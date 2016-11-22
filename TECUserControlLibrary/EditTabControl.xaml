@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="TECUserControlLibrary.EditTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent}">
+        <TabControl Grid.Column="4"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    SelectedIndex="{Binding Path=Index, Converter={cnvt:EnumerationToIntegerConverter}}"
+                    Background="{DynamicResource SectionBackgroundBrush}">
+            <!--System Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:SystemEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
+            <!--Equipment Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:EquipmentEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
+            <!--SubScope Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:SubScopeEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
+            <!--Device Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:DeviceEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
+            <!--Point Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:PointEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

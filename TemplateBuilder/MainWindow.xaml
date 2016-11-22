@@ -1,0 +1,284 @@
+﻿<Window x:Class="TemplateBuilder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        
+        xmlns:local="clr-namespace:TemplateBuilder"
+        xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+        xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        
+        Title="Template Builder" Height="520" Width="960"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        MinHeight="300" MinWidth="535"
+        x:Name="root">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SaveCommand}"
+                    Gesture="CTRL+S" />
+        <KeyBinding Command="{Binding SaveToCommand}"
+                    Gesture="SHIFT+CTRL+S" />
+        <KeyBinding Command="{Binding UndoCommand}"
+                    Gesture="CTRL+Z" />
+        <KeyBinding Command="{Binding RedoCommand}"
+                    Gesture="CTRL+SHIFT+Z" />
+    </Window.InputBindings>
+    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Load"
+                          Command="{Binding LoadCommand}"
+                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                <MenuItem Header="_Save"
+                          Command="{Binding SaveCommand}"
+                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                <MenuItem Header="_Save As"
+                          Command="{Binding SaveToCommand}"
+                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo"
+                          Command="{Binding UndoCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+                <MenuItem Header="_Redo"
+                          Command="{Binding RedoCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*" MinHeight="40"/>
+            </Grid.RowDefinitions>
+
+            <Image Source="{Binding TECLogo}"
+                   Grid.Column="4"/>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding ViewData.SearchString}"/>
+                <Button Grid.Column="1"
+                    Content="Search"
+                    Command="{Binding SearchCollectionCommand}"/>
+                <Button Grid.Column="2"
+                    Content="Done"
+                    Command="{Binding EndSearchCommand}"/>
+            </Grid>
+
+            <TabControl Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        Grid.RowSpan="2"
+                        SelectedIndex="{Binding DGTabIndex}"
+                        Background="{DynamicResource SectionBackgroundBrush}">
+                <TabItem Header="Systems">
+                    <cLib:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
+                                             ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+                <TabItem Header="Equipment">
+                    <cLib:EquipmentGridControl EquipmentSource="{Binding Templates.EquipmentTemplates}"
+                                               ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+                <TabItem Header="Points">
+                    <cLib:SubScopeGridControl SubScopeSource="{Binding Templates.SubScopeTemplates}"
+                                              ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+                <TabItem Header="Devices">
+                    <cLib:DevicesGridControl DevicesSource="{Binding Templates.DeviceCatalog}"
+                                             ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+            </TabControl>
+
+
+            <Grid Grid.Column="0" Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="1" Text="{Binding Version}"
+                           Margin="10" Foreground="{DynamicResource LightTextBrush}"/>
+
+                <TabControl
+                Grid.RowSpan="1" Margin="5,0,5,0" Background="{DynamicResource SectionBackgroundBrush}"
+                SelectedIndex="{Binding LeftTabIndex}">
+                    <TabItem Header="Sys"
+                Visibility="{Binding LeftSystemsVisibility}">
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ViewData.SystemItemsCollection}"/>
+                    </TabItem>
+                    <TabItem Header="Equip"
+                 Visibility="{Binding LeftEquipmentVisibility}">
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ViewData.EquipmentItemsCollection}"/>
+                    </TabItem>
+                    <TabItem Header="Points"
+                 Visibility="{Binding LeftSubScopeVisibility}">
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ViewData.SubScopeItemsCollection}"/>
+                    </TabItem>
+                    <TabItem Header="Dev"
+                     Visibility="{Binding LeftDevicesVisibility}">
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ViewData.DevicesItemsCollection}"/>
+                    </TabItem>
+                    <TabItem Header="Devices"
+                     Visibility="{Binding LeftDevicesEditVisibility}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="46*"/>
+                                <ColumnDefinition Width="35*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="0"
+                           Grid.Row="0"
+                           Content="Name:"/>
+                            <TextBox Grid.Column="1" Grid.Row="0"
+                               Text="{Binding DeviceName}"
+                             VerticalAlignment="Top"
+                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
+                            <Label Grid.Column="0"
+                           Grid.Row="1"
+                           Content="Description:"/>
+                            <TextBox Grid.Column="1"
+                               Grid.Row="1"
+                               Text="{Binding DeviceDescription}"
+                             VerticalAlignment="Top"
+                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
+                            <Label Grid.Column="0"
+                           Grid.Row="2"
+                           Content="Cost:"/>
+                            <TextBox Grid.Column="1"
+                               Grid.Row="2"
+                               Text="{Binding DeviceCost}"
+                             VerticalAlignment="Top"
+                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
+                            <Label Grid.Column="0"
+                           Grid.Row="3"
+                           Content="Wire Type:"/>
+                            <TextBox Grid.Column="1"
+                               Grid.Row="3"
+                               Text="{Binding DeviceWire}"
+                             VerticalAlignment="Top"
+                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
+                            <Label Grid.Column="0"
+                           Grid.Row="4"
+                           Content="Manufacturer:"/>
+                            <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding DeviceManufacturer}"
+                              Grid.Row="4" Grid.Column="1"
+                              VerticalAlignment="Top"
+                             Margin="5,5,5,0"/>
+                            <Button Grid.Column="0"
+                            Grid.Row="5"
+                            Grid.ColumnSpan="3"
+                            Margin="2"
+                            Content="Add"
+                            Command="{Binding AddDeviceCommand}"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Tags">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Name:"/>
+                            <TextBox Text="{Binding TagName}"
+                             Grid.Column="1"
+                             VerticalAlignment="Top"
+                             Margin="5"/>
+                            <Button Content="Add"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1"
+                            Command="{Binding AddTagCommand}"
+                                Margin="5"/>
+                            <cLib:TagsGridControl TagsSource="{Binding Templates.Tags}"
+                                           Grid.Row="2" Grid.ColumnSpan="2"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Manufacturers"
+                     Visibility="{Binding LeftManufacturerVisibility}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Manufacturer:"/>
+                            <TextBox Text="{Binding ViewData.ManufacturerName}"
+                             Grid.Column="1"
+                             VerticalAlignment="Top"
+                             Margin="5"/>
+                            <Label Content="Multiplier:"
+                           Grid.Row="1"/>
+                            <TextBox Text="{Binding ViewData.ManufacturerMultiplier}"
+                             Grid.Column="1"
+                             Grid.Row="1"
+                             VerticalAlignment="Top"
+                             Margin="5"/>
+                            <Button Content="Add"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="2"
+                                Margin="5"
+                            Command="{Binding AddManufacturerCommand}"/>
+
+                            <cLib:ManufacturersGridControl ManufacturersSource="{Binding Templates.ManufacturerCatalog}"
+                                           Grid.Row="3" Grid.ColumnSpan="2"/>
+
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            
+            <!--Right Tab Control-->
+            <cLib:EditTabControl Index="{Binding RightTabIndex}"
+                             ViewModel="{Binding ElementName=root, Path=DataContext}"
+                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"/>
+        </Grid>
+    </DockPanel>
+</Window>
