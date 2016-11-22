@@ -407,7 +407,7 @@ namespace EstimateBuilder.ViewModel
 
         private void ClosingExecute(CancelEventArgs e)
         {
-            bool changes = (stack.SaveStack.Count > 0);
+            bool changes = (Stack.SaveStack.Count > 0);
             if (changes)
             {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
