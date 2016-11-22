@@ -14,6 +14,7 @@ using TECUserControlLibrary;
 using System.Collections;
 using System.Drawing.Imaging;
 using System.Deployment.Application;
+using System.ComponentModel;
 
 namespace Scope_Builder.ViewModel
 {
@@ -65,6 +66,8 @@ namespace Scope_Builder.ViewModel
         public ICommand EndSearchCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+
+        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
         public int LeftTabIndex
         {
@@ -255,6 +258,8 @@ namespace Scope_Builder.ViewModel
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+
+            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
 
             bidDBFilePath = null;
 
@@ -548,6 +553,30 @@ namespace Scope_Builder.ViewModel
                 return true;
             else
                 return false;
+        }
+
+        private void ClosingExecute(CancelEventArgs e)
+        {
+            bool changes = (stack.SaveStack.Count > 0);
+            if (changes)
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveExecute();
+                    if (!saveSuccessful)
+                    {
+                        e.Cancel = true;
+                        MessageBox.Show("Save unsuccessful, cancelling quit.");
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                    Console.WriteLine("Closing");
+                }
+            }
+
         }
         #endregion //Commands
 

@@ -22,7 +22,7 @@ namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
-        private const string indentSize = "1cm";
+        private const string indentSize = "51cm";
         private const string doubleIndentSize = "2cm";
         private const string beforeParagraphSize = "0.5cm";
 

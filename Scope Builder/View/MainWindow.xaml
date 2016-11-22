@@ -15,8 +15,7 @@
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         xmlns:dd="urn:gong-wpf-dragdrop"
         MinHeight="300" MinWidth="535"
-        x:Name="Window"
-        Closing="Window_Closing">
+        x:Name="Window">
     <Window.InputBindings>
         <KeyBinding Command="{Binding SaveCommand}"
                     Gesture="CTRL+S" />

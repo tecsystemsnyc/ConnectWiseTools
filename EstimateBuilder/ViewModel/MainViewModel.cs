@@ -86,6 +86,8 @@ namespace EstimateBuilder.ViewModel
             DocumentCommand = new RelayCommand(DocumentExecute);
             CSVExportCommand = new RelayCommand(CSVExportExecute);
 
+            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
+
             MessengerInstance.Register<NotificationMessage>(this, processNotification);
             MessengerInstance.Register<NotificationMessage<String>>(this, processNotificationInformation);
 
@@ -162,7 +164,7 @@ namespace EstimateBuilder.ViewModel
         public ICommand CSVExportCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
 
-
+        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion Command Properties
         #endregion Properties
 
@@ -403,6 +405,29 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private void ClosingExecute(CancelEventArgs e)
+        {
+            bool changes = (stack.SaveStack.Count > 0);
+            if (changes)
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveExecute();
+                    if (!saveSuccessful)
+                    {
+                        e.Cancel = true;
+                        MessageBox.Show("Save unsuccessful, cancelling quit.");
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                    Console.WriteLine("Closing");
+                }
+            }
+
+        }
         #endregion Commands Methods
 
         #region Helper Methods
