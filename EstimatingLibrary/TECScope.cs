@@ -63,7 +63,6 @@ namespace EstimatingLibrary
             get { return _tags; }
             set
             {
-               
                     var temp = this.Copy();
                     _tags = value;
                     NotifyPropertyChanged("Tags", temp, this);
