@@ -11,6 +11,8 @@ namespace Tests
 {
     public static class TestHelper
     {
+        static private string testBidPath = Environment.CurrentDirectory + @"\Test Files\UnitTestBid.bdb";
+
         public static TECBid CreateTestBid()
         {
             TECBid bid = new TECBid();
@@ -33,6 +35,11 @@ namespace Tests
             bid.Systems.Add(system1);
 
             return bid;
+        }
+
+        public static TECBid LoadTestBid()
+        {
+            return EstimatingLibraryDatabase.LoadDBToBid(testBidPath, new TECTemplates());
         }
     }
 }

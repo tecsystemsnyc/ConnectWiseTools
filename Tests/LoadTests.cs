@@ -12,52 +12,71 @@ namespace Tests
     [TestClass]
     public class LoadTests
     {
-        private string testBidPath = Environment.CurrentDirectory + @"\Test Files\UnitTestBid.bdb";
-
         [TestMethod]
         public void Load_Bid_Info()
         {
+            //Act
+            TECBid bid = TestHelper.LoadTestBid();
 
+            //Assert
+            string actualName = bid.Name;
+            string expectedName = "Unit Testimate";
+            string failMessage = "Name test failed.";
+            Assert.AreEqual(expectedName, actualName, failMessage);
+
+            string actualNumber = bid.BidNumber;
+            string expectedNumber = "1701-117";
+            failMessage = "Bid Number test failed.";
+            Assert.AreEqual(expectedNumber, actualNumber, failMessage);
+
+            string actualSales = bid.Salesperson;
+            string expectedSales = "Mrs. Test";
+            failMessage = "Salesperson test failed.";
+            Assert.AreEqual(expectedSales, actualSales, failMessage);
+
+            string actualEstimator = bid.Estimator;
+            string expectedEstimator = "Mr. Test";
+            failMessage = "Estimator test failed.";
+            Assert.AreEqual(expectedEstimator, actualEstimator, failMessage);
         }
 
         [TestMethod]
         public void Load_Bid_System()
         {
             //Arrange
-            TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
 
             //Act
-            bid = EstimatingLibraryDatabase.LoadDBToBid(testBidPath, new TECTemplates());
+            TECBid bid = TestHelper.LoadTestBid();
             if (bid.Systems.Count > 0)
             {
                 system = bid.Systems[0];
             }
             else
             {
-                Assert.Fail("No systems loaded from path: " + testBidPath);
+                Assert.Fail("No systems loaded.");
             }
 
             //Assert
-            string actual = system.Name;
-            string expected = "Test System";
-            string failMessage = "Name test failed. Test bid path: " + testBidPath;
-            Assert.AreEqual(expected, actual, failMessage);
+            string actualName = system.Name;
+            string expectedName = "Test System";
+            string failMessage = "Name test failed.";
+            Assert.AreEqual(expectedName, actualName, failMessage);
 
-            actual = system.Description;
-            expected = "Test System Description";
-            failMessage = "Description test failed. Test bid path: " + testBidPath;
-            Assert.AreEqual(expected, actual, failMessage);
+            string actualDescription = system.Description;
+            string expectedDescription = "Test System Description";
+            failMessage = "Description test failed.";
+            Assert.AreEqual(expectedDescription, actualDescription, failMessage);
 
-            actual = system.Quantity.ToString();
-            expected = "123";
-            failMessage = "Quantity test failed. Test bid path: " + testBidPath;
-            Assert.AreEqual(expected, actual, failMessage);
+            int actualQuantity = system.Quantity;
+            int expectedQuantity = 123;
+            failMessage = "Quantity test failed.";
+            Assert.AreEqual(expectedQuantity, actualQuantity, failMessage);
 
-            actual = system.BudgetPrice.ToString();
-            expected = "123";
-            failMessage = "Budget Price test failed. Test bid path: " + testBidPath;
-            Assert.AreEqual(expected, actual, failMessage);
+            double actualBP = system.BudgetPrice;
+            double expectedBP = 123;
+            failMessage = "Budget Price test failed.";
+            Assert.AreEqual(expectedBP, actualBP, failMessage);
         }
 
 
