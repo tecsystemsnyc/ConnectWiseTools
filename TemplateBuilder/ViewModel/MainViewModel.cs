@@ -757,7 +757,10 @@ namespace TemplateBuilder.ViewModel
                     Console.WriteLine("Closing");
                 }
             }
-            
+            if (!e.Cancel)
+            {
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void DeleteSelectedSystemExecute()

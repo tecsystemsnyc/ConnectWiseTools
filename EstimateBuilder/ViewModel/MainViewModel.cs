@@ -434,7 +434,10 @@ namespace EstimateBuilder.ViewModel
                     Console.WriteLine("Closing");
                 }
             }
-
+            if (!e.Cancel)
+            {
+                Properties.Settings.Default.Save();
+            }
         }
         #endregion Commands Methods
 
