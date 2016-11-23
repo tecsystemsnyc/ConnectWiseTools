@@ -227,7 +227,15 @@ namespace EstimateBuilder.ViewModel
                 if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
                 {
                     SaveWindow saveWindow = new SaveWindow();
-                    EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, Stack);
+                    try
+                    {
+                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, Stack);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Write("Save delta failed. Saving to new file. Error: " + e.Message);
+                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                    }
                     saveSuccessful = true;
                     Stack.ClearStacks();
                     saveWindow.Close();

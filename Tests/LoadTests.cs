@@ -79,6 +79,11 @@ namespace Tests
             Assert.AreEqual(expectedBP, actualBP, failMessage);
         }
 
-
+        [TestMethod]
+        public void Load_Bid_Equipment()
+        {
+            //Arrange
+            TECEquipment equipment = new TECEquipment();
+        }
     }
 }

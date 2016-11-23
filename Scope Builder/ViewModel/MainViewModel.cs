@@ -335,8 +335,16 @@ namespace Scope_Builder.ViewModel
                     {
                         File.Delete(bidDBFilePath);
                     }
-                    //Create new database
-                    EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stack);
+                    try
+                    {
+                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stack);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Write("Save delta failed. Saving to new file. Error: " + e.Message);
+                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                    }
+                    
                     stack.ClearStacks();
                     saveSuccessful = true;
                     saveWindow.Close();
