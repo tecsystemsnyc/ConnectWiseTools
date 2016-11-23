@@ -11,7 +11,7 @@ namespace Tests
 {
     public static class TestHelper
     {
-        static private string testBidPath = Environment.CurrentDirectory + @"\Test Files\UnitTestBid.bdb";
+        static public string StaticTestBidPath = Environment.CurrentDirectory + @"\Test Files\UnitTestBid.bdb";
 
         public static TECBid CreateTestBid()
         {
@@ -37,9 +37,79 @@ namespace Tests
             return bid;
         }
 
-        public static TECBid LoadTestBid()
+        public static TECBid LoadTestBid(string path)
         {
-            return EstimatingLibraryDatabase.LoadDBToBid(testBidPath, new TECTemplates());
+            return EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+        }
+
+        public static TECSystem LoadTestSystem(string path)
+        {
+            TECBid bid = LoadTestBid(path);
+
+            if (bid.Systems.Count > 0)
+            {
+                return bid.Systems[0];
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
+        public static TECEquipment LoadTestEquipment(string path)
+        {
+            TECSystem system = LoadTestSystem(path);
+
+            if (system.Equipment.Count > 0)
+            {
+                return system.Equipment[0];
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
+        public static TECSubScope LoadTestSubScope(string path)
+        {
+            TECEquipment equip = LoadTestEquipment(path);
+
+            if (equip.SubScope.Count > 0)
+            {
+                return equip.SubScope[0];
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
+        public static TECDevice LoadTestDevice(string path)
+        {
+            TECSubScope ss = LoadTestSubScope(path);
+
+            if (ss.Devices.Count > 0)
+            {
+                return ss.Devices[0];
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
+        public static TECPoint LoadTestPoint(string path)
+        {
+            TECSubScope ss = LoadTestSubScope(path);
+
+            if (ss.Points.Count > 0)
+            {
+                return ss.Points[0];
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }
     }
 }

@@ -32,21 +32,17 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (templates.DeviceCatalog != null)
                 {
-                    SQLiteDB.nonQueryCommand(clearDeviceTable());
-
                     foreach (TECDevice device in templates.DeviceCatalog)
                     {
-                        addDevice(device);
+                        editDevice(device);
                     }
                 }
 
                 if (templates.ManufacturerCatalog != null)
                 {
-                    SQLiteDB.nonQueryCommand(clearManufacturerTable());
-
                     foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
                     {
-                        addManufacturer(manufacturer);
+                        editManufacturer(manufacturer);
                     }
                 }
 
@@ -580,6 +576,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private void addFullSubScope(TECSubScope subScope)
         {
+            addSubScope(subScope);
             addTagsInScope(subScope.Tags, subScope.Guid);
             foreach (TECDevice dev in subScope.Devices)
             {
@@ -994,6 +991,19 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Replace("TECDevice", data))
             {
                 Console.WriteLine("Error: Couldn't update device in TECDevice table.");
+            }
+        }
+
+        static private void editManufacturer(TECManufacturer manufacturer)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("ManufacturerID", manufacturer.Guid.ToString());
+            data.Add("Name", manufacturer.Name);
+            data.Add("Multiplier", manufacturer.Multiplier.ToString());
+
+            if (!SQLiteDB.Replace("TECManfuacturer", data))
+            {
+                Console.WriteLine("Error: Couldn't update manufacturer in TECManufacturer table.");
             }
         }
 
@@ -2086,16 +2096,6 @@ namespace EstimatingUtilitiesLibrary
             ");";
         }
         #endregion //Create Relation Tables
-
-        static private string clearDeviceTable()
-        {
-            return "DELETE FROM 'TECDevice'";
-        }
-
-        static private string clearManufacturerTable()
-        {
-            return "DELETE FROM 'TECManufacturer'";
-        }
 
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems)
         {
