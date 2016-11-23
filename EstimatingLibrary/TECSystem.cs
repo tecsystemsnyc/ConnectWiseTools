@@ -82,10 +82,10 @@ namespace EstimatingLibrary
             get { return _quantity; }
             set
             {
+                var temp = this.Copy();
                 _quantity = value;
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("Quantity");
-             
+                NotifyPropertyChanged("Quantity", temp, this);
+                RaisePropertyChanged("TotalBudgetPrice");             
             }
         }
 
