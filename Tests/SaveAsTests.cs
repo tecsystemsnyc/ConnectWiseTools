@@ -20,15 +20,12 @@ namespace Tests
             //Arrange
             TECBid expectedBid = CreateTestBid();
 
-            if (File.Exists(DynamicTestBidPath))
-            {
-                File.Delete(DynamicTestBidPath);
-            }
+            string path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveBidToNewDB(DynamicTestBidPath, expectedBid);
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
 
-            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(DynamicTestBidPath, new TECTemplates());
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             //Assert
             Assert.AreEqual(expectedBid.Name, actualBid.Name);
@@ -36,12 +33,34 @@ namespace Tests
             Assert.AreEqual(expectedBid.DueDate, actualBid.DueDate);
             Assert.AreEqual(expectedBid.Salesperson, actualBid.Salesperson);
             Assert.AreEqual(expectedBid.Estimator, actualBid.Estimator);
+
+            File.Delete(path);
         }
 
         [TestMethod]
         public void SaveAs_Bid_System()
         {
+            //Arrange
+            TECBid expectedbid = CreateTestBid();
 
+            TECSystem expectedSystem = expectedbid.Systems[0];
+
+            string path = Path.GetTempFileName();
+
+            //Act
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedbid);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSystem actualSystem = actualBid.Systems[0];
+
+            //Assert
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+
+            File.Delete(path);
         }
     }
 }

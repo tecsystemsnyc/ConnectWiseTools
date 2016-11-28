@@ -13,7 +13,6 @@ namespace Tests
     public static class TestHelper
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
-        static public string DynamicTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\DynamicTestBid.bdb";
 
         public static TECBid CreateTestBid()
         {
@@ -33,12 +32,13 @@ namespace Tests
 
             //Equipment
             var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, allSubScope);
+            equipment1.Quantity = 1234;
             var allEquipment = new ObservableCollection<TECEquipment>();
             allEquipment.Add(equipment1);
 
             //Systems
             var system1 = new TECSystem("System 1", "Description 1", 234.5, allEquipment);
-            system1.Quantity = 1;
+            system1.Quantity = 2345;
 
             //Bid
             bid.Systems.Add(system1);
