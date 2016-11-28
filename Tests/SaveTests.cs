@@ -215,5 +215,117 @@ namespace Tests
 
             File.Delete(path);
         }
+
+        [TestMethod]
+        public void Save_Bid_System_Name()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedName = "Save System Name";
+            bid.Systems[0].Name = expectedName;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualName = actualBid.Systems[0].Name;
+
+            //Assert
+            Assert.AreEqual(expectedName, actualName);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Description()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedDescription = "Save System Description";
+            bid.Systems[0].Description = expectedDescription;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualDescription = actualBid.Systems[0].Description;
+
+            //Assert
+            Assert.AreEqual(expectedDescription, actualDescription);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Quantity()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            int expectedQuantity = 987654321;
+            bid.Systems[0].Quantity = expectedQuantity;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            int actualQuantity = actualBid.Systems[0].Quantity;
+
+            //Assert
+            Assert.AreEqual(expectedQuantity, actualQuantity);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_BudgetPrice()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            double expectedBudgetPrice = 987654321;
+            bid.Systems[0].BudgetPrice = expectedBudgetPrice;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualBudgetPrice = actualBid.Systems[0].BudgetPrice;
+
+            //Assert
+            Assert.AreEqual(expectedBudgetPrice, actualBudgetPrice);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
     }
 }
