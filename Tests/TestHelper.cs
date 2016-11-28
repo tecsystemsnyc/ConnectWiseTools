@@ -62,10 +62,22 @@ namespace Tests
             var allDrawings = new ObservableCollection<TECDrawing>();
             allDrawings.Add(drawing1);
 
+            //Manufacturers
+            var manufacturer1 = new TECManufacturer("Test", "Desc", 0.8);
+            var allManufacturers = new ObservableCollection<TECManufacturer>();
+            allManufacturers.Add(manufacturer1);
+
+            //Tags
+            var tag1 = new TECTag("Test");
+            var allTags = new ObservableCollection<TECTag>();
+            allTags.Add(tag1);
+
             //Bid
             bid.Systems.Add(system1);
             bid.DeviceCatalog = allDevices;
             bid.Drawings = allDrawings;
+            bid.ManufacturerCatalog = allManufacturers;
+            
 
             return bid;
         }
