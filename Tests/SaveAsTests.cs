@@ -15,7 +15,7 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_Info()
         {
-            TECBid bid = CreateTestBid();
+            TECBid expectedBid = CreateTestBid();
         }
     }
 }

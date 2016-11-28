@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Tests
 {
     public static class TestHelper
     {
-        static public string StaticTestBidPath = Environment.CurrentDirectory + @"\Test Files\StaticTestBid.bdb";
+        static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
 
         public static TECBid CreateTestBid()
         {
