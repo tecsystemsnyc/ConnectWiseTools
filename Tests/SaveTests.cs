@@ -3,6 +3,7 @@ using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,258 @@ namespace Tests
             Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
             Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
             Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_BidInfo_Name()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedName = "Save Name";
+            bid.Name = expectedName;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualName = actualBid.Name;
+
+            //Assert
+            Assert.AreEqual(expectedName, actualName);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_BidInfo_BidNo()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedBidNo = "Save BidNo";
+            bid.BidNumber = expectedBidNo;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualBidNo = actualBid.BidNumber;
+
+            //Assert
+            Assert.AreEqual(expectedBidNo, actualBidNo);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_BidInfo_DueDate()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            DateTime expectedDueDate = DateTime.Now;
+            bid.DueDate = expectedDueDate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            DateTime actualDueDate = actualBid.DueDate;
+
+            //Assert
+            Assert.AreEqual(expectedDueDate, actualDueDate);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_BidInfo_Salesperson()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedSalesperson = "Save Salesperson";
+            bid.Salesperson = expectedSalesperson;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualSalesperson = actualBid.Salesperson;
+
+            //Assert
+            Assert.AreEqual(expectedSalesperson, actualSalesperson);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_BidInfo_Estimator()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedEstimator = "Save Estimator";
+            bid.Estimator = expectedEstimator;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualEstimator = actualBid.Estimator;
+
+            //Assert
+            Assert.AreEqual(expectedEstimator, actualEstimator);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Name()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedName = "Save System Name";
+            bid.Systems[0].Name = expectedName;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualName = actualBid.Systems[0].Name;
+
+            //Assert
+            Assert.AreEqual(expectedName, actualName);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Description()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            string expectedDescription = "Save System Description";
+            bid.Systems[0].Description = expectedDescription;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            string actualDescription = actualBid.Systems[0].Description;
+
+            //Assert
+            Assert.AreEqual(expectedDescription, actualDescription);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Quantity()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            int expectedQuantity = 987654321;
+            bid.Systems[0].Quantity = expectedQuantity;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            int actualQuantity = actualBid.Systems[0].Quantity;
+
+            //Assert
+            Assert.AreEqual(expectedQuantity, actualQuantity);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_BudgetPrice()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            double expectedBudgetPrice = 987654321;
+            bid.Systems[0].BudgetPrice = expectedBudgetPrice;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualBudgetPrice = actualBid.Systems[0].BudgetPrice;
+
+            //Assert
+            Assert.AreEqual(expectedBudgetPrice, actualBudgetPrice);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();

@@ -219,7 +219,7 @@ namespace EstimatingUtilitiesLibrary
         static public void UpdateBidToDB(string path, ChangeStack changeStack)
         {
 
-            string tempPath = Path.GetDirectoryName(path) + '/' + Path.GetFileNameWithoutExtension(path) + ".tmp";
+            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
 
             File.Copy(path, tempPath);
 
