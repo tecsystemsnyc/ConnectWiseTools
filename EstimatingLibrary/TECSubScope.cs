@@ -32,9 +32,7 @@ namespace EstimatingLibrary
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
-
-
-
+        
         public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points) : this(name, description, devices, points, Guid.NewGuid()) { }
         public TECSubScope() : this("", "", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>()) { }
 

@@ -72,12 +72,18 @@ namespace Tests
             var allTags = new ObservableCollection<TECTag>();
             allTags.Add(tag1);
 
+            //Devices Catalog
+            var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, "Test Wire", new TECManufacturer());
+            deviceC1.Quantity = 987;
+            var deviceCatalog = new ObservableCollection<TECDevice>();
+            deviceCatalog.Add(deviceC1);
+
             //Bid
             bid.Systems.Add(system1);
-            bid.DeviceCatalog = allDevices;
+            bid.DeviceCatalog = deviceCatalog;
             bid.Drawings = allDrawings;
             bid.ManufacturerCatalog = allManufacturers;
-            
+            bid.Tags = allTags;
 
             return bid;
         }

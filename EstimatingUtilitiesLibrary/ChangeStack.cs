@@ -53,16 +53,17 @@ namespace EstimatingUtilitiesLibrary
         {
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
+            Bid.Labor.PropertyChanged += Object_PropertyChanged;
             //Systems Collection Changed
-            Bid.Systems.CollectionChanged += Bid_CollectionChanged;
+            //Bid.Systems.CollectionChanged += Bid_CollectionChanged;
             //System Changed
-            Bid.ScopeTree.CollectionChanged += Bid_CollectionChanged;
+            //Bid.ScopeTree.CollectionChanged += Bid_CollectionChanged;
             foreach (TECScopeBranch branch in Bid.ScopeTree) { registerScope(branch); }
             //Notes changed
-            Bid.Notes.CollectionChanged += Bid_CollectionChanged;
+            //Bid.Notes.CollectionChanged += Bid_CollectionChanged;
             foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
             //Exclusions changed
-            Bid.Exclusions.CollectionChanged += Bid_CollectionChanged;
+            //Bid.Exclusions.CollectionChanged += Bid_CollectionChanged;
             foreach (TECExclusion exclusion in Bid.Exclusions) { exclusion.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             {
@@ -89,7 +90,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
-            Bid.Drawings.CollectionChanged += Bid_CollectionChanged;
+            //Bid.Drawings.CollectionChanged += Bid_CollectionChanged;
             foreach (TECDrawing drawing in Bid.Drawings)
             {
                 drawing.PropertyChanged += Object_PropertyChanged;
@@ -275,6 +276,22 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Exclusions.Remove((TECExclusion)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECDrawing)
+                {
+                    ((TECBid)StackItem.Item2).Drawings.Remove((TECDrawing)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECManufacturer)
+                {
+                    ((TECBid)StackItem.Item2).ManufacturerCatalog.Remove((TECManufacturer)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECDevice)
+                {
+                    ((TECBid)StackItem.Item2).DeviceCatalog.Remove((TECDevice)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECTag)
+                {
+                    ((TECBid)StackItem.Item2).Tags.Remove((TECTag)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECSystem)
             {
@@ -343,6 +360,22 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECExclusion)
                 {
                     ((TECBid)StackItem.Item2).Exclusions.Add((TECExclusion)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECDrawing)
+                {
+                    ((TECBid)StackItem.Item2).Drawings.Add((TECDrawing)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECManufacturer)
+                {
+                    ((TECBid)StackItem.Item2).ManufacturerCatalog.Add((TECManufacturer)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECDevice)
+                {
+                    ((TECBid)StackItem.Item2).DeviceCatalog.Add((TECDevice)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECTag)
+                {
+                    ((TECBid)StackItem.Item2).Tags.Add((TECTag)StackItem.Item3);
                 }
             }
             else if (StackItem.Item2 is TECSystem)
@@ -469,6 +502,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
+        /*
         private void handleBidCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (!isDoing) { RedoStack.Clear(); }
@@ -495,7 +529,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
+        */
         private void handleChildren(Tuple<Change, object, object> stackItem)
         {
             var newItem = stackItem.Item3;
@@ -616,8 +650,9 @@ namespace EstimatingUtilitiesLibrary
 
         #region Event Handlers
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
-
+        /*
         private void Bid_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e){ handleBidCollectionChanged(e); }
+        */
         #endregion //Event Handlers
     }
 }

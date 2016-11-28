@@ -18,7 +18,15 @@ namespace EstimatingLibrary
         private string _estimator;
         private Guid _infoGuid;
         private TECLabor _labor;
-
+        private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
+        private ObservableCollection<TECSystem> _systems { get; set; }
+        private ObservableCollection<TECDevice> _deviceCatalog { get; set; }
+        private ObservableCollection<TECManufacturer> _manufacturerCatalog { get; set; }
+        private ObservableCollection<TECNote> _notes { get; set; }
+        private ObservableCollection<TECExclusion> _exclusions { get; set; }
+        private ObservableCollection<TECTag> _tags { get; set; }
+        private ObservableCollection<TECDrawing> _drawings { get; set; }
+        
         public string Name {
             get { return _name; }
             set
@@ -94,20 +102,99 @@ namespace EstimatingLibrary
             get { return getLaborCost(); }
         }
 
-        public ObservableCollection<TECScopeBranch> ScopeTree { get; set; }
-        public ObservableCollection<TECSystem> Systems { get; set; }
-        public ObservableCollection<TECDevice> DeviceCatalog { get; set; }
-        public ObservableCollection<TECManufacturer> ManufacturerCatalog { get; set; }
+        public ObservableCollection<TECScopeBranch> ScopeTree {
+            get { return _scopeTree; }
+            set
+            {
+                var temp = this.Copy();
+                ScopeTree.CollectionChanged -= CollectionChanged;
+                _scopeTree = value;
+                ScopeTree.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ScopeTree", temp, this);
+            }
+        }
+        public ObservableCollection<TECSystem> Systems {
+            get { return _systems; }
+            set
+            {
+                var temp = this.Copy();
+                Systems.CollectionChanged -= CollectionChanged;
+                _systems = value;
+                Systems.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Systems", temp, this);
+            }
+        }
+        public ObservableCollection<TECDevice> DeviceCatalog {
+            get { return _deviceCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                DeviceCatalog.CollectionChanged -= CollectionChanged;
+                _deviceCatalog = value;
+                DeviceCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("DeviceCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECManufacturer> ManufacturerCatalog {
+            get { return _manufacturerCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
+                _manufacturerCatalog = value;
+                ManufacturerCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
+            }
+        }
 
-        public ObservableCollection<TECNote> Notes { get; set; }
-        public ObservableCollection<TECExclusion> Exclusions { get; set; }
+        public ObservableCollection<TECNote> Notes {
+            get { return _notes; }
+            set
+            {
+                var temp = this.Copy();
+                Notes.CollectionChanged -= CollectionChanged;
+                _notes = value;
+                Notes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Notes", temp, this);
+            }
+        }
+        public ObservableCollection<TECExclusion> Exclusions {
+            get { return _exclusions; }
+            set
+            {
+                var temp = this.Copy();
+                Exclusions.CollectionChanged -= CollectionChanged;
+                _exclusions = value;
+                Exclusions.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Exclusions", temp, this);
+            }
+        }
 
-        public ObservableCollection<TECTag> Tags { get; set; }
+        public ObservableCollection<TECTag> Tags {
+            get { return _tags; }
+            set
+            {
+                var temp = this.Copy();
+                Tags.CollectionChanged -= CollectionChanged;
+                _tags = value;
+                Tags.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Tags", temp, this);
+            }
+        }
 
-        public ObservableCollection<TECDrawing> Drawings { get; set; }
+        public ObservableCollection<TECDrawing> Drawings {
+            get { return _drawings; }
+            set
+            {
+                var temp = this.Copy();
+                Drawings.CollectionChanged -= CollectionChanged;
+                _drawings = value;
+                Drawings.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Drawings", temp, this);
+            }
+        }
         #endregion //Properties
-
-
+        
         #region Constructors
         public TECBid(
             string name,
@@ -129,16 +216,25 @@ namespace EstimatingLibrary
             _dueDate = dueDate;
             _salesperson = salesperson;
             _estimator = estimator;
-            ScopeTree = scopeTree;
-            Systems = systems;
-            DeviceCatalog = deviceCatalog;
-            ManufacturerCatalog = manufacturerCatalog;
-            Notes = notes;
-            Exclusions = exclusions;
-            Tags = tags;
+            _scopeTree = scopeTree;
+            _systems = systems;
+            _deviceCatalog = deviceCatalog;
+            _manufacturerCatalog = manufacturerCatalog;
+            _notes = notes;
+            _exclusions = exclusions;
+            _tags = tags;
             _infoGuid = infoGuid;
             _labor = new TECLabor();
-            Drawings = new ObservableCollection<TECDrawing>();
+            _drawings = new ObservableCollection<TECDrawing>();
+
+            Systems.CollectionChanged += CollectionChanged;
+            ScopeTree.CollectionChanged += CollectionChanged;
+            DeviceCatalog.CollectionChanged += CollectionChanged;
+            ManufacturerCatalog.CollectionChanged += CollectionChanged;
+            Notes.CollectionChanged += CollectionChanged;
+            Exclusions.CollectionChanged += CollectionChanged;
+            Tags.CollectionChanged += CollectionChanged;
+            Drawings.CollectionChanged += CollectionChanged;
         }
         public TECBid(
             string name, 
@@ -205,6 +301,26 @@ namespace EstimatingLibrary
             TECBid bid = new TECBid(this);
             bid._infoGuid = InfoGuid;
             return bid;
+        }
+
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("Add", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("Remove", this, item);
+                }
+            }
+
         }
         #endregion
 
