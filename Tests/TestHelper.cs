@@ -13,13 +13,21 @@ namespace Tests
     public static class TestHelper
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
+        static public string DynamicTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\DynamicTestBid.bdb";
 
         public static TECBid CreateTestBid()
         {
             TECBid bid = new TECBid();
 
+            //Bid Info
+            bid.Name = "Bid Name";
+            bid.BidNumber = "1701-117";
+            bid.DueDate = DateTime.Now;
+            bid.Salesperson = "Mrs. Test";
+            bid.Estimator = "Mr. Test";
+
             //SubScope
-            var subScope1 = new TECSubScope();
+            var subScope1 = new TECSubScope("SubScope 1", "Description 1", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
             var allSubScope = new ObservableCollection<TECSubScope>();
             allSubScope.Add(subScope1);
 
