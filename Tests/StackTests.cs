@@ -726,8 +726,13 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Name = edit;
+            Trace.WriteLine("Before Undo: " + Bid.Name);
+            Trace.WriteLine("Undo Count: " + testStack.UndoStack.Count);
             testStack.Undo();
+            Trace.WriteLine("After Undo: " + Bid.Name);
+            Trace.WriteLine("Redo Count: " + testStack.RedoStack.Count);
             testStack.Redo();
+            Trace.WriteLine("After Redo: " + Bid.Name);
 
             //assert
             string actual = Bid.Name;

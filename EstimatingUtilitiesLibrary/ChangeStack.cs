@@ -239,7 +239,12 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (StackItem.Item1 == Change.Edit)
             {
-                int index = UndoStack.IndexOf(UndoStack.Last());
+                int index = 0;
+                if (UndoStack.Count > 0)
+                {
+                    index = UndoStack.IndexOf(UndoStack.Last());
+                } 
+                
                 handleEdit(StackItem);
                 RedoStack.Remove(StackItem);
                 for (int x = (UndoStack.Count - 2); x > index; x--)
