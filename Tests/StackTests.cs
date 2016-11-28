@@ -12,6 +12,8 @@ namespace Tests
 
         public TECBid Bid = new TECBid();
 
+
+        #region Undo
         [TestMethod]
         public void Undo_Bid_Name()
         {
@@ -527,5 +529,157 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Undo_Device_Name()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Device_Description()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Device_Cost()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            double edit = 123;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Device_Manufacturer()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            TECManufacturer expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            TECManufacturer edit = new TECManufacturer();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
+            testStack.Undo();
+
+            //assert
+            TECManufacturer actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Point_Name()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name = edit;
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Point_Description()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description = edit;
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Point_Quantity()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            int expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            int edit = 3;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
+            testStack.Undo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Point_Type()
+        {
+            //Arrange
+            Bid = TestHelper.CreateTestBid();
+            PointTypes expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            PointTypes edit = PointTypes.AO;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type = edit;
+            testStack.Undo();
+
+            //assert
+            PointTypes actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+        #endregion
     }
 }
