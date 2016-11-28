@@ -714,5 +714,677 @@ namespace Tests
 
         }
         #endregion
+
+        #region Redo
+        [TestMethod]
+        public void Redo_Bid_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Number()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.BidNumber = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.BidNumber;
+            Assert.AreEqual(edit, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_DueDate()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            DateTime edit = new DateTime(2000, 1, 1);
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.DueDate = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            DateTime actual = Bid.DueDate;
+            Assert.AreEqual(edit, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Salesperson()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Salesperson;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Salesperson = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Salesperson;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Estimator()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Estimator = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Estimator;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Labor()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.CommCoef = 1.1;
+            TECLabor expected = new TECLabor(Bid.Labor);
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            TECLabor actual = Bid.Labor;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_ScopeTree()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECScopeBranch> expected = Bid.ScopeTree;
+            TECScopeBranch edit = new TECScopeBranch();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.ScopeTree.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECScopeBranch> actual = Bid.ScopeTree;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Systems()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECSystem> expected = Bid.Systems;
+            TECSystem edit = new TECSystem();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECSystem> actual = Bid.Systems;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_DeviceCatalog()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECDevice edit = new TECDevice();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.DeviceCatalog.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECDevice> actual = Bid.DeviceCatalog;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_ManufacturerCatalog()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECManufacturer edit = new TECManufacturer();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.ManufacturerCatalog.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECManufacturer> actual = Bid.ManufacturerCatalog;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Notes()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECNote edit = new TECNote();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Notes.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECNote> actual = Bid.Notes;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Exclusions()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECExclusion edit = new TECExclusion();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Exclusions.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECExclusion> actual = Bid.Exclusions;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Tags()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECTag edit = new TECTag();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Tags.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECTag> actual = Bid.Tags;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Drawings()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECDrawing edit = new TECDrawing("This");
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Drawings.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECDrawing> actual = Bid.Drawings;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Description()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Description = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Description;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int edit = 3;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Quantity = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            int actual = Bid.Systems[0].Quantity;
+            Assert.AreEqual(edit, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Equipment()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECEquipment edit = new TECEquipment();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECEquipment> actual = Bid.Systems[0].Equipment;
+            Assert.AreEqual(edit, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Equipment_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Equipment_Description()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].Description = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].Description;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Equipment_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int edit = 3;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].Quantity = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].Quantity;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Equipment_SubScope()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECSubScope edit = new TECSubScope();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECSubScope> actual = Bid.Systems[0].Equipment[0].SubScope;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_SubScope_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_SubScope_Description()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Description = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Description;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_SubScope_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int edit = 3;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Quantity = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Quantity;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_SubScope_Points()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECPoint edit = new TECPoint();
+            edit.Type = PointTypes.AI;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECPoint> actual = Bid.Systems[0].Equipment[0].SubScope[0].Points;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_SubScope_Device()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECDevice edit = new TECDevice();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices.Add(edit);
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECDevice> actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Device_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Device_Description()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Device_Cost()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double edit = 123;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Device_Manufacturer()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECManufacturer edit = new TECManufacturer();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            TECManufacturer actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Point_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Point_Description()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Point_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int edit = 3;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Point_Type()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            PointTypes edit = PointTypes.AO;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            PointTypes actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+        #endregion
     }
 }

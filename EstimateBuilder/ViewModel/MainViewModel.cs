@@ -352,6 +352,7 @@ namespace EstimateBuilder.ViewModel
         }
         private bool UndoCanExecute()
         {
+            return true;
             if (Stack.UndoStack.Count > 0)
                 return true;
             else
@@ -364,6 +365,7 @@ namespace EstimateBuilder.ViewModel
         }
         private bool RedoCanExecute()
         {
+            return true;
             if (Stack.RedoStack.Count > 0)
                 return true;
             else

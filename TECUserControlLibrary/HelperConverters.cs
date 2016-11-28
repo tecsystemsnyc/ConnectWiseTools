@@ -152,7 +152,6 @@ namespace TECUserControlLibrary.HelperConverters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             int outInt = System.Convert.ToInt32(value);
-            Console.WriteLine("Index: " + outInt);
             return outInt;
         }
 
