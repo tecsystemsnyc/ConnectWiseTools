@@ -12,13 +12,18 @@ using static Tests.TestHelper;
 namespace Tests
 {
     [TestClass]
-    public class SaveAsTests
+    public class SaveTests
     {
         [TestMethod]
-        public void SaveAs_Bid_Info()
+        public void SaveAs_Bid()
         {
             //Arrange
             TECBid expectedBid = CreateTestBid();
+            TECSystem expectedSystem = expectedBid.Systems[0];
+            TECEquipment expectedEquipment = expectedSystem.Equipment[0];
+            TECSubScope expectedSubScope = expectedEquipment.SubScope[0];
+            TECDevice expectedDevice = expectedSubScope.Devices[0];
+            TECPoint expectedPoints = expectedSubScope.Points[0];
 
             string path = Path.GetTempFileName();
 
@@ -26,6 +31,11 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            TECSystem actualSystem = actualBid.Systems[0];
+            TECEquipment actualEquipment = actualSystem.Equipment[0];
+            TECSubScope actualSubScope = actualEquipment.SubScope[0];
+            TECDevice actualDevice = actualSubScope.Devices[0];
+            TECPoint actualPoints = actualSubScope.Points[0];
 
             //Assert
             Assert.AreEqual(expectedBid.Name, actualBid.Name);
@@ -34,27 +44,6 @@ namespace Tests
             Assert.AreEqual(expectedBid.Salesperson, actualBid.Salesperson);
             Assert.AreEqual(expectedBid.Estimator, actualBid.Estimator);
 
-            File.Delete(path);
-        }
-
-        [TestMethod]
-        public void SaveAs_Bid_System()
-        {
-            //Arrange
-            TECBid expectedbid = CreateTestBid();
-
-            TECSystem expectedSystem = expectedbid.Systems[0];
-
-            string path = Path.GetTempFileName();
-
-            //Act
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedbid);
-
-            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);

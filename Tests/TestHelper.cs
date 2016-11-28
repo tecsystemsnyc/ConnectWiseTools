@@ -26,17 +26,20 @@ namespace Tests
             bid.Estimator = "Mr. Test";
 
             //Points
-            var point1 = new TECPoint(PointTypes.AI, "Test", "Desc");
+            var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
+            point1.Quantity = 321;
             var allPoints = new ObservableCollection<TECPoint>();
             allPoints.Add(point1);
 
             //Devices
-            var device1 = new TECDevice("Test", "Desc", 42, "instr", new TECManufacturer());
+            var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", new TECManufacturer());
+            device1.Quantity = 987;
             var allDevices = new ObservableCollection<TECDevice>();
             allDevices.Add(device1);
 
             //SubScope
             var subScope1 = new TECSubScope("SubScope 1", "Description 1", allDevices, allPoints);
+            subScope1.Quantity = 654;
             var allSubScope = new ObservableCollection<TECSubScope>();
             allSubScope.Add(subScope1);
 
