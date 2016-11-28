@@ -3,6 +3,7 @@ using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -76,6 +77,7 @@ namespace Tests
             File.Delete(path);
         }
 
+        #region Save BidInfo
         [TestMethod]
         public void Save_BidInfo_Name()
         {
@@ -215,7 +217,49 @@ namespace Tests
 
             File.Delete(path);
         }
+        #endregion Save BidInfo
 
+        #region Save System
+        [TestMethod]
+        public void Save_Bid_Add_System()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSystem expectedSystem = new TECSystem("New system", "New system desc", 123.5, new ObservableCollection<TECEquipment>());
+            Guid expectedGuid = expectedSystem.Guid;
+
+            bid.Systems.Add(expectedSystem);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (expectedGuid == system.Guid)
+                {
+                    actualSystem = system;
+                }
+            }
+
+            //Assert
+            Assert.IsNotNull(actualSystem);
+
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+        }
+
+        #region Edit System
         [TestMethod]
         public void Save_Bid_System_Name()
         {
@@ -327,5 +371,7 @@ namespace Tests
 
             File.Delete(path);
         }
+        #endregion Edit System
+        #endregion Save System
     }
 }
