@@ -77,6 +77,7 @@ namespace Tests
             deviceC1.Quantity = 987;
             var deviceCatalog = new ObservableCollection<TECDevice>();
             deviceCatalog.Add(deviceC1);
+            deviceCatalog.Add(device1);
 
             //Bid
             bid.Systems.Add(system1);
