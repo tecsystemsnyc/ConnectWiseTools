@@ -18,19 +18,27 @@ namespace Tests
         {
             TECBid bid = new TECBid();
 
+            //Bid Info
+            bid.Name = "Bid Name";
+            bid.BidNumber = "1701-117";
+            bid.DueDate = DateTime.Now;
+            bid.Salesperson = "Mrs. Test";
+            bid.Estimator = "Mr. Test";
+
             //SubScope
-            var subScope1 = new TECSubScope();
+            var subScope1 = new TECSubScope("SubScope 1", "Description 1", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
             var allSubScope = new ObservableCollection<TECSubScope>();
             allSubScope.Add(subScope1);
 
             //Equipment
             var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, allSubScope);
+            equipment1.Quantity = 1234;
             var allEquipment = new ObservableCollection<TECEquipment>();
             allEquipment.Add(equipment1);
 
             //Systems
             var system1 = new TECSystem("System 1", "Description 1", 234.5, allEquipment);
-            system1.Quantity = 1;
+            system1.Quantity = 2345;
 
             //Bid
             bid.Systems.Add(system1);

@@ -28,6 +28,10 @@ namespace Tests
             string expectedNumber = "1701-117";
             Assert.AreEqual(expectedNumber, actualNumber);
 
+            DateTime actualDueDate = bid.DueDate;
+            DateTime expectedDueDate = new DateTime(1969, 7, 20);
+            Assert.AreEqual(expectedDueDate, actualDueDate);
+
             string actualSales = bid.Salesperson;
             string expectedSales = "Mrs. Test";
             Assert.AreEqual(expectedSales, actualSales);
