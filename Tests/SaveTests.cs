@@ -233,7 +233,7 @@ namespace Tests
 
             //Act
             TECSystem expectedSystem = new TECSystem("New system", "New system desc", 123.5, new ObservableCollection<TECEquipment>());
-            Guid expectedGuid = expectedSystem.Guid;
+            expectedSystem.Quantity = 1235;
 
             bid.Systems.Add(expectedSystem);
 
@@ -244,7 +244,7 @@ namespace Tests
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                if (expectedGuid == system.Guid)
+                if (expectedSystem.Guid == system.Guid)
                 {
                     actualSystem = system;
                 }
@@ -406,5 +406,47 @@ namespace Tests
         }
         #endregion Edit System
         #endregion Save System
+
+        #region Save Equipment
+        [TestMethod]
+        public void Save_Bid_Add_Equipment()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment expectedEquipment = new TECEquipment("New Equipment", "New Description", 465543.54, new ObservableCollection<TECSubScope>());
+            expectedEquipment.Quantity = 46554354;
+
+            bid.Systems[0].Equipment.Add(expectedEquipment);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment actualEquipment = null;
+            foreach (TECEquipment equip in actualBid.Systems[0].Equipment)
+            {
+                if (expectedEquipment.Guid == equip.Guid)
+                {
+                    actualEquipment = equip;
+                }
+            }
+
+            //Assert
+            Assert.IsNotNull(actualEquipment);
+
+            Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
+            Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
+            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+        }
+
+        #endregion Save Equipment
     }
 }
