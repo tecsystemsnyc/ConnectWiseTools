@@ -63,7 +63,6 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    Console.WriteLine("Page Added");
                     NotifyPropertyChanged("Add", this, item);
                 }
             }
@@ -74,8 +73,6 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("Remove", this, item);
                 }
             }
-
-
         }
 
         public TECDrawing(string name, string description, Guid guid, ObservableCollection<TECPage> pages) : this(name)
