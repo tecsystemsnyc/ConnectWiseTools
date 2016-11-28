@@ -259,6 +259,39 @@ namespace Tests
             Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
         }
 
+        [TestMethod]
+        public void Save_Bid_Remove_System()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            int oldNumSystems = bid.Systems.Count;
+            TECSystem systemToRemove = bid.Systems[0];
+
+            bid.Systems.Remove(systemToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                if (system.Guid == systemToRemove.Guid)
+                {
+                    Assert.Fail();
+                }
+            }
+
+            Assert.AreEqual((oldNumSystems - 1), bid.Systems.Count);
+        }
+
         #region Edit System
         [TestMethod]
         public void Save_Bid_System_Name()

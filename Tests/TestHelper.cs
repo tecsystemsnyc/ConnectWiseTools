@@ -53,6 +53,9 @@ namespace Tests
             var system1 = new TECSystem("System 1", "Description 1", 234.5, allEquipment);
             system1.Quantity = 2345;
 
+            var system2 = new TECSystem("System 2", "Description 2", 234.52, new ObservableCollection<TECEquipment>());
+            system2.Quantity = 23452;
+
             //Pages
             var pages1 = new TECPage("Testpath", 2);
             var allPages = new ObservableCollection<TECPage>();
@@ -81,6 +84,7 @@ namespace Tests
 
             //Bid
             bid.Systems.Add(system1);
+            bid.Systems.Add(system2);
             bid.DeviceCatalog = deviceCatalog;
             bid.Drawings = allDrawings;
             bid.ManufacturerCatalog = allManufacturers;
