@@ -25,8 +25,18 @@ namespace Tests
             bid.Salesperson = "Mrs. Test";
             bid.Estimator = "Mr. Test";
 
+            //Points
+            var point1 = new TECPoint(PointTypes.AI, "Test", "Desc");
+            var allPoints = new ObservableCollection<TECPoint>();
+            allPoints.Add(point1);
+
+            //Devices
+            var device1 = new TECDevice("Test", "Desc", 42, "instr", new TECManufacturer());
+            var allDevices = new ObservableCollection<TECDevice>();
+            allDevices.Add(device1);
+
             //SubScope
-            var subScope1 = new TECSubScope("SubScope 1", "Description 1", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            var subScope1 = new TECSubScope("SubScope 1", "Description 1", allDevices, allPoints);
             var allSubScope = new ObservableCollection<TECSubScope>();
             allSubScope.Add(subScope1);
 
@@ -40,8 +50,19 @@ namespace Tests
             var system1 = new TECSystem("System 1", "Description 1", 234.5, allEquipment);
             system1.Quantity = 2345;
 
+            //Pages
+            var pages1 = new TECPage("Testpath", 2);
+            var allPages = new ObservableCollection<TECPage>();
+
+            //Drawings
+            var drawing1 = new TECDrawing("Test", "Desc", Guid.NewGuid(), allPages);
+            var allDrawings = new ObservableCollection<TECDrawing>();
+            allDrawings.Add(drawing1);
+
             //Bid
             bid.Systems.Add(system1);
+            bid.DeviceCatalog = allDevices;
+            bid.Drawings = allDrawings;
 
             return bid;
         }
