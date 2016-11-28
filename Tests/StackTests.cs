@@ -118,12 +118,10 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECLabor expected = Bid.Labor;
-            TECLabor edit = new TECLabor();
-            edit.CommCoef = 1.1;
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor = edit;
+            Bid.Labor.CommCoef = 1.1;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 

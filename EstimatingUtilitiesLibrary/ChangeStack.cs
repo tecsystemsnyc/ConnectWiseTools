@@ -53,6 +53,7 @@ namespace EstimatingUtilitiesLibrary
         {
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
+            Bid.Labor.PropertyChanged += Object_PropertyChanged;
             //Systems Collection Changed
             //Bid.Systems.CollectionChanged += Bid_CollectionChanged;
             //System Changed
