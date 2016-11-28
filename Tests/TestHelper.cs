@@ -11,7 +11,7 @@ namespace Tests
 {
     public static class TestHelper
     {
-        static public string StaticTestBidPath = Environment.CurrentDirectory + @"\Test Files\UnitTestBid.bdb";
+        static public string StaticTestBidPath = Environment.CurrentDirectory + @"\Test Files\StaticTestBid.bdb";
 
         public static TECBid CreateTestBid()
         {
