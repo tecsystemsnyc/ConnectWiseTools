@@ -82,6 +82,11 @@ namespace Tests
             deviceCatalog.Add(deviceC1);
             deviceCatalog.Add(device1);
 
+            //Locations
+            var location1 = new TECLocation("1st Floor");
+            var allLocations = new ObservableCollection<TECLocation>();
+            allLocations.Add(location1);
+
             //Bid
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);
@@ -89,6 +94,7 @@ namespace Tests
             bid.Drawings = allDrawings;
             bid.ManufacturerCatalog = allManufacturers;
             bid.Tags = allTags;
+            bid.Locations = allLocations;
 
             return bid;
         }

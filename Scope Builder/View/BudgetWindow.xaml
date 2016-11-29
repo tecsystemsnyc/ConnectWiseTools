@@ -66,8 +66,7 @@
                              Grid.Column="2"
                              FontSize="12"
                              Height="Auto"
-                             Margin="5"
-                             Foreground="{DynamicResource LightTextBrush}"/>
+                             Margin="5"/>
                     <TextBox Text="{Binding ManualAdjustmentAmount, StringFormat={}{0:C}}"
                              Grid.Row="2"
                              Grid.Column="2"

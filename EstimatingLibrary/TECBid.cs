@@ -26,7 +26,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECExclusion> _exclusions { get; set; }
         private ObservableCollection<TECTag> _tags { get; set; }
         private ObservableCollection<TECDrawing> _drawings { get; set; }
-        
+        private ObservableCollection<TECLocation> _locations { get; set; }
+
         public string Name {
             get { return _name; }
             set
@@ -193,8 +194,21 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Drawings", temp, this);
             }
         }
+
+        public ObservableCollection<TECLocation> Locations
+        {
+            get { return _locations; }
+            set
+            {
+                var temp = this.Copy();
+                Locations.CollectionChanged -= CollectionChanged;
+                _locations = value;
+                Locations.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Locations", temp, this);
+            }
+        }
         #endregion //Properties
-        
+
         #region Constructors
         public TECBid(
             string name,
@@ -226,6 +240,7 @@ namespace EstimatingLibrary
             _infoGuid = infoGuid;
             _labor = new TECLabor();
             _drawings = new ObservableCollection<TECDrawing>();
+            _locations = new ObservableCollection<TECLocation>();
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
@@ -235,6 +250,7 @@ namespace EstimatingLibrary
             Exclusions.CollectionChanged += CollectionChanged;
             Tags.CollectionChanged += CollectionChanged;
             Drawings.CollectionChanged += CollectionChanged;
+            Locations.CollectionChanged += CollectionChanged;
         }
         public TECBid(
             string name, 
