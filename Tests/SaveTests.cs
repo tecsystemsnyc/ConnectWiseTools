@@ -256,6 +256,11 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
             Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
         }
 
         [TestMethod]
@@ -289,6 +294,11 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumSystems - 1), bid.Systems.Count);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
         }
 
         #region Edit System
@@ -467,16 +477,20 @@ namespace Tests
                 if (expectedEquipment.Guid == equip.Guid)
                 {
                     actualEquipment = equip;
+                    break;
                 }
             }
 
             //Assert
-            Assert.IsNotNull(actualEquipment);
-
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
             Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
         }
 
         [TestMethod]
@@ -521,6 +535,11 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumEquip - 1), modifiedSystem.Equipment.Count);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
         }
 
         #region Edit Equipment
@@ -676,7 +695,7 @@ namespace Tests
                         break;
                     }
                 }
-
+                if (actualEquip != null) break;
             }
 
             //Assert
@@ -691,5 +710,248 @@ namespace Tests
         #endregion Edit Equipment
 
         #endregion Save Equipment
+
+        #region Save SubScope
+        [TestMethod]
+        public void Save_Bid_Add_SubScope()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSubScope expectedSubScope = new TECSubScope("New SubScope", "New Description", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            expectedSubScope.Quantity = 235746543;
+
+            bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == expectedSubScope.Guid)
+                        {
+                            actualSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null) break;
+                }
+                if (actualSubScope != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
+            Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
+            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_SubScope()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment equipToModify = bid.Systems[0].Equipment[0];
+            int oldNumSubScope = equipToModify.SubScope.Count();
+            TECSubScope subScopeToRemove = equipToModify.SubScope[0];
+
+            equipToModify.SubScope.Remove(subScopeToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment modifiedEquip = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    if (equip.Guid == equipToModify.Guid)
+                    {
+                        modifiedEquip = equip;
+                        break;
+                    }
+                }
+                if (modifiedEquip != null) break;
+            }
+
+            //Assert
+            foreach (TECSubScope ss in modifiedEquip.SubScope)
+            {
+                if (subScopeToRemove.Guid == ss.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumSubScope - 1), modifiedEquip.SubScope.Count);
+
+            //Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        #region Edit SubScope
+        [TestMethod]
+        public void Save_Bid_SubScope_Name()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            expectedSubScope.Name = "Save SubScope Name";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == expectedSubScope.Guid)
+                        {
+                            actualSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null) break;
+                }
+                if (actualSubScope != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
+
+            //Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_SubScope_Description()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            expectedSubScope.Description = "Save SubScope Description";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == expectedSubScope.Guid)
+                        {
+                            actualSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null) break;
+                }
+                if (actualSubScope != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
+
+            //Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_SubScope_Quantity()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            expectedSubScope.Quantity = 987654321;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == expectedSubScope.Guid)
+                        {
+                            actualSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null) break;
+                }
+                if (actualSubScope != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
+
+            //Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+        #endregion Edit SubScope
+        #endregion Save SubScope
     }
 }
