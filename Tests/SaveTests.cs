@@ -247,12 +247,11 @@ namespace Tests
                 if (expectedSystem.Guid == system.Guid)
                 {
                     actualSystem = system;
+                    break;
                 }
             }
 
             //Assert
-            Assert.IsNotNull(actualSystem);
-
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
@@ -305,15 +304,24 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
 
             //Act
-            string expectedName = "Save System Name";
-            bid.Systems[0].Name = expectedName;
+            TECSystem expectedSystem = bid.Systems[0];
+            expectedSystem.Name = "Save System Name";
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            string actualName = actualBid.Systems[0].Name;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual(expectedName, actualName);
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -333,15 +341,23 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
 
             //Act
-            string expectedDescription = "Save System Description";
-            bid.Systems[0].Description = expectedDescription;
+            TECSystem expectedSystem = bid.Systems[0];
+            expectedSystem.Description = "Save System Description";
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            string actualDescription = actualBid.Systems[0].Description;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                }
+            }
 
             //Assert
-            Assert.AreEqual(expectedDescription, actualDescription);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -361,15 +377,23 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
 
             //Act
-            int expectedQuantity = 987654321;
-            bid.Systems[0].Quantity = expectedQuantity;
+            TECSystem expectedSystem = bid.Systems[0];
+            expectedSystem.Quantity = 987654321;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            int actualQuantity = actualBid.Systems[0].Quantity;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                }
+            }
 
             //Assert
-            Assert.AreEqual(expectedQuantity, actualQuantity);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -389,15 +413,23 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
 
             //Act
-            double expectedBudgetPrice = 987654321;
-            bid.Systems[0].BudgetPrice = expectedBudgetPrice;
+            TECSystem expectedSystem = bid.Systems[0];
+            expectedSystem.BudgetPrice = 9876543.21;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            double actualBudgetPrice = actualBid.Systems[0].BudgetPrice;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                }
+            }
 
             //Assert
-            Assert.AreEqual(expectedBudgetPrice, actualBudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -446,6 +478,217 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
             Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
         }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Equipment()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECSystem systemToModify = bid.Systems[0];
+            int oldNumEquip = systemToModify.Equipment.Count();
+            TECEquipment equipToRemove = systemToModify.Equipment[0];
+
+            systemToModify.Equipment.Remove(equipToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSystem modifiedSystem = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                if (system.Guid == systemToModify.Guid)
+                {
+                    modifiedSystem = system;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECEquipment equip in modifiedSystem.Equipment)
+            {
+                if (equipToRemove.Guid == equip.Guid)
+                {
+                    Assert.Fail();
+                }
+            }
+
+            Assert.AreEqual((oldNumEquip - 1), modifiedSystem.Equipment.Count);
+        }
+
+        #region Edit Equipment
+        [TestMethod]
+        public void Save_Bid_Equipment_Name()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            expectedEquip.Name = "Save Equip Name";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment actualEquip = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    if (equip.Guid == expectedEquip.Guid)
+                    {
+                        actualEquip = equip;
+                        break;
+                    }
+                }
+                
+            }
+
+            //Assert
+            Assert.AreEqual(expectedEquip.Name, actualEquip.Name);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Equipment_Description()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            expectedEquip.Description = "Save Equip Description";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment actualEquip = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    if (equip.Guid == expectedEquip.Guid)
+                    {
+                        actualEquip = equip;
+                        break;
+                    }
+                }
+
+            }
+
+            //Assert
+            Assert.AreEqual(expectedEquip.Description, actualEquip.Description);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Equipment_Quantity()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            expectedEquip.Quantity = 987654321;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment actualEquip = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    if (equip.Guid == expectedEquip.Guid)
+                    {
+                        actualEquip = equip;
+                        break;
+                    }
+                }
+
+            }
+
+            //Assert
+            Assert.AreEqual(expectedEquip.Quantity, actualEquip.Quantity);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Equipment_BudgetPrice()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            expectedEquip.BudgetPrice = 9876543.21;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment actualEquip = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    if (equip.Guid == expectedEquip.Guid)
+                    {
+                        actualEquip = equip;
+                        break;
+                    }
+                }
+
+            }
+
+            //Assert
+            Assert.AreEqual(expectedEquip.BudgetPrice, actualEquip.BudgetPrice);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
+        }
+
+        #endregion Edit Equipment
 
         #endregion Save Equipment
     }

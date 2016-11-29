@@ -139,13 +139,35 @@ namespace EstimateBuilder.ViewModel
                 Stack = new ChangeStack(Bid);
                 MessengerInstance.Send(new GenericMessage<TECBid>(Bid));
                 RaisePropertyChanged("Bid");
+                buildTitleString();
+                Bid.PropertyChanged += Bid_PropertyChanged;
             }
         }
+
+        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Name")
+            {
+                buildTitleString();
+            }
+        }
+
         private TECBid _bid;
 
         private string defaultTemplatesPath;
         private bool saveSuccessful;
         private string bidDBFilePath;
+
+        public string TitleString
+        {
+            get { return _titleString; }
+            set
+            {
+                _titleString = value;
+                RaisePropertyChanged("TitleString");
+            }
+        }
+        private string _titleString;
 
         public string TECLogo { get; set; }
 
@@ -641,6 +663,11 @@ namespace EstimateBuilder.ViewModel
             }
 
             return path;
+        }
+
+        private void buildTitleString()
+        {
+            TitleString = Bid.Name + " - Estimate Builder";
         }
 
         #endregion Helper Methods
