@@ -12,7 +12,7 @@
         mc:Ignorable="d ignore"
         Height="720"
         Width="1024"
-        Title="Estimate Builder"
+        Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
         <ResourceDictionary>
