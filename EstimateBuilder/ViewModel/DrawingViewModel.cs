@@ -6,7 +6,7 @@ using System.Windows;
 using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Generic;
 using EstimatingUtilitiesLibrary;
 

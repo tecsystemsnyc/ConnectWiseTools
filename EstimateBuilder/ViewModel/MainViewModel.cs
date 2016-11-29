@@ -6,7 +6,7 @@ using System;
 using EstimatingUtilitiesLibrary;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
@@ -374,7 +374,6 @@ namespace EstimateBuilder.ViewModel
         }
         private bool UndoCanExecute()
         {
-            return true;
             if (Stack.UndoStack.Count > 0)
                 return true;
             else
@@ -387,7 +386,6 @@ namespace EstimateBuilder.ViewModel
         }
         private bool RedoCanExecute()
         {
-            return true;
             if (Stack.RedoStack.Count > 0)
                 return true;
             else

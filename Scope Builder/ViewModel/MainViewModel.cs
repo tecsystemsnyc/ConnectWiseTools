@@ -1,7 +1,7 @@
 using GalaSoft.MvvmLight;
 using EstimatingLibrary;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System;
 using Microsoft.Win32;
@@ -763,7 +763,7 @@ namespace Scope_Builder.ViewModel
             switch (tIndex)
             {
                 case 0:
-                    DataGridVisibilty.ExpandSubScope = Visibility.Collapsed;
+                    DataGridVisibilty.ExpandSubScope = Visibility.Visible;
                     break;
                 default:
                     break;
