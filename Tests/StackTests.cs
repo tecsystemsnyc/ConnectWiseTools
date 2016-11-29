@@ -136,7 +136,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECScopeBranch> expected = Bid.ScopeTree;
+            ObservableCollection<TECScopeBranch> expected = new ObservableCollection<TECScopeBranch>();
+            foreach (TECScopeBranch item in Bid.ScopeTree)
+            {
+                expected.Add(item);
+            }
             TECScopeBranch edit = new TECScopeBranch();
 
             //Act
@@ -147,7 +151,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECScopeBranch> actual = Bid.ScopeTree;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -156,7 +160,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECSystem> expected = Bid.Systems;
+            ObservableCollection<TECSystem> expected = new ObservableCollection<TECSystem>();
+            foreach (TECSystem item in Bid.Systems)
+            {
+                expected.Add(item);
+            }
             TECSystem edit = new TECSystem();
 
             //Act
@@ -167,7 +175,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECSystem> actual = Bid.Systems;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -176,7 +184,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECDevice> expected = Bid.DeviceCatalog;
+            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
+            foreach(TECDevice item in Bid.DeviceCatalog)
+            {
+                expected.Add(item);
+            }
             TECDevice edit = new TECDevice();
 
             //Act
@@ -187,7 +199,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECDevice> actual = Bid.DeviceCatalog;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -196,7 +208,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECManufacturer> expected = Bid.ManufacturerCatalog;
+            ObservableCollection<TECManufacturer> expected = new ObservableCollection<TECManufacturer>();
+            foreach (TECManufacturer item in Bid.ManufacturerCatalog)
+            {
+                expected.Add(item);
+            }
             TECManufacturer edit = new TECManufacturer();
 
             //Act
@@ -207,7 +223,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECManufacturer> actual = Bid.ManufacturerCatalog;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -216,7 +232,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECNote> expected = Bid.Notes;
+            ObservableCollection<TECNote> expected = new ObservableCollection<TECNote>();
+            foreach (TECNote item in Bid.Notes)
+            {
+                expected.Add(item);
+            }
             TECNote edit = new TECNote();
 
             //Act
@@ -227,7 +247,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECNote> actual = Bid.Notes;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -236,7 +256,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECExclusion> expected = Bid.Exclusions;
+            ObservableCollection<TECExclusion> expected = new ObservableCollection<TECExclusion>();
+            foreach (TECExclusion item in Bid.Exclusions)
+            {
+                expected.Add(item);
+            }
             TECExclusion edit = new TECExclusion();
 
             //Act
@@ -247,7 +271,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECExclusion> actual = Bid.Exclusions;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -256,7 +280,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECTag> expected = Bid.Tags;
+            ObservableCollection<TECTag> expected = new ObservableCollection<TECTag>();
+            foreach (TECTag item in Bid.Tags)
+            {
+                expected.Add(item);
+            }
             TECTag edit = new TECTag();
 
             //Act
@@ -267,7 +295,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECTag> actual = Bid.Tags;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -276,7 +304,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECDrawing> expected = Bid.Drawings;
+            ObservableCollection<TECDrawing> expected = new ObservableCollection<TECDrawing>();
+            foreach (TECDrawing item in Bid.Drawings)
+            {
+                expected.Add(item);
+            }
             TECDrawing edit = new TECDrawing("This");
 
             Trace.Write("Number of drawings: " + Bid.Drawings.Count + "\n");
@@ -289,7 +321,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECDrawing> actual = Bid.Drawings;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -358,7 +390,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECEquipment> expected = Bid.Systems[0].Equipment;
+            ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
+            foreach (TECEquipment item in Bid.Systems[0].Equipment)
+            {
+                expected.Add(item);
+            }
             TECEquipment edit = new TECEquipment();
 
             //Act
@@ -369,7 +405,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECEquipment> actual = Bid.Systems[0].Equipment;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -438,7 +474,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECSubScope> expected = Bid.Systems[0].Equipment[0].SubScope;
+            ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
+            foreach (TECSubScope item in Bid.Systems[0].Equipment[0].SubScope)
+            {
+                expected.Add(item);
+            }
             TECSubScope edit = new TECSubScope();
 
             //Act
@@ -449,7 +489,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECSubScope> actual = Bid.Systems[0].Equipment[0].SubScope;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -518,7 +558,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECPoint> expected = Bid.Systems[0].Equipment[0].SubScope[0].Points;
+            ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
+            foreach (TECPoint item in Bid.Systems[0].Equipment[0].SubScope[0].Points)
+            {
+                expected.Add(item);
+            }
             TECPoint edit = new TECPoint();
             edit.Type = PointTypes.AI;
 
@@ -530,7 +574,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECPoint> actual = Bid.Systems[0].Equipment[0].SubScope[0].Points;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -539,7 +583,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECDevice> expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices;
+            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
+            foreach (TECDevice item in Bid.Systems[0].Equipment[0].SubScope[0].Devices)
+            {
+                expected.Add(item);
+            }
             TECDevice edit = new TECDevice();
 
             //Act
@@ -550,7 +598,7 @@ namespace Tests
 
             //assert
             ObservableCollection<TECDevice> actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -726,13 +774,8 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Name = edit;
-            Trace.WriteLine("Before Undo: " + Bid.Name);
-            Trace.WriteLine("Undo Count: " + testStack.UndoStack.Count);
             testStack.Undo();
-            Trace.WriteLine("After Undo: " + Bid.Name);
-            Trace.WriteLine("Redo Count: " + testStack.RedoStack.Count);
             testStack.Redo();
-            Trace.WriteLine("After Redo: " + Bid.Name);
 
             //assert
             string actual = Bid.Name;
@@ -832,7 +875,7 @@ namespace Tests
 
             //assert
             TECLabor actual = Bid.Labor;
-            Assert.AreEqual(expected, actual, "Not Redone");
+            Assert.AreEqual(expected.CommCoef, actual.CommCoef, "Not Redone");
 
         }
 
@@ -841,18 +884,22 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECScopeBranch> expected = Bid.ScopeTree;
             TECScopeBranch edit = new TECScopeBranch();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.ScopeTree.Add(edit);
+            var expected = new ObservableCollection<TECScopeBranch>();
+            foreach (TECScopeBranch item in Bid.ScopeTree)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECScopeBranch> actual = Bid.ScopeTree;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -861,18 +908,22 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECSystem> expected = Bid.Systems;
             TECSystem edit = new TECSystem();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems.Add(edit);
+            var expected = new ObservableCollection<TECSystem>();
+            foreach(TECSystem item in Bid.Systems)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECSystem> actual = Bid.Systems;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -886,12 +937,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.DeviceCatalog.Add(edit);
+            var expected = new ObservableCollection<TECDevice>();
+            foreach (TECDevice item in Bid.DeviceCatalog)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECDevice> actual = Bid.DeviceCatalog;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -905,12 +961,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.ManufacturerCatalog.Add(edit);
+            var expected = new ObservableCollection<TECManufacturer>();
+            foreach (TECManufacturer item in Bid.ManufacturerCatalog)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECManufacturer> actual = Bid.ManufacturerCatalog;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -924,12 +985,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Notes.Add(edit);
+            var expected = new ObservableCollection<TECNote>();
+            foreach (TECNote item in Bid.Notes)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECNote> actual = Bid.Notes;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -943,12 +1009,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Exclusions.Add(edit);
+            var expected = new ObservableCollection<TECExclusion>();
+            foreach (TECExclusion item in Bid.Exclusions)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECExclusion> actual = Bid.Exclusions;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -962,12 +1033,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Tags.Add(edit);
+            var expected = new ObservableCollection<TECTag>();
+            foreach (TECTag item in Bid.Tags)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECTag> actual = Bid.Tags;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -981,12 +1057,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Drawings.Add(edit);
+            var expected = new ObservableCollection<TECDrawing>();
+            foreach (TECDrawing item in Bid.Drawings)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECDrawing> actual = Bid.Drawings;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -1057,12 +1138,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems[0].Equipment.Add(edit);
+            var expected = new ObservableCollection<TECEquipment>();
+            foreach (TECEquipment item in Bid.Systems[0].Equipment)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECEquipment> actual = Bid.Systems[0].Equipment;
-            Assert.AreEqual(edit, actual, "Not Undone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
@@ -1133,12 +1219,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems[0].Equipment[0].SubScope.Add(edit);
+            var expected = new ObservableCollection<TECSubScope>();
+            foreach (TECSubScope item in Bid.Systems[0].Equipment[0].SubScope)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECSubScope> actual = Bid.Systems[0].Equipment[0].SubScope;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -1210,12 +1301,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems[0].Equipment[0].SubScope[0].Points.Add(edit);
+            var expected = new ObservableCollection<TECPoint>();
+            foreach (TECPoint item in Bid.Systems[0].Equipment[0].SubScope[0].Points)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECPoint> actual = Bid.Systems[0].Equipment[0].SubScope[0].Points;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
@@ -1229,12 +1325,17 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems[0].Equipment[0].SubScope[0].Devices.Add(edit);
+            var expected = new ObservableCollection<TECDevice>();
+            foreach (TECDevice item in Bid.Systems[0].Equipment[0].SubScope[0].Devices)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
             testStack.Redo();
 
             //assert
             ObservableCollection<TECDevice> actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices;
-            Assert.AreEqual(edit, actual, "Not Redone");
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
