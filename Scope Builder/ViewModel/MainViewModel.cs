@@ -831,13 +831,11 @@ namespace Scope_Builder.ViewModel
             }
             else
             {
-
-           
                 if (sourceItem is TECSystem)
                 {
                     TECSystem tempSystem = new TECSystem(sourceItem as TECSystem);
                     int index = dropInfo.InsertIndex;
-                    if (index < Bid.Systems.Count)
+                    if (index < ((IList)dropInfo.TargetCollection).Count)
                     {
                         Bid.Systems.Insert(dropInfo.InsertIndex, tempSystem);
                     }
@@ -851,7 +849,7 @@ namespace Scope_Builder.ViewModel
                     TECEquipment tempEquipment = new TECEquipment(sourceItem as TECEquipment);
                     int index = dropInfo.InsertIndex;
                     ObservableCollection<TECEquipment> targetEquipment = dropInfo.TargetCollection as ObservableCollection<TECEquipment>;
-                    if (index < Bid.Systems.Count)
+                    if (index < ((IList)dropInfo.TargetCollection).Count)
                     {
                         targetEquipment.Insert(dropInfo.InsertIndex, tempEquipment);
                     }
@@ -867,7 +865,7 @@ namespace Scope_Builder.ViewModel
                     int index = dropInfo.InsertIndex;
                     ObservableCollection<TECSubScope> targetSubScope = dropInfo.TargetCollection as ObservableCollection<TECSubScope>;
 
-                    if (index < Bid.Systems.Count)
+                    if (index < ((IList)dropInfo.TargetCollection).Count)
                     {
                         targetSubScope.Insert(dropInfo.InsertIndex, tempSubScope);
                     }
