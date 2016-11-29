@@ -54,17 +54,13 @@ namespace EstimatingUtilitiesLibrary
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
-            //Systems Collection Changed
-            //Bid.Systems.CollectionChanged += Bid_CollectionChanged;
             //System Changed
-            //Bid.ScopeTree.CollectionChanged += Bid_CollectionChanged;
             foreach (TECScopeBranch branch in Bid.ScopeTree) { registerScope(branch); }
             //Notes changed
-            //Bid.Notes.CollectionChanged += Bid_CollectionChanged;
             foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
             //Exclusions changed
-            //Bid.Exclusions.CollectionChanged += Bid_CollectionChanged;
             foreach (TECExclusion exclusion in Bid.Exclusions) { exclusion.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECLocation location in Bid.Locations) { location.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             {
                 system.PropertyChanged += Object_PropertyChanged;
@@ -297,6 +293,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Tags.Remove((TECTag)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECLocation)
+                {
+                    ((TECBid)StackItem.Item2).Locations.Remove((TECLocation)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECSystem)
             {
@@ -381,6 +381,10 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECTag)
                 {
                     ((TECBid)StackItem.Item2).Tags.Add((TECTag)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECLocation)
+                {
+                    ((TECBid)StackItem.Item2).Locations.Add((TECLocation)StackItem.Item3);
                 }
             }
             else if (StackItem.Item2 is TECSystem)

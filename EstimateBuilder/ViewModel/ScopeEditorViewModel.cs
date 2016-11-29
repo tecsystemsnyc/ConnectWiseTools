@@ -115,7 +115,6 @@ namespace EstimateBuilder.ViewModel
             }
             set
             {
-                clearSelected(value);
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
                 RightTabIndex = EditIndex.System;
@@ -131,7 +130,6 @@ namespace EstimateBuilder.ViewModel
             }
             set
             {
-                clearSelected(value);
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
                 RightTabIndex = EditIndex.Equipment;
@@ -148,7 +146,6 @@ namespace EstimateBuilder.ViewModel
             }
             set
             {
-                clearSelected(value);
                 _selectedSubScope = value;
                 RaisePropertyChanged("SelectedSubscope");
                 RightTabIndex = EditIndex.SubScope;
@@ -164,7 +161,6 @@ namespace EstimateBuilder.ViewModel
             }
             set
             {
-                clearSelected(value);
                 _selectedDevice = value;
                 RaisePropertyChanged("SelectedDevice");
                 RightTabIndex = EditIndex.Device;
@@ -177,7 +173,6 @@ namespace EstimateBuilder.ViewModel
             get { return _selectedPoint; }
             set
             {
-                clearSelected(value);
                 _selectedPoint = value;
                 RaisePropertyChanged("SelectedPoint");
                 RightTabIndex = EditIndex.Point;
@@ -713,44 +708,7 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region Helper Methods
-        private void clearSelected(object selected)
-        {
-            if(selected is TECSystem)
-            {
-                _selectedEquipment = null;
-                _selectedSubScope = null;
-                _selectedDevice = null;
-                _selectedPoint = null;
-            }
-            else if (selected is TECEquipment)
-            {
-                _selectedSystem = null;
-                _selectedSubScope = null;
-                _selectedDevice = null;
-                _selectedPoint = null;
-            }
-            else if (selected is TECSubScope)
-            {
-                _selectedSystem = null;
-                _selectedEquipment = null;
-                _selectedDevice = null;
-                _selectedPoint = null;
-            }
-            else if (selected is TECDevice)
-            {
-                _selectedSystem = null;
-                _selectedEquipment = null;
-                _selectedSubScope = null;
-                _selectedPoint = null;
-            }
-            else if (selected is TECPoint)
-            {
-                _selectedSystem = null;
-                _selectedEquipment = null;
-                _selectedSubScope = null;
-                _selectedDevice = null;
-            }
-        }
+        
 
         private void setVisibility(GridIndex gridIndex)
         {

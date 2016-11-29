@@ -326,6 +326,30 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Undo_Bid_Locations()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECLocation> expected = new ObservableCollection<TECLocation>();
+            foreach (TECLocation item in Bid.Locations)
+            {
+                expected.Add(item);
+            }
+            TECLocation edit = new TECLocation("Edit");
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Locations.Add(edit);
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECDrawing> actual = Bid.Drawings;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
         public void Undo_System_Name()
         {
             //Arrange
@@ -1067,6 +1091,30 @@ namespace Tests
 
             //assert
             ObservableCollection<TECDrawing> actual = Bid.Drawings;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Locations()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECLocation edit = new TECLocation("This");
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Locations.Add(edit);
+            var expected = new ObservableCollection<TECLocation>();
+            foreach (TECLocation item in Bid.Locations)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECLocation> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
