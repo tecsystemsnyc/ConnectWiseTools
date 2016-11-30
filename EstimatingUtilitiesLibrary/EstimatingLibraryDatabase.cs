@@ -1473,14 +1473,7 @@ namespace EstimatingUtilitiesLibrary
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
                 string costString = row["Cost"].ToString();
-                string wire = row["Wire"].ToString();string quantityString = row["Quantity"].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in device, setting to 1");
-                }
+                string wire = row["Wire"].ToString();
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -1492,8 +1485,6 @@ namespace EstimatingUtilitiesLibrary
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
 
                 TECDevice deviceToAdd = new TECDevice(name, description, cost, wire, manufacturer, deviceID);
-
-                deviceToAdd.Quantity = quantity;
                 deviceToAdd.Tags = getTagsInScope(deviceID);
 
                 devices.Add(deviceToAdd);
@@ -1663,9 +1654,10 @@ namespace EstimatingUtilitiesLibrary
                 string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
                 quantityCommand += (subScopeID + "' and DeviceID = '" + deviceID + "'");
 
-                DataTable quantityDT = SQLiteDB.getDataFromCommand(command);
+                DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
 
                 string quantityString = quantityDT.Rows[0][0].ToString();
+                //Console.WriteLine("QuantityString: " + quantityString);
                 int quantity;
                 if (!int.TryParse(quantityString, out quantity))
                 {
