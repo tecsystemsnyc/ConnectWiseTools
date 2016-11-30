@@ -77,7 +77,6 @@ namespace Tests
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, "Test Wire", new TECManufacturer());
-            deviceC1.Quantity = 987;
             var deviceCatalog = new ObservableCollection<TECDevice>();
             deviceCatalog.Add(deviceC1);
             deviceCatalog.Add(device1);

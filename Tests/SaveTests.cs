@@ -9,68 +9,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Tests.TestHelper;
 
 namespace Tests
 {
     [TestClass]
     public class SaveTests
     {
-        [TestMethod]
-        public void SaveAs_Bid()
+        TECBid bid;
+        ChangeStack testStack;
+        string path;
+
+        [TestInitialize()]
+        public void TestInitialize()
         {
             //Arrange
-            TECBid expectedBid = CreateTestBid();
-            TECSystem expectedSystem = expectedBid.Systems[0];
-            TECEquipment expectedEquipment = expectedSystem.Equipment[0];
-            TECSubScope expectedSubScope = expectedEquipment.SubScope[0];
-            TECDevice expectedDevice = expectedSubScope.Devices[0];
-            TECPoint expectedPoint = expectedSubScope.Points[0];
-
+            TECBid bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
             string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+        }
 
-            //Act
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
-
-            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECEquipment actualEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSubScope = actualEquipment.SubScope[0];
-            TECDevice actualDevice = actualSubScope.Devices[0];
-            TECPoint actualPoint = actualSubScope.Points[0];
-
-            //Assert
-            Assert.AreEqual(expectedBid.Name, actualBid.Name);
-            Assert.AreEqual(expectedBid.BidNumber, actualBid.BidNumber);
-            Assert.AreEqual(expectedBid.DueDate, actualBid.DueDate);
-            Assert.AreEqual(expectedBid.Salesperson, actualBid.Salesperson);
-            Assert.AreEqual(expectedBid.Estimator, actualBid.Estimator);
-
-            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
-
-            Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
-            Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
-
-            Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
-            Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
-
-            Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
-            Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
-
-            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
-            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
-            Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
-            Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
-
+        [TestCleanup()]
+        public void TestCleanup()
+        {
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
@@ -81,14 +44,6 @@ namespace Tests
         [TestMethod]
         public void Save_BidInfo_Name()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             string expectedName = "Save Name";
             bid.Name = expectedName;
@@ -99,24 +54,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedName, actualName);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_BidInfo_BidNo()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             string expectedBidNo = "Save BidNo";
             bid.BidNumber = expectedBidNo;
@@ -127,24 +69,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedBidNo, actualBidNo);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_BidInfo_DueDate()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             DateTime expectedDueDate = DateTime.Now;
             bid.DueDate = expectedDueDate;
@@ -155,24 +84,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedDueDate, actualDueDate);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_BidInfo_Salesperson()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             string expectedSalesperson = "Save Salesperson";
             bid.Salesperson = expectedSalesperson;
@@ -183,24 +99,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSalesperson, actualSalesperson);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_BidInfo_Estimator()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             string expectedEstimator = "Save Estimator";
             bid.Estimator = expectedEstimator;
@@ -211,11 +114,6 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedEstimator, actualEstimator);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
         #endregion Save BidInfo
 
@@ -223,14 +121,6 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_System()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem expectedSystem = new TECSystem("New system", "New system desc", 123.5, new ObservableCollection<TECEquipment>());
             expectedSystem.Quantity = 1235;
@@ -256,24 +146,11 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
             Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_System()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             int oldNumSystems = bid.Systems.Count;
             TECSystem systemToRemove = bid.Systems[0];
@@ -294,25 +171,12 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumSystems - 1), bid.Systems.Count);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         #region Edit System
         [TestMethod]
         public void Save_Bid_System_Name()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Name = "Save System Name";
@@ -332,24 +196,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_System_Description()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Description = "Save System Description";
@@ -368,24 +219,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_System_Quantity()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Quantity = 987654321;
@@ -404,24 +242,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_System_BudgetPrice()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.BudgetPrice = 9876543.21;
@@ -440,11 +265,6 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
         #endregion Edit System
         #endregion Save System
@@ -453,14 +273,6 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Equipment()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment expectedEquipment = new TECEquipment("New Equipment", "New Description", 465543.54, new ObservableCollection<TECSubScope>());
             expectedEquipment.Quantity = 46554354;
@@ -486,24 +298,11 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
             Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_Equipment()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSystem systemToModify = bid.Systems[0];
             int oldNumEquip = systemToModify.Equipment.Count();
@@ -535,25 +334,12 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumEquip - 1), modifiedSystem.Equipment.Count);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         #region Edit Equipment
         [TestMethod]
         public void Save_Bid_Equipment_Name()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Name = "Save Equip Name";
@@ -577,24 +363,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedEquip.Name, actualEquip.Name);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Equipment_Description()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Description = "Save Equip Description";
@@ -618,24 +391,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedEquip.Description, actualEquip.Description);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Equipment_Quantity()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Quantity = 987654321;
@@ -659,24 +419,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedEquip.Quantity, actualEquip.Quantity);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Equipment_BudgetPrice()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.BudgetPrice = 9876543.21;
@@ -700,11 +447,6 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedEquip.BudgetPrice, actualEquip.BudgetPrice);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         #endregion Edit Equipment
@@ -715,14 +457,6 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_SubScope()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSubScope expectedSubScope = new TECSubScope("New SubScope", "New Description", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
             expectedSubScope.Quantity = 235746543;
@@ -755,25 +489,11 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
             Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_SubScope()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECEquipment equipToModify = bid.Systems[0].Equipment[0];
             int oldNumSubScope = equipToModify.SubScope.Count();
@@ -806,26 +526,12 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumSubScope - 1), modifiedEquip.SubScope.Count);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         #region Edit SubScope
         [TestMethod]
         public void Save_Bid_SubScope_Name()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Name = "Save SubScope Name";
@@ -853,25 +559,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_SubScope_Description()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Description = "Save SubScope Description";
@@ -899,25 +591,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
         public void Save_Bid_SubScope_Quantity()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Quantity = 987654321;
@@ -945,12 +623,6 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
         #endregion Edit SubScope
         #endregion Save SubScope
@@ -960,14 +632,6 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Device()
         {
-            //Arrange
-            TECBid bid = CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-
             //Act
             TECDevice expectedDevice = null;
             foreach (TECDevice dev in bid.DeviceCatalog)
@@ -1019,12 +683,6 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
-
-            //Cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Delete(path);
         }
 
         [TestMethod]
