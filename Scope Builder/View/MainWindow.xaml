@@ -246,6 +246,9 @@
                     <TabItem Header="Points">
                         <cLib:ScopeItemsControl ScopeSource="{Binding SubScopeItemsCollection}"/>
                     </TabItem>
+                    <TabItem Header="Devices">
+                        <cLib:ScopeItemsControl ScopeSource="{Binding Templates.DeviceCatalog}"/>
+                    </TabItem>
                 </TabControl>
             </Grid>
             <StatusBar Grid.Row="3"
