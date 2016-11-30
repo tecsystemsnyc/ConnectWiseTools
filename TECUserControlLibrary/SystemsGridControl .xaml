@@ -33,6 +33,13 @@
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
                                     Source={StaticResource proxy}}"/>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location}"
+                                        DisplayMemberPath="Name"
+                                        ItemsSource="{Binding Data.Bid.Locations,
+                                        Source={StaticResource proxy}}"
+                                        Header="Location" Width="Auto"
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation,
+                                        Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemQuantity,

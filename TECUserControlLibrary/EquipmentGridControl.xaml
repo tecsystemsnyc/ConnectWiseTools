@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent"
@@ -23,6 +25,13 @@
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=ViewModel.SelectedEquipment}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="AddingNewItem">
+                    <command:EventToCommand
+                        Command="{Binding Path=ViewModel.AddNewEquipment, Mode=OneWay}"
+                        PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" />
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"
@@ -31,6 +40,13 @@
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentDescription, 
                                     Source={StaticResource proxy}}"/>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location}"
+                                        DisplayMemberPath="Name"
+                                        ItemsSource="{Binding Data.Bid.Locations,
+                                        Source={StaticResource proxy}}"
+                                        Header="Location" Width="Auto"
+                                        Visibility="{Binding Data.DataGridVisibilty.EquipmentLocation,
+                                        Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentQuantity,

@@ -15,6 +15,7 @@ using System.Collections;
 using System.Drawing.Imaging;
 using System.Deployment.Application;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace Scope_Builder.ViewModel
 {
@@ -66,6 +67,7 @@ namespace Scope_Builder.ViewModel
         public ICommand EndSearchCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
@@ -267,6 +269,8 @@ namespace Scope_Builder.ViewModel
             Bid.DeviceCatalog = Templates.DeviceCatalog;
             Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
             Bid.Tags = Templates.Tags;
+            Bid.Locations.Add(new TECLocation("Floor 1"));
+            Bid.Locations.Add(new TECLocation("Floor 2"));
 
             populateItemsCollections();
 
@@ -282,6 +286,7 @@ namespace Scope_Builder.ViewModel
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
 
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
 
@@ -591,6 +596,12 @@ namespace Scope_Builder.ViewModel
                 return true;
             else
                 return false;
+        }
+
+        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
+        {
+            e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
+            ((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
         }
 
         private void ClosingExecute(CancelEventArgs e)
@@ -920,6 +931,6 @@ namespace Scope_Builder.ViewModel
             }
         }
         #endregion
-        
+
     }
 }

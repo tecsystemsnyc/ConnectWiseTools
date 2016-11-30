@@ -25,6 +25,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Description" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding Wire}" Header="Wire Type" Width="Auto"/>
