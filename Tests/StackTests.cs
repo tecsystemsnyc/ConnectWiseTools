@@ -707,6 +707,26 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Undo_Device_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            int edit = 123;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
         public void Undo_Point_Name()
         {
             //Arrange
@@ -1459,6 +1479,25 @@ namespace Tests
 
             //assert
             TECManufacturer actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Device_Quantity()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            int edit = 123;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }

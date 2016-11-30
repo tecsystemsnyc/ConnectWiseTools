@@ -502,18 +502,22 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.Add(item);
                     SaveStack.Add(item);
                 }
-                else if (e.PropertyName == "Child")
+                else if (e.PropertyName == "ChildChanged")
                 {
-                    item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
-                    handleChildren(item);
-                    SaveStack.Add(item);
+                    var saveEdit = ((PropertyChangedExtendedEventArgs<Object>)newValue).NewValue;
+                    var undoNew = ((PropertyChangedExtendedEventArgs<Object>)newValue).NewValue;
+                    var undoOld = ((PropertyChangedExtendedEventArgs<Object>)newValue).OldValue;
+                    var undoItem = Tuple.Create<Change, Object, Object>(Change.Edit, undoOld, undoNew);
+                    var saveItem = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, saveEdit);
+                    UndoStack.Add(undoItem);
+                    SaveStack.Add(saveItem);
                 }
                 else
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
-                    UndoStack.Add(item);
                     if(!(newValue is TECDevice))
                     {
+                        UndoStack.Add(item);
                         SaveStack.Add(item);
                     }
                     
