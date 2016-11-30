@@ -424,12 +424,14 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECDevice)
             {
+                Console.WriteLine("Edit Device in stack");
                 if (refObject is TECDevice)
                 {
                     editDevice(tarObject as TECDevice);
                 }
                 else if (refObject is TECSubScope)
                 {
+                    Console.WriteLine("Edit Device quantity");
                     editDeviceQuantity(refObject as TECSubScope, tarObject as TECDevice);
                 }
             }
@@ -1035,7 +1037,6 @@ namespace EstimatingUtilitiesLibrary
             data.Add("DeviceID", device.Guid.ToString());
             data.Add("Name", device.Name);
             data.Add("Description", device.Description);
-            data.Add("Quantity", device.Quantity.ToString());
             data.Add("Cost", device.Cost.ToString());
             data.Add("Wire", device.Wire);
 
