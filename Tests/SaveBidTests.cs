@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SaveTests
+    public class SaveBidTests
     {
         TECBid bid;
         ChangeStack testStack;
@@ -23,9 +23,9 @@ namespace Tests
         public void TestInitialize()
         {
             //Arrange
-            TECBid bid = TestHelper.CreateTestBid();
-            ChangeStack testStack = new ChangeStack(bid);
-            string path = Path.GetTempFileName();
+            bid = TestHelper.CreateTestBid();
+            testStack = new ChangeStack(bid);
+            path = Path.GetTempFileName();
             File.Delete(path);
             path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
@@ -688,8 +688,54 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Remove_Device()
         {
-            Assert.Fail();
+            //Act
+            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            int oldNumDevices = ssToModify.Devices.Count();
+            TECDevice deviceToRemove = ssToModify.Devices[0];
+
+            ssToModify.Devices.Remove(deviceToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope modifiedSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == ssToModify.Guid)
+                        {
+                            modifiedSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (modifiedSubScope != null) break;
+                }
+                if (modifiedSubScope != null) break;
+            }
+
+            //Assert
+            foreach (TECDevice dev in modifiedSubScope.Devices)
+            {
+                if (deviceToRemove.Guid == dev.Guid) Assert.Fail();
+            }
+            bool devFound = false;
+            foreach (TECDevice dev in actualBid.DeviceCatalog)
+            {
+                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+            }
+            if (!devFound) Assert.Fail();
+
+            Assert.AreEqual(bid.DeviceCatalog.Count(), actualBid.DeviceCatalog.Count());
+            Assert.AreEqual((oldNumDevices - 1), modifiedSubScope.Devices.Count);
         }
+
+        #region Edit Device
+
+        #endregion Edit Device
 
         #endregion Save Device
 
