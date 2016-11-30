@@ -506,6 +506,9 @@ namespace EstimatingUtilitiesLibrary
                 else if (e.PropertyName == "ChildChanged")
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
+                    Console.WriteLine("Child Changed ");
+                    Console.WriteLine("Ref: " + oldValue.GetType());
+                    Console.WriteLine("Target: " + newValue.GetType());
                     SaveStack.Add(item);
                 }
                 else
