@@ -195,8 +195,8 @@ namespace EstimatingLibrary
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
             if (e.PropertyName == "Quantity")
             {
-                Console.WriteLine("Device Quantity CHanged");
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args);
+                Console.WriteLine("Device Quantity Changed");
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
 
