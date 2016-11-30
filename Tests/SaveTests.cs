@@ -756,6 +756,7 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
             Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
 
+            //Cleanup
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
@@ -977,6 +978,7 @@ namespace Tests
                     break;
                 }
             }
+            expectedDevice.Quantity = 5;
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
@@ -986,8 +988,43 @@ namespace Tests
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            Assert.Fail();
-            
+            TECDevice actualDevice = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == subScopeToModify.Guid)
+                        {
+                            foreach (TECDevice dev in ss.Devices)
+                            {
+                                if (dev.Guid == expectedDevice.Guid)
+                                {
+                                    actualDevice = dev;
+                                    break;
+                                }
+                            }
+                        }
+                        if (actualDevice != null) break;
+                    }
+                    if (actualDevice != null) break;
+                }
+                if (actualDevice != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
+            Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
+            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+
+            //Cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(path);
         }
 
         [TestMethod]
