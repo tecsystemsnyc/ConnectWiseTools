@@ -40,7 +40,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points, Guid guid) : base(name, description, guid)
         {
-            Devices = devices;
+            _devices = devices;
             Points = points;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             Devices.CollectionChanged += Devices_CollectionChanged;
