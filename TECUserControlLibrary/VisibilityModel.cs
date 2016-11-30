@@ -33,6 +33,17 @@ namespace TECUserControlLibrary
             }
         }
 
+        private Visibility _systemLocation;
+        public Visibility SystemLocation
+        {
+            get { return _systemLocation; }
+            set
+            {
+                _systemLocation = value;
+                RaisePropertyChanged("SystemLocation");
+            }
+        }
+
         private Visibility _systemQuantity;
         public Visibility SystemQuantity
         {
@@ -123,6 +134,17 @@ namespace TECUserControlLibrary
             }
         }
 
+        private Visibility _equipmentLocation;
+        public Visibility EquipmentLocation
+        {
+            get { return _equipmentLocation; }
+            set
+            {
+                _equipmentLocation = value;
+                RaisePropertyChanged("EquipmentLocation");
+            }
+        }
+
         private Visibility _equipmentQuantity;
         public Visibility EquipmentQuantity
         {
@@ -191,6 +213,17 @@ namespace TECUserControlLibrary
             }
         }
 
+        private Visibility _subScopeLocation;
+        public Visibility SubScopeLocation
+        {
+            get { return _subScopeLocation; }
+            set
+            {
+                _subScopeLocation = value;
+                RaisePropertyChanged("SubScopeLocation");
+            }
+        }
+
         private Visibility _subScopeQuantity;
         public Visibility SubScopeQuantity
         {
@@ -218,6 +251,7 @@ namespace TECUserControlLibrary
         {
             SystemName = Visibility.Visible;
             SystemDescription = Visibility.Visible;
+            SystemLocation = Visibility.Visible;
             SystemQuantity = Visibility.Visible;
             SystemEquipmentCount = Visibility.Visible;
             SystemSubScopeCount = Visibility.Visible;
@@ -227,6 +261,7 @@ namespace TECUserControlLibrary
 
             EquipmentName = Visibility.Visible;
             EquipmentDescription = Visibility.Visible;
+            EquipmentLocation = Visibility.Visible;
             EquipmentQuantity = Visibility.Visible;
             EquipmentSubScopeCount = Visibility.Visible;
             EquipmentUnitPrice = Visibility.Visible;
@@ -235,6 +270,7 @@ namespace TECUserControlLibrary
             ExpandSubScope = Visibility.Visible;
             SubScopeName = Visibility.Visible;
             SubScopeDescription = Visibility.Visible;
+            SubScopeLocation = Visibility.Visible;
             SubScopeQuantity = Visibility.Visible;
         }
 
