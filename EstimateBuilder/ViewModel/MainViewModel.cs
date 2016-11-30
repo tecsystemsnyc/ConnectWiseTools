@@ -142,9 +142,7 @@ namespace EstimateBuilder.ViewModel
                 Bid.PropertyChanged += Bid_PropertyChanged;
             }
         }
-
         
-
         private TECBid _bid;
 
         private string defaultTemplatesPath;

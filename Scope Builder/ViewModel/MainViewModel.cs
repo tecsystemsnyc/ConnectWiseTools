@@ -16,6 +16,7 @@ using System.Drawing.Imaging;
 using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
+using System.Reflection;
 
 namespace Scope_Builder.ViewModel
 {
@@ -832,103 +833,55 @@ namespace Scope_Builder.ViewModel
         {
             var sourceItem = dropInfo.Data;
             var targetCollection = dropInfo.TargetCollection;
+            Type sourceType = sourceItem.GetType();
+            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if(sourceItem is TECSystem)
+            if (sourceItem != null && sourceType == targetType)
             {
-                if (sourceItem != null && targetCollection.GetType() == typeof(ObservableCollection<TECSystem>))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            } else if (sourceItem is TECEquipment)
-            {
-                if (sourceItem != null && targetCollection.GetType() == typeof(ObservableCollection<TECEquipment>))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            } else if (sourceItem is TECSubScope)
-            {
-                if (sourceItem != null && targetCollection.GetType() == typeof(ObservableCollection<TECSubScope>))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Copy;
             }
-
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-
-            if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+            Object sourceItem;
+            if (dropInfo.Data is TECDevice)
             {
-                if (dropInfo.InsertIndex > dropInfo.DragInfo.SourceIndex)
-                {
-                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                    }
-                    else
-                    {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                    }
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
-                else
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
-
+                Console.WriteLine("Is Device");
+                sourceItem = new TECDevice((TECDevice)dropInfo.Data);
             }
             else
             {
-                if (sourceItem is TECSystem)
-                {
-                    TECSystem tempSystem = new TECSystem(sourceItem as TECSystem);
-                    int index = dropInfo.InsertIndex;
-                    if (index < ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        Bid.Systems.Insert(dropInfo.InsertIndex, tempSystem);
-                    }
-                    else
-                    {
-                        Bid.Systems.Add(tempSystem);
-                    }
-                }
-                else if (sourceItem is TECEquipment)
-                {
-                    TECEquipment tempEquipment = new TECEquipment(sourceItem as TECEquipment);
-                    int index = dropInfo.InsertIndex;
-                    ObservableCollection<TECEquipment> targetEquipment = dropInfo.TargetCollection as ObservableCollection<TECEquipment>;
-                    if (index < ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        targetEquipment.Insert(dropInfo.InsertIndex, tempEquipment);
-                    }
-                    else
-                    {
-                        targetEquipment.Add(tempEquipment);
-                    }
-                }
-                else if (sourceItem is TECSubScope)
-                {
-                    TECSubScope tempSubScope = new TECSubScope(sourceItem as TECSubScope);
-
-                    int index = dropInfo.InsertIndex;
-                    ObservableCollection<TECSubScope> targetSubScope = dropInfo.TargetCollection as ObservableCollection<TECSubScope>;
-
-                    if (index < ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        targetSubScope.Insert(dropInfo.InsertIndex, tempSubScope);
-                    }
-                    else
-                    {
-                        targetSubScope.Add(tempSubScope);
-                    }
-                }
+                Console.WriteLine("Is of type: " + dropInfo.Data.GetType());
+                sourceItem = dropInfo.Data;
             }
+
+            if (dropInfo.InsertIndex > dropInfo.DragInfo.SourceIndex)
+            {
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                {
+                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                }
+                else
+                {
+                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                }
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
+                    
+            }
+            else
+            {
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
+                ((IList)dropInfo.TargetCollection).Add(sourceItem);
+            }
+
         }
         #endregion
 

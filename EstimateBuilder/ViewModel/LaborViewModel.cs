@@ -20,7 +20,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 _bid = value;
-                Labor = Bid.Labor;
+                _labor = Bid.Labor;
                 RaisePropertyChanged("Bid");
 
             }

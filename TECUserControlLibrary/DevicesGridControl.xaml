@@ -21,15 +21,15 @@
                   SelectedItem="{Binding Path=ViewModel.SelectedDevice}"
                   x:Name="DeviceGrid"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
-                  IsReadOnly="True">
+                  CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" Header="Description" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty." Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <DataGridTextColumn Binding="{Binding Wire}" Header="Wire Type" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Wire}" Header="Wire Type" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
