@@ -846,19 +846,25 @@ namespace Scope_Builder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if (dropInfo.Data is TECDevice)
+            if ((dropInfo.Data is TECDevice) && (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource))
+            { sourceItem = new TECDevice((TECDevice)dropInfo.Data); }
+            else
+            { sourceItem = dropInfo.Data; }
+
+            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
-                Console.WriteLine("Is Device");
-                sourceItem = new TECDevice((TECDevice)dropInfo.Data);
+                ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
             }
             else
             {
-                Console.WriteLine("Is of type: " + dropInfo.Data.GetType());
-                sourceItem = dropInfo.Data;
-            }
-
-            if (dropInfo.InsertIndex > dropInfo.DragInfo.SourceIndex)
-            {
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -867,21 +873,8 @@ namespace Scope_Builder.ViewModel
                 {
                     ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
-                    
-            }
-            else
-            {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
-                ((IList)dropInfo.TargetCollection).Add(sourceItem);
-            }
 
+            }
         }
         #endregion
 
