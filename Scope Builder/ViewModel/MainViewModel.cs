@@ -101,6 +101,8 @@ namespace Scope_Builder.ViewModel
                 stack = new ChangeStack(value);
                 // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
+                buildTitleString();
+                Bid.PropertyChanged += Bid_PropertyChanged;
             }
         }
 
@@ -190,6 +192,28 @@ namespace Scope_Builder.ViewModel
             }
         }
 
+        public string CurrentStatusText
+        {
+            get { return _currentStatusText; }
+            set
+            {
+                _currentStatusText = value;
+                RaisePropertyChanged("CurrentStatusText");
+            }
+        }
+        private string _currentStatusText;
+
+        public string TitleString
+        {
+            get { return _titleString; }
+            set
+            {
+                _titleString = value;
+                RaisePropertyChanged("TitleString");
+            }
+        }
+        private string _titleString;
+
         public string TECLogo { get; set; }
 
         public string Version { get; set; }
@@ -268,6 +292,8 @@ namespace Scope_Builder.ViewModel
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
 
             stack = new ChangeStack(Bid);
+
+            CurrentStatusText = "Done.";
         }
 
         #region Resources Paths
@@ -307,6 +333,7 @@ namespace Scope_Builder.ViewModel
             string path = getLoadPath();
             if (path != null)
             {
+                CurrentStatusText = "Loading...";
                 bidDBFilePath = path;
                 Properties.Settings.Default.ScopeDirectoryPath = Path.GetDirectoryName(path);
                 
@@ -320,6 +347,7 @@ namespace Scope_Builder.ViewModel
                     MessageBox.Show(message);
                 }
                 Console.WriteLine("Finished loading SQL Database.");
+                CurrentStatusText = "Done.";
             }
         }
 
@@ -330,6 +358,7 @@ namespace Scope_Builder.ViewModel
             {
                 if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
                 {
+                    CurrentStatusText = "Saving...";
                     SaveWindow saveWindow = new SaveWindow();
                     if (File.Exists(bidDBFilePath))
                     {
@@ -354,6 +383,7 @@ namespace Scope_Builder.ViewModel
                     string message = "File is open elsewhere";
                     MessageBox.Show(message);
                 }
+                CurrentStatusText = "Done.";
             }
             else
             {
@@ -768,6 +798,19 @@ namespace Scope_Builder.ViewModel
                 default:
                     break;
 
+            }
+        }
+
+        private void buildTitleString()
+        {
+            TitleString = Bid.Name + " - Scope Builder";
+        }
+
+        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Name")
+            {
+                buildTitleString();
             }
         }
 

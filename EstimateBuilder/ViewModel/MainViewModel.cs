@@ -97,7 +97,6 @@ namespace EstimateBuilder.ViewModel
 
             Stack = new ChangeStack(Bid);
 
-            //Bid.Systems.CollectionChanged += Systems_CollectionChanged;
         }
 
         #region Properties
@@ -144,13 +143,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Name")
-            {
-                buildTitleString();
-            }
-        }
+        
 
         private TECBid _bid;
 
@@ -700,6 +693,14 @@ namespace EstimateBuilder.ViewModel
             if (message.Notification == "StatusUpdate")
             {
                 CurrentStatusText = message.Content;
+            }
+        }
+
+        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Name")
+            {
+                buildTitleString();
             }
         }
 
