@@ -17,6 +17,7 @@ namespace EstimatingLibrary
         protected string _description;
         protected Guid _guid;
         protected int _quantity;
+        protected TECLocation _location;
 
         protected ObservableCollection<TECTag> _tags;
 
@@ -67,6 +68,17 @@ namespace EstimatingLibrary
                     _tags = value;
                     NotifyPropertyChanged("Tags", temp, this);
                 
+            }
+        }
+
+        public TECLocation Location
+        {
+            get { return _location; }
+            set
+            {
+                var temp = Copy();
+                _location = value;
+                NotifyPropertyChanged("Location", temp, this);
             }
         }
         

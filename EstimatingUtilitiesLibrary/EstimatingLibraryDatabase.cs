@@ -59,10 +59,12 @@ namespace EstimatingUtilitiesLibrary
                 bid.Systems = getAllSystems();
                 bid.DeviceCatalog = getAllDevices();
                 bid.ManufacturerCatalog = getAllManufacturers();
+                bid.Locations = getAllLocations();
                 bid.Notes = getNotes();
                 bid.Exclusions = getExclusions();
                 bid.Drawings = getDrawings();
                 linkAllVisualScope(bid.Drawings, bid.Systems);
+                linkAllLocations(bid.Locations, bid.Systems);
             }
             catch (Exception e)
             {
@@ -161,6 +163,10 @@ namespace EstimatingUtilitiesLibrary
                             addVisualScopeScopeRelation(vs);
                         }
                     }
+                }
+                foreach (TECLocation location in bid.Locations)
+                {
+                    addLocation(location);
                 }
             }
             catch (Exception e)
@@ -383,6 +389,10 @@ namespace EstimatingUtilitiesLibrary
                     addManufacturer(tarObject as TECManufacturer);
                 }
             }
+            else if (tarObject is TECLocation)
+            {
+                addLocation(tarObject as TECLocation);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -444,6 +454,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 editScopeBranch(tarObject as TECScopeBranch);
             }
+            else if (tarObject is TECLocation)
+            {
+                editLocation(tarObject as TECLocation);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
@@ -475,10 +489,13 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECDevice)
             {
-                removeDevice(tarObject as TECDevice);
                 if (refObject is TECSubScope)
                 {
                     removeSubScopeDeviceRelation(tarObject as TECDevice);
+                }
+                else if (refObject is TECBid)
+                {
+                    removeDevice(tarObject as TECDevice);
                 }
             }
             else if (tarObject is TECPoint)
@@ -516,6 +533,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     removeScopeBranchHierarchyRelation(tarObject as TECScopeBranch);
                 }
+            }
+            else if (tarObject is TECLocation)
+            {
+                removeLocation(tarObject as TECLocation);
             }
             else
             {
@@ -556,6 +577,7 @@ namespace EstimatingUtilitiesLibrary
         {
             addSystem(system);
             addTagsInScope(system.Tags, system.Guid);
+            addLocationInScope(system.Location, system.Guid);
             foreach (TECEquipment equip in system.Equipment)
             {
                 addFullEquipment(equip);
@@ -567,6 +589,7 @@ namespace EstimatingUtilitiesLibrary
         {
             addEquipment(equipment);
             addTagsInScope(equipment.Tags, equipment.Guid);
+            addLocationInScope(equipment.Location, equipment.Guid);
             foreach (TECSubScope ss in equipment.SubScope)
             {
                 addEquipmentSubScopeRelation(equipment, ss);
@@ -578,6 +601,7 @@ namespace EstimatingUtilitiesLibrary
         {
             addSubScope(subScope);
             addTagsInScope(subScope.Tags, subScope.Guid);
+            addLocationInScope(subScope.Location, subScope.Guid);
             foreach (TECDevice dev in subScope.Devices)
             {
                 addSubScopeDeviceRelation(subScope, dev);
@@ -774,6 +798,17 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't add item to TECVisualScopeTable.");
             }
         }
+        static private void addLocation(TECLocation location)
+        {
+            Dictionary<string, string> locData = new Dictionary<string, string>();
+            locData.Add("LocationID", location.Guid.ToString());
+            locData.Add("Name", location.Name.ToString());
+
+            if (!SQLiteDB.Insert("TECLocation", locData))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECLocationTable.");
+            }
+        }
 
         #endregion Add Object Functions
 
@@ -905,6 +940,18 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Insert("TECVisualScopeTECScope", data))
             {
                 Console.WriteLine("Could not add relation to TECVisualScopeTECScope table.");
+            }
+        }
+
+        static private void addLocationInScope(TECLocation location, Guid scopeID)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("ScopeID", scopeID.ToString());
+            data.Add("LocationID", location.Guid.ToString());
+
+            if (!SQLiteDB.Insert("TECLocationTECScope", data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECLocationTECScope table.");
             }
         }
 
@@ -1084,6 +1131,18 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't update item in TECVisualScope table.");
             }
         }
+
+        static private void editLocation(TECLocation location)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("LocationID", location.Guid.ToString());
+            data.Add("Name", location.Name);
+
+            if (!SQLiteDB.Replace("TECLocation", data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECLocation table.");
+            }
+        }
         #endregion Edit Methods
 
         #region Remove Methods
@@ -1126,6 +1185,11 @@ namespace EstimatingUtilitiesLibrary
         static private void removeExclusion(TECExclusion exclusion)
         {
             SQLiteDB.Delete("TECExclusion", "ExclusionID", exclusion.Guid);
+        }
+
+        static private void removeLocation(TECLocation location)
+        {
+            SQLiteDB.Delete("TECLocation", "LocationID", location.Guid);
         }
         #endregion Remove Objects
 
@@ -1292,6 +1356,7 @@ namespace EstimatingUtilitiesLibrary
 
                 system.Quantity = quantity;
                 system.Tags = getTagsInScope(systemID);
+                system.Location = getLocationInScope(systemID);
 
                 systems.Add(system);
             }
@@ -1446,6 +1511,23 @@ namespace EstimatingUtilitiesLibrary
             return manufacturers;
         }
 
+        static private ObservableCollection<TECLocation> getAllLocations()
+        {
+            ObservableCollection<TECLocation> locations = new ObservableCollection<TECLocation>();
+
+            DataTable locationsDT = SQLiteDB.getDataFromTable("TECLocation");
+
+            foreach (DataRow row in locationsDT.Rows)
+            {
+                Guid locationID = new Guid(row["LocationID"].ToString());
+                string name = row["Name"].ToString();
+
+                locations.Add(new TECLocation(name, locationID));
+            }
+
+            return locations;
+        }
+
         static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID)
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
@@ -1485,6 +1567,7 @@ namespace EstimatingUtilitiesLibrary
 
                 equipmentToAdd.Quantity = quantity;
                 equipmentToAdd.Tags = getTagsInScope(equipmentID);
+                equipmentToAdd.Location = getLocationInScope(equipmentID);
 
                 equipment.Add(equipmentToAdd);
             }
@@ -1524,7 +1607,7 @@ namespace EstimatingUtilitiesLibrary
 
                 subScopeToAdd.Quantity = quantity;
                 subScopeToAdd.Tags = getTagsInScope(subScopeID);
-
+                subScopeToAdd.Location = getLocationInScope(subScopeID);
                 subScope.Add(subScopeToAdd);
             }
 
@@ -1816,6 +1899,26 @@ namespace EstimatingUtilitiesLibrary
 
             return vs;
         }
+
+        static private TECLocation getLocationInScope(Guid ScopeID)
+        {
+            string command = "select * from TECLocation where LocationID in ";
+            command += "(select LocationID from TECLocationTECScope where ScopeID = '";
+            command += ScopeID;
+            command += "')";
+
+            DataTable locationDT = SQLiteDB.getDataFromCommand(command);
+
+            if (locationDT.Rows.Count > 0)
+            {
+                TECLocation location = new TECLocation(locationDT.Rows[0]["Name"].ToString(), new Guid(locationDT.Rows[0]["LocationID"].ToString()));
+                return location;
+            }
+            else
+            {
+                return null;
+            }
+        }
         #endregion //Loading from DB Methods
 
         #region Create Object Tables Methods
@@ -1982,6 +2085,14 @@ namespace EstimatingUtilitiesLibrary
                 "PRIMARY KEY(PageID)" +
             ");";
         }
+        static private string newLocationTable()
+        {
+            return "CREATE TABLE 'TECLocation' (" +
+                "'LocationID' TEXT," +
+                "'Name' TEXT," +
+                "PRIMARY KEY(LocationID)" +
+            ");";
+        }
 
         static private string newVisualScopeTable()
         {
@@ -2095,13 +2206,19 @@ namespace EstimatingUtilitiesLibrary
                 "'ScopeID' TEXT" +
             ");";
         }
+        static private string newLocationScopeTable()
+        {
+            return "Create Table 'TECLocationTECScope' (" +
+                "'LocationID' TEXT," +
+                "'ScopeID' TEXT" +
+                ");";
+        }
         #endregion //Create Relation Tables
 
+        #region Link Methods
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems)
         {
             //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
-
-            Console.WriteLine("Link VS starting.");
 
             Dictionary<TECVisualScope, Guid> scopeToLink = new Dictionary<TECVisualScope, Guid>();
             
@@ -2128,8 +2245,6 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
-
-            Console.WriteLine("Num scope to link: " + scopeToLink.Count);
 
             foreach (TECSystem system in bidSystems)
             {
@@ -2223,5 +2338,43 @@ namespace EstimatingUtilitiesLibrary
                 throw e;
             }
         }
+
+        static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> systems)
+        {
+            ObservableCollection<TECScope> scopeToLink = new ObservableCollection<TECScope>();
+
+            foreach (TECSystem sys in systems)
+            {
+                if (sys.Location != null) { scopeToLink.Add(sys); }
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    if (equip.Location != null) { scopeToLink.Add(equip); }
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Location != null) { scopeToLink.Add(ss); }
+                    }
+                }
+            }
+
+            ObservableCollection<TECScope> scopeToRemove = new ObservableCollection<TECScope>();
+            foreach (TECLocation location in locations)
+            {
+                foreach (TECScope scope in scopeToLink)
+                {
+                    if (scope.Location.Guid == location.Guid)
+                    {
+                        scope.Location = location;
+                        scopeToRemove.Add(scope);
+                    }
+                }
+                foreach (TECScope scope in scopeToRemove)
+                {
+                    scopeToLink.Remove(scope);
+                }
+                scopeToRemove.Clear();
+            }
+            
+        }
+        #endregion Link Methods
     }
 }

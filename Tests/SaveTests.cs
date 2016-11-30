@@ -953,5 +953,64 @@ namespace Tests
         }
         #endregion Edit SubScope
         #endregion Save SubScope
+
+        #region Save Device
+
+        [TestMethod]
+        public void Save_Bid_Add_Device()
+        {
+            //Arrange
+            TECBid bid = CreateTestBid();
+            ChangeStack testStack = new ChangeStack(bid);
+            string path = Path.GetTempFileName();
+            File.Delete(path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //Act
+            TECDevice expectedDevice = null;
+            foreach (TECDevice dev in bid.DeviceCatalog)
+            {
+                if (dev.Name == "Device C1")
+                {
+                    expectedDevice = dev;
+                    break;
+                }
+            }
+
+            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+
+            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            Assert.Fail();
+            
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Device()
+        {
+            Assert.Fail();
+        }
+
+        #endregion Save Device
+
+        #region Save Point
+
+        [TestMethod]
+        public void Save_Bid_Add_Point()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Point()
+        {
+            Assert.Fail();
+        }
+        #endregion Save Point
     }
 }
