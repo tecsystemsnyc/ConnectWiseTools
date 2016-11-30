@@ -845,8 +845,18 @@ namespace Scope_Builder.ViewModel
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            
+            Object sourceItem;
+            if (dropInfo.Data is TECDevice)
+            {
+                Console.WriteLine("Is Device");
+                sourceItem = new TECDevice((TECDevice)dropInfo.Data);
+            }
+            else
+            {
+                Console.WriteLine("Is of type: " + dropInfo.Data.GetType());
+                sourceItem = dropInfo.Data;
+            }
+
             if (dropInfo.InsertIndex > dropInfo.DragInfo.SourceIndex)
             {
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
