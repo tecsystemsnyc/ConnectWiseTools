@@ -841,7 +841,6 @@ namespace Scope_Builder.ViewModel
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
             }
-            
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
