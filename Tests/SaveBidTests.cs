@@ -734,7 +734,48 @@ namespace Tests
         }
 
         #region Edit Device
+        [TestMethod]
+        public void Save_Bid_Device_Quantity()
+        {
+            //Act
+            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECDevice expectedDevice = ssToModify.Devices[0];
+            expectedDevice.Quantity = 465456456;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope modifiedSS = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == ssToModify.Guid)
+                        {
+                            modifiedSS = ss;
+                            break;
+                        }
+                    }
+                    if (modifiedSS != null) break;
+                }
+                if (modifiedSS != null) break;
+            }
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice dev in modifiedSS.Devices)
+            {
+                if (expectedDevice.Guid == dev.Guid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+        }
         #endregion Edit Device
 
         #endregion Save Device
