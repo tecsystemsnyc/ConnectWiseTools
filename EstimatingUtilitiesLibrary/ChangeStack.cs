@@ -491,19 +491,34 @@ namespace EstimatingUtilitiesLibrary
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     handleChildren(item);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(item);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+                }
+                else if (e.PropertyName == "Child")
+                {
+                    item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
+                    handleChildren(item);
+                    SaveStack.Add(item);
                 }
                 else
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
+                    UndoStack.Add(item);
+                    if(!(newValue is TECDevice))
+                    {
+                        SaveStack.Add(item);
+                    }
+                    
                 }
-                UndoStack.Add(item);
-                SaveStack.Add(item);
+                
             }
             else
             {

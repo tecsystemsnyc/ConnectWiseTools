@@ -11,7 +11,20 @@ namespace EstimatingLibrary
     public class TECSubScope : TECScope
     {
         #region Properties
-        public ObservableCollection<TECDevice> Devices { get; set; }
+        private ObservableCollection<TECDevice> _devices;
+        public ObservableCollection<TECDevice> Devices
+        {
+            get { return _devices; }
+            set
+            {
+                var temp = this.Copy();
+                unSubscribeToDevices();
+                _devices = value;
+                NotifyPropertyChanged("Devices", temp, this);
+                subscribeToDevices();
+            }
+        }
+
         public ObservableCollection<TECPoint> Points { get; set; }
 
         public double MaterialCost
@@ -113,6 +126,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    ((TECDevice)item).PropertyChanged += DeviceChanged;
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -120,6 +134,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
+                    ((TECDevice)item).PropertyChanged -= DeviceChanged;
                 }
             }
         }
@@ -157,6 +172,31 @@ namespace EstimatingLibrary
             }
 
             return labCost;
+        }
+
+        private void subscribeToDevices()
+        {
+            foreach(TECDevice item in this._devices)
+            {
+                item.PropertyChanged += DeviceChanged;
+            }
+        }
+
+        private void unSubscribeToDevices()
+        {
+            foreach (TECDevice item in this._devices)
+            {
+                item.PropertyChanged -= DeviceChanged;
+            }
+        }
+
+        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+            if (e.PropertyName == "Quantity")
+            {
+                NotifyPropertyChanged("Child", this, args.NewValue);
+            }
         }
 
         #endregion
