@@ -18,10 +18,8 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                unSubscribeToDevices();
                 _devices = value;
                 NotifyPropertyChanged("Devices", temp, this);
-                subscribeToDevices();
             }
         }
 
@@ -43,6 +41,7 @@ namespace EstimatingLibrary
             _devices = devices;
             Points = points;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
+            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
         
