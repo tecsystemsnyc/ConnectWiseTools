@@ -153,7 +153,17 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Location()
         {
-            Assert.Fail();
+            //Assert
+            string expectedLocationName = "Test Location";
+            Assert.AreEqual(expectedLocationName, actualBid.Locations[0].Name);
+
+            string expectedLocation2Name = "Test Location 2";
+            Assert.AreEqual(expectedLocation2Name, actualBid.Locations[1].Name);
+
+            //System and Equipment have the same location, but subscope does not
+            Assert.AreEqual(actualBid.Locations[0], actualSystem.Location);
+            Assert.AreEqual(actualBid.Locations[0], actualEquipment.Location);
+            Assert.AreEqual(actualBid.Locations[1], actualSubScope.Location);
         }
     }
 }

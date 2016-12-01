@@ -77,6 +77,7 @@ namespace Tests
             GC.WaitForPendingFinalizers();
 
             File.Delete(path);
+            //Console.WriteLine("SaveAs test bid saved to: " + path);
         }
 
         [TestMethod]
@@ -144,10 +145,10 @@ namespace Tests
         public void SaveAs_Bid_Location()
         {
             //Assert
-            Assert.AreEqual(expectedSystem.Location, actualSystem.Location);
-            Assert.AreEqual(expectedSystem1.Location, actualSystem1.Location);
-            Assert.AreEqual(expectedEquipment.Location, actualEquipment.Location);
-            Assert.AreEqual(expectedSubScope.Location, actualSubScope.Location);
+            Assert.AreEqual(expectedSystem.Location.Guid, actualSystem.Location.Guid);
+            Assert.AreEqual(expectedSystem1.Location.Guid, actualSystem1.Location.Guid);
+            Assert.AreEqual(expectedEquipment.Location.Guid, actualEquipment.Location.Guid);
+            Assert.AreEqual(expectedSubScope.Location.Guid, actualSubScope.Location.Guid);
 
             //In CreateTestBid, the first system has the same location as its equipment.
             Assert.AreEqual(expectedSystem.Location, expectedEquipment.Location);
