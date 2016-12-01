@@ -38,6 +38,7 @@ namespace Scope_Builder.ViewModel
         private TECTemplates _templates;
         private TECSystem _selectedSystem;
         private TECEquipment _selectedEquipment;
+        private TECSubScope _selectedSubScope;
 
         private VisibilityModel _dataGridVisibilty;
         public VisibilityModel DataGridVisibilty
@@ -128,7 +129,6 @@ namespace Scope_Builder.ViewModel
                 RaisePropertyChanged("SelectedSystem");
             }
         }
-
         public TECEquipment SelectedEquipment
         {
             get { return _selectedEquipment; }
@@ -136,6 +136,27 @@ namespace Scope_Builder.ViewModel
             {
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
+            }
+        }
+        public TECSubScope SelectedSubScope
+        {
+            get { return _selectedSubScope; }
+            set
+            {
+                _selectedSubScope = value;
+                RaisePropertyChanged("SelectedSubScope");
+            }
+        }
+
+        private TECLocation _selectedLocation;
+        public TECLocation SelectedLocation
+        {
+            get { return _selectedLocation; }
+            set
+            {
+                _selectedLocation = value;
+                RaisePropertyChanged("SelectedLocation");
+                OrganizeByLocation();
             }
         }
 
@@ -169,7 +190,7 @@ namespace Scope_Builder.ViewModel
             set
             {
                 _subScopeItemsCollection = value;
-
+                RaisePropertyChanged("SubScopeItemsCollection");
             }
         }
 
@@ -181,6 +202,40 @@ namespace Scope_Builder.ViewModel
             {
                 _devicesItemsCollection = value;
                 RaisePropertyChanged("DevicesItemsCollection");
+            }
+        }
+
+        private ObservableCollection<TECSystem> _systemsByLocation;
+        public ObservableCollection<TECSystem> SystemsByLocation
+        {
+            get { return _systemsByLocation; }
+            set
+            {
+                _systemsByLocation = value;
+                RaisePropertyChanged("SystemsByLocation");
+            }
+
+        }
+
+        private ObservableCollection<TECEquipment> _equipmentByLocation;
+        public ObservableCollection<TECEquipment> EquipmentByLocation
+        {
+            get { return _equipmentByLocation; }
+            set
+            {
+                _equipmentByLocation = value;
+                RaisePropertyChanged("EquipmentByLocation");
+            }
+        }
+
+        private ObservableCollection<TECSubScope> _subScopeByLocation;
+        public ObservableCollection<TECSubScope> SubScopeByLocation
+        {
+            get { return _subScopeByLocation; }
+            set
+            {
+                _subScopeByLocation = value;
+                RaisePropertyChanged("SubScopeByLocation");
             }
         }
 
@@ -274,7 +329,7 @@ namespace Scope_Builder.ViewModel
             Bid.Locations.Add(new TECLocation("Floor 2"));
 
             populateItemsCollections();
-
+            
             NewCommand = new RelayCommand(NewExecute);
             LoadCommand = new RelayCommand(LoadExecute);
             SaveCommand = new RelayCommand(SaveExecute);
@@ -826,6 +881,35 @@ namespace Scope_Builder.ViewModel
             }
         }
 
+        private void OrganizeByLocation()
+        {
+            SystemsByLocation = new ObservableCollection<TECSystem>();
+            EquipmentByLocation = new ObservableCollection<TECEquipment>();
+            SubScopeByLocation = new ObservableCollection<TECSubScope>();
+
+            foreach (TECSystem system in Bid.Systems)
+            {
+                if(system.Location == SelectedLocation)
+                {
+                    SystemsByLocation.Add(system);
+                    foreach(TECEquipment equipment in system.Equipment)
+                    {
+                        if(equipment.Location == SelectedLocation)
+                        {
+                            EquipmentByLocation.Add(equipment);
+                            foreach(TECSubScope subScope in equipment.SubScope)
+                            {
+                                if(subScope.Location == SelectedLocation)
+                                {
+                                    SubScopeByLocation.Add(subScope);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion //Helper Functions
 
         #region Drag Drop
@@ -846,11 +930,11 @@ namespace Scope_Builder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if ((dropInfo.Data is TECDevice) && (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource))
-            { sourceItem = new TECDevice((TECDevice)dropInfo.Data); }
-            else
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            { sourceItem =  ((TECScope)dropInfo.Data).DragDropCopy(); }
+            else 
             { sourceItem = dropInfo.Data; }
-
+           
             if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
                 ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -873,7 +957,6 @@ namespace Scope_Builder.ViewModel
                 {
                     ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
-
             }
         }
         #endregion

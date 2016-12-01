@@ -149,6 +149,13 @@ namespace EstimatingLibrary
             return outScope;
         }
 
+        public override object DragDropCopy()
+        {
+            TECSubScope outScope = new TECSubScope(this);
+            return outScope;
+        }
+
+
         private double getMaterialCost()
         {
             double matCost = 0;

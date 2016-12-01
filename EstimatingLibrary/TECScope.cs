@@ -98,6 +98,7 @@ namespace EstimatingLibrary
         }
 
 
+        abstract public Object DragDropCopy();
         #endregion //Constructors
 
     }

@@ -73,6 +73,12 @@ namespace EstimatingLibrary
             TECDevice outDevice = new TECDevice(this);
             return outDevice;
         }
+
+        public override Object DragDropCopy()
+        {
+            TECDevice outDevice = new TECDevice(this);
+            return outDevice;
+        }
         #endregion
     }
 }

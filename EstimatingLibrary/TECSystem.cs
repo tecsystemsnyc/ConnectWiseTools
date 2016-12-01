@@ -160,6 +160,13 @@ namespace EstimatingLibrary
         public override Object Copy()
         {
             TECSystem outSystem = new TECSystem(this);
+            outSystem._guid = Guid;
+            return outSystem;
+        }
+
+        public override object DragDropCopy()
+        {
+            TECSystem outSystem = new TECSystem(this);
             return outSystem;
         }
 

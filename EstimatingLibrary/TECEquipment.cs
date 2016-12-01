@@ -118,6 +118,12 @@ namespace EstimatingLibrary
             return outEquip;
         }
 
+        public override object DragDropCopy()
+        {
+            TECEquipment outEquip = new TECEquipment(this);
+            return outEquip;
+        }
+
         private double getMaterialCost()
         {
             double cost = 0;

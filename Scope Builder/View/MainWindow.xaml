@@ -176,8 +176,10 @@
                                              ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
                 </TabItem>
                 <TabItem Header="By Location">
-                    <cLib:ByLocationControl SystemsSource="{Binding Bid.Systems}"
-                                            LocationSource="{Binding Bid.Locations}"
+                    <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
+                                            SystemsSource="{Binding SystemsByLocation}"
+                                            EquipmentSource="{Binding EquipmentByLocation}"
+                                            SubScopeSource="{Binding SubScopeByLocation}"
                                             ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
                 </TabItem>
                 <TabItem Header="Scope">
