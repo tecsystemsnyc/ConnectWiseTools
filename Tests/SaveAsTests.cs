@@ -15,6 +15,7 @@ namespace Tests
     {
         static TECBid expectedBid;
         static TECSystem expectedSystem;
+        static TECSystem expectedSystem1;
         static TECEquipment expectedEquipment;
         static TECSubScope expectedSubScope;
         static TECDevice expectedDevice;
@@ -24,6 +25,7 @@ namespace Tests
 
         static TECBid actualBid;
         static TECSystem actualSystem;
+        static TECSystem actualSystem1;
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
@@ -48,6 +50,7 @@ namespace Tests
             //Arrange
             expectedBid = TestHelper.CreateTestBid();
             expectedSystem = expectedBid.Systems[0];
+            expectedSystem1 = expectedBid.Systems[1];
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
@@ -60,6 +63,7 @@ namespace Tests
 
             actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
             actualSystem = actualBid.Systems[0];
+            actualSystem1 = actualBid.Systems[1];
             actualEquipment = actualSystem.Equipment[0];
             actualSubScope = actualEquipment.SubScope[0];
             actualDevice = actualSubScope.Devices[0];
@@ -134,6 +138,19 @@ namespace Tests
             Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
             Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
             Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Location()
+        {
+            //Assert
+            Assert.AreEqual(expectedSystem.Location, actualSystem.Location);
+            Assert.AreEqual(expectedSystem1.Location, actualSystem1.Location);
+            Assert.AreEqual(expectedEquipment.Location, actualEquipment.Location);
+            Assert.AreEqual(expectedSubScope.Location, actualSubScope.Location);
+
+            //In CreateTestBid, the first system has the same location as its equipment.
+            Assert.AreEqual(expectedSystem.Location, expectedEquipment.Location);
         }
     }
 }

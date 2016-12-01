@@ -13,152 +13,147 @@ namespace Tests
     [TestClass]
     public class LoadTests
     {
+        static TECBid actualBid;
+        static TECSystem actualSystem;
+        static TECEquipment actualEquipment;
+        static TECSubScope actualSubScope;
+        static TECDevice actualDevice;
+        static TECPoint actualPoint;
+
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext TestContext)
+        {
+            //Arrange
+            actualBid = LoadTestBid(StaticTestBidPath);
+            actualSystem = actualBid.Systems[0];
+            actualEquipment = actualSystem.Equipment[0];
+            actualSubScope = actualEquipment.SubScope[0];
+            actualDevice = actualSubScope.Devices[0];
+            actualPoint = actualSubScope.Points[0];
+        }
+
         [TestMethod]
         public void Load_Bid_Info()
         {
-            //Act
-            TECBid bid = LoadTestBid(StaticTestBidPath);
-
             //Assert
-            string actualName = bid.Name;
             string expectedName = "Unit Testimate";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualNumber = bid.BidNumber;
+            Assert.AreEqual(expectedName, actualBid.Name);
+            
             string expectedNumber = "1701-117";
-            Assert.AreEqual(expectedNumber, actualNumber);
-
-            DateTime actualDueDate = bid.DueDate;
+            Assert.AreEqual(expectedNumber, actualBid.BidNumber);
+            
             DateTime expectedDueDate = new DateTime(1969, 7, 20);
-            Assert.AreEqual(expectedDueDate, actualDueDate);
-
-            string actualSales = bid.Salesperson;
+            Assert.AreEqual(expectedDueDate, actualBid.DueDate);
+            
             string expectedSales = "Mrs. Test";
-            Assert.AreEqual(expectedSales, actualSales);
-
-            string actualEstimator = bid.Estimator;
+            Assert.AreEqual(expectedSales, actualBid.Salesperson);
+            
             string expectedEstimator = "Mr. Test";
-            Assert.AreEqual(expectedEstimator, actualEstimator);
+            Assert.AreEqual(expectedEstimator, actualBid.Estimator);
         }
 
         [TestMethod]
         public void Load_Bid_System()
         {
-            //Arrange
-            TECSystem system = LoadTestSystem(StaticTestBidPath);
-
             //Assert
-            string actualName = system.Name;
             string expectedName = "Test System";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualDescription = system.Description;
+            Assert.AreEqual(expectedName, actualSystem.Name);
+            
             string expectedDescription = "Test System Description";
-            Assert.AreEqual(expectedDescription, actualDescription);
-
-            int actualQuantity = system.Quantity;
+            Assert.AreEqual(expectedDescription, actualSystem.Description);
+            
             int expectedQuantity = 123;
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            double actualBP = system.BudgetPrice;
+            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
+            
             double expectedBP = 123;
-            Assert.AreEqual(expectedBP, actualBP);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPrice);
         }
 
         [TestMethod]
         public void Load_Bid_Equipment()
         {
-            //Arrange
-            TECEquipment equipment = LoadTestEquipment(StaticTestBidPath);
-
             //Assert
-            string actualName = equipment.Name;
             string expectedName = "Test Equipment";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualDescription = equipment.Description;
+            Assert.AreEqual(expectedName, actualEquipment.Name);
+            
             string expectedDescription = "Test Equipment Description";
-            Assert.AreEqual(expectedDescription, actualDescription);
-
-            int actualQuantity = equipment.Quantity;
+            Assert.AreEqual(expectedDescription, actualEquipment.Description);
+            
             int expectedQuantity = 456;
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            double actualBP = equipment.BudgetPrice;
+            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
+            
             double expectedBP = 456;
-            Assert.AreEqual(expectedBP, actualBP);
+            Assert.AreEqual(expectedBP, actualEquipment.BudgetPrice);
         }
 
         [TestMethod]
         public void Load_Bid_SubScope()
         {
-            //Arrange
-            TECSubScope subScope = LoadTestSubScope(StaticTestBidPath);
-
             //Assert
-            string actualName = subScope.Name;
             string expectedName = "Test SubScope";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualDescription = subScope.Description;
+            Assert.AreEqual(expectedName, actualSubScope.Name);
+            
             string expectedDescription = "Test SubScope Description";
-            Assert.AreEqual(expectedDescription, actualDescription);
-
-            int actualQuantity = subScope.Quantity;
+            Assert.AreEqual(expectedDescription, actualSubScope.Description);
+            
             int expectedQuantity = 789;
-            Assert.AreEqual(expectedQuantity, actualQuantity);
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
         }
 
         [TestMethod]
         public void Load_Bid_Device()
         {
-            //Arrange
-            TECDevice dev = LoadTestDevice(StaticTestBidPath);
-
             //Assert
-            string actualName = dev.Name;
             string expectedName = "Test Device";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualDescription = dev.Description;
+            Assert.AreEqual(expectedName, actualDevice.Name);
+            
             string expectedDescription = "Test Device Description";
-            Assert.AreEqual(expectedDescription, actualDescription);
-
-            int actualQuantity = dev.Quantity;
+            Assert.AreEqual(expectedDescription, actualDevice.Description);
+            
             int expectedQuantity = 987;
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            double actualCost = dev.Cost;
+            Assert.AreEqual(expectedQuantity, actualDevice.Quantity);
+            
             double expectedCost = 654;
-            Assert.AreEqual(expectedCost, actualCost);
-
-            string actualWire = dev.Wire;
+            Assert.AreEqual(expectedCost, actualDevice.Cost);
+            
             string expectedWire = "Test Wire";
-            Assert.AreEqual(expectedWire, actualWire);
+            Assert.AreEqual(expectedWire, actualDevice.Wire);
         }
 
         [TestMethod]
         public void Load_Bid_Point()
         {
-            //Arrange
-            TECPoint point = LoadTestPoint(StaticTestBidPath);
-
             //Assert
-            string actualName = point.Name;
             string expectedName = "Test Point";
-            Assert.AreEqual(expectedName, actualName);
-
-            string actualDescription = point.Description;
+            Assert.AreEqual(expectedName, actualPoint.Name);
+            
             string expectedDescription = "Test Point Description";
-            Assert.AreEqual(expectedDescription, actualDescription);
-
-            int actualQuantity = point.Quantity;
+            Assert.AreEqual(expectedDescription, actualPoint.Description);
+            
             int expectedQuantity = 321;
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            PointTypes actualType = point.Type;
+            Assert.AreEqual(expectedQuantity, actualPoint.Quantity);
+            
             PointTypes expectedType = PointTypes.Serial;
-            Assert.AreEqual(expectedType, actualType);
+            Assert.AreEqual(expectedType, actualPoint.Type);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Location()
+        {
+            Assert.Fail();
         }
     }
 }
