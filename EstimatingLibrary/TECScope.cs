@@ -76,8 +76,10 @@ namespace EstimatingLibrary
             get { return _location; }
             set
             {
+                var oldNew = Tuple.Create<Object, Object>(_location, value);
                 var temp = Copy();
                 _location = value;
+                NotifyPropertyChanged("LocationChanged", temp, oldNew);
                 NotifyPropertyChanged("Location", temp, this);
             }
         }
