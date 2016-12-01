@@ -66,7 +66,7 @@ namespace Tests
             equipment2.SubScope.Add(subScope2);
 
             //Systems
-            var system1 = new TECSystem("System 1", "Description 1", 234.5, new ObservableCollection<TECEquipment>());
+            var system1 = new TECSystem("System 1", "Locations all the way", 234.5, new ObservableCollection<TECEquipment>());
             system1.Quantity = 2345;
             system1.Location = location1;
             system1.Equipment.Add(equipment1);
