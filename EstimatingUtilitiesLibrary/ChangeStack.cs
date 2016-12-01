@@ -60,6 +60,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
             //Exclusions changed
             foreach (TECExclusion exclusion in Bid.Exclusions) { exclusion.PropertyChanged += Object_PropertyChanged; }
+            //Locations changed
             foreach (TECLocation location in Bid.Locations) { location.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             {
@@ -508,6 +509,23 @@ namespace EstimatingUtilitiesLibrary
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     SaveStack.Add(item);
                 }
+                else if (e.PropertyName == "LocationChanged")
+                {
+                    var oldNew = newValue as Tuple<Object, Object>;
+                    var toSave = new List<Tuple<Change, object, object>>();
+                    if (oldNew.Item1 != null)
+                    {
+                        toSave.Add(Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, oldNew.Item1));
+                    }
+                    if (oldNew.Item2 != null)
+                    {
+                        toSave.Add(Tuple.Create<Change, Object, Object>(Change.Add, oldValue, oldNew.Item2));
+                    }
+                    foreach(var save in toSave)
+                    {
+                        SaveStack.Add(save);
+                    }
+                }
                 else
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
@@ -521,35 +539,7 @@ namespace EstimatingUtilitiesLibrary
                 if(debugProperties) { Console.WriteLine("Property not compatible: " + e.PropertyName); }
             }
         }
-
-        /*
-        private void handleBidCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (!isDoing) { RedoStack.Clear(); }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECObject oldItem in e.OldItems)
-                {
-                    oldItem.PropertyChanged -= Object_PropertyChanged;
-                    var stackItem = Tuple.Create(Change.Remove, (object)Bid, (object)oldItem);
-                    UndoStack.Add(stackItem);
-                    SaveStack.Add(stackItem);
-                    handleChildren(stackItem);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (TECObject newItem in e.NewItems)
-                {
-                    newItem.PropertyChanged += Object_PropertyChanged;
-                    var stackItem = Tuple.Create(Change.Add, (object)Bid, (object)newItem);
-                    UndoStack.Add(stackItem);
-                    SaveStack.Add(stackItem);
-                    handleChildren(stackItem);
-                }
-            }
-        }
-        */
+        
         private void handleChildren(Tuple<Change, object, object> stackItem)
         {
             var newItem = stackItem.Item3;
@@ -670,9 +660,7 @@ namespace EstimatingUtilitiesLibrary
 
         #region Event Handlers
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
-        /*
-        private void Bid_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e){ handleBidCollectionChanged(e); }
-        */
+        
         #endregion //Event Handlers
     }
 }

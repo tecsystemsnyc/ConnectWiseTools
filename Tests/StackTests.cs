@@ -350,6 +350,26 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Undo_Location_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Locations[0].Name;
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Locations[0].Name = edit;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Locations[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
         public void Undo_System_Name()
         {
             //Arrange
@@ -430,6 +450,26 @@ namespace Tests
             //assert
             ObservableCollection<TECEquipment> actual = Bid.Systems[0].Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_System_Location()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECLocation expected = Bid.Systems[0].Location;
+            TECLocation edit = new TECLocation("Floor 42");
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Location = edit;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            TECLocation actual = Bid.Systems[0].Location;
+            Assert.AreEqual(expected, actual, "Not Undone");
 
         }
 
@@ -1138,6 +1178,25 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
+        
+        [TestMethod]
+        public void Redo_Location_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Locations[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Locations[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
 
         [TestMethod]
         public void Redo_System_Name()
@@ -1217,6 +1276,25 @@ namespace Tests
             //assert
             ObservableCollection<TECEquipment> actual = Bid.Systems[0].Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Location()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECLocation edit = new TECLocation("Floor 42");
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Location = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            TECLocation actual = Bid.Systems[0].Location;
+            Assert.AreEqual(edit, actual, "Not Undone");
 
         }
 
