@@ -132,6 +132,15 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECSystem system in bid.Systems)
                 {
                     addFullSystem(system);
+                    addLocationInScope(system);
+                    foreach (TECEquipment equip in system.Equipment)
+                    {
+                        addLocationInScope(equip);
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            addLocationInScope(ss);
+                        }
+                    }
                 }
 
                 foreach (TECScopeBranch branch in bid.ScopeTree)
@@ -391,7 +400,14 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECLocation)
             {
-                addLocation(tarObject as TECLocation);
+                if (refObject is TECBid)
+                {
+                    addLocation(tarObject as TECLocation);
+                }
+                else
+                {
+                    addLocationInScope(refObject as TECScope);
+                }
             }
             else
             {
@@ -424,14 +440,12 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECDevice)
             {
-                Console.WriteLine("Edit Device in stack");
                 if (refObject is TECDevice)
                 {
                     editDevice(tarObject as TECDevice);
                 }
                 else if (refObject is TECSubScope)
                 {
-                    Console.WriteLine("Edit Device quantity");
                     editDeviceQuantity(refObject as TECSubScope, tarObject as TECDevice);
                 }
             }
@@ -545,7 +559,14 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECLocation)
             {
-                removeLocation(tarObject as TECLocation);
+                if (refObject is TECBid)
+                {
+                    removeLocation(tarObject as TECLocation);
+                }
+                else
+                {
+                    removeLocationInScope(refObject as TECScope);
+                }
             }
             else
             {
@@ -949,11 +970,11 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addLocationInScope(TECLocation location, Guid scopeID)
+        static private void addLocationInScope(TECScope scope)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ScopeID", scopeID.ToString());
-            data.Add("LocationID", location.Guid.ToString());
+            data.Add("ScopeID", scope.Guid.ToString());
+            data.Add("LocationID", scope.Location.Guid.ToString());
 
             if (!SQLiteDB.Insert("TECLocationTECScope", data))
             {
@@ -1236,6 +1257,11 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB.Delete("TECScopeBranchHierarchy", "BranchID", branch.Guid);
 
+        }
+
+        private static void removeLocationInScope(TECScope scope)
+        {
+            SQLiteDB.Delete("TECLocationTECScope", "ScopeID", scope.Guid);
         }
         #endregion
         #endregion Remove Methods

@@ -19,7 +19,7 @@ namespace Tests
         ChangeStack testStack;
         string path;
 
-        [TestInitialize()]
+        [TestInitialize]
         public void TestInitialize()
         {
             //Arrange
@@ -31,7 +31,7 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
         }
 
-        [TestCleanup()]
+        [TestCleanup]
         public void TestCleanup()
         {
             GC.Collect();
@@ -634,6 +634,7 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = null;
+            //Devices can only be added from the device catalog.
             foreach (TECDevice dev in bid.DeviceCatalog)
             {
                 if (dev.Name == "Device C1")
@@ -646,6 +647,7 @@ namespace Tests
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
+            //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -785,14 +787,234 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Point()
         {
-            Assert.Fail();
+            //Act
+            TECPoint expectedPoint = new TECPoint(PointTypes.Serial, "New Point", "Point Description");
+            expectedPoint.Quantity = 84300;
+
+            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            subScopeToModify.Points.Add(expectedPoint);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == subScopeToModify.Guid)
+                        {
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                if (expectedPoint.Guid == point.Guid)
+                                {
+                                    actualPoint = point;
+                                    break;
+                                }
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
+            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
+            Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
+            Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_Point()
         {
-            Assert.Fail();
+            //Act
+            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            int oldNumPoints = ssToModify.Points.Count();
+            TECPoint pointToRemove = ssToModify.Points[0];
+            ssToModify.Points.Remove(pointToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope modifiedSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == ssToModify.Guid)
+                        {
+                            modifiedSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (modifiedSubScope != null) break;
+                }
+                if (modifiedSubScope != null) break;
+            }
+
+            //Assert
+            foreach (TECPoint point in modifiedSubScope.Points)
+            {
+                if (pointToRemove.Guid == point.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumPoints - 1), modifiedSubScope.Points.Count);
         }
+
+        #region Edit Point
+        [TestMethod]
+        public void Save_Bid_Point_Name()
+        {
+            //Act
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            expectedPoint.Name = "Point name save test";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedPoint.Guid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Point_Description()
+        {
+            //Act
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            expectedPoint.Description = "Point Description save test";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedPoint.Guid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Point_Quantity()
+        {
+            //Act
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            expectedPoint.Quantity = 7463;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedPoint.Guid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Point_Type()
+        {
+            //Act
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            expectedPoint.Type = PointTypes.BI;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedPoint.Guid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
+        }
+        #endregion Edit Point
         #endregion Save Point
     }
 }
