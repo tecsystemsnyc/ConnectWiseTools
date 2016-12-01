@@ -610,11 +610,11 @@ namespace EstimateBuilder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if ((dropInfo.Data is TECDevice) && (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource))
-            { sourceItem = new TECDevice((TECDevice)dropInfo.Data); }
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
             else
             { sourceItem = dropInfo.Data; }
-            
+
             if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
                 ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -632,11 +632,11 @@ namespace EstimateBuilder.ViewModel
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                } else
+                }
+                else
                 {
                     ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
-                
             }
         }
         #endregion
