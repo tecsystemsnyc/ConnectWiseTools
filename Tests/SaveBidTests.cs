@@ -37,7 +37,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
+            //File.Delete(path);
+            Console.WriteLine("SaveBid test bid: " + path);
         }
 
         #region Save BidInfo
@@ -1016,5 +1017,111 @@ namespace Tests
         }
         #endregion Edit Point
         #endregion Save Point
+
+        #region Save Location
+        [TestMethod]
+        public void Save_Bid_Add_Location()
+        {
+            //Act
+            TECLocation expectedLocation = new TECLocation("New Location");
+            bid.Locations.Add(expectedLocation);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation loc in actualBid.Locations)
+            {
+                if (loc.Guid == expectedLocation.Guid)
+                {
+                    actualLocation = loc;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Guid, actualLocation.Guid);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Location()
+        {
+            //Act
+            int oldNumLocations = bid.Locations.Count;
+            TECLocation locationToRemove = bid.Locations[0];
+            bid.Locations.Remove(locationToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECLocation loc in actualBid.Locations)
+            {
+                if (loc.Guid == locationToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumLocations - 1), actualBid.Locations.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Location_ToScope()
+        {
+            //Act
+            TECLocation expectedLocation = bid.Locations[0];
+
+            TECSystem sysToModify = null;
+            foreach (TECSystem sys in bid.Systems)
+            {
+                if (sys.Description == "No Location")
+                {
+                    sysToModify = sys;
+                    break;
+                }
+            }
+            TECEquipment equipToModify = sysToModify.Equipment[0];
+            TECSubScope ssToModify = equipToModify.SubScope[0];
+
+            sysToModify.Location = expectedLocation;
+            equipToModify.Location = expectedLocation;
+            ssToModify.Location = expectedLocation;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation loc in actualBid.Locations)
+            {
+                if (loc.Guid == expectedLocation.Guid)
+                {
+                    actualLocation = loc;
+                    break;
+                }
+            }
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                if (sys.Guid == sysToModify.Guid)
+                {
+                    actualSystem = sys;
+                    break;
+                }
+            }
+            TECEquipment actualEquip = actualSystem.Equipment[0];
+            TECSubScope actualSS = actualEquip.SubScope[0];
+
+            //Assert
+            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Guid, actualLocation.Guid);
+
+            Assert.AreEqual(actualLocation, actualSystem.Location);
+            Assert.AreEqual(actualLocation, actualEquip.Location);
+            Assert.AreEqual(actualLocation, actualSS.Location);
+        }
+        #endregion Save Location
     }
 }

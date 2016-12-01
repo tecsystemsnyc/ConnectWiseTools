@@ -62,12 +62,58 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
 
             actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-            actualSystem = actualBid.Systems[0];
-            actualSystem1 = actualBid.Systems[1];
-            actualEquipment = actualSystem.Equipment[0];
-            actualSubScope = actualEquipment.SubScope[0];
-            actualDevice = actualSubScope.Devices[0];
-            actualPoint = actualSubScope.Points[0];
+
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                if (sys.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = sys;
+                }
+                else if (sys.Guid == expectedSystem1.Guid)
+                {
+                    actualSystem1 = sys;
+                }
+                if (actualSystem != null && actualSystem1 != null)
+                {
+                    break;
+                }
+            }
+
+            foreach (TECEquipment equip in actualSystem.Equipment)
+            {
+                if (equip.Guid == expectedEquipment.Guid)
+                {
+                    actualEquipment = equip;
+                    break;
+                }
+            }
+
+            foreach (TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == expectedSubScope.Guid)
+                {
+                    actualSubScope = ss;
+                    break;
+                }
+            }
+
+            foreach (TECDevice dev in actualSubScope.Devices)
+            {
+                if (dev.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            foreach (TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == expectedPoint.Guid)
+                {
+                    actualPoint = point;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]

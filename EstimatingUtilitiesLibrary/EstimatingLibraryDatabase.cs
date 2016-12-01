@@ -184,7 +184,7 @@ namespace EstimatingUtilitiesLibrary
                 MessageBox.Show(message);
             }
 
-            SQLiteDB.Connection.Close();
+    SQLiteDB.Connection.Close();
         }
 
         static public void SaveTemplatesToNewDB(string path, TECTemplates templates)
@@ -972,13 +972,16 @@ namespace EstimatingUtilitiesLibrary
 
         static private void addLocationInScope(TECScope scope)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ScopeID", scope.Guid.ToString());
-            data.Add("LocationID", scope.Location.Guid.ToString());
-
-            if (!SQLiteDB.Insert("TECLocationTECScope", data))
+            if (scope.Location != null)
             {
-                Console.WriteLine("Error: Couldn't add relation to TECLocationTECScope table.");
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("ScopeID", scope.Guid.ToString());
+                data.Add("LocationID", scope.Location.Guid.ToString());
+
+                if (!SQLiteDB.Insert("TECLocationTECScope", data))
+                {
+                    Console.WriteLine("Error: Couldn't add relation to TECLocationTECScope table.");
+                }
             }
         }
 
@@ -2399,7 +2402,7 @@ namespace EstimatingUtilitiesLibrary
 
                     foreach (DataRow row in scopeDT.Rows)
                     {
-                        scopeToLink.Add(new Guid(row[0].ToString()), location);
+                        scopeToLink.Add(new Guid(row["ScopeID"].ToString()), location);
                     }
                 }
                 catch (Exception e)
