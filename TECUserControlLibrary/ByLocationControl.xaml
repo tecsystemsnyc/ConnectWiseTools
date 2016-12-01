@@ -35,15 +35,18 @@
                         SelectedIndex="{Binding Path=SelectedScopeType, Converter={cnvt:EnumerationToIntegerConverter}}">
                 <TabItem Visibility="Collapsed">
                     <local:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=SystemsSource}"
-                                   ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                              ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                              AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <local:EquipmentGridControl EquipmentSource="{Binding ElementName=parent, Path=EquipmentSource}"
-                                   ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <local:SubScopeGridControl SubScopeSource="{Binding ElementName=parent, Path=SubScopeSource}"
-                                   ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                               AllowAddingNew="False"/>
                 </TabItem>
             </TabControl>
         </Grid>

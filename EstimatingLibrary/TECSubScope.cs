@@ -60,6 +60,7 @@ namespace EstimatingLibrary
                 Points.Add(new TECPoint(point));
             }
 
+            _location = sourceSubScope.Location;
             _quantity = sourceSubScope.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSubScope.Tags);
         }

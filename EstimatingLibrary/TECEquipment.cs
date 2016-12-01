@@ -105,6 +105,7 @@ namespace EstimatingLibrary
                 SubScope.Add(new TECSubScope(subScope));
             }
 
+            _location = equipmentSource.Location;
             _quantity = equipmentSource.Quantity;
             _tags = new ObservableCollection<TECTag>(equipmentSource.Tags);
         }

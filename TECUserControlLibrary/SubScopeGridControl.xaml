@@ -20,7 +20,8 @@
         <DataGrid ItemsSource="{Binding Path=SubScopeSource}"
                   SelectedItem="{Binding Path=ViewModel.SelectedSubScope}"
                   AutoGenerateColumns="False"
-                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
+                  CanUserAddRows="{Binding Path=AllowAddingNew}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"
                                     Visibility="{Binding Data.DataGridVisibilty.ExpandSubScope, 

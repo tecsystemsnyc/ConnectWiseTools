@@ -150,6 +150,7 @@ namespace EstimatingLibrary
                 Equipment.Add(new TECEquipment(equipment));
             }
 
+            _location = sourceSystem.Location;
             _quantity = sourceSystem.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);
 
