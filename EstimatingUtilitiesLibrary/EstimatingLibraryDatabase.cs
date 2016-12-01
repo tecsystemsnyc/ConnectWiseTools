@@ -493,10 +493,12 @@ namespace EstimatingUtilitiesLibrary
             if (tarObject is TECSystem)
             {
                 removeSystem(tarObject as TECSystem);
+                removeLocationInScope(tarObject as TECSystem);
             }
             else if (tarObject is TECEquipment)
             {
                 removeEquipment(tarObject as TECEquipment);
+                removeLocationInScope(tarObject as TECEquipment);
                 if (refObject is TECSystem)
                 {
                     removeSystemEquipmentRelation(tarObject as TECEquipment);
@@ -505,6 +507,7 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is TECSubScope)
             {
                 removeSubScope(tarObject as TECSubScope);
+                removeLocationInScope(tarObject as TECSubScope);
                 if (refObject is TECEquipment)
                 {
                     removeEquipmentSubScopeRelation(tarObject as TECSubScope);

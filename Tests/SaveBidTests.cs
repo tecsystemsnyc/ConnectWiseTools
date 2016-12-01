@@ -37,8 +37,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveBid test bid: " + path);
+            File.Delete(path);
+            //Console.WriteLine("SaveBid test bid: " + path);
         }
 
         #region Save BidInfo
@@ -1067,6 +1067,31 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Bid_Edit_Location_Name()
+        {
+            //Act
+            TECLocation expectedLocation = bid.Locations[0];
+            expectedLocation.Name = "Location Name Save";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation loc in actualBid.Locations)
+            {
+                if (loc.Guid == expectedLocation.Guid)
+                {
+                    actualLocation = loc;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+        }
+
+        [TestMethod]
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
@@ -1121,6 +1146,115 @@ namespace Tests
             Assert.AreEqual(actualLocation, actualSystem.Location);
             Assert.AreEqual(actualLocation, actualEquip.Location);
             Assert.AreEqual(actualLocation, actualSS.Location);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Location_FromScope()
+        {
+            //Act
+            int expectedNumLocations = bid.Locations.Count;
+
+            TECSystem expectedSys = null;
+            foreach (TECSystem sys in bid.Systems)
+            {
+                if (sys.Description == "Locations all the way")
+                {
+                    expectedSys = sys;
+                    break;
+                }
+            }
+            TECEquipment expectedEquip = expectedSys.Equipment[0];
+            TECSubScope expectedSS = expectedEquip.SubScope[0];
+
+            expectedSys.Location = null;
+            expectedEquip.Location = null;
+            expectedSS.Location = null;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            int actualNumLocations = actualBid.Locations.Count;
+
+            TECSystem actualSys = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                if (sys.Guid == expectedSys.Guid)
+                {
+                    actualSys = sys;
+                    break;
+                }
+            }
+            TECEquipment actualEquip = actualSys.Equipment[0];
+            TECSubScope actualSS = actualEquip.SubScope[0];
+
+            //Assert
+            Assert.AreEqual(expectedNumLocations, actualNumLocations);
+
+            Assert.IsNull(actualSys.Location);
+            Assert.IsNull(actualEquip.Location);
+            Assert.IsNull(actualSS.Location);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Edit_Location_InScope()
+        {
+            //Act
+            int expectedNumLocations = bid.Locations.Count;
+
+            TECLocation expectedLocation = null;
+            foreach (TECLocation loc in bid.Locations)
+            {
+                if (loc.Name == "Cellar")
+                {
+                    expectedLocation = loc;
+                    break;
+                }
+            }
+
+            TECSystem expectedSystem = null;
+            foreach (TECSystem sys in bid.Systems)
+            {
+                if (sys.Name == "System 1")
+                {
+                    expectedSystem = sys;
+                    break;
+                }
+            }
+
+            expectedSystem.Location = expectedLocation;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            int actualNumLocations = actualBid.Locations.Count;
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation loc in actualBid.Locations)
+            {
+                if (loc.Guid == expectedLocation.Guid)
+                {
+                    actualLocation = loc;
+                    break;
+                }
+            }
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                if (sys.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = sys;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNumLocations, actualNumLocations);
+
+            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(actualLocation, actualSystem.Location);
         }
         #endregion Save Location
     }
