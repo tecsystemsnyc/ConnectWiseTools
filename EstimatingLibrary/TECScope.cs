@@ -79,11 +79,11 @@ namespace EstimatingLibrary
                 var oldNew = Tuple.Create<Object, Object>(_location, value);
                 var temp = Copy();
                 _location = value;
-                NotifyPropertyChanged("LocationChanged", temp, oldNew);
                 NotifyPropertyChanged("Location", temp, this);
+                temp = Copy();
+                NotifyPropertyChanged("LocationChanged", temp, oldNew);
             }
         }
-        
         #endregion //Properties
 
         #region Constructors
@@ -96,8 +96,7 @@ namespace EstimatingLibrary
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
         }
-
-
+        
         abstract public Object DragDropCopy();
         #endregion //Constructors
 
