@@ -25,7 +25,7 @@ namespace TECUserControlLibrary
         #region DPs
 
         /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
+        /// Gets or sets the SystemSource which is displayed
         /// </summary>
         public ObservableCollection<TECSystem> SystemsSource
         {
@@ -34,7 +34,7 @@ namespace TECUserControlLibrary
         }
 
         /// <summary>
-        /// Identified the DevicesSource dependency property
+        /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty SystemsSourceProperty =
             DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECSystem>),

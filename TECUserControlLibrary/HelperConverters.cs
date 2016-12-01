@@ -122,20 +122,14 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
-    public class IgnoreNewItemPlaceholderConverter : BaseConverter, IValueConverter
+    class IgnoreNewItemPlaceholderConverter : IValueConverter
     {
         public static readonly IgnoreNewItemPlaceholderConverter Instance = new IgnoreNewItemPlaceholderConverter();
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            //Console.WriteLine("Ignore placeholder conversion called.");
-
             if (value != null && value.ToString() == "{NewItemPlaceholder}")
-            {
-                //Console.WriteLine("Is new item placeholder.");
                 return DependencyProperty.UnsetValue;
-            }
-                
             return value;
         }
 

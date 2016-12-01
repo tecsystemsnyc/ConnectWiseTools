@@ -29,11 +29,17 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                             <Grid Margin="0,0,0,5">
+                                <!--
                                 <local:ScopeControl Content="{Binding Converter={cnvt:IgnoreNewItemPlaceholderConverter}}"
                                                     Height="72" Width="72" 
                                                     NameLabel="{Binding Name}"
                                                     DescriptionLabel="{Binding Description}" Margin="5"/>
-                            </Grid>
+                                -->
+                            <local:ScopeControl Content="{Binding}"
+                                                    Height="72" Width="72" 
+                                                    NameLabel="{Binding Name}"
+                                                    DescriptionLabel="{Binding Description}" Margin="5"/>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

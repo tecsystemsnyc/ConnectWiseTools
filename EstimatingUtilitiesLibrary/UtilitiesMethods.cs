@@ -91,4 +91,5 @@ namespace EstimatingUtilitiesLibrary
     public enum EditIndex { System, Equipment, SubScope, Device, Point };
     public enum GridIndex { Systems, Scope, Notes, Exclusions};
     public enum AddIndex { System, Equipment, SubScope, Devices, Tags};
+    public enum LocationScopeType { System, Equipment, SubScope};
 }

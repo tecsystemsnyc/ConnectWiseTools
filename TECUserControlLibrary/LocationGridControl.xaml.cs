@@ -18,27 +18,29 @@ using System.Windows.Shapes;
 namespace TECUserControlLibrary
 {
     /// <summary>
-    /// Interaction logic for SubScopeGridControl.xaml
+    /// Interaction logic for LocationGridControl.xaml
     /// </summary>
-    public partial class SubScopeGridControl : UserControl
+    public partial class LocationGridControl : UserControl
     {
+
         #region DPs
 
         /// <summary>
-        /// Gets or sets the SubScopeSource which is displayed
+        /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECSubScope> SubScopeSource
+        public ObservableCollection<TECLocation> LocationSource
         {
-            get { return (ObservableCollection<TECSubScope>)GetValue(SubScopeSourceProperty); }
-            set { SetValue(SubScopeSourceProperty, value); }
+            get { return (ObservableCollection<TECLocation>)GetValue(LocationSourceProperty); }
+            set { SetValue(LocationSourceProperty, value); }
         }
 
         /// <summary>
-        /// Identified the SubScopeSource dependency property
+        /// Identified the DevicesSource dependency property
         /// </summary>
-        public static readonly DependencyProperty SubScopeSourceProperty =
-            DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<TECSubScope>),
-              typeof(SubScopeGridControl), new PropertyMetadata(default(ObservableCollection<TECSubScope>)));
+        public static readonly DependencyProperty LocationSourceProperty =
+            DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLocation>),
+              typeof(LocationGridControl), new PropertyMetadata(default(ObservableCollection<TECLocation>)));
+
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
@@ -54,12 +56,10 @@ namespace TECUserControlLibrary
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(SubScopeGridControl));
-
-
+              typeof(LocationGridControl));
         #endregion
 
-        public SubScopeGridControl()
+        public LocationGridControl()
         {
             InitializeComponent();
         }
