@@ -57,7 +57,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            DateTime expected = Bid.DueDate;
+            string expected = Bid.DueDate.ToString();
             DateTime edit = new DateTime(2000, 1, 1);
 
             //Act
@@ -67,7 +67,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            DateTime actual = Bid.DueDate;
+            string actual = Bid.DueDate.ToString();
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -117,16 +117,16 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLabor expected = Bid.Labor;
+            double expected = Bid.Labor.SoftCoef;
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.CommCoef = 1.1;
+            Bid.Labor.SoftCoef = 1.1;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            TECLabor actual = Bid.Labor;
+            double actual = Bid.Labor.SoftCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -344,7 +344,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDrawing> actual = Bid.Drawings;
+            ObservableCollection<TECLocation> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -458,7 +458,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation expected = Bid.Systems[0].Location;
+            Guid expected = new Guid(Bid.Systems[0].Location.Guid.ToString());
             TECLocation edit = new TECLocation("Floor 42");
 
             //Act
@@ -468,7 +468,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            TECLocation actual = Bid.Systems[0].Location;
+            Guid actual = new Guid(Bid.Systems[0].Location.Guid.ToString());
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -731,7 +731,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECManufacturer expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            Guid expected = new Guid(Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
             TECManufacturer edit = new TECManufacturer();
 
             //Act
@@ -741,7 +741,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            TECManufacturer actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            Guid actual = new Guid(Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -831,7 +831,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            PointTypes expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type.ToString();
             PointTypes edit = PointTypes.AO;
 
             //Act
@@ -841,7 +841,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            PointTypes actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type.ToString(); ;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }

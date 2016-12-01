@@ -70,6 +70,7 @@ namespace Scope_Builder.ViewModel
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
         public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
+        public ICommand AddPointCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
@@ -106,10 +107,12 @@ namespace Scope_Builder.ViewModel
                 // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
                 buildTitleString();
+                populateLocationSelections();
                 Bid.PropertyChanged += Bid_PropertyChanged;
+                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
             }
         }
-
+       
         public TECTemplates Templates
         {
             get { return _templates; }
@@ -156,9 +159,34 @@ namespace Scope_Builder.ViewModel
             {
                 _selectedLocation = value;
                 RaisePropertyChanged("SelectedLocation");
-                OrganizeByLocation();
+                organizeByLocation();
             }
         }
+
+        public TECDevice SelectedDevice
+        {
+            get
+            {
+                return _selectedDevice;
+            }
+            set
+            {
+                _selectedDevice = value;
+                RaisePropertyChanged("SelectedDevice");
+            }
+        }
+        private TECDevice _selectedDevice;
+
+        public TECPoint SelectedPoint
+        {
+            get { return _selectedPoint; }
+            set
+            {
+                _selectedPoint = value;
+                RaisePropertyChanged("SelectedPoint");
+            }
+        }
+        private TECPoint _selectedPoint;
 
         private ObservableCollection<TECSystem> _systemItemsCollection;
         public ObservableCollection<TECSystem> SystemItemsCollection
@@ -239,6 +267,17 @@ namespace Scope_Builder.ViewModel
             }
         }
 
+        private ObservableCollection<TECLocation> _locationSelections;
+        public ObservableCollection<TECLocation> LocationSelections
+        {
+            get { return _locationSelections; }
+            set
+            {
+                _locationSelections = value;
+                RaisePropertyChanged("LocationSelections");
+            }
+        }
+        
         private string _searchString;
         public string SearchString
         {
@@ -277,7 +316,54 @@ namespace Scope_Builder.ViewModel
         public string Version { get; set; }
 
         private ChangeStack stack { get; set; }
-        
+
+        #region Point Interface Properties
+        public string PointName
+        {
+            get { return _pointName; }
+            set
+            {
+                _pointName = value;
+                RaisePropertyChanged("PointName");
+            }
+        }
+        private string _pointName;
+
+        public string PointDescription
+        {
+            get { return _pointDescription; }
+            set
+            {
+                _pointDescription = value;
+                RaisePropertyChanged("PointDescription");
+            }
+        }
+        private string _pointDescription;
+
+        public PointTypes PointType
+        {
+            get { return _pointType; }
+            set
+            {
+                _pointType = value;
+                RaisePropertyChanged("PointType");
+            }
+        }
+        private PointTypes _pointType;
+
+        public int PointQuantity
+        {
+            get { return _pointQuantity; }
+            set
+            {
+                _pointQuantity = value;
+                RaisePropertyChanged("PointQuantity");
+            }
+        }
+        private int _pointQuantity;
+        #endregion //Point Interface Properties
+
+        #region Intitializer
         public MainViewModel()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
@@ -343,6 +429,7 @@ namespace Scope_Builder.ViewModel
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
             AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
+            AddPointCommand = new RelayCommand(AddPointExecute, AddPointCanExecute);
 
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
 
@@ -356,6 +443,7 @@ namespace Scope_Builder.ViewModel
 
             CurrentStatusText = "Done.";
         }
+        #endregion 
 
         #region Resources Paths
         const string APPDATA_FOLDER = @"TECSystems\";
@@ -686,6 +774,30 @@ namespace Scope_Builder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+
+        private void AddPointExecute()
+        {
+            TECPoint newPoint = new TECPoint();
+            newPoint.Name = PointName;
+            newPoint.Description = PointDescription;
+            newPoint.Type = PointType;
+            newPoint.Quantity = PointQuantity;
+            if (PointType != 0)
+            {
+                SelectedSubScope.Points.Add(newPoint);
+            }
+        }
+        private bool AddPointCanExecute()
+        {
+            if ((PointType != 0) && (PointName != ""))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         #endregion //Commands
 
         #region Helper Functions
@@ -878,10 +990,15 @@ namespace Scope_Builder.ViewModel
             if (e.PropertyName == "Name")
             {
                 buildTitleString();
-            }
+            } 
         }
 
-        private void OrganizeByLocation()
+        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            populateLocationSelections();
+        }
+
+        private void organizeByLocation()
         {
             SystemsByLocation = new ObservableCollection<TECSystem>();
             EquipmentByLocation = new ObservableCollection<TECEquipment>();
@@ -907,6 +1024,17 @@ namespace Scope_Builder.ViewModel
                         }
                     }
                 }
+            }
+        }
+
+        private void populateLocationSelections()
+        {
+            LocationSelections = new ObservableCollection<TECLocation>();
+
+            LocationSelections.Add(new TECLocation("None"));
+            foreach (TECLocation location in Bid.Locations)
+            {
+                LocationSelections.Add(location);
             }
         }
 

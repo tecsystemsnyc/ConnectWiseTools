@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent"
@@ -18,7 +19,7 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=SubScopeSource}"
-                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">
@@ -26,20 +27,20 @@
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"
                                     Visibility="{Binding Data.DataGridVisibilty.ExpandSubScope, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeName, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeDescription, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location}"
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         DisplayMemberPath="Name"
-                                        ItemsSource="{Binding Data.Bid.Locations,
+                                        ItemsSource="{Binding Data.LocationSelections,
                                         Source={StaticResource proxy}}"
                                         Header="Location" Width="Auto"
                                         Visibility="{Binding Data.DataGridVisibilty.SubScopeLocation,
                                         Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeQuantity, 
                                     Source={StaticResource proxy}}"/>
 
@@ -47,7 +48,7 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <StackPanel>
-                            <Label Content="Points" FontSize="10"/>
+                            <Label Content="Devices and IO" FontSize="10"/>
                             <local:DevicesPointsControl DevicesSource="{Binding Devices}"
                                                 PointsSource="{Binding Points}"
                                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"

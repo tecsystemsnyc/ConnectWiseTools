@@ -122,7 +122,39 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
-    class IgnoreNewItemPlaceholderConverter : IValueConverter
+    public class SelectedLocationToLocationConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return new TECLocation("None");
+            }
+            else
+            {
+                return value;
+            }
+        }
+        
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+
+            if (((TECLocation)value).Name == "None")
+            {
+                return null;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        #endregion
+    }
+
+    public class IgnoreNewItemPlaceholderConverter : BaseConverter, IValueConverter
     {
         public static readonly IgnoreNewItemPlaceholderConverter Instance = new IgnoreNewItemPlaceholderConverter();
 
@@ -136,6 +168,24 @@ namespace TECUserControlLibrary.HelperConverters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class IgnoreNewItemPlaceholderToNullConverter : BaseConverter, IValueConverter
+    {
+        public static readonly IgnoreNewItemPlaceholderConverter Instance = new IgnoreNewItemPlaceholderConverter();
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value != null && value.ToString() == "{NewItemPlaceholder}")
+                return null;
+            else
+                return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
         }
     }
 

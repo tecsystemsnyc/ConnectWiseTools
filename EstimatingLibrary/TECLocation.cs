@@ -21,7 +21,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _name = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Text", temp, this);
+                NotifyPropertyChanged("Name", temp, this);
             }
         }
 
