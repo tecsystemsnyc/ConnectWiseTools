@@ -67,6 +67,11 @@ namespace EstimatingLibrary
             
             return outController;
         }
+
+        public override Object DragDropCopy()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

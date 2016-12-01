@@ -933,8 +933,8 @@ namespace TemplateBuilder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if ((dropInfo.Data is TECDevice) && (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource))
-            { sourceItem = new TECDevice((TECDevice)dropInfo.Data); }
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
             else
             { sourceItem = dropInfo.Data; }
 
@@ -960,7 +960,6 @@ namespace TemplateBuilder.ViewModel
                 {
                     ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
-
             }
         }
         #endregion

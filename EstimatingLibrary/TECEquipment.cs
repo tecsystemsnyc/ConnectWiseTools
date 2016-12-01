@@ -105,6 +105,7 @@ namespace EstimatingLibrary
                 SubScope.Add(new TECSubScope(subScope));
             }
 
+            _location = equipmentSource.Location;
             _quantity = equipmentSource.Quantity;
             _tags = new ObservableCollection<TECTag>(equipmentSource.Tags);
         }
@@ -115,6 +116,12 @@ namespace EstimatingLibrary
         {
             TECEquipment outEquip = new TECEquipment(this);
             outEquip._guid = this.Guid;
+            return outEquip;
+        }
+
+        public override object DragDropCopy()
+        {
+            TECEquipment outEquip = new TECEquipment(this);
             return outEquip;
         }
 

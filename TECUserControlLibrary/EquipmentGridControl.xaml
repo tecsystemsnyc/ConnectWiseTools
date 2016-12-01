@@ -24,7 +24,8 @@
                   x:Name="equipmentDataGrid"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=ViewModel.SelectedEquipment}"
-                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
+                  CanUserAddRows="{Binding Path=AllowAddingNew}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="AddingNewItem">
                     <command:EventToCommand

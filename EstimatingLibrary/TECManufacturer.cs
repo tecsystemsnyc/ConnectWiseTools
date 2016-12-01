@@ -41,6 +41,11 @@ namespace EstimatingLibrary
             outMan._guid = this.Guid;
             return outMan;
         }
+
+        public override Object DragDropCopy()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }

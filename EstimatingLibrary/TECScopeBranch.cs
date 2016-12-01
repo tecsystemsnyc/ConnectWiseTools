@@ -41,5 +41,10 @@ namespace EstimatingLibrary
             return outScope;
         }
 
+        public override object DragDropCopy()
+        {
+            TECScopeBranch outScope = new TECScopeBranch(this);
+            return outScope;
+        }
     }
 }

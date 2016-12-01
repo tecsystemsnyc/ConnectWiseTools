@@ -25,7 +25,7 @@ namespace TECUserControlLibrary
         #region DPs
 
         /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
+        /// Gets or sets the EquipmentSource which is displayed
         /// </summary>
         public ObservableCollection<TECEquipment> EquipmentSource
         {
@@ -34,7 +34,7 @@ namespace TECUserControlLibrary
         }
 
         /// <summary>
-        /// Identified the DevicesSource dependency property
+        /// Identified the EquipmentSource dependency property
         /// </summary>
         public static readonly DependencyProperty EquipmentSourceProperty =
             DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
@@ -56,6 +56,23 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(EquipmentGridControl));
+
+
+        /// <summary>
+        /// Gets or sets wether user can add rows 
+        /// </summary>
+        public bool AllowAddingNew
+        {
+            get { return (bool)GetValue(AllowAddingNewProperty); }
+            set { SetValue(AllowAddingNewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the AllowAddingNew dependency property
+        /// </summary>
+        public static readonly DependencyProperty AllowAddingNewProperty =
+            DependencyProperty.Register("AllowAddingNew", typeof(bool),
+              typeof(EquipmentGridControl), new PropertyMetadata(true));
 
 
         #endregion

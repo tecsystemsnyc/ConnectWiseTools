@@ -150,6 +150,7 @@ namespace EstimatingLibrary
                 Equipment.Add(new TECEquipment(equipment));
             }
 
+            _location = sourceSystem.Location;
             _quantity = sourceSystem.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);
 
@@ -158,6 +159,13 @@ namespace EstimatingLibrary
 
         #region Methods
         public override Object Copy()
+        {
+            TECSystem outSystem = new TECSystem(this);
+            outSystem._guid = Guid;
+            return outSystem;
+        }
+
+        public override object DragDropCopy()
         {
             TECSystem outSystem = new TECSystem(this);
             return outSystem;

@@ -174,9 +174,14 @@
                 <TabItem Header="Systems">
                     <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
-
                 </TabItem>
-                
+                <TabItem Header="By Location">
+                    <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
+                                            SystemsSource="{Binding SystemsByLocation}"
+                                            EquipmentSource="{Binding EquipmentByLocation}"
+                                            SubScopeSource="{Binding SubScopeByLocation}"
+                                            ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
+                </TabItem>
                 <TabItem Header="Scope">
                     <DataGrid  ItemsSource="{Binding Bid.ScopeTree}" 
                            AutoGenerateColumns="False">
@@ -230,7 +235,6 @@
                 </TabItem>
             </TabControl>
             <Grid Grid.Row="2">
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>

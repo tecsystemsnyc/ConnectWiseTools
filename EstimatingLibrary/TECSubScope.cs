@@ -60,6 +60,7 @@ namespace EstimatingLibrary
                 Points.Add(new TECPoint(point));
             }
 
+            _location = sourceSubScope.Location;
             _quantity = sourceSubScope.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSubScope.Tags);
         }
@@ -148,6 +149,13 @@ namespace EstimatingLibrary
             outScope._guid = Guid;
             return outScope;
         }
+
+        public override object DragDropCopy()
+        {
+            TECSubScope outScope = new TECSubScope(this);
+            return outScope;
+        }
+
 
         private double getMaterialCost()
         {

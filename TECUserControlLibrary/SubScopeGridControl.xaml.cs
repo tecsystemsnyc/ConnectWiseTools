@@ -25,7 +25,7 @@ namespace TECUserControlLibrary
         #region DPs
 
         /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
+        /// Gets or sets the SubScopeSource which is displayed
         /// </summary>
         public ObservableCollection<TECSubScope> SubScopeSource
         {
@@ -34,7 +34,7 @@ namespace TECUserControlLibrary
         }
 
         /// <summary>
-        /// Identified the DevicesSource dependency property
+        /// Identified the SubScopeSource dependency property
         /// </summary>
         public static readonly DependencyProperty SubScopeSourceProperty =
             DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<TECSubScope>),
@@ -57,7 +57,24 @@ namespace TECUserControlLibrary
               typeof(SubScopeGridControl));
 
 
+        /// <summary>
+        /// Gets or sets wether user can add rows 
+        /// </summary>
+        public bool AllowAddingNew
+        {
+            get { return (bool)GetValue(AllowAddingNewProperty); }
+            set { SetValue(AllowAddingNewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the AllowAddingNew dependency property
+        /// </summary>
+        public static readonly DependencyProperty AllowAddingNewProperty =
+            DependencyProperty.Register("AllowAddingNew", typeof(bool),
+              typeof(SubScopeGridControl), new PropertyMetadata(true));
+
         #endregion
+
         public SubScopeGridControl()
         {
             InitializeComponent();

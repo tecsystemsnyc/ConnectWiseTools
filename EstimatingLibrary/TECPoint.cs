@@ -65,11 +65,15 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            
             TECPoint outPoint = new TECPoint(this);
             outPoint._guid = Guid;
             return outPoint;
-            
+        }
+
+        public override object DragDropCopy()
+        {
+            TECPoint outPoint = new TECPoint(this);
+            return outPoint;
         }
         #region Conversion Methods
         private static PointTypes convertStringToType(string type)
