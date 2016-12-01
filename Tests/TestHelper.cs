@@ -26,10 +26,14 @@ namespace Tests
             bid.Estimator = "Mr. Test";
 
             //Locations
+            var cellar = new TECLocation("Cellar");
             var location1 = new TECLocation("1st Floor");
             var location2 = new TECLocation("2nd Floor");
             var location3 = new TECLocation("3rd Floor");
+
             var allLocations = new ObservableCollection<TECLocation>();
+
+            allLocations.Add(cellar);
             allLocations.Add(location1);
             allLocations.Add(location2);
             allLocations.Add(location3);
@@ -37,8 +41,6 @@ namespace Tests
             //Points
             var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
             point1.Quantity = 321;
-            var allPoints = new ObservableCollection<TECPoint>();
-            allPoints.Add(point1);
 
             //Devices
             var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", new TECManufacturer());
@@ -47,33 +49,39 @@ namespace Tests
             allDevices.Add(device1);
 
             //SubScope
-            var subScope1 = new TECSubScope("SubScope 1", "Description 1", allDevices, allPoints);
+            var subScope1 = new TECSubScope("SubScope 1", "Description 1", allDevices, new ObservableCollection<TECPoint>());
             subScope1.Quantity = 654;
             subScope1.Location = location3;
+            subScope1.Points.Add(point1);
 
-            var allSubScope = new ObservableCollection<TECSubScope>();
-            allSubScope.Add(subScope1);
+            var subScope2 = new TECSubScope("Empty SubScope", "Description 2", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
 
             //Equipment
-            var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, allSubScope);
+            var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, new ObservableCollection<TECSubScope>());
             equipment1.Quantity = 1234;
             equipment1.Location = location1;
+            equipment1.SubScope.Add(subScope1);
 
-            var allEquipment = new ObservableCollection<TECEquipment>();
-            allEquipment.Add(equipment1);
+            var equipment2 = new TECEquipment("Equipment 2", "Description 2", 0, new ObservableCollection<TECSubScope>());
+            equipment2.SubScope.Add(subScope2);
 
             //Systems
-            var system1 = new TECSystem("System 1", "Description 1", 234.5, allEquipment);
+            var system1 = new TECSystem("System 1", "Description 1", 234.5, new ObservableCollection<TECEquipment>());
             system1.Quantity = 2345;
             system1.Location = location1;
+            system1.Equipment.Add(equipment1);
 
             var system2 = new TECSystem("System 2", "Description 2", 234.52, new ObservableCollection<TECEquipment>());
             system2.Quantity = 23452;
             system2.Location = location2;
 
+            var system3 = new TECSystem("System 3", "No Location", 349, new ObservableCollection<TECEquipment>());
+            system3.Equipment.Add(equipment2);
+
             var allSystems = new ObservableCollection<TECSystem>();
             allSystems.Add(system1);
             allSystems.Add(system2);
+            allSystems.Add(system3);
 
             //Pages
             var pages1 = new TECPage("Testpath", 2);
