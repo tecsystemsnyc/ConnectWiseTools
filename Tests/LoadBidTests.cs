@@ -22,6 +22,8 @@ namespace Tests
 
         static TECManufacturer actualManufacturer;
 
+        static TECTag actualTag;
+
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -47,6 +49,8 @@ namespace Tests
             actualPoint = actualSubScope.Points[0];
 
             actualManufacturer = actualBid.ManufacturerCatalog[0];
+
+            actualTag = actualBid.Tags[0];
         }
 
         [TestMethod]
@@ -221,6 +225,31 @@ namespace Tests
             //Assert
             string expectedText = "Test Exclusion";
             Assert.AreEqual(expectedText, actualBid.Exclusions[0].Text);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Tag()
+        {
+            //Assert
+            string expectedText = "Test Tag";
+            Assert.AreEqual(expectedText, actualTag.Text);
+
+            Guid expectedGuid = actualTag.Guid;
+
+            Assert.AreEqual(expectedGuid, actualSystem.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualSystem.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualEquipment.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualEquipment.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualSubScope.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualSubScope.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualDevice.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualDevice.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
         }
     }
 }
