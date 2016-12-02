@@ -11,7 +11,7 @@ using static Tests.TestHelper;
 namespace Tests
 {
     [TestClass]
-    public class LoadTests
+    public class LoadBidTests
     {
         static TECBid actualBid;
         static TECSystem actualSystem;
@@ -187,6 +187,22 @@ namespace Tests
             Assert.AreEqual(actualBid.Locations[0], actualSystem.Location);
             Assert.AreEqual(actualBid.Locations[0], actualEquipment.Location);
             Assert.AreEqual(actualBid.Locations[1], actualSubScope.Location);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Note()
+        {
+            //Assert
+            string expectedText = "Test Note";
+            Assert.AreEqual(expectedText, actualBid.Notes[0].Text);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Exclusion()
+        {
+            //Assert
+            string expectedText = "Test Exclusion";
+            Assert.AreEqual(expectedText, actualBid.Exclusions[0].Text);
         }
     }
 }

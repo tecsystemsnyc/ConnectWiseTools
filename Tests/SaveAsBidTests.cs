@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SaveAsTests
+    public class SaveAsBidTests
     {
         static TECBid expectedBid;
         static TECLabor expectedLabor;
@@ -21,6 +21,8 @@ namespace Tests
         static TECSubScope expectedSubScope;
         static TECDevice expectedDevice;
         static TECPoint expectedPoint;
+        static TECNote expectedNote;
+        static TECExclusion expectedExclusion;
 
         static string path;
 
@@ -32,6 +34,8 @@ namespace Tests
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
         static TECPoint actualPoint;
+        static TECNote actualNote;
+        static TECExclusion actualExclusion;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -58,6 +62,8 @@ namespace Tests
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
             expectedPoint = expectedSubScope.Points[0];
+            expectedNote = expectedBid.Notes[0];
+            expectedExclusion = expectedBid.Exclusions[0];
 
             path = Path.GetTempFileName();
 
@@ -116,6 +122,24 @@ namespace Tests
                 if (point.Guid == expectedPoint.Guid)
                 {
                     actualPoint = point;
+                    break;
+                }
+            }
+
+            foreach (TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            foreach (TECExclusion exclusion in actualBid.Exclusions)
+            {
+                if (exclusion.Guid == expectedExclusion.Guid)
+                {
+                    actualExclusion = exclusion;
                     break;
                 }
             }
@@ -215,6 +239,20 @@ namespace Tests
 
             //In CreateTestBid, the first system has the same location as its equipment.
             Assert.AreEqual(expectedSystem.Location, expectedEquipment.Location);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Note()
+        {
+            //Assert
+            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Exclusion()
+        {
+            //Assert
+            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
         }
     }
 }

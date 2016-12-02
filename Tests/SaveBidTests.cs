@@ -1350,5 +1350,152 @@ namespace Tests
             Assert.AreEqual(actualLocation, actualSystem.Location);
         }
         #endregion Save Location
+
+        #region Save Note
+        [TestMethod]
+        public void Save_Bid_Add_Note()
+        {
+            //Act
+            TECNote expectedNote = new TECNote("New Note");
+            bid.Notes.Add(expectedNote);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECNote actualNote = null;
+            foreach (TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Note()
+        {
+            //Act
+            int oldNumNotes = bid.Notes.Count;
+            TECNote noteToRemove = bid.Notes[0];
+            bid.Notes.Remove(noteToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == noteToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumNotes - 1), bid.Notes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Note_Text()
+        {
+            //Act
+            TECNote expectedNote = bid.Notes[0];
+            expectedNote.Text = "Test Save Text";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECNote actualNote = null;
+            foreach (TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+        }
+        #endregion Save Note
+
+        #region Save Exclusion
+
+        [TestMethod]
+        public void Save_Bid_Add_Exclusion()
+        {
+            //Act
+            TECExclusion expectedExclusion = new TECExclusion("New Exclusion");
+            bid.Exclusions.Add(expectedExclusion);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECExclusion actualExclusion = null;
+            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            {
+                if (Exclusion.Guid == expectedExclusion.Guid)
+                {
+                    actualExclusion = Exclusion;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Exclusion()
+        {
+            //Act
+            int oldNumExclusions = bid.Exclusions.Count;
+            TECExclusion ExclusionToRemove = bid.Exclusions[0];
+            bid.Exclusions.Remove(ExclusionToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            {
+                if (Exclusion.Guid == ExclusionToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumExclusions - 1), bid.Exclusions.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Exclusion_Text()
+        {
+            //Act
+            TECExclusion expectedExclusion = bid.Exclusions[0];
+            expectedExclusion.Text = "Test Save Text";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECExclusion actualExclusion = null;
+            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            {
+                if (Exclusion.Guid == expectedExclusion.Guid)
+                {
+                    actualExclusion = Exclusion;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+        }
+        #endregion Save Exclusion
     }
 }

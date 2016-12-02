@@ -116,6 +116,18 @@ namespace Tests
             deviceCatalog.Add(deviceC1);
             deviceCatalog.Add(device1);
 
+            //Notes
+            var note1 = new TECNote("Note 1");
+
+            var allNotes = new ObservableCollection<TECNote>();
+            allNotes.Add(note1);
+
+            //Exclusions
+            var exclusion1 = new TECExclusion("Exlusions 1");
+
+            var allExclusions = new ObservableCollection<TECExclusion>();
+            allExclusions.Add(exclusion1);
+
             //Bid
             bid.Systems = allSystems;
             bid.DeviceCatalog = deviceCatalog;
@@ -123,6 +135,8 @@ namespace Tests
             bid.ManufacturerCatalog = allManufacturers;
             bid.Tags = allTags;
             bid.Locations = allLocations;
+            bid.Notes = allNotes;
+            bid.Exclusions = allExclusions;
 
             return bid;
         }
