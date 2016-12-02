@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Deployment.Application;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace TemplateBuilder.ViewModel
 {
@@ -85,6 +86,8 @@ namespace TemplateBuilder.ViewModel
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
 
+            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
+
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
@@ -103,6 +106,9 @@ namespace TemplateBuilder.ViewModel
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
 
             Stack = new ChangeStack(Templates);
+
+            CurrentStatusText = "Done.";
+            TitleString = "Template Builder";
         }
 
         #region Resources Paths
@@ -114,6 +120,28 @@ namespace TemplateBuilder.ViewModel
         public string TECLogo { get; set; }
 
         public string Version { get; set; }
+
+        public string CurrentStatusText
+        {
+            get { return _currentStatusText; }
+            set
+            {
+                _currentStatusText = value;
+                RaisePropertyChanged("CurrentStatusText");
+            }
+        }
+        private string _currentStatusText;
+
+        public string TitleString
+        {
+            get { return _titleString; }
+            set
+            {
+                _titleString = value;
+                RaisePropertyChanged("TitleString");
+            }
+        }
+        private string _titleString;
 
         #region Interface Properties
         public MainViewModelData ViewData
@@ -242,6 +270,17 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private TECTag _selectedTag;
+
+        private ObservableCollection<TECLocation> _locationSelections;
+        public ObservableCollection<TECLocation> LocationSelections
+        {
+            get { return _locationSelections; }
+            set
+            {
+                _locationSelections = value;
+                RaisePropertyChanged("LocationSelections");
+            }
+        }
         #endregion //Selected Object Properties
 
         #region Tab Indexes
@@ -513,6 +552,7 @@ namespace TemplateBuilder.ViewModel
         public ICommand RedoCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
+        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
         #endregion //Commands Properties
 
         string defaultTemplatesPath;
@@ -739,6 +779,12 @@ namespace TemplateBuilder.ViewModel
         {
             TECManufacturer newMan = new TECManufacturer(ViewData.ManufacturerName, "", ViewData.ManufacturerMultiplier);
             Templates.ManufacturerCatalog.Add(newMan);
+        }
+
+        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
+        {
+            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
+            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
         }
 
         private void ClosingExecute(CancelEventArgs e)
@@ -985,6 +1031,9 @@ namespace TemplateBuilder.ViewModel
                     DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
                     DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
                     DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+                    DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+                    DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+                    DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
                     break;
                 case 1:
                     LeftTabIndex = 1;
