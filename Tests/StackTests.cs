@@ -1034,25 +1034,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Bid_Labor()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.CommCoef = 1.1;
-            TECLabor expected = new TECLabor(Bid.Labor);
-
-            //Act
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            TECLabor actual = Bid.Labor;
-            Assert.AreEqual(expected.CommCoef, actual.CommCoef, "Not Redone");
-
-        }
-
-        [TestMethod]
         public void Redo_Bid_ScopeTree()
         {
             //Arrange
@@ -1284,6 +1265,120 @@ namespace Tests
             //assert
             string actual = Bid.Locations[0].Name;
             Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+        
+        [TestMethod]
+        public void Redo_Labor_PM()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.PMCoef = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.PMCoef;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Labor_ENG()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ENGCoef = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.ENGCoef;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Labor_Comm()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.CommCoef = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.CommCoef;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Labor_Soft()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.SoftCoef = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.SoftCoef;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Labor_Graph()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.GraphCoef = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.GraphCoef;
+            Assert.AreEqual(expected, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Labor_Electrical()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ElectricalRate = 1.1;
+            double expected = 1.1;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            double actual = Bid.Labor.ElectricalRate;
+            Assert.AreEqual(expected, actual, "Not Redone");
 
         }
 
