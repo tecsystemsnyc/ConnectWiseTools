@@ -50,8 +50,13 @@ namespace Tests
             var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
             point1.Quantity = 321;
 
+            //Manufacturers
+            var manufacturer1 = new TECManufacturer("Test", "Desc", 0.8);
+            var allManufacturers = new ObservableCollection<TECManufacturer>();
+            allManufacturers.Add(manufacturer1);
+
             //Devices
-            var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", new TECManufacturer());
+            var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", manufacturer1);
             device1.Quantity = 987;
             var allDevices = new ObservableCollection<TECDevice>();
             allDevices.Add(device1);
@@ -99,11 +104,6 @@ namespace Tests
             var drawing1 = new TECDrawing("Test", "Desc", Guid.NewGuid(), allPages);
             var allDrawings = new ObservableCollection<TECDrawing>();
             allDrawings.Add(drawing1);
-
-            //Manufacturers
-            var manufacturer1 = new TECManufacturer("Test", "Desc", 0.8);
-            var allManufacturers = new ObservableCollection<TECManufacturer>();
-            allManufacturers.Add(manufacturer1);
 
             //Tags
             var tag1 = new TECTag("Test");

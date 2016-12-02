@@ -20,6 +20,7 @@ namespace Tests
         static TECEquipment expectedEquipment;
         static TECSubScope expectedSubScope;
         static TECDevice expectedDevice;
+        static TECManufacturer expectedManufacturer;
         static TECPoint expectedPoint;
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
@@ -33,6 +34,7 @@ namespace Tests
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
+        static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
         static TECNote actualNote;
         static TECExclusion actualExclusion;
@@ -61,6 +63,7 @@ namespace Tests
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
+            expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
@@ -113,6 +116,15 @@ namespace Tests
                 if (dev.Guid == expectedDevice.Guid)
                 {
                     actualDevice = dev;
+                    break;
+                }
+            }
+
+            foreach (TECManufacturer man in actualBid.ManufacturerCatalog)
+            {
+                if (man.Guid == expectedManufacturer.Guid)
+                {
+                    actualManufacturer = man;
                     break;
                 }
             }
@@ -216,6 +228,18 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Manufacturer()
+        {
+            //Assert
+            Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
+            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
+
+            Assert.AreEqual(expectedDevice.Manufacturer.Name, expectedDevice.Manufacturer.Name);
+            Assert.AreEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier);
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, expectedDevice.Manufacturer.Guid);
         }
 
         [TestMethod]
