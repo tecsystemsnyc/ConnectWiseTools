@@ -59,12 +59,12 @@
                     <Label Content="Adjustment %:" FontSize="12"
                            Grid.Row="1" Grid.ColumnSpan="2"
                            Background="{DynamicResource WindowBackgroundBrush}"
-                   Foreground="{DynamicResource LightTextBrush}"
+                           Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
                     <Label Content="Adjustment Amount:" FontSize="12"
                            Grid.Row="2" Grid.ColumnSpan="2"
                            Background="{DynamicResource WindowBackgroundBrush}"
-                   Foreground="{DynamicResource LightTextBrush}"
+                           Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
                     <TextBox Text="{Binding ManualAdjustmentPercentage}"
                              Grid.Row="1"
