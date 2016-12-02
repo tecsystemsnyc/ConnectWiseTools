@@ -91,8 +91,10 @@ namespace EstimatingLibrary
                 var temp = Copy();
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
+                Labor.PropertyChanged += objectPropertyChanged;
             }
         }
+
 
         public double MaterialCost
         {
@@ -242,6 +244,8 @@ namespace EstimatingLibrary
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
 
+            Labor.PropertyChanged += objectPropertyChanged;
+
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
             DeviceCatalog.CollectionChanged += CollectionChanged;
@@ -337,6 +341,12 @@ namespace EstimatingLibrary
                 }
             }
 
+        }
+
+
+        private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged("ChildChanged", (object)this, (object)Labor);
         }
         #endregion
 
