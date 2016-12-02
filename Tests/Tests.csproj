@@ -75,14 +75,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="EstimateBuilderTests.cs" />
-    <Compile Include="LoadTests.cs" />
+    <Compile Include="LoadBidTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SaveAsTests.cs" />
+    <Compile Include="SaveAsBidTests.cs" />
     <Compile Include="SaveBidTests.cs" />
     <Compile Include="StackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

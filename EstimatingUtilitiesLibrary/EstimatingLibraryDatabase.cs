@@ -424,7 +424,10 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECLabor)
             {
-                editBidInfo(refObject as TECBid);
+                if (refObject is TECBid)
+                {
+                    editBidInfo(refObject as TECBid);
+                }
             }
             else if (tarObject is TECSystem)
             {
