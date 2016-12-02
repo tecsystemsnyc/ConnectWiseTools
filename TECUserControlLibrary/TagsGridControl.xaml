@@ -20,7 +20,7 @@
                   x:Name="TagsGrid"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding}" Header="Name" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Text}" Header="Text" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

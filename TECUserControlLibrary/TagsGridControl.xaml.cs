@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,9 +27,9 @@ namespace TECUserControlLibrary
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<string> TagsSource
+        public ObservableCollection<TECTag> TagsSource
         {
-            get { return (ObservableCollection<string>)GetValue(TagsSourceProperty); }
+            get { return (ObservableCollection<TECTag>)GetValue(TagsSourceProperty); }
             set { SetValue(TagsSourceProperty, value); }
         }
 
@@ -36,8 +37,8 @@ namespace TECUserControlLibrary
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty TagsSourceProperty =
-            DependencyProperty.Register("TagsSource", typeof(ObservableCollection<string>),
-              typeof(TagsGridControl), new PropertyMetadata(default(ObservableCollection<string>)));
+            DependencyProperty.Register("TagsSource", typeof(ObservableCollection<TECTag>),
+              typeof(TagsGridControl), new PropertyMetadata(default(ObservableCollection<TECTag>)));
 
         #endregion
 

@@ -34,6 +34,7 @@ namespace Scope_Builder.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase, IDropTarget
     {
+        #region Properties
         private TECBid _bid;
         private TECTemplates _templates;
         private TECSystem _selectedSystem;
@@ -316,7 +317,6 @@ namespace Scope_Builder.ViewModel
         public string Version { get; set; }
 
         private ChangeStack stack { get; set; }
-
         #region Point Interface Properties
         public string PointName
         {
@@ -362,7 +362,8 @@ namespace Scope_Builder.ViewModel
         }
         private int _pointQuantity;
         #endregion //Point Interface Properties
-
+        #endregion
+        
         #region Intitializer
         public MainViewModel()
         {
@@ -587,7 +588,7 @@ namespace Scope_Builder.ViewModel
                 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    //EstimatingUtilitiesLibrary.ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
+                    EstimatingUtilitiesLibrary.ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
                     Console.WriteLine("Scope saved to document.");
                 }
                 else
