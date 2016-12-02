@@ -134,6 +134,81 @@ namespace Tests
             Assert.AreEqual(expectedPM, actualPM);
         }
 
+        [TestMethod]
+        public void Save_Labor_ENGCoef()
+        {
+            //Act
+            double expectedENG = 0.123;
+            bid.Labor.ENGCoef = expectedENG;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualENG = actualBid.Labor.ENGCoef;
+
+            //Assert
+            Assert.AreEqual(expectedENG, actualENG);
+        }
+
+        [TestMethod]
+        public void Save_Labor_CommCoef()
+        {
+            //Act
+            double expectedComm = 0.123;
+            bid.Labor.CommCoef = expectedComm;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualComm = actualBid.Labor.CommCoef;
+
+            //Assert
+            Assert.AreEqual(expectedComm, actualComm);
+        }
+
+        [TestMethod]
+        public void Save_Labor_SoftCoef()
+        {
+            //Act
+            double expectedSoft = 0.123;
+            bid.Labor.SoftCoef = expectedSoft;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualSoft = actualBid.Labor.SoftCoef;
+
+            //Assert
+            Assert.AreEqual(expectedSoft, actualSoft);
+        }
+
+        [TestMethod]
+        public void Save_Labor_GraphCoef()
+        {
+            //Act
+            double expectedGraph = 0.123;
+            bid.Labor.GraphCoef = expectedGraph;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualGraph = actualBid.Labor.GraphCoef;
+
+            //Assert
+            Assert.AreEqual(expectedGraph, actualGraph);
+        }
+
+        [TestMethod]
+        public void Save_Labor_ElecRate()
+        {
+            //Act
+            double expectedRate = 0.123;
+            bid.Labor.ElectricalRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualBid.Labor.ElectricalRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
         #endregion Save Labor
 
         #region Save System
