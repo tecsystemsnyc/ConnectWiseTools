@@ -14,6 +14,7 @@ namespace Tests
     public class SaveAsTests
     {
         static TECBid expectedBid;
+        static TECLabor expectedLabor;
         static TECSystem expectedSystem;
         static TECSystem expectedSystem1;
         static TECEquipment expectedEquipment;
@@ -24,6 +25,7 @@ namespace Tests
         static string path;
 
         static TECBid actualBid;
+        static TECLabor actualLabor;
         static TECSystem actualSystem;
         static TECSystem actualSystem1;
         static TECEquipment actualEquipment;
@@ -49,6 +51,7 @@ namespace Tests
         {
             //Arrange
             expectedBid = TestHelper.CreateTestBid();
+            expectedLabor = expectedBid.Labor;
             expectedSystem = expectedBid.Systems[0];
             expectedSystem1 = expectedBid.Systems[1];
             expectedEquipment = expectedSystem.Equipment[0];
@@ -62,6 +65,8 @@ namespace Tests
             EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
 
             actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
             {
@@ -135,6 +140,18 @@ namespace Tests
             Assert.AreEqual(expectedBid.DueDate, actualBid.DueDate);
             Assert.AreEqual(expectedBid.Salesperson, actualBid.Salesperson);
             Assert.AreEqual(expectedBid.Estimator, actualBid.Estimator);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Labor()
+        {
+            //Assert
+            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
         }
 
         [TestMethod]
