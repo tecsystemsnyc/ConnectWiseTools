@@ -118,6 +118,24 @@ namespace Tests
         }
         #endregion Save BidInfo
 
+        #region Save Labor
+        [TestMethod]
+        public void Save_Labor_PMCoef()
+        {
+            //Act
+            double expectedPM = 0.123;
+            bid.Labor.PMCoef = expectedPM;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualPM = actualBid.Labor.PMCoef;
+
+            //Assert
+            Assert.AreEqual(expectedPM, actualPM);
+        }
+
+        #endregion Save Labor
+
         #region Save System
         [TestMethod]
         public void Save_Bid_Add_System()
