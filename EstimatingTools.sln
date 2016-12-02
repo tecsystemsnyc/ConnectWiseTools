@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateBuilder", "Template
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{10D3075C-F8C3-4BB1-8E0E-EDE16BEF33AE}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EstimatingToolsSetup", "EstimatingToolsSetup\EstimatingToolsSetup.vdproj", "{FF6516EF-752F-402A-8E6C-993BFC7C91C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +158,15 @@ Global
 		{10D3075C-F8C3-4BB1-8E0E-EDE16BEF33AE}.Working|x64.Build.0 = Release|Any CPU
 		{10D3075C-F8C3-4BB1-8E0E-EDE16BEF33AE}.Working|x86.ActiveCfg = Release|Any CPU
 		{10D3075C-F8C3-4BB1-8E0E-EDE16BEF33AE}.Working|x86.Build.0 = Release|Any CPU
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Debug|Any CPU.ActiveCfg = Debug
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Debug|x64.ActiveCfg = Debug
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Debug|x86.ActiveCfg = Debug
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Release|Any CPU.ActiveCfg = Release
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Release|x64.ActiveCfg = Release
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Release|x86.ActiveCfg = Release
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Working|Any CPU.ActiveCfg = Release
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Working|x64.ActiveCfg = Release
+		{FF6516EF-752F-402A-8E6C-993BFC7C91C4}.Working|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
