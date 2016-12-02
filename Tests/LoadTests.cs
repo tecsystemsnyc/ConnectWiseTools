@@ -66,6 +66,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_Labor()
+        {
+            //Assert
+            double expectedPM = 2;
+            Assert.AreEqual(expectedPM, actualBid.Labor.PMCoef);
+
+            double expectedENG = 3;
+            Assert.AreEqual(expectedENG, actualBid.Labor.ENGCoef);
+
+            double expectedComm = 4;
+            Assert.AreEqual(expectedComm, actualBid.Labor.CommCoef);
+
+            double expectedSoft = 5;
+            Assert.AreEqual(expectedSoft, actualBid.Labor.SoftCoef);
+
+            double expectedGraph = 6;
+            Assert.AreEqual(expectedGraph, actualBid.Labor.GraphCoef);
+
+            double expectedElec = 7;
+            Assert.AreEqual(expectedElec, actualBid.Labor.ElectricalRate);
+        }
+
+        [TestMethod]
         public void Load_Bid_System()
         {
             //Assert

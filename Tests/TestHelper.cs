@@ -25,6 +25,14 @@ namespace Tests
             bid.Salesperson = "Mrs. Test";
             bid.Estimator = "Mr. Test";
 
+            //Bid Labor
+            bid.Labor.PMCoef = 0.1;
+            bid.Labor.ENGCoef = 0.2;
+            bid.Labor.CommCoef = 0.3;
+            bid.Labor.SoftCoef = 0.4;
+            bid.Labor.GraphCoef = 0.5;
+            bid.Labor.ElectricalRate = 0.6;
+
             //Locations
             var cellar = new TECLocation("Cellar");
             var location1 = new TECLocation("1st Floor");
