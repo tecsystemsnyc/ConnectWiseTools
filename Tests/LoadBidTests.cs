@@ -20,6 +20,8 @@ namespace Tests
         static TECDevice actualDevice;
         static TECPoint actualPoint;
 
+        static TECManufacturer actualManufacturer;
+
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -43,6 +45,8 @@ namespace Tests
             actualSubScope = actualEquipment.SubScope[0];
             actualDevice = actualSubScope.Devices[0];
             actualPoint = actualSubScope.Points[0];
+
+            actualManufacturer = actualBid.ManufacturerCatalog[0];
         }
 
         [TestMethod]
@@ -154,6 +158,20 @@ namespace Tests
             
             string expectedWire = "Test Wire";
             Assert.AreEqual(expectedWire, actualDevice.Wire);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Manufacturer()
+        {
+            //Assert
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.17;
+
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
+
+            Assert.AreEqual(expectedName, actualDevice.Manufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualDevice.Manufacturer.Multiplier);
         }
 
         [TestMethod]
