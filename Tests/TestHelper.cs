@@ -33,6 +33,12 @@ namespace Tests
             bid.Labor.GraphCoef = 0.5;
             bid.Labor.ElectricalRate = 0.6;
 
+            //Tags
+            var tag1 = new TECTag("Tag 1");
+
+            var allTags = new ObservableCollection<TECTag>();
+            allTags.Add(tag1);
+
             //Locations
             var cellar = new TECLocation("Cellar");
             var location1 = new TECLocation("1st Floor");
@@ -49,6 +55,7 @@ namespace Tests
             //Points
             var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
             point1.Quantity = 321;
+            point1.Tags.Add(tag1);
 
             //Manufacturers
             var manufacturer1 = new TECManufacturer("Test", "Desc", 0.8);
@@ -58,6 +65,8 @@ namespace Tests
             //Devices
             var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", manufacturer1);
             device1.Quantity = 987;
+            device1.Tags.Add(tag1);
+
             var allDevices = new ObservableCollection<TECDevice>();
             allDevices.Add(device1);
 
@@ -66,6 +75,7 @@ namespace Tests
             subScope1.Quantity = 654;
             subScope1.Location = location3;
             subScope1.Points.Add(point1);
+            subScope1.Tags.Add(tag1);
 
             var subScope2 = new TECSubScope("Empty SubScope", "Description 2", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
 
@@ -74,6 +84,7 @@ namespace Tests
             equipment1.Quantity = 1234;
             equipment1.Location = location1;
             equipment1.SubScope.Add(subScope1);
+            equipment1.Tags.Add(tag1);
 
             var equipment2 = new TECEquipment("Equipment 2", "Description 2", 0, new ObservableCollection<TECSubScope>());
             equipment2.SubScope.Add(subScope2);
@@ -83,6 +94,7 @@ namespace Tests
             system1.Quantity = 2345;
             system1.Location = location1;
             system1.Equipment.Add(equipment1);
+            system1.Tags.Add(tag1);
 
             var system2 = new TECSystem("System 2", "Description 2", 234.52, new ObservableCollection<TECEquipment>());
             system2.Quantity = 23452;
@@ -104,11 +116,6 @@ namespace Tests
             var drawing1 = new TECDrawing("Test", "Desc", Guid.NewGuid(), allPages);
             var allDrawings = new ObservableCollection<TECDrawing>();
             allDrawings.Add(drawing1);
-
-            //Tags
-            var tag1 = new TECTag("Test");
-            var allTags = new ObservableCollection<TECTag>();
-            allTags.Add(tag1);
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, "Test Wire", new TECManufacturer());

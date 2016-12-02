@@ -24,6 +24,7 @@ namespace Tests
         static TECPoint expectedPoint;
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
+        static TECTag expectedTag;
 
         static string path;
 
@@ -38,6 +39,7 @@ namespace Tests
         static TECPoint actualPoint;
         static TECNote actualNote;
         static TECExclusion actualExclusion;
+        static TECTag actualTag;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -67,6 +69,7 @@ namespace Tests
             expectedPoint = expectedSubScope.Points[0];
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
+            expectedTag = expectedBid.Tags[0];
 
             path = Path.GetTempFileName();
 
@@ -155,6 +158,15 @@ namespace Tests
                     break;
                 }
             }
+
+            foreach (TECTag tag in actualBid.Tags)
+            {
+                if (tag.Guid == expectedTag.Guid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]
@@ -163,8 +175,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveAs test bid saved to: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveAs test bid saved to: " + path);
         }
 
         [TestMethod]
@@ -277,6 +289,31 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Tag()
+        {
+            //Assert
+            Assert.AreEqual(expectedTag.Text, actualTag.Text);
+
+            string expectedText = actualTag.Text;
+            Guid expectedGuid = actualTag.Guid;
+
+            Assert.AreEqual(expectedGuid, actualSystem.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualSystem.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualEquipment.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualEquipment.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualSubScope.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualSubScope.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualDevice.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualDevice.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
         }
     }
 }

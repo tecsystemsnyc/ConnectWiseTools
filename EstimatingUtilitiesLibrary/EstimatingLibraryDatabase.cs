@@ -30,7 +30,8 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-                if (templates.DeviceCatalog != null)
+                //Update catalogs from templates.
+                if (templates.DeviceCatalog.Count > 0)
                 {
                     foreach (TECDevice device in templates.DeviceCatalog)
                     {
@@ -38,7 +39,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
 
-                if (templates.ManufacturerCatalog != null)
+                if (templates.ManufacturerCatalog.Count > 0)
                 {
                     foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
                     {
@@ -46,20 +47,21 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
 
+                if (templates.Tags.Count > 0)
+                {
+                    foreach (TECTag tag in templates.Tags)
+                    {
+                        editTag(tag);
+                    }
+                }
+
                 bid = getBidInfo();
-                if (templates.Tags != null)
-                {
-                    bid.Tags = templates.Tags;
-                }
-                else
-                {
-                    bid.Tags = getAllTags();
-                }
                 bid.ScopeTree = getMainScopeBranches();
                 bid.Systems = getAllSystems();
                 bid.DeviceCatalog = getAllDevices();
                 bid.ManufacturerCatalog = getAllManufacturers();
                 bid.Locations = getAllLocations();
+                bid.Tags = getAllTags();
                 bid.Notes = getNotes();
                 bid.Exclusions = getExclusions();
                 bid.Drawings = getDrawings();
@@ -118,6 +120,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECDevice device in bid.DeviceCatalog)
                 {
                     addDevice(device);
+                    addTagsInScope(device.Tags, device.Guid);
                 }
 
                 foreach (TECManufacturer manufacturer in bid.ManufacturerCatalog)
@@ -757,10 +760,8 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach (TECTag tag in tags)
             {
-                //Console.WriteLine("Adding a tag");
-
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("TagID", Guid.NewGuid().ToString());
+                data.Add("TagID", tag.Guid.ToString());
                 data.Add("TagString", tag.Text);
 
                 if (!SQLiteDB.Insert("TECTag", data))
@@ -917,28 +918,13 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach (TECTag tag in tags)
             {
-                string command = "select TagID from TECTag where TagString = '";
-                command += tag;
-                command += "'";
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("ScopeID", scopeID.ToString());
+                data.Add("TagID", tag.Guid.ToString());
 
-                DataTable tagIDDT = SQLiteDB.getDataFromCommand(command);
-
-                try
+                if (!SQLiteDB.Insert("TECScopeTECTag", data))
                 {
-                    string tagID = tagIDDT.Rows[0]["TagID"].ToString();
-
-                    Dictionary<string, string> data = new Dictionary<string, string>();
-                    data.Add("ScopeID", scopeID.ToString());
-                    data.Add("TagID", tagID);
-
-                    if (!SQLiteDB.Insert("TECScopeTECTag", data))
-                    {
-                        Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("Error: Could not find tag, '" + tag + "'.");
+                    Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
                 }
             }
         }
@@ -1189,6 +1175,18 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Replace("TECLocation", data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECLocation table.");
+            }
+        }
+
+        static private void editTag(TECTag tag)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("TagID", tag.Guid.ToString());
+            data.Add("TagString", tag.Text);
+
+            if (!SQLiteDB.Replace("TECTag", data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECTag table");
             }
         }
         #endregion Edit Methods
