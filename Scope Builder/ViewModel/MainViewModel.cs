@@ -749,8 +749,8 @@ namespace Scope_Builder.ViewModel
 
         private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
         {
-            e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
-            ((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
+            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
+            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
         }
 
         private void ClosingExecute(CancelEventArgs e)
