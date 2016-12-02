@@ -442,6 +442,11 @@ namespace Scope_Builder.ViewModel
             stack = new ChangeStack(Bid);
 
             CurrentStatusText = "Done.";
+
+            if(Properties.Settings.Default.StartupFile != "")
+            {
+                LoadFromPath(Properties.Settings.Default.StartupFile);
+            }
         }
         #endregion 
 
@@ -1035,6 +1040,28 @@ namespace Scope_Builder.ViewModel
             foreach (TECLocation location in Bid.Locations)
             {
                 LocationSelections.Add(location);
+            }
+        }
+
+        private void LoadFromPath(string path)
+        {
+            if (path != null)
+            {
+                CurrentStatusText = "Loading...";
+                bidDBFilePath = path;
+                Properties.Settings.Default.ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                }
+                else
+                {
+                    string message = "File is open elsewhere";
+                    MessageBox.Show(message);
+                }
+                Console.WriteLine("Finished loading SQL Database.");
+                CurrentStatusText = "Done.";
             }
         }
 

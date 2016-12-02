@@ -8,7 +8,8 @@
              xmlns:ignore="http://www.galasoft.ch/ignore" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:vm="clr-namespace:Scope_Builder.ViewModel"
-             xmlns:views="clr-namespace:Scope_Builder.View">
+             xmlns:views="clr-namespace:Scope_Builder.View"
+             Startup="Application_Startup">
     
   <Application.Resources>
     <ResourceDictionary>

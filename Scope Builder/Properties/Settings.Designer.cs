@@ -70,5 +70,17 @@ namespace Scope_Builder.Properties {
                 this["BudgetCSVDirectoryPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartupFile {
+            get {
+                return ((string)(this["StartupFile"]));
+            }
+            set {
+                this["StartupFile"] = value;
+            }
+        }
     }
 }
