@@ -58,7 +58,9 @@ namespace EstimatingUtilitiesLibrary
             Bid.PropertyChanged += Object_PropertyChanged;
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
             //System Changed
-            foreach (TECScopeBranch branch in Bid.ScopeTree) { registerScope(branch); }
+            foreach (TECScopeBranch branch in Bid.ScopeTree) {
+                branch.PropertyChanged += Object_PropertyChanged;
+                registerScope(branch); }
             //Notes changed
             foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
             //Exclusions changed
