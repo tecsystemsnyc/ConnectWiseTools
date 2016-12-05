@@ -13,6 +13,7 @@ namespace Tests
     public static class TestHelper
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
+        static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.tdb";
 
         public static TECBid CreateTestBid()
         {
@@ -163,6 +164,11 @@ namespace Tests
         public static TECBid LoadTestBid(string path)
         {
             return EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+        }
+
+        public static TECTemplates LoadTestTemplates(string path)
+        {
+            return EstimatingLibraryDatabase.LoadDBToTemplates(path);
         }
     }
 }
