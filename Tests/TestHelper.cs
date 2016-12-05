@@ -59,7 +59,7 @@ namespace Tests
             point1.Tags.Add(tag1);
 
             //Manufacturers
-            var manufacturer1 = new TECManufacturer("Test", "Desc", 0.8);
+            var manufacturer1 = new TECManufacturer("Test", 0.8);
             var allManufacturers = new ObservableCollection<TECManufacturer>();
             allManufacturers.Add(manufacturer1);
 
@@ -159,6 +159,81 @@ namespace Tests
             bid.Exclusions = allExclusions;
 
             return bid;
+        }
+
+        public static TECTemplates CreateTestTemplates()
+        {
+            TECTemplates templates = new TECTemplates();
+
+            //Tags
+            TECTag testTag = new TECTag("Test Tag");
+            TECTag sysTag = new TECTag("System Tag");
+            TECTag equipTag = new TECTag("Equipment Tag");
+            TECTag ssTag = new TECTag("SubScope Tag");
+            TECTag devTag = new TECTag("Device Tag");
+
+            templates.Tags.Add(testTag);
+            templates.Tags.Add(sysTag);
+            templates.Tags.Add(equipTag);
+            templates.Tags.Add(ssTag);
+            templates.Tags.Add(devTag);
+
+            //Manufacturers
+            TECManufacturer testMan = new TECManufacturer("Test Manufacturer", 0.654);
+            TECManufacturer testDevMan = new TECManufacturer("Child Manufacturer (Test Device)", 0.446);
+            TECManufacturer childDevMan = new TECManufacturer("Child Manufacturer (Child Device)", 0.916);
+
+            templates.ManufacturerCatalog.Add(testMan);
+            templates.ManufacturerCatalog.Add(testDevMan);
+            templates.ManufacturerCatalog.Add(childDevMan);
+
+            //Devices
+            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, "Test Wire", testDevMan);
+            TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, "Test Child Wire", childDevMan);
+
+            testDev.Tags.Add(devTag);
+            childDev.Tags.Add(devTag);
+
+            templates.DeviceCatalog.Add(testDev);
+            templates.DeviceCatalog.Add(childDev);
+
+            //System
+            TECSystem system = new TECSystem("Test System", "System Description", 587.3, new ObservableCollection<TECEquipment>());
+            TECEquipment sysEquip = new TECEquipment("System Equipment", "Child Equipment", 489.5, new ObservableCollection<TECSubScope>());
+            TECSubScope sysSS = new TECSubScope("System SubScope", "Child SubScope", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+
+            sysSS.Devices.Add(childDev);
+            sysSS.Tags.Add(ssTag);
+
+            sysEquip.SubScope.Add(sysSS);
+            sysEquip.Tags.Add(equipTag);
+
+            system.Equipment.Add(sysEquip);
+            system.Tags.Add(sysTag);
+
+            templates.SystemTemplates.Add(system);
+
+            //Equipment
+            TECEquipment equipment = new TECEquipment("Test Equipment", "Equipment Description", 193.2, new ObservableCollection<TECSubScope>());
+            TECSubScope equipSS = new TECSubScope("Equipment SubScope", "Child SubScope", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+
+            equipSS.Devices.Add(childDev);
+            equipSS.Tags.Add(ssTag);
+
+            equipment.SubScope.Add(equipSS);
+            equipment.Tags.Add(equipTag);
+
+            templates.EquipmentTemplates.Add(equipment);
+
+            //SubScope
+            TECSubScope subScope = new TECSubScope("Test SubScope", "SubScope Description", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+
+            subScope.Devices.Add(childDev);
+            subScope.Tags.Add(ssTag);
+
+            templates.SubScopeTemplates.Add(subScope);
+
+            return templates;
         }
 
         public static TECBid LoadTestBid(string path)
