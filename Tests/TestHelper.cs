@@ -123,6 +123,17 @@ namespace Tests
             deviceCatalog.Add(deviceC1);
             deviceCatalog.Add(device1);
 
+            //Scope Branches
+            var branch1 = new TECScopeBranch("Branch 1", "1st Description", new ObservableCollection<TECScopeBranch>());
+            var branch2 = new TECScopeBranch("Branch 2", "2nd Description", new ObservableCollection<TECScopeBranch>());
+            var branch3 = new TECScopeBranch("Branch 3", "3rd Description", new ObservableCollection<TECScopeBranch>());
+
+            branch1.Branches.Add(branch2);
+            branch2.Branches.Add(branch3);
+
+            var scopeTree = new ObservableCollection<TECScopeBranch>();
+            scopeTree.Add(branch1);
+
             //Notes
             var note1 = new TECNote("Note 1");
 
@@ -142,6 +153,7 @@ namespace Tests
             bid.ManufacturerCatalog = allManufacturers;
             bid.Tags = allTags;
             bid.Locations = allLocations;
+            bid.ScopeTree = scopeTree;
             bid.Notes = allNotes;
             bid.Exclusions = allExclusions;
 
