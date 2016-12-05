@@ -315,6 +315,28 @@ namespace EstimatingUtilitiesLibrary
 
             File.Delete(tempPath);
         }
+
+        static public void CheckAndUpdateDB(string path)
+        {
+            SQLiteDB = new SQLiteDatabase(path);
+
+            bool isUpToDate;
+            try
+            {
+                isUpToDate = checkDatabaseVersion();
+                if (isUpToDate == false)
+                {
+                    updateDatabaseVersion();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Could not check database version.");
+            }
+
+            SQLiteDB.Connection.Close();
+        }
+
         #endregion Public Functions
 
         #region Update Functions
@@ -592,6 +614,7 @@ namespace EstimatingUtilitiesLibrary
         static private void addBidInfo(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("DBVersion", Properties.Settings.Default.Version);
             data.Add("BidInfoID", bid.InfoGuid.ToString());
             data.Add("BidName", bid.Name);
             data.Add("BidNumber", bid.BidNumber);
@@ -1999,6 +2022,7 @@ namespace EstimatingUtilitiesLibrary
         static private string newBidInfoTable()
         {
             return "CREATE TABLE 'TECBidInfo' (" +
+                "'DBVersion'    TEXT," +
                 "'BidInfoID'    TEXT," +
                 "'BidName'      TEXT," +
                 "'BidNumber'    TEXT," +
@@ -2485,5 +2509,155 @@ namespace EstimatingUtilitiesLibrary
             }
         }
         #endregion Link Methods
+
+        #region Database Version Update
+
+        static private bool checkDatabaseVersion()
+        {
+            string currentVersion = Properties.Settings.Default.Version;
+            
+            try
+            {
+                DataTable bidInfoDT = SQLiteDB.getDataFromTable("TECBidInfo");
+                if (bidInfoDT.Rows.Count < 1)
+                {
+                    MessageBox.Show("Bid info not found in database. Could not check verison.");
+                    throw new Exception("Could not load from TECBidInfo");
+                }
+                else
+                {
+                    DataRow bidInfoRow = bidInfoDT.Rows[0];
+                    if(bidInfoRow["DBVersion"] != null)
+                    { return false; }
+                    string version = bidInfoRow["DBVersion"].ToString();
+                    if(version == currentVersion)
+                    { return true; }
+                    else
+                    { return false; }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not load version number from database. Error: " + e.Message);
+                throw e;
+            }
+        }
+        static private void updateDatabaseVersion()
+        {
+            List<string> tableNames = getAllTableNames();
+            foreach(object table in AllTables.Tables)
+            {
+                checkTableFields(table.GetType(), tableNames);
+            }
+        }
+        static private List<string> getAllTableNames()
+        {
+            string command = "select name from sqlite_master where type = 'table' order by 1";
+            DataTable tables = SQLiteDB.getDataFromCommand(command);
+            List<string> tableNames = new List<string>();
+            foreach(DataRow row in tables.Rows)
+            {
+                tableNames.Add(row["Name"].ToString());
+            }
+            return tableNames;
+        }
+        static private List<string> getAllTableFields(string tableName)
+        {
+            string command = "select * from" + tableName + " limit 1";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> tableFields = new List<string>();
+            foreach (DataColumn col in data.Columns)
+            {
+                tableFields.Add(col.ColumnName);
+            }
+            return tableFields;
+        }
+        static private void checkTableFields(Type type, List<string> currentTables)
+        {
+            string tableName = "";
+            foreach (var p in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+            {
+                if (p.Name == "TableName")
+                {
+                    var v = p.GetValue(null);
+                    tableName = (string)v;
+                }
+            }
+            if (currentTables.Contains(tableName))
+            {
+                List<string> fields = getAllTableFields(tableName);
+                foreach (var p in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+                {
+                    if (p.Name != "TableName")
+                    {
+                        var v = p.GetValue(null) as TableField;
+                        if (!fields.Contains(v.Name))
+                        {
+                            string command = "alter table " + tableName + " add column " + v.Name + "{" + v.FieldType + "}";
+                        }
+                    }
+                }
+            } else
+            {
+                createTable(type);
+            }
+        }
+        static private void createTable(Type type)
+        {
+            if(type == typeof(BidInfoTable))
+            { SQLiteDB.nonQueryCommand(newBidInfoTable()); }
+            else if (type == typeof(NoteTable))
+            { SQLiteDB.nonQueryCommand(newNoteTable()); }
+            else if (type == typeof(ExclusionTable))
+            { SQLiteDB.nonQueryCommand(newExclusionTable()); }
+            else if (type == typeof(ScopeBranchTable))
+            { SQLiteDB.nonQueryCommand(newScopeBranchTable()); }
+            else if (type == typeof(SystemTable))
+            { SQLiteDB.nonQueryCommand(newSystemTable()); }
+            else if (type == typeof(EquipmentTable))
+            { SQLiteDB.nonQueryCommand(newEquipmentTable()); }
+            else if (type == typeof(SubScopeTable))
+            { SQLiteDB.nonQueryCommand(newSubScopeTable()); }
+            else if (type == typeof(DeviceTable))
+            { SQLiteDB.nonQueryCommand(newDeviceTable()); }
+            else if (type == typeof(PointTable))
+            { SQLiteDB.nonQueryCommand(newPointTable()); }
+            else if (type == typeof(TagTable))
+            { SQLiteDB.nonQueryCommand(newTagTable()); }
+            else if (type == typeof(ManufacturerTable))
+            { SQLiteDB.nonQueryCommand(newManufacturerTable()); }
+            else if (type == typeof(DrawingTable))
+            { SQLiteDB.nonQueryCommand(newDrawingTable()); }
+            else if (type == typeof(PageTable))
+            { SQLiteDB.nonQueryCommand(newPageTable()); }
+            else if (type == typeof(LocationTable))
+            { SQLiteDB.nonQueryCommand(newLocationTable()); }
+            else if (type == typeof(VisualScopeTable))
+            { SQLiteDB.nonQueryCommand(newVisualScopeTable()); }
+            else if (type == typeof(ScopeBranchHierarchyTable))
+            { SQLiteDB.nonQueryCommand(newScopeBranchHierarchyTable()); }
+            else if (type == typeof(SystemEquipmentTable))
+            { SQLiteDB.nonQueryCommand(newSystemEquipmentTable()); }
+            else if (type == typeof(EquipmentSubScopeTable))
+            { SQLiteDB.nonQueryCommand(newEquipmentSubScopeTable()); }
+            else if (type == typeof(SubScopeDeviceTable))
+            { SQLiteDB.nonQueryCommand(newSubScopeDeviceTable()); }
+            else if (type == typeof(SubScopePointTable))
+            { SQLiteDB.nonQueryCommand(newSubScopePointTable()); }
+            else if (type == typeof(ScopeTagTable))
+            { SQLiteDB.nonQueryCommand(newScopeTagTable()); }
+            else if (type == typeof(DeviceManufacturerTable))
+            { SQLiteDB.nonQueryCommand(newDeviceManufacturerTable()); }
+            else if (type == typeof(DrawingPageTable))
+            { SQLiteDB.nonQueryCommand(newDrawingPageTable()); }
+            else if (type == typeof(PageVisualScopeTable))
+            { SQLiteDB.nonQueryCommand(newPageVisScopeTable()); }
+            else if (type == typeof(VisualScopeScopeTable))
+            { SQLiteDB.nonQueryCommand(newVisScopeScopeTable()); }
+            else if (type == typeof(LocationScopeTable))
+            { SQLiteDB.nonQueryCommand(newLocationScopeTable()); }
+        }
+        #endregion
     }
+    
 }

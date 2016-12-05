@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="ChangeStack.cs" />
     <Compile Include="CSVWriter.cs" />
+    <Compile Include="DBDefinitions.cs" />
     <Compile Include="EstimatingLibraryDatabase.cs" />
     <Compile Include="PDFConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,6 +104,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SaveWindow.xaml.cs">
       <DependentUpon>SaveWindow.xaml</DependentUpon>
@@ -118,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <ItemGroup>
