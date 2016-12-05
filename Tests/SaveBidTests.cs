@@ -1179,25 +1179,100 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Remove_Branch()
         {
-            Assert.Fail();
+            //Act
+            int oldNumBranches = bid.ScopeTree.Count();
+            TECScopeBranch branchToRemove = bid.ScopeTree[0];
+            bid.ScopeTree.Remove(branchToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach(TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == branchToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumBranches - 1), actualBid.ScopeTree.Count());
         }
 
         [TestMethod]
         public void Save_Bid_Remove_Branch_FromBranch()
         {
-            Assert.Fail();
+            //Act
+            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            int oldNumBranches = branchToModify.Branches.Count();
+            TECScopeBranch branchToRemove = branchToModify.Branches[0];
+            branchToModify.Branches.Remove(branchToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch modifiedBranch = null;
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == branchToModify.Guid)
+                {
+                    modifiedBranch = branch;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECScopeBranch branch in modifiedBranch.Branches)
+            {
+                if (branch.Guid == branchToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumBranches - 1), modifiedBranch.Branches.Count);
         }
 
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
-            Assert.Fail();
+            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            expectedBranch.Name = "Test Branch Save";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch actualBranch = null;
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedBranch.Guid)
+                {
+                    actualBranch = branch;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
         }
 
         [TestMethod]
         public void Save_Bid_Branch_Description()
         {
-            Assert.Fail();
+            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            expectedBranch.Description = "Test Branch Save";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch actualBranch = null;
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedBranch.Guid)
+                {
+                    actualBranch = branch;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
         }
 
         #endregion Save Scope Branch

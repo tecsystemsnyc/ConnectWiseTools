@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Tests.TestHelper;
 
 namespace Tests
 {
@@ -41,7 +40,7 @@ namespace Tests
         public static void ClassInitialize(TestContext TestContext)
         {
             //Arrange
-            actualBid = LoadTestBid(StaticTestBidPath);
+            actualBid = TestHelper.LoadTestBid(TestHelper.StaticTestBidPath);
             actualSystem = actualBid.Systems[0];
             actualEquipment = actualSystem.Equipment[0];
             actualSubScope = actualEquipment.SubScope[0];
