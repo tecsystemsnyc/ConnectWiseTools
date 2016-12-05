@@ -32,7 +32,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             throw new NotImplementedException();
         }
-
-
+        
     }
 }
