@@ -1111,6 +1111,97 @@ namespace Tests
         #endregion Edit Point
         #endregion Save Point
 
+        #region Save Scope Branch
+
+        [TestMethod]
+        public void Save_Bid_Add_Branch()
+        {
+            //Act
+            TECScopeBranch expectedBranch = new TECScopeBranch("New Branch", "Branch description", new ObservableCollection<TECScopeBranch>());
+            bid.ScopeTree.Add(expectedBranch);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch actualBranch = null;
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedBranch.Guid)
+                {
+                    actualBranch = branch;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
+            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Branch_InBranch()
+        {
+            //Act
+            TECScopeBranch expectedBranch = new TECScopeBranch("New Child", "Child Branch Description", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            branchToModify.Branches.Add(expectedBranch);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch modifiedBranch = null;
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == branchToModify.Guid)
+                {
+                    modifiedBranch = branch;
+                    break;
+                }
+            }
+
+            TECScopeBranch actualBranch = null;
+            foreach (TECScopeBranch branch in modifiedBranch.Branches)
+            {
+                if (branch.Guid == expectedBranch.Guid)
+                {
+                    actualBranch = branch;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
+            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Branch()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Branch_FromBranch()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Save_Bid_Branch_Name()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Save_Bid_Branch_Description()
+        {
+            Assert.Fail();
+        }
+
+        #endregion Save Scope Branch
+
         #region Save Location
         [TestMethod]
         public void Save_Bid_Add_Location()

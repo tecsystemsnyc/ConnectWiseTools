@@ -24,9 +24,12 @@ namespace EstimatingUtilitiesLibrary
         public TECBid Bid;
         public TECTemplates Templates;
 
+        private bool DEBUG_PROPERTIES = true;
+        private bool DEBUG_STACK = true;
+
+
         private bool isDoing = false;
-        private bool debugProperties = false;
-        private bool debugStack = false;
+        
 
         #region Constructors
         public ChangeStack(TECBid bid)
@@ -191,7 +194,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = UndoStack.Last();
-            if (debugStack) { Console.WriteLine("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+            if (DEBUG_STACK) { Console.WriteLine("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
             if (StackItem.Item1 == Change.Add)
             {
                 handleAdd(StackItem);
@@ -215,7 +218,7 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (debugStack) { Console.WriteLine("After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+            if (DEBUG_STACK) { Console.WriteLine("After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
             isDoing = false;
         }
 
@@ -223,7 +226,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = RedoStack.Last();
-            if (debugStack) { Console.WriteLine("Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+            if (DEBUG_STACK) { Console.WriteLine("Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
             if (StackItem.Item1 == Change.Add)
             {
                 handleRemove(StackItem);
@@ -249,7 +252,7 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (debugStack) { Console.WriteLine("After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+            if (DEBUG_STACK) { Console.WriteLine("After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
             isDoing = false;
         }
 
@@ -450,7 +453,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (debugProperties) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
                 }
             }
         }
@@ -470,7 +473,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (debugProperties) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
                 }
             }
             return outObj;
@@ -478,7 +481,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
-            if (debugProperties) { Console.WriteLine("Propertychanged: " + e.PropertyName); }
+            if (DEBUG_PROPERTIES) { Console.WriteLine("Propertychanged: " + e.PropertyName); }
             if (!isDoing){ RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -488,7 +491,7 @@ namespace EstimatingUtilitiesLibrary
                 object newValue = args.NewValue;
                 if (e.PropertyName == "Add")
                 {
-                    if (debugProperties) { Console.WriteLine("Add change: " + oldValue); }
+                    if (DEBUG_PROPERTIES) { Console.WriteLine("Add change: " + oldValue); }
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     handleChildren(item);
@@ -536,7 +539,7 @@ namespace EstimatingUtilitiesLibrary
             }
             else
             {
-                if(debugProperties) { Console.WriteLine("Property not compatible: " + e.PropertyName); }
+                if(DEBUG_PROPERTIES) { Console.WriteLine("Property not compatible: " + e.PropertyName); }
             }
         }
         

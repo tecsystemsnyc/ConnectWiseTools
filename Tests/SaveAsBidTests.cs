@@ -22,6 +22,7 @@ namespace Tests
         static TECDevice expectedDevice;
         static TECManufacturer expectedManufacturer;
         static TECPoint expectedPoint;
+        static TECScopeBranch expectedBranch;
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
@@ -37,6 +38,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
+        static TECScopeBranch actualBranch;
         static TECNote actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
@@ -67,6 +69,7 @@ namespace Tests
             expectedDevice = expectedSubScope.Devices[0];
             expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
+            expectedBranch = expectedBid.ScopeTree[0];
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Tags[0];
@@ -137,6 +140,15 @@ namespace Tests
                 if (point.Guid == expectedPoint.Guid)
                 {
                     actualPoint = point;
+                    break;
+                }
+            }
+
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedBranch.Guid)
+                {
+                    actualBranch = branch;
                     break;
                 }
             }
@@ -275,6 +287,23 @@ namespace Tests
 
             //In CreateTestBid, the first system has the same location as its equipment.
             Assert.AreEqual(expectedSystem.Location, expectedEquipment.Location);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_ScopeBranch()
+        {
+            //Assert
+            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
+            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual(expectedBranch.Guid, actualBranch.Guid);
+
+            Assert.AreEqual(expectedBranch.Branches[0].Name, actualBranch.Branches[0].Name);
+            Assert.AreEqual(expectedBranch.Branches[0].Description, actualBranch.Branches[0].Description);
+            Assert.AreEqual(expectedBranch.Branches[0].Guid, actualBranch.Branches[0].Guid);
+
+            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Name, actualBranch.Branches[0].Branches[0].Name);
+            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Description, actualBranch.Branches[0].Branches[0].Description);
+            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Guid, actualBranch.Branches[0].Branches[0].Guid);
         }
 
         [TestMethod]

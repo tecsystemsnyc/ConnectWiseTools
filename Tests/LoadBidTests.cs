@@ -212,6 +212,24 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_ScopeTree()
+        {
+            TECScopeBranch actualScopeParent = actualBid.ScopeTree[0];
+            TECScopeBranch actualScopeChild = actualScopeParent.Branches[0];
+            TECScopeBranch actualScopeGrandChild = actualScopeChild.Branches[0];
+
+            //Assert
+            Assert.AreEqual("Scope 1", actualScopeParent.Name);
+            Assert.AreEqual("1st Description", actualScopeParent.Description);
+
+            Assert.AreEqual("Scope 2", actualScopeChild.Name);
+            Assert.AreEqual("2nd Description", actualScopeChild.Description);
+
+            Assert.AreEqual("Scope 3", actualScopeGrandChild.Name);
+            Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
+        }
+
+        [TestMethod]
         public void Load_Bid_Note()
         {
             //Assert
