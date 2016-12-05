@@ -489,7 +489,6 @@ namespace Scope_Builder.ViewModel
             if (path != null)
             {
                 CurrentStatusText = "Loading...";
-                EstimatingLibraryDatabase.CheckAndUpdateDB(path);
                 bidDBFilePath = path;
                 Properties.Settings.Default.ScopeDirectoryPath = Path.GetDirectoryName(path);
                 
