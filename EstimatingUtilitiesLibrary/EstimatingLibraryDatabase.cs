@@ -2550,7 +2550,6 @@ namespace EstimatingUtilitiesLibrary
             List<string> tableNames = getAllTableNames();
             foreach(TableBase table in AllTables.Tables)
             {
-                Console.WriteLine("Checking Table: " + table);
                 checkTableFields(table, tableNames);
             }
         }
