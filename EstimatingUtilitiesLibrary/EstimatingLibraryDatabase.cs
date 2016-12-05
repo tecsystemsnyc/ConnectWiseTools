@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Drawing;
+using System.Reflection;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -25,6 +26,8 @@ namespace EstimatingUtilitiesLibrary
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
+
+            checkAndUpdateDB();
 
             TECBid bid = new TECBid();
 
@@ -187,7 +190,7 @@ namespace EstimatingUtilitiesLibrary
                 MessageBox.Show(message);
             }
 
-    SQLiteDB.Connection.Close();
+            SQLiteDB.Connection.Close();
         }
 
         static public void SaveTemplatesToNewDB(string path, TECTemplates templates)
@@ -315,28 +318,7 @@ namespace EstimatingUtilitiesLibrary
 
             File.Delete(tempPath);
         }
-
-        static public void CheckAndUpdateDB(string path)
-        {
-            SQLiteDB = new SQLiteDatabase(path);
-
-            bool isUpToDate;
-            try
-            {
-                isUpToDate = checkDatabaseVersion();
-                if (isUpToDate == false)
-                {
-                    updateDatabaseVersion();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Could not check database version.");
-            }
-
-            SQLiteDB.Connection.Close();
-        }
-
+        
         #endregion Public Functions
 
         #region Update Functions
@@ -1105,7 +1087,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add("Name", manufacturer.Name);
             data.Add("Multiplier", manufacturer.Multiplier.ToString());
 
-            if (!SQLiteDB.Replace("TECManfuacturer", data))
+            if (!SQLiteDB.Replace("TECManufacturer", data))
             {
                 Console.WriteLine("Error: Couldn't update manufacturer in TECManufacturer table.");
             }
@@ -2511,6 +2493,22 @@ namespace EstimatingUtilitiesLibrary
         #endregion Link Methods
 
         #region Database Version Update
+        static private void checkAndUpdateDB()
+        {
+            bool isUpToDate;
+            try
+            {
+                isUpToDate = checkDatabaseVersion();
+                if (isUpToDate == false)
+                {
+                    updateDatabaseVersion();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not check database version." + e);
+            }
+        }
 
         static private bool checkDatabaseVersion()
         {
@@ -2527,13 +2525,18 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     DataRow bidInfoRow = bidInfoDT.Rows[0];
-                    if(bidInfoRow["DBVersion"] != null)
-                    { return false; }
-                    string version = bidInfoRow["DBVersion"].ToString();
-                    if(version == currentVersion)
-                    { return true; }
-                    else
-                    { return false; }
+                    if (bidInfoDT.Columns.Contains(BidInfoTable.DBVersion.Name))
+                    {
+                        string version = bidInfoRow["DBVersion"].ToString();
+                        if (version == currentVersion)
+                        { return true; }
+                        else
+                        { return false; }
+                    } else
+                    {
+                        return false;
+                    }
+                    
                 }
             }
             catch (Exception e)
@@ -2545,9 +2548,10 @@ namespace EstimatingUtilitiesLibrary
         static private void updateDatabaseVersion()
         {
             List<string> tableNames = getAllTableNames();
-            foreach(object table in AllTables.Tables)
+            foreach(TableBase table in AllTables.Tables)
             {
-                checkTableFields(table.GetType(), tableNames);
+                Console.WriteLine("Checking Table: " + table);
+                checkTableFields(table, tableNames);
             }
         }
         static private List<string> getAllTableNames()
@@ -2563,7 +2567,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private List<string> getAllTableFields(string tableName)
         {
-            string command = "select * from" + tableName + " limit 1";
+            string command = "select * from " + tableName + " limit 1";
             DataTable data = SQLiteDB.getDataFromCommand(command);
             List<string> tableFields = new List<string>();
             foreach (DataColumn col in data.Columns)
@@ -2572,10 +2576,12 @@ namespace EstimatingUtilitiesLibrary
             }
             return tableFields;
         }
-        static private void checkTableFields(Type type, List<string> currentTables)
+        static private void checkTableFields(TableBase table, List<string> currentTables)
         {
             string tableName = "";
-            foreach (var p in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+            var type = table.GetType();
+
+            foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
                 if (p.Name == "TableName")
                 {
@@ -2586,19 +2592,22 @@ namespace EstimatingUtilitiesLibrary
             if (currentTables.Contains(tableName))
             {
                 List<string> fields = getAllTableFields(tableName);
-                foreach (var p in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+                foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                 {
                     if (p.Name != "TableName")
                     {
                         var v = p.GetValue(null) as TableField;
                         if (!fields.Contains(v.Name))
                         {
-                            string command = "alter table " + tableName + " add column " + v.Name + "{" + v.FieldType + "}";
+                            Console.WriteLine("Adding Column: " + v.Name);
+                            string command = "alter table " + tableName + " add column " + v.Name + " " + v.FieldType + "";
+                            SQLiteDB.nonQueryCommand(command);
                         }
                     }
                 }
             } else
             {
+                Console.WriteLine("Creating table: " + type);
                 createTable(type);
             }
         }
