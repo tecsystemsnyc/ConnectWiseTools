@@ -24,8 +24,8 @@ namespace EstimatingUtilitiesLibrary
         public TECBid Bid;
         public TECTemplates Templates;
 
-        private bool DEBUG_PROPERTIES = true;
-        private bool DEBUG_STACK = true;
+        private bool DEBUG_PROPERTIES = false;
+        private bool DEBUG_STACK = false;
 
 
         private bool isDoing = false;
