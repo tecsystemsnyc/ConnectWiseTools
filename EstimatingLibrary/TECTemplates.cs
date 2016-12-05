@@ -101,7 +101,7 @@ namespace EstimatingLibrary
 
         #endregion //Constructors
 
-        #region
+        #region Collection Changed
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Console.WriteLine("Collection changed");
