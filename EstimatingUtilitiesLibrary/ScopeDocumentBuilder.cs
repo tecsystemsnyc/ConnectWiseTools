@@ -25,6 +25,8 @@ namespace EstimatingUtilitiesLibrary
         private const string indentSize = "1cm";
         private const string doubleIndentSize = "2cm";
         private const string beforeParagraphSize = "0.5cm";
+        private static List<String> itemLetters = new List<string>(new string[] {
+        "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","BB","CC","DD","EE","FF","GG","HH","II","JJ","KK","LL","MM","NN","OO","PP"});
 
         public static void CreateScopeDocument(TECBid bid, string path)
         {
@@ -204,7 +206,8 @@ namespace EstimatingUtilitiesLibrary
         }
 
         private static void createSystemTree(Paragraph paragraph, ObservableCollection<TECSystem> systems)
-        {            
+        {
+            int itemNum = 1;
             foreach (TECSystem system in systems)
             {
                 paragraph.AddTab();
@@ -218,7 +221,7 @@ namespace EstimatingUtilitiesLibrary
                     systemString += ": " + system.Description;
                 }
                 
-                paragraph.AddFormattedText("•" + systemString);
+                paragraph.AddFormattedText(itemNum.ToString() + " " + systemString);
                 paragraph.AddLineBreak();
                 foreach (TECEquipment equipment in system.Equipment)
                 {
@@ -249,6 +252,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
                 paragraph.AddLineBreak();
+                itemNum++;
             }
         }
 
