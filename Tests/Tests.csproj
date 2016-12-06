@@ -83,6 +83,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SaveAsBidTests.cs" />
+    <Compile Include="SaveAsTemplatesTests.cs" />
     <Compile Include="SaveBidTests.cs" />
     <Compile Include="StackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

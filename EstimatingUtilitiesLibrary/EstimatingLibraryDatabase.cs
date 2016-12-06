@@ -223,6 +223,8 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECDevice device in templates.DeviceCatalog)
                 {
                     addDevice(device);
+                    addDeviceManufacturerRelation(device, device.Manufacturer);
+                    addTagsInScope(device.Tags, device.Guid);
                 }
                 foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
                 {
@@ -1553,7 +1555,7 @@ namespace EstimatingUtilitiesLibrary
                     Console.WriteLine("Cannot convert multiplier to double, setting to 1");
                 }
 
-                manufacturers.Add(new TECManufacturer(name, "", multiplier, manufacturerID));
+                manufacturers.Add(new TECManufacturer(name, multiplier, manufacturerID));
             }
 
             return manufacturers;
@@ -1774,7 +1776,7 @@ namespace EstimatingUtilitiesLibrary
                     Console.WriteLine("Cannot convert multiplier to double, setting to 1");
                 }
 
-                return new TECManufacturer(name, "", multiplier, manufacturerID);
+                return new TECManufacturer(name, multiplier, manufacturerID);
             }
             else
             {

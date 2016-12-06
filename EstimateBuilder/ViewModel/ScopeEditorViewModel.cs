@@ -523,7 +523,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void AddManufacturerExecute()
         {
-            TECManufacturer newMan = new TECManufacturer(ViewData.ManufacturerName, "", ViewData.ManufacturerMultiplier);
+            TECManufacturer newMan = new TECManufacturer(ViewData.ManufacturerName, ViewData.ManufacturerMultiplier);
             Templates.ManufacturerCatalog.Add(newMan);
         }
 
