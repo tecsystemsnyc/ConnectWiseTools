@@ -241,7 +241,7 @@ namespace EstimatingUtilitiesLibrary
 
         static public void UpdateBidToDB(string path, ChangeStack changeStack)
         {
-
+            createBackup(path);
             string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
 
             File.Copy(path, tempPath);
@@ -277,9 +277,7 @@ namespace EstimatingUtilitiesLibrary
             GC.WaitForPendingFinalizers();
 
             File.Copy(tempPath, path, true);
-
-            addBackup(path);
-
+            
             File.Delete(tempPath);
         }
 
@@ -2672,8 +2670,9 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Backup Methods
-        private static void addBackup(string originalPath)
+        private static void createBackup(string originalPath)
         {
+            Console.WriteLine("Backing up...");
             string APPDATA_FOLDER = @"TECSystems\Backups";
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string backupFolder = Path.Combine(appData, APPDATA_FOLDER);
@@ -2684,10 +2683,19 @@ namespace EstimatingUtilitiesLibrary
             }
 
             string backupFileName = Path.GetFileNameWithoutExtension(originalPath);
-            backupFileName += new DateTime().ToString();
+            backupFileName += "-";
+            var date = DateTime.Now.Ticks ;
+            backupFileName += date.ToString();
             var backupPath = Path.Combine(backupFolder, backupFileName);
-
-            File.Copy(originalPath, backupPath);
+            Console.WriteLine("Backup path: " + backupPath);
+            try
+            {
+                File.Copy(originalPath, backupPath);
+            } catch (Exception e)
+            {
+                Console.WriteLine("Backup Failed: " + e);
+            }
+            
         }
         #endregion
     }
