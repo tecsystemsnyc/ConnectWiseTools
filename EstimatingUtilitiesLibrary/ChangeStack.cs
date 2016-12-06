@@ -508,7 +508,11 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.Add(item);
                     SaveStack.Add(item);
                 }
-                
+                else if (e.PropertyName == "Edit")
+                {
+                    item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
+                    SaveStack.Add(item);
+                }
                 else if (e.PropertyName == "ChildChanged")
                 {
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);

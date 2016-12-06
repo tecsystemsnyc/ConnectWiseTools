@@ -276,6 +276,8 @@ namespace EstimatingUtilitiesLibrary
 
             File.Copy(tempPath, path, true);
 
+            addBackup(path);
+
             File.Delete(tempPath);
         }
 
@@ -2666,6 +2668,26 @@ namespace EstimatingUtilitiesLibrary
             { SQLiteDB.nonQueryCommand(newLocationScopeTable()); }
         }
         #endregion
+
+        #region Backup Methods
+        private static void addBackup(string originalPath)
+        {
+            string APPDATA_FOLDER = @"TECSystems\Backups";
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string backupFolder = Path.Combine(appData, APPDATA_FOLDER);
+            
+            if (!Directory.Exists(backupFolder))
+            {
+                Directory.CreateDirectory(backupFolder);
+            }
+
+            string backupFileName = Path.GetFileNameWithoutExtension(originalPath);
+            backupFileName += new DateTime().ToString();
+            var backupPath = Path.Combine(backupFolder, backupFileName);
+
+            File.Copy(originalPath, backupPath);
+        }
+        #endregion
     }
-    
+
 }

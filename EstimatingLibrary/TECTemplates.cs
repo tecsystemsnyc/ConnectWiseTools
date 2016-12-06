@@ -119,6 +119,10 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("Remove", this, item);
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                NotifyPropertyChanged("Edit", this, sender);
+            }
         }
         #endregion
     }
