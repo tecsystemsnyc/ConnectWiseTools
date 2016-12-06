@@ -2494,7 +2494,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion Link Methods
 
-        #region Database Version Update
+        #region Database Version Update Methods
         static private void checkAndUpdateDB()
         {
             bool isUpToDate;
