@@ -232,7 +232,7 @@ namespace EstimatingUtilitiesLibrary
 
         static public void UpdateBidToDB(string path, ChangeStack changeStack)
         {
-
+            createBackup(path);
             string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
 
             File.Copy(path, tempPath);
@@ -268,7 +268,7 @@ namespace EstimatingUtilitiesLibrary
             GC.WaitForPendingFinalizers();
 
             File.Copy(tempPath, path, true);
-
+            
             File.Delete(tempPath);
         }
 
@@ -2732,6 +2732,36 @@ namespace EstimatingUtilitiesLibrary
             { SQLiteDB.nonQueryCommand(newLocationScopeTable()); }
         }
         #endregion
+
+        #region Backup Methods
+        private static void createBackup(string originalPath)
+        {
+            Console.WriteLine("Backing up...");
+            string APPDATA_FOLDER = @"TECSystems\Backups";
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string backupFolder = Path.Combine(appData, APPDATA_FOLDER);
+            
+            if (!Directory.Exists(backupFolder))
+            {
+                Directory.CreateDirectory(backupFolder);
+            }
+
+            string backupFileName = Path.GetFileNameWithoutExtension(originalPath);
+            backupFileName += "-";
+            var date = DateTime.Now.Ticks ;
+            backupFileName += date.ToString();
+            var backupPath = Path.Combine(backupFolder, backupFileName);
+            Console.WriteLine("Backup path: " + backupPath);
+            try
+            {
+                File.Copy(originalPath, backupPath);
+            } catch (Exception e)
+            {
+                Console.WriteLine("Backup Failed: " + e);
+            }
+            
+        }
+        #endregion
     }
-    
+
 }

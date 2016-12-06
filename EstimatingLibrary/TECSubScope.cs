@@ -117,6 +117,10 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("Remove", this, item);
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                NotifyPropertyChanged("Edit", this, sender);
+            }
         }
 
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -136,6 +140,10 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("Remove", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                 }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                NotifyPropertyChanged("Edit", this, sender);
             }
         }
 
