@@ -94,8 +94,7 @@ namespace EstimatingLibrary
                 Labor.PropertyChanged += objectPropertyChanged;
             }
         }
-
-
+        
         public double MaterialCost
         {
             get { return getMaterialCost(); }
@@ -103,6 +102,10 @@ namespace EstimatingLibrary
         public double LaborCost
         {
             get { return getLaborCost(); }
+        }
+        public double BudgetPrice
+        {
+            get { return getBudgetPrice(); }
         }
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
@@ -271,7 +274,24 @@ namespace EstimatingLibrary
             ObservableCollection<TECTag> tags)
             : this(name, bidNumber, dueDate, salesperson, estimator, scopeTree, systems, deviceCatalog, manufacturerCatalog, notes, exclusions, tags, Guid.NewGuid()) { }
         public TECBid() : 
-            this("", "", new DateTime(), "", "", new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>()) { }
+            this("", "", new DateTime(), "", "", new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>())
+        {
+            foreach(string item in Defaults.Scope)
+            {
+                ScopeTree.Add(new TECScopeBranch(item, "", new ObservableCollection<TECScopeBranch>()));
+            }
+
+            foreach (string item in Defaults.Exclusions)
+            {
+                Exclusions.Add(new TECExclusion(item));
+            }
+
+            foreach (string item in Defaults.Notes)
+            {
+                Notes.Add(new TECNote(item));
+            }
+            
+        }
 
         //Copy Constructor
         public TECBid(TECBid bidSource) : this(bidSource.Name, bidSource.BidNumber, bidSource.DueDate, bidSource.Salesperson, bidSource.Estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), bidSource.DeviceCatalog, bidSource.ManufacturerCatalog, new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), bidSource.Tags)
@@ -316,6 +336,16 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+        private double getBudgetPrice()
+        {
+            double price = 0;
+            foreach (TECSystem system in this.Systems)
+            {
+                price += system.TotalBudgetPrice;
+            }
+            return price;
+        }
+
         public override object Copy()
         {
             TECBid bid = new TECBid(this);

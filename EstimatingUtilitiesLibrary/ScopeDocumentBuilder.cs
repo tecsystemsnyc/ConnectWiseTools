@@ -22,9 +22,11 @@ namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
-        private const string indentSize = "51cm";
+        private const string indentSize = "1cm";
         private const string doubleIndentSize = "2cm";
         private const string beforeParagraphSize = "0.5cm";
+        private static List<String> itemLetters = new List<string>(new string[] {
+        "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","BB","CC","DD","EE","FF","GG","HH","II","JJ","KK","LL","MM","NN","OO","PP"});
 
         public static void CreateScopeDocument(TECBid bid, string path)
         {
@@ -37,7 +39,7 @@ namespace EstimatingUtilitiesLibrary
             createIntroduction(scopeDocument);
             createDocumentList(scopeDocument, bid);
             createScope(scopeDocument, bid);
-            createPricing(scopeDocument, bid.MaterialCost);
+            createPricing(scopeDocument, bid.BudgetPrice);
             createNotesAndExclusions(scopeDocument, bid.Notes.ToList(), bid.Exclusions.ToList());
             createSignature(scopeDocument, bid.Salesperson);
             createFooter(scopeDocument);
@@ -135,7 +137,7 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             paragraph.AddLineBreak();
             paragraph.AddFormattedText("As an authorized representative of Honeywell, " +
-                "Inc., T.E.C. Systems, Inc. is pleased to provide this quotation to provide" +
+                "Inc., T.E.C. Systems, Inc. is pleased to provide this quotation for" +
                 " the Automatic Temperature Controls and Building Automation Systems as Specified." +
                 " This proposal is based upon our review of the following documents:");
 
@@ -177,19 +179,24 @@ namespace EstimatingUtilitiesLibrary
             {
                 addScopeBranch(branch, paragraph, 0);
             }
-            paragraph.AddFormattedText("Provide a BMS and Automatic Tempwerature functions for the following mechanical systems:" );
-            createSystemTree(paragraph, bid.Systems);
+            paragraph.AddFormattedText("•   Provide a BMS and Automatic Tempwerature functions for the following mechanical systems:");
             paragraph.AddLineBreak();
+            createSystemTree(paragraph, bid.Systems);
+            
         }
 
         private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs)
         {
-            string scopeString = branch.Name + ": " + branch.Description;
+            string scopeString = branch.Name;
+            if (branch.Description != "")
+            {
+                scopeString += ": " + branch.Description;
+            }
             for (int i = 0; i < tabs; i++)
             {
                 paragraph.AddTab();
             }
-            paragraph.AddFormattedText(scopeString);
+            paragraph.AddFormattedText("•   " + scopeString);
             paragraph.AddLineBreak();
             
             foreach (TECScopeBranch childBranch in branch.Branches)
@@ -200,44 +207,53 @@ namespace EstimatingUtilitiesLibrary
 
         private static void createSystemTree(Paragraph paragraph, ObservableCollection<TECSystem> systems)
         {
-            /*
-            Paragraph paragraph = document.LastSection.AddParagraph("Systems:", "Heading1");
-            paragraph = document.LastSection.AddParagraph();
-            */
-            paragraph.AddLineBreak();
-            
+            int itemNum = 1;
             foreach (TECSystem system in systems)
             {
                 paragraph.AddTab();
                 string systemString = system.Name;
-                systemString += " (" + system.Quantity.ToString() + ")";
-                systemString += ": " + system.Description;
-                paragraph.AddFormattedText(systemString);
+                if(system.Quantity > 1)
+                {
+                    systemString += " (" + system.Quantity.ToString() + ")";
+                }
+                if(system.Description != "")
+                {
+                    systemString += ": " + system.Description;
+                }
+                
+                paragraph.AddFormattedText(itemNum.ToString() + " " + systemString);
                 paragraph.AddLineBreak();
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     paragraph.AddTab();
                     string equipmentString = equipment.Name;
-                    equipmentString += " (" + equipment.Quantity.ToString() + ")";
-                    equipmentString += ": " + equipment.Description;
+                    if(equipment.Quantity > 1)
+                    {
+                        equipmentString += " (" + equipment.Quantity.ToString() + ")";
+                    }
+                    if (equipment.Description != "")
+                    {
+                        equipmentString += ": " + equipment.Description;
+                    }
+                    
                     paragraph.AddTab();
-                    paragraph.AddFormattedText(equipmentString);
+                    paragraph.AddFormattedText("•" + equipmentString);
                     paragraph.AddLineBreak();
-                    /*
+                    
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
+                        paragraph.AddTab();
                         string subScopeString = subScope.Name;
-                        subScopeString += " (" + subScope.Quantity.ToString() + ")";
-                        subScopeString += ": " + subScope.Description;
+
                         paragraph.AddTab();
                         paragraph.AddTab();
-                        paragraph.AddFormattedText(subScopeString);
+                        paragraph.AddFormattedText("•" + subScopeString);
                         paragraph.AddLineBreak();
                     }
-                    */
                 }
+                paragraph.AddLineBreak();
+                itemNum++;
             }
-            paragraph.AddLineBreak();
         }
 
         private static void createPricing(Document document, double price)
@@ -263,7 +279,7 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             foreach (TECNote note in notes)
             {
-                paragraph.AddFormattedText(note.Text);
+                paragraph.AddFormattedText("•   " + note.Text);
                 paragraph.AddLineBreak();
             }
             paragraph.AddLineBreak();
@@ -275,7 +291,7 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             foreach (TECExclusion exclusion in exclusions)
             {
-                paragraph.AddFormattedText(exclusion.Text);
+                paragraph.AddFormattedText("•   " + exclusion.Text);
                 paragraph.AddLineBreak();
             }
         }
@@ -357,8 +373,7 @@ namespace EstimatingUtilitiesLibrary
             style = document.Styles.AddStyle("TOC", "Normal");
             style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right, TabLeader.Dots);
             style.ParagraphFormat.Font.Color = Colors.Blue;
-
-
+            
             //List Style
             style = document.AddStyle("BulletList", "Normal");
             style.ParagraphFormat.LeftIndent = "0.5cm";
