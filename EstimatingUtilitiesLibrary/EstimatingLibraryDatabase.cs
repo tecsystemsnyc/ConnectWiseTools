@@ -78,6 +78,9 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB.Connection.Close();
 
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             return bid;
         }
 
@@ -135,19 +138,7 @@ namespace EstimatingUtilitiesLibrary
 
                 addBidInfo(bid);
 
-                foreach (TECSystem system in bid.Systems)
-                {
-                    addFullSystem(system);
-                    addLocationInScope(system);
-                    foreach (TECEquipment equip in system.Equipment)
-                    {
-                        addLocationInScope(equip);
-                        foreach (TECSubScope ss in equip.SubScope)
-                        {
-                            addLocationInScope(ss);
-                        }
-                    }
-                }
+                addFullSystems(bid.Systems);
 
                 foreach (TECScopeBranch branch in bid.ScopeTree)
                 {
@@ -191,6 +182,9 @@ namespace EstimatingUtilitiesLibrary
             }
 
             SQLiteDB.Connection.Close();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         static public void SaveTemplatesToNewDB(string path, TECTemplates templates)
@@ -208,10 +202,7 @@ namespace EstimatingUtilitiesLibrary
             try
             {
                 addTags(templates.Tags);
-                foreach (TECSystem system in templates.SystemTemplates)
-                {
-                    addFullSystem(system);
-                }
+                addFullSystems(templates.SystemTemplates);
                 foreach (TECEquipment equipment in templates.EquipmentTemplates)
                 {
                     addFullEquipment(equipment);
@@ -283,7 +274,7 @@ namespace EstimatingUtilitiesLibrary
 
         static public void UpdateTemplatesToDB(string path, ChangeStack changeStack)
         {
-            string tempPath = Path.GetDirectoryName(path) + Path.GetFileNameWithoutExtension(path) + ".tmp";
+            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
 
             File.Copy(path, tempPath);
 
@@ -329,23 +320,30 @@ namespace EstimatingUtilitiesLibrary
         {
             if (tarObject is TECSystem)
             {
-                addSystem(tarObject as TECSystem);
+                if (refObject is TECBid)
+                {
+                    updateSystems((refObject as TECBid).Systems);
+                }
+                else if (tarObject is TECTemplates)
+                {
+                    updateSystems((refObject as TECTemplates).SystemTemplates);
+                }
             }
             else if (tarObject is TECEquipment)
             {
                 addEquipment(tarObject as TECEquipment);
-                addSystemEquipmentRelation(refObject as TECSystem, tarObject as TECEquipment);
+                updateSystemEquipmentRelation(refObject as TECSystem);
             }
             else if (tarObject is TECSubScope)
             {
                 addSubScope(tarObject as TECSubScope);
-                addEquipmentSubScopeRelation(refObject as TECEquipment, tarObject as TECSubScope);
+                updateEquipmentSubScopeRelation(refObject as TECEquipment);
             }
             else if (tarObject is TECDevice)
             {
                 if (refObject is TECSubScope)
                 {
-                    addSubScopeDeviceRelation(refObject as TECSubScope, tarObject as TECDevice);
+                    updateSubScopeDeviceRelation(refObject as TECSubScope);
                 }
                 else if (refObject is TECBid)
                 {
@@ -359,7 +357,7 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is TECPoint)
             {
                 addPoint(tarObject as TECPoint);
-                addSubScopePointRelation(refObject as TECSubScope, tarObject as TECPoint);
+                updateSubScopePointRelation(refObject as TECSubScope);
             }
             else if (tarObject is TECDrawing)
             {
@@ -493,6 +491,26 @@ namespace EstimatingUtilitiesLibrary
             {
                 editLocation(tarObject as TECLocation);
             }
+            else if (tarObject is ObservableCollection<TECSystem>)
+            {
+                updateSystems(tarObject as ObservableCollection<TECSystem>);
+            }
+            else if (tarObject is ObservableCollection<TECEquipment>)
+            {
+                updateSystemEquipmentRelation(refObject as TECSystem);
+            }
+            else if (tarObject is ObservableCollection<TECSubScope>)
+            {
+                updateEquipmentSubScopeRelation(refObject as TECEquipment);
+            }
+            else if (tarObject is ObservableCollection<TECDevice>)
+            {
+                updateSubScopeDeviceRelation(refObject as TECSubScope);
+            }
+            else if (tarObject is ObservableCollection<TECPoint>)
+            {
+                updateSubScopePointRelation(refObject as TECSubScope);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
@@ -619,14 +637,18 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addFullSystem(TECSystem system)
+        static private void addFullSystems(ObservableCollection<TECSystem> systems)
         {
-            addSystem(system);
-            addTagsInScope(system.Tags, system.Guid);
-            foreach (TECEquipment equip in system.Equipment)
+            updateSystems(systems);
+            foreach (TECSystem system in systems)
             {
-                addFullEquipment(equip);
-                addSystemEquipmentRelation(system, equip);
+                addTagsInScope(system.Tags, system.Guid);
+                addLocationInScope(system);
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    addFullEquipment(equip);
+                }
+                updateSystemEquipmentRelation(system);
             }
         }
 
@@ -634,28 +656,26 @@ namespace EstimatingUtilitiesLibrary
         {
             addEquipment(equipment);
             addTagsInScope(equipment.Tags, equipment.Guid);
+            addLocationInScope(equipment);
             foreach (TECSubScope ss in equipment.SubScope)
             {
-                addEquipmentSubScopeRelation(equipment, ss);
                 addFullSubScope(ss);
             }
+            updateEquipmentSubScopeRelation(equipment);
         }
 
         static private void addFullSubScope(TECSubScope subScope)
         {
             addSubScope(subScope);
             addTagsInScope(subScope.Tags, subScope.Guid);
-            foreach (TECDevice dev in subScope.Devices)
-            {
-                addSubScopeDeviceRelation(subScope, dev);
-            }
-
+            addLocationInScope(subScope);
+            updateSubScopeDeviceRelation(subScope);
             foreach (TECPoint point in subScope.Points)
             {
-                addSubScopePointRelation(subScope, point);
                 addPoint(point);
                 addTagsInScope(point.Tags, point.Guid);
             }
+            updateSubScopePointRelation(subScope);
         }
 
         static private void addScopeTree(TECScopeBranch trunk)
@@ -670,20 +690,7 @@ namespace EstimatingUtilitiesLibrary
 
         #region Add Object Functions
 
-        static private void addSystem(TECSystem system)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SystemID", system.Guid.ToString());
-            data.Add("Name", system.Name);
-            data.Add("Description", system.Description);
-            data.Add("Quantity", system.Quantity.ToString());
-            data.Add("BudgetPrice", system.BudgetPrice.ToString());
-
-            if (!SQLiteDB.Insert("TECSystem", data))
-            {
-                Console.WriteLine("Error: Couldn't add system to TECSystem table");
-            }
-        }
+        
         static private void addEquipment(TECEquipment equipment)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -854,51 +861,7 @@ namespace EstimatingUtilitiesLibrary
 
         #region Add Relation Functions
 
-        static private void addSystemEquipmentRelation(TECSystem system, TECEquipment equipment)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SystemID", system.Guid.ToString());
-            data.Add("EquipmentID", equipment.Guid.ToString());
-
-            if (!SQLiteDB.Insert("TECSystemTECEquipment", data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECSystemTECEquipment table.");
-            }
-        }
-        static private void addEquipmentSubScopeRelation(TECEquipment equipment, TECSubScope subScope)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("EquipmentID", equipment.Guid.ToString());
-            data.Add("SubScopeID", subScope.Guid.ToString());
-
-            if (!SQLiteDB.Insert("TECEquipmentTECSubScope", data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECEquipmentTECSubScope table.");
-            }
-        }
-        static private void addSubScopeDeviceRelation(TECSubScope subScope, TECDevice device)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SubScopeID", subScope.Guid.ToString());
-            data.Add("DeviceID", device.Guid.ToString());
-            data.Add("Quantity", device.Quantity.ToString());
-
-            if (!SQLiteDB.Insert("TECSubScopeTECDevice", data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECDevice table.");
-            }
-        }
-        static private void addSubScopePointRelation(TECSubScope subScope, TECPoint point)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SubScopeID", subScope.Guid.ToString());
-            data.Add("PointID", point.Guid.ToString());
-
-            if (!SQLiteDB.Insert("TECSubScopeTECPoint", data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECPoint table.");
-            }
-        }
+        
         static private void addDeviceManufacturerRelation(TECDevice device, TECManufacturer manufacturer)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1280,6 +1243,100 @@ namespace EstimatingUtilitiesLibrary
         #endregion
         #endregion Remove Methods
 
+        #region Update Relations/Order
+
+        static private void updateSystems(ObservableCollection<TECSystem> systems)
+        {
+            int i = 0;
+            foreach (TECSystem system in systems)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("SystemID", system.Guid.ToString());
+                data.Add("Name", system.Name);
+                data.Add("Description", system.Description);
+                data.Add("Quantity", system.Quantity.ToString());
+                data.Add("BudgetPrice", system.BudgetPrice.ToString());
+                data.Add("ScopeIndex", i.ToString());
+
+                if (!SQLiteDB.Replace("TECSystem", data))
+                {
+                    Console.WriteLine("Error: Couldn't add system to TECSystem table");
+                }
+                i++;
+            }
+        }
+        static private void updateSystemEquipmentRelation(TECSystem system)
+        {
+            int i = 0;
+            foreach (TECEquipment equipment in system.Equipment)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("SystemID", system.Guid.ToString());
+                data.Add("EquipmentID", equipment.Guid.ToString());
+                data.Add("ScopeIndex", i.ToString());
+
+                if (!SQLiteDB.Replace("TECSystemTECEquipment", data))
+                {
+                    Console.WriteLine("Error: Couldn't add relation to TECSystemTECEquipment table.");
+                }
+                i++;
+            }
+        }
+        static private void updateEquipmentSubScopeRelation(TECEquipment equipment)
+        {
+            int i = 0;
+            foreach (TECSubScope subScope in equipment.SubScope)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("EquipmentID", equipment.Guid.ToString());
+                data.Add("SubScopeID", subScope.Guid.ToString());
+                data.Add("ScopeIndex", i.ToString());
+
+                if (!SQLiteDB.Replace("TECEquipmentTECSubScope", data))
+                {
+                    Console.WriteLine("Error: Couldn't add relation to TECEquipmentTECSubScope table.");
+                }
+                i++;
+            }
+        }
+        static private void updateSubScopeDeviceRelation(TECSubScope subScope)
+        {
+            int i = 0;
+            foreach (TECDevice device in subScope.Devices)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("SubScopeID", subScope.Guid.ToString());
+                data.Add("DeviceID", device.Guid.ToString());
+                data.Add("Quantity", device.Quantity.ToString());
+                data.Add("ScopeIndex", i.ToString());
+
+                if (!SQLiteDB.Replace("TECSubScopeTECDevice", data))
+                {
+                    Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECDevice table.");
+                }
+                i++;
+            }
+        }
+        static private void updateSubScopePointRelation(TECSubScope subScope)
+        {
+            int i = 0;
+            foreach (TECPoint point in subScope.Points)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("SubScopeID", subScope.Guid.ToString());
+                data.Add("PointID", point.Guid.ToString());
+                data.Add("ScopeIndex", i.ToString());
+
+                if (!SQLiteDB.Replace("TECSubScopeTECPoint", data))
+                {
+                    Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECPoint table.");
+                }
+                i++;
+            }
+        }
+
+        #endregion Update Relations/Order
+
         #endregion //Saving to DB Methods
 
         #region Loading from DB Methods
@@ -1384,7 +1441,10 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECSystem> getAllSystems()
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
-            DataTable systemsDT = SQLiteDB.getDataFromTable("TECSystem");
+
+            string command = "select * from TECSystem order by ScopeIndex";
+
+            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
             foreach (DataRow row in systemsDT.Rows)
             {
@@ -1580,10 +1640,9 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command =    "select * from TECEquipment where EquipmentID in ";
-            command +=          "(select EquipmentID from TECSystemTECEquipment where SystemID = '";
+            string command =    "select * from (TECEquipment inner join TECSystemTECEquipment on (TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID and SystemID = '";
             command +=          systemID;
-            command +=          "')";
+            command +=          "')) order by ScopeIndex";
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
 
@@ -1626,10 +1685,9 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
 
-            string command =    "select * from TECSubScope where SubScopeID in ";
-            command +=          "(select SubScopeID from TECEquipmentTECSubScope where EquipmentID = '";
-            command +=          equipmentID;
-            command +=          "')";
+            string command = "select * from (TECSubScope inner join TECEquipmentTECSubScope on (TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and EquipmentID = '";
+            command += equipmentID;
+            command += "')) order by ScopeIndex";
 
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
 
@@ -1666,10 +1724,9 @@ namespace EstimatingUtilitiesLibrary
 
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
 
-            string command = "select * from TECDevice where DeviceID in ";
-            command += "(select DeviceID from TECSubScopeTECDevice where SubScopeID = '";
+            string command = "select * from (TECDevice inner join TECSubScopeTECDevice on (TECDevice.DeviceID = TECSubScopeTECDevice.DeviceID and SubScopeID = '";
             command += subScopeID;
-            command += "')";
+            command += "')) order by ScopeIndex";
 
             DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
 
@@ -1719,10 +1776,9 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
-            string command = "select * from TECPoint where PointID in ";
-            command += "(select PointID from TECSubScopeTECPoint where SubScopeID = '";
+            string command = "select * from (TECPoint inner join TECSubScopeTECPoint on (TECPoint.PointID = TECSubScopeTECPoint.PointID and SubScopeID = '";
             command += subScopeID;
-            command += "')";
+            command += "')) order by ScopeIndex";
 
             DataTable pointsDT = SQLiteDB.getDataFromCommand(command);
 
@@ -2057,6 +2113,7 @@ namespace EstimatingUtilitiesLibrary
                 "`Description`	TEXT," +
                 "'Quantity'     INTEGER," +
                 "'BudgetPrice'  REAL," +
+                "'ScopeIndex' INTEGER," +
                 "PRIMARY KEY(SystemID)" +
             ");";
         }
@@ -2199,14 +2256,18 @@ namespace EstimatingUtilitiesLibrary
         {
             return "CREATE TABLE `TECSystemTECEquipment` (" +
                 "`SystemID`	TEXT," +
-                "`EquipmentID`	TEXT" +
+                "`EquipmentID`	TEXT," +
+                "'ScopeIndex' INTEGER," +
+                "Primary Key(SystemID, EquipmentID)" +
             ");";
         }
         static private string newEquipmentSubScopeTable()
         {
             return "CREATE TABLE `TECEquipmentTECSubScope` (" +
                 "`EquipmentID`	TEXT," +
-                "`SubScopeID`	TEXT" +
+                "`SubScopeID`	TEXT," +
+                "'ScopeIndex' INTEGER," +
+                "Primary Key(EquipmentID, SubScopeID)" +
             ");";
         }
         static private string newSubScopeDeviceTable()
@@ -2215,6 +2276,7 @@ namespace EstimatingUtilitiesLibrary
                 "`SubScopeID`	TEXT," +
                 "`DeviceID`	TEXT," +
                 "'Quantity' INTEGER," +
+                "'ScopeIndex' INTEGER," +
                 "PRIMARY KEY(SubScopeID, DeviceID)" +
             ");";
         }
@@ -2222,7 +2284,9 @@ namespace EstimatingUtilitiesLibrary
         {
             return "CREATE TABLE `TECSubScopeTECPoint` (" +
                 "`SubScopeID`	TEXT," +
-                "`PointID`	TEXT" +
+                "`PointID`	TEXT," +
+                "'ScopeIndex' TEXT," +
+                "Primary Key(SubScopeID, PointID)" +
             ");";
         }
 

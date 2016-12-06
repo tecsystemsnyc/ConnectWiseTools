@@ -515,10 +515,6 @@ namespace Scope_Builder.ViewModel
                 {
                     CurrentStatusText = "Saving...";
                     SaveWindow saveWindow = new SaveWindow();
-                    if (File.Exists(bidDBFilePath))
-                    {
-                        File.Delete(bidDBFilePath);
-                    }
                     try
                     {
                         EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stack);
