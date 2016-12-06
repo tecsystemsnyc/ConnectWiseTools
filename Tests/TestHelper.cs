@@ -201,7 +201,9 @@ namespace Tests
             TECSystem system = new TECSystem("Test System", "System Description", 587.3, new ObservableCollection<TECEquipment>());
             TECEquipment sysEquip = new TECEquipment("System Equipment", "Child Equipment", 489.5, new ObservableCollection<TECSubScope>());
             TECSubScope sysSS = new TECSubScope("System SubScope", "Child SubScope", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            TECPoint sysPoint = new TECPoint(PointTypes.Serial, "System Point", "Child Point");
 
+            sysSS.Points.Add(sysPoint);
             sysSS.Devices.Add(childDev);
             sysSS.Tags.Add(ssTag);
 
@@ -216,7 +218,9 @@ namespace Tests
             //Equipment
             TECEquipment equipment = new TECEquipment("Test Equipment", "Equipment Description", 193.2, new ObservableCollection<TECSubScope>());
             TECSubScope equipSS = new TECSubScope("Equipment SubScope", "Child SubScope", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            TECPoint equipPoint = new TECPoint(PointTypes.AI, "Equipment Point", "Child Point");
 
+            equipSS.Points.Add(equipPoint);
             equipSS.Devices.Add(childDev);
             equipSS.Tags.Add(ssTag);
 
@@ -227,7 +231,9 @@ namespace Tests
 
             //SubScope
             TECSubScope subScope = new TECSubScope("Test SubScope", "SubScope Description", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            TECPoint ssPoint = new TECPoint(PointTypes.BO, "SubScope Point", "Child Point");
 
+            subScope.Points.Add(ssPoint);
             subScope.Devices.Add(childDev);
             subScope.Tags.Add(ssTag);
 
