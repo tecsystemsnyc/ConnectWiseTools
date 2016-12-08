@@ -78,7 +78,16 @@ namespace TECUserControlLibrary
         #endregion
         public EquipmentGridControl()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Equipment Grid Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
         }
     }
 }

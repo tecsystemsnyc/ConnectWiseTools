@@ -61,7 +61,16 @@ namespace TECUserControlLibrary
 
         public EquipmentEditControl()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Equipment Edit Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
         }
     }
 }

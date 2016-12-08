@@ -44,7 +44,16 @@ namespace TECUserControlLibrary
 
         public TagsGridControl()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Tags Grid Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
         }
     }
 }

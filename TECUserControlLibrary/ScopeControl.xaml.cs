@@ -57,7 +57,16 @@ namespace TECUserControlLibrary
         #endregion
         public ScopeControl()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Scope Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
         }
     }
 }

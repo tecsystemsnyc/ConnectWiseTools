@@ -123,7 +123,16 @@ namespace TECUserControlLibrary
         #endregion
         public EditTabControl()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Edit Tab Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
         }
     }
 }
