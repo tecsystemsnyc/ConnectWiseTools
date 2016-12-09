@@ -2117,6 +2117,7 @@ namespace EstimatingUtilitiesLibrary
                 "PRIMARY KEY(SystemID)" +
             ");";
         }
+
         static private string newEquipmentTable()
         {
             return "CREATE TABLE `TECEquipment` (" +
@@ -2602,7 +2603,6 @@ namespace EstimatingUtilitiesLibrary
                     {
                         return false;
                     }
-                    
                 }
             }
             catch (Exception e)
@@ -2676,9 +2676,69 @@ namespace EstimatingUtilitiesLibrary
                 createTable(type);
             }
         }
+        static private void creatTableFromType(TableBase table)
+        {
+            string tableName = "";
+            List<TableField> primaryKey = new List<TableField>();
+            List<TableField> fields = new List<TableField>();
+            var type = table.GetType();
+
+            foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                if (p.Name == "TableName")
+                {
+                    var v = p.GetValue(null);
+                    tableName = (string)v;
+                }
+                else if (p.Name == "PrimaryKey")
+                {
+                    var v = p.GetValue(null) as List<TableField>;
+                    foreach (TableField field in v)
+                    {
+                        primaryKey.Add(field);
+                    }
+                }
+                else
+                {
+                    var v = p.GetValue(null) as TableField;
+                    foreach (TableField field in v)
+                    {
+                        fields.Add(field);
+                    }
+                }
+            }
+
+            string createString = "CREATE TABLE '" + tableName + "'";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                {
+                    createString += ", ";
+                }
+            }
+            if (primaryKey.Count != 0)
+            {
+                createString += ", PRIMARY KEY(";
+            }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                {
+                    createString += ", ";
+                }
+                else
+                {
+                    createString += ")";
+                }
+            }
+            SQLiteDB.nonQueryCommand(createString);
+        }
         static private void createTable(Type type)
         {
-            if(type == typeof(BidInfoTable))
+
+            if (type == typeof(BidInfoTable))
             { SQLiteDB.nonQueryCommand(newBidInfoTable()); }
             else if (type == typeof(NoteTable))
             { SQLiteDB.nonQueryCommand(newNoteTable()); }
