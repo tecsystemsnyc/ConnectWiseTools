@@ -2673,37 +2673,15 @@ namespace EstimatingUtilitiesLibrary
             } else
             {
                 Console.WriteLine("Creating table: " + type);
-                createTable(type);
+                creatTableFromType(table);
             }
         }
         static private void creatTableFromType(TableBase table)
         {
-            string tableName = "";
-            List<TableField> primaryKey = new List<TableField>();
-            List<TableField> fields = new List<TableField>();
-            var type = table.GetType();
-
-            foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-            {
-                if (p.Name == "TableName")
-                {
-                    var v = p.GetValue(null);
-                    tableName = (string)v;
-                }
-                else if (p.Name == "PrimaryKey")
-                {
-                    var v = p.GetValue(null) as List<TableField>;
-                    foreach (TableField field in v)
-                    {
-                        primaryKey.Add(field);
-                    }
-                }
-                else
-                {
-                    var v = p.GetValue(null) as TableField;
-                    fields.Add(v);
-                }
-            }
+            var tableInfo = getTableInfo(table);
+            string tableName = tableInfo.Item1;
+            List<TableField> primaryKey = tableInfo.Item3;
+            List<TableField> fields = tableInfo.Item2;
 
             string createString = "CREATE TABLE '" + tableName + "'";
             foreach (TableField field in fields)
@@ -2731,6 +2709,40 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             SQLiteDB.nonQueryCommand(createString);
+        }
+        static private void creatTempTableFromType(TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            string tableName = "temp_" + tableInfo.Item1;
+            List<TableField> primaryKey = tableInfo.Item3;
+            List<TableField> fields = tableInfo.Item2;
+            
+            string createString = "CREATE TABLE '" + tableName + "'";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                { createString += ", "; }
+            }
+            if (primaryKey.Count != 0)
+            { createString += ", PRIMARY KEY("; }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                { createString += ", "; }
+                else
+                { createString += ")"; }
+            }
+            SQLiteDB.nonQueryCommand(createString);
+        }
+        
+        static private void updateTableFromType(TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            string tableName = tableInfo.Item1;
+            List<TableField> primaryKey = tableInfo.Item3;
+            List<TableField> fields = tableInfo.Item2;
         }
         static private void createTable(Type type)
         {
@@ -2787,6 +2799,36 @@ namespace EstimatingUtilitiesLibrary
             { SQLiteDB.nonQueryCommand(newVisScopeScopeTable()); }
             else if (type == typeof(LocationScopeTable))
             { SQLiteDB.nonQueryCommand(newLocationScopeTable()); }
+        }
+
+        static private Tuple<string, List<TableField>, List<TableField>> getTableInfo(TableBase table)
+        {
+            string tableName = "";
+            List<TableField> primaryKey = new List<TableField>();
+            List<TableField> fields = new List<TableField>();
+            var type = table.GetType();
+
+            foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                if (p.Name == "TableName")
+                {
+                    var v = p.GetValue(null);
+                    tableName += (string)v;
+                }
+                else if (p.Name == "PrimaryKey")
+                {
+                    var v = p.GetValue(null) as List<TableField>;
+                    foreach (TableField field in v)
+                    { primaryKey.Add(field); }
+                }
+                else
+                {
+                    var v = p.GetValue(null) as TableField;
+                    fields.Add(v);
+                }
+            }
+
+            return Tuple.Create<string, List<TableField>, List<TableField>>(tableName, fields, primaryKey);
         }
         #endregion
 
