@@ -2701,10 +2701,7 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     var v = p.GetValue(null) as TableField;
-                    foreach (TableField field in v)
-                    {
-                        fields.Add(field);
-                    }
+                    fields.Add(v);
                 }
             }
 
