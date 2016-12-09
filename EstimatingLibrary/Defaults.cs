@@ -27,17 +27,18 @@ namespace EstimatingLibrary
 
         public static List<string> Exclusions = new List<string>(new string[]
         {
-            "Overtime labor",
-            "Power wiring",
-            "Access doors",
-            "Demolition ",
-            "Patching, painting and debris removal ",
-            "Automatic louver dampers, smoke dampers, fire/smoke dampers, and end switches ",
-            "Steam-fitting and Sheet-metal labor",
-            "Installation of valves, wells, and dampers",
-            "Self-contained valves",
-            "Provision of smoke detection and fire alarm system components ",
-            "Payment and Performance Bonds "
+            "Overtime labor.",
+            "Power wiring.",
+            "Access doors.",
+            "Demolition.",
+            "Patching, painting and debris removal.",
+            "Automatic louver dampers, smoke dampers, fire/smoke dampers, and end switches.",
+            "Steam-fitting and Sheet-metal labor.",
+            "Installation of valves, wells, and dampers.",
+            "Self-contained valves.",
+            "Provision of smoke detection and fire alarm system components.",
+            "Payment and Performance Bonds.",
+            "Smoke purge and UUKL-864 systems."
         });
     }
 }
