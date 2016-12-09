@@ -324,7 +324,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     updateSystems((refObject as TECBid).Systems);
                 }
-                else if (tarObject is TECTemplates)
+                else if (refObject is TECTemplates)
                 {
                     updateSystems((refObject as TECTemplates).SystemTemplates);
                 }

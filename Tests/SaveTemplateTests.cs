@@ -26,7 +26,7 @@ namespace Tests
             testStack = new ChangeStack(templates);
             path = Path.GetTempFileName();
             File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tdb";
             EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, templates);
         }
 
@@ -36,8 +36,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveTemplates test templates: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveTemplates test templates: " + path);
         }
 
         #region Save System
