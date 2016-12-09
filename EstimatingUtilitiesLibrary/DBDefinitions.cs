@@ -13,6 +13,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField DBVersion = new TableField("DBVersion", "TEXT");
         public static TableField BidName = new TableField("BidName", "TEXT");
+        public static TableField BidID = new TableField("BidID", "TEXT");
         public static TableField BidNumber = new TableField("BidNumber", "TEXT");
         public static TableField DueDate = new TableField("DueDate", "TEXT");
         public static TableField SalesPerson = new TableField("Salesperson", "TEXT");
@@ -26,6 +27,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            BidID
+            };
+
     }
     public class NoteTable : TableBase
     {
@@ -33,6 +38,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField NoteID = new TableField("NoteID", "TEXT");
         public static TableField NoteText = new TableField("NoteText", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            NoteID
+            };
     }
     public class ExclusionTable : TableBase
     {
@@ -40,6 +49,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ExclusionID = new TableField("ExclusionID", "TEXT");
         public static TableField ExclusionText = new TableField("ExclusionText", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ExclusionID
+            };
 
     }
     public class ScopeBranchTable : TableBase
@@ -49,6 +62,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ScopeBranchID
+            };
 
     }
     public class SystemTable : TableBase
@@ -60,6 +77,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
         public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL");
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SystemID
+            };
 
     }
     public class EquipmentTable : TableBase
@@ -72,6 +94,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
         public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            EquipmentID
+            };
+
     }
     public class SubScopeTable : TableBase
     {
@@ -81,6 +107,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SubScopeID
+            };
 
     }
     public class DeviceTable : TableBase
@@ -93,6 +123,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Cost = new TableField("Cost", "REAL");
         public static TableField Wire = new TableField("Wire", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            DeviceID
+            };
+
     }
     public class PointTable : TableBase
     {
@@ -104,6 +138,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
         public static TableField Type = new TableField("Type", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            PointID
+            };
+
     }
     public class TagTable : TableBase
     {
@@ -111,6 +149,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField TagID = new TableField("TagID", "TEXT");
         public static TableField TagString = new TableField("TagString", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            TagID
+            };
 
     }
     public class ManufacturerTable : TableBase
@@ -121,6 +163,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Multiplier = new TableField("Multiplier", "REAL");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ManufacturerID
+            };
+
     }
     public class DrawingTable : TableBase
     {
@@ -129,6 +175,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField DrawingID = new TableField("DrawingID", "TEXT");
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            DrawingID
+            };
 
     }
     public class PageTable : TableBase
@@ -139,6 +189,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Image = new TableField("Image", "TEXT");
         public static TableField PageNum = new TableField("PageNum", "INTEGER");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            PageID
+            };
+
     }
     public class LocationTable : TableBase
     {
@@ -146,6 +200,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField LocationID = new TableField("LocationID", "TEXT");
         public static TableField Name = new TableField("Name", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            LocationID
+            };
 
     }
     public class VisualScopeTable : TableBase
@@ -156,6 +214,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField XPos = new TableField("XPos", "REAL");
         public static TableField YPos = new TableField("YPos", "REAL");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            VisualScopeID
+            };
+
     }
 
     public class ScopeBranchHierarchyTable : TableBase
@@ -165,6 +227,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ParentID = new TableField("ParentID", "TEXT");
         public static TableField ChildID = new TableField("ChildID", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ParentID,
+            ChildID
+            };
+
     }
     public class SystemEquipmentTable : TableBase
     {
@@ -172,6 +239,12 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField SystemID = new TableField("SystemID", "TEXT");
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT");
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SystemID,
+            EquipmentID
+            };
 
     }
     public class EquipmentSubScopeTable : TableBase
@@ -180,6 +253,12 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT");
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT");
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            EquipmentID,
+            SubScopeID
+            };
 
     }
     public class SubScopeDeviceTable : TableBase
@@ -189,6 +268,12 @@ namespace EstimatingUtilitiesLibrary
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT");
         public static TableField DeviceID = new TableField("DeviceID", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SubScopeID,
+            DeviceID
+            };
 
     }
     public class SubScopePointTable : TableBase
@@ -197,6 +282,12 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT");
         public static TableField PointID = new TableField("PointID", "TEXT");
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SubScopeID,
+            PointID
+            };
 
     }
     public class ScopeTagTable : TableBase
@@ -206,6 +297,10 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ScopeID = new TableField("ScopeID", "TEXT");
         public static TableField TagID = new TableField("TagID", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ScopeID,
+            TagID
+            };
     }
     public class DeviceManufacturerTable : TableBase
     {
@@ -213,6 +308,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField DeviceID = new TableField("DeviceID", "TEXT");
         public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            DeviceID,
+            ManufacturerID
+            };
 
     }
     public class DrawingPageTable : TableBase
@@ -222,6 +322,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField DrawingID = new TableField("DrawingID", "TEXT");
         public static TableField PageID = new TableField("PageID", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            DrawingID,
+            PageID
+            };
+
     }
     public class PageVisualScopeTable : TableBase
     {
@@ -229,6 +334,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField PageID = new TableField("PageID", "TEXT");
         public static TableField VisualScopeID = new TableField("VisualScopeID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            PageID,
+            VisualScopeID
+            };
 
     }
     public class VisualScopeScopeTable : TableBase
@@ -238,6 +348,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField VisualScopeID = new TableField("VisualScopeID", "TEXT");
         public static TableField ScopeID = new TableField("ScopeID", "TEXT");
 
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            VisualScopeID,
+            ScopeID
+            };
+
     }
     public class LocationScopeTable : TableBase
     {
@@ -245,6 +360,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField LocationID = new TableField("LocationID", "TEXT");
         public static TableField ScopeID = new TableField("ScopeID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            LocationID,
+            ScopeID
+            };
 
     }
 
@@ -283,6 +403,9 @@ namespace EstimatingUtilitiesLibrary
     public class TableBase
     {
         public static string TableName;
+
+        public static List<TableField> PrimaryKey;
+
     }
 
     public class TableField
