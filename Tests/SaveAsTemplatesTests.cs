@@ -124,8 +124,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveAs test templates saved to: " + path);
+            File.Delete(path);
+            //Console.WriteLine("SaveAs test templates saved to: " + path);
         }
 
         [TestMethod]

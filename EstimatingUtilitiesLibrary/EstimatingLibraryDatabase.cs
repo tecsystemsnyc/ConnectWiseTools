@@ -840,7 +840,7 @@ namespace EstimatingUtilitiesLibrary
         static private void addVisualScope(TECVisualScope visualScope)
         {
             Dictionary<string, string> vsData = new Dictionary<string, string>();
-            vsData.Add(VisualScopeScopeTable.VisualScopeID.Name, visualScope.Guid.ToString());
+            vsData.Add(VisualScopeTable.VisualScopeID.Name, visualScope.Guid.ToString());
             vsData.Add(VisualScopeTable.XPos.Name, visualScope.X.ToString());
             vsData.Add(VisualScopeTable.YPos.Name, visualScope.Y.ToString());
 
