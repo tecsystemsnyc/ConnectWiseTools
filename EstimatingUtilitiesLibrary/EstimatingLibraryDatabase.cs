@@ -2447,7 +2447,7 @@ namespace EstimatingUtilitiesLibrary
 
             createTempTableFromDefinition(table);
 
-            string commandString = "insert into '" + tempName + "' select " + commonString + " from '" + tableName + "'";
+            string commandString = "insert into '" + tempName + "' (" + commonString + ") select " + commonString + " from '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
             commandString = "drop table '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
