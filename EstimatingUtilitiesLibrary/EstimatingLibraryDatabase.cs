@@ -2398,7 +2398,15 @@ namespace EstimatingUtilitiesLibrary
             List<string> tableNames = getAllTableNames();
             foreach(TableBase table in AllBidTables.Tables)
             {
-                updateTableFromType(table);
+                var tableInfo = getTableInfo(table);
+                if (tableNames.Contains(tableInfo.Item1))
+                {
+                    updateTableFromType(table);
+                } else
+                {
+                    createTableFromDefinition(table);
+                }
+                
                 //checkTableFields(table, tableNames);
             }
         }
