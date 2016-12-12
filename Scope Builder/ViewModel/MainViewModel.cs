@@ -412,8 +412,6 @@ namespace Scope_Builder.ViewModel
             Bid.DeviceCatalog = Templates.DeviceCatalog;
             Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
             Bid.Tags = Templates.Tags;
-            Bid.Locations.Add(new TECLocation("Floor 1"));
-            Bid.Locations.Add(new TECLocation("Floor 2"));
 
             populateItemsCollections();
             
