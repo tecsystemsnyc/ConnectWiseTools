@@ -31,7 +31,6 @@ namespace Scope_Builder
         {
             if (e.Args.Length == 1)
             {
-                MessageBox.Show("Now opening file: \n\n" + e.Args[0]);
                 Scope_Builder.Properties.Settings.Default.StartupFile = e.Args[0];
             }
         }
