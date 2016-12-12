@@ -396,8 +396,8 @@ namespace Scope_Builder.ViewModel
             }
             else
             {
-                string message = "No template database found. Use Template Builder to create and save templates and reload them in Scope Builder.";
-                MessageBox.Show(message);
+                //string message = "No template database found. Use Template Builder to create and save templates and reload them in Scope Builder.";
+                //MessageBox.Show(message);
             }
 
             Bid = new TECBid();
