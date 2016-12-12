@@ -121,7 +121,7 @@ namespace EstimatingUtilitiesLibrary
             createBidObjectTables();
             createBidRelationTables();
             */
-            createAllTables();
+            createAllBidTables();
 
             try
             {
@@ -198,8 +198,9 @@ namespace EstimatingUtilitiesLibrary
                 SQLiteDB.overwriteFile();
             }
 
-            createTemplateObjectTables();
-            createTemplateRelationTables();
+            //createTemplateObjectTables();
+            //createTemplateRelationTables();
+            createAllTemplateTables();
 
             try
             {
@@ -2037,313 +2038,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion //Loading from DB Methods
 
-        #region Create Object Tables Methods
-        static private void createBidObjectTables()
-        {
-            SQLiteDB.nonQueryCommand(newBidInfoTable());
-            SQLiteDB.nonQueryCommand(newNoteTable());
-            SQLiteDB.nonQueryCommand(newExclusionTable());
-            SQLiteDB.nonQueryCommand(newScopeBranchTable());
-            SQLiteDB.nonQueryCommand(newSystemTable());
-            SQLiteDB.nonQueryCommand(newEquipmentTable());
-            SQLiteDB.nonQueryCommand(newSubScopeTable());
-            SQLiteDB.nonQueryCommand(newDeviceTable());
-            SQLiteDB.nonQueryCommand(newPointTable());
-            SQLiteDB.nonQueryCommand(newTagTable());
-            SQLiteDB.nonQueryCommand(newManufacturerTable());
-            SQLiteDB.nonQueryCommand(newDrawingTable());
-            SQLiteDB.nonQueryCommand(newPageTable());
-            SQLiteDB.nonQueryCommand(newVisualScopeTable());
-            SQLiteDB.nonQueryCommand(newLocationTable());
-        }
-        static private void createTemplateObjectTables()
-        {
-            SQLiteDB.nonQueryCommand(newSystemTable());
-            SQLiteDB.nonQueryCommand(newEquipmentTable());
-            SQLiteDB.nonQueryCommand(newSubScopeTable());
-            SQLiteDB.nonQueryCommand(newDeviceTable());
-            SQLiteDB.nonQueryCommand(newPointTable());
-            SQLiteDB.nonQueryCommand(newTagTable());
-            SQLiteDB.nonQueryCommand(newManufacturerTable());
-        }
-
-        static private string newBidInfoTable()
-        {
-            return "CREATE TABLE 'TECBidInfo' (" +
-                "'DBVersion'    TEXT," +
-                "'BidInfoID'    TEXT," +
-                "'BidName'      TEXT," +
-                "'BidNumber'    TEXT," +
-                "'DueDate'      TEXT," +
-                "'Salesperson'  TEXT," +
-                "'Estimator'    TEXT," +
-
-                "'PMCoef'       REAL," +
-                "'ENGCoef'      REAL," +
-                "'CommCoef'     REAL," +
-                "'SoftCoef'     REAL," +
-                "'GraphCoef'    REAL," +
-                
-                "'ElectricalRate'   REAL," +
-                "PRIMARY KEY(BidInfoID)" +
-            ");";
-        }
-        static private string newNoteTable()
-        {
-            return "CREATE TABLE 'TECNote' (" +
-                "'NoteID'       TEXT," +
-                "'NoteText'     TEXT," +
-                "PRIMARY KEY(NoteID)" +
-            ");";
-        }
-        static private string newExclusionTable()
-        {
-            return "CREATE TABLE 'TECExclusion' (" +
-                "'ExclusionID'      TEXT," +
-                "'ExclusionText'    TEXT," +
-                "PRIMARY KEY(ExclusionID)" +
-            ");";
-        }
-        static private string newScopeBranchTable()
-        {
-            return "CREATE TABLE `TECScopeBranch` (" +
-                "`ScopeBranchID`	TEXT," +
-                "`Name`	TEXT," +
-                "`Description`	TEXT," +
-                "PRIMARY KEY(ScopeBranchID)" +
-            ");";
-        }
-        static private string newSystemTable()
-        {
-            return "CREATE TABLE `TECSystem` (" +
-                "`SystemID`	TEXT," +
-                "`Name`	TEXT," +
-                "`Description`	TEXT," +
-                "'Quantity'     INTEGER," +
-                "'BudgetPrice'  REAL," +
-                "'ScopeIndex' INTEGER," +
-                "PRIMARY KEY(SystemID)" +
-            ");";
-        }
-
-        static private string newEquipmentTable()
-        {
-            return "CREATE TABLE `TECEquipment` (" +
-                "`EquipmentID`	TEXT," +
-                "`Name`	TEXT," +
-                "`Description`	TEXT," +
-                "'Quantity'     INTEGER," +
-                "'BudgetPrice'  REAL," +
-                "PRIMARY KEY(EquipmentID)" +
-            ");";
-        }
-        static private string newSubScopeTable()
-        {
-            return "CREATE TABLE `TECSubScope` (" +
-                "`SubScopeID`	TEXT," +
-                "`Name`	TEXT," +
-                "`Description`	TEXT," +
-                "'Quantity'     INTEGER," +
-                "PRIMARY KEY(SubScopeID)" +
-            ");";
-        }
-        static private string newDeviceTable()
-        {
-            return "CREATE TABLE `TECDevice` (" +
-                "`DeviceID`	TEXT," +
-                "'Name' TEXT," +
-                "'Description'  TEXT," +
-                "`Cost`	REAL," +
-                "`Wire`	TEXT," +
-                "PRIMARY KEY(DeviceID)" +
-            ");";
-        }
-        static private string newPointTable()
-        {
-            return "CREATE TABLE `TECPoint` (" +
-                "`PointID`	TEXT," +
-                "`Name`	TEXT," +
-                "`Description`	TEXT," +
-                "'Quantity'     INTEGER," +
-                "`Type`	TEXT," +
-                "PRIMARY KEY(PointID)" +
-            ");";
-        }
-        static private string newTagTable()
-        {
-            return "CREATE TABLE 'TECTag' (" +
-                "'TagID'        TEXT," +
-                "'TagString'    TEXT," +
-                "PRIMARY KEY(TagID)" +
-            ");";
-        }
-        static private string newManufacturerTable()
-        {
-            return "CREATE TABLE 'TECManufacturer' (" +
-                "'ManufacturerID' TEXT," +
-                "'Name' TEXT," +
-                "'Multiplier' REAL," +
-                "PRIMARY KEY(ManufacturerID)" +
-            ");";
-        }
-        static private string newDrawingTable()
-        {
-            return "CREATE TABLE 'TECDrawing' (" +
-                "'DrawingID' TEXT," +
-                "'Name' TEXT," +
-                "'Description' TEXT," +
-                "PRIMARY KEY(DrawingID)" +
-            ");";
-        }
-        static private string newPageTable()
-        {
-            return "CREATE TABLE 'TECPage' (" +
-                "'PageID' TEXT," +
-                "'Image' BLOB," +
-                "'PageNum' INTEGER," +
-                "PRIMARY KEY(PageID)" +
-            ");";
-        }
-        static private string newLocationTable()
-        {
-            return "CREATE TABLE 'TECLocation' (" +
-                "'LocationID' TEXT," +
-                "'Name' TEXT," +
-                "PRIMARY KEY(LocationID)" +
-            ");";
-        }
-
-        static private string newVisualScopeTable()
-        {
-            return "CREATE TABLE 'TECVisualScope' (" +
-                "'VisualScopeID' TEXT," +
-                "'XPos' REAL," +
-                "'YPos' REAL," +
-                "PRIMARY KEY(VisualScopeID)" +
-            ");";
-        }
-
-        #endregion //Create Object Tables
-
-        #region Create Relation Tables Methods
-        static private void createBidRelationTables()
-        {
-            SQLiteDB.nonQueryCommand(newScopeBranchHierarchyTable());
-            SQLiteDB.nonQueryCommand(newSystemEquipmentTable());
-            SQLiteDB.nonQueryCommand(newEquipmentSubScopeTable());
-            SQLiteDB.nonQueryCommand(newSubScopeDeviceTable());
-            SQLiteDB.nonQueryCommand(newSubScopePointTable());
-
-            SQLiteDB.nonQueryCommand(newScopeTagTable());
-            SQLiteDB.nonQueryCommand(newDeviceManufacturerTable());
-
-            SQLiteDB.nonQueryCommand(newDrawingPageTable());
-            SQLiteDB.nonQueryCommand(newPageVisScopeTable());
-            SQLiteDB.nonQueryCommand(newVisScopeScopeTable());
-
-            SQLiteDB.nonQueryCommand(newLocationScopeTable());
-        }
-        static private void createTemplateRelationTables()
-        {
-            SQLiteDB.nonQueryCommand(newSystemEquipmentTable());
-            SQLiteDB.nonQueryCommand(newEquipmentSubScopeTable());
-            SQLiteDB.nonQueryCommand(newSubScopeDeviceTable());
-            SQLiteDB.nonQueryCommand(newSubScopePointTable());
-
-            SQLiteDB.nonQueryCommand(newScopeTagTable());
-            SQLiteDB.nonQueryCommand(newDeviceManufacturerTable());
-        }
-
-        static private string newScopeBranchHierarchyTable()
-        {
-            return "CREATE TABLE `TECScopeBranchHierarchy` (" +
-                "`ParentID`	TEXT," +
-                "`ChildID`	TEXT" +
-            ");";
-        }
-        static private string newSystemEquipmentTable()
-        {
-            return "CREATE TABLE `TECSystemTECEquipment` (" +
-                "`SystemID`	TEXT," +
-                "`EquipmentID`	TEXT," +
-                "'ScopeIndex' INTEGER," +
-                "Primary Key(SystemID, EquipmentID)" +
-            ");";
-        }
-        static private string newEquipmentSubScopeTable()
-        {
-            return "CREATE TABLE `TECEquipmentTECSubScope` (" +
-                "`EquipmentID`	TEXT," +
-                "`SubScopeID`	TEXT," +
-                "'ScopeIndex' INTEGER," +
-                "Primary Key(EquipmentID, SubScopeID)" +
-            ");";
-        }
-        static private string newSubScopeDeviceTable()
-        {
-            return "CREATE TABLE `TECSubScopeTECDevice` (" +
-                "`SubScopeID`	TEXT," +
-                "`DeviceID`	TEXT," +
-                "'Quantity' INTEGER," +
-                "'ScopeIndex' INTEGER," +
-                "PRIMARY KEY(SubScopeID, DeviceID)" +
-            ");";
-        }
-        static private string newSubScopePointTable()
-        {
-            return "CREATE TABLE `TECSubScopeTECPoint` (" +
-                "`SubScopeID`	TEXT," +
-                "`PointID`	TEXT," +
-                "'ScopeIndex' TEXT," +
-                "Primary Key(SubScopeID, PointID)" +
-            ");";
-        }
-
-        static private string newScopeTagTable()
-        {
-            return "CREATE TABLE `TECScopeTECTag` (" +
-                "`ScopeID`	TEXT," +
-                "`TagID`	TEXT" +
-            ");";
-        }
-
-        static private string newDeviceManufacturerTable()
-        {
-            return "CREATE TABLE 'TECDeviceTECManufacturer' (" +
-                "'DeviceID' TEXT," +
-                "'ManufacturerID' TEXT"  +
-            ");";
-        }
-
-        static private string newDrawingPageTable()
-        {
-            return "CREATE TABLE 'TECDrawingTECPage' (" +
-                "'DrawingID' TEXT," +
-                "'PageID' TEXT" +
-            ");";
-        }
-        static private string newPageVisScopeTable()
-        {
-            return "CREATE TABLE 'TECPageTECVisualScope' (" +
-                "'PageID' TEXT," +
-                "'VisualScopeID' TEXT" +
-            ");";
-        }
-        static private string newVisScopeScopeTable()
-        {
-            return "Create Table 'TECVisualScopeTECScope' (" +
-                "'VisualScopeID' TEXT," +
-                "'ScopeID' TEXT" +
-            ");";
-        }
-        static private string newLocationScopeTable()
-        {
-            return "Create Table 'TECLocationTECScope' (" +
-                "'LocationID' TEXT," +
-                "'ScopeID' TEXT" +
-                ");";
-        }
-        #endregion //Create Relation Tables
+        
 
         #region Generic Create Methods
         static private void createTableFromDefinition(TableBase table)
@@ -2408,9 +2103,16 @@ namespace EstimatingUtilitiesLibrary
             createString += ")";
             SQLiteDB.nonQueryCommand(createString);
         }
-        static private void createAllTables()
+        static private void createAllBidTables()
         {
-            foreach(TableBase table in AllTables.Tables)
+            foreach(TableBase table in AllBidTables.Tables)
+            {
+                createTableFromDefinition(table);
+            }
+        }
+        static private void createAllTemplateTables()
+        {
+            foreach(TableBase table in AllTemplateTables.Tables)
             {
                 createTableFromDefinition(table);
             }
@@ -2648,7 +2350,7 @@ namespace EstimatingUtilitiesLibrary
                 isUpToDate = checkDatabaseVersion();
                 if (isUpToDate == false)
                 {
-                    updateDatabaseVersion();
+                    updateBidDatabase();
                 }
             }
             catch (Exception e)
@@ -2691,10 +2393,10 @@ namespace EstimatingUtilitiesLibrary
                 throw e;
             }
         }
-        static private void updateDatabaseVersion()
+        static private void updateBidDatabase()
         {
             List<string> tableNames = getAllTableNames();
-            foreach(TableBase table in AllTables.Tables)
+            foreach(TableBase table in AllBidTables.Tables)
             {
                 updateTableFromType(table);
                 //checkTableFields(table, tableNames);
@@ -2745,7 +2447,7 @@ namespace EstimatingUtilitiesLibrary
 
             createTempTableFromDefinition(table);
 
-            string commandString = "insert into '" + tempName + "' select commonString from '" + tableName + "'";
+            string commandString = "insert into '" + tempName + "' select " + commonString + " from '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
             commandString = "drop table '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
@@ -2787,100 +2489,6 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return Tuple.Create<string, List<TableField>, List<TableField>>(tableName, fields, primaryKey);
-        }
-        
-        //Deprecated
-        static private void checkTableFields(TableBase table, List<string> currentTables)
-        {
-            string tableName = "";
-            var type = table.GetType();
-
-            foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-            {
-                if (p.Name == "TableName")
-                {
-                    var v = p.GetValue(null);
-                    tableName = (string)v;
-                }
-            }
-            if (currentTables.Contains(tableName))
-            {
-                List<string> fields = getAllTableFields(tableName);
-                foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-                {
-                    if (p.Name != "TableName")
-                    {
-                        var v = p.GetValue(null) as TableField;
-                        if (!fields.Contains(v.Name))
-                        {
-                            Console.WriteLine("Adding Column: " + v.Name);
-                            string command = "alter table " + tableName + " add column " + v.Name + " " + v.FieldType + "";
-                            SQLiteDB.nonQueryCommand(command);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Creating table: " + type);
-                createTableFromDefinition(table);
-            }
-        }
-        static private void createTable(Type type)
-        {
-
-            if (type == typeof(BidInfoTable))
-            { SQLiteDB.nonQueryCommand(newBidInfoTable()); }
-            else if (type == typeof(NoteTable))
-            { SQLiteDB.nonQueryCommand(newNoteTable()); }
-            else if (type == typeof(ExclusionTable))
-            { SQLiteDB.nonQueryCommand(newExclusionTable()); }
-            else if (type == typeof(ScopeBranchTable))
-            { SQLiteDB.nonQueryCommand(newScopeBranchTable()); }
-            else if (type == typeof(SystemTable))
-            { SQLiteDB.nonQueryCommand(newSystemTable()); }
-            else if (type == typeof(EquipmentTable))
-            { SQLiteDB.nonQueryCommand(newEquipmentTable()); }
-            else if (type == typeof(SubScopeTable))
-            { SQLiteDB.nonQueryCommand(newSubScopeTable()); }
-            else if (type == typeof(DeviceTable))
-            { SQLiteDB.nonQueryCommand(newDeviceTable()); }
-            else if (type == typeof(PointTable))
-            { SQLiteDB.nonQueryCommand(newPointTable()); }
-            else if (type == typeof(TagTable))
-            { SQLiteDB.nonQueryCommand(newTagTable()); }
-            else if (type == typeof(ManufacturerTable))
-            { SQLiteDB.nonQueryCommand(newManufacturerTable()); }
-            else if (type == typeof(DrawingTable))
-            { SQLiteDB.nonQueryCommand(newDrawingTable()); }
-            else if (type == typeof(PageTable))
-            { SQLiteDB.nonQueryCommand(newPageTable()); }
-            else if (type == typeof(LocationTable))
-            { SQLiteDB.nonQueryCommand(newLocationTable()); }
-            else if (type == typeof(VisualScopeTable))
-            { SQLiteDB.nonQueryCommand(newVisualScopeTable()); }
-            else if (type == typeof(ScopeBranchHierarchyTable))
-            { SQLiteDB.nonQueryCommand(newScopeBranchHierarchyTable()); }
-            else if (type == typeof(SystemEquipmentTable))
-            { SQLiteDB.nonQueryCommand(newSystemEquipmentTable()); }
-            else if (type == typeof(EquipmentSubScopeTable))
-            { SQLiteDB.nonQueryCommand(newEquipmentSubScopeTable()); }
-            else if (type == typeof(SubScopeDeviceTable))
-            { SQLiteDB.nonQueryCommand(newSubScopeDeviceTable()); }
-            else if (type == typeof(SubScopePointTable))
-            { SQLiteDB.nonQueryCommand(newSubScopePointTable()); }
-            else if (type == typeof(ScopeTagTable))
-            { SQLiteDB.nonQueryCommand(newScopeTagTable()); }
-            else if (type == typeof(DeviceManufacturerTable))
-            { SQLiteDB.nonQueryCommand(newDeviceManufacturerTable()); }
-            else if (type == typeof(DrawingPageTable))
-            { SQLiteDB.nonQueryCommand(newDrawingPageTable()); }
-            else if (type == typeof(PageVisualScopeTable))
-            { SQLiteDB.nonQueryCommand(newPageVisScopeTable()); }
-            else if (type == typeof(VisualScopeScopeTable))
-            { SQLiteDB.nonQueryCommand(newVisScopeScopeTable()); }
-            else if (type == typeof(LocationScopeTable))
-            { SQLiteDB.nonQueryCommand(newLocationScopeTable()); }
         }
         #endregion
 

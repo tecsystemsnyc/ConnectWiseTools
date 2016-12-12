@@ -13,7 +13,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField DBVersion = new TableField("DBVersion", "TEXT");
         public static TableField BidName = new TableField("BidName", "TEXT");
-        public static TableField BidID = new TableField("BidID", "TEXT");
+        public static TableField BidInfoID = new TableField("BidInfoID", "TEXT");
         public static TableField BidNumber = new TableField("BidNumber", "TEXT");
         public static TableField DueDate = new TableField("DueDate", "TEXT");
         public static TableField SalesPerson = new TableField("Salesperson", "TEXT");
@@ -28,7 +28,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            BidID
+            BidInfoID
             };
 
     }
@@ -368,7 +368,7 @@ namespace EstimatingUtilitiesLibrary
 
     }
 
-    public static class AllTables
+    public static class AllBidTables
     {
         public static List<object> Tables = new List<object>() {
             new BidInfoTable(),
@@ -398,6 +398,26 @@ namespace EstimatingUtilitiesLibrary
             new VisualScopeScopeTable(),
             new LocationScopeTable()
             };
+    }
+
+    public static class AllTemplateTables
+    {
+        public static List<object> Tables = new List<object>()
+        {
+            new SystemTable(),
+            new EquipmentTable(),
+            new SubScopeTable(),
+            new DeviceTable(),
+            new PointTable(),
+            new TagTable(),
+            new ManufacturerTable(),
+            new SystemEquipmentTable(),
+            new EquipmentSubScopeTable(),
+            new SubScopeDeviceTable(),
+            new SubScopePointTable(),
+            new ScopeTagTable(),
+            new DeviceManufacturerTable()
+        };
     }
 
     public class TableBase
