@@ -368,13 +368,9 @@ namespace Scope_Builder.ViewModel
         public MainViewModel()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            }
+            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
-            {
-                Version = "Undeployed Version";
-            }
+            { Version = "Undeployed Version"; }
 
             Templates = new TECTemplates();
             DataGridVisibilty = new VisibilityModel();
@@ -384,18 +380,14 @@ namespace Scope_Builder.ViewModel
             string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
 
             if (!Directory.Exists(resourcesFolder))
-            {
-                Directory.CreateDirectory(resourcesFolder);
-            }
+            { Directory.CreateDirectory(resourcesFolder); }
 
             defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
 
             if (File.Exists(defaultTemplatesPath))
             {
                 if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-                {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                }
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath); }
                 else
                 {
                     string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
@@ -976,7 +968,6 @@ namespace Scope_Builder.ViewModel
                     break;
                 default:
                     break;
-
             }
         }
 
@@ -1006,21 +997,21 @@ namespace Scope_Builder.ViewModel
 
             foreach (TECSystem system in Bid.Systems)
             {
-                if(system.Location == SelectedLocation)
+                if (system.Location == SelectedLocation)
                 {
                     SystemsByLocation.Add(system);
-                    foreach(TECEquipment equipment in system.Equipment)
+                }
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    if (equipment.Location == SelectedLocation)
                     {
-                        if(equipment.Location == SelectedLocation)
+                        EquipmentByLocation.Add(equipment);
+                    }
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        if(subScope.Location == SelectedLocation)
                         {
-                            EquipmentByLocation.Add(equipment);
-                            foreach(TECSubScope subScope in equipment.SubScope)
-                            {
-                                if(subScope.Location == SelectedLocation)
-                                {
-                                    SubScopeByLocation.Add(subScope);
-                                }
-                            }
+                            SubScopeByLocation.Add(subScope);
                         }
                     }
                 }
