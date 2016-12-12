@@ -893,10 +893,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECTag tag in tags)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("ScopeID", scopeID.ToString());
-                data.Add("TagID", tag.Guid.ToString());
+                data.Add(ScopeTagTable.ScopeID.Name, scopeID.ToString());
+                data.Add(ScopeTagTable.TagID.Name, tag.Guid.ToString());
 
-                if (!SQLiteDB.Insert("TECScopeTECTag", data))
+                if (!SQLiteDB.Insert(ScopeTagTable.TableName, data))
                 {
                     Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
                 }
@@ -905,10 +905,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addDrawingPageRelation(TECDrawing drawing, TECPage page)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DrawingID", drawing.Guid.ToString());
-            data.Add("PageID", page.Guid.ToString());
+            data.Add(DrawingPageTable.DrawingID.Name, drawing.Guid.ToString());
+            data.Add(DrawingPageTable.PageID.Name, page.Guid.ToString());
 
-            if (!SQLiteDB.Insert("TECDrawingTECPage", data))
+            if (!SQLiteDB.Insert(DrawingPageTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDrawingTECPage table.");
             }
@@ -916,10 +916,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addPageVisualScopeRelation(TECPage page, TECVisualScope vs)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("PageID", page.Guid.ToString());
-            data.Add("VisualScopeID", vs.Guid.ToString());
+            data.Add(PageVisualScopeTable.PageID.Name, page.Guid.ToString());
+            data.Add(PageVisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
 
-            if (!SQLiteDB.Insert("TECPageTECVisualScope", data))
+            if (!SQLiteDB.Insert(PageVisualScopeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECPageTECScope table.");
             }
@@ -927,10 +927,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addVisualScopeScopeRelation(TECVisualScope vs)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("VisualScopeID", vs.Guid.ToString());
-            data.Add("ScopeID", vs.Scope.Guid.ToString());
+            data.Add(VisualScopeScopeTable.VisualScopeID.Name, vs.Guid.ToString());
+            data.Add(VisualScopeScopeTable.ScopeID.Name, vs.Scope.Guid.ToString());
 
-            if (!SQLiteDB.Insert("TECVisualScopeTECScope", data))
+            if (!SQLiteDB.Insert(VisualScopeScopeTable.TableName, data))
             {
                 Console.WriteLine("Could not add relation to TECVisualScopeTECScope table.");
             }
@@ -941,10 +941,10 @@ namespace EstimatingUtilitiesLibrary
             if (scope.Location != null)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("ScopeID", scope.Guid.ToString());
-                data.Add("LocationID", scope.Location.Guid.ToString());
+                data.Add(LocationScopeTable.ScopeID.Name, scope.Guid.ToString());
+                data.Add(LocationScopeTable.LocationID.Name, scope.Location.Guid.ToString());
 
-                if (!SQLiteDB.Insert("TECLocationTECScope", data))
+                if (!SQLiteDB.Insert(LocationScopeTable.TableName, data))
                 {
                     Console.WriteLine("Error: Couldn't add relation to TECLocationTECScope table.");
                 }
@@ -958,20 +958,20 @@ namespace EstimatingUtilitiesLibrary
         static private void editBidInfo(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("BidInfoID", bid.InfoGuid.ToString());
-            data.Add("BidName", bid.Name);
-            data.Add("BidNumber", bid.BidNumber);
-            data.Add("DueDate", bid.DueDate.ToString(FMT));
-            data.Add("Salesperson", bid.Salesperson);
-            data.Add("Estimator", bid.Estimator);
-            data.Add("PMCoef", bid.Labor.PMCoef.ToString());
-            data.Add("ENGCoef", bid.Labor.ENGCoef.ToString());
-            data.Add("CommCoef", bid.Labor.CommCoef.ToString());
-            data.Add("SoftCoef", bid.Labor.SoftCoef.ToString());
-            data.Add("GraphCoef", bid.Labor.GraphCoef.ToString());
-            data.Add("ElectricalRate", bid.Labor.ElectricalRate.ToString());
+            data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
+            data.Add(BidInfoTable.BidName.Name, bid.Name);
+            data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
+            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(FMT));
+            data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
+            data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
+            data.Add(BidInfoTable.PMCoef.Name, bid.Labor.PMCoef.ToString());
+            data.Add(BidInfoTable.ENGCoef.Name, bid.Labor.ENGCoef.ToString());
+            data.Add(BidInfoTable.CommCoef.Name, bid.Labor.CommCoef.ToString());
+            data.Add(BidInfoTable.SoftCoef.Name, bid.Labor.SoftCoef.ToString());
+            data.Add(BidInfoTable.GraphCoef.Name, bid.Labor.GraphCoef.ToString());
+            data.Add(BidInfoTable.ElectricalRate.Name, bid.Labor.ElectricalRate.ToString());
 
-            if (!SQLiteDB.Replace("TECBidInfo", data))
+            if (!SQLiteDB.Replace(BidInfoTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update bid info in TECBidInfo table.");
             }
@@ -980,13 +980,13 @@ namespace EstimatingUtilitiesLibrary
         static private void editSystem(TECSystem system)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SystemID", system.Guid.ToString());
-            data.Add("Name", system.Name);
-            data.Add("Description", system.Description);
-            data.Add("Quantity", system.Quantity.ToString());
-            data.Add("BudgetPrice", system.BudgetPrice.ToString());
+            data.Add(SystemTable.SystemID.Name, system.Guid.ToString());
+            data.Add(SystemTable.Name.Name, system.Name);
+            data.Add(SystemTable.Description.Name, system.Description);
+            data.Add(SystemTable.Quantity.Name, system.Quantity.ToString());
+            data.Add(SystemTable.BudgetPrice.Name, system.BudgetPrice.ToString());
 
-            if (!SQLiteDB.Replace("TECSystem", data))
+            if (!SQLiteDB.Replace(SystemTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update system in TECSystem table");
             }
@@ -995,13 +995,13 @@ namespace EstimatingUtilitiesLibrary
         static private void editEquipment(TECEquipment equipment)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("EquipmentID", equipment.Guid.ToString());
-            data.Add("Name", equipment.Name);
-            data.Add("Description", equipment.Description);
-            data.Add("Quantity", equipment.Quantity.ToString());
-            data.Add("BudgetPrice", equipment.BudgetPrice.ToString());
+            data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
+            data.Add(EquipmentTable.Name.Name, equipment.Name);
+            data.Add(EquipmentTable.Description.Name, equipment.Description);
+            data.Add(EquipmentTable.Quantity.Name, equipment.Quantity.ToString());
+            data.Add(EquipmentTable.BudgetPrice.Name, equipment.BudgetPrice.ToString());
 
-            if (!SQLiteDB.Replace("TECEquipment", data))
+            if (!SQLiteDB.Replace(EquipmentTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update equipment in TECEquipment table.");
             }
@@ -1010,12 +1010,12 @@ namespace EstimatingUtilitiesLibrary
         static private void editSubScope(TECSubScope subScope)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SubScopeID", subScope.Guid.ToString());
-            data.Add("Name", subScope.Name);
-            data.Add("Description", subScope.Description);
-            data.Add("Quantity", subScope.Quantity.ToString());
+            data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+            data.Add(SubScopeTable.Name.Name, subScope.Name);
+            data.Add(SubScopeTable.Description.Name, subScope.Description);
+            data.Add(SubScopeTable.Quantity.Name, subScope.Quantity.ToString());
 
-            if (!SQLiteDB.Replace("TECSubScope", data))
+            if (!SQLiteDB.Replace(SubScopeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update subScope in TECSubScope table.");
             }
@@ -1024,13 +1024,13 @@ namespace EstimatingUtilitiesLibrary
         static private void editDevice(TECDevice device)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DeviceID", device.Guid.ToString());
-            data.Add("Name", device.Name);
-            data.Add("Description", device.Description);
-            data.Add("Cost", device.Cost.ToString());
-            data.Add("Wire", device.Wire);
+            data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceTable.Name.Name, device.Name);
+            data.Add(DeviceTable.Description.Name, device.Description);
+            data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
+            data.Add(DeviceTable.Wire.Name, device.Wire);
 
-            if (!SQLiteDB.Replace("TECDevice", data))
+            if (!SQLiteDB.Replace(DeviceTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update device in TECDevice table.");
             }
@@ -1039,11 +1039,11 @@ namespace EstimatingUtilitiesLibrary
         static private void editDeviceQuantity(TECSubScope subScope, TECDevice device)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SubScopeID", subScope.Guid.ToString());
-            data.Add("DeviceID", device.Guid.ToString());
-            data.Add("Quantity", device.Quantity.ToString());
+            data.Add(SubScopeDeviceTable.SubScopeID.Name, subScope.Guid.ToString());
+            data.Add(SubScopeDeviceTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(SubScopeDeviceTable.Quantity.Name, device.Quantity.ToString());
 
-            if (!SQLiteDB.Replace("TECSubScopeTECDevice", data))
+            if (!SQLiteDB.Replace(SubScopeDeviceTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update SubScopeDevice relation in TECSubScopeTECDevice.");
             }
@@ -1052,11 +1052,11 @@ namespace EstimatingUtilitiesLibrary
         static private void editManufacturer(TECManufacturer manufacturer)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ManufacturerID", manufacturer.Guid.ToString());
-            data.Add("Name", manufacturer.Name);
-            data.Add("Multiplier", manufacturer.Multiplier.ToString());
+            data.Add(ManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
+            data.Add(ManufacturerTable.Name.Name, manufacturer.Name);
+            data.Add(ManufacturerTable.Multiplier.Name, manufacturer.Multiplier.ToString());
 
-            if (!SQLiteDB.Replace("TECManufacturer", data))
+            if (!SQLiteDB.Replace(ManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update manufacturer in TECManufacturer table.");
             }
@@ -1065,13 +1065,13 @@ namespace EstimatingUtilitiesLibrary
         static private void editPoint(TECPoint point)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("PointID", point.Guid.ToString());
-            data.Add("Name", point.Name);
-            data.Add("Description", point.Description);
-            data.Add("Type", point.Type.ToString());
-            data.Add("Quantity", point.Quantity.ToString());
+            data.Add(PointTable.PointID.Name, point.Guid.ToString());
+            data.Add(PointTable.Name.Name, point.Name);
+            data.Add(PointTable.Description.Name, point.Description);
+            data.Add(PointTable.Type.Name, point.Type.ToString());
+            data.Add(PointTable.Quantity.Name, point.Quantity.ToString());
 
-            if (!SQLiteDB.Replace("TECPoint", data))
+            if (!SQLiteDB.Replace(PointTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update point in TECPoint table.");
             }
@@ -1080,10 +1080,10 @@ namespace EstimatingUtilitiesLibrary
         static private void editNote(TECNote note)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("NoteID", note.Guid.ToString());
-            data.Add("NoteText", note.Text);
+            data.Add(NoteTable.NoteID.Name, note.Guid.ToString());
+            data.Add(NoteTable.NoteText.Name, note.Text);
 
-            if (!SQLiteDB.Replace("TECNote", data))
+            if (!SQLiteDB.Replace(NoteTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECNote table");
             }
@@ -1092,10 +1092,10 @@ namespace EstimatingUtilitiesLibrary
         static private void editExclusion(TECExclusion exclusion)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ExclusionID", exclusion.Guid.ToString());
-            data.Add("ExclusionText", exclusion.Text);
+            data.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
+            data.Add(ExclusionTable.ExclusionText.Name, exclusion.Text);
 
-            if (!SQLiteDB.Replace("TECExclusion", data))
+            if (!SQLiteDB.Replace(ExclusionTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECExclusion table.");
             }
@@ -1104,11 +1104,11 @@ namespace EstimatingUtilitiesLibrary
         static private void editScopeBranch(TECScopeBranch branch)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ScopeBranchID", branch.Guid.ToString());
-            data.Add("Name", branch.Name);
-            data.Add("Description", branch.Description);
+            data.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            data.Add(ScopeBranchTable.Name.Name, branch.Name);
+            data.Add(ScopeBranchTable.Description.Name, branch.Description);
 
-            if (!SQLiteDB.Replace("TECScopeBranch", data))
+            if (!SQLiteDB.Replace(ScopeBranchTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECScopeBranch table.");
             }
@@ -1117,11 +1117,11 @@ namespace EstimatingUtilitiesLibrary
         static private void editDrawing(TECDrawing drawing)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DrawingID", drawing.Guid.ToString());
-            data.Add("Name", drawing.Name);
-            data.Add("Description", drawing.Description);
+            data.Add(DrawingTable.DrawingID.Name, drawing.Guid.ToString());
+            data.Add(DrawingTable.Name.Name, drawing.Name);
+            data.Add(DrawingTable.Description.Name, drawing.Description);
             
-            if (!SQLiteDB.Replace("TECDrawing", data))
+            if (!SQLiteDB.Replace(DrawingTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECDrawing table.");
             }
@@ -1130,11 +1130,11 @@ namespace EstimatingUtilitiesLibrary
         static private void editVisualScope(TECVisualScope vs)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("VisualScopeID", vs.Guid.ToString());
-            data.Add("XPos", vs.X.ToString());
-            data.Add("YPos", vs.Y.ToString());
+            data.Add(VisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
+            data.Add(VisualScopeTable.XPos.Name, vs.X.ToString());
+            data.Add(VisualScopeTable.YPos.Name, vs.Y.ToString());
 
-            if (!SQLiteDB.Replace("TECVisualScope", data))
+            if (!SQLiteDB.Replace(VisualScopeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECVisualScope table.");
             }
@@ -1143,10 +1143,10 @@ namespace EstimatingUtilitiesLibrary
         static private void editLocation(TECLocation location)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("LocationID", location.Guid.ToString());
-            data.Add("Name", location.Name);
+            data.Add(LocationTable.LocationID.Name, location.Guid.ToString());
+            data.Add(LocationTable.Name.Name, location.Name);
 
-            if (!SQLiteDB.Replace("TECLocation", data))
+            if (!SQLiteDB.Replace(LocationTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECLocation table.");
             }
@@ -1155,10 +1155,10 @@ namespace EstimatingUtilitiesLibrary
         static private void editTag(TECTag tag)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("TagID", tag.Guid.ToString());
-            data.Add("TagString", tag.Text);
+            data.Add(TagTable.TagID.Name, tag.Guid.ToString());
+            data.Add(TagTable.TagString.Name, tag.Text);
 
-            if (!SQLiteDB.Replace("TECTag", data))
+            if (!SQLiteDB.Replace(TagTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECTag table");
             }
@@ -1169,37 +1169,37 @@ namespace EstimatingUtilitiesLibrary
         #region Remove Objects
         static private void removeSystem(TECSystem system)
         {
-            SQLiteDB.Delete("TECSystem", "SystemID", system.Guid);
+            SQLiteDB.Delete(SystemTable.TableName, "SystemID", system.Guid);
         }
 
         static private void removeEquipment(TECEquipment equipment)
         {
-            SQLiteDB.Delete("TECEquipment", "EquipmentID", equipment.Guid);
+            SQLiteDB.Delete(EquipmentTable.TableName, EquipmentTable.EquipmentID.Name, equipment.Guid);
         }
 
         static private void removeSubScope(TECSubScope subScope)
         {
-            SQLiteDB.Delete("TECSubScope", "SubScopeID", subScope.Guid);
+            SQLiteDB.Delete(SubScopeTable.TableName, SubScopeTable.SubScopeID.Name, subScope.Guid);
         }
 
         static private void removeDevice(TECDevice device)
         {
-            SQLiteDB.Delete("TECDevice", "DeviceID", device.Guid);
+            SQLiteDB.Delete(DeviceTable.TableName, DeviceTable.DeviceID.Name, device.Guid);
         }
 
         static private void removePoint(TECPoint point)
         {
-            SQLiteDB.Delete("TECPoint", "PointID", point.Guid);
+            SQLiteDB.Delete(PointTable.TableName, PointTable.PointID.Name, point.Guid);
         }
 
         static private void removeScopeBranch(TECScopeBranch branch)
         {
-            SQLiteDB.Delete("TECScopeBranch", "ScopeBranchID", branch.Guid);
+            SQLiteDB.Delete(ScopeBranchTable.TableName, ScopeBranchTable.ScopeBranchID.Name, branch.Guid);
         }
 
         static private void removeNote(TECNote note)
         {
-            SQLiteDB.Delete("TECNote", "NoteID", note.Guid);
+            SQLiteDB.Delete(NoteTable.TableName, NoteTable.NoteID.Name, note.Guid);
         }
 
         static private void removeExclusion(TECExclusion exclusion)
@@ -1216,22 +1216,22 @@ namespace EstimatingUtilitiesLibrary
         #region Remove Relations
         private static void removeSystemEquipmentRelation(TECEquipment equipment)
         {
-            SQLiteDB.Delete("TECSystemTECEquipment", "EquipmentID", equipment.Guid);
+            SQLiteDB.Delete("TECSystemTECEquipment", EquipmentTable.EquipmentID.Name, equipment.Guid);
         }
 
         private static void removeEquipmentSubScopeRelation(TECSubScope subScope)
         {
-            SQLiteDB.Delete("TECEquipmentTECSubScope", "SubScopeID", subScope.Guid);
+            SQLiteDB.Delete("TECEquipmentTECSubScope", SubScopeTable.SubScopeID.Name, subScope.Guid);
         }
 
         private static void removeSubScopeDeviceRelation(TECDevice device)
         {
-            SQLiteDB.Delete("TECSubScopeTECDevice", "DeviceID", device.Guid);
+            SQLiteDB.Delete("TECSubScopeTECDevice", DeviceTable.DeviceID.Name, device.Guid);
         }
 
         private static void removeSubScopePointRelation(TECPoint point)
         {
-            SQLiteDB.Delete("TECSubScopeTECPoint", "PointID", point.Guid);
+            SQLiteDB.Delete("TECSubScopeTECPoint", PointTable.PointID.Name, point.Guid);
         }
 
         private static void removeScopeBranchHierarchyRelation(TECScopeBranch branch)
@@ -1276,7 +1276,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 data.Add("SystemID", system.Guid.ToString());
-                data.Add("EquipmentID", equipment.Guid.ToString());
+                data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
                 data.Add("ScopeIndex", i.ToString());
 
                 if (!SQLiteDB.Replace("TECSystemTECEquipment", data))
@@ -1292,8 +1292,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSubScope subScope in equipment.SubScope)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("EquipmentID", equipment.Guid.ToString());
-                data.Add("SubScopeID", subScope.Guid.ToString());
+                data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
+                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
                 data.Add("ScopeIndex", i.ToString());
 
                 if (!SQLiteDB.Replace("TECEquipmentTECSubScope", data))
@@ -1309,8 +1309,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECDevice device in subScope.Devices)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("SubScopeID", subScope.Guid.ToString());
-                data.Add("DeviceID", device.Guid.ToString());
+                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+                data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
                 data.Add("Quantity", device.Quantity.ToString());
                 data.Add("ScopeIndex", i.ToString());
 
@@ -1327,8 +1327,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECPoint point in subScope.Points)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("SubScopeID", subScope.Guid.ToString());
-                data.Add("PointID", point.Guid.ToString());
+                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+                data.Add(PointTable.PointID.Name, point.Guid.ToString());
                 data.Add("ScopeIndex", i.ToString());
 
                 if (!SQLiteDB.Replace("TECSubScopeTECPoint", data))
@@ -1397,7 +1397,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in mainBranchDT.Rows)
             {
-                Guid scopeBranchID = new Guid(row["ScopeBranchID"].ToString());
+                Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
 
@@ -1426,7 +1426,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in childBranchDT.Rows)
             {
-                Guid childBranchID = new Guid(row["ScopeBranchID"].ToString());
+                Guid childBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
 
@@ -1495,7 +1495,7 @@ namespace EstimatingUtilitiesLibrary
             
             foreach (DataRow row in equipmentDT.Rows)
             {
-                Guid equipmentID = new Guid(row["EquipmentID"].ToString());
+                Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
                 string quantityString = row["Quantity"].ToString();
@@ -1540,7 +1540,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in subScopeDT.Rows)
             {
-                Guid subScopeID = new Guid(row["SubScopeID"].ToString());
+                Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
                 string quantityString = row["Quantity"].ToString();
@@ -1570,11 +1570,11 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
 
-            DataTable devicesDT = SQLiteDB.getDataFromTable("TECDevice");
+            DataTable devicesDT = SQLiteDB.getDataFromTable(DeviceTable.TableName);
 
             foreach (DataRow row in devicesDT.Rows)
             {
-                Guid deviceID = new Guid(row["DeviceID"].ToString());
+                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
                 string costString = row["Cost"].ToString();
@@ -1652,11 +1652,11 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in equipmentDT.Rows)
             {
-                Guid equipmentID = new Guid(row["EquipmentID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-                string budgetPriceString = row["BudgetPrice"].ToString();
+                Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
+                string name = row[EquipmentTable.Name.Name].ToString();
+                string description = row[EquipmentTable.Description.Name].ToString();
+                string quantityString = row[EquipmentTable.Quantity.Name].ToString();
+                string budgetPriceString = row[EquipmentTable.BudgetPrice.Name].ToString();
 
                 double budgetPrice;
                 if (!double.TryParse(budgetPriceString, out budgetPrice))
@@ -1697,10 +1697,10 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in subScopeDT.Rows)
             {
-                Guid subScopeID = new Guid(row["SubScopeID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
+                Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
+                string name = row[SubScopeTable.Name.Name].ToString();
+                string description = row[SubScopeTable.Description.Name].ToString();
+                string quantityString = row[SubScopeTable.Quantity.Name].ToString();
 
                 int quantity;
                 if (!int.TryParse(quantityString, out quantity))
@@ -1736,11 +1736,11 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in devicesDT.Rows)
             {
-                Guid deviceID = new Guid(row["DeviceID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string costString = row["Cost"].ToString();
-                string wire = row["Wire"].ToString();
+                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
+                string name = row[DeviceTable.Name.Name].ToString();
+                string description = row[DeviceTable.Description.Name].ToString();
+                string costString = row[DeviceTable.Cost.Name].ToString();
+                string wire = row[DeviceTable.Wire.Name].ToString();
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -1788,11 +1788,11 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in pointsDT.Rows)
             {
-                Guid pointID = new Guid(row["PointID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string type = row["Type"].ToString();
-                string quantityString = row["Quantity"].ToString();
+                Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
+                string name = row[PointTable.Name.Name].ToString();
+                string description = row[PointTable.Description.Name].ToString();
+                string type = row[PointTable.Type.Name].ToString();
+                string quantityString = row[PointTable.Quantity.Name].ToString();
 
                 int quantity;
                 if (!int.TryParse(quantityString, out quantity))
@@ -1845,11 +1845,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECNote> getNotes()
         {
             ObservableCollection<TECNote> notes = new ObservableCollection<TECNote>();
-            DataTable notesDT = SQLiteDB.getDataFromTable("TECNote");
+            DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
 
             foreach (DataRow row in notesDT.Rows)
             {
-                Guid noteID = new Guid(row["NoteID"].ToString());
+                Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
                 string noteText = row["NoteText"].ToString();
 
                 notes.Add(new TECNote(noteText, noteID));
