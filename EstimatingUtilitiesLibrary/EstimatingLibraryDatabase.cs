@@ -1427,8 +1427,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (DataRow row in childBranchDT.Rows)
             {
                 Guid childBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
+                string name = row[ScopeBranchTable.Name.Name].ToString();
+                string description = row[ScopeBranchTable.Description.Name].ToString();
 
                 ObservableCollection<TECScopeBranch> grandChildBranches = getChildBranches(childBranchID);
 
