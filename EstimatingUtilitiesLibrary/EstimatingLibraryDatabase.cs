@@ -332,12 +332,18 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is TECEquipment)
             {
                 addEquipment(tarObject as TECEquipment);
-                updateSystemEquipmentRelation(refObject as TECSystem);
+                if (refObject is TECSystem)
+                {
+                    updateSystemEquipmentRelation(refObject as TECSystem);
+                }
             }
             else if (tarObject is TECSubScope)
             {
                 addSubScope(tarObject as TECSubScope);
-                updateEquipmentSubScopeRelation(refObject as TECEquipment);
+                if (refObject is TECEquipment)
+                {
+                    updateEquipmentSubScopeRelation(refObject as TECEquipment);
+                }
             }
             else if (tarObject is TECDevice)
             {
@@ -2676,7 +2682,7 @@ namespace EstimatingUtilitiesLibrary
                 createTable(type);
             }
         }
-        static private void creatTableFromType(TableBase table)
+        static private void createTableFromType(TableBase table)
         {
             string tableName = "";
             List<TableField> primaryKey = new List<TableField>();
