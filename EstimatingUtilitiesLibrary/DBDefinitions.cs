@@ -16,7 +16,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField BidInfoID = new TableField("BidInfoID", "TEXT");
         public static TableField BidNumber = new TableField("BidNumber", "TEXT");
         public static TableField DueDate = new TableField("DueDate", "TEXT");
-        public static TableField SalesPerson = new TableField("Salesperson", "TEXT");
+        public static TableField Salesperson = new TableField("Salesperson", "TEXT");
         public static TableField Estimator = new TableField("Estimator", "TEXT");
 
         public static TableField PMCoef = new TableField("PMCoef", "REAL");

@@ -117,10 +117,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 SQLiteDB.overwriteFile();
             }
-            /*
-            createBidObjectTables();
-            createBidRelationTables();
-            */
+
             createAllBidTables();
 
             try
@@ -197,9 +194,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 SQLiteDB.overwriteFile();
             }
-
-            //createTemplateObjectTables();
-            //createTemplateRelationTables();
+            
             createAllTemplateTables();
 
             try
@@ -625,22 +620,22 @@ namespace EstimatingUtilitiesLibrary
         static private void addBidInfo(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DBVersion", Properties.Settings.Default.Version);
-            data.Add("BidInfoID", bid.InfoGuid.ToString());
-            data.Add("BidName", bid.Name);
-            data.Add("BidNumber", bid.BidNumber);
-            data.Add("DueDate", bid.DueDate.ToString(FMT));
-            data.Add("Salesperson", bid.Salesperson);
-            data.Add("Estimator", bid.Estimator);
+            data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+            data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
+            data.Add(BidInfoTable.BidName.Name, bid.Name);
+            data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
+            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(FMT));
+            data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
+            data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
 
-            data.Add("PMCoef", bid.Labor.PMCoef.ToString());
-            data.Add("ENGCoef", bid.Labor.ENGCoef.ToString());
-            data.Add("CommCoef", bid.Labor.CommCoef.ToString());
-            data.Add("SoftCoef", bid.Labor.SoftCoef.ToString());
-            data.Add("GraphCoef", bid.Labor.GraphCoef.ToString());
-            data.Add("ElectricalRate", bid.Labor.ElectricalRate.ToString());
+            data.Add(BidInfoTable.PMCoef.Name, bid.Labor.PMCoef.ToString());
+            data.Add(BidInfoTable.ENGCoef.Name, bid.Labor.ENGCoef.ToString());
+            data.Add(BidInfoTable.CommCoef.Name, bid.Labor.CommCoef.ToString());
+            data.Add(BidInfoTable.SoftCoef.Name, bid.Labor.SoftCoef.ToString());
+            data.Add(BidInfoTable.GraphCoef.Name, bid.Labor.GraphCoef.ToString());
+            data.Add(BidInfoTable.ElectricalRate.Name, bid.Labor.ElectricalRate.ToString());
 
-            if (!SQLiteDB.Insert("TECBidInfo", data))
+            if (!SQLiteDB.Insert(BidInfoTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECBidInfo table");
             }
@@ -703,13 +698,13 @@ namespace EstimatingUtilitiesLibrary
         static private void addEquipment(TECEquipment equipment)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("EquipmentID", equipment.Guid.ToString());
-            data.Add("Name", equipment.Name);
-            data.Add("Description", equipment.Description);
-            data.Add("Quantity", equipment.Quantity.ToString());
-            data.Add("BudgetPrice", equipment.BudgetPrice.ToString());
+            data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
+            data.Add(EquipmentTable.Name.Name, equipment.Name);
+            data.Add(EquipmentTable.Description.Name, equipment.Description);
+            data.Add(EquipmentTable.Quantity.Name, equipment.Quantity.ToString());
+            data.Add(EquipmentTable.BudgetPrice.Name, equipment.BudgetPrice.ToString());
 
-            if (!SQLiteDB.Insert("TECEquipment", data))
+            if (!SQLiteDB.Insert(EquipmentTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add equipment to TECEquipment table.");
             }
@@ -717,12 +712,12 @@ namespace EstimatingUtilitiesLibrary
         static private void addSubScope(TECSubScope subScope)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("SubScopeID", subScope.Guid.ToString());
-            data.Add("Name", subScope.Name);
-            data.Add("Description", subScope.Description);
-            data.Add("Quantity", subScope.Quantity.ToString());
+            data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+            data.Add(SubScopeTable.Name.Name, subScope.Name);
+            data.Add(SubScopeTable.Description.Name, subScope.Description);
+            data.Add(SubScopeTable.Quantity.Name, subScope.Quantity.ToString());
 
-            if (!SQLiteDB.Insert("TECSubScope", data))
+            if (!SQLiteDB.Insert(SubScopeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add subScope to TECSubScope table.");
             }
@@ -730,13 +725,13 @@ namespace EstimatingUtilitiesLibrary
         static private void addDevice(TECDevice device)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DeviceID", device.Guid.ToString());
-            data.Add("Name", device.Name);
-            data.Add("Description", device.Description);
-            data.Add("Cost", device.Cost.ToString());
-            data.Add("Wire", device.Wire);
+            data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceTable.Name.Name, device.Name);
+            data.Add(DeviceTable.Description.Name, device.Description);
+            data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
+            data.Add(DeviceTable.Wire.Name, device.Wire);
 
-            if (!SQLiteDB.Insert("TECDevice", data))
+            if (!SQLiteDB.Insert(DeviceTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add device to TECDevice table.");
             }
@@ -744,11 +739,11 @@ namespace EstimatingUtilitiesLibrary
         static private void addManufacturer(TECManufacturer manufacturer)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ManufacturerID", manufacturer.Guid.ToString());
-            data.Add("Name", manufacturer.Name);
-            data.Add("Multiplier", manufacturer.Multiplier.ToString());
+            data.Add(ManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
+            data.Add(ManufacturerTable.Name.Name, manufacturer.Name);
+            data.Add(ManufacturerTable.Multiplier.Name, manufacturer.Multiplier.ToString());
 
-            if (!SQLiteDB.Insert("TECManufacturer", data))
+            if (!SQLiteDB.Insert(ManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add manufacturer to TECManufacturer table.");
             }
@@ -756,13 +751,13 @@ namespace EstimatingUtilitiesLibrary
         static private void addPoint(TECPoint point)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("PointID", point.Guid.ToString());
-            data.Add("Name", point.Name);
-            data.Add("Description", point.Description);
-            data.Add("Type", point.Type.ToString());
-            data.Add("Quantity", point.Quantity.ToString());
+            data.Add(PointTable.PointID.Name, point.Guid.ToString());
+            data.Add(PointTable.Name.Name, point.Name);
+            data.Add(PointTable.Description.Name, point.Description);
+            data.Add(PointTable.Type.Name, point.Type.ToString());
+            data.Add(PointTable.Quantity.Name, point.Quantity.ToString());
 
-            if (!SQLiteDB.Insert("TECPoint", data))
+            if (!SQLiteDB.Insert(PointTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add point to TECPoint table.");
             }
@@ -770,11 +765,11 @@ namespace EstimatingUtilitiesLibrary
         static private void addScopeBranch(TECScopeBranch branch)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ScopeBranchID", branch.Guid.ToString());
-            data.Add("Name", branch.Name);
-            data.Add("Description", branch.Description);
+            data.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            data.Add(ScopeBranchTable.Name.Name, branch.Name);
+            data.Add(ScopeBranchTable.Description.Name, branch.Description);
 
-            if (!SQLiteDB.Insert("TECScopeBranch", data))
+            if (!SQLiteDB.Insert(ScopeBranchTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECScopeBranch table");
             }
@@ -784,10 +779,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECTag tag in tags)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("TagID", tag.Guid.ToString());
-                data.Add("TagString", tag.Text);
+                data.Add(TagTable.TagID.Name, tag.Guid.ToString());
+                data.Add(TagTable.TagString.Name, tag.Text);
 
-                if (!SQLiteDB.Insert("TECTag", data))
+                if (!SQLiteDB.Insert(TagTable.TableName, data))
                 {
                     Console.WriteLine("Error: Couldn't add tag to TECTag table.");
                 }
@@ -796,10 +791,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addNote(TECNote note)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("NoteID", note.Guid.ToString());
-            data.Add("NoteText", note.Text);
+            data.Add(NoteTable.NoteID.Name, note.Guid.ToString());
+            data.Add(NoteTable.NoteText.Name, note.Text);
 
-            if (!SQLiteDB.Insert("TECNote", data))
+            if (!SQLiteDB.Insert(NoteTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECNote table");
             }
@@ -807,10 +802,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addExclusion(TECExclusion exclusion)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ExclusionID", exclusion.Guid.ToString());
-            data.Add("ExclusionText", exclusion.Text);
+            data.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
+            data.Add(ExclusionTable.ExclusionText.Name, exclusion.Text);
 
-            if (!SQLiteDB.Insert("TECExclusion", data))
+            if (!SQLiteDB.Insert(ExclusionTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECExclusion table.");
             }
@@ -818,10 +813,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addDrawing(TECDrawing drawing)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DrawingID", drawing.Guid.ToString());
-            data.Add("Name", drawing.Name);
-            data.Add("Description", drawing.Description);
-            if (!SQLiteDB.Insert("TECDrawing", data))
+            data.Add(DrawingTable.DrawingID.Name, drawing.Guid.ToString());
+            data.Add(DrawingTable.Name.Name, drawing.Name);
+            data.Add(DrawingTable.Description.Name, drawing.Description);
+            if (!SQLiteDB.Insert(DrawingTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECDrawing table.");
             }
@@ -831,13 +826,13 @@ namespace EstimatingUtilitiesLibrary
             byte[] imageBytes = File.ReadAllBytes(page.Path);
 
             Dictionary<string, string> stringData = new Dictionary<string, string>();
-            stringData.Add("PageID", page.Guid.ToString());
-            stringData.Add("PageNum", page.PageNum.ToString());
+            stringData.Add(PageTable.PageID.Name, page.Guid.ToString());
+            stringData.Add(PageTable.PageNum.Name, page.PageNum.ToString());
 
             Dictionary<string, byte[]> byteData = new Dictionary<string, byte[]>();
-            byteData.Add("Image", imageBytes);
+            byteData.Add(PageTable.Image.Name, imageBytes);
 
-            if (!SQLiteDB.Insert("TECPage", stringData, byteData))
+            if (!SQLiteDB.Insert(PageTable.TableName, stringData, byteData))
             {
                 Console.WriteLine("Error: Couldn't add item to TECPageTable.");
             }
@@ -845,11 +840,11 @@ namespace EstimatingUtilitiesLibrary
         static private void addVisualScope(TECVisualScope visualScope)
         {
             Dictionary<string, string> vsData = new Dictionary<string, string>();
-            vsData.Add("VisualScopeID", visualScope.Guid.ToString());
-            vsData.Add("XPos", visualScope.X.ToString());
-            vsData.Add("YPos", visualScope.Y.ToString());
+            vsData.Add(VisualScopeScopeTable.VisualScopeID.Name, visualScope.Guid.ToString());
+            vsData.Add(VisualScopeTable.XPos.Name, visualScope.X.ToString());
+            vsData.Add(VisualScopeTable.YPos.Name, visualScope.Y.ToString());
 
-            if (!SQLiteDB.Insert("TECVisualScope", vsData))
+            if (!SQLiteDB.Insert(VisualScopeTable.TableName, vsData))
             {
                 Console.WriteLine("Error: Couldn't add item to TECVisualScopeTable.");
             }
@@ -857,10 +852,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addLocation(TECLocation location)
         {
             Dictionary<string, string> locData = new Dictionary<string, string>();
-            locData.Add("LocationID", location.Guid.ToString());
-            locData.Add("Name", location.Name.ToString());
+            locData.Add(LocationTable.LocationID.Name, location.Guid.ToString());
+            locData.Add(LocationTable.Name.Name, location.Name.ToString());
 
-            if (!SQLiteDB.Insert("TECLocation", locData))
+            if (!SQLiteDB.Insert(LocationTable.TableName, locData))
             {
                 Console.WriteLine("Error: Couldn't add item to TECLocationTable.");
             }
@@ -874,10 +869,10 @@ namespace EstimatingUtilitiesLibrary
         static private void addDeviceManufacturerRelation(TECDevice device, TECManufacturer manufacturer)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("DeviceID", device.Guid.ToString());
-            data.Add("ManufacturerID", manufacturer.Guid.ToString());
+            data.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
 
-            if (!SQLiteDB.Insert("TECDeviceTECManufacturer", data))
+            if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDeviceTECManufacturer table.");
             }
@@ -885,8 +880,8 @@ namespace EstimatingUtilitiesLibrary
         static private void addScopeTreeRelation(TECScopeBranch parentBranch, TECScopeBranch childBranch)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("ParentID", parentBranch.Guid.ToString());
-            data.Add("ChildID", childBranch.Guid.ToString());
+            data.Add(ScopeBranchHierarchyTable.ParentID.Name, parentBranch.Guid.ToString());
+            data.Add(ScopeBranchHierarchyTable.ChildID.Name, childBranch.Guid.ToString());
 
             if (!SQLiteDB.Insert("TECScopeBranchHierarchy", data))
             {
@@ -2037,9 +2032,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
         #endregion //Loading from DB Methods
-
         
-
         #region Generic Create Methods
         static private void createTableFromDefinition(TableBase table)
         {
@@ -2407,7 +2400,6 @@ namespace EstimatingUtilitiesLibrary
                     createTableFromDefinition(table);
                 }
                 
-                //checkTableFields(table, tableNames);
             }
         }
         static private List<string> getAllTableNames()
