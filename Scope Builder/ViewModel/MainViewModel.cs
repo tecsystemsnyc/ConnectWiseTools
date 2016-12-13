@@ -17,6 +17,7 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Reflection;
+using TECUserControlLibrary.ViewModelExtensions;
 
 namespace Scope_Builder.ViewModel
 {
@@ -35,23 +36,13 @@ namespace Scope_Builder.ViewModel
     public class MainViewModel : ViewModelBase, IDropTarget
     {
         #region Properties
+        #region VMExtensions
+        public ScopeDataGridExtension ScopeDataGrid { get; set; }
+        #endregion
+        
         private TECBid _bid;
         private TECTemplates _templates;
-        private TECSystem _selectedSystem;
-        private TECEquipment _selectedEquipment;
-        private TECSubScope _selectedSubScope;
-
-        private VisibilityModel _dataGridVisibilty;
-        public VisibilityModel DataGridVisibilty
-        {
-            get { return _dataGridVisibilty; }
-            set
-            {
-                _dataGridVisibilty = value;
-                RaisePropertyChanged("DataGridVisibilty");
-            }
-        }
-
+        
         private string bidDBFilePath;
         
         private bool saveSuccessful;
@@ -71,7 +62,6 @@ namespace Scope_Builder.ViewModel
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
         public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
-        public ICommand AddPointCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
@@ -123,35 +113,7 @@ namespace Scope_Builder.ViewModel
                 RaisePropertyChanged("Templates");
             }
         }
-
-        public TECSystem SelectedSystem
-        {
-            get { return _selectedSystem; }
-            set
-            {
-                _selectedSystem = value;
-                RaisePropertyChanged("SelectedSystem");
-            }
-        }
-        public TECEquipment SelectedEquipment
-        {
-            get { return _selectedEquipment; }
-            set
-            {
-                _selectedEquipment = value;
-                RaisePropertyChanged("SelectedEquipment");
-            }
-        }
-        public TECSubScope SelectedSubScope
-        {
-            get { return _selectedSubScope; }
-            set
-            {
-                _selectedSubScope = value;
-                RaisePropertyChanged("SelectedSubScope");
-            }
-        }
-
+        
         private TECLocation _selectedLocation;
         public TECLocation SelectedLocation
         {
@@ -163,31 +125,6 @@ namespace Scope_Builder.ViewModel
                 organizeByLocation();
             }
         }
-
-        public TECDevice SelectedDevice
-        {
-            get
-            {
-                return _selectedDevice;
-            }
-            set
-            {
-                _selectedDevice = value;
-                RaisePropertyChanged("SelectedDevice");
-            }
-        }
-        private TECDevice _selectedDevice;
-
-        public TECPoint SelectedPoint
-        {
-            get { return _selectedPoint; }
-            set
-            {
-                _selectedPoint = value;
-                RaisePropertyChanged("SelectedPoint");
-            }
-        }
-        private TECPoint _selectedPoint;
 
         private ObservableCollection<TECSystem> _systemItemsCollection;
         public ObservableCollection<TECSystem> SystemItemsCollection
@@ -317,63 +254,20 @@ namespace Scope_Builder.ViewModel
         public string Version { get; set; }
 
         private ChangeStack stack { get; set; }
-        #region Point Interface Properties
-        public string PointName
-        {
-            get { return _pointName; }
-            set
-            {
-                _pointName = value;
-                RaisePropertyChanged("PointName");
-            }
-        }
-        private string _pointName;
-
-        public string PointDescription
-        {
-            get { return _pointDescription; }
-            set
-            {
-                _pointDescription = value;
-                RaisePropertyChanged("PointDescription");
-            }
-        }
-        private string _pointDescription;
-
-        public PointTypes PointType
-        {
-            get { return _pointType; }
-            set
-            {
-                _pointType = value;
-                RaisePropertyChanged("PointType");
-            }
-        }
-        private PointTypes _pointType;
-
-        public int PointQuantity
-        {
-            get { return _pointQuantity; }
-            set
-            {
-                _pointQuantity = value;
-                RaisePropertyChanged("PointQuantity");
-            }
-        }
-        private int _pointQuantity;
-        #endregion //Point Interface Properties
+        
         #endregion
         
         #region Intitializer
         public MainViewModel()
         {
+            ScopeDataGrid = new ScopeDataGridExtension();
+
             if (ApplicationDeployment.IsNetworkDeployed)
             { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
             { Version = "Undeployed Version"; }
 
             Templates = new TECTemplates();
-            DataGridVisibilty = new VisibilityModel();
             setVisibility(0);
 
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -420,7 +314,6 @@ namespace Scope_Builder.ViewModel
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
             AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
-            AddPointCommand = new RelayCommand(AddPointExecute, AddPointCanExecute);
 
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
 
@@ -766,30 +659,6 @@ namespace Scope_Builder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
-
-        private void AddPointExecute()
-        {
-            TECPoint newPoint = new TECPoint();
-            newPoint.Name = PointName;
-            newPoint.Description = PointDescription;
-            newPoint.Type = PointType;
-            newPoint.Quantity = PointQuantity;
-            if (PointType != 0)
-            {
-                SelectedSubScope.Points.Add(newPoint);
-            }
-        }
-        private bool AddPointCanExecute()
-        {
-            if ((PointType != 0) && (PointName != ""))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion //Commands
 
         #region Helper Functions
@@ -964,7 +833,7 @@ namespace Scope_Builder.ViewModel
             switch (tIndex)
             {
                 case 0:
-                    DataGridVisibilty.ExpandSubScope = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.ExpandSubScope = Visibility.Visible;
                     break;
                 default:
                     break;

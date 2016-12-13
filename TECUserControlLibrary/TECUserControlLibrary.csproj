@@ -104,6 +104,7 @@
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
+    <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
     <Compile Include="ViewModels\DevicesPointsViewModel.cs" />
     <Compile Include="ViewModels\ScopeViewModelBase.cs" />
     <Compile Include="ViewModels\SystemsViewModel.cs" />
