@@ -60,7 +60,7 @@ namespace EstimatingUtilitiesLibrary
 
                 bid = getBidInfo();
                 bid.ScopeTree = getMainScopeBranches();
-                bid.Systems = getAllSystems();
+                bid.Systems = getAllSystemsInBid();
                 bid.DeviceCatalog = getAllDevices();
                 bid.ManufacturerCatalog = getAllManufacturers();
                 bid.Locations = getAllLocations();
@@ -320,11 +320,13 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (refObject is TECBid)
                 {
-                    updateSystems((refObject as TECBid).Systems);
+                    //Console.WriteLine("Num systems to update: " + (refObject as TECBid).Systems.Count);
+                    addSystem(tarObject as TECSystem);
+                    updateSystemIndexes((refObject as TECBid).Systems);
                 }
                 else if (refObject is TECTemplates)
                 {
-                    updateSystems((refObject as TECTemplates).SystemTemplates);
+                    addSystem(tarObject as TECSystem);
                 }
             }
             else if (tarObject is TECEquipment)
@@ -497,7 +499,7 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is ObservableCollection<TECSystem>)
             {
-                updateSystems(tarObject as ObservableCollection<TECSystem>);
+                updateSystemIndexes(tarObject as ObservableCollection<TECSystem>);
             }
             else if (tarObject is ObservableCollection<TECEquipment>)
             {
@@ -643,11 +645,12 @@ namespace EstimatingUtilitiesLibrary
 
         static private void addFullSystems(ObservableCollection<TECSystem> systems)
         {
-            updateSystems(systems);
+            updateSystemIndexes(systems);
             foreach (TECSystem system in systems)
             {
                 addTagsInScope(system.Tags, system.Guid);
                 addLocationInScope(system);
+                addSystem(system);
                 foreach (TECEquipment equip in system.Equipment)
                 {
                     addFullEquipment(equip);
@@ -694,7 +697,20 @@ namespace EstimatingUtilitiesLibrary
 
         #region Add Object Functions
 
-        
+        static private void addSystem(TECSystem system)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(SystemTable.SystemID.Name, system.Guid.ToString());
+            data.Add(SystemTable.Name.Name, system.Name);
+            data.Add(SystemTable.Description.Name, system.Description);
+            data.Add(SystemTable.Quantity.Name, system.Quantity.ToString());
+            data.Add(SystemTable.BudgetPrice.Name, system.BudgetPrice.ToString());
+
+            if (!SQLiteDB.Insert(SystemTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add system to TECSystem table.");
+            }
+        }
         static private void addEquipment(TECEquipment equipment)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1249,22 +1265,18 @@ namespace EstimatingUtilitiesLibrary
 
         #region Update Relations/Order
 
-        static private void updateSystems(ObservableCollection<TECSystem> systems)
+        static private void updateSystemIndexes(ObservableCollection<TECSystem> systems)
         {
             int i = 0;
             foreach (TECSystem system in systems)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("SystemID", system.Guid.ToString());
-                data.Add("Name", system.Name);
-                data.Add("Description", system.Description);
-                data.Add("Quantity", system.Quantity.ToString());
-                data.Add("BudgetPrice", system.BudgetPrice.ToString());
-                data.Add("ScopeIndex", i.ToString());
+                data.Add(SystemIndexTable.SystemID.Name, system.Guid.ToString());
+                data.Add(SystemIndexTable.Index.Name, i.ToString());
 
-                if (!SQLiteDB.Replace("TECSystem", data))
+                if (!SQLiteDB.Replace(SystemIndexTable.TableName, data))
                 {
-                    Console.WriteLine("Error: Couldn't add system to TECSystem table");
+                    Console.WriteLine("Error: Couldn't add system to TECSystemIndex table");
                 }
                 i++;
             }
@@ -1447,6 +1459,48 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
             string command = "select * from TECSystem order by ScopeIndex";
+
+            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
+
+            foreach (DataRow row in systemsDT.Rows)
+            {
+                Guid systemID = new Guid(row["SystemID"].ToString());
+                string name = row["Name"].ToString();
+                string description = row["Description"].ToString();
+                string quantityString = row["Quantity"].ToString();
+                string budgetPriceString = row["BudgetPrice"].ToString();
+
+                int quantity;
+                if (!int.TryParse(quantityString, out quantity))
+                {
+                    quantity = 1;
+                    Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
+                }
+
+                double budgetPrice;
+                if (!double.TryParse(budgetPriceString, out budgetPrice))
+                {
+                    budgetPrice = -1;
+                    Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
+                }
+
+                ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
+
+                TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
+
+                system.Quantity = quantity;
+                system.Tags = getTagsInScope(systemID);
+
+                systems.Add(system);
+            }
+            return systems;
+        }
+
+        static private ObservableCollection<TECSystem> getAllSystemsInBid()
+        {
+            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+
+            string command = "select * from (TECSystem inner join TECSystemIndex on (TECSystem.SystemID = TECSystemIndex.SystemID)) order by ScopeIndex";
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
