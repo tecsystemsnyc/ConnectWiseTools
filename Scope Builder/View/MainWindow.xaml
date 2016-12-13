@@ -173,7 +173,7 @@
                 
                 <TabItem Header="Systems">
                     <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
-                                             ViewModel="{Binding ScopeDataGrid}"/>
+                                             ViewModel="{Binding ElementName=Window, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="By Location">
                     <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"

@@ -30,7 +30,7 @@
                Content="Points"/>
         <local:DevicesGridControl Grid.Row="1" Margin="5"
                                   DevicesSource="{Binding Path=DevicesSource}"
-                                  ViewModel="{Binding ElementName=parent, Path=ViewModel}">
+                                  ViewModel="{Binding Path=ViewModel}">
         </local:DevicesGridControl>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -63,7 +63,7 @@
                       Margin="0,1,5,1"/>
             <Label Content="Quantity:" Grid.Column="2" Grid.Row="1"/>
             <Button Content="Add Point" Grid.Row="2" Grid.ColumnSpan="4" Margin="5,2,5,2"
-                    Command="{Binding ViewModel.AddPointCommand}"/>
+                    Command="{Binding Path=ViewModel.AddPointCommand}"/>
             <TextBox Text="{Binding ElementName=parent, Path=ViewModel.PointQuantity}"
                      Grid.Column="3" Grid.Row="1"
                      Margin="0,1,5,1"/>

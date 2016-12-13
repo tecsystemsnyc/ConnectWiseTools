@@ -22,7 +22,7 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=SystemsSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">
             
@@ -80,7 +80,7 @@
                         </i:Interaction.Behaviors>
                         <Label Content="Equipment" FontSize="10"/>
                         <local:EquipmentGridControl EquipmentSource="{Binding Equipment}"
-                                                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                    ViewModel="{Binding Path=ViewModel}"
                                                     Margin="30, 0, 0, 0"/>
                     </StackPanel>
                 </DataTemplate>

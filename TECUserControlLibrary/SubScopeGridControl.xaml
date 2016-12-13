@@ -51,7 +51,7 @@
                             <Label Content="Devices and IO" FontSize="10"/>
                             <local:DevicesPointsControl DevicesSource="{Binding Devices}"
                                                 PointsSource="{Binding Points}"
-                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                ViewModel="{Binding Path=ViewModel}"
                                                 Margin="30, 0, 0, 0"/>
                      </StackPanel>
                 </DataTemplate>
