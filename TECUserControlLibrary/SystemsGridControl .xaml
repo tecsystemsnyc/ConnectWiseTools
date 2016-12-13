@@ -80,7 +80,7 @@
                         </i:Interaction.Behaviors>
                         <Label Content="Equipment" FontSize="10"/>
                         <local:EquipmentGridControl EquipmentSource="{Binding Equipment}"
-                                                    ViewModel="{Binding Path=ViewModel}"
+                                                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                     Margin="30, 0, 0, 0"/>
                     </StackPanel>
                 </DataTemplate>

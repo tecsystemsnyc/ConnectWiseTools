@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,10 +12,9 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModelExtensions
 {
-    public class ScopeDataGridExtension : ViewModelBase
+    public class ScopeDataGridExtension : ViewModelBase, IDropTarget
     {
         #region Properties
-
         private VisibilityModel _dataGridVisibilty;
         public VisibilityModel DataGridVisibilty
         {
@@ -25,6 +25,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DataGridVisibilty");
             }
         }
+
+        #region Delegates
+        public Action<IDropInfo> DragHandler;
+        public Action<IDropInfo> DropHandler;
+        #endregion
 
         #region Selected ScopeProperties
         private TECSystem _selectedSystem;
@@ -171,6 +176,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         #endregion //Commands
 
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DragHandler(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            DropHandler(dropInfo);
+        }
         #endregion
     }
 }

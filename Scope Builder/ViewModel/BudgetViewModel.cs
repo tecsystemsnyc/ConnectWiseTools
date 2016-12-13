@@ -19,7 +19,6 @@ namespace Scope_Builder.ViewModel
     /// </summary>
     public class BudgetViewModel : ViewModelBase
     {
-
         private double _manualAdjustmentAmount;
 
         private ObservableCollection<TECSystem> _systems;
