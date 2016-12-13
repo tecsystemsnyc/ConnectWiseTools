@@ -832,6 +832,7 @@ namespace Scope_Builder.ViewModel
         private void setupLocationDataGrid()
         {
             LocationDataGrid = new LocationDataGridExtension();
+            LocationDataGrid.Bid = Bid;
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
         }
