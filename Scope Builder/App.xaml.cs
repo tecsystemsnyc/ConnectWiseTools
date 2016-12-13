@@ -32,6 +32,7 @@ namespace Scope_Builder
             if (e.Args.Length == 1)
             {
                 Scope_Builder.Properties.Settings.Default.StartupFile = e.Args[0];
+                MessageBox.Show("Anything");
             }
         }
     }
