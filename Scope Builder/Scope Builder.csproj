@@ -256,11 +256,6 @@
     <Resource Include="scopeBuilderLogo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <FileAssociation Include=".bdb">
       <Visible>False</Visible>
       <Description>Bid Database</Description>

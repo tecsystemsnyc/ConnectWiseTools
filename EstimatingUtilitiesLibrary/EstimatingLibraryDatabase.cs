@@ -1504,6 +1504,12 @@ namespace EstimatingUtilitiesLibrary
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
+            if (systemsDT.Rows.Count < 1)
+            {
+                command = "select * from TECSystem";
+                systemsDT = SQLiteDB.getDataFromCommand(command);
+            }
+
             foreach (DataRow row in systemsDT.Rows)
             {
                 Guid systemID = new Guid(row["SystemID"].ToString());
