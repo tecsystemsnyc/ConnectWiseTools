@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Scope_Builder.ViewModel
+namespace TECUserControlLibrary.ViewModel
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

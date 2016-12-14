@@ -59,6 +59,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -105,10 +107,13 @@
     </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
-    <Compile Include="ViewModels\DevicesPointsViewModel.cs" />
-    <Compile Include="ViewModels\ScopeViewModelBase.cs" />
-    <Compile Include="ViewModels\SystemsViewModel.cs" />
+    <Compile Include="ViewModels\BidEditorBase.cs" />
+    <Compile Include="ViewModels\BudgetViewModel.cs" />
+    <Compile Include="View\BudgetWindow.xaml.cs">
+      <DependentUpon>BudgetWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VisibilityModel.cs" />
     <Page Include="ByLocationControl.xaml">
       <SubType>Designer</SubType>
@@ -219,6 +224,10 @@
     <Compile Include="TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\BudgetWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -258,6 +267,9 @@
       <Project>{51a81226-21be-421f-846e-84bff88b0f0f}</Project>
       <Name>EstimatingUtilitiesLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

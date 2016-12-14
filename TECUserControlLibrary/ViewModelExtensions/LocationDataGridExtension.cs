@@ -11,21 +11,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
     public class LocationDataGridExtension : ScopeDataGridExtension
     {
         #region Properties
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                // Call OnPropertyChanged whenever the property is updated
-                RaisePropertyChanged("Bid");
-                populateLocationSelections();
-                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
-            }
-        }
-
-
         private TECLocation _selectedLocation;
         public TECLocation SelectedLocation
         {
@@ -72,28 +57,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECLocation> _locationSelections;
-        public ObservableCollection<TECLocation> LocationSelections
-        {
-            get { return _locationSelections; }
-            set
-            {
-                _locationSelections = value;
-                RaisePropertyChanged("LocationSelections");
-            }
-        }
         #endregion
-        public LocationDataGridExtension()
+        public LocationDataGridExtension(TECBid bid) : base(bid)
         {
 
         }
         
         #region Methods
-        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            populateLocationSelections();
-        }
-
+        
         private void organizeByLocation()
         {
             SystemsByLocation = new ObservableCollection<TECSystem>();
@@ -120,17 +91,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                     }
                 }
-            }
-        }
-
-        private void populateLocationSelections()
-        {
-            LocationSelections = new ObservableCollection<TECLocation>();
-
-            LocationSelections.Add(new TECLocation("None"));
-            foreach (TECLocation location in Bid.Locations)
-            {
-                LocationSelections.Add(location);
             }
         }
         #endregion

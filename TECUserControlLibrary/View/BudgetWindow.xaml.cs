@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Scope_Builder.View
+namespace TECUserControlLibrary.View
 {
     /// <summary>
     /// Interaction logic for BudgetWindow.xaml

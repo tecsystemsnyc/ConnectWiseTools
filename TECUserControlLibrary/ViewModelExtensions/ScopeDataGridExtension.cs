@@ -4,10 +4,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModelExtensions
@@ -23,6 +25,31 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _dataGridVisibilty = value;
                 RaisePropertyChanged("DataGridVisibilty");
+            }
+        }
+
+        private TECBid _bid;
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                _bid = value;
+                // Call OnPropertyChanged whenever the property is updated
+                RaisePropertyChanged("Bid");
+                populateLocationSelections();
+                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
+            }
+        }
+        
+        private ObservableCollection<TECLocation> _locationSelections;
+        public ObservableCollection<TECLocation> LocationSelections
+        {
+            get { return _locationSelections; }
+            set
+            {
+                _locationSelections = value;
+                RaisePropertyChanged("LocationSelections");
             }
         }
 
@@ -136,16 +163,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         #region Command Properties
         public ICommand AddPointCommand { get; private set; }
+
+        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
+
         #endregion
 
         #endregion
-        
+
         #region Intializers
-        public ScopeDataGridExtension()
+        public ScopeDataGridExtension(TECBid bid)
         {
+            Bid = bid;
             DataGridVisibilty = new VisibilityModel();
 
             AddPointCommand = new RelayCommand(AddPointExecute, AddPointCanExecute);
+            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
         }
         #endregion
 
@@ -174,7 +206,30 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        
+        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
+        {
+            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
+            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
+        }
         #endregion //Commands
+
+        public void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            populateLocationSelections();
+        }
+
+
+        public void populateLocationSelections()
+        {
+            LocationSelections = new ObservableCollection<TECLocation>();
+
+            LocationSelections.Add(new TECLocation("None"));
+            foreach (TECLocation location in Bid.Locations)
+            {
+                LocationSelections.Add(location);
+            }
+        }
 
         public void DragOver(IDropInfo dropInfo)
         {

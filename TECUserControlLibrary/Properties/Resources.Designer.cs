@@ -59,5 +59,15 @@ namespace TECUserControlLibrary.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TECLogo {
+            get {
+                object obj = ResourceManager.GetObject("TECLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

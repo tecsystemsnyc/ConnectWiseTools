@@ -15,7 +15,7 @@
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight.Ioc;
-
+using TECUserControlLibrary.ViewModel;
 
 namespace Scope_Builder.ViewModel
 {

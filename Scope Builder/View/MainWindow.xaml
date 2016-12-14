@@ -157,13 +157,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SearchString}"/>
+                <TextBox Text="{Binding ScopeCollection.SearchString}"/>
             <Button Grid.Column="1"
                     Content="Search"
-                    Command="{Binding SearchCollectionCommand}"/>
+                    Command="{Binding ScopeCollection.SearchCollectionCommand}"/>
             <Button Grid.Column="2"
                     Content="Done"
-                    Command="{Binding EndSearchCommand}"/>
+                    Command="{Binding ScopeCollection.EndSearchCommand}"/>
         </Grid>
             <TabControl Grid.Row="1"
                     Grid.Column="1"
@@ -240,18 +240,18 @@
                 </Grid.RowDefinitions>
 
                 <TabControl Margin="5,5,5,5"
-                SelectedIndex="{Binding LeftTabIndex}">
+                SelectedIndex="{Binding ScopeCollection.TabIndex}">
                     <TabItem Header="Sys">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding SystemItemsCollection}"/>
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.SystemItemsCollection}"/>
                     </TabItem>
                     <TabItem Header="Equip">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding EquipmentItemsCollection}"/>
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.EquipmentItemsCollection}"/>
                     </TabItem>
                     <TabItem Header="Points">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding SubScopeItemsCollection}"/>
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.SubScopeItemsCollection}"/>
                     </TabItem>
                     <TabItem Header="Devices">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding Templates.DeviceCatalog}"/>
+                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.DevicesItemsCollection}"/>
                     </TabItem>
                 </TabControl>
             </Grid>
