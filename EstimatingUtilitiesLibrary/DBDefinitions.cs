@@ -32,6 +32,15 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+
+    public class TemplatesInfoTable : TableBase
+    {
+        public static new string TableName = "TECTemplatesInfo";
+
+        public static TableField DBVersion = new TableField("DBVersion", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>();
+    }
     public class NoteTable : TableBase
     {
         public static new string TableName = "TECNote";

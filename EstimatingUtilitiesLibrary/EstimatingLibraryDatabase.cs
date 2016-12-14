@@ -88,6 +88,8 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB = new SQLiteDatabase(path);
 
+            checkAndUpdateDB();
+
             TECTemplates templates = new TECTemplates();
 
             try
