@@ -27,10 +27,8 @@ namespace EstimateBuilder.ViewModel
     /// </summary>
     public class MainViewModel : BidEditorBase
     {
-
         public MainViewModel()
         {
-
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;
@@ -41,8 +39,7 @@ namespace EstimateBuilder.ViewModel
             }
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
-
-
+            
             pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
@@ -50,16 +47,18 @@ namespace EstimateBuilder.ViewModel
             MessengerInstance.Register<NotificationMessage>(this, processNotification);
             MessengerInstance.Register<NotificationMessage<String>>(this, processNotificationInformation);
 
+            BidSet += () =>
+            {
+                MessengerInstance.Send(new GenericMessage<TECBid>(Bid));
+            };
         }
 
         #region Properties
-        //Potentially needed in bid setter: MessengerInstance.Send(new GenericMessage<TECBid>(Bid));
-
+        //Potentially needed in bid setter: 
 
         #region Command Properties
         public ICommand LoadDrawingCommand { get; private set; }
-
-
+        
         #endregion Command Properties
         #endregion Properties
 
@@ -174,7 +173,6 @@ namespace EstimateBuilder.ViewModel
                 MessengerInstance.Send<GenericMessage<TECBid>>(new GenericMessage<TECBid>(Bid));
             }
         }
-
         private void processNotificationInformation(NotificationMessage<String> message)
         {
             if (message.Notification == "StatusUpdate")
@@ -182,8 +180,6 @@ namespace EstimateBuilder.ViewModel
                 CurrentStatusText = message.Content;
             }
         }
-        
-
         #endregion Methods
     }
 }

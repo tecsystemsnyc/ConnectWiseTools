@@ -702,8 +702,13 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.EquipmentTemplates.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            var expected = new ObservableCollection<TECEquipment>();
+            foreach (TECEquipment item in Template.EquipmentTemplates)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
+            testStack.Redo();
 
             //assert
             ObservableCollection<TECEquipment> actual = Template.EquipmentTemplates;
@@ -716,18 +721,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Template.SubScopeTemplates)
-            {
-                expected.Add(item);
-            }
             TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.SubScopeTemplates.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            var expected = new ObservableCollection<TECSubScope>();
+            foreach (TECSubScope item in Template.SubScopeTemplates)
+            {
+                expected.Add(item);
+            }
             testStack.Undo();
+            testStack.Redo();
 
             //assert
             ObservableCollection<TECSubScope> actual = Template.SubScopeTemplates;
