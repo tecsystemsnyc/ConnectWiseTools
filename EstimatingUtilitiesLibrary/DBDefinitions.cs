@@ -194,7 +194,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECPage";
 
         public static TableField PageID = new TableField("PageID", "TEXT");
-        public static TableField Image = new TableField("Image", "TEXT");
+        public static TableField Image = new TableField("Image", "BLOB");
         public static TableField PageNum = new TableField("PageNum", "INTEGER");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
