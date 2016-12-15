@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -38,6 +39,38 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private int _tabIndex;
 
+        public string TagName
+        {
+            get { return _tagName; }
+            set
+            {
+                _tagName = value;
+                RaisePropertyChanged("TagName");
+            }
+        }
+        private string _tagName;
+
+        private string _manufacturerName;
+        public string ManufacturerName
+        {
+            get { return _manufacturerName; }
+            set
+            {
+                _manufacturerName = value;
+                RaisePropertyChanged("ManufacturerName");
+            }
+        }
+
+        private double _manufacturerMultiplier;
+        public double ManufacturerMultiplier
+        {
+            get { return _manufacturerMultiplier; }
+            set
+            {
+                _manufacturerMultiplier = value;
+                RaisePropertyChanged("ManufacturerMultiplier");
+            }
+        }
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -46,8 +79,77 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Commands
         public ICommand SearchCollectionCommand { get; private set; }
         public ICommand EndSearchCommand { get; private set; }
+        public ICommand AddTagCommand { get; private set; }
 
         #endregion
+
+        #region Visibility Properties
+        public Visibility SystemsVisibility
+        {
+            get { return _SystemsVisibility; }
+            set
+            {
+                _SystemsVisibility = value;
+                RaisePropertyChanged("SystemsVisibility");
+            }
+        }
+        private Visibility _SystemsVisibility;
+
+        public Visibility EquipmentVisibility
+        {
+            get { return _EquipmentVisibility; }
+            set
+            {
+                _EquipmentVisibility = value;
+                RaisePropertyChanged("EquipmentVisibility");
+            }
+        }
+        private Visibility _EquipmentVisibility;
+
+        public Visibility SubScopeVisibility
+        {
+            get { return _SubScopeVisibility; }
+            set
+            {
+                _SubScopeVisibility = value;
+                RaisePropertyChanged("SubScopeVisibility");
+            }
+        }
+        private Visibility _SubScopeVisibility;
+
+        public Visibility DevicesVisibility
+        {
+            get { return _DevicesVisibility; }
+            set
+            {
+                _DevicesVisibility = value;
+                RaisePropertyChanged("DevicesVisibility");
+            }
+        }
+        private Visibility _DevicesVisibility;
+
+        public Visibility DevicesEditVisibility
+        {
+            get { return _DevicesEditVisibility; }
+            set
+            {
+                _DevicesEditVisibility = value;
+                RaisePropertyChanged("DevicesEditVisibility");
+            }
+        }
+        private Visibility _DevicesEditVisibility;
+
+        public Visibility ManufacturerVisibility
+        {
+            get { return _ManufacturerVisibility; }
+            set
+            {
+                _ManufacturerVisibility = value;
+                RaisePropertyChanged("ManufacturerVisibility");
+            }
+        }
+        private Visibility _ManufacturerVisibility;
+        #endregion //Visibility Properties
 
         #region Scope Collections
         private ObservableCollection<TECSystem> _systemItemsCollection;
@@ -113,9 +215,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Intializers
         public ScopeCollectionExtension(TECTemplates templates)
         {
-
+            Templates = templates;
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
+            AddTagCommand = new RelayCommand(AddTagExecute);
 
             populateItemsCollections();
         }
@@ -127,6 +230,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void SearchCollectionExecute()
         {
+            Console.WriteLine("here");
             if (SearchString != null)
             {
                 switch (TabIndex)
@@ -191,16 +295,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 }
             }
         }
-
         private void EndSearchExecute()
         {
             populateItemsCollections();
             SearchString = "";
         }
+        private void AddTagExecute()
+        {
+            Console.WriteLine("here");
+            TECTag newTag = new TECTag();
+            newTag.Text = TagName;
+            Templates.Tags.Add(newTag);
+        }
+        private void AddManufacturerExecute()
+        {
+            TECManufacturer newMan = new TECManufacturer(ManufacturerName, ManufacturerMultiplier);
+            Templates.ManufacturerCatalog.Add(newMan);
+        }
 
         #endregion
 
-        private void populateItemsCollections()
+        public void populateItemsCollections()
         {
             SystemItemsCollection = Templates.SystemTemplates;
             EquipmentItemsCollection = Templates.EquipmentTemplates;

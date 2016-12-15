@@ -21,7 +21,7 @@
         <TabControl Grid.Column="4"
                     Grid.Row="0"
                     Grid.RowSpan="2"
-                    SelectedIndex="{Binding Path=Index, Converter={cnvt:EnumerationToIntegerConverter}}"
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:EnumerationToIntegerConverter}}"
                     Background="{DynamicResource SectionBackgroundBrush}">
             <!--System Edit-->
             <TabItem Visibility="Collapsed">

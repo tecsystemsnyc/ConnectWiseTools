@@ -89,30 +89,7 @@ namespace EstimateBuilder
                 RaisePropertyChanged("SearchButtonText");
             }
         }
-
-        private string _manufacturerName;
-        public string ManufacturerName
-        {
-            get { return _manufacturerName; }
-            set
-            {
-                _manufacturerName = value;
-                RaisePropertyChanged("ManufacturerName");
-            }
-        }
-
-        private double _manufacturerMultiplier;
-        public double ManufacturerMultiplier
-        {
-            get { return _manufacturerMultiplier; }
-            set
-            {
-                _manufacturerMultiplier = value;
-                RaisePropertyChanged("ManufacturerMultiplier");
-            }
-        }
-
-
+        
         public ScopeEditorViewModelData()
         {
             SystemItemsCollection = new ObservableCollection<TECSystem>();

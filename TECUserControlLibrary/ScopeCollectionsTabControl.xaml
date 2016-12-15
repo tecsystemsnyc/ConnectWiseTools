@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="TECUserControlLibrary.ScopeCollectionsTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Path=ViewModel.SearchString}"/>
+            <Button Grid.Column="1"
+                    Content="Search"
+                    Command="{Binding Path=ViewModel.SearchCollectionCommand}"/>
+            <Button Grid.Column="2"
+                    Content="Done"
+                    Command="{Binding Path=ViewModel.EndSearchCommand}"/>
+        </Grid>
+        <TabControl Grid.Row="1"
+                    Background="{DynamicResource SectionBackgroundBrush}"
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex}">
+            <TabItem Header="Sys"
+                Visibility="{Binding Path=ViewModel.SystemsVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Equip"
+                 Visibility="{Binding Path=ViewModel.EquipmentVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.EquipmentItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Points"
+                 Visibility="{Binding Path=ViewModel.SubScopeVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SubScopeItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Dev"
+                     Visibility="{Binding Path=ViewModel.DevicesVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.DevicesItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Tags"
+                     Visibility="{Binding Path=ViewModel.TagsVisibility}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Name:"/>
+                    <TextBox Text="{Binding Path=ViewModel.TagName}"
+                             Grid.Column="1"
+                             VerticalAlignment="Top"
+                             Margin="5"/>
+                    <Button Content="Add"
+                            Grid.ColumnSpan="2" 
+                            Grid.Row="1"
+                            Command="{Binding Path=ViewModel.AddTagCommand}"
+                                Margin="5"/>
+                    <local:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
+                                           Grid.Row="2" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

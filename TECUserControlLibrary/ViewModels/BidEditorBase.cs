@@ -111,7 +111,6 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         public BidEditorBase()
         {
-            Console.WriteLine("Parent");
             CurrentStatusText = "Loading...";
 
             setupCommands();
@@ -125,6 +124,8 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
+
+        #region Setup
         private void setupCommands()
         {
             NewCommand = new RelayCommand(NewExecute);
@@ -137,10 +138,9 @@ namespace TECUserControlLibrary.ViewModels
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
-            
+
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
-        #region Helper Functions
         private void setupTemplates()
         {
             Templates = new TECTemplates();
@@ -183,6 +183,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             stack = new ChangeStack(Bid);
         }
+        #endregion
+
+        #region Helper Functions
+
         public void checkForOpenWith(string startupFile)
         {
             if (startupFile != "")

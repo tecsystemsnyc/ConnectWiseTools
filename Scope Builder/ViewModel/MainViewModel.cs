@@ -42,18 +42,6 @@ namespace Scope_Builder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
         #endregion
-        
-        public int DGTabIndex
-        {
-            get { return _dgTabIndex; }
-            set
-            {
-                _dgTabIndex = value;
-                RaisePropertyChanged("DGTabIndex");
-            }
-        }
-        private int _dgTabIndex;
-
         #endregion
 
         #region Fields
@@ -63,9 +51,9 @@ namespace Scope_Builder.ViewModel
         #region Intitializer
         public MainViewModel()
         {
-            Console.WriteLine("Child");
             setupScopeDataGrid();
             setupLocationDataGrid();
+            setupScopeCollection();
             getVersion();
 
             setVisibility(0);
@@ -75,14 +63,8 @@ namespace Scope_Builder.ViewModel
             documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
 
             checkForOpenWith(Properties.Settings.Default.StartupFile);
-
         }
         #endregion 
-        
-        #region Commands
-        
-       
-        #endregion //Commands
 
         #region Helper Functions
         private void setVisibility(int tIndex)
@@ -126,7 +108,7 @@ namespace Scope_Builder.ViewModel
             ScopeCollection.DropHandler += Drop;
         }
         #endregion
-
+        
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
