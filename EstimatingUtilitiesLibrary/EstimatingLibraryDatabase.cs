@@ -558,7 +558,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     removeSubScopeDeviceRelation(tarObject as TECDevice);
                 }
-                else if (refObject is TECBid)
+                else if (refObject is TECTemplates)
                 {
                     removeDevice(tarObject as TECDevice);
                 }

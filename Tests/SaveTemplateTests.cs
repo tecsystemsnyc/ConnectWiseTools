@@ -615,5 +615,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
         }
         #endregion Save Device
+
+
     }
 }
