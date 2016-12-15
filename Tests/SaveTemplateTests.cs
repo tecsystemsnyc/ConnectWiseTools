@@ -99,7 +99,7 @@ namespace Tests
 
         #region Edit System
         [TestMethod]
-        public void Save_Bid_System_Name()
+        public void Save_Templates_System_Name()
         {
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
@@ -123,7 +123,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_System_Description()
+        public void Save_Templates_System_Description()
         {
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
@@ -146,7 +146,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_System_Quantity()
+        public void Save_Templates_System_Quantity()
         {
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
@@ -169,7 +169,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_System_BudgetPrice()
+        public void Save_Templates_System_BudgetPrice()
         {
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
@@ -250,7 +250,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_Equipment_Name()
+        public void Save_Templates_Equipment_Name()
         {
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
@@ -274,7 +274,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_Equipment_Description()
+        public void Save_Templates_Equipment_Description()
         {
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
@@ -297,7 +297,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_Equipment_Quantity()
+        public void Save_Templates_Equipment_Quantity()
         {
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
@@ -320,7 +320,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_Equipment_BudgetPrice()
+        public void Save_Templates_Equipment_BudgetPrice()
         {
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
@@ -399,7 +399,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_SubScope_Name()
+        public void Save_Templates_SubScope_Name()
         {
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
@@ -423,7 +423,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_SubScope_Description()
+        public void Save_Templates_SubScope_Description()
         {
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
@@ -446,7 +446,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_SubScope_Quantity()
+        public void Save_Templates_SubScope_Quantity()
         {
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];

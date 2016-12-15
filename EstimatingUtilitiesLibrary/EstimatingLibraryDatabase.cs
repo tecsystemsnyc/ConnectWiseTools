@@ -88,6 +88,8 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB = new SQLiteDatabase(path);
 
+            checkAndUpdateDB();
+
             TECTemplates templates = new TECTemplates();
 
             try
@@ -1503,6 +1505,12 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from (TECSystem inner join TECSystemIndex on (TECSystem.SystemID = TECSystemIndex.SystemID)) order by ScopeIndex";
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
+
+            if (systemsDT.Rows.Count < 1)
+            {
+                command = "select * from TECSystem";
+                systemsDT = SQLiteDB.getDataFromCommand(command);
+            }
 
             foreach (DataRow row in systemsDT.Rows)
             {
