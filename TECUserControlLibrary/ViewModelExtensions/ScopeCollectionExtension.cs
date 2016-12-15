@@ -80,6 +80,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand SearchCollectionCommand { get; private set; }
         public ICommand EndSearchCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
+        public ICommand AddDeviceCommand { get; private set; }
+        public ICommand AddManufacturerCommand { get; private set; }
 
         #endregion
 
@@ -149,7 +151,98 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _ManufacturerVisibility;
+
+        public Visibility TagsVisibility
+        {
+            get { return _tagsVisibility; }
+            set
+            {
+                _tagsVisibility = value;
+                RaisePropertyChanged("TagsVisibility");
+            }
+        }
+        private Visibility _tagsVisibility;
         #endregion //Visibility Properties
+
+        #region Device Interface Properties
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set
+            {
+                _deviceName = value;
+                RaisePropertyChanged("DeviceName");
+            }
+        }
+        private string _deviceName;
+
+        public string DeviceDescription
+        {
+            get { return _deviceDescription; }
+            set
+            {
+                _deviceDescription = value;
+                RaisePropertyChanged("DeviceDescription");
+            }
+        }
+        private string _deviceDescription;
+
+
+        public double DeviceCost
+        {
+            get { return _deviceCost; }
+            set
+            {
+                _deviceCost = value;
+                RaisePropertyChanged("DeviceCost");
+            }
+        }
+        private double _deviceCost;
+
+        public string DeviceWire
+        {
+            get { return _deviceWire; }
+            set
+            {
+                _deviceWire = value;
+                RaisePropertyChanged("DeviceWire");
+            }
+        }
+        private string _deviceWire;
+
+        public string DeviceButtonContent
+        {
+            get { return _deviceButtonContent; }
+            set
+            {
+                _deviceButtonContent = value;
+                RaisePropertyChanged("DeviceButtonContent");
+            }
+        }
+        private string _deviceButtonContent;
+
+        public TECManufacturer DeviceManufacturer
+        {
+            get { return _deviceManufacturer; }
+            set
+            {
+                _deviceManufacturer = value;
+                RaisePropertyChanged("DeviceManufacturer");
+            }
+        }
+        private TECManufacturer _deviceManufacturer;
+
+        public double DeviceMultiplier
+        {
+            get { return _deviceMultiplier; }
+            set
+            {
+                _deviceMultiplier = value;
+                RaisePropertyChanged("DeviceMultiplier");
+            }
+        }
+        private double _deviceMultiplier;
+        #endregion //Device Interface Properties
 
         #region Scope Collections
         private ObservableCollection<TECSystem> _systemItemsCollection;
@@ -219,6 +312,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             AddTagCommand = new RelayCommand(AddTagExecute);
+            AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
+            AddDeviceCommand = new RelayCommand(AddDeviceExecute);
 
             populateItemsCollections();
         }
@@ -312,6 +407,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             TECManufacturer newMan = new TECManufacturer(ManufacturerName, ManufacturerMultiplier);
             Templates.ManufacturerCatalog.Add(newMan);
         }
+        private void AddDeviceExecute()
+        {
+            Templates.DeviceCatalog.Add(new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceWire, DeviceManufacturer));
+            DeviceName = "";
+            DeviceDescription = "";
+            DeviceCost = 0;
+            DeviceWire = "";
+        }
 
         #endregion
 
@@ -320,6 +423,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SystemItemsCollection = Templates.SystemTemplates;
             EquipmentItemsCollection = Templates.EquipmentTemplates;
             SubScopeItemsCollection = Templates.SubScopeTemplates;
+            DevicesItemsCollection = Templates.DeviceCatalog;
         }
 
         public void DragOver(IDropInfo dropInfo)

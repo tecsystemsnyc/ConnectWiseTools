@@ -26,21 +26,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private EditIndex _TabIndex;
-
-        public GridIndex DGTabIndex
-        {
-            get
-            {
-                return _DGTabIndex;
-            }
-            set
-            {
-                _DGTabIndex = value;
-                RaisePropertyChanged("DGTabIndex");
-            }
-        }
-        private GridIndex _DGTabIndex;
-
+        
         public TECTemplates Templates
         {
             get { return _templates; }
@@ -51,18 +37,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECTemplates _templates;
-
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
-        private TECBid _bid;
-
+        
         public TECSystem SelectedSystem
         {
             get
@@ -150,10 +125,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
         public ICommand AddTagToSubScopeCommand { get; private set; }
+        public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToPointCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
         public ICommand DeleteSelectedSubScopeCommand { get; private set; }
+        public ICommand DeleteSelectedDeviceCommand { get; private set; }
         public ICommand DeleteSelectedPointCommand { get; private set; }
         #endregion
         #endregion
@@ -161,21 +138,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
         /// <summary>
         /// Initializes a new instance of the EditTabExtension class.
         /// </summary>
-        public EditTabExtension(TECBid bid, TECTemplates templates)
+        public EditTabExtension(TECTemplates templates)
         {
-            Bid = bid;
             Templates = templates;
+            setupCommands();
+        }
+
+        #region Methods
+
+        private void setupCommands()
+        {
             AddTagToSystemCommand = new RelayCommand(AddTagToSystemExecute);
             AddTagToEquipmentCommand = new RelayCommand(AddTagToEquipmentExecute);
             AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute);
+            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
+            DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
         }
-
-        #region Methods
         
         #region Commands
         private void AddTagToSystemExecute()
@@ -200,6 +183,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectedSubScope.Tags.Add(SelectedTag);
             }
         }
+        private void AddTagToDeviceExecute()
+        {
+            if (SelectedTag != null && SelectedDevice != null)
+            {
+                SelectedDevice.Tags.Add(SelectedTag);
+            }
+        }
         private void AddTagToPointExecute()
         {
             if (SelectedTag != null && SelectedPoint != null)
@@ -211,7 +201,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates.SystemTemplates.Remove(SelectedSystem);
             SelectedSystem = null;
-            resetEditTab();
         }
         private void DeleteSelectedEquipmentExecute()
         {
@@ -224,7 +213,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.EquipmentTemplates.Remove(SelectedEquipment);
             }
             SelectedEquipment = null;
-            resetEditTab();
         }
         private void DeleteSelectedSubScopeExecute()
         {
@@ -237,7 +225,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.SubScopeTemplates.Remove(SelectedSubScope);
             }
             SelectedSubScope = null;
-            resetEditTab();
+        }
+        private void DeleteSelectedDeviceExecute()
+        {
+            if (SelectedSubScope != null)
+            {
+                SelectedSubScope.Devices.Remove(SelectedDevice);
+            }
+            else
+            {
+                Templates.DeviceCatalog.Remove(SelectedDevice);
+            }
+            SelectedDevice = null;
         }
         private void DeleteSelectedPointExecute()
         {
@@ -246,15 +245,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectedSubScope.Points.Remove(SelectedPoint);
             }
             SelectedPoint = null;
-            resetEditTab();
         }
         #endregion
-
-        public void resetEditTab()
-        {
-            TabIndex = (EditIndex)DGTabIndex;
-        }
-
+        
         #region Events
         public void updateSelection(object selection)
         {
@@ -269,6 +262,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECSubScope)
             {
                 SelectedSubScope = selection as TECSubScope;
+            }
+            else if (selection is TECDevice)
+            {
+                SelectedDevice = selection as TECDevice;
+            }
+            else if (selection is TECPoint)
+            {
+                SelectedPoint = selection as TECPoint;
             }
         }
         #endregion

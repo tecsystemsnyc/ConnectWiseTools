@@ -18,97 +18,34 @@ using System.Reflection;
 using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
+using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TemplateBuilder.ViewModel
 {
-
     public class MainViewModel : ViewModelBase, IDropTarget
     {
         //Initializer
         public MainViewModel()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            }
+            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
-            {
-                Version = "Undeployed Version";
-            }
-
-            Templates = new TECTemplates();
-            ViewData = new MainViewModelData();
-            DataGridVisibilty = new VisibilityModel();
-
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
-
-            if (!Directory.Exists(resourcesFolder))
-            {
-                Directory.CreateDirectory(resourcesFolder);
-            }
-
-            defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
-
-            if (File.Exists(defaultTemplatesPath))
-            {
-                if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-                {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                }
-                else
-                {
-                    string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
-                    MessageBox.Show(message);
-                }
-            }
-            else
-            {
-                string message = "No template database found. Reload templates to add one.";
-                MessageBox.Show(message);
-            }
-
-            populateItemsCollections();
-
-            LoadCommand = new RelayCommand(LoadExecute);
-            SaveCommand = new RelayCommand(SaveExecute);
-            SaveToCommand = new RelayCommand(SaveToExecute);
-            AddDeviceCommand = new RelayCommand(AddDeviceExecute);
-            AddTagCommand = new RelayCommand(AddTagExecute);
-            AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
-            AddTagToSystemCommand = new RelayCommand(AddTagToSystemExecute);
-            AddTagToEquipmentCommand = new RelayCommand(AddTagToEquipmentExecute);
-            AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute);
-            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
-            AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
-            AddPointCommand = new RelayCommand(AddPointExecute);
-            SearchCollectionCommand = new RelayCommand(SearchCollectionExecute);
-            EndSearchCommand = new RelayCommand(EndSearchExecute);
-            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
-
-            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
-
-            DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
-            DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
-            DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
-            DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
-            DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
-
-            UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
-            RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
-
-            setVisibility(0);
-            DeviceButtonContent = "Add New";
-            DeviceManufacturer = new TECManufacturer();
+            { Version = "Undeployed Version"; }
+            getTemplates();
 
             TECLogo = Path.GetTempFileName();
-
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
 
             Stack = new ChangeStack(Templates);
 
             CurrentStatusText = "Done.";
             TitleString = "Template Builder";
+
+            setupScopeCollecion();
+            setupEditTab();
+            setupScopeDataGrid();
+
+            setVisibility(0);
         }
 
         #region Resources Paths
@@ -117,6 +54,12 @@ namespace TemplateBuilder.ViewModel
         #endregion //Resources Paths
 
         #region Properties
+        #region VM Extensions
+        public ScopeCollectionExtension ScopeCollection { get; set; }
+        public ScopeDataGridExtension ScopeDataGrid { get; set; }
+        public EditTabExtension EditTab { get; set; }
+        #endregion
+
         public string TECLogo { get; set; }
 
         public string Version { get; set; }
@@ -144,28 +87,7 @@ namespace TemplateBuilder.ViewModel
         private string _titleString;
 
         #region Interface Properties
-        public MainViewModelData ViewData
-        {
-            get { return _viewData; }
-            set
-            {
-                _viewData = value;
-                RaisePropertyChanged("ViewData");
-            }
-        }
-        private MainViewModelData _viewData;
-
-        public VisibilityModel DataGridVisibilty
-        {
-            get { return _dataGridVisibility; }
-            set
-            {
-                _dataGridVisibility = value;
-                RaisePropertyChanged("DataGridVisibilty");
-            }
-        }
-        private VisibilityModel _dataGridVisibility;
-
+       
         #region Selected Object Properties
         public TECTemplates Templates
         {
@@ -180,107 +102,7 @@ namespace TemplateBuilder.ViewModel
         private TECTemplates _templates;
 
         public ChangeStack Stack { get; set; }
-
-        public TECSystem SelectedSystem
-        {
-            get
-            {
-                return _selectedSystem;
-            }
-            set
-            {
-                _selectedSystem = value;
-                RaisePropertyChanged("SelectedSystem");
-                RightTabIndex = EditIndex.System;
-            }
-        }
-        private TECSystem _selectedSystem;
-
-        public TECEquipment SelectedEquipment
-        {
-            get
-            {
-                return _selectedEquipment;
-            }
-            set
-            {
-                _selectedEquipment = value;
-                RaisePropertyChanged("SelectedEquipment");
-                RightTabIndex = EditIndex.Equipment;
-            }
-        }
-        private TECEquipment _selectedEquipment;
-
-        public TECSubScope SelectedSubScope
-        {
-            get
-            {
-                return _selectedSubscope;
-            }
-            set
-            {
-                _selectedSubscope = value;
-                RaisePropertyChanged("SelectedSubscope");
-                RightTabIndex = EditIndex.SubScope;
-            }
-        }
-        private TECSubScope _selectedSubscope;
-
-        public TECDevice SelectedDevice
-        {
-            get
-            {
-                return _selectedDevice;
-            }
-            set
-            {
-                _selectedDevice = value;
-                DeviceButtonContent = "Edit";
-                if (value != null)
-                {
-                    DeviceName = SelectedDevice.Name;
-                    DeviceDescription = SelectedDevice.Description;
-                    DeviceCost = SelectedDevice.Cost;
-                }
-                RaisePropertyChanged("SelectedDevice");
-                RightTabIndex = EditIndex.Device;
-            }
-        }
-        private TECDevice _selectedDevice;
-
-        public TECPoint SelectedPoint
-        {
-            get { return _selectedPoint; }
-            set
-            {
-                _selectedPoint = value;
-                RaisePropertyChanged("SelectedPoint");
-                RightTabIndex = EditIndex.Point;
-            }
-        }
-        private TECPoint _selectedPoint;
-
-        public TECTag SelectedTag
-        {
-            get { return _selectedTag; }
-            set
-            {
-                _selectedTag = value;
-                RaisePropertyChanged("SelectedTag");
-            }
-        }
-        private TECTag _selectedTag;
-
-        private ObservableCollection<TECLocation> _locationSelections;
-        public ObservableCollection<TECLocation> LocationSelections
-        {
-            get { return _locationSelections; }
-            set
-            {
-                _locationSelections = value;
-                RaisePropertyChanged("LocationSelections");
-            }
-        }
+        
         #endregion //Selected Object Properties
 
         #region Tab Indexes
@@ -298,267 +120,83 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private int _DGTabIndex;
-
-        public int LeftTabIndex
-        {
-            get { return _leftTabIndex; }
-            set
-            {
-                _leftTabIndex = value;
-                RaisePropertyChanged("LeftTabIndex");
-            }
-        }
-        private int _leftTabIndex;
-
-        public EditIndex RightTabIndex
-        {
-            get { return _rightTabIndex; }
-            set
-            {
-                _rightTabIndex = value;
-                RaisePropertyChanged("RightTabIndex");
-            }
-        }
-        private EditIndex _rightTabIndex;
+        
         #endregion //Tab Indexes
 
-        #region Visibility Properties
-        public Visibility LeftSystemsVisibility
-        {
-            get { return _leftSystemsVisibility; }
-            set
-            {
-                _leftSystemsVisibility = value;
-                RaisePropertyChanged("LeftSystemsVisibility");
-            }
-        }
-        private Visibility _leftSystemsVisibility;
-
-        public Visibility LeftEquipmentVisibility
-        {
-            get { return _leftEquipmentVisibility; }
-            set
-            {
-                _leftEquipmentVisibility = value;
-                RaisePropertyChanged("LeftEquipmentVisibility");
-            }
-        }
-        private Visibility _leftEquipmentVisibility;
-
-        public Visibility LeftSubScopeVisibility
-        {
-            get { return _leftSubScopeVisibility; }
-            set
-            {
-                _leftSubScopeVisibility = value;
-                RaisePropertyChanged("LeftSubScopeVisibility");
-            }
-        }
-        private Visibility _leftSubScopeVisibility;
-
-        public Visibility LeftDevicesVisibility
-        {
-            get { return _leftDevicesVisibility; }
-            set
-            {
-                _leftDevicesVisibility = value;
-                RaisePropertyChanged("LeftDevicesVisibility");
-            }
-        }
-        private Visibility _leftDevicesVisibility;
-
-        public Visibility LeftDevicesEditVisibility
-        {
-            get { return _leftDevicesEditVisibility; }
-            set
-            {
-                _leftDevicesEditVisibility = value;
-                RaisePropertyChanged("LeftDevicesEditVisibility");
-            }
-        }
-        private Visibility _leftDevicesEditVisibility;
-
-        public Visibility LeftManufacturerVisibility
-        {
-            get { return _leftManufacturerVisibility; }
-            set
-            {
-                _leftManufacturerVisibility = value;
-                RaisePropertyChanged("LeftManufacturerVisibility");
-            }
-        }
-        private Visibility _leftManufacturerVisibility;
-        #endregion //Visibility Properties
-
-        #region Device Interface Properties
-        public string DeviceName
-        {
-            get { return _deviceName; }
-            set
-            {
-                _deviceName = value;
-                RaisePropertyChanged("DeviceName");
-            }
-        }
-        private string _deviceName;
-
-        public string DeviceDescription
-        {
-            get { return _deviceDescription; }
-            set
-            {
-                _deviceDescription = value;
-                RaisePropertyChanged("DeviceDescription");
-            }
-        }
-        private string _deviceDescription;
-
-
-        public double DeviceCost
-        {
-            get { return _deviceCost; }
-            set
-            {
-                _deviceCost = value;
-                RaisePropertyChanged("DeviceCost");
-            }
-        }
-        private double _deviceCost;
-
-        public string DeviceWire
-        {
-            get { return _deviceWire; }
-            set
-            {
-                _deviceWire = value;
-                RaisePropertyChanged("DeviceWire");
-            }
-        }
-        private string _deviceWire;
-
-        public string DeviceButtonContent
-        {
-            get { return _deviceButtonContent; }
-            set
-            {
-                _deviceButtonContent = value;
-                RaisePropertyChanged("DeviceButtonContent");
-            }
-        }
-        private string _deviceButtonContent;
-
-        public TECManufacturer DeviceManufacturer
-        {
-            get { return _deviceManufacturer; }
-            set
-            {
-                _deviceManufacturer = value;
-                RaisePropertyChanged("DeviceManufacturer");
-            }
-        }
-        private TECManufacturer _deviceManufacturer;
-
-        public double DeviceMultiplier
-        {
-            get { return _deviceMultiplier; }
-            set
-            {
-                _deviceMultiplier = value;
-                RaisePropertyChanged("DeviceMultiplier");
-            }
-        }
-        private double _deviceMultiplier;
-        #endregion //Device Interface Properties
-
-        #region Point Interface Properties
-        public string PointName
-        {
-            get { return _pointName; }
-            set
-            {
-                _pointName = value;
-                RaisePropertyChanged("PointName");
-            }
-        }
-        private string _pointName;
-
-        public string PointDescription
-        {
-            get { return _pointDescription; }
-            set
-            {
-                _pointDescription = value;
-                RaisePropertyChanged("PointDescription");
-            }
-        }
-        private string _pointDescription;
-
-        public PointTypes PointType
-        {
-            get { return _pointType; }
-            set
-            {
-                _pointType = value;
-                RaisePropertyChanged("PointType");
-            }
-        }
-        private PointTypes _pointType;
-
-        public int PointQuantity
-        {
-            get { return _pointQuantity; }
-            set
-            {
-                _pointQuantity = value;
-                RaisePropertyChanged("PointQuantity");
-            }
-        }
-        private int _pointQuantity;
-        #endregion //Point Interface Properties
-
-        public string TagName
-        {
-            get { return _tagName; }
-            set
-            {
-                _tagName = value;
-                RaisePropertyChanged("TagName");
-            }
-        }
-        private string _tagName;
         #endregion //Interface Properties
 
         #region Commands Properties
         public ICommand LoadCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand SaveToCommand { get; private set; }
-        public ICommand AddDeviceCommand { get; private set; }
-        public ICommand AddTagCommand { get; private set; }
-        public ICommand AddTagToSystemCommand { get; private set; }
-        public ICommand AddTagToEquipmentCommand { get; private set; }
-        public ICommand AddTagToSubScopeCommand { get; private set; }
-        public ICommand AddTagToDeviceCommand { get; private set; }
-        public ICommand AddTagToPointCommand { get; private set; }
-        public ICommand AddPointCommand { get; private set; }
-        public ICommand SearchCollectionCommand { get; private set; }
-        public ICommand EndSearchCommand { get; private set; }
-        public ICommand AddManufacturerCommand { get; private set; }
-        public ICommand DeleteSelectedSystemCommand { get; private set; }
-        public ICommand DeleteSelectedEquipmentCommand { get; private set; }
-        public ICommand DeleteSelectedSubScopeCommand { get; private set; }
-        public ICommand DeleteSelectedDeviceCommand { get; private set; }
-        public ICommand DeleteSelectedPointCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
-        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
         #endregion //Commands Properties
 
         string defaultTemplatesPath;
         #endregion //Properties
 
         #region Methods
+        #region Setup Methods
+        private void setupCommands()
+        {
+            LoadCommand = new RelayCommand(LoadExecute);
+            SaveCommand = new RelayCommand(SaveExecute);
+            SaveToCommand = new RelayCommand(SaveToExecute);
+            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
+
+            UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
+            RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+        }
+        private void getTemplates()
+        {
+            Templates = new TECTemplates();
+            
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
+
+            if (!Directory.Exists(resourcesFolder))
+            { Directory.CreateDirectory(resourcesFolder); }
+            defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
+
+            if (File.Exists(defaultTemplatesPath))
+            {
+                if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath); }
+                else
+                {
+                    string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
+                    MessageBox.Show(message);
+                }
+            }
+            else
+            {
+                string message = "No template database found. Reload templates to add one.";
+                MessageBox.Show(message);
+            }
+        }
+
+        private void setupScopeCollecion()
+        {
+            ScopeCollection = new ScopeCollectionExtension(Templates);
+            ScopeCollection.DragHandler += DragOver;
+            ScopeCollection.DropHandler += Drop;
+        }
+        private void setupScopeDataGrid()
+        {
+            ScopeDataGrid = new ScopeDataGridExtension(Templates);
+            ScopeDataGrid.DragHandler += DragOver;
+            ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+        }
+        private void setupEditTab()
+        {
+            EditTab = new EditTabExtension(Templates);
+        }
+        #endregion
+
         #region Commands Methods
         private void LoadExecute()
         {
@@ -573,7 +211,6 @@ namespace TemplateBuilder.ViewModel
                 {
                     File.Copy(path, defaultTemplatesPath, true);
                     Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                    populateItemsCollections();
                 }
                 else
                 {
@@ -631,162 +268,7 @@ namespace TemplateBuilder.ViewModel
                 }
             }
         }
-        private void AddDeviceExecute()
-        {
-            Templates.DeviceCatalog.Add(new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceWire, DeviceManufacturer));
-            DeviceName = "";
-            DeviceDescription = "";
-            DeviceCost = 0;
-            DeviceWire = "";
-        }
-        private void AddTagExecute()
-        {
-            TECTag newTag = new TECTag(TagName);
-            Templates.Tags.Add(newTag);
-        }
-        private void AddTagToSystemExecute()
-        {
-            if (SelectedTag != null && SelectedSystem != null)
-            {
-                SelectedSystem.Tags.Add(SelectedTag);
-            }
-        }
-        private void AddTagToEquipmentExecute()
-        {
-            if (SelectedTag != null && SelectedEquipment != null)
-            {
-                SelectedEquipment.Tags.Add(SelectedTag);
-            }
-
-        }
-        private void AddTagToSubScopeExecute()
-        {
-            if (SelectedTag != null && SelectedSubScope != null)
-            {
-                SelectedSubScope.Tags.Add(SelectedTag);
-            }
-        }
-        private void AddTagToDeviceExecute()
-        {
-            if (SelectedTag != null && SelectedDevice != null)
-            {
-                SelectedDevice.Tags.Add(SelectedTag);
-            }
-        }
-        private void AddTagToPointExecute()
-        {
-            if (SelectedTag != null && SelectedPoint != null)
-            {
-                SelectedPoint.Tags.Add(SelectedTag);
-            }
-        }
-        private void AddPointExecute()
-        {
-            TECPoint newPoint = new TECPoint();
-            newPoint.Name = PointName;
-            newPoint.Description = PointDescription;
-            newPoint.Type = PointType;
-            if (PointType != 0)
-            {
-                SelectedSubScope.Points.Add(newPoint);
-            }
-        }
-        private void SearchCollectionExecute()
-        {
-            if (ViewData.SearchString != null)
-            {
-                switch (LeftTabIndex)
-                {
-                    case 0:
-                        ViewData.SystemItemsCollection = new ObservableCollection<TECSystem>();
-                        foreach (TECSystem item in Templates.SystemTemplates)
-                        {
-                            if (item.Name.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                            {
-                                Console.WriteLine(item.Name);
-                                ViewData.SystemItemsCollection.Add(item);
-                            }
-                            foreach (TECTag tag in item.Tags)
-                            {
-                                if (tag.Text.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                                {
-                                    ViewData.SystemItemsCollection.Add(item);
-                                }
-                            }
-                        }
-                        break;
-                    case 1:
-                        ViewData.EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
-                        foreach (TECEquipment item in Templates.EquipmentTemplates)
-                        {
-                            if (item.Name.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                            {
-                                Console.WriteLine(item.Name);
-                                ViewData.EquipmentItemsCollection.Add(item);
-                            }
-                            foreach (TECTag tag in item.Tags)
-                            {
-                                if (tag.Text.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                                {
-                                    ViewData.EquipmentItemsCollection.Add(item);
-                                }
-                            }
-                        }
-                        break;
-                    case 2:
-                        ViewData.SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
-                        foreach (TECSubScope item in Templates.SubScopeTemplates)
-                        {
-                            if (item.Name.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                            {
-                                Console.WriteLine(item.Name);
-                                ViewData.SubScopeItemsCollection.Add(item);
-                            }
-                            foreach (TECTag tag in item.Tags)
-                            {
-                                if (tag.Text.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                                {
-                                    ViewData.SubScopeItemsCollection.Add(item);
-                                }
-                            }
-                        }
-                        break;
-                    case 3:
-                        ViewData.DevicesItemsCollection = new ObservableCollection<TECDevice>();
-                        foreach (TECDevice item in Templates.DeviceCatalog)
-                        {
-                            if (item.Name.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                            {
-                                Console.WriteLine(item.Name);
-                                ViewData.DevicesItemsCollection.Add(item);
-                            }
-                            foreach (TECTag tag in item.Tags)
-                            {
-                                if (tag.Text.ToUpper().Contains(ViewData.SearchString.ToUpper()))
-                                {
-                                    ViewData.DevicesItemsCollection.Add(item);
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-
-                }
-            }
-        }
-        private void AddManufacturerExecute()
-        {
-            TECManufacturer newMan = new TECManufacturer(ViewData.ManufacturerName, ViewData.ManufacturerMultiplier);
-            Templates.ManufacturerCatalog.Add(newMan);
-        }
-
-        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
-        {
-            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
-            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
-        }
-
+        
         private void ClosingExecute(CancelEventArgs e)
         {
             bool changes = (Stack.SaveStack.Count > 0);
@@ -808,68 +290,7 @@ namespace TemplateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
-
-        private void DeleteSelectedSystemExecute()
-        {
-            Templates.SystemTemplates.Remove(SelectedSystem);
-            SelectedSystem = null;
-            resetEditTab();
-        }
-        private void DeleteSelectedEquipmentExecute()
-        {
-            if (SelectedSystem != null)
-            {
-                SelectedSystem.Equipment.Remove(SelectedEquipment);
-            }
-            else
-            {
-                Templates.EquipmentTemplates.Remove(SelectedEquipment);
-            }
-            SelectedEquipment = null;
-            resetEditTab();
-        }
-        private void DeleteSelectedSubScopeExecute()
-        {
-            if (SelectedEquipment != null)
-            {
-                SelectedEquipment.SubScope.Remove(SelectedSubScope);
-            }
-            else
-            {
-                Templates.SubScopeTemplates.Remove(SelectedSubScope);
-            }
-            SelectedSubScope = null;
-            resetEditTab();
-        }
-        private void DeleteSelectedDeviceExecute()
-        {
-            if (SelectedSubScope != null)
-            {
-                SelectedSubScope.Devices.Remove(SelectedDevice);
-            }
-            else
-            {
-                Templates.DeviceCatalog.Remove(SelectedDevice);
-            }
-            SelectedDevice = null;
-            resetEditTab();
-        }
-        private void DeleteSelectedPointExecute()
-        {
-            if (SelectedSubScope != null)
-            {
-                SelectedSubScope.Points.Remove(SelectedPoint);
-            }
-            SelectedPoint = null;
-            resetEditTab();
-        }
-
-        private void EndSearchExecute()
-        {
-            populateItemsCollections();
-            ViewData.SearchString = "";
-        }
-
+        
         private void UndoExecute()
         {
             Stack.Undo();
@@ -962,7 +383,7 @@ namespace TemplateBuilder.ViewModel
         #endregion //Get Path Methods
 
         #region Drag Drop
-        void IDropTarget.DragOver(IDropInfo dropInfo)
+        public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
             var targetCollection = dropInfo.TargetCollection;
@@ -976,7 +397,7 @@ namespace TemplateBuilder.ViewModel
             }
         }
 
-        void IDropTarget.Drop(IDropInfo dropInfo)
+        public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
@@ -1018,94 +439,80 @@ namespace TemplateBuilder.ViewModel
             switch (gridIndex)
             {
                 case 0:
-                    LeftTabIndex = 0;
+                    ScopeCollection.TabIndex = 0;
 
-                    LeftSystemsVisibility = Visibility.Visible;
-                    LeftEquipmentVisibility = Visibility.Visible;
-                    LeftSubScopeVisibility = Visibility.Visible;
-                    LeftDevicesVisibility = Visibility.Visible;
-                    LeftDevicesEditVisibility = Visibility.Collapsed;
-                    LeftManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.SystemsVisibility = Visibility.Visible;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
 
-                    DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
-                    DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
-                    DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
-                    DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
-                    DataGridVisibilty.SystemLocation = Visibility.Collapsed;
-                    DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
-                    DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
                     break;
                 case 1:
-                    LeftTabIndex = 1;
+                    ScopeCollection.TabIndex = 1;
 
-                    LeftSystemsVisibility = Visibility.Collapsed;
-                    LeftEquipmentVisibility = Visibility.Visible;
-                    LeftSubScopeVisibility = Visibility.Visible;
-                    LeftDevicesVisibility = Visibility.Visible;
-                    LeftDevicesEditVisibility = Visibility.Collapsed;
-                    LeftManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
 
-                    DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
-                    DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
                     break;
                 case 2:
-                    LeftTabIndex = 2;
+                    ScopeCollection.TabIndex = 2;
 
-                    LeftSystemsVisibility = Visibility.Collapsed;
-                    LeftEquipmentVisibility = Visibility.Collapsed;
-                    LeftSubScopeVisibility = Visibility.Visible;
-                    LeftDevicesVisibility = Visibility.Visible;
-                    LeftDevicesEditVisibility = Visibility.Collapsed;
-                    LeftManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
 
-                    DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
                     break;
                 case 3:
-                    LeftTabIndex = 4;
+                    ScopeCollection.TabIndex = 4;
 
-                    LeftSystemsVisibility = Visibility.Collapsed;
-                    LeftEquipmentVisibility = Visibility.Collapsed;
-                    LeftSubScopeVisibility = Visibility.Collapsed;
-                    LeftDevicesVisibility = Visibility.Collapsed;
-                    LeftDevicesEditVisibility = Visibility.Visible;
-                    LeftManufacturerVisibility = Visibility.Visible;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Visible;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Visible;
                     break;
                 default:
-                    LeftTabIndex = 0;
+                    ScopeCollection.TabIndex = 0;
 
-                    LeftSystemsVisibility = Visibility.Visible;
-                    LeftEquipmentVisibility = Visibility.Visible;
-                    LeftSubScopeVisibility = Visibility.Visible;
-                    LeftDevicesVisibility = Visibility.Visible;
-                    LeftDevicesEditVisibility = Visibility.Collapsed;
-                    LeftManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.SystemsVisibility = Visibility.Visible;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     break;
 
             }
         }
-
         private void nullifySelected()
         {
-            SelectedDevice = null;
-            SelectedPoint = null;
-            SelectedSubScope = null;
-            SelectedEquipment = null;
-            SelectedSystem = null;
-            resetEditTab();
+            ScopeDataGrid.SelectedDevice = null;
+            ScopeDataGrid.SelectedPoint = null;
+            ScopeDataGrid.SelectedSubScope = null;
+            ScopeDataGrid.SelectedEquipment = null;
+            ScopeDataGrid.SelectedSystem = null;
         }
 
-        private void populateItemsCollections()
-        {
-            ViewData.SystemItemsCollection = Templates.SystemTemplates;
-            ViewData.EquipmentItemsCollection = Templates.EquipmentTemplates;
-            ViewData.SubScopeItemsCollection = Templates.SubScopeTemplates;
-            ViewData.DevicesItemsCollection = Templates.DeviceCatalog;
-        }
-
-        private void resetEditTab()
-        {
-            RightTabIndex = (EditIndex)DGTabIndex;
-        }
         #endregion //Helper Methods
         #endregion //Methods
     }
