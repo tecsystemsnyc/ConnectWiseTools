@@ -53,6 +53,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                RaisePropertyChanged("Templates");
+            }
+        }
+        private TECTemplates _templates;
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -60,7 +71,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public Action<Object> SelectionChanged;
         #endregion
 
-        #region Selected ScopeProperties
+        #region Selected Scope Properties
         private TECSystem _selectedSystem;
         public TECSystem SelectedSystem
         {
@@ -184,13 +195,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Bid = bid;
             DataGridVisibilty = new VisibilityModel();
 
-            AddPointCommand = new RelayCommand(AddPointExecute, AddPointCanExecute);
-            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
+            setupCommands();
+        }
+        public ScopeDataGridExtension(TECTemplates templates)
+        {
+            Templates = templates;
+            DataGridVisibilty = new VisibilityModel();
+
+            setupCommands();
         }
         #endregion
 
         #region Methods
+
         #region Commands
+        private void setupCommands()
+        {
+            AddPointCommand = new RelayCommand(AddPointExecute, AddPointCanExecute);
+            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
+        }
+
         private void AddPointExecute()
         {
             TECPoint newPoint = new TECPoint();

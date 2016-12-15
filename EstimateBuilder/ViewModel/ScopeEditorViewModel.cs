@@ -109,8 +109,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupEditTab()
         {
-            EditTab = new EditTabExtension(Bid, Templates);
-
+            EditTab = new EditTabExtension(Templates);
         }
         #endregion
         
