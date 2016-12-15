@@ -219,15 +219,12 @@ namespace TemplateBuilder.ViewModel
 
             if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
             {
-                SaveWindow saveWindow = new SaveWindow();
                 
                 EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
 
                 Stack.ClearStacks();
 
                 Console.WriteLine("Finished saving SQL Database.");
-
-                saveWindow.Close();
             }
             else
             {
@@ -245,15 +242,11 @@ namespace TemplateBuilder.ViewModel
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    SaveWindow saveWindow = new SaveWindow();
-
                     EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
 
                     Stack.ClearStacks();
 
                     Console.WriteLine("Finished saving SQL Database.");
-
-                    saveWindow.Close();
                 }
                 else
                 {
