@@ -88,7 +88,7 @@ namespace EstimateBuilder.ViewModel
                         if (e.Result is TECDrawing)
                         {
                             Bid.Drawings.Add((TECDrawing)e.Result);
-                            CurrentStatusText = "Done.";
+                            ResetStatusText();
                             string message = "Drawings have finished loading.";
                             MessageBox.Show(message);
                         }
