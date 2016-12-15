@@ -56,6 +56,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
+
+        public Action<Object> SelectionChanged;
         #endregion
 
         #region Selected ScopeProperties
@@ -67,6 +69,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
+                SelectionChanged?.Invoke(value);
+
             }
         }
         private TECEquipment _selectedEquipment;
@@ -77,6 +81,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
+                SelectionChanged?.Invoke(value);
             }
         }
         private TECSubScope _selectedSubScope;
@@ -87,6 +92,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSubScope = value;
                 RaisePropertyChanged("SelectedSubScope");
+                SelectionChanged?.Invoke(value);
             }
         }
         private TECDevice _selectedDevice;
@@ -100,6 +106,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedDevice = value;
                 RaisePropertyChanged("SelectedDevice");
+                SelectionChanged?.Invoke(value);
             }
         }
         private TECPoint _selectedPoint;
@@ -110,6 +117,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedPoint = value;
                 RaisePropertyChanged("SelectedPoint");
+                SelectionChanged?.Invoke(value);
             }
         }
 
@@ -218,8 +226,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             populateLocationSelections();
         }
-
-
+        
         public void populateLocationSelections()
         {
             LocationSelections = new ObservableCollection<TECLocation>();

@@ -151,20 +151,8 @@
         
             <Image Source="{Binding TECLogo}"
                    Grid.Column="5"/>
-            <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding ScopeCollection.SearchString}"/>
-            <Button Grid.Column="1"
-                    Content="Search"
-                    Command="{Binding ScopeCollection.SearchCollectionCommand}"/>
-            <Button Grid.Column="2"
-                    Content="Done"
-                    Command="{Binding ScopeCollection.EndSearchCommand}"/>
-        </Grid>
+            <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
+                                             Grid.Row="1" Grid.RowSpan="2"/>
             <TabControl Grid.Row="1"
                     Grid.Column="1"
                     Grid.ColumnSpan="5"
@@ -234,27 +222,7 @@
                     </DataGrid>
                 </TabItem>
             </TabControl>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <TabControl Margin="5,5,5,5"
-                SelectedIndex="{Binding ScopeCollection.TabIndex}">
-                    <TabItem Header="Sys">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.SystemItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Equip">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.EquipmentItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Points">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.SubScopeItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Devices">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding ScopeCollection.DevicesItemsCollection}"/>
-                    </TabItem>
-                </TabControl>
-            </Grid>
+            
             <StatusBar Grid.Row="3"
                        Grid.ColumnSpan="6">
                 <StatusBar.ItemsPanel>

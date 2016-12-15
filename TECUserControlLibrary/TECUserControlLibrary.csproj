@@ -99,6 +99,9 @@
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScopeCollectionsTabControl.xaml.cs">
+      <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,7 @@
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
+    <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
@@ -158,6 +162,10 @@
     <Page Include="PointsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScopeCollectionsTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ScopeControl.xaml">
       <Generator>MSBuild:Compile</Generator>
