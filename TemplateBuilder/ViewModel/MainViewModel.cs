@@ -61,7 +61,6 @@ namespace TemplateBuilder.ViewModel
         #endregion
 
         public string TECLogo { get; set; }
-
         public string Version { get; set; }
 
         public string CurrentStatusText
@@ -74,7 +73,6 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private string _currentStatusText;
-
         public string TitleString
         {
             get { return _titleString; }
@@ -396,7 +394,6 @@ namespace TemplateBuilder.ViewModel
                 dropInfo.Effects = DragDropEffects.Copy;
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
