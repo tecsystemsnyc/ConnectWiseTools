@@ -41,6 +41,8 @@ namespace TemplateBuilder.ViewModel
             CurrentStatusText = "Done.";
             TitleString = "Template Builder";
 
+            setupCommands();
+
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
@@ -59,7 +61,18 @@ namespace TemplateBuilder.ViewModel
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public EditTabExtension EditTab { get; set; }
         #endregion
-
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                Stack = new ChangeStack(value);
+                RaisePropertyChanged("Templates");
+            }
+        }
+        private TECTemplates _templates;
+        public ChangeStack Stack { get; set; }
         public string TECLogo { get; set; }
         public string Version { get; set; }
 
@@ -85,23 +98,6 @@ namespace TemplateBuilder.ViewModel
         private string _titleString;
 
         #region Interface Properties
-       
-        #region Selected Object Properties
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                Stack = new ChangeStack(value);
-                RaisePropertyChanged("Templates");
-            }
-        }
-        private TECTemplates _templates;
-
-        public ChangeStack Stack { get; set; }
-        
-        #endregion //Selected Object Properties
 
         #region Tab Indexes
         public int DGTabIndex

@@ -26,11 +26,9 @@ namespace EstimatingUtilitiesLibrary
 
         private bool DEBUG_PROPERTIES = false;
         private bool DEBUG_STACK = false;
-
-
+        
         private bool isDoing = false;
         
-
         #region Constructors
         public ChangeStack(TECBid bid)
         {

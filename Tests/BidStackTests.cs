@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Tests
 {
     [TestClass]
-    public class StackTests
+    public class BidStackTests
     {
 
         #region Undo
