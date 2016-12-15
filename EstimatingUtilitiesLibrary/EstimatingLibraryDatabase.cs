@@ -20,7 +20,7 @@ namespace EstimatingUtilitiesLibrary
         static private SQLiteDatabase SQLiteDB;
 
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
-        private const string FMT = "O";
+        private const string DB_FMT = "O";
 
         #region Public Functions
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
@@ -629,7 +629,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
-            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(FMT));
+            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
             data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
             data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
 
@@ -991,7 +991,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
-            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(FMT));
+            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
             data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
             data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
             data.Add(BidInfoTable.PMCoef.Name, bid.Labor.PMCoef.ToString());
@@ -1387,7 +1387,7 @@ namespace EstimatingUtilitiesLibrary
             string bidNumber = bidInfoRow["BidNumber"].ToString();
 
             string dueDateString = bidInfoRow["DueDate"].ToString();
-            DateTime dueDate = DateTime.ParseExact(dueDateString, FMT, CultureInfo.InvariantCulture);
+            DateTime dueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
 
             string salesperson = bidInfoRow["Salesperson"].ToString();
             string estimator = bidInfoRow["Estimator"].ToString();
@@ -2600,10 +2600,17 @@ namespace EstimatingUtilitiesLibrary
         #region Backup Methods
         private static void createBackup(string originalPath)
         {
+            var date = DateTime.Now;
+
             Console.WriteLine("Backing up...");
-            string APPDATA_FOLDER = @"TECSystems\Backups";
+            string APPDATA_FOLDER = @"TECSystems\Backups\";
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string backupFolder = Path.Combine(appData, APPDATA_FOLDER);
+
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("ja-JP");
+            DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+            dtfi.DateSeparator = "\\";
+            backupFolder += date.ToString("d", dtfi);
             
             if (!Directory.Exists(backupFolder))
             {
@@ -2612,8 +2619,10 @@ namespace EstimatingUtilitiesLibrary
 
             string backupFileName = Path.GetFileNameWithoutExtension(originalPath);
             backupFileName += "-";
-            var date = DateTime.Now.Ticks ;
-            backupFileName += date.ToString();
+            culture = CultureInfo.CreateSpecificCulture("hr-HR");
+            dtfi = culture.DateTimeFormat;
+            dtfi.TimeSeparator = "-";
+            backupFileName += date.ToString("T", dtfi);
             var backupPath = Path.Combine(backupFolder, backupFileName);
             Console.WriteLine("Backup path: " + backupPath);
             try
