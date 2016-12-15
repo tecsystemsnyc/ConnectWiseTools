@@ -27,7 +27,7 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB = new SQLiteDatabase(path);
 
-            checkAndUpdateDB();
+            checkAndUpdateDB(typeof(TECBid));
 
             TECBid bid = new TECBid();
 
@@ -88,7 +88,7 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB = new SQLiteDatabase(path);
 
-            checkAndUpdateDB();
+            checkAndUpdateDB(typeof(TECTemplates));
 
             TECTemplates templates = new TECTemplates();
 
@@ -201,6 +201,7 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
+                addTemplatesInfo();
                 addTags(templates.Tags);
                 addFullSystems(templates.SystemTemplates);
                 foreach (TECEquipment equipment in templates.EquipmentTemplates)
@@ -641,7 +642,18 @@ namespace EstimatingUtilitiesLibrary
 
             if (!SQLiteDB.Insert(BidInfoTable.TableName, data))
             {
-                Console.WriteLine("Error: Couldn't add item to TECBidInfo table");
+                Console.WriteLine("Error: Couldn't add item to TECBidInfo table.");
+            }
+        }
+
+        static private void addTemplatesInfo()
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+
+            if (!SQLiteDB.Insert(TemplatesInfoTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECTemplatesInfo table.");
             }
         }
 
@@ -1460,7 +1472,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
-            string command = "select * from TECSystem order by ScopeIndex";
+            string command = "select * from TECSystem";
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
@@ -2397,15 +2409,15 @@ namespace EstimatingUtilitiesLibrary
         #endregion Link Methods
 
         #region Database Version Update Methods
-        static private void checkAndUpdateDB()
+        static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
             try
             {
-                isUpToDate = checkDatabaseVersion();
-                if (isUpToDate == false)
+                isUpToDate = checkDatabaseVersion(type);
+                if (!isUpToDate)
                 {
-                    updateBidDatabase();
+                    updateDatabase(type);
                 }
             }
             catch (Exception e)
@@ -2414,28 +2426,45 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private bool checkDatabaseVersion()
+        static private bool checkDatabaseVersion(Type type)
         {
             string currentVersion = Properties.Settings.Default.Version;
             
             try
             {
-                DataTable bidInfoDT = SQLiteDB.getDataFromTable("TECBidInfo");
-                if (bidInfoDT.Rows.Count < 1)
+                DataTable infoDT = new DataTable();
+                if (type == typeof(TECBid))
                 {
-                    MessageBox.Show("Bid info not found in database. Could not check verison.");
-                    throw new Exception("Could not load from TECBidInfo");
+                    infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
+                }
+                else if (type == typeof(TECTemplates))
+                {
+                    infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
                 }
                 else
                 {
-                    DataRow bidInfoRow = bidInfoDT.Rows[0];
-                    if (bidInfoDT.Columns.Contains(BidInfoTable.DBVersion.Name))
+                    throw new ArgumentException("checkDatabaseVersion given invalid type");
+                }
+                
+                if (infoDT.Rows.Count < 1)
+                {
+                    if (type == typeof(TECBid))
                     {
-                        string version = bidInfoRow["DBVersion"].ToString();
-                        if (version == currentVersion)
-                        { return true; }
-                        else
-                        { return false; }
+                        MessageBox.Show("Bid info not found in database. Could not check verison.");
+                        throw new Exception("Could not load from TECBidInfo");
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    DataRow infoRow = infoDT.Rows[0];
+                    if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
+                    {
+                        string version = infoRow["DBVersion"].ToString();
+                        return (version == currentVersion);
                     } else
                     {
                         return false;
@@ -2448,10 +2477,24 @@ namespace EstimatingUtilitiesLibrary
                 throw e;
             }
         }
-        static private void updateBidDatabase()
+        static private void updateDatabase(Type type)
         {
             List<string> tableNames = getAllTableNames();
-            foreach(TableBase table in AllBidTables.Tables)
+
+            List<object> databaseTableList = new List<object>();
+            if (type == typeof(TECBid))
+            {
+                databaseTableList = AllBidTables.Tables;
+            }
+            else if (type == typeof(TECTemplates))
+            {
+                databaseTableList = AllTemplateTables.Tables;
+            }
+            else
+            {
+                throw new ArgumentException("updateDatabase() given invalid type");
+            }
+            foreach(TableBase table in databaseTableList)
             {
                 var tableInfo = getTableInfo(table);
                 if (tableNames.Contains(tableInfo.Item1))

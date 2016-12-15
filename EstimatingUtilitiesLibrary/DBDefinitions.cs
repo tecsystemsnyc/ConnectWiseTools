@@ -426,6 +426,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static List<object> Tables = new List<object>()
         {
+            new TemplatesInfoTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
