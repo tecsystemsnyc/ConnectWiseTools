@@ -22,6 +22,12 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class BidEditorBase : ViewModelBase
     {
+        #region Constants
+
+        string DEFAULT_STATUS_TEXT = "Ready :)";
+
+        #endregion
+
         #region Properties
         private TECBid _bid;
         public TECBid Bid
@@ -120,7 +126,7 @@ namespace TECUserControlLibrary.ViewModels
             setupBid();
             setupStack();
 
-            CurrentStatusText = "Done.";
+            ResetStatusText();
         }
 
         #region Methods
@@ -397,6 +403,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        protected void ResetStatusText()
+        {
+            CurrentStatusText = DEFAULT_STATUS_TEXT;
+        }
+
         #endregion //Helper Functions
 
         #region Commands
@@ -430,7 +441,7 @@ namespace TECUserControlLibrary.ViewModels
             string path = getLoadPath();
             if (path != null)
             {
-                CurrentStatusText = "Loading...";
+                CurrentStatusText = "Loading File: " + path;
                 bidDBFilePath = path;
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
@@ -444,7 +455,7 @@ namespace TECUserControlLibrary.ViewModels
                     MessageBox.Show(message);
                 }
                 Console.WriteLine("Finished loading SQL Database.");
-                CurrentStatusText = "Done.";
+                ResetStatusText();
             }
         }
         private void SaveExecute()
@@ -452,30 +463,38 @@ namespace TECUserControlLibrary.ViewModels
             saveSuccessful = false;
             if (bidDBFilePath != null)
             {
-                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                {
-                    CurrentStatusText = "Saving...";
-                    SaveWindow saveWindow = new SaveWindow();
-                    try
-                    {
-                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stack);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write("Save delta failed. Saving to new file. Error: " + e.Message);
-                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                    }
+                CurrentStatusText = "Saving...";
+                ChangeStack stackToSave = stack;
+                stack.ClearStacks();
 
-                    stack.ClearStacks();
-                    saveSuccessful = true;
-                    saveWindow.Close();
-                }
-                else
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
-                }
-                CurrentStatusText = "Done.";
+                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                    {
+                        try
+                        {
+                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
+                        saveSuccessful = true;
+                    }
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatusText();
+                };
+                worker.RunWorkerAsync();
             }
             else
             {
@@ -492,25 +511,36 @@ namespace TECUserControlLibrary.ViewModels
                 bidDBFilePath = path;
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
-                if (!UtilitiesMethods.IsFileLocked(path))
+                stack.ClearStacks();
+                CurrentStatusText = "Saving file: " + path;
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
                 {
-                    SaveWindow saveWindow = new SaveWindow();
-                    if (File.Exists(path))
+                    if (!UtilitiesMethods.IsFileLocked(path))
                     {
-                        File.Delete(path);
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                        saveSuccessful = true;
                     }
-                    //Create new database
-                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    stack.ClearStacks();
-                    saveSuccessful = true;
-                    saveWindow.Close();
-                }
-                else
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
-                }
-                Console.WriteLine("Finished saving SQL Database.");
+                    Console.WriteLine("Finished saving SQL Database.");
+                    ResetStatusText();
+                };
+
+                worker.RunWorkerAsync();
+                
             }
         }
         private void DocumentExecute()
@@ -566,6 +596,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (path != null)
             {
+                CurrentStatusText = "Loading File: " + path;
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     File.Copy(path, defaultTemplatesPath, true);
@@ -581,6 +612,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 Console.WriteLine("Finished loading templates");
             }
+            ResetStatusText();
         }
 
         private void UndoExecute()
