@@ -290,7 +290,6 @@ namespace EstimatingLibrary
             {
                 Notes.Add(new TECNote(item));
             }
-            
         }
 
         //Copy Constructor

@@ -93,7 +93,7 @@ namespace EstimatingLibrary
        
         public override object Copy()
         {
-            throw new NotImplementedException();
+            return new TECTemplates(this);
         }
 
         #endregion //Properties
@@ -102,12 +102,12 @@ namespace EstimatingLibrary
 
         public TECTemplates()
         {
-            SystemTemplates = new ObservableCollection<TECSystem>();
-            EquipmentTemplates = new ObservableCollection<TECEquipment>();
-            SubScopeTemplates = new ObservableCollection<TECSubScope>();
-            DeviceCatalog = new ObservableCollection<TECDevice>();
-            Tags = new ObservableCollection<TECTag>();
-            ManufacturerCatalog = new ObservableCollection<TECManufacturer>();
+            _systemTemplates = new ObservableCollection<TECSystem>();
+            _equipmentTemplates = new ObservableCollection<TECEquipment>();
+            _subScopeTemplates = new ObservableCollection<TECSubScope>();
+            _deviceCatalog = new ObservableCollection<TECDevice>();
+            _tags = new ObservableCollection<TECTag>();
+            _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -115,6 +115,34 @@ namespace EstimatingLibrary
             DeviceCatalog.CollectionChanged += CollectionChanged;
             Tags.CollectionChanged += CollectionChanged;
             ManufacturerCatalog.CollectionChanged += CollectionChanged;
+        }
+
+        public TECTemplates(TECTemplates templatesSource) : this()
+        {
+            foreach(TECSystem system in templatesSource.SystemTemplates)
+            {
+                SystemTemplates.Add(system);
+            }
+            foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
+            {
+                EquipmentTemplates.Add(equip);
+            }
+            foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
+            {
+                SubScopeTemplates.Add(subScope);
+            }
+            foreach (TECDevice device in templatesSource.DeviceCatalog)
+            {
+                DeviceCatalog.Add(device);
+            }
+            foreach (TECTag tag in templatesSource.Tags)
+            {
+                Tags.Add(tag);
+            }
+            foreach (TECManufacturer man in templatesSource.ManufacturerCatalog)
+            {
+                ManufacturerCatalog.Add(man);
+            }
         }
 
         #endregion //Constructors
