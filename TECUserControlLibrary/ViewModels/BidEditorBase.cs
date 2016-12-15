@@ -41,6 +41,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Bid");
                 buildTitleString();
                 Bid.PropertyChanged += Bid_PropertyChanged;
+                BidSet?.Invoke();
             }
         }
         private TECTemplates _templates;
@@ -109,6 +110,10 @@ namespace TECUserControlLibrary.ViewModels
         const string APPDATA_FOLDER = @"TECSystems\";
         const string TEMPLATES_FILE_NAME = @"TECTemplates.tdb";
         #endregion //Resources Paths
+
+        #region Delgates
+        public Action BidSet;
+        #endregion
 
         #endregion
 

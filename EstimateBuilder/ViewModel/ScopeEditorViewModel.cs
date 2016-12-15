@@ -122,6 +122,7 @@ namespace EstimateBuilder.ViewModel
 
         public void PopulateBid(GenericMessage<TECBid> genericMessage)
         {
+            Console.WriteLine("Populating");
             Bid = genericMessage.Content;
             ScopeDataGrid.Bid = Bid;
         }
@@ -129,7 +130,6 @@ namespace EstimateBuilder.ViewModel
         public void PopulateTemplates(GenericMessage<TECTemplates> genericMessage)
         {
             Templates = genericMessage.Content;
-
             ScopeCollection.populateItemsCollections();
         }
 
