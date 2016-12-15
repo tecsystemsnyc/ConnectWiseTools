@@ -15,7 +15,7 @@
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         
         Title="{Binding TitleString}"
-        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         MinHeight="300" MinWidth="535"
         x:Name="root">
 

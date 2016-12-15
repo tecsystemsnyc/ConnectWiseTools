@@ -23,9 +23,11 @@ namespace EstimatingLibrary
             get { return _systemTemplates; }
             set
             {
+                var temp = this.Copy();
+                SystemTemplates.CollectionChanged -= CollectionChanged;
                 _systemTemplates = value;
                 SystemTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("SystemTemplates");
+                NotifyPropertyChanged("SystemTemplates", temp, this);
             }
         }
         public ObservableCollection<TECEquipment> EquipmentTemplates
@@ -33,9 +35,11 @@ namespace EstimatingLibrary
             get { return _equipmentTemplates; }
             set
             {
+                var temp = this.Copy();
+                EquipmentTemplates.CollectionChanged -= CollectionChanged;
                 _equipmentTemplates = value;
                 EquipmentTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("EquipmentTemplates");
+                NotifyPropertyChanged("EquipmentTemplates", temp, this);
             }
         }
         public ObservableCollection<TECSubScope> SubScopeTemplates
@@ -43,9 +47,11 @@ namespace EstimatingLibrary
             get { return _subScopeTemplates; }
             set
             {
+                var temp = this.Copy();
+                SubScopeTemplates.CollectionChanged -= CollectionChanged;
                 _subScopeTemplates = value;
                 SubScopeTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("SubScopeTemplates");
+                NotifyPropertyChanged("SubScopeTemplates", temp, this);
             }
         }
         public ObservableCollection<TECDevice> DeviceCatalog
@@ -53,9 +59,11 @@ namespace EstimatingLibrary
             get { return _deviceCatalog; }
             set
             {
+                var temp = this.Copy();
+                DeviceCatalog.CollectionChanged -= CollectionChanged;
                 _deviceCatalog = value;
                 DeviceCatalog.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("DeviceCatalog");
+                NotifyPropertyChanged("DeviceCatalog", temp, this);
             }
         }
         public ObservableCollection<TECManufacturer> ManufacturerCatalog
@@ -63,9 +71,11 @@ namespace EstimatingLibrary
             get { return _manufacturerCatalog; }
             set
             {
+                var temp = this.Copy();
+                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
                 _manufacturerCatalog = value;
                 ManufacturerCatalog.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("ManufacturerCatalog");
+                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
             }
         }
         public ObservableCollection<TECTag> Tags
@@ -73,9 +83,11 @@ namespace EstimatingLibrary
             get { return _tags; }
             set
             {
+                var temp = this.Copy();
+                Tags.CollectionChanged -= CollectionChanged;
                 _tags = value;
                 Tags.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("Tags");
+                NotifyPropertyChanged("Tags", temp, this);
             }
         }
        
@@ -96,7 +108,13 @@ namespace EstimatingLibrary
             DeviceCatalog = new ObservableCollection<TECDevice>();
             Tags = new ObservableCollection<TECTag>();
             ManufacturerCatalog = new ObservableCollection<TECManufacturer>();
-            
+
+            SystemTemplates.CollectionChanged += CollectionChanged;
+            EquipmentTemplates.CollectionChanged += CollectionChanged;
+            SubScopeTemplates.CollectionChanged += CollectionChanged;
+            DeviceCatalog.CollectionChanged += CollectionChanged;
+            Tags.CollectionChanged += CollectionChanged;
+            ManufacturerCatalog.CollectionChanged += CollectionChanged;
         }
 
         #endregion //Constructors
