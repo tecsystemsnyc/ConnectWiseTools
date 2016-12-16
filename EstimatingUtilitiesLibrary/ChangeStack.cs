@@ -30,6 +30,12 @@ namespace EstimatingUtilitiesLibrary
         private bool isDoing = false;
         
         #region Constructors
+        public ChangeStack()
+        {
+            UndoStack = new List<Tuple<Change, object, object>>();
+            RedoStack = new List<Tuple<Change, object, object>>();
+            SaveStack = new List<Tuple<Change, object, object>>();
+        }
         public ChangeStack(TECBid bid)
         {
             Bid = bid;
@@ -261,6 +267,24 @@ namespace EstimatingUtilitiesLibrary
             UndoStack.Clear();
             RedoStack.Clear();
             SaveStack.Clear();
+        }
+
+        public ChangeStack Copy()
+        {
+            var outStack = new ChangeStack();
+            foreach (var item in UndoStack)
+            {
+                outStack.UndoStack.Add(item);
+            }
+            foreach (var item in RedoStack)
+            {
+                outStack.RedoStack.Add(item);
+            }
+            foreach (var item in SaveStack)
+            {
+                outStack.SaveStack.Add(item);
+            }
+            return outStack;
         }
         
         private void handleAdd(Tuple<Change, object, object> StackItem)
