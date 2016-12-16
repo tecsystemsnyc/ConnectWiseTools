@@ -504,7 +504,7 @@ namespace TECUserControlLibrary.ViewModels
             if (bidDBFilePath != null)
             {
                 SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack;
+                ChangeStack stackToSave = stack.Copy();
                 stack.ClearStacks();
 
                 BackgroundWorker worker = new BackgroundWorker();
