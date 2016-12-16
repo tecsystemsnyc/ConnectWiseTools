@@ -81,6 +81,7 @@
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
     <Compile Include="TECBid.cs" />
     <Compile Include="TECConnection.cs" />
+    <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECController.cs" />
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECDrawing.cs" />
