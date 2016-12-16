@@ -37,9 +37,13 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECTemplatesInfo";
 
+        public static TableField TemplatesInfoID = new TableField("TemplatesInfoID", "TEXT");
         public static TableField DBVersion = new TableField("DBVersion", "TEXT");
 
-        public static new List<TableField> PrimaryKey = new List<TableField>();
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            TemplatesInfoID
+        };
     }
     public class NoteTable : TableBase
     {

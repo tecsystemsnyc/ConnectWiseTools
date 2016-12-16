@@ -94,6 +94,7 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
+                templates = getTemplatesInfo();
                 templates.SystemTemplates = getAllSystems();
                 templates.EquipmentTemplates = getOrphanEquipment();
                 templates.SubScopeTemplates = getOrphanSubScope();
@@ -201,7 +202,7 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-                addTemplatesInfo();
+                addTemplatesInfo(templates);
                 addTags(templates.Tags);
                 addFullSystems(templates.SystemTemplates);
                 foreach (TECEquipment equipment in templates.EquipmentTemplates)
@@ -646,9 +647,10 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addTemplatesInfo()
+        static private void addTemplatesInfo(TECTemplates templates)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(TemplatesInfoTable.TemplatesInfoID.Name, templates.InfoGuid.ToString());
             data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
 
             if (!SQLiteDB.Insert(TemplatesInfoTable.TableName, data))
@@ -1410,6 +1412,22 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return bid;
+        }
+
+        static private TECTemplates getTemplatesInfo()
+        {
+            DataTable bidInfoDT = SQLiteDB.getDataFromTable("TECTemplatesInfo");
+
+            if (bidInfoDT.Rows.Count < 1)
+            {
+                MessageBox.Show("Bid info not found in database. Bid info and labor will be missing.");
+                return new TECTemplates();
+            }
+            DataRow bidInfoRow = bidInfoDT.Rows[0];
+
+            Guid infoGuid = new Guid(bidInfoRow["TemplatesInfoID"].ToString());
+
+            return new TECTemplates(infoGuid);
         }
 
         static private ObservableCollection<TECScopeBranch> getMainScopeBranches()

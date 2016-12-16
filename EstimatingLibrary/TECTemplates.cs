@@ -11,6 +11,7 @@ namespace EstimatingLibrary
     public class TECTemplates : TECObject
     {
         #region Properties
+        private Guid _infoGuid;
         private ObservableCollection<TECSystem> _systemTemplates;
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
@@ -18,6 +19,10 @@ namespace EstimatingLibrary
         private ObservableCollection<TECManufacturer> _manufacturerCatalog;
         private ObservableCollection<TECTag> _tags;
 
+        public Guid InfoGuid
+        {
+            get { return _infoGuid; }
+        }
         public ObservableCollection<TECSystem> SystemTemplates
         {
             get { return _systemTemplates; }
@@ -100,8 +105,12 @@ namespace EstimatingLibrary
 
         #region Constructors
 
-        public TECTemplates()
+        public TECTemplates() : this(Guid.NewGuid()) {}
+
+        public TECTemplates(Guid guid)
         {
+            _infoGuid = guid;
+
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
