@@ -778,7 +778,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
         }
 
         [TestMethod]

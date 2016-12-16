@@ -1519,34 +1519,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in systemsDT.Rows)
             {
-                Guid systemID = new Guid(row["SystemID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-                string budgetPriceString = row["BudgetPrice"].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
-                }
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
-                }
-
-                ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
-
-                TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
-
-                system.Quantity = quantity;
-                system.Tags = getTagsInScope(systemID);
-
-                systems.Add(system);
+                systems.Add(getSystemFromRow(row));
             }
             return systems;
         }
@@ -1581,27 +1554,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in subScopeDT.Rows)
             {
-                Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
-                }
-
-                ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
-                ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
-
-                TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
-
-                subScopeToAdd.Quantity = quantity;
-                subScopeToAdd.Tags = getTagsInScope(subScopeID);
-
-                subScope.Add(subScopeToAdd);
+                subScope.Add(getSubScopeFromRow(row));
             }
 
             return subScope;
@@ -1615,28 +1568,8 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in devicesDT.Rows)
             {
-                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-                string name = row[DeviceTable.Name.Name].ToString();
-                string description = row[DeviceTable.Description.Name].ToString();
-                string costString = row[DeviceTable.Cost.Name].ToString();
-                ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
-
-                TECConnection connection = getConnectionInDevice(deviceID);
-
-                double cost;
-                if (!double.TryParse(costString, out cost))
-                {
-                    cost = 0;
-                    Console.WriteLine("Cannot convert cost to double, setting to 0");
-                }
-
-                TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
-
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
-                deviceToAdd.Tags = getTagsInScope(deviceID);
-                deviceToAdd.ConnectionType = connectionType;
-
-                devices.Add(deviceToAdd);
+                
+                devices.Add(getDeviceFromRow(row));
             }
 
             return devices;
@@ -1696,34 +1629,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in equipmentDT.Rows)
             {
-                Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
-                string name = row[EquipmentTable.Name.Name].ToString();
-                string description = row[EquipmentTable.Description.Name].ToString();
-                string quantityString = row[EquipmentTable.Quantity.Name].ToString();
-                string budgetPriceString = row[EquipmentTable.BudgetPrice.Name].ToString();
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budget price to double in equipment, setting to -1");
-                }
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in equipment, setting to 1");
-                }
-
-                ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
-
-                TECEquipment equipmentToAdd = new TECEquipment(name, description, budgetPrice, subScopeInEquipment, equipmentID);
-
-                equipmentToAdd.Quantity = quantity;
-                equipmentToAdd.Tags = getTagsInScope(equipmentID);
-
-                equipment.Add(equipmentToAdd);
+                equipment.Add(getEquipmentFromRow(row));
             }
 
             return equipment;
@@ -1762,25 +1668,10 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in devicesDT.Rows)
             {
-                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-                string name = row[DeviceTable.Name.Name].ToString();
-                string description = row[DeviceTable.Description.Name].ToString();
-                string costString = row[DeviceTable.Cost.Name].ToString();
-                ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
-
-                double cost;
-                if (!double.TryParse(costString, out cost))
-                {
-                    cost = 0;
-                    Console.WriteLine("Cannot convert cost to double, setting to 0");
-                }
-
-                TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
-
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
+                TECDevice deviceToAdd = getDeviceFromRow(row);
 
                 string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
-                quantityCommand += (subScopeID + "' and DeviceID = '" + deviceID + "'");
+                quantityCommand += (subScopeID + "' and DeviceID = '" + deviceToAdd.Guid + "'");
 
                 DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
 
@@ -1794,7 +1685,7 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 deviceToAdd.Quantity = quantity;
-                deviceToAdd.Tags = getTagsInScope(deviceID);
+                deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
 
                 devices.Add(deviceToAdd);
             }
@@ -1814,24 +1705,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in pointsDT.Rows)
             {
-                Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
-                string name = row[PointTable.Name.Name].ToString();
-                string description = row[PointTable.Description.Name].ToString();
-                string type = row[PointTable.Type.Name].ToString();
-                string quantityString = row[PointTable.Quantity.Name].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in point, setting to 1");
-                }
-
-                TECPoint pointToAdd = new TECPoint(type, name, description, pointID);
-
-                pointToAdd.Quantity = quantity;
-                pointToAdd.Tags = getTagsInScope(pointID);
-
+                var pointToAdd = getPointFromRow(row);
                 points.Add(pointToAdd);
             }
 
@@ -1849,18 +1723,8 @@ namespace EstimatingUtilitiesLibrary
 
             if (manTable.Rows.Count > 0)
             {
-                Guid manufacturerID = new Guid(manTable.Rows[0]["ManufacturerID"].ToString());
-                string name = manTable.Rows[0]["Name"].ToString();
-                string multiplierString = manTable.Rows[0]["Multiplier"].ToString();
-
-                double multiplier;
-                if (!double.TryParse(multiplierString, out multiplier))
-                {
-                    multiplier = 1;
-                    Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-                }
-
-                return new TECManufacturer(name, multiplier, manufacturerID);
+                var row = manTable.Rows[0];
+                return getManufacturerFromRow(row);
             }
             else
             {
@@ -1874,12 +1738,7 @@ namespace EstimatingUtilitiesLibrary
             DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
 
             foreach (DataRow row in notesDT.Rows)
-            {
-                Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
-                string noteText = row["NoteText"].ToString();
-
-                notes.Add(new TECNote(noteText, noteID));
-            }
+            { notes.Add(getNoteFromRow(row)); }
 
             return notes;
         }
@@ -1887,14 +1746,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECExclusion> getExclusions()
         {
             ObservableCollection<TECExclusion> exclusions = new ObservableCollection<TECExclusion>();
-            DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
+            DataTable exclusionsDT = SQLiteDB.getDataFromTable(ExclusionTable.TableName);
 
             foreach (DataRow row in exclusionsDT.Rows)
-            {
-                Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-                string exclusionText = row["ExclusionText"].ToString();
-
-                exclusions.Add(new TECExclusion(exclusionText, exclusionId));
+            { 
+                exclusions.Add(getExclusionFromRow(row));
             }
 
             return exclusions;
@@ -1908,7 +1764,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in tagsDT.Rows)
             {
-                tags.Add(new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString())));
+                tags.Add(getTagFromRow(row));
             }
 
             return tags;
@@ -1927,7 +1783,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in tagsDT.Rows)
             {
-                tags.Add(new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString())));
+                tags.Add(getTagFromRow(row));
             }
 
             return tags;
@@ -1936,7 +1792,6 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECDrawing> getDrawings()
         {
             ObservableCollection<TECDrawing> drawings = new ObservableCollection<TECDrawing>();
-
             string command = "select * from TECDrawing";
 
             DataTable ghostDrawingsDT;
@@ -1944,24 +1799,14 @@ namespace EstimatingUtilitiesLibrary
             try
             {
                 ghostDrawingsDT = SQLiteDB.getDataFromCommand(command);
-
                 foreach (DataRow row in ghostDrawingsDT.Rows)
-                {
-                    string name = row["Name"].ToString();
-                    string description = row["Description"].ToString();
-                    Guid guid = new Guid(row["DrawingID"].ToString());
-
-                    ObservableCollection<TECPage> pages = getPagesInDrawing(guid);
-
-                    drawings.Add(new TECDrawing(name, description, guid, pages));
-                }
+                { drawings.Add(getDrawingFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: GetDrawings() failed. Code: " + e.Message);
                 throw e;
             }
-
             return drawings;
         }
 
@@ -1982,8 +1827,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Guid guid = new Guid(row["ConnectionID"].ToString());
                     double length = UtilitiesMethods.StringToDouble(row["Length"].ToString());
-
-
+                    
                     TECConnection outConnection = new TECConnection(length, ConnectionType.Cat6, new TECController(), new ObservableCollection<TECScope>(), guid);
                     connection = outConnection;
                 }
@@ -2013,20 +1857,7 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (DataRow row in pagesDT.Rows)
                 {
-                    Guid guid = new Guid(row["PageID"].ToString());
-                    int pageNum = UtilitiesMethods.StringToInt(row["PageNum"].ToString());
-                    byte[] blob = row["Image"] as byte[];
-
-                    TECPage page = new TECPage(pageNum, guid);
-
-                    page.Path = Path.GetTempFileName();
-
-                    //path = path.Substring(0, path.Length - 3);
-                    //path += "png";
-
-                    File.WriteAllBytes(page.Path, blob);
-
-                    page.PageScope = getVisualScopeInPage(guid);
+                    var page = getPageFromRow(row);
 
                     pages.Add(page);
                 }
@@ -2055,11 +1886,7 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (DataRow row in vsDT.Rows)
                 {
-                    Guid guid = new Guid(row["VisualScopeID"].ToString());
-                    double xPos = UtilitiesMethods.StringToDouble(row["XPos"].ToString());
-                    double yPos = UtilitiesMethods.StringToDouble(row["YPos"].ToString());
-
-                    vs.Add(new TECVisualScope(guid, xPos, yPos));
+                    vs.Add(getVisualScopeFromRow(row));
                 }
             }
             catch (Exception e)
@@ -2082,8 +1909,7 @@ namespace EstimatingUtilitiesLibrary
 
             if (locationDT.Rows.Count > 0)
             {
-                TECLocation location = new TECLocation(locationDT.Rows[0]["Name"].ToString(), new Guid(locationDT.Rows[0]["LocationID"].ToString()));
-                return location;
+                return getLocationFromRow(locationDT.Rows[0]);
             }
             else
             {
@@ -2711,6 +2537,129 @@ namespace EstimatingUtilitiesLibrary
             return subScopeToAdd;
         }
 
+        private static TECPoint getPointFromRow(DataRow row)
+        {
+            Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
+            string name = row[PointTable.Name.Name].ToString();
+            string description = row[PointTable.Description.Name].ToString();
+            string type = row[PointTable.Type.Name].ToString();
+            string quantityString = row[PointTable.Quantity.Name].ToString();
+
+            int quantity;
+            if (!int.TryParse(quantityString, out quantity))
+            {
+                quantity = 1;
+                Console.WriteLine("Cannot convert quantity to int in point, setting to 1");
+            }
+
+            TECPoint pointToAdd = new TECPoint(type, name, description, pointID);
+
+            pointToAdd.Quantity = quantity;
+            pointToAdd.Tags = getTagsInScope(pointID);
+
+            return pointToAdd;
+        }
+
+        private static TECManufacturer getManufacturerFromRow(DataRow row)
+        {
+            Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
+            string name = row[ManufacturerTable.Name.Name].ToString();
+            string multiplierString = row[ManufacturerTable.Multiplier.Name].ToString();
+
+            double multiplier;
+            if (!double.TryParse(multiplierString, out multiplier))
+            {
+                multiplier = 1;
+                Console.WriteLine("Cannot convert multiplier to double, setting to 1");
+            }
+
+            return new TECManufacturer(name, multiplier, manufacturerID);
+        }
+
+        private static TECNote getNoteFromRow(DataRow row)
+        {
+            Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
+            string noteText = row[NoteTable.NoteText.Name].ToString();
+            return new TECNote(noteText, noteID);
+        }
+
+        private static TECExclusion getExclusionFromRow(DataRow row)
+        {
+            Guid exclusionId = new Guid(row[ExclusionTable.ExclusionID.Name].ToString());
+            string exclusionText = row[ExclusionTable.ExclusionText.Name].ToString();
+
+            return new TECExclusion(exclusionText, exclusionId);
+        }
+
+        private static TECTag getTagFromRow(DataRow row)
+        {
+            return new TECTag(row[TagTable.TagString.Name].ToString(), new Guid(row[TagTable.TagID.Name].ToString()));
+        }
+
+        private static TECDrawing getDrawingFromRow(DataRow row)
+        {
+            string name = row[DrawingTable.Name.Name].ToString();
+            string description = row[DrawingTable.Description.Name].ToString();
+            Guid guid = new Guid(row[DrawingTable.DrawingID.Name].ToString());
+
+            ObservableCollection<TECPage> pages = getPagesInDrawing(guid);
+
+            return new TECDrawing(name, description, guid, pages);
+        }
+
+        private static TECPage getPageFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PageTable.PageID.Name].ToString());
+            int pageNum = UtilitiesMethods.StringToInt(row[PageTable.PageNum.Name].ToString());
+            byte[] blob = row[PageTable.Image.Name] as byte[];
+
+            TECPage page = new TECPage(pageNum, guid);
+
+            page.Path = Path.GetTempFileName();
+
+            //path = path.Substring(0, path.Length - 3);
+            //path += "png";
+
+            File.WriteAllBytes(page.Path, blob);
+
+            page.PageScope = getVisualScopeInPage(guid);
+
+            return page;
+        }
+
+        private static TECVisualScope getVisualScopeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[VisualScopeScopeTable.VisualScopeID.Name].ToString());
+            double xPos = UtilitiesMethods.StringToDouble(row[VisualScopeTable.XPos.Name].ToString());
+            double yPos = UtilitiesMethods.StringToDouble(row[VisualScopeTable.YPos.Name].ToString());
+
+            return new TECVisualScope(guid, xPos, yPos);
+        }
+
+        private static TECLocation getLocationFromRow(DataRow row)
+        {
+            return new TECLocation(row[LocationTable.Name.Name].ToString(), new Guid(row[LocationTable.LocationID.Name].ToString()));
+        }
+
+        private static TECDevice getDeviceFromRow(DataRow row)
+        {
+            Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
+            string name = row[DeviceTable.Name.Name].ToString();
+            string description = row[DeviceTable.Description.Name].ToString();
+            string costString = row[DeviceTable.Cost.Name].ToString();
+            ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
+
+            double cost;
+            if (!double.TryParse(costString, out cost))
+            {
+                cost = 0;
+                Console.WriteLine("Cannot convert cost to double, setting to 0");
+            }
+
+            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+
+            return new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
+        }
         #endregion
     }
 

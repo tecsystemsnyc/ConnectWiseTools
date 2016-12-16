@@ -164,7 +164,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
@@ -204,7 +204,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
@@ -236,7 +236,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
@@ -260,7 +260,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
             Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);

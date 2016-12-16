@@ -158,9 +158,9 @@ namespace Tests
             
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
-            
-            string expectedWire = "Test Wire";
-            Assert.AreEqual(expectedWire, actualDevice.Wire);
+
+            ConnectionType expectedWire = ConnectionType.Fiber;
+            Assert.AreEqual(expectedWire, actualDevice.ConnectionType);
         }
 
         [TestMethod]
