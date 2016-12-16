@@ -109,9 +109,16 @@ namespace Tests
             allSystems.Add(system2);
             allSystems.Add(system3);
 
+            //VisualScope
+            var vScope = new TECVisualScope(system1, 4.2, 4.2);
+            var allVScope = new ObservableCollection<TECVisualScope>();
+            allVScope.Add(vScope);
+
             //Pages
-            var pages1 = new TECPage("Testpath", 2);
+            var pages1 = new TECPage(2, Guid.NewGuid());
+            pages1.PageScope = allVScope;
             var allPages = new ObservableCollection<TECPage>();
+            allPages.Add(pages1);
 
             //Drawings
             var drawing1 = new TECDrawing("Test", "Desc", Guid.NewGuid(), allPages);

@@ -269,6 +269,30 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Undo_Bid_VisualScope()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECVisualScope> expected = new ObservableCollection<TECVisualScope>();
+            foreach (TECVisualScope item in Bid.Drawings[0].Pages[0].PageScope)
+            {
+                expected.Add(item);
+            }
+            TECVisualScope edit = new TECVisualScope(new TECSystem(), 1.0, 1.0);
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Drawings[0].Pages[0].PageScope.Add(edit);
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECVisualScope> actual = Bid.Drawings[0].Pages[0].PageScope;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
         public void Undo_Bid_DeviceCatalog()
         {
             //Arrange

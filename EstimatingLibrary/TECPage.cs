@@ -10,10 +10,9 @@ namespace EstimatingLibrary
 {
     public class TECPage : TECObject
     {
-        private string _path;
-
+        #region Poperties
         public Guid Guid { get; set; }
-
+        private string _path;
         public string Path
         {
             get { return _path; }
@@ -23,51 +22,49 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("Path");
             }
         }
-
         public int PageNum { get; set; }
-
         public ObservableCollection<TECVisualScope> PageScope
         {
             get { return _pageScope; }
             set
             {
+                var temp = this.Copy();
+                PageScope.CollectionChanged -= PageScope_CollectionChanged;
                 _pageScope = value;
-                RaisePropertyChanged("PageScope");
+                NotifyPropertyChanged("PageScope", temp, this);
                 PageScope.CollectionChanged += PageScope_CollectionChanged;
             }
         }
         private ObservableCollection<TECVisualScope> _pageScope;
-
+        #endregion
         public TECPage(string path, int pageNum)
         {
             PageNum = pageNum;
             Guid = Guid.NewGuid();
-            Path = path;
-            PageScope = new ObservableCollection<TECVisualScope>();
+            _path = path;
+            _pageScope = new ObservableCollection<TECVisualScope>();
             PageScope.CollectionChanged += PageScope_CollectionChanged;
         }
-
         
-
         public TECPage(int pageNum, Guid guid)
         {
             PageNum = pageNum;
             Guid = guid;
-            Path = null;
-            PageScope = new ObservableCollection<TECVisualScope>();
+            _path = null;
+            _pageScope = new ObservableCollection<TECVisualScope>();
             PageScope.CollectionChanged += PageScope_CollectionChanged;
         }
 
         public TECPage(TECPage page)
         {
             Guid = page.Guid;
-            Path = page.Path;
-            PageScope = new ObservableCollection<TECVisualScope>();
+            _path = page.Path;
+            _pageScope = new ObservableCollection<TECVisualScope>();
             foreach (TECVisualScope vs in page.PageScope)
             {
                 _pageScope.Add(new TECVisualScope(vs));
             }
-            PageScope.CollectionChanged += PageScope_CollectionChanged;
+            _pageScope.CollectionChanged += PageScope_CollectionChanged;
         }
 
         public override Object Copy()

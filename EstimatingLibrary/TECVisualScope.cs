@@ -13,7 +13,6 @@ namespace EstimatingLibrary
         private double _x;
         private double _y;
         
-
         public TECScope Scope
         {
             get { return _scope; }

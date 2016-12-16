@@ -23,6 +23,11 @@
                             <Border BorderThickness="2" BorderBrush="Black">
                                 <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
                                     <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
+                                    <Grid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Test"/>
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                 </Grid>
                             </Border>
                         </ControlTemplate>
