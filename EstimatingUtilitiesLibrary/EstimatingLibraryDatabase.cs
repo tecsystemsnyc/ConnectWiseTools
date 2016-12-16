@@ -2571,15 +2571,15 @@ namespace EstimatingUtilitiesLibrary
                 if(table is BidInfoTable)
                 {
                     var infoBid = getBidInfo();
-                    Data.Add(BidInfoTable.BidInfoID.Name, infoBid.InfoGuid.ToString());
-                    Data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-                    SQLiteDB.Replace(BidInfoTable.TableName, Data);
+                    commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
+                    commandString += "where " + BidInfoTable.BidInfoID.Name + " = '" + infoBid.InfoGuid.ToString() + "'";
+                    SQLiteDB.nonQueryCommand(commandString);
                 } else
                 {
                     var infoTemplates = getTemplatesInfo();
-                    Data.Add(TemplatesInfoTable.TemplatesInfoID.Name, infoTemplates.InfoGuid.ToString());
-                    Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-                    SQLiteDB.Replace(TemplatesInfoTable.TableName, Data);
+                    commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
+                    commandString += "where " + TemplatesInfoTable.TemplatesInfoID.Name + " = '" + infoTemplates.InfoGuid.ToString() + "'";
+                    SQLiteDB.nonQueryCommand(commandString);
                 }
             }
         }
