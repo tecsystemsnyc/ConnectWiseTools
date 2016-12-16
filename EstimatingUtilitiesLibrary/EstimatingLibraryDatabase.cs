@@ -2152,6 +2152,11 @@ namespace EstimatingUtilitiesLibrary
             }
             createString += ")";
             SQLiteDB.nonQueryCommand(createString);
+
+            if(table is TemplatesInfoTable)
+            {
+                populateTemplatesInfo();
+            }
         }
         static private void createTempTableFromDefinition(TableBase table)
         {
@@ -2419,6 +2424,14 @@ namespace EstimatingUtilitiesLibrary
         #endregion Link Methods
 
         #region Database Version Update Methods
+        static private void populateTemplatesInfo()
+        {
+            Dictionary<string, string> Data = new Dictionary<string, string>();
+            Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+            Data.Add(TemplatesInfoTable.TemplatesInfoID.Name, Guid.NewGuid().ToString());
+            SQLiteDB.Insert(TemplatesInfoTable.TableName, Data);
+        }
+
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
@@ -2557,19 +2570,16 @@ namespace EstimatingUtilitiesLibrary
                 Dictionary<string, string> Data = new Dictionary<string, string>();
                 if(table is BidInfoTable)
                 {
+                    var infoBid = getBidInfo();
+                    Data.Add(BidInfoTable.BidInfoID.Name, infoBid.InfoGuid.ToString());
                     Data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
                     SQLiteDB.Replace(BidInfoTable.TableName, Data);
                 } else
                 {
+                    var infoTemplates = getTemplatesInfo();
+                    Data.Add(TemplatesInfoTable.TemplatesInfoID.Name, infoTemplates.InfoGuid.ToString());
                     Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
                     SQLiteDB.Replace(TemplatesInfoTable.TableName, Data);
-                    var infoTemplates = getTemplatesInfo();
-                    if(infoTemplates.InfoGuid == null)
-                    {
-                        commandString = "Update set " + TemplatesInfoTable.TemplatesInfoID + " = '" + Guid.NewGuid().ToString() + "' ";
-                        commandString += "where " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "'";
-                        SQLiteDB.nonQueryCommand(commandString);
-                    }
                 }
             }
         }
