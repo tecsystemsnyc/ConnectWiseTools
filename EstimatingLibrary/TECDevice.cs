@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private string _wire;
+        private TECConnection _wire;
         private TECManufacturer _manufacturer;
 
         public double Cost {
@@ -24,7 +24,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public string Wire
+        public TECConnection Wire
         {
             get { return _wire; }
             set
@@ -48,15 +48,15 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(string name, string description, double cost, string wire, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
+        public TECDevice(string name, string description, double cost, TECConnection wire, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
         {
             _cost = cost;
             _wire = wire;
             _manufacturer = manufacturer;
         }
-        public TECDevice(string name, string description, double cost, string wire, TECManufacturer manufacturer)
+        public TECDevice(string name, string description, double cost, TECConnection wire, TECManufacturer manufacturer)
             : this(name, description, cost, wire, manufacturer, Guid.NewGuid()) { }
-        public TECDevice() : this("", "", 0, "2c", new TECManufacturer()) { }
+        public TECDevice() : this("", "", 0, new TECConnection(), new TECManufacturer()) { }
         
         //Copy Constructor
         public TECDevice(TECDevice deviceSource) 
