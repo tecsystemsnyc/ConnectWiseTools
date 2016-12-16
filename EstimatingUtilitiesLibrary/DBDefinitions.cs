@@ -133,7 +133,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Cost = new TableField("Cost", "REAL");
-        public static TableField Wire = new TableField("Wire", "TEXT");
+        public static TableField ConnectionType = new TableField("ConnectionType", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             DeviceID
@@ -232,6 +232,59 @@ namespace EstimatingUtilitiesLibrary
 
     }
 
+    public class ConnectionTable : TableBase
+    {
+        public static new string TableName = "TECConnection";
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+        public static TableField Length = new TableField("Length", "REAL");
+        public static TableField Type = new TableField("Type", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ConnectionID
+            };
+    }
+
+    public class ControllerTable : TableBase
+    {
+        public static new string TableName = "TECController";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Description = new TableField("Description", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID
+            };
+    }
+    
+    public class ControllerConnectionTypeTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECConnectionType";
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+        public static TableField Type = new TableField("ConnectionType", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ConnectionID,
+            Type
+            };
+    }
+
+    public class ScopeConnectionTable : TableBase
+    {
+        public static new string TableName = "TECScopeTECController";
+
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT");
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ScopeID,
+            ConnectionID
+            };
+    }
+
     public class ScopeBranchHierarchyTable : TableBase
     {
         public static new string TableName = "TECScopeBranchHierarchy";
@@ -245,6 +298,7 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+
 
     public class SystemIndexTable : TableBase
     {

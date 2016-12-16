@@ -64,7 +64,7 @@ namespace Tests
             allManufacturers.Add(manufacturer1);
 
             //Devices
-            var device1 = new TECDevice("Device 1", "Description 1", 987.6, "Test Wire", manufacturer1);
+            var device1 = new TECDevice("Device 1", "Description 1", 987.6, new TECConnection(), manufacturer1);
             device1.Quantity = 987;
             device1.Tags.Add(tag1);
 
@@ -126,7 +126,7 @@ namespace Tests
             allDrawings.Add(drawing1);
 
             //Devices Catalog
-            var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, "Test Wire", new TECManufacturer());
+            var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, new TECConnection(), new TECManufacturer());
             var deviceCatalog = new ObservableCollection<TECDevice>();
             deviceCatalog.Add(deviceC1);
             deviceCatalog.Add(device1);
@@ -195,8 +195,8 @@ namespace Tests
             templates.ManufacturerCatalog.Add(childDevMan);
 
             //Devices
-            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, "Test Wire", testDevMan);
-            TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, "Test Child Wire", childDevMan);
+            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, new TECConnection(), testDevMan);
+            TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, new TECConnection(), childDevMan);
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);

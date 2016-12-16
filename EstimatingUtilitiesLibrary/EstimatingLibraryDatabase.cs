@@ -1667,10 +1667,12 @@ namespace EstimatingUtilitiesLibrary
             foreach (DataRow row in devicesDT.Rows)
             {
                 Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string costString = row["Cost"].ToString();
-                string wire = row["Wire"].ToString();
+                string name = row[DeviceTable.Name.Name].ToString();
+                string description = row[DeviceTable.Description.Name].ToString();
+                string costString = row[DeviceTable.Cost.Name].ToString();
+                string connectionType = row[DeviceTable.ConnectionType.Name].ToString();
+
+                TECConnection connection = getConnectionInDevice(deviceID);
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -1681,8 +1683,9 @@ namespace EstimatingUtilitiesLibrary
 
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
 
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, wire, manufacturer, deviceID);
+                TECDevice deviceToAdd = new TECDevice(name, description, cost, connection, manufacturer, deviceID);
                 deviceToAdd.Tags = getTagsInScope(deviceID);
+                deviceToAdd.ConnectionType = connectionType;
 
                 devices.Add(deviceToAdd);
             }
@@ -2029,6 +2032,39 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return drawings;
+        }
+
+        static private TECConnection getConnectionInDevice(Guid deviceID)
+        {
+            TECConnection connection = new TECConnection();
+
+            string command = "select * from TECConnection where ConnectionID in ";
+            command += "(select ConnectionID from TECScopeTECConnection where ScopeID = '";
+            command += deviceID;
+            command += "')";
+
+            try
+            {
+                DataTable connectionsDT = SQLiteDB.getDataFromCommand(command);
+
+                foreach (DataRow row in connectionsDT.Rows)
+                {
+                    Guid guid = new Guid(row["ConnectionID"].ToString());
+                    double length = UtilitiesMethods.StringToDouble(row["Length"].ToString());
+
+
+                    TECConnection outConnection = new TECConnection(length, ConnectionType.Cat6, new TECController(), new ObservableCollection<TECScope>(), guid);
+                    connection = outConnection;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: GetPagesInDrawing() failed. Code: " + e.Message);
+                throw e;
+            }
+
+
+            return connection;
         }
 
         static private ObservableCollection<TECPage> getPagesInDrawing(Guid DrawingID)
