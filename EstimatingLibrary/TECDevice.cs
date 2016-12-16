@@ -60,19 +60,19 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(string name, string description, double cost, TECConnection connection, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
+        public TECDevice(string name, string description, double cost, ConnectionType connectiontype, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
         {
             _cost = cost;
-            _connection = connection;
+            _connectionType = connectiontype;
             _manufacturer = manufacturer;
         }
-        public TECDevice(string name, string description, double cost, TECConnection connection, TECManufacturer manufacturer)
-            : this(name, description, cost, connection, manufacturer, Guid.NewGuid()) { }
-        public TECDevice() : this("", "", 0, new TECConnection(), new TECManufacturer()) { }
+        public TECDevice(string name, string description, double cost, ConnectionType connectionType, TECManufacturer manufacturer)
+            : this(name, description, cost, connectionType, manufacturer, Guid.NewGuid()) { }
+        public TECDevice() : this("", "", 0, 0, new TECManufacturer()) { }
         
         //Copy Constructor
         public TECDevice(TECDevice deviceSource) 
-            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.Connection, deviceSource.Manufacturer, deviceSource.Guid)
+            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.ConnectionType, deviceSource.Manufacturer, deviceSource.Guid)
         {
             _connectionType = deviceSource.ConnectionType;
             _quantity = deviceSource.Quantity;

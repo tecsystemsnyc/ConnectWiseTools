@@ -761,7 +761,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(DeviceTable.Name.Name, device.Name);
             data.Add(DeviceTable.Description.Name, device.Description);
             data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-            data.Add(DeviceTable.Wire.Name, device.Wire);
+            data.Add(DeviceTable.ConnectionType.Name, TECConnectionType.convertTypeToString(device.ConnectionType));
 
             if (!SQLiteDB.Insert(DeviceTable.TableName, data))
             {
@@ -1060,7 +1060,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(DeviceTable.Name.Name, device.Name);
             data.Add(DeviceTable.Description.Name, device.Description);
             data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-            data.Add(DeviceTable.Wire.Name, device.Wire);
+            data.Add(DeviceTable.ConnectionType.Name, TECConnectionType.convertTypeToString(device.ConnectionType));
 
             if (!SQLiteDB.Replace(DeviceTable.TableName, data))
             {
@@ -1632,7 +1632,7 @@ namespace EstimatingUtilitiesLibrary
 
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
 
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, connection, manufacturer, deviceID);
+                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
                 deviceToAdd.Tags = getTagsInScope(deviceID);
                 deviceToAdd.ConnectionType = connectionType;
 
@@ -1766,7 +1766,7 @@ namespace EstimatingUtilitiesLibrary
                 string name = row[DeviceTable.Name.Name].ToString();
                 string description = row[DeviceTable.Description.Name].ToString();
                 string costString = row[DeviceTable.Cost.Name].ToString();
-                string wire = row[DeviceTable.Wire.Name].ToString();
+                ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -1777,7 +1777,7 @@ namespace EstimatingUtilitiesLibrary
 
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
 
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, wire, manufacturer, deviceID);
+                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
 
                 string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
                 quantityCommand += (subScopeID + "' and DeviceID = '" + deviceID + "'");
