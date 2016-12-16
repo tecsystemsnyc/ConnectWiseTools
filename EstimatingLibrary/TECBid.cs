@@ -277,19 +277,11 @@ namespace EstimatingLibrary
             this("", "", new DateTime(), "", "", new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>())
         {
             foreach(string item in Defaults.Scope)
-            {
-                ScopeTree.Add(new TECScopeBranch(item, "", new ObservableCollection<TECScopeBranch>()));
-            }
-
+            { ScopeTree.Add(new TECScopeBranch(item, "", new ObservableCollection<TECScopeBranch>())); }
             foreach (string item in Defaults.Exclusions)
-            {
-                Exclusions.Add(new TECExclusion(item));
-            }
-
+            { Exclusions.Add(new TECExclusion(item)); }
             foreach (string item in Defaults.Notes)
-            {
-                Notes.Add(new TECNote(item));
-            }
+            { Notes.Add(new TECNote(item)); }
         }
 
         //Copy Constructor

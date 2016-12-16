@@ -2120,25 +2120,17 @@ namespace EstimatingUtilitiesLibrary
             {
                 createString += "'" + field.Name + "' " + field.FieldType;
                 if (fields.IndexOf(field) < (fields.Count - 1))
-                {
-                    createString += ", ";
-                }
+                { createString += ", "; }
             }
             if (primaryKey.Count != 0)
-            {
-                createString += ", PRIMARY KEY(";
-            }
+            {  createString += ", PRIMARY KEY("; }
             foreach (TableField pk in primaryKey)
             {
                 createString += "'" + pk.Name + "' ";
                 if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
-                {
-                    createString += ", ";
-                }
+                { createString += ", "; }
                 else
-                {
-                    createString += ")";
-                }
+                { createString += ")"; }
             }
             createString += ")";
             SQLiteDB.nonQueryCommand(createString);
@@ -2434,17 +2426,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 DataTable infoDT = new DataTable();
                 if (type == typeof(TECBid))
-                {
-                    infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
-                }
+                { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
                 else if (type == typeof(TECTemplates))
-                {
-                    infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
-                }
+                { infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName); }
                 else
-                {
-                    throw new ArgumentException("checkDatabaseVersion given invalid type");
-                }
+                { throw new ArgumentException("checkDatabaseVersion given invalid type");  }
                 
                 if (infoDT.Rows.Count < 1)
                 {
@@ -2454,9 +2440,7 @@ namespace EstimatingUtilitiesLibrary
                         throw new Exception("Could not load from TECBidInfo");
                     }
                     else
-                    {
-                        return false;
-                    }
+                    { return false; }
                 }
                 else
                 {
@@ -2466,9 +2450,7 @@ namespace EstimatingUtilitiesLibrary
                         string version = infoRow["DBVersion"].ToString();
                         return (version == currentVersion);
                     } else
-                    {
-                        return false;
-                    }
+                    { return false; }
                 }
             }
             catch (Exception e)
@@ -2483,28 +2465,18 @@ namespace EstimatingUtilitiesLibrary
 
             List<object> databaseTableList = new List<object>();
             if (type == typeof(TECBid))
-            {
-                databaseTableList = AllBidTables.Tables;
-            }
+            { databaseTableList = AllBidTables.Tables;  }
             else if (type == typeof(TECTemplates))
-            {
-                databaseTableList = AllTemplateTables.Tables;
-            }
+            { databaseTableList = AllTemplateTables.Tables; }
             else
-            {
-                throw new ArgumentException("updateDatabase() given invalid type");
-            }
+            { throw new ArgumentException("updateDatabase() given invalid type"); }
             foreach(TableBase table in databaseTableList)
             {
                 var tableInfo = getTableInfo(table);
                 if (tableNames.Contains(tableInfo.Item1))
-                {
-                    updateTableFromType(table);
+                { updateTableFromType(table);
                 } else
-                {
-                    createTableFromDefinition(table);
-                }
-                
+                { createTableFromDefinition(table); }
             }
         }
         static private List<string> getAllTableNames()
@@ -2543,9 +2515,7 @@ namespace EstimatingUtilitiesLibrary
             foreach(TableField field in fields)
             {
                 if (currentFields.Contains(field.Name))
-                {
-                    commonFields.Add(field.Name);
-                }
+                {  commonFields.Add(field.Name); }
             }
 
             string commonString = UtilitiesMethods.CommaSeparatedString(commonFields);
@@ -2564,6 +2534,20 @@ namespace EstimatingUtilitiesLibrary
             commandString = "drop table '" + tempName + "'";
             SQLiteDB.nonQueryCommand(commandString);
 
+            if ((table is BidInfoTable) || (table is TemplatesInfoTable))
+            {
+                Dictionary<string, string> Data = new Dictionary<string, string>();
+                if(table is BidInfoTable)
+                {
+                    Data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+                    SQLiteDB.Replace(BidInfoTable.TableName, Data);
+                } else
+                {
+                    Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+                    SQLiteDB.Replace(TemplatesInfoTable.TableName, Data);
+                    var infoTemples = getTemplateInfo();
+                }
+            }
         }
         
         static private Tuple<string, List<TableField>, List<TableField>> getTableInfo(TableBase table)
