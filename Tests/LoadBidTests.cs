@@ -268,5 +268,11 @@ namespace Tests
             Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
         }
+
+        [TestMethod]
+        public void Load_Bid_Drawing()
+        {
+            //Assert
+        }
     }
 }

@@ -71,11 +71,16 @@ namespace EstimateBuilder.ViewModel
 
             if (path != null)
             {
+                if (!isReady)
+                {
+                    MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                    return;
+                }
                 Properties.Settings.Default.DrawingDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    CurrentStatusText = "Loading Drawings...";
+                    SetBusyStatus("Loading drawings from file: " + path);
                     var worker = new BackgroundWorker();
 
                     worker.DoWork += (s, e) => {
@@ -87,7 +92,7 @@ namespace EstimateBuilder.ViewModel
                         if (e.Result is TECDrawing)
                         {
                             Bid.Drawings.Add((TECDrawing)e.Result);
-                            ResetStatusText();
+                            ResetStatus();
                             string message = "Drawings have finished loading.";
                             MessageBox.Show(message);
                         }
@@ -177,7 +182,7 @@ namespace EstimateBuilder.ViewModel
         {
             if (message.Notification == "StatusUpdate")
             {
-                CurrentStatusText = message.Content;
+                SetBusyStatus(message.Content);
             }
         }
         #endregion Methods
