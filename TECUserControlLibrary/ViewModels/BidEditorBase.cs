@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class BidEditorBase : ViewModelBase
     {
+
         #region Constants
 
         string DEFAULT_STATUS_TEXT = "Ready :)";
@@ -29,6 +30,12 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
+        protected bool isReady
+        {
+            get;
+            private set;
+        }
+
         private TECBid _bid;
         public TECBid Bid
         {
@@ -58,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels
         public string CurrentStatusText
         {
             get { return _currentStatusText; }
-            set
+            private set
             {
                 _currentStatusText = value;
                 RaisePropertyChanged("CurrentStatusText");
@@ -122,7 +129,7 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         public BidEditorBase()
         {
-            CurrentStatusText = "Loading...";
+            SetBusyStatus("Initializing Program...");
 
             setupCommands();
             setupTemplates();
@@ -131,7 +138,7 @@ namespace TECUserControlLibrary.ViewModels
             setupBid();
             setupStack();
 
-            ResetStatusText();
+            ResetStatus();
         }
 
         #region Methods
@@ -408,9 +415,20 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        protected void ResetStatusText()
+        protected void SetBusyStatus(string statusText)
+        {
+            CurrentStatusText = statusText;
+            isReady = false;
+        }
+        protected void ResetStatus()
         {
             CurrentStatusText = DEFAULT_STATUS_TEXT;
+            isReady = true;
+        }
+
+        protected bool IsReady()
+        {
+            return isReady;
         }
 
         #endregion //Helper Functions
@@ -418,6 +436,11 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
         private void NewExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             string message = "Would you like to save your changes before creating a new scope?";
             MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
             if (result == MessageBoxResult.Yes)
@@ -442,11 +465,17 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void LoadExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
             //User choose path
             string path = getLoadPath();
             if (path != null)
             {
-                CurrentStatusText = "Loading File: " + path;
+                SetBusyStatus("Loading File: " + path);
                 bidDBFilePath = path;
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
@@ -460,15 +489,21 @@ namespace TECUserControlLibrary.ViewModels
                     MessageBox.Show(message);
                 }
                 Console.WriteLine("Finished loading SQL Database.");
-                ResetStatusText();
+                ResetStatus();
             }
         }
         private void SaveExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
             saveSuccessful = false;
             if (bidDBFilePath != null)
             {
-                CurrentStatusText = "Saving...";
+                SetBusyStatus("Saving to path: " + bidDBFilePath);
                 ChangeStack stackToSave = stack;
                 stack.ClearStacks();
 
@@ -497,7 +532,7 @@ namespace TECUserControlLibrary.ViewModels
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
-                    ResetStatusText();
+                    ResetStatus();
                 };
                 worker.RunWorkerAsync();
             }
@@ -508,6 +543,11 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void SaveAsExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             //User choose path
             saveSuccessful = false;
             string path = getSavePath();
@@ -517,7 +557,7 @@ namespace TECUserControlLibrary.ViewModels
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
                 stack.ClearStacks();
-                CurrentStatusText = "Saving file: " + path;
+                SetBusyStatus("Saving file: " + path);
 
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += (s, e) =>
@@ -541,7 +581,7 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     Console.WriteLine("Finished saving SQL Database.");
-                    ResetStatusText();
+                    ResetStatus();
                 };
 
                 worker.RunWorkerAsync();
@@ -596,12 +636,17 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void LoadTemplatesExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             //User choose path
             string path = getLoadTemplatesPath();
 
             if (path != null)
             {
-                CurrentStatusText = "Loading File: " + path;
+                SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     File.Copy(path, defaultTemplatesPath, true);
@@ -617,7 +662,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 Console.WriteLine("Finished loading templates");
             }
-            ResetStatusText();
+            ResetStatus();
         }
 
         private void UndoExecute()
