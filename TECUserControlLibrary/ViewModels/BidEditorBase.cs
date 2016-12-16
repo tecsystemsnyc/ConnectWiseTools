@@ -691,6 +691,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void ClosingExecute(CancelEventArgs e)
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                e.Cancel = true;
+                return;
+            }
             bool changes = (stack.SaveStack.Count > 0);
             if (changes)
             {
