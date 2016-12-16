@@ -2563,7 +2563,13 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
                     SQLiteDB.Replace(TemplatesInfoTable.TableName, Data);
-                    var infoTemples = getTemplateInfo();
+                    var infoTemplates = getTemplatesInfo();
+                    if(infoTemplates.InfoGuid == null)
+                    {
+                        commandString = "Update set " + TemplatesInfoTable.TemplatesInfoID + " = '" + Guid.NewGuid().ToString() + "' ";
+                        commandString += "where " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "'";
+                        SQLiteDB.nonQueryCommand(commandString);
+                    }
                 }
             }
         }
