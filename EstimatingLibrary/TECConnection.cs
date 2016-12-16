@@ -9,11 +9,6 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public enum ConnectionType { TwoC18, ThreeC18, FourC18, SixC18,
-        WireTHHN14, WireTHHN12,
-        PlenTwoC18, PlenThree18, PlenFourC18, PlenSixC18,
-        Cat6, Fiber, FiberArmor, BX};
-
     public class TECConnection : INotifyPropertyChanged
     {
         #region Properties
@@ -47,6 +42,9 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Type", temp, this);
             }
         }
+
+        
+
         public TECController Controller
         {
             get { return _controller; }
