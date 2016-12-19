@@ -1672,8 +1672,6 @@ namespace EstimatingUtilitiesLibrary
                 string costString = row[DeviceTable.Cost.Name].ToString();
                 ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
 
-                TECConnection connection = getConnectionInDevice(deviceID);
-
                 double cost;
                 if (!double.TryParse(costString, out cost))
                 {
@@ -2006,13 +2004,9 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECDrawing> drawings = new ObservableCollection<TECDrawing>();
 
-            string command = "select * from TECDrawing";
-
-            DataTable ghostDrawingsDT;
-
             try
             {
-                ghostDrawingsDT = SQLiteDB.getDataFromCommand(command);
+                DataTable ghostDrawingsDT = SQLiteDB.getDataFromTable(DrawingTable.TableName);
 
                 foreach (DataRow row in ghostDrawingsDT.Rows)
                 {
@@ -2032,39 +2026,6 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return drawings;
-        }
-
-        static private TECConnection getConnectionInDevice(Guid deviceID)
-        {
-            TECConnection connection = new TECConnection();
-
-            string command = "select * from TECConnection where ConnectionID in ";
-            command += "(select ConnectionID from TECScopeTECConnection where ScopeID = '";
-            command += deviceID;
-            command += "')";
-
-            try
-            {
-                DataTable connectionsDT = SQLiteDB.getDataFromCommand(command);
-
-                foreach (DataRow row in connectionsDT.Rows)
-                {
-                    Guid guid = new Guid(row["ConnectionID"].ToString());
-                    double length = UtilitiesMethods.StringToDouble(row["Length"].ToString());
-
-
-                    TECConnection outConnection = new TECConnection(length, ConnectionType.Cat6, new TECController(), new ObservableCollection<TECScope>(), guid);
-                    connection = outConnection;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: GetPagesInDrawing() failed. Code: " + e.Message);
-                throw e;
-            }
-
-
-            return connection;
         }
 
         static private ObservableCollection<TECPage> getPagesInDrawing(Guid DrawingID)
@@ -2157,6 +2118,63 @@ namespace EstimatingUtilitiesLibrary
             else
             {
                 return null;
+            }
+        }
+
+        static private ObservableCollection<TECController> getControllers()
+        {
+            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
+
+            try
+            {
+                DataTable controllersDT = SQLiteDB.getDataFromTable(ControllerTable.TableName);
+
+                foreach (DataRow row in controllersDT.Rows)
+                {
+                    Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
+                    string name = row[ControllerTable.Name.Name].ToString();
+                    string description = row[ControllerTable.Description.Name].ToString();
+                    string costString = row[ControllerTable.Cost.Name].ToString();
+
+                    double cost;
+                    if (!double.TryParse(costString, out cost))
+                    {
+                        cost = 0;
+                        Console.WriteLine("Cannot convert cost to double, setting to 0");
+                    }
+
+                    TECController controller = new TECController(name, description, guid, cost);
+
+                    controller.Types = getConnectionTypesInController(guid);
+                    controller.Connections = getConnectionsInController(guid);
+
+                    controllers.Add(new TECController());
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: getControllers() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return controllers;
+        }
+
+        static private ObservableCollection<ConnectionType> getConnectionTypesInController(Guid controllerID)
+        {
+            ObservableCollection<ConnectionType> connections = new ObservableCollection<ConnectionType>();
+
+            string command = "select " + ControllerConnectionTypeTable.Type.Name + " from " + ControllerConnectionTypeTable.TableName + " where " +
+                ControllerConnectionTypeTable.ConnectionID.Name + " = '" + controllerID + "'";
+
+            try
+            {
+                DataTable typeDT = SQLiteDB.getDataFromCommand(command);
+
+                foreach (DataRow row in typeDT.Rows)
+                {
+
+                }
             }
         }
         #endregion //Loading from DB Methods
@@ -2456,6 +2474,11 @@ namespace EstimatingUtilitiesLibrary
                 Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
                 throw e;
             }
+        }
+
+        static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECScope> scope)
+        {
+
         }
         #endregion Link Methods
 
