@@ -1496,32 +1496,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in systemsDT.Rows)
             {
-                Guid systemID = new Guid(row["SystemID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-                string budgetPriceString = row["BudgetPrice"].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
-                }
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
-                }
-
-                ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
-
-                TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
-
-                system.Quantity = quantity;
-                system.Tags = getTagsInScope(systemID);
+                var system = getSystemFromRow(row);
 
                 systems.Add(system);
             }
@@ -1587,33 +1562,7 @@ namespace EstimatingUtilitiesLibrary
             
             foreach (DataRow row in equipmentDT.Rows)
             {
-                Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-                string budgetPriceString = row["BudgetPrice"].ToString();
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budget price to double in equipment, setting to -1");
-                }
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in equipment, setting to 1");
-                }
-
-                
-                ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
-
-                TECEquipment equipmentToAdd = new TECEquipment(name, description, budgetPrice, subScopeInEquipment, equipmentID);
-
-                equipmentToAdd.Quantity = quantity;
-                equipmentToAdd.Tags = getTagsInScope(equipmentID);
+                var equipmentToAdd = getEquipmentFromRow(row);
 
                 equipment.Add(equipmentToAdd);
             }
@@ -1790,25 +1739,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in subScopeDT.Rows)
             {
-                Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
-                string name = row[SubScopeTable.Name.Name].ToString();
-                string description = row[SubScopeTable.Description.Name].ToString();
-                string quantityString = row[SubScopeTable.Quantity.Name].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
-                }
-
-                ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
-                ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
-
-                TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
-
-                subScopeToAdd.Quantity = quantity;
-                subScopeToAdd.Tags = getTagsInScope(subScopeID);
+                var subScopeToAdd = getSubScopeFromRow(row);
                 subScope.Add(subScopeToAdd);
             }
 
@@ -2711,6 +2642,98 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
+        #endregion
+
+        #region Table Row to Object Methods
+        private static TECSystem getSystemFromRow(DataRow row)
+        {
+            Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
+            string name = row[SystemTable.Name.Name].ToString();
+            string description = row[SystemTable.Description.Name].ToString();
+            string quantityString = row[SystemTable.Quantity.Name].ToString();
+            string budgetPriceString = row[SystemTable.BudgetPrice.Name].ToString();
+
+            int quantity;
+            if (!int.TryParse(quantityString, out quantity))
+            {
+                quantity = 1;
+                Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
+            }
+
+            double budgetPrice;
+            if (!double.TryParse(budgetPriceString, out budgetPrice))
+            {
+                budgetPrice = -1;
+                Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
+            }
+
+            ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
+
+            TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
+
+            system.Quantity = quantity;
+            system.Tags = getTagsInScope(systemID);
+
+            return system;
+        }
+
+        private static TECEquipment getEquipmentFromRow(DataRow row)
+        {
+            Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
+            string name = row[EquipmentTable.Name.Name].ToString();
+            string description = row[EquipmentTable.Description.Name].ToString();
+            string quantityString = row[EquipmentTable.Quantity.Name].ToString();
+            string budgetPriceString = row[EquipmentTable.BudgetPrice.Name].ToString();
+
+            double budgetPrice;
+            if (!double.TryParse(budgetPriceString, out budgetPrice))
+            {
+                budgetPrice = -1;
+                Console.WriteLine("Cannot convert budget price to double in equipment, setting to -1");
+            }
+
+            int quantity;
+            if (!int.TryParse(quantityString, out quantity))
+            {
+                quantity = 1;
+                Console.WriteLine("Cannot convert quantity to int in equipment, setting to 1");
+            }
+            
+            ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
+
+            TECEquipment equipmentToAdd = new TECEquipment(name, description, budgetPrice, subScopeInEquipment, equipmentID);
+
+            equipmentToAdd.Quantity = quantity;
+            equipmentToAdd.Tags = getTagsInScope(equipmentID);
+
+            return equipmentToAdd;
+        }
+
+        private static TECSubScope getSubScopeFromRow(DataRow row)
+        {
+            Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
+            string name = row[SubScopeTable.Name.Name].ToString();
+            string description = row[SubScopeTable.Description.Name].ToString();
+            string quantityString = row[SubScopeTable.Quantity.Name].ToString();
+
+            int quantity;
+            if (!int.TryParse(quantityString, out quantity))
+            {
+                quantity = 1;
+                Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
+            }
+
+            ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
+            ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
+
+            TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
+
+            subScopeToAdd.Quantity = quantity;
+            subScopeToAdd.Tags = getTagsInScope(subScopeID);
+
+            return subScopeToAdd;
+        }
+
         #endregion
     }
 
