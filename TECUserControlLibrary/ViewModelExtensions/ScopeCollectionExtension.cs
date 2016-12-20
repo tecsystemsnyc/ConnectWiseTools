@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _deviceCost;
 
-        public string DeviceWire
+        public ConnectionType DeviceWire
         {
             get { return _deviceWire; }
             set
@@ -208,7 +208,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DeviceWire");
             }
         }
-        private string _deviceWire;
+        private ConnectionType _deviceWire;
 
         public string DeviceButtonContent
         {
@@ -413,7 +413,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceWire = "";
+            DeviceWire = 0;
         }
 
         #endregion

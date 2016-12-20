@@ -2077,9 +2077,9 @@ namespace EstimatingUtilitiesLibrary
                     TECController controller = new TECController(name, description, guid, cost);
 
                     controller.Types = getConnectionTypesInController(guid);
-                    controller.Connections = getConnectionsInController(guid);
+                    controller.Connections = getConnectionsInController(controller);
 
-                    controllers.Add(new TECController());
+                    controllers.Add(controller);
                 }
             }
             catch (Exception e)
@@ -2093,7 +2093,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private ObservableCollection<ConnectionType> getConnectionTypesInController(Guid controllerID)
         {
-            ObservableCollection<ConnectionType> connections = new ObservableCollection<ConnectionType>();
+            ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
 
             string command = "select " + ControllerConnectionTypeTable.Type.Name + " from " + ControllerConnectionTypeTable.TableName + " where " +
                 ControllerConnectionTypeTable.ConnectionID.Name + " = '" + controllerID + "'";
@@ -2104,9 +2104,49 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (DataRow row in typeDT.Rows)
                 {
-
+                    ConnectionType type = TECConnectionType.convertStringToType(row[ControllerConnectionTypeTable.Type.Name].ToString());
+                    types.Add(type);
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("getConnectionTypesInController() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return types;
+        }
+
+        static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller)
+        {
+            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
+
+            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID + " in (" +
+                "select " + ScopeConnectionTable.ConnectionID.Name + " where " + ScopeConnectionTable.ScopeID.Name + " = '" + controller.Guid.ToString() + "')";
+
+            try
+            {
+                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+
+                foreach (DataRow row in connectionDT.Rows)
+                {
+                    Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
+                    string lengthString = row[ConnectionTable.Length.Name].ToString();
+                    string typeString = row[ConnectionTable.Type.Name].ToString();
+
+                    double length = UtilitiesMethods.StringToDouble(lengthString);
+                    ConnectionType type = TECConnectionType.convertStringToType(typeString);
+
+                    connections.Add(new TECConnection(length, type, controller, guid));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("getConnectionsInController() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return connections;
         }
         #endregion //Loading from DB Methods
         
@@ -2409,7 +2449,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECScope> scope)
         {
-
+            
         }
         #endregion Link Methods
 

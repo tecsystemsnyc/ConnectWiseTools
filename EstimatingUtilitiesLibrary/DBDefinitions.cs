@@ -238,7 +238,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
         public static TableField Length = new TableField("Length", "REAL");
-        public static TableField Type = new TableField("Type", "REAL");
+        public static TableField Type = new TableField("Type", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ConnectionID

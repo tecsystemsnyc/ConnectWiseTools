@@ -160,7 +160,7 @@ namespace Tests
             Assert.AreEqual(expectedCost, actualDevice.Cost);
             
             string expectedWire = "Test Wire";
-            Assert.AreEqual(expectedWire, actualDevice.Wire);
+            Assert.AreEqual(expectedWire, actualDevice.ConnectionType);
         }
 
         [TestMethod]

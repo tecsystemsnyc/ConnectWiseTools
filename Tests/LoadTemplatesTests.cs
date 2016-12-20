@@ -93,7 +93,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("Test Wire (Child)", childDevice.Wire);
+            Assert.AreEqual("Test Wire (Child)", childDevice.ConnectionType);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("System Point", sysPoint.Name);
@@ -128,7 +128,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("Test Wire (Child)", childDevice.Wire);
+            Assert.AreEqual("Test Wire (Child)", childDevice.ConnectionType);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("Equipment Point", equipPoint.Name);
@@ -156,7 +156,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("Test Wire (Child)", childDevice.Wire);
+            Assert.AreEqual("Test Wire (Child)", childDevice.ConnectionType);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("SubScope Point", ssPoint.Name);
@@ -178,7 +178,7 @@ namespace Tests
             Assert.AreEqual("Test Device", actualDevice.Name);
             Assert.AreEqual("Device Description", actualDevice.Description);
             Assert.AreEqual(72.9, actualDevice.Cost);
-            Assert.AreEqual("Test Wire", actualDevice.Wire);
+            Assert.AreEqual("Test Wire", actualDevice.ConnectionType);
             Assert.AreEqual("Device Tag", actualDevice.Tags[0].Text);
 
             Assert.AreEqual("Child Manufacturer (Test Device)", childMan.Name);
