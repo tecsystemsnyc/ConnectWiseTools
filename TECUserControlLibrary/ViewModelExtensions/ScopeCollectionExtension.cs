@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _deviceCost;
 
-        public string DeviceConnectionType
+        public ConnectionType DeviceConnectionType
         {
             get { return _deviceConnectionType; }
             set
@@ -208,7 +208,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DeviceConnectionType");
             }
         }
-        private string _deviceConnectionType;
+        private ConnectionType _deviceConnectionType;
 
         public string DeviceButtonContent
         {
@@ -409,11 +409,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddDeviceExecute()
         {
-            Templates.DeviceCatalog.Add(new TECDevice(DeviceName, DeviceDescription, DeviceCost, ConnectionType.FourC18, DeviceManufacturer));
+            Templates.DeviceCatalog.Add(new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer));
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceWire = "";
+            DeviceConnectionType = 0;
         }
 
         #endregion
