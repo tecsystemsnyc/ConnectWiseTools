@@ -413,7 +413,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceConnectionType = "";
+            DeviceWire = "";
         }
 
         #endregion
