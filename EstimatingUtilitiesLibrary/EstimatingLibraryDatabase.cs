@@ -2077,7 +2077,6 @@ namespace EstimatingUtilitiesLibrary
                     TECController controller = new TECController(name, description, guid, cost);
 
                     controller.Types = getConnectionTypesInController(guid);
-                    controller.Connections = getConnectionsInController(controller);
 
                     controllers.Add(controller);
                 }
@@ -2117,16 +2116,13 @@ namespace EstimatingUtilitiesLibrary
             return types;
         }
 
-        static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller)
+        static private ObservableCollection<TECConnection> getConnections()
         {
             ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
 
-            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID + " in (" +
-                "select " + ScopeConnectionTable.ConnectionID.Name + " where " + ScopeConnectionTable.ScopeID.Name + " = '" + controller.Guid.ToString() + "')";
-
             try
             {
-                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+                DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName);
 
                 foreach (DataRow row in connectionDT.Rows)
                 {
@@ -2137,12 +2133,12 @@ namespace EstimatingUtilitiesLibrary
                     double length = UtilitiesMethods.StringToDouble(lengthString);
                     ConnectionType type = TECConnectionType.convertStringToType(typeString);
 
-                    connections.Add(new TECConnection(length, type, controller, guid));
+                    connections.Add(new TECConnection(length, type, guid));
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("getConnectionsInController() failed. Code: " + e.Message);
+                Console.WriteLine("Error: getConnections() failed. Code: " + e.Message);
                 throw e;
             }
 
@@ -2354,7 +2350,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> systems)
+        static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
         {
             Dictionary<Guid, TECLocation> scopeToLink = new Dictionary<Guid, TECLocation>();
 
@@ -2378,7 +2374,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             List<Guid> scopeToRemove = new List<Guid>();
-            foreach (TECSystem sys in systems)
+            foreach (TECSystem sys in bidSystems)
             {
                 foreach (Guid guid in scopeToLink.Keys)
                 {
@@ -2447,7 +2443,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECScope> scope)
+        static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
         {
             
         }
