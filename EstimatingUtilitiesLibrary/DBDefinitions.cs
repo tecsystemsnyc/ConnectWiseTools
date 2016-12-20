@@ -489,7 +489,12 @@ namespace EstimatingUtilitiesLibrary
             new DrawingPageTable(),
             new PageVisualScopeTable(),
             new VisualScopeScopeTable(),
-            new LocationScopeTable()
+            new LocationScopeTable(),
+            new ConnectionTable(),
+            new ControllerTable(),
+            new ControllerConnectionTable(),
+            new ControllerConnectionTypeTable(),
+            new ScopeConnectionTable()
             };
     }
 
@@ -510,6 +515,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
             new ScopeTagTable(),
+            new ControllerTable(),
+            new ControllerConnectionTypeTable(),
             new DeviceManufacturerTable()
         };
     }
