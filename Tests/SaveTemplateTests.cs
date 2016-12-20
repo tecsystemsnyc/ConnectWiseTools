@@ -474,7 +474,7 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, ConnectionType.Cat6, new TECManufacturer(), Guid.NewGuid());
+            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, ConnectionType.WireTHHN12, new TECManufacturer(), Guid.NewGuid());
 
             templates.DeviceCatalog.Add(expectedDevice);
 
@@ -593,11 +593,11 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Templates_Device_Wire()
+        public void Save_Templates_Device_ConnectionType()
         {
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
-            expectedDevice.ConnectionType = ConnectionType.WireTHHN14;
+            expectedDevice.ConnectionType = ConnectionType.WireTHHN12;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
