@@ -892,6 +892,19 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't add item to TECLocationTable.");
             }
         }
+        static private void addController(TECController controller)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerTable.Name.Name, controller.Name);
+            data.Add(ControllerTable.Description.Name, controller.Description);
+            data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
+
+            if (!SQLiteDB.Insert(ControllerTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECController table.");
+            }
+        }
 
         #endregion Add Object Functions
 
@@ -2445,7 +2458,93 @@ namespace EstimatingUtilitiesLibrary
 
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
         {
-            
+            //Construct guid relations
+            List<Tuple<TECConnection, Guid, List<Guid>>> toConnect = new List<Tuple<TECConnection, Guid, List<Guid>>>();
+            foreach (TECConnection conn in connections)
+            {
+                string command = "select * from " + ControllerConnectionTable.TableName + " where " + ControllerConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
+                
+                DataTable guidDT = SQLiteDB.getDataFromCommand(command);
+
+                Guid parentGuid = new Guid(guidDT.Rows[0][ControllerConnectionTable.ControllerID.Name].ToString());
+
+                command = "select * from " + ScopeConnectionTable.TableName + " where " + ScopeConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
+
+                guidDT = SQLiteDB.getDataFromCommand(command);
+
+                List<Guid> childGuids = new List<Guid>();
+
+                foreach (DataRow row in guidDT.Rows)
+                {
+                    childGuids.Add(new Guid(row[ScopeConnectionTable.ScopeID.Name].ToString()));
+                }
+
+                toConnect.Add(new Tuple<TECConnection, Guid, List<Guid>>(conn, parentGuid, childGuids));
+            }
+
+            //Construct potential TECScope List
+            List<TECScope> scopeToLink = new List<TECScope>();
+
+            foreach (TECController controller in controllers)
+            {
+                scopeToLink.Add(controller);
+            }
+            foreach (TECSystem system in bidSystems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECDevice dev in ss.Devices)
+                        {
+                            scopeToLink.Add(dev);
+                        }
+                    }
+                }
+            }
+
+            //Link
+            foreach (Tuple<TECConnection, Guid, List<Guid>> item in toConnect)
+            {
+                TECConnection connection = item.Item1;
+                Guid parentGuid = item.Item2;
+                List<Guid> childGuids = item.Item3;
+
+                //Link Parent Controller
+                foreach (TECController controller in controllers)
+                {
+                    if (controller.Guid == parentGuid)
+                    {
+                        connection.Controller = controller;
+                        controller.Connections.Add(connection);
+                        break;
+                    }
+                }
+
+                //Link Children Scope
+                foreach (Guid child in childGuids)
+                {
+                    TECScope scopeToRemove;
+                    foreach (TECScope scope in scopeToLink)
+                    {
+                        if (scope.Guid == child)
+                        {
+                            if (scope is TECDevice)
+                            {
+                                (scope as TECDevice).Connection = connection;
+                            }
+                            else if (scope is TECController)
+                            {
+                                (scope as TECController).Connections.Add(connection);
+                            }
+                            connection.Scope.Add(scope);
+                            scopeToRemove = scope;
+                            break;
+                        }
+                        scopeToLink.Remove(scope);
+                    }
+                }
+            }
         }
         #endregion Link Methods
 

@@ -270,7 +270,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ControllerConnectionTable : TableBase
     {
-        public static new string TableName = "TECControllerTECController";
+        public static new string TableName = "TECControllerTECConection";
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT");
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
