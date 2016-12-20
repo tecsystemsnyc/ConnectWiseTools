@@ -272,6 +272,19 @@ namespace EstimatingUtilitiesLibrary
             };
     }
 
+    public class ControllerConnectionTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECController";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID,
+            ConnectionID
+            };
+    }
+
     public class ScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECScopeTECController";
