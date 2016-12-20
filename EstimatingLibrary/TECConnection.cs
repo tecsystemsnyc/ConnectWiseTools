@@ -72,18 +72,18 @@ namespace EstimatingLibrary
         public TECConnection(double length, ConnectionType type, TECController controller, Guid guid)
         {
             this._guid = guid;
-            this.Length = length;
-            this.Type = type;
-            this.Controller = controller;
+            this._length = length;
+            this._type = type;
+            this._controller = controller;
             this._scope = new ObservableCollection<TECScope>();
         }
         public TECConnection()
         {
             _guid = Guid.NewGuid();
-            Length = 0;
-            Type = ConnectionType.TwoC18;
-            Controller = new TECController();
-            Scope = new ObservableCollection<TECScope>();
+            _length = 0;
+            _type = ConnectionType.TwoC18;
+            _controller = new TECController();
+            _scope = new ObservableCollection<TECScope>();
         }
 
         public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.Type, connectionSource.Controller, connectionSource.Guid)

@@ -5,42 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:vm="clr-namespace:EstimateBuilder.ViewModel"
-             xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:dd ="urn:gong-wpf-dragdrop"
         mc:Ignorable="d ignore"
+        x:Name="drawingControl"
         DataContext="{Binding Drawing, Source={StaticResource Locator}}" d:DesignWidth="960" d:DesignHeight="660">
 
     <UserControl.Resources>
-        <DataTemplate 
+        <ResourceDictionary>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=drawingControl, Path=DataContext}"/>
+            <DataTemplate 
             DataType="{x:Type eLib:TECVisualScope}">
-            <Grid>
-                <Thumb
+                <Grid>
+                    <Thumb
                     Width="40"
                     Height="20"
                     DragDelta="Thumb_DragDelta">
-                    <Thumb.Template>
-                        <ControlTemplate>
-                            <Border BorderThickness="2" BorderBrush="Black">
-                                <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
-                                    <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Test"/>
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Thumb.Template>
-                </Thumb>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                        <Thumb.Template>
+                            <ControlTemplate>
+                                <Border BorderThickness="2" BorderBrush="Black">
+                                    <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
+                                        <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
+                                        <Grid.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Start Connection"
+                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.StartConnectionCommand}"
+                                                      CommandParameter="{Binding}"/>
+                                                <MenuItem Header="End Connection"
+                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.EndConnectionCommand}"
+                                                      CommandParameter="{Binding}"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </DataTemplate>
+
+            <DataTemplate
+            DataType="{x:Type cLib:VisualConnection}">
+            <Line
+                Stroke="Black"
+                StrokeThickness="1"
+                X1="{Binding Scope1.X}"
+                Y1="{Binding Scope1.Y}"
+                X2="{Binding Scope2.X}"
+                Y2="{Binding Scope2.Y}"
+                />
         </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -121,6 +143,21 @@
             VerticalAlignment="Top" 
             HorizontalAlignment="Left" 
             Grid.Column="1"/>
+                <ItemsControl x:Name="connectionsOverlayItemsControl"
+                      Background="Transparent"
+                      Grid.Column="1"
+                      ItemsSource="{Binding DisplayConnections}"
+                      Width="{Binding ElementName=imageControl, Path=Width}"
+                      Height="{Binding ElementName=imageControl, Path=Height}"
+                      dd:DragDrop.IsDropTarget="True"
+                      dd:DragDrop.DropHandler="{Binding}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
                 <ItemsControl x:Name="scopeOverlayItemsControl"
                       Background="Transparent"
                       Grid.Column="1"
@@ -141,6 +178,7 @@
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
+                
             </Grid>
         </ScrollViewer>
     </Grid>

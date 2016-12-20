@@ -119,6 +119,7 @@
       <DependentUpon>BudgetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="VisibilityModel.cs" />
+    <Compile Include="VisualConnection.cs" />
     <Page Include="ByLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

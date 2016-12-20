@@ -32,7 +32,6 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
-
     public class TemplatesInfoTable : TableBase
     {
         public static new string TableName = "TECTemplatesInfo";
@@ -45,6 +44,7 @@ namespace EstimatingUtilitiesLibrary
             TemplatesInfoID
         };
     }
+
     public class NoteTable : TableBase
     {
         public static new string TableName = "TECNote";
@@ -231,7 +231,6 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
-
     public class ConnectionTable : TableBase
     {
         public static new string TableName = "TECConnection";
@@ -244,7 +243,6 @@ namespace EstimatingUtilitiesLibrary
             ConnectionID
             };
     }
-
     public class ControllerTable : TableBase
     {
         public static new string TableName = "TECController";
@@ -258,7 +256,6 @@ namespace EstimatingUtilitiesLibrary
             ControllerID
             };
     }
-    
     public class ControllerConnectionTypeTable : TableBase
     {
         public static new string TableName = "TECControllerTECConnectionType";
@@ -271,7 +268,6 @@ namespace EstimatingUtilitiesLibrary
             Type
             };
     }
-
     public class ControllerConnectionTable : TableBase
     {
         public static new string TableName = "TECControllerTECController";
@@ -284,7 +280,6 @@ namespace EstimatingUtilitiesLibrary
             ConnectionID
             };
     }
-
     public class ScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECScopeTECController";
@@ -297,7 +292,6 @@ namespace EstimatingUtilitiesLibrary
             ConnectionID
             };
     }
-
     public class ScopeBranchHierarchyTable : TableBase
     {
         public static new string TableName = "TECScopeBranchHierarchy";
@@ -311,8 +305,6 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
-
-
     public class SystemIndexTable : TableBase
     {
         public static new string TableName = "TECSystemIndex";
@@ -540,8 +532,6 @@ namespace EstimatingUtilitiesLibrary
             FieldType = fieldType;
         }
     }
-
-    
     
     #endregion
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -85,6 +86,13 @@ namespace EstimatingUtilitiesLibrary
                 i++;
             }
             return css;
+        }
+
+        public static double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
+        {
+            var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
+
+            return length;
         }
     }
 

@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Generic;
 using EstimatingUtilitiesLibrary;
+using TECUserControlLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -24,6 +25,9 @@ namespace EstimateBuilder.ViewModel
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
         private ObservableCollection<TECSystem> _displaySystems;
+        private ObservableCollection<VisualConnection> _displayConnections;
+
+        private TECVisualScope startingVS;
 
         private Dictionary<TECDrawing, int> pageIndexes;
 
@@ -98,19 +102,32 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DisplaySystems");
             }
         }
+        public ObservableCollection<VisualConnection> DisplayConnections
+        {
+            get { return _displayConnections; }
+            set
+            {
+                _displayConnections = value;
+                RaisePropertyChanged("DisplayConnections");
+            }
+        }
 
-        
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
+        public ICommand StartConnectionCommand { get; private set; }
+        public ICommand EndConnectionCommand { get; private set; }
 
         public DrawingViewModel()
         {
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
+            StartConnectionCommand = new RelayCommand<TECVisualScope>(vs => StartConnectionExecute(vs));
+            EndConnectionCommand = new RelayCommand<TECVisualScope>(vs => EndConnectionExecute(vs));
 
             pageIndexes = new Dictionary<TECDrawing, int>();
 
             DisplaySystems = new ObservableCollection<TECSystem>();
+            DisplayConnections = new ObservableCollection<VisualConnection>();
 
             Bid = new TECBid();
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
@@ -152,6 +169,22 @@ namespace EstimateBuilder.ViewModel
             }
 
             
+        }
+
+        private void StartConnectionExecute(TECVisualScope vsStart)
+        {
+            Console.WriteLine("Starting");
+            startingVS = vsStart;
+        }
+        private void EndConnectionExecute(TECVisualScope vsEnd)
+        {
+            Console.WriteLine("Ending");
+            double length = UtilitiesMethods.getLength(startingVS, vsEnd, 1.0);
+            var newConnection = new TECConnection();
+            newConnection.Length = length;
+            newConnection.Controller = new TECController();
+            newConnection.Scope.Add(vsEnd.Scope);
+            DisplayConnections.Add(new VisualConnection(startingVS, vsEnd, newConnection));
         }
         #endregion
 
@@ -280,6 +313,19 @@ namespace EstimateBuilder.ViewModel
                 return 0;
             }
             
+        }
+
+        private ObservableCollection<VisualConnection> getVisualConnections(TECBid bid)
+        {
+            var outConnections = new ObservableCollection<VisualConnection>();
+            /*
+            foreach(TECVisualScope vs in CurrentPage.PageScope)
+            {
+                foreach 
+            }
+            */
+            
+            return outConnections;
         }
 
         #endregion Helper Methods
