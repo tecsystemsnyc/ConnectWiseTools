@@ -272,6 +272,19 @@ namespace EstimatingUtilitiesLibrary
             };
     }
 
+    public class ControllerConnectionTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECController";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID,
+            ConnectionID
+            };
+    }
+
     public class ScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECScopeTECController";
@@ -476,7 +489,12 @@ namespace EstimatingUtilitiesLibrary
             new DrawingPageTable(),
             new PageVisualScopeTable(),
             new VisualScopeScopeTable(),
-            new LocationScopeTable()
+            new LocationScopeTable(),
+            new ConnectionTable(),
+            new ControllerTable(),
+            new ControllerConnectionTable(),
+            new ControllerConnectionTypeTable(),
+            new ScopeConnectionTable()
             };
     }
 
@@ -497,6 +515,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
             new ScopeTagTable(),
+            new ControllerTable(),
+            new ControllerConnectionTypeTable(),
             new DeviceManufacturerTable()
         };
     }
