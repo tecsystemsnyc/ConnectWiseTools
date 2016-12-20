@@ -44,14 +44,12 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECController(string name, string desciption, Guid guid, double cost, ObservableCollection<TECConnection> connections, ObservableCollection<ConnectionType> types) : base(name, desciption, guid)
+        public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
         {
             _cost = cost;
-            _connections = connections;
-            _types = types;
         }
 
-        public TECController() : this("", "", Guid.NewGuid(), 0, new ObservableCollection<TECConnection>(), new ObservableCollection<ConnectionType>())
+        public TECController() : this("", "", Guid.NewGuid(), 0)
         {
         }
 
@@ -61,9 +59,17 @@ namespace EstimatingLibrary
             TECController outController = new TECController(this.Name,
                 this.Description,
                 this.Guid,
-                this.Cost,
-                this.Connections,
-                this.Types);
+                this.Cost);
+
+            foreach (ConnectionType type in this.Types)
+            {
+                outController.Types.Add(type);
+            }
+
+            foreach (TECConnection conn in this.Connections)
+            {
+                outController.Connections.Add(conn);
+            }
             
             return outController;
         }
