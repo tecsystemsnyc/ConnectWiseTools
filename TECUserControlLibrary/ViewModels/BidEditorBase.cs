@@ -194,7 +194,6 @@ namespace TECUserControlLibrary.ViewModels
             Bid.DeviceCatalog = Templates.DeviceCatalog;
             Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
             Bid.Tags = Templates.Tags;
-
             bidDBFilePath = null;
         }
         private void setupStack()

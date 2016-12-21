@@ -1,15 +1,13 @@
 ﻿using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TECUserControlLibrary
+namespace EstimatingLibrary
 {
-    public class VisualConnection : ViewModelBase
+    public class TECVisualConnection : TECObject
     {
         private TECConnection _connection;
         public TECConnection Connection
@@ -43,12 +41,12 @@ namespace TECUserControlLibrary
             }
         }
         
-        public VisualConnection()
+        public TECVisualConnection()
         {
 
         }
 
-        public VisualConnection(TECVisualScope vs1, TECVisualScope vs2, TECConnection connection)
+        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2, TECConnection connection)
         {
             Scope1 = vs1;
             Scope2 = vs2;
@@ -61,8 +59,20 @@ namespace TECUserControlLibrary
         {
             if(e.PropertyName == "X" || e.PropertyName == "Y")
             {
-                Connection.Length = UtilitiesMethods.getLength(Scope1, Scope2, 1);
+                Connection.Length = getLength(Scope1, Scope2, 1);
             }
+        }
+
+        double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
+        {
+            var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
+
+            return length;
+        }
+
+        public override object Copy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

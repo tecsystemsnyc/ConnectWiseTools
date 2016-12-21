@@ -27,6 +27,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECTag> _tags { get; set; }
         private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLocation> _locations { get; set; }
+        private ObservableCollection<TECConnection> _connections { get; set; }
+        private ObservableCollection<TECController> _controllers { get; set; }
 
         public string Name {
             get { return _name; }
@@ -212,6 +214,32 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Locations", temp, this);
             }
         }
+
+        public ObservableCollection<TECConnection> Connections
+        {
+            get { return _connections; }
+            set
+            {
+                var temp = this.Copy();
+                Connections.CollectionChanged -= CollectionChanged;
+                _connections = value;
+                Connections.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Connections", temp, this);
+            }
+        }
+
+        public ObservableCollection<TECController> Controllers
+        {
+            get { return _controllers; }
+            set
+            {
+                var temp = this.Copy();
+                Controllers.CollectionChanged -= CollectionChanged;
+                _controllers = value;
+                Controllers.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Controllers", temp, this);
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -246,6 +274,8 @@ namespace EstimatingLibrary
             _labor = new TECLabor();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
+            _controllers = new ObservableCollection<TECController>();
+            _connections = new ObservableCollection<TECConnection>();
 
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -258,6 +288,8 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += CollectionChanged;
             Drawings.CollectionChanged += CollectionChanged;
             Locations.CollectionChanged += CollectionChanged;
+            Controllers.CollectionChanged += CollectionChanged;
+            Connections.CollectionChanged += CollectionChanged;
         }
         public TECBid(
             string name, 
@@ -282,6 +314,8 @@ namespace EstimatingLibrary
             { Exclusions.Add(new TECExclusion(item)); }
             foreach (string item in Defaults.Notes)
             { Notes.Add(new TECNote(item)); }
+
+            
         }
 
         //Copy Constructor

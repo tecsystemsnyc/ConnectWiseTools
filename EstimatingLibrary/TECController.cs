@@ -47,6 +47,9 @@ namespace EstimatingLibrary
         public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
         {
             _cost = cost;
+            _types = new ObservableCollection<ConnectionType>();
+            _types.Add(ConnectionType.TwoC18);
+            _connections = new ObservableCollection<TECConnection>();
         }
 
         public TECController() : this("", "", Guid.NewGuid(), 0)

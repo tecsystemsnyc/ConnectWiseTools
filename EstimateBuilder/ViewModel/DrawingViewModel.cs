@@ -25,7 +25,7 @@ namespace EstimateBuilder.ViewModel
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
         private ObservableCollection<TECSystem> _displaySystems;
-        private ObservableCollection<VisualConnection> _displayConnections;
+        private ObservableCollection<TECVisualConnection> _displayConnections;
 
         private TECVisualScope startingVS;
 
@@ -102,7 +102,7 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DisplaySystems");
             }
         }
-        public ObservableCollection<VisualConnection> DisplayConnections
+        public ObservableCollection<TECVisualConnection> DisplayConnections
         {
             get { return _displayConnections; }
             set
@@ -114,20 +114,36 @@ namespace EstimateBuilder.ViewModel
 
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
-        public ICommand StartConnectionCommand { get; private set; }
-        public ICommand EndConnectionCommand { get; private set; }
+        public ICommand ConnectCommand { get; private set; }
+        public ICommand AddControllerCommand { get; private set; }
+
+        private bool isConnecting;
+
+        private string _connectingText;
+        public string ConnectingText
+        {
+            get { return _connectingText; }
+            set
+            {
+                _connectingText = value;
+                RaisePropertyChanged("ConnectingText");
+            }
+        }
 
         public DrawingViewModel()
         {
+            isConnecting = false;
+            ConnectingText = "Start Connection";
+
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
-            StartConnectionCommand = new RelayCommand<TECVisualScope>(vs => StartConnectionExecute(vs));
-            EndConnectionCommand = new RelayCommand<TECVisualScope>(vs => EndConnectionExecute(vs));
+            ConnectCommand = new RelayCommand<TECVisualScope>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
+            AddControllerCommand = new RelayCommand(AddControllerExecute);
 
             pageIndexes = new Dictionary<TECDrawing, int>();
 
             DisplaySystems = new ObservableCollection<TECSystem>();
-            DisplayConnections = new ObservableCollection<VisualConnection>();
+            DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
@@ -171,20 +187,71 @@ namespace EstimateBuilder.ViewModel
             
         }
 
-        private void StartConnectionExecute(TECVisualScope vsStart)
+        private bool CanConnectExecute(TECVisualScope arg)
         {
-            Console.WriteLine("Starting");
-            startingVS = vsStart;
+            if(arg != null)
+            {
+                if (startingVS == null)
+                {
+                    return true;
+                }
+                else if (startingVS.Scope is TECController)
+                {
+                    return true;
+                }
+                else if (!(startingVS.Scope is TECController) && (arg.Scope is TECController))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
+        private void ConnectExecute(TECVisualScope vs)
+        {
+            if (isConnecting)
+            {
+                Console.WriteLine("Ending");
+                double length = UtilitiesMethods.getLength(startingVS, vs, 1.0);
+                var newConnection = new TECConnection();
+                newConnection.Length = length;
+                if(startingVS.Scope is TECController)
+                {
+                    newConnection.Controller = startingVS.Scope as TECController;
+                } else
+                {
+                    newConnection.Controller = vs.Scope as TECController;
+                }
+                newConnection.Scope.Add(vs.Scope);
+                Bid.Connections.Add(newConnection);
+                CurrentPage.Connections.Add(new TECVisualConnection(startingVS, vs, newConnection));
+                ConnectingText = "Start Connection";
+                isConnecting = false;
+            }
+            else
+            {
+                Console.WriteLine("Starting");
+                startingVS = vs;
+                ConnectingText = "End Connection";
+                isConnecting = true;
+            }
+            
+        }
+
         private void EndConnectionExecute(TECVisualScope vsEnd)
         {
-            Console.WriteLine("Ending");
-            double length = UtilitiesMethods.getLength(startingVS, vsEnd, 1.0);
-            var newConnection = new TECConnection();
-            newConnection.Length = length;
-            newConnection.Controller = new TECController();
-            newConnection.Scope.Add(vsEnd.Scope);
-            DisplayConnections.Add(new VisualConnection(startingVS, vsEnd, newConnection));
+            
+        }
+
+        private void AddControllerExecute()
+        {
+            Bid.Controllers.Add(new TECController("Controller", "", Guid.NewGuid(), 100));
         }
         #endregion
 
@@ -235,7 +302,7 @@ namespace EstimateBuilder.ViewModel
         #region Drag Drop
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            TECSystem sourceItem = dropInfo.Data as TECSystem;
+            TECScope sourceItem = dropInfo.Data as TECScope;
             var targetCollection = dropInfo.TargetCollection;
             if ((sourceItem != null) && (CurrentPage != null))
             {
@@ -250,7 +317,11 @@ namespace EstimateBuilder.ViewModel
             Point dropPoint = dropInfo.DropPosition;
             TECVisualScope newScope = new TECVisualScope(sourceItem, dropPoint.X, dropPoint.Y);
             CurrentPage.PageScope.Add(newScope);
-            DisplaySystems.Remove(dropInfo.Data as TECSystem);
+            if(sourceItem is TECSystem)
+            {
+                DisplaySystems.Remove(dropInfo.Data as TECSystem);
+            }
+            
         }
         #endregion
         
@@ -314,20 +385,7 @@ namespace EstimateBuilder.ViewModel
             }
             
         }
-
-        private ObservableCollection<VisualConnection> getVisualConnections(TECBid bid)
-        {
-            var outConnections = new ObservableCollection<VisualConnection>();
-            /*
-            foreach(TECVisualScope vs in CurrentPage.PageScope)
-            {
-                foreach 
-            }
-            */
-            
-            return outConnections;
-        }
-
+        
         #endregion Helper Methods
 
         #endregion

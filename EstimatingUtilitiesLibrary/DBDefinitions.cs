@@ -260,12 +260,12 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECControllerTECConnectionType";
 
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
-        public static TableField Type = new TableField("ConnectionType", "TEXT");
+        public static TableField ControllerID = new TableField("ConnectionID", "TEXT");
+        public static TableField ConnectionType = new TableField("ConnectionType", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ConnectionID,
-            Type
+            ControllerID,
+            ConnectionType
             };
     }
     public class ControllerConnectionTable : TableBase
@@ -282,7 +282,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ScopeConnectionTable : TableBase
     {
-        public static new string TableName = "TECScopeTECController";
+        public static new string TableName = "TECScopeTECConnection";
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT");
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");

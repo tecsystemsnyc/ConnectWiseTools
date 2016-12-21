@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public class TECConnection : INotifyPropertyChanged
+    public class TECConnection : TECObject
     {
         #region Properties
         private Guid _guid;
@@ -92,35 +92,13 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public Object Copy()
+        public override Object Copy()
         {
             TECConnection connection = new TECConnection(this);
 
             return connection;
         }
         #endregion
-
-        #region Property Changed
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChanged(string name)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
-        {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
-        }
-        protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(sender, e);
-        }
-        #endregion //Property Changed
+        
     }
 }

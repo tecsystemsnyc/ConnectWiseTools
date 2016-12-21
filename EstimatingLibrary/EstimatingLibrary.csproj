@@ -101,6 +101,7 @@
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTag.cs" />
     <Compile Include="TECTemplates.cs" />
+    <Compile Include="TECVisualConnection.cs" />
     <Compile Include="TECVisualScope.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

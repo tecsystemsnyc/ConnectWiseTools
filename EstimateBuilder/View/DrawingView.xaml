@@ -29,11 +29,8 @@
                                         <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
                                         <Grid.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="Start Connection"
-                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.StartConnectionCommand}"
-                                                      CommandParameter="{Binding}"/>
-                                                <MenuItem Header="End Connection"
-                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.EndConnectionCommand}"
+                                                <MenuItem Header="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectingText}"
+                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectCommand}"
                                                       CommandParameter="{Binding}"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
@@ -52,7 +49,7 @@
             </DataTemplate>
 
             <DataTemplate
-            DataType="{x:Type cLib:VisualConnection}">
+            DataType="{x:Type eLib:TECVisualConnection}">
             <Line
                 Stroke="Black"
                 StrokeThickness="1"
@@ -71,6 +68,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -97,6 +95,25 @@
                 <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0"
+                    Command="{Binding AddControllerCommand}"
+                    Content="Add Controller"/>
+            <DataGrid Grid.Column="0" 
+                  Grid.Row="1"
+                  ItemsSource="{Binding Bid.Controllers}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Name}" Header="Controller Name"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -135,6 +152,7 @@
         </Grid>
         <ScrollViewer Grid.Column="1"
                       Grid.Row="1"
+                       Grid.RowSpan="2"
                       HorizontalScrollBarVisibility="Auto">
             <Grid>
                 <Image x:Name="imageControl"
@@ -146,7 +164,7 @@
                 <ItemsControl x:Name="connectionsOverlayItemsControl"
                       Background="Transparent"
                       Grid.Column="1"
-                      ItemsSource="{Binding DisplayConnections}"
+                      ItemsSource="{Binding CurrentPage.Connections}"
                       Width="{Binding ElementName=imageControl, Path=Width}"
                       Height="{Binding ElementName=imageControl, Path=Height}"
                       dd:DragDrop.IsDropTarget="True"

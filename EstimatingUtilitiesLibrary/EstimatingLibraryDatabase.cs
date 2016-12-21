@@ -30,9 +30,10 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECBid));
 
             TECBid bid = new TECBid();
-
+    
             try
             {
+         
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
                 {
@@ -68,14 +69,19 @@ namespace EstimatingUtilitiesLibrary
                 bid.Notes = getNotes();
                 bid.Exclusions = getExclusions();
                 bid.Drawings = getDrawings();
-                linkAllVisualScope(bid.Drawings, bid.Systems);
+                bid.Connections = getConnections();
+                bid.Controllers = getControllers();
+                linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
+                linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+                populatePageVisualConnections(bid.Drawings, bid.Connections, bid.Controllers);
+           
             }
             catch (Exception e)
             {
                 MessageBox.Show("Could not load bid from database. Error: " + e.Message);
             }
-
+     
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -122,9 +128,10 @@ namespace EstimatingUtilitiesLibrary
             }
 
             createAllBidTables();
-
+            
             try
             {
+            
                 foreach (TECDevice device in bid.DeviceCatalog)
                 {
                     addDevice(device);
@@ -176,12 +183,32 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addLocation(location);
                 }
+
+                foreach (TECConnection connection in bid.Connections)
+                {
+                    addConnection(connection);
+                    foreach(TECScope scope in connection.Scope)
+                    {
+                        addScopeConnectionRelation(scope, connection);
+                    }
+                    addControllerConnectionRelation(connection.Controller, connection);
+                }
+                foreach(TECController controller in bid.Controllers)
+                {
+                    addController(controller);
+                    foreach(ConnectionType type in controller.Types)
+                    {
+                        addControllerConnectionTypeRelation(controller, type.ToString());
+                    }
+                }
+                
             }
             catch (Exception e)
             {
                 string message = "Could not save bid to new database. Error: " + e.Message;
                 MessageBox.Show(message);
             }
+            
 
             SQLiteDB.Connection.Close();
 
@@ -906,6 +933,19 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
+        static private void addConnection(TECConnection connection)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConnectionTable.ConnectionID.Name, connection.Guid.ToString());
+            data.Add(ConnectionTable.Length.Name, connection.Length.ToString());
+            data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
+
+            if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECConnection table.");
+            }
+        }
+
         #endregion Add Object Functions
 
         #region Add Relation Functions
@@ -995,6 +1035,43 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+
+        static private void addControllerConnectionRelation(TECController controller, TECConnection connection)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ControllerConnectionTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerConnectionTable.ConnectionID.Name, connection.Guid.ToString());
+
+            if (!SQLiteDB.Insert(ControllerConnectionTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECControllerTECConnection table.");
+            }
+        }
+
+        static private void addScopeConnectionRelation(TECScope scope, TECConnection connection)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ScopeConnectionTable.ScopeID.Name, scope.Guid.ToString());
+            data.Add(ScopeConnectionTable.ConnectionID.Name, connection.Guid.ToString());
+
+            if (!SQLiteDB.Insert(ScopeConnectionTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECScopeTECConnection table.");
+            }
+        }
+
+        static private void addControllerConnectionTypeRelation(TECController controller, string typeString)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ControllerConnectionTypeTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerConnectionTypeTable.ConnectionType.Name, typeString);
+
+            if (!SQLiteDB.Insert(ControllerConnectionTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECControllerTECConnectionType table.");
+            }
+        }
+        
 
         #endregion Add Relation Functions
         #endregion Add Methods
@@ -2107,8 +2184,8 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
 
-            string command = "select " + ControllerConnectionTypeTable.Type.Name + " from " + ControllerConnectionTypeTable.TableName + " where " +
-                ControllerConnectionTypeTable.ConnectionID.Name + " = '" + controllerID + "'";
+            string command = "select " + ControllerConnectionTypeTable.ConnectionType.Name + " from " + ControllerConnectionTypeTable.TableName + " where " +
+                ControllerConnectionTypeTable.ControllerID.Name + " = '" + controllerID + "'";
 
             try
             {
@@ -2116,7 +2193,7 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (DataRow row in typeDT.Rows)
                 {
-                    ConnectionType type = TECConnectionType.convertStringToType(row[ControllerConnectionTypeTable.Type.Name].ToString());
+                    ConnectionType type = TECConnectionType.convertStringToType(row[ControllerConnectionTypeTable.ConnectionType.Name].ToString());
                     types.Add(type);
                 }
             }
@@ -2236,7 +2313,7 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Link Methods
-        static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems)
+        static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
             //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
 
@@ -2264,6 +2341,29 @@ namespace EstimatingUtilitiesLibrary
                         }
                     }
                 }
+            }
+
+            foreach(TECController controller in bidControllers)
+            {
+                //Check scope in systems.
+                List<TECVisualScope> scopeToRemove = new List<TECVisualScope>();
+                foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
+                {
+                    if (vs.Value == controller.Guid)
+                    {
+                        vs.Key.Scope = controller;
+                        scopeToRemove.Add(vs.Key);
+                    }
+                }
+                foreach (TECVisualScope scope in scopeToRemove)
+                {
+                    scopeToLink.Remove(scope);
+                }
+                if (scopeToLink.Count < 1)
+                {
+                    return;
+                }
+                scopeToRemove.Clear();
             }
 
             foreach (TECSystem system in bidSystems)
@@ -2541,12 +2641,57 @@ namespace EstimatingUtilitiesLibrary
                             scopeToRemove = scope;
                             break;
                         }
-                        scopeToLink.Remove(scope);
+                        //scopeToLink.Remove(scope);
                     }
                 }
             }
         }
         #endregion Link Methods
+
+        #region Populate Derived
+
+        static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers)
+        {
+            var VS1 = new TECVisualScope();
+            var VS2 = new TECVisualScope();
+            Console.WriteLine("p[opulating page connections");
+            foreach (TECDrawing drawing in drawings)
+            {
+                Console.WriteLine("In Drawings");
+                foreach (TECPage page in drawing.Pages)
+                {
+                    Console.WriteLine("In Pages");
+                    page.Connections = new ObservableCollection<TECVisualConnection>();
+                    foreach (TECConnection connection in connections)
+                    {
+                        Console.WriteLine("In Connections");
+                        foreach (TECVisualScope scope in page.PageScope)
+                        {
+                            Console.WriteLine("In Page Scope");
+                            Console.WriteLine(scope.Guid.ToString());
+                            if (connection.Scope.Count > 0)
+                            {
+                                Console.WriteLine("Connection: " + connection.Controller.Guid.ToString());
+                                Console.WriteLine("Connection: " + connection.Scope[0].Guid.ToString());
+                                Console.WriteLine("Has Scope");
+                                if (connection.Controller.Guid == scope.Guid)
+                                {
+                                    Console.WriteLine("Found vs1 match");
+                                    VS1 = scope;
+                                }
+                                else if (connection.Scope[0].Guid == scope.Guid)
+                                {
+                                    Console.WriteLine("Found vs2 match");
+                                    VS2 = scope;
+                                }
+                            }
+                        }
+                        page.Connections.Add(new TECVisualConnection(VS1, VS2, connection));
+                    }
+                }
+            }
+        }
+        #endregion
 
         #region Database Version Update Methods
         static private void populateTemplatesInfo()

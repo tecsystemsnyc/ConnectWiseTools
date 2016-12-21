@@ -45,6 +45,11 @@ namespace EstimatingLibrary
 
         public Guid Guid;
 
+        public TECVisualScope() : this(new TECSystem(), 0, 0)
+        {
+
+        }
+
         public TECVisualScope(TECScope scope, double x, double y)
         {
             Guid = Guid.NewGuid();
