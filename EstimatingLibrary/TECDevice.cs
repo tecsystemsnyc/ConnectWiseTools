@@ -11,7 +11,6 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private TECConnection _connection;
         private ConnectionType _connectionType;
         private TECManufacturer _manufacturer;
 
@@ -23,17 +22,6 @@ namespace EstimatingLibrary
                 _cost = value;
                 // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("Cost", temp, this);
-            }
-        }
-        public TECConnection Connection
-        {
-            get { return _connection; }
-            set
-            {
-                var temp = this.Copy();
-                _connection = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Connection", temp, this);
             }
         }
         public ConnectionType ConnectionType

@@ -949,7 +949,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion Add Object Functions
 
         #region Add Relation Functions
-
         
         static private void addDeviceManufacturerRelation(TECDevice device, TECManufacturer manufacturer)
         {

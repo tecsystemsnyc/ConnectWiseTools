@@ -25,6 +25,17 @@ namespace EstimatingLibrary
 
         public ObservableCollection<TECPoint> Points { get; set; }
 
+        private TECConnection _connection { get; set; }
+        public TECConnection Connection {
+            get { return _connection; }
+            set
+            {
+                var temp = this.Copy();
+                _connection = value;
+                NotifyPropertyChanged("Connection", temp, this);
+            }
+        }
+
         public double MaterialCost
         {
             get { return getMaterialCost(); }
