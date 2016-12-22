@@ -44,6 +44,11 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
+
+        public ObservableCollection<ConnectionType> ConnectionTypes
+        {
+            get { return getConnectionTypes(); }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -175,6 +180,15 @@ namespace EstimatingLibrary
             return outScope;
         }
 
+        private ObservableCollection<ConnectionType> getConnectionTypes()
+        {
+            var outTypes = new ObservableCollection<ConnectionType>();
+            foreach(TECDevice device in Devices)
+            {
+                outTypes.Add(device.ConnectionType);
+            }
+            return outTypes;
+        }
 
         private double getMaterialCost()
         {
