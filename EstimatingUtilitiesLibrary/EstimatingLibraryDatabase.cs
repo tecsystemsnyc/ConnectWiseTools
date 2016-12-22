@@ -74,7 +74,7 @@ namespace EstimatingUtilitiesLibrary
                 linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-                populatePageVisualConnections(bid.Drawings, bid.Connections, bid.Controllers);
+                populatePageVisualConnections(bid.Drawings, bid.Connections);
            
             }
             catch (Exception e)
@@ -2648,52 +2648,125 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+
         #endregion Link Methods
 
         #region Populate Derived
 
-        static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers)
+        static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {
-            var VS1 = new TECVisualScope();
-            var VS2 = new TECVisualScope();
-            Console.WriteLine("Populating page connections");
+            ObservableCollection<TECConnection> connectionsToAdd = connections;
             foreach (TECDrawing drawing in drawings)
             {
-                Console.WriteLine("In Drawings");
-                foreach (TECPage page in drawing.Pages)
+                foreach(TECPage page in drawing.Pages)
                 {
-                    Console.WriteLine("In Pages");
-                    page.Connections = new ObservableCollection<TECVisualConnection>();
-                    foreach (TECConnection connection in connections)
+                    List<Tuple<TECSubScope, TECVisualScope>> vSubScope = GetSubScopeVisual(page.PageScope);
+                    List<TECVisualScope> vControllers = new List<TECVisualScope>();
+
+                    ObservableCollection<TECVisualConnection> vConnectionsToAdd = new ObservableCollection<TECVisualConnection>();
+
+                    foreach(TECVisualScope vScope in page.PageScope)
                     {
-                        Console.WriteLine("In Connections");
-                        Console.WriteLine("Scope count in connection: " + connection.Scope.Count);
-                        foreach (TECVisualScope vScope in page.PageScope)
+                        if (vScope.Scope is TECController)
+                        { vControllers.Add(vScope); }
+                    }
+
+                    foreach(Tuple<TECSubScope, TECVisualScope> item in vSubScope)
+                    {
+                        foreach (TECConnection connection in connectionsToAdd)
                         {
-                            Console.WriteLine("In Page Scope");
-                            Console.WriteLine("Scope GUID: " + vScope.Scope.Guid.ToString());
-                            if (connection.Scope.Count > 0)
+                            foreach (TECVisualScope vController in vControllers)
                             {
-                                Console.WriteLine("Controller: " + connection.Controller.Guid.ToString());
-                                Console.WriteLine("Scope: " + connection.Scope[0].Guid.ToString());
-                                Console.WriteLine("Has Scope");
-                                if (connection.Controller.Guid == vScope.Scope.Guid)
+                                if ((connection.Controller == vController.Scope) && (connection.Scope.Contains(item.Item1)))
                                 {
-                                    Console.WriteLine("Found vs1 match");
-                                    VS1 = vScope;
-                                }
-                                else if (connection.Scope[0].Guid == vScope.Scope.Guid)
-                                {
-                                    Console.WriteLine("Found vs2 match");
-                                    VS2 = vScope;
+                                    ObservableCollection<TECConnection> childConnections = new ObservableCollection<TECConnection>();
+                                    childConnections.Add(connection);
+                                    vConnectionsToAdd.Add(new TECVisualConnection(vController, item.Item2, childConnections));
                                 }
                             }
                         }
-                        page.Connections.Add(new TECVisualConnection(VS1, VS2, connection));
                     }
+                    page.Connections = vConnectionsToAdd;
                 }
             }
         }
+
+        private static List<Tuple<TECSubScope, TECVisualScope>> GetSubScopeVisual(ObservableCollection<TECVisualScope> allVScope)
+        {
+            List<Tuple<TECSubScope, TECVisualScope>> outList = new List<Tuple<TECSubScope, TECVisualScope>>();
+            ObservableCollection<TECVisualScope> vScopeToCheck = allVScope;
+            var vScopeToRemove = new ObservableCollection<TECVisualScope>();
+
+            List<TECSubScope> accountedFor = new List<TECSubScope>();
+            foreach (TECVisualScope vScope in allVScope)
+            {
+                if (vScope.Scope is TECSubScope)
+                {
+                    var sub = vScope.Scope as TECSubScope;
+                    accountedFor.Add(sub);
+                    outList.Add(Tuple.Create<TECSubScope, TECVisualScope>(sub, vScope));
+                    vScopeToRemove.Add(vScope);
+                }
+            }
+            foreach (TECVisualScope item in vScopeToRemove)
+            {
+                if (vScopeToCheck.Contains(item))
+                { vScopeToCheck.Remove(item); }
+            }
+            vScopeToRemove.Clear();
+
+            foreach (TECVisualScope vScope in vScopeToCheck)
+            {
+                if (vScope.Scope is TECEquipment)
+                {
+                    foreach (TECSubScope sub in (vScope.Scope as TECEquipment).SubScope)
+                    {
+                        if (!accountedFor.Contains(sub))
+                        {
+                            accountedFor.Add(sub);
+                            outList.Add(Tuple.Create<TECSubScope, TECVisualScope>(sub, vScope));
+                            vScopeToRemove.Add(vScope);
+                        }
+                    }
+                }
+            }
+            foreach (TECVisualScope item in vScopeToRemove)
+            {
+                if (vScopeToCheck.Contains(item))
+                { vScopeToCheck.Remove(item); }
+            }
+            vScopeToRemove.Clear();
+
+
+            foreach (TECVisualScope vScope in vScopeToCheck)
+            {
+                if (vScope.Scope is TECSystem)
+                {
+                    foreach (TECEquipment equip in (vScope.Scope as TECSystem).Equipment)
+                    {
+                        foreach (TECSubScope sub in equip.SubScope)
+                        {
+                            if (!accountedFor.Contains(sub))
+                            {
+                                accountedFor.Add(sub);
+                                outList.Add(Tuple.Create<TECSubScope, TECVisualScope>(sub, vScope));
+                                vScopeToRemove.Add(vScope);
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (TECVisualScope item in vScopeToRemove)
+            {
+                if (vScopeToCheck.Contains(item))
+                { vScopeToCheck.Remove(item); }
+            }
+            vScopeToRemove.Clear();
+
+
+            return outList;
+        }
+
         #endregion
 
         #region Database Version Update Methods

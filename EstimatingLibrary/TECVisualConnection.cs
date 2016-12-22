@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,14 @@ namespace EstimatingLibrary
 {
     public class TECVisualConnection : TECObject
     {
-        private TECConnection _connection;
-        public TECConnection Connection
+        private ObservableCollection<TECConnection> _connections;
+        public ObservableCollection<TECConnection> Connections
         {
-            get { return _connection; }
+            get { return _connections; }
             set
             {
-                _connection = value;
-                RaisePropertyChanged("Connection");
+                _connections = value;
+                RaisePropertyChanged("Connections");
             }
         }
 
@@ -46,11 +47,11 @@ namespace EstimatingLibrary
 
         }
 
-        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2, TECConnection connection)
+        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2, ObservableCollection<TECConnection> connections)
         {
             Scope1 = vs1;
             Scope2 = vs2;
-            Connection = connection;
+            Connections = connections;
 
             Scope1.PropertyChanged += scopeChanged;
         }
@@ -59,7 +60,11 @@ namespace EstimatingLibrary
         {
             if(e.PropertyName == "X" || e.PropertyName == "Y")
             {
-                Connection.Length = getLength(Scope1, Scope2, 1);
+                foreach(TECConnection connection in Connections)
+                {
+                    connection.Length = getLength(Scope1, Scope2, 1);
+                }
+               
             }
         }
 
