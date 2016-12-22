@@ -2624,7 +2624,7 @@ namespace EstimatingUtilitiesLibrary
                 //Link Children Scope
                 foreach (Guid child in childGuids)
                 {
-                    TECScope scopeToRemove;
+                    TECScope scopeToRemove = null;
                     foreach (TECScope scope in scopeToLink)
                     {
                         if (scope.Guid == child)
@@ -2641,7 +2641,10 @@ namespace EstimatingUtilitiesLibrary
                             scopeToRemove = scope;
                             break;
                         }
-                        //scopeToLink.Remove(scope);
+                    }
+                    if (scopeToRemove != null)
+                    {
+                        scopeToLink.Remove(scopeToRemove);
                     }
                 }
             }
@@ -2654,7 +2657,7 @@ namespace EstimatingUtilitiesLibrary
         {
             var VS1 = new TECVisualScope();
             var VS2 = new TECVisualScope();
-            Console.WriteLine("p[opulating page connections");
+            Console.WriteLine("Populating page connections");
             foreach (TECDrawing drawing in drawings)
             {
                 Console.WriteLine("In Drawings");
@@ -2665,24 +2668,25 @@ namespace EstimatingUtilitiesLibrary
                     foreach (TECConnection connection in connections)
                     {
                         Console.WriteLine("In Connections");
-                        foreach (TECVisualScope scope in page.PageScope)
+                        Console.WriteLine("Scope count in connection: " + connection.Scope.Count);
+                        foreach (TECVisualScope vScope in page.PageScope)
                         {
                             Console.WriteLine("In Page Scope");
-                            Console.WriteLine(scope.Guid.ToString());
+                            Console.WriteLine("Scope GUID: " + vScope.Scope.Guid.ToString());
                             if (connection.Scope.Count > 0)
                             {
-                                Console.WriteLine("Connection: " + connection.Controller.Guid.ToString());
-                                Console.WriteLine("Connection: " + connection.Scope[0].Guid.ToString());
+                                Console.WriteLine("Controller: " + connection.Controller.Guid.ToString());
+                                Console.WriteLine("Scope: " + connection.Scope[0].Guid.ToString());
                                 Console.WriteLine("Has Scope");
-                                if (connection.Controller.Guid == scope.Guid)
+                                if (connection.Controller.Guid == vScope.Scope.Guid)
                                 {
                                     Console.WriteLine("Found vs1 match");
-                                    VS1 = scope;
+                                    VS1 = vScope;
                                 }
-                                else if (connection.Scope[0].Guid == scope.Guid)
+                                else if (connection.Scope[0].Guid == vScope.Scope.Guid)
                                 {
                                     Console.WriteLine("Found vs2 match");
-                                    VS2 = scope;
+                                    VS2 = vScope;
                                 }
                             }
                         }
