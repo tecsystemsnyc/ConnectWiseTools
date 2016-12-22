@@ -14,7 +14,6 @@ namespace EstimatingLibrary
         #region Properties
         private Guid _guid;
         private double _length;
-        private ConnectionType _type;
         private TECController _controller;
         private ObservableCollection<TECScope> _scope;
         private ObservableCollection<ConnectionType> _connectionTypes;
@@ -68,23 +67,23 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors 
-        public TECConnection(double length, ConnectionType type, Guid guid)
+        public TECConnection(double length, ObservableCollection<ConnectionType> types, Guid guid)
         {
             this._guid = guid;
             this._length = length;
-            this._type = type;
+            this._connectionTypes = types;
             this._scope = new ObservableCollection<TECScope>();
         }
         public TECConnection()
         {
             _guid = Guid.NewGuid();
             _length = 0;
-            _type = ConnectionType.TwoC18;
+            _connectionTypes = new ObservableCollection<ConnectionType>();
             _controller = new TECController();
             _scope = new ObservableCollection<TECScope>();
         }
 
-        public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.Type, connectionSource.Guid)
+        public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.ConnectionTypes, connectionSource.Guid)
         {
             _scope = connectionSource.Scope;
         }

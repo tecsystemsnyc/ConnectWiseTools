@@ -938,7 +938,7 @@ namespace EstimatingUtilitiesLibrary
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(ConnectionTable.ConnectionID.Name, connection.Guid.ToString());
             data.Add(ConnectionTable.Length.Name, connection.Length.ToString());
-            data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
+            //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
 
             if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
             {
@@ -2217,12 +2217,14 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
                     string lengthString = row[ConnectionTable.Length.Name].ToString();
-                    string typeString = row[ConnectionTable.Type.Name].ToString();
+                    //string typeString = row[ConnectionTable.Type.Name].ToString();
 
                     double length = UtilitiesMethods.StringToDouble(lengthString);
-                    ConnectionType type = TECConnectionType.convertStringToType(typeString);
+                    //ConnectionType type = TECConnectionType.convertStringToType(typeString);
 
-                    connections.Add(new TECConnection(length, type, guid));
+                    ObservableCollection<ConnectionType> connectionTypes = getConnectionTypesInConnection(guid);
+
+                    connections.Add(new TECConnection(length, connectionTypes, guid));
                 }
             }
             catch (Exception e)
@@ -2232,6 +2234,32 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return connections;
+        }
+
+        static private ObservableCollection<ConnectionType> getConnectionTypesInConnection(Guid connectionID)
+        {
+            ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
+
+            string command = "select " + ConnectionConnectionTypeTable.Type.Name + " from " + ConnectionConnectionTypeTable.TableName + " where " +
+                ConnectionConnectionTypeTable.ConnectionID.Name + " = '" + connectionID + "'";
+
+            try
+            {
+                DataTable typeDT = SQLiteDB.getDataFromCommand(command);
+
+                foreach (DataRow row in typeDT.Rows)
+                {
+                    ConnectionType type = TECConnectionType.convertStringToType(row[ConnectionConnectionTypeTable.Type.Name].ToString());
+                    types.Add(type);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("getConnectionTypesInController() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return types;
         }
         #endregion //Loading from DB Methods
         
@@ -2594,10 +2622,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
-                        foreach (TECDevice dev in ss.Devices)
-                        {
-                            scopeToLink.Add(dev);
-                        }
+                        scopeToLink.Add(ss);
                     }
                 }
             }
@@ -2628,9 +2653,9 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if (scope.Guid == child)
                         {
-                            if (scope is TECDevice)
+                            if (scope is TECSubScope)
                             {
-                                (scope as TECDevice).Connection = connection;
+                                (scope as TECSubScope).Connection = connection;
                             }
                             else if (scope is TECController)
                             {

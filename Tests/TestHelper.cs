@@ -14,6 +14,7 @@ namespace Tests
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
         static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.tdb";
+        static public string TestPDF = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales\ Office\ Update.pdf";
 
         public static TECBid CreateTestBid()
         {

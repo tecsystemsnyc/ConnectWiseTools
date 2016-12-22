@@ -26,6 +26,9 @@ namespace Tests
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
+        static TECDrawing expectedDrawing;
+        static TECPage expectedPage;
+        static TECVisualScope expectedVisualScope;
 
         static string path;
 
@@ -42,6 +45,9 @@ namespace Tests
         static TECNote actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
+        static TECDrawing actualDrawing;
+        static TECPage actualPage;
+        static TECVisualScope actualVisualScope;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -343,6 +349,21 @@ namespace Tests
 
             Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Drawing()
+        {
+            //Assert
+            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Page()
+        {
+            //Assert
+            Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
         }
     }
 }

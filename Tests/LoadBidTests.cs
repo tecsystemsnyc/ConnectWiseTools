@@ -23,6 +23,13 @@ namespace Tests
 
         static TECTag actualTag;
 
+        static TECDrawing actualDrawing;
+        static TECPage actualPage;
+        static TECVisualScope actualVisScope;
+
+        static TECController actualController;
+        static TECConnection actualConnection;
+
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -50,6 +57,13 @@ namespace Tests
             actualManufacturer = actualBid.ManufacturerCatalog[0];
 
             actualTag = actualBid.Tags[0];
+
+            actualDrawing = actualBid.Drawings[0];
+            actualPage = actualDrawing.Pages[0];
+            actualVisScope = actualPage.PageScope[0];
+
+            actualController = actualBid.Controllers[0];
+            actualConnection = actualBid.Connections[0];
         }
 
         [TestMethod]
@@ -141,6 +155,8 @@ namespace Tests
             
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
+
+            Assert.AreEqual(actualConnection, actualSubScope.Connection);
         }
 
         [TestMethod]
@@ -273,33 +289,104 @@ namespace Tests
         public void Load_Bid_Drawing()
         {
             //Assert
-            Assert.Fail();
+            string expectedName = "Test Drawing";
+            string expectedDescription = "Test Drawing Description";
+
+            Assert.AreEqual(expectedName, actualDrawing.Name);
+            Assert.AreEqual(expectedDescription, actualDrawing.Description);
         }
 
         [TestMethod]
         public void Load_Bid_Page()
         {
             //Assert
-            Assert.Fail();
+            int expectedPageNum = 1;
+
+            Assert.AreEqual(expectedPageNum, actualPage.PageNum);
         }
 
+        [TestMethod]
         public void Load_Bid_VisualScope()
         {
             //Assert
-            Assert.Fail();
+            double expectedXPos = 119;
+            double expectedYPos = 69.08;
+
+            Assert.AreEqual(expectedXPos, actualVisScope.X);
+            Assert.AreEqual(expectedYPos, actualVisScope.Y);
+            Assert.AreEqual(actualSystem, actualVisScope.Scope);
         }
 
         [TestMethod]
         public void Load_Bid_Controller()
         {
+            //Arrange
+            string expectedName = "Test Controller";
+            string expectedDescription = "Test Controller Description";
+            double expectedCost = 64.94;
+
+            bool hasTHHN14 = false;
+            bool hasThreeC18 = false;
+
+            foreach (ConnectionType type in actualController.Types)
+            {
+                if (type == ConnectionType.WireTHHN14)
+                {
+                    hasTHHN14 = true;
+                }
+                else if (type == ConnectionType.ThreeC18)
+                {
+                    hasThreeC18 = true;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.Connections)
+            {
+                if (conn == actualConnection)
+                {
+                    hasConnection = true;
+                }
+            }
+
             //Assert
-            Assert.Fail();
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.IsTrue(hasTHHN14);
+            Assert.IsTrue(hasThreeC18);
+
+            Assert.IsTrue(hasConnection);
         }
 
+        [TestMethod]
         public void Load_Bid_Connection()
         {
+            //Arrange
+            double expectedLength = 493.45;
+
+            bool hasThreeC18 = false;
+            foreach (ConnectionType type in actualConnection.ConnectionTypes)
+            {
+                if (type == ConnectionType.ThreeC18)
+                {
+                    hasThreeC18 = true;
+                }
+            }
+
+            bool hasSubScope = false;
+            foreach (TECScope scope in actualConnection.Scope)
+            {
+                if (scope == actualSubScope)
+                {
+                    hasSubScope = true;
+                }
+            }
+
             //Assert
-            Assert.Fail();
+            Assert.AreEqual(expectedLength, actualConnection.Length);
+            Assert.IsTrue(hasThreeC18);
+            Assert.IsTrue(hasSubScope);
         }
     }
 }
