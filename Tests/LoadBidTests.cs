@@ -273,6 +273,33 @@ namespace Tests
         public void Load_Bid_Drawing()
         {
             //Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Load_Bid_Page()
+        {
+            //Assert
+            Assert.Fail();
+        }
+
+        public void Load_Bid_VisualScope()
+        {
+            //Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Load_Bid_Controller()
+        {
+            //Assert
+            Assert.Fail();
+        }
+
+        public void Load_Bid_Connection()
+        {
+            //Assert
+            Assert.Fail();
         }
     }
 }
