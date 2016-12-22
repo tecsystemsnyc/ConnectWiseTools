@@ -17,6 +17,7 @@ namespace EstimatingLibrary
         private ConnectionType _type;
         private TECController _controller;
         private ObservableCollection<TECScope> _scope;
+        private ObservableCollection<ConnectionType> _connectionTypes;
 
         public Guid Guid
         {
@@ -32,19 +33,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Length", temp, this);
             }
         }
-        public ConnectionType Type
-        {
-            get { return _type; }
-            set
-            {
-                var temp = this.Copy();
-                _type = value;
-                NotifyPropertyChanged("Type", temp, this);
-            }
-        }
-
         
-
         public TECController Controller
         {
             get { return _controller; }
@@ -62,7 +51,17 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _scope = value;
-                RaisePropertyChanged("Scope");
+                NotifyPropertyChanged("Scope", temp, this);
+            }
+        }
+        public ObservableCollection<ConnectionType> ConnectionTypes
+        {
+            get { return _connectionTypes; }
+            set
+            {
+                var temp = this.Copy();
+                _connectionTypes = value;
+                NotifyPropertyChanged("ConnectionTypes", temp, this);
             }
         }
 
