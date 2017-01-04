@@ -36,11 +36,12 @@ namespace EstimateBuilder.ViewModel
             setupScopeCollection();
             setupScopeDataGrid();
             setupLocationDataGrid();
-            
+            /*
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
             MessengerInstance.Register<GenericMessage<TECTemplates>>(this, PopulateTemplates);
 
             MessengerInstance.Send<NotificationMessage>(new NotificationMessage("ScopeEditorViewModelLoaded"));
+            */
         }
 
         #region Properties

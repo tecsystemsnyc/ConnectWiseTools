@@ -114,19 +114,24 @@
 
             <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                 <TabItem Header="Scope Editor">
-                    <view:ScopeEditorView/>
+                    <view:ScopeEditorView
+                        ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
                 <TabItem Header="Drawing">
-                    <view:DrawingView/>
+                    <view:DrawingView
+                        ViewModel="{Binding DrawingVM}"/>
                 </TabItem>
                 <TabItem Header="Labor">
-                    <view:LaborView/>
+                    <view:LaborView
+                        ViewModel="{Binding LaborVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewView/>
+                    <view:ReviewView
+                        ViewModel="{Binding ReviewVM}"/>
                 </TabItem>
                 <TabItem Header="Settings">
-                    <view:SettingsView/>
+                    <view:SettingsView
+                        ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
             <StatusBar Grid.Row="3"

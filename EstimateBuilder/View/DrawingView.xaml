@@ -9,12 +9,12 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:dd ="urn:gong-wpf-dragdrop"
         mc:Ignorable="d ignore"
-        x:Name="drawingControl"
-        DataContext="{Binding Drawing, Source={StaticResource Locator}}" d:DesignWidth="960" d:DesignHeight="660">
+        x:Name="drawingControl" 
+             d:DesignWidth="960" d:DesignHeight="660">
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=drawingControl, Path=DataContext}"/>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=drawingControl, Path=ViewModel}"/>
             <DataTemplate 
             DataType="{x:Type eLib:TECVisualScope}">
                 <Grid>
@@ -64,7 +64,8 @@
         </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid 
+        DataContext="{Binding ElementName=drawingControl, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
