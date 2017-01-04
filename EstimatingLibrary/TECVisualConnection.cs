@@ -47,11 +47,10 @@ namespace EstimatingLibrary
 
         }
 
-        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2, ObservableCollection<TECConnection> connections)
+        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2)
         {
             Scope1 = vs1;
             Scope2 = vs2;
-            Connections = connections;
 
             Scope1.PropertyChanged += scopeChanged;
         }

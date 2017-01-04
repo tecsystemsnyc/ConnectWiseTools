@@ -365,5 +365,15 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_VisScope()
+        {
+            //Assert
+            Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
+            Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
+
+            Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
+        }
     }
 }
