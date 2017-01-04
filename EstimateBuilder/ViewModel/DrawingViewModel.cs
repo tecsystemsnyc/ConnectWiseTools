@@ -230,9 +230,9 @@ namespace EstimateBuilder.ViewModel
                 }
                 newConnection.Scope.Add(vs.Scope);
                 Bid.Connections.Add(newConnection);
-                var connectionsToAdd = new ObservableCollection<TECConnection>();
-                connectionsToAdd.Add(newConnection);
-                CurrentPage.Connections.Add(new TECVisualConnection(startingVS, vs, connectionsToAdd));
+                TECVisualConnection connectionToAdd = new TECVisualConnection(startingVS, vs);
+                connectionToAdd.Connections.Add(newConnection);
+                CurrentPage.Connections.Add(connectionToAdd);
                 ConnectingText = "Start Connection";
                 isConnecting = false;
             }
