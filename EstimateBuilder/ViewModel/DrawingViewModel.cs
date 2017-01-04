@@ -24,7 +24,7 @@ namespace EstimateBuilder.ViewModel
         private TECBid _bid;
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
-        private ObservableCollection<TECSystem> _displaySystems;
+        private ObservableCollection<TECScope> _displayScope;
         private ObservableCollection<TECVisualConnection> _displayConnections;
 
         private TECVisualScope startingVS;
@@ -93,13 +93,13 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
-        public ObservableCollection<TECSystem> DisplaySystems
+        public ObservableCollection<TECScope> DisplayScope
         {
-            get { return _displaySystems; }
+            get { return _displayScope; }
             set
             {
-                _displaySystems = value;
-                RaisePropertyChanged("DisplaySystems");
+                _displayScope = value;
+                RaisePropertyChanged("DisplayScope");
             }
         }
         public ObservableCollection<TECVisualConnection> DisplayConnections
@@ -142,7 +142,7 @@ namespace EstimateBuilder.ViewModel
 
             pageIndexes = new Dictionary<TECDrawing, int>();
 
-            DisplaySystems = new ObservableCollection<TECSystem>();
+            DisplayScope = new ObservableCollection<TECScope>();
             DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
@@ -230,9 +230,9 @@ namespace EstimateBuilder.ViewModel
                 }
                 newConnection.Scope.Add(vs.Scope);
                 Bid.Connections.Add(newConnection);
-                TECVisualConnection connectionToAdd = new TECVisualConnection(startingVS, vs);
-                connectionToAdd.Connections.Add(newConnection);
-                CurrentPage.Connections.Add(connectionToAdd);
+                var connectionsToAdd = new ObservableCollection<TECConnection>();
+                connectionsToAdd.Add(newConnection);
+                CurrentPage.Connections.Add(new TECVisualConnection(startingVS, vs, connectionsToAdd));
                 ConnectingText = "Start Connection";
                 isConnecting = false;
             }
@@ -245,12 +245,7 @@ namespace EstimateBuilder.ViewModel
             }
             
         }
-
-        private void EndConnectionExecute(TECVisualScope vsEnd)
-        {
-            
-        }
-
+        
         private void AddControllerExecute()
         {
             Bid.Controllers.Add(new TECController("Controller", "", Guid.NewGuid(), 100));
@@ -267,23 +262,29 @@ namespace EstimateBuilder.ViewModel
 
             CurrentDrawing = null;
             pageIndexes.Clear();
-            DisplaySystems = new ObservableCollection<TECSystem>();
-            ObservableCollection<TECScope> checkSystems = new ObservableCollection<TECScope>();
+            DisplayScope = new ObservableCollection<TECScope>();
+            ObservableCollection<TECScope> checkScope = new ObservableCollection<TECScope>();
             foreach(TECDrawing drawing in Bid.Drawings)
             {
                 foreach(TECPage page in drawing.Pages)
                 {
                     foreach(TECVisualScope scope in page.PageScope)
                     {
-                        checkSystems.Add(scope.Scope);
+                        checkScope.Add(scope.Scope);
                     }
                 }
             }
             foreach(TECSystem system in Bid.Systems)
             {
-                if (!checkSystems.Contains(system))
+                foreach(TECEquipment equipment in system.Equipment)
                 {
-                    DisplaySystems.Add(system);
+                    foreach(TECSubScope sub in equipment.SubScope)
+                    {
+                        if (!checkScope.Contains(sub))
+                        {
+                            checkScope.Add(sub);
+                        }
+                    }
                 }
             }
             
@@ -321,7 +322,7 @@ namespace EstimateBuilder.ViewModel
             CurrentPage.PageScope.Add(newScope);
             if(sourceItem is TECSystem)
             {
-                DisplaySystems.Remove(dropInfo.Data as TECSystem);
+                DisplayScope.Remove(dropInfo.Data as TECSystem);
             }
             
         }
@@ -332,9 +333,9 @@ namespace EstimateBuilder.ViewModel
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach(TECSystem item in e.OldItems)
+                foreach(TECScope item in e.OldItems)
                 {
-                    DisplaySystems.Remove(item);
+                    DisplayScope.Remove(item);
                     foreach(TECDrawing drawing in Bid.Drawings)
                     {
                         foreach(TECPage page in drawing.Pages)
@@ -358,7 +359,14 @@ namespace EstimateBuilder.ViewModel
             {
                 foreach (TECSystem item in e.NewItems)
                 {
-                    DisplaySystems.Add(item);
+                    foreach(TECEquipment equipment in item.Equipment)
+                    {
+                        foreach(TECSubScope sub in equipment.SubScope)
+                        {
+                            DisplayScope.Add(sub);
+                        }
+                    }
+                    
                 }
             }
         }
