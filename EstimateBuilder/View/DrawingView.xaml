@@ -28,15 +28,16 @@
                                     <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
                                         <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
                                         <Grid.ContextMenu>
-                                            <ContextMenu ItemsSource="{Binding SubScope}"/>
-                                        </Grid.ContextMenu>
-                                        <!--<Grid.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectingText}"
-                                                      Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectCommand}"
-                                                      CommandParameter="{Binding}"/>
+                                            <ContextMenu ItemsSource="{Binding ConnectableScope}"
+                                                         DisplayMemberPath="Item1.Name">
+                                                <ContextMenu.ItemContainerStyle>
+                                                    <Style TargetType="MenuItem">
+                                                        <Setter Property="Command" Value="{Binding Source={x:Reference drawingControl}, Path=ViewModel.ConnectCommand}" />
+                                                        <Setter Property="CommandParameter" Value="{Binding}"/>
+                                                    </Style>
+                                                </ContextMenu.ItemContainerStyle>
                                             </ContextMenu>
-                                        </Grid.ContextMenu>-->
+                                        </Grid.ContextMenu>
                                     </Grid>
                                 </Border>
                             </ControlTemplate>
@@ -53,15 +54,25 @@
 
             <DataTemplate
             DataType="{x:Type eLib:TECVisualConnection}">
-            <Line
-                Stroke="Black"
-                StrokeThickness="1"
-                X1="{Binding Scope1.X}"
-                Y1="{Binding Scope1.Y}"
-                X2="{Binding Scope2.X}"
-                Y2="{Binding Scope2.Y}"
-                />
-        </DataTemplate>
+                <Canvas>
+                    <Line
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    X1="{Binding Scope1.X}"
+                    Y1="{Binding Scope1.Y}"
+                    X2="{Binding Scope2.X}"
+                    Y2="{Binding Scope1.Y}"
+                        />
+                    <Line
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    X1="{Binding Scope2.X}"
+                    Y1="{Binding Scope1.Y}"
+                    X2="{Binding Scope2.X}"
+                    Y2="{Binding Scope2.Y}"
+                        />
+                </Canvas>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid 
@@ -89,16 +100,40 @@
                       DisplayMemberPath="Name"
                       SelectedItem="{Binding CurrentDrawing}"/>
         </Grid>
-
-        <DataGrid Grid.Column="0" 
-                  Grid.Row="1"
+        <TabControl Grid.Column="0"
+                    Grid.Row="1">
+            <TabItem Header="Systems">
+                <DataGrid
                   ItemsSource="{Binding DisplaySystems}"
                   dd:DragDrop.IsDragSource="True"
                   AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Equipment">
+                <DataGrid
+                  ItemsSource="{Binding DisplayEquipment}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="SubScope">
+                <DataGrid
+                  ItemsSource="{Binding DisplaySubScope}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

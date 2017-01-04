@@ -88,6 +88,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupDrawingVM(TECBid bid)
         {
+            Console.WriteLine("Setting up drawing VM");
             DrawingVM = new DrawingViewModel();
             DrawingVM.Bid = bid;
         }
