@@ -2706,7 +2706,8 @@ namespace EstimatingUtilitiesLibrary
                                 {
                                     ObservableCollection<TECConnection> childConnections = new ObservableCollection<TECConnection>();
                                     childConnections.Add(connection);
-                                    vConnectionsToAdd.Add(new TECVisualConnection(vController, item.Item2, childConnections));
+                                    TECVisualConnection visConnection = new TECVisualConnection(vController, item.Item2);
+                                    vConnectionsToAdd.Add(visConnection);
                                 }
                             }
                         }
