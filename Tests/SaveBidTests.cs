@@ -1663,5 +1663,86 @@ namespace Tests
             Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
         }
         #endregion Save Exclusion
+
+        #region Save Drawing
+        [TestMethod]
+        public void Save_Bid_Add_Drawing()
+        {
+            //Act
+            TECDrawing expectedDrawing = PDFConverter.convertPDFToDrawing(TestHelper.TestPDF2);
+            expectedDrawing.Name = "New Drawing";
+            expectedDrawing.Description = "New Drawing Description";
+
+            bid.Drawings.Add(expectedDrawing);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECDrawing actualDrawing = null;
+            foreach (TECDrawing drawing in actualBid.Drawings)
+            {
+                if (drawing.Guid == expectedDrawing.Guid)
+                {
+                    actualDrawing = drawing;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+            Assert.AreEqual(expectedDrawing.Pages.Count, actualDrawing.Pages.Count);
+
+            byte[] expectedBytes = File.ReadAllBytes(expectedDrawing.Pages[0].Path);
+            byte[] actualBytes = File.ReadAllBytes(actualDrawing.Pages[0].Path);
+
+            Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
+
+            bool pagesAreEqual = true;
+            int i = 0;
+            foreach (byte b in expectedBytes)
+            {
+                if (b != actualBytes[i])
+                {
+                    pagesAreEqual = false;
+                    break;
+                }
+                i++;
+            }
+
+            Assert.IsTrue(pagesAreEqual);
+        }
+        #endregion Save Drawing
+
+        #region Save Visual Scope
+        [TestMethod]
+        public void Save_Bid_Add_VS()
+        {
+            //Act
+            TECScope expectedScope = bid.Systems[0];
+            TECVisualScope expectedVS = new TECVisualScope(expectedScope, 15, 743);
+            bid.Drawings[0].Pages[0].PageScope.Add(expectedVS);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECVisualScope actualVS = null;
+            foreach (TECVisualScope vs in actualBid.Drawings[0].Pages[0].PageScope)
+            {
+                if (expectedVS.Guid == vs.Guid)
+                {
+                    actualVS = vs;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedScope.Guid, actualVS.Scope.Guid);
+            Assert.AreEqual(expectedVS.X, actualVS.X);
+            Assert.AreEqual(expectedVS.Y, actualVS.Y);
+        }
+        #endregion Save Visual Scope
     }
 }

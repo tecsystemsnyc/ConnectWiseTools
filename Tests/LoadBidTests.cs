@@ -303,7 +303,7 @@ namespace Tests
             int expectedPageNum = 1;
 
             Assert.AreEqual(expectedPageNum, actualPage.PageNum);
-            Assert.AreEqual(actualVisScope, actualPage.PageScope);
+            Assert.AreEqual(actualVisScope, actualPage.PageScope[0]);
         }
 
         [TestMethod]

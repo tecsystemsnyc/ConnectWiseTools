@@ -115,6 +115,7 @@
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
     <Compile Include="ViewModels\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetViewModel.cs" />
+    <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="View\BudgetWindow.xaml.cs">
       <DependentUpon>BudgetWindow.xaml</DependentUpon>

@@ -14,7 +14,8 @@ namespace Tests
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
         static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.tdb";
-        static public string TestPDF = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales\ Office\ Update.pdf";
+        static public string TestPDF1 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales Office Update.pdf";
+        static public string TestPDF2 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\pdf-sample.pdf";
 
         public static TECBid CreateTestBid()
         {
@@ -115,14 +116,11 @@ namespace Tests
             var allVScope = new ObservableCollection<TECVisualScope>();
             allVScope.Add(vScope);
 
-            //Pages
-            var pages1 = new TECPage(2, Guid.NewGuid());
-            pages1.PageScope = allVScope;
-            var allPages = new ObservableCollection<TECPage>();
-            allPages.Add(pages1);
-
             //Drawings
-            var drawing1 = new TECDrawing("Test", "Desc", Guid.NewGuid(), allPages);
+            var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
+            drawing1.Name = "Test";
+            drawing1.Description = "Desc";
+            drawing1.Pages[0].PageScope = allVScope;
             var allDrawings = new ObservableCollection<TECDrawing>();
             allDrawings.Add(drawing1);
 
@@ -252,7 +250,8 @@ namespace Tests
 
         public static TECBid LoadTestBid(string path)
         {
-            return EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            TECBid testBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            return testBid;
         }
 
         public static TECTemplates LoadTestTemplates(string path)
