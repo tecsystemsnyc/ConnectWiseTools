@@ -14,7 +14,8 @@ namespace Tests
     {
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
         static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.tdb";
-        static public string TestPDF = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales Office Update.pdf";
+        static public string TestPDF1 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales Office Update.pdf";
+        static public string TestPDF2 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\pdf-sample.pdf";
 
         public static TECBid CreateTestBid()
         {
@@ -116,7 +117,7 @@ namespace Tests
             allVScope.Add(vScope);
 
             //Drawings
-            var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF);
+            var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
             drawing1.Name = "Test";
             drawing1.Description = "Desc";
             drawing1.Pages[0].PageScope = allVScope;
