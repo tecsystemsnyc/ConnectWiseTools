@@ -146,9 +146,11 @@ namespace EstimateBuilder.ViewModel
             DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
+            /*
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
 
             MessengerInstance.Send<NotificationMessage>(new NotificationMessage("DrawingViewModelLoaded"));
+            */
         }
         
         #region Methods
@@ -249,6 +251,7 @@ namespace EstimateBuilder.ViewModel
         private void AddControllerExecute()
         {
             Bid.Controllers.Add(new TECController("Controller", "", Guid.NewGuid(), 100));
+            Console.WriteLine("Controller Added");
         }
         #endregion
 

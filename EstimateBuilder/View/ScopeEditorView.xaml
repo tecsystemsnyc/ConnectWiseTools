@@ -10,12 +10,11 @@
         xmlns:helpers="clr-namespace:EstimateBuilder.Helpers"
         xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         mc:Ignorable="d ignore"
-             
-             x:Name="scopeEditorControl"
-        DataContext="{Binding ScopeEditor, Source={StaticResource Locator}}"
+             x:Name="parent"
         d:DesignWidth="960" d:DesignHeight="660">
 
-    <Grid  Background="{DynamicResource WindowBackgroundBrush}">
+    <Grid  Background="{DynamicResource WindowBackgroundBrush}"
+           DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>

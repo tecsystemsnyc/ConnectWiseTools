@@ -43,7 +43,7 @@ namespace EstimateBuilder.ViewModel
             pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
-
+            /*
             MessengerInstance.Register<NotificationMessage>(this, processNotification);
             MessengerInstance.Register<NotificationMessage<String>>(this, processNotificationInformation);
 
@@ -51,18 +51,61 @@ namespace EstimateBuilder.ViewModel
             {
                 MessengerInstance.Send(new GenericMessage<TECBid>(Bid));
             };
+            */
+            setupScopeEditorVM(Bid, Templates);
+            setupDrawingVM(Bid);
+            setupLaborVM(Bid);
+            setupReviewVM(Bid);
+            setupSettingsVM(Bid);
+
         }
 
         #region Properties
         //Potentially needed in bid setter: 
 
+        #region ViewModels
+        public ScopeEditorViewModel ScopeEditorVM { get; set; }
+        public DrawingViewModel DrawingVM { get; set; }
+        public LaborViewModel LaborVM { get; set; }
+        public SettingsViewModel SettingsVM { get; set; }
+        public ReviewViewModel ReviewVM { get; set; }
+        #endregion
+
         #region Command Properties
         public ICommand LoadDrawingCommand { get; private set; }
-        
+
         #endregion Command Properties
         #endregion Properties
 
         #region Methods
+
+        #region VM Setup Methods
+        private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
+        {
+            ScopeEditorVM = new ScopeEditorViewModel();
+            ScopeEditorVM.Bid = bid;
+            ScopeEditorVM.Templates = templates;
+        }
+        private void setupDrawingVM(TECBid bid)
+        {
+            DrawingVM = new DrawingViewModel();
+            DrawingVM.Bid = bid;
+        }
+        private void setupLaborVM(TECBid bid)
+        {
+            LaborVM = new LaborViewModel();
+            LaborVM.Bid = bid;
+        }
+        private void setupSettingsVM(TECBid bid)
+        {
+            SettingsVM = new SettingsViewModel();
+        }
+        private void setupReviewVM(TECBid bid)
+        {
+            ReviewVM = new ReviewViewModel();
+            ReviewVM.Bid = bid;
+        }
+        #endregion
 
         #region Commands Methods
         private void LoadDrawingExecute()
