@@ -80,6 +80,10 @@ namespace Tests
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Tags[0];
 
+            expectedDrawing = expectedBid.Drawings[0];
+            expectedPage = expectedDrawing.Pages[0];
+            expectedVisualScope = expectedPage.PageScope[0];
+
             path = Path.GetTempFileName();
 
             //Act
@@ -182,6 +186,33 @@ namespace Tests
                 if (tag.Guid == expectedTag.Guid)
                 {
                     actualTag = tag;
+                    break;
+                }
+            }
+
+            foreach (TECDrawing drawing in actualBid.Drawings)
+            {
+                if (drawing.Guid == expectedDrawing.Guid)
+                {
+                    actualDrawing = drawing;
+                    break;
+                }
+            }
+
+            foreach (TECPage page in actualDrawing.Pages)
+            {
+                if (page.Guid == expectedPage.Guid)
+                {
+                    actualPage = page;
+                    break;
+                }
+            }
+
+            foreach (TECVisualScope vs in actualPage.PageScope)
+            {
+                if (vs.Guid == expectedVisualScope.Guid)
+                {
+                    actualVisualScope = vs;
                     break;
                 }
             }

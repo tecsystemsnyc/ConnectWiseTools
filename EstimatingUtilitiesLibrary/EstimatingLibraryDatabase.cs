@@ -74,8 +74,8 @@ namespace EstimatingUtilitiesLibrary
                 linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-                populatePageVisualConnections(bid.Drawings, bid.Connections);
-           
+                //Breaks Visual Scope in a page
+                //populatePageVisualConnections(bid.Drawings, bid.Connections);
             }
             catch (Exception e)
             {
