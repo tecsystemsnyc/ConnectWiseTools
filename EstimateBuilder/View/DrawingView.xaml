@@ -28,12 +28,15 @@
                                     <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
                                         <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
                                         <Grid.ContextMenu>
+                                            <ContextMenu ItemsSource="{Binding SubScope}"/>
+                                        </Grid.ContextMenu>
+                                        <!--<Grid.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectingText}"
                                                       Command="{Binding Source={x:Reference drawingControl}, Path=DataContext.ConnectCommand}"
                                                       CommandParameter="{Binding}"/>
                                             </ContextMenu>
-                                        </Grid.ContextMenu>
+                                        </Grid.ContextMenu>-->
                                     </Grid>
                                 </Border>
                             </ControlTemplate>

@@ -141,6 +141,11 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+        <Label Content="{Binding EquipmentQuantity}" FontSize="12"
+                           Grid.Row="2" 
+                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Foreground="{DynamicResource LightTextBrush}"
+                           VerticalAlignment="Center"/>
         <Button Content="Export Budget" Command="{Binding ExportBudgetCommand}" Grid.Row="2" Grid.Column="1" Margin="5"/>
     </Grid>
 </Window>

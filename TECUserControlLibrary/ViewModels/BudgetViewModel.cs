@@ -127,6 +127,8 @@ namespace TECUserControlLibrary.ViewModel
                 
             }
         }
+
+        public int EquipmentQuantity { get { return getEquipmentQuantity(); } }
         
         public ICommand ExportBudgetCommand { get; private set; }
 
@@ -187,6 +189,20 @@ namespace TECUserControlLibrary.ViewModel
             }
 
             return path;
+        }
+
+        private int getEquipmentQuantity()
+        {
+            int outNum = 0;
+            foreach(TECSystem system in Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    outNum += equipment.Quantity * system.Quantity;
+                }
+            }
+
+            return outNum;
         }
     }
 }

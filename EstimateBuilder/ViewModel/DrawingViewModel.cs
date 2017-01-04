@@ -282,7 +282,7 @@ namespace EstimateBuilder.ViewModel
                     {
                         if (!checkScope.Contains(sub))
                         {
-                            checkScope.Add(sub);
+                            DisplayScope.Add(sub);
                         }
                     }
                 }
@@ -359,9 +359,11 @@ namespace EstimateBuilder.ViewModel
             {
                 foreach (TECSystem item in e.NewItems)
                 {
-                    foreach(TECEquipment equipment in item.Equipment)
+                    DisplayScope.Add(item);
+                    foreach (TECEquipment equipment in item.Equipment)
                     {
-                        foreach(TECSubScope sub in equipment.SubScope)
+                        DisplayScope.Add(equipment);
+                        foreach (TECSubScope sub in equipment.SubScope)
                         {
                             DisplayScope.Add(sub);
                         }
