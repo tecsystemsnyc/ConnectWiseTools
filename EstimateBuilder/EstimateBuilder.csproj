@@ -154,6 +154,7 @@
     <Compile Include="ViewModel\DrawingViewModel.cs" />
     <Compile Include="ViewModel\LaborViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ProposalViewModel.cs" />
     <Compile Include="ViewModel\ScopeEditorViewModelData.cs" />
     <Compile Include="ViewModel\ReviewViewModel.cs" />
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
@@ -165,6 +166,9 @@
     </Compile>
     <Compile Include="View\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProposalView.xaml.cs">
+      <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
@@ -197,6 +201,10 @@
     </Page>
     <Page Include="View\LaborView.xaml">
       <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProposalView.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ReviewView.xaml">

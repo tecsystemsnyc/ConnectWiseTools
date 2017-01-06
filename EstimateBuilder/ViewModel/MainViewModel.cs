@@ -57,7 +57,7 @@ namespace EstimateBuilder.ViewModel
             setupLaborVM(Bid);
             setupReviewVM(Bid);
             setupSettingsVM(Bid);
-
+            setupProposalVM(Bid);
         }
 
         #region Properties
@@ -69,6 +69,7 @@ namespace EstimateBuilder.ViewModel
         public LaborViewModel LaborVM { get; set; }
         public SettingsViewModel SettingsVM { get; set; }
         public ReviewViewModel ReviewVM { get; set; }
+        public ProposalViewModel ProposalVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -104,6 +105,10 @@ namespace EstimateBuilder.ViewModel
         {
             ReviewVM = new ReviewViewModel();
             ReviewVM.Bid = bid;
+        }
+        private void setupProposalVM(TECBid bid)
+        {
+            ProposalVM = new ProposalViewModel(bid);
         }
         #endregion
 

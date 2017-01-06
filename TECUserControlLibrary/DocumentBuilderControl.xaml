@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="TECUserControlLibrary.DocumentBuilderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <local:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <local:SystemsGridControl SystemsSource="{Binding Bid.Systems}"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <local:NotesGridControl NotesSource="{Binding Bid.Notes}"/>
+        </Grid>
+        <Grid Grid.Row="3">
+            <local:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"/>
+        </Grid>
+
+    </Grid>
+</UserControl>

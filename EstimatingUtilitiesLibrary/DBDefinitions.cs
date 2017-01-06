@@ -520,6 +520,7 @@ namespace EstimatingUtilitiesLibrary
             new ScopeTagTable(),
             new ControllerTable(),
             new ControllerConnectionTypeTable(),
+            new ScopeConnectionTable(),
             new DeviceManufacturerTable()
         };
     }

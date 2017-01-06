@@ -87,20 +87,32 @@
     <Compile Include="DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DocumentBuilderControl.xaml.cs">
+      <DependentUpon>DocumentBuilderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditTabControl.xaml.cs">
       <DependentUpon>EditTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EquipmentEditControl.xaml.cs">
       <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExclusionsGridControl.xaml.cs">
+      <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocationGridControl.xaml.cs">
       <DependentUpon>LocationGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NotesGridControl.xaml.cs">
+      <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScopeCollectionsTabControl.xaml.cs">
       <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScopeTreeGridControl.xaml.cs">
+      <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
@@ -137,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="DocumentBuilderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -149,11 +165,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ExclusionsGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LocationGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ManufacturersGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NotesGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,6 +198,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ScopeItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScopeTreeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
