@@ -37,7 +37,7 @@
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex}">
 
-            <TabItem Header="Systems">
+            <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
                 <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>
 
