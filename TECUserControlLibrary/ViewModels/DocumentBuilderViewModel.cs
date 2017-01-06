@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using EstimatingLibrary;
+using GalaSoft.MvvmLight;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -10,11 +11,11 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class DocumentBuilderViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Initializes a new instance of the DocumentBuilderViewModel class.
-        /// </summary>
-        public DocumentBuilderViewModel()
+        public TECBid Bid { get; set; }
+
+        public DocumentBuilderViewModel(TECBid bid)
         {
+            Bid = bid;
         }
     }
 }

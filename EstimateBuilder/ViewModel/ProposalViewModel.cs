@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -11,16 +12,11 @@ namespace EstimateBuilder.ViewModel
     /// </summary>
     public class ProposalViewModel : ViewModelBase
     {
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set { _bid = value; }
-        }
+        public DocumentBuilderViewModel DocumentBuilderVM { get; set; }
 
         public ProposalViewModel(TECBid bid)
         {
-            Bid = bid;
+            DocumentBuilderVM = new DocumentBuilderViewModel(bid);
         }
     }
 }

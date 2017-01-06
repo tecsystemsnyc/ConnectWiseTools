@@ -29,6 +29,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECLocation> _locations { get; set; }
         private ObservableCollection<TECConnection> _connections { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
+        private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
 
         public string Name {
             get { return _name; }
@@ -239,6 +240,11 @@ namespace EstimatingLibrary
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
             }
+        }
+        public ObservableCollection<TECProposalScope> ProposalScope
+        {
+            get { return _proposalScope; }
+            set { _proposalScope = value; }
         }
         #endregion //Properties
 
