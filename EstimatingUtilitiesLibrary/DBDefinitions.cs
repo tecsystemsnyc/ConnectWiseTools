@@ -77,7 +77,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
         public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL");
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID
@@ -233,6 +232,19 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+
+    public class SystemIndexTable : TableBase
+    {
+        public static new string TableName = "TECSystemIndex";
+
+        public static TableField SystemID = new TableField("SystemID", "TEXT");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            SystemID
+        };
+    }
     public class SystemEquipmentTable : TableBase
     {
         public static new string TableName = "TECSystemTECEquipment";
@@ -387,6 +399,7 @@ namespace EstimatingUtilitiesLibrary
             new LocationTable(),
             new VisualScopeTable(),
             new ScopeBranchHierarchyTable(),
+            new SystemIndexTable(),
             new SystemEquipmentTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),

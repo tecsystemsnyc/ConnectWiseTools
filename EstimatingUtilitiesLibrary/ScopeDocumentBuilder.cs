@@ -179,7 +179,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 addScopeBranch(branch, paragraph, 0);
             }
-            paragraph.AddFormattedText("•   Provide a BMS and Automatic Tempwerature functions for the following mechanical systems:");
+            paragraph.AddFormattedText("•   Provide a BMS and Automatic Temperature functions for the following mechanical systems:");
             paragraph.AddLineBreak();
             createSystemTree(paragraph, bid.Systems);
             

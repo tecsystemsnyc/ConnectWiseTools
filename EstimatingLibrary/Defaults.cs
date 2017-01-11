@@ -13,7 +13,6 @@ namespace EstimatingLibrary
             "Provide a seamless extension to the existing Honeywell system provided by T.E.C.Systems.",
             "System components shall be manufactured by Honeywell Automation and will be designed and installed by T.E.C. Systems, Inc.",
             "Provide the engineering resources required for the creation of design, installation and as-built documentation as required for the submittal and training phases of the project.",
-            "Provide the field programming required to comply with the specified sequence of operations.",
             "Provide the programming resources required.",
             "Provide field technical resources required for system commissioning, calibration, start-up and testing.",
             "Provide training in accordance with specification requirements.",
@@ -38,7 +37,7 @@ namespace EstimatingLibrary
             "Self-contained valves.",
             "Provision of smoke detection and fire alarm system components.",
             "Payment and Performance Bonds.",
-            "Smoke purge and UUKL-864 systems."
+            "Smoke purge and UL-864 systems."
         });
     }
 }

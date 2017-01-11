@@ -142,7 +142,9 @@ namespace EstimatingUtilitiesLibrary
             values = values.Substring(0, values.Length - 1);
             try
             {
-                nonQueryCommand(string.Format("replace into {0}({1}) values({2})", tableName, columns, values));
+                string command = string.Format("replace into {0}({1}) values({2})", tableName, columns, values);
+                //Console.WriteLine("Replace command: " + command);
+                nonQueryCommand(command);
                 return true;
             }
             catch (Exception fail)
