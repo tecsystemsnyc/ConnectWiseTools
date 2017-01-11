@@ -94,6 +94,7 @@ namespace EstimatingUtilitiesLibrary
 
             return length;
         }
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point };

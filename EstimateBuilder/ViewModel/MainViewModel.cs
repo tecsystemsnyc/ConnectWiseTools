@@ -82,9 +82,8 @@ namespace EstimateBuilder.ViewModel
         #region VM Setup Methods
         private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
         {
-            ScopeEditorVM = new ScopeEditorViewModel();
-            ScopeEditorVM.Bid = bid;
-            ScopeEditorVM.Templates = templates;
+            ScopeEditorVM = new ScopeEditorViewModel(bid, templates);
+
         }
         private void setupDrawingVM(TECBid bid)
         {

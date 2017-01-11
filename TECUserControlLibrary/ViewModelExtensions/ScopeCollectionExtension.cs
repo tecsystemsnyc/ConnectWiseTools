@@ -414,6 +414,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceDescription = "";
             DeviceCost = 0;
             DeviceConnectionType = 0;
+            DeviceManufacturer = null;
         }
 
         #endregion

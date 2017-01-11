@@ -27,10 +27,10 @@ namespace EstimateBuilder.ViewModel
     public class ScopeEditorViewModel : ViewModelBase, IDropTarget
     {
         //Initializer
-        public ScopeEditorViewModel()
+        public ScopeEditorViewModel(TECBid bid, TECTemplates templates)
         {
-            Bid = new TECBid();
-            Templates = new TECTemplates();
+            Bid = bid;
+            Templates = templates;
 
             setupEditTab();
             setupScopeCollection();
