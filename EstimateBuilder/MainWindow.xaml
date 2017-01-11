@@ -125,6 +125,10 @@
                     <view:LaborView
                         ViewModel="{Binding LaborVM}"/>
                 </TabItem>
+                <TabItem Header="Proposal">
+                    <view:ProposalView
+                        ViewModel="{Binding ProposalVM}"/>
+                </TabItem>
                 <TabItem Header="Review">
                     <view:ReviewView
                         ViewModel="{Binding ReviewVM}"/>

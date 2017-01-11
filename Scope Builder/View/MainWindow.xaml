@@ -203,23 +203,10 @@
                 </TabItem>
                 
                 <TabItem Header="Notes">
-                    <DataGrid x:Name="notesDataGrid"  
-                  ItemsSource="{Binding Bid.Notes}"
-                  AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <cLib:NotesGridControl NotesSource="{Binding Bid.Notes}"/>
                 </TabItem>
                 <TabItem Header="Exclusions">
-                    <DataGrid x:Name="exclusionsDataGrid"  
-                  ItemsSource="{Binding Bid.Exclusions}"
-                          CanUserAddRows="True"
-                  AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <cLib:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"/>
                 </TabItem>
             </TabControl>
             
