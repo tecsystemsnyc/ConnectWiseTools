@@ -37,6 +37,18 @@ namespace Scope_Builder.ViewModel
     public class MainViewModel : BidEditorBase, IDropTarget
     {
         #region Properties
+
+        private int _dGTabIndex;
+        public int DGTabIndex
+        {
+            get { return _dGTabIndex; }
+            set
+            {
+                _dGTabIndex = value;
+                RaisePropertyChanged("DGTabIndex");
+            }
+        }
+
         #region VMExtensions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public LocationDataGridExtension LocationDataGrid { get; set; }
@@ -55,6 +67,7 @@ namespace Scope_Builder.ViewModel
             setupLocationDataGrid();
             setupScopeCollection();
             getVersion();
+            DGTabIndex = 0;
 
             setVisibility(0);
             startupFile = Properties.Settings.Default.StartupFile;

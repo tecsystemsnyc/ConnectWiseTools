@@ -31,6 +31,7 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = bid;
             Templates = templates;
+            DGTabIndex = 0;
 
             setupEditTab();
             setupScopeCollection();
@@ -45,6 +46,17 @@ namespace EstimateBuilder.ViewModel
         }
 
         #region Properties
+
+        private int _dGTabIndex;
+        public int DGTabIndex
+        {
+            get { return _dGTabIndex; }
+            set
+            {
+                _dGTabIndex = value;
+                RaisePropertyChanged("DGTabIndex");
+            }
+        }
 
         #region Extensions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
