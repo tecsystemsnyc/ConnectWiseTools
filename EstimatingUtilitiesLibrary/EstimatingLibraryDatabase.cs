@@ -615,7 +615,8 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECVisualScope)
             {
-                throw new NotImplementedException();
+                removeVisualScope(tarObject as TECVisualScope);
+                removePageVisualScopeRelation(tarObject as TECVisualScope);
             }
             else if (tarObject is TECNote)
             {
@@ -1338,6 +1339,11 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB.Delete("TECLocation", "LocationID", location.Guid);
         }
+
+        static private void removeVisualScope(TECVisualScope vs)
+        {
+            SQLiteDB.Delete(VisualScopeTable.TableName, VisualScopeTable.VisualScopeID.Name, vs.Guid);
+        }
         #endregion Remove Objects
 
         #region Remove Relations
@@ -1370,6 +1376,11 @@ namespace EstimatingUtilitiesLibrary
         private static void removeLocationInScope(TECScope scope)
         {
             SQLiteDB.Delete("TECLocationTECScope", "ScopeID", scope.Guid);
+        }
+
+        private static void removePageVisualScopeRelation(TECVisualScope vs)
+        {
+            SQLiteDB.Delete(PageVisualScopeTable.TableName, PageVisualScopeTable.VisualScopeID.Name, vs.Guid);
         }
         #endregion
         #endregion Remove Methods

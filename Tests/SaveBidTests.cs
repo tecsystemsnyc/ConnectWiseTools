@@ -1743,6 +1743,45 @@ namespace Tests
             Assert.AreEqual(expectedVS.X, actualVS.X);
             Assert.AreEqual(expectedVS.Y, actualVS.Y);
         }
+
+        [TestMethod]
+        public void Save_Bid_Remove_VS()
+        {
+            //Act
+            TECPage pageToModify = bid.Drawings[0].Pages[0];
+            int oldNumVS = pageToModify.PageScope.Count;
+            TECVisualScope vsToRemove = pageToModify.PageScope[0];
+            bid.Drawings[0].Pages[0].PageScope.Remove(vsToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPage actualPage = null;
+            foreach (TECDrawing drawing in bid.Drawings)
+            {
+                foreach (TECPage page in drawing.Pages)
+                {
+                    if (page.Guid == pageToModify.Guid)
+                    {
+                        actualPage = page;
+                        break;
+                    }
+                }
+                if (actualPage != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECVisualScope vs in actualPage.PageScope)
+            {
+                if (vs.Guid == vsToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
+        }
         #endregion Save Visual Scope
     }
 }
