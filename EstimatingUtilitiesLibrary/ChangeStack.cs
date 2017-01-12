@@ -71,6 +71,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECExclusion exclusion in Bid.Exclusions) { exclusion.PropertyChanged += Object_PropertyChanged; }
             //Locations changed
             foreach (TECLocation location in Bid.Locations) { location.PropertyChanged += Object_PropertyChanged; }
+            //Manufacturers Changed
+            foreach (TECManufacturer manufacturer in Bid.ManufacturerCatalog) { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             {
                 system.PropertyChanged += Object_PropertyChanged;

@@ -12,6 +12,8 @@ namespace Tests
     {
 
         #region Undo
+
+        #region Bid Properties
         [TestMethod]
         public void Undo_Bid_Name()
         {
@@ -137,114 +139,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Labor_Soft()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.SoftCoef;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.SoftCoef = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.SoftCoef;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
-        public void Undo_Labor_PM()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.PMCoef;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.PMCoef = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.PMCoef;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
-        public void Undo_Labor_ENG()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.ENGCoef;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.ENGCoef = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.ENGCoef;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
-        public void Undo_Labor_Comm()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.CommCoef;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.CommCoef = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.CommCoef;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
-        public void Undo_Labor_Graph()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.GraphCoef;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.GraphCoef = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.GraphCoef;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
-        public void Undo_Labor_Electrical()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.ElectricalRate;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Labor.ElectricalRate = 1.1;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Labor.ElectricalRate;
-            Assert.AreEqual(expected, actual, "Not Undone");
-        }
-
-        [TestMethod]
         public void Undo_Bid_Systems()
         {
             //Arrange
@@ -298,7 +192,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach(TECDevice item in Bid.DeviceCatalog)
+            foreach (TECDevice item in Bid.DeviceCatalog)
             {
                 expected.Add(item);
             }
@@ -462,6 +356,122 @@ namespace Tests
 
         }
 
+        #endregion
+
+
+        #region Labor Properties
+        [TestMethod]
+        public void Undo_Labor_Soft()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.SoftCoef;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.SoftCoef = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.SoftCoef;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_PM()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.PMCoef;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.PMCoef = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.PMCoef;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_ENG()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.ENGCoef;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ENGCoef = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.ENGCoef;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_Comm()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.CommCoef;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.CommCoef = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.CommCoef;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_Graph()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.GraphCoef;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.GraphCoef = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.GraphCoef;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_Electrical()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            double expected = Bid.Labor.ElectricalRate;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ElectricalRate = 1.1;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            double actual = Bid.Labor.ElectricalRate;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        #endregion
+
+        #region Location Properties
+        
         [TestMethod]
         public void Undo_Location_Name()
         {
@@ -481,6 +491,10 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
+
+        #endregion
+
+        #region System Properties
 
         [TestMethod]
         public void Undo_System_Name()
@@ -586,6 +600,10 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Equipment Properties
+
         [TestMethod]
         public void Undo_Equipment_Name()
         {
@@ -669,6 +687,10 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
+
+        #endregion
+
+        #region SubScope Properties
 
         [TestMethod]
         public void Undo_SubScope_Name()
@@ -779,6 +801,10 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Device Properties
+
         [TestMethod]
         public void Undo_Device_Name()
         {
@@ -879,6 +905,10 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Point Properties
+
         [TestMethod]
         public void Undo_Point_Name()
         {
@@ -958,6 +988,33 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
+
+        #endregion
+
+        #region Manufacturer Properties
+
+        [TestMethod]
+        public void Undo_Manufacturer_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name;
+            string edit = "changedName";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name = edit;
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        #endregion
+
         #endregion
 
         #region Redo
