@@ -614,6 +614,29 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
         }
+
+        [TestMethod]
+        public void Save_Templates_Device_Manufacturer()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            expectedDevice.Manufacturer = new TECManufacturer("Test", 1.0);
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Manufacturer, actualDevice.Manufacturer);
+        }
         #endregion Save Device
 
 
