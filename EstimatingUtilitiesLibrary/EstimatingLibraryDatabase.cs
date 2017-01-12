@@ -31,8 +31,8 @@ namespace EstimatingUtilitiesLibrary
 
             TECBid bid = new TECBid();
     
-            try
-            {
+            //try
+            //{
          
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
@@ -62,6 +62,12 @@ namespace EstimatingUtilitiesLibrary
                 bid = getBidInfo();
                 bid.ScopeTree = getMainScopeBranches();
                 bid.Systems = getAllSystemsInBid();
+                //--Temporary--
+                foreach (TECSystem system in bid.Systems)
+                {
+                    bid.ProposalScope.Add(new TECProposalScope(system));
+                }
+                //--Temporary--
                 bid.DeviceCatalog = getAllDevices();
                 bid.ManufacturerCatalog = getAllManufacturers();
                 bid.Locations = getAllLocations();
@@ -76,11 +82,11 @@ namespace EstimatingUtilitiesLibrary
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
                 //Breaks Visual Scope in a page
                 //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Could not load bid from database. Error: " + e.Message);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Could not load bid from database. Error: " + e.Message);
+            //}
      
             SQLiteDB.Connection.Close();
 

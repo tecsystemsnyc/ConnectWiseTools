@@ -282,6 +282,7 @@ namespace EstimatingLibrary
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _connections = new ObservableCollection<TECConnection>();
+            _proposalScope = new ObservableCollection<TECProposalScope>();
 
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -296,6 +297,7 @@ namespace EstimatingLibrary
             Locations.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Connections.CollectionChanged += CollectionChanged;
+            ProposalScope.CollectionChanged += CollectionChanged;
         }
         public TECBid(
             string name, 

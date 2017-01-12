@@ -7,18 +7,28 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProposalScope
+    public class TECProposalScope : TECObject
     {
-        public TECScope Scope;
-        public ObservableCollection<TECProposalScope> Children;
-        public ObservableCollection<string> Notes;
-        public bool IsProposed;
+        public TECScope Scope { get; set; }
+        public ObservableCollection<TECProposalScope> Children { get; set; }
+        public ObservableCollection<TECScopeBranch> Notes { get; set; }
+        public bool IsProposed
+        {
+            get { return _isProposed; }
+            set
+            {
+                var temp = Copy();
+                _isProposed = value;
+                NotifyPropertyChanged("IsProposed", temp, this);
+            }
+        }
+        private bool _isProposed;
 
         public TECProposalScope(TECScope scope)
         {
             Scope = scope;
-            IsProposed = false;
-            Notes = new ObservableCollection<string>();
+            _isProposed = false;
+            Notes = new ObservableCollection<TECScopeBranch>();
             Children = new ObservableCollection<TECProposalScope>();
 
             if (scope is TECSystem)
@@ -44,5 +54,23 @@ namespace EstimatingLibrary
                 throw new NotImplementedException();
             }
         }
+
+        public override object Copy()
+        {
+            TECProposalScope pScopeToReturn = new TECProposalScope(this.Scope);
+            pScopeToReturn._isProposed = IsProposed;
+            foreach(TECProposalScope child in Children)
+            {
+                pScopeToReturn.Children.Add(child.Copy() as TECProposalScope);
+            }
+
+            foreach(TECScopeBranch branch in Notes)
+            {
+                pScopeToReturn.Notes.Add(branch.Copy() as TECScopeBranch);
+            }
+
+            return pScopeToReturn;
+        }
+
     }
 }

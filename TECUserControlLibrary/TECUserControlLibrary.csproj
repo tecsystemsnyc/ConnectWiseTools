@@ -108,6 +108,9 @@
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProposalScopeGridControl.xaml.cs">
+      <DependentUpon>ProposalScopeGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScopeCollectionsTabControl.xaml.cs">
       <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
     </Compile>
@@ -188,6 +191,10 @@
     <Page Include="PointsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProposalScopeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ScopeCollectionsTabControl.xaml">
       <SubType>Designer</SubType>

@@ -19,8 +19,9 @@ namespace EstimatingLibrary
             get { return _scope; }
             set
             {
+                var temp = this.Copy();
                 _scope = value;
-                RaisePropertyChanged("Scope");
+                NotifyPropertyChanged("Scope", temp, this);
             }
         }
         public double X
@@ -60,7 +61,7 @@ namespace EstimatingLibrary
         public TECVisualScope(TECScope scope, double x, double y)
         {
             Guid = Guid.NewGuid();
-            Scope = scope;
+            _scope = scope;
             _x = x;
             _y = y;
         }

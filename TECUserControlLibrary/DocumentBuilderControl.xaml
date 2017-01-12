@@ -29,7 +29,7 @@
             <local:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"/>
         </Grid>
         <Grid Grid.Row="1">
-            <local:SystemsGridControl SystemsSource="{Binding Bid.Systems}"/>
+            <local:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"/>
         </Grid>
         <Grid Grid.Row="2">
             <local:NotesGridControl NotesSource="{Binding Bid.Notes}"/>
