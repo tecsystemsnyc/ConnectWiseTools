@@ -219,19 +219,12 @@ namespace EstimateBuilder.ViewModel
             {
                 if (connectionStart == null)
                 {
-                    return true;
-                }
-                else if (connectionStart.Item1 is TECController)
-                {
-                    return true;
-                }
-                else if (!(connectionStart.Item1 is TECController) && (arg.Item1 is TECController))
-                {
-                    return true;
+                    return canStartConnection(arg.Item1);
                 }
                 else
                 {
-                    return false;
+                    var newConnection = createConnection(connectionStart, arg, 1.0);
+                    return canAcceptConnection(arg.Item1, newConnection);
                 }
             }
             else
@@ -244,17 +237,7 @@ namespace EstimateBuilder.ViewModel
             if (isConnecting)
             {
                 Console.WriteLine("Ending");
-                double length = UtilitiesMethods.getLength(connectionStart.Item2, arg.Item2, 1.0);
-                var newConnection = new TECConnection();
-                newConnection.Length = length;
-                if(connectionStart.Item1 is TECController)
-                {
-                    newConnection.Controller = connectionStart.Item1 as TECController;
-                } else
-                {
-                    newConnection.Controller = arg.Item1 as TECController;
-                }
-                newConnection.Scope.Add(arg.Item2.Scope);
+                var newConnection = createConnection(connectionStart, arg, 1.0);
                 Bid.Connections.Add(newConnection);
                 bool isShown = false;
                 foreach(TECVisualConnection vc in CurrentPage.Connections)
@@ -274,6 +257,7 @@ namespace EstimateBuilder.ViewModel
                 }
                 ConnectingText = "Start Connection";
                 isConnecting = false;
+                connectionStart = null;
             }
             else
             {
@@ -287,8 +271,10 @@ namespace EstimateBuilder.ViewModel
         
         private void AddControllerExecute()
         {
-            Bid.Controllers.Add(new TECController("Controller", "", Guid.NewGuid(), 100));
-            Console.WriteLine("Controller Added");
+            var newController = new TECController("Controller", "", Guid.NewGuid(), 100);
+            newController.Types.Add(ConnectionType.ThreeC18);
+            newController.Types.Add(ConnectionType.ThreeC18);
+            Bid.Controllers.Add(newController);
         }
         #endregion
 
@@ -510,6 +496,98 @@ namespace EstimateBuilder.ViewModel
                 CurrentDrawing = Bid.Drawings[0];
                 CurrentPage = CurrentDrawing.Pages[getIndex(CurrentDrawing)];
             }
+        }
+
+        private bool canAcceptConnection(TECObject item, TECConnection connection)
+        {
+            bool canConnect = false;
+
+            if(item is TECController)
+            {
+                var controller = item as TECController;
+
+                var availableConnections = controller.AvailableConnections;
+                
+                foreach(ConnectionType conType in connection.ConnectionTypes)
+                {
+                    if (availableConnections.Contains(conType))
+                    {
+                        availableConnections.Remove(conType);
+                        canConnect = true;
+                    }
+                    else
+                    {
+                        canConnect = false;
+                    }
+                }
+            } 
+            else if (item is TECSubScope)
+            {
+                var subScope = item as TECSubScope;
+                if(subScope.Connection == null)
+                {
+                    var availableConnections = subScope.AvailableConnections;
+
+                    foreach (ConnectionType conType in connection.ConnectionTypes)
+                    {
+                        if (availableConnections.Contains(conType))
+                        {
+                            availableConnections.Remove(conType);
+                            canConnect = true;
+                        }
+                        else
+                        {
+                            canConnect = false;
+                        }
+                    }
+                }
+                else
+                {
+                    canConnect = false;
+                }
+            }
+
+            return canConnect;
+        }
+        private bool canStartConnection(TECObject item)
+        {
+            bool canStart = false;
+            if(item is TECController)
+            {
+                var controller = item as TECController;
+                var avaiableConnections = controller.AvailableConnections;
+                if(avaiableConnections.Count > 0)
+                {
+                    canStart = true;
+                }
+            } else if(item is TECSubScope)
+            {
+                var subScope = item as TECSubScope;
+                if(subScope.Connection == null)
+                {
+                    canStart = true;
+                }
+            }
+            
+            return canStart;
+        }
+
+        private TECConnection createConnection(Tuple<TECObject, TECVisualScope> item1, Tuple<TECObject, TECVisualScope> item2, double scale)
+        {
+            double length = UtilitiesMethods.getLength(item1.Item2, item2.Item2, scale);
+            var newConnection = new TECConnection();
+            newConnection.Length = length;
+            if (item1.Item1 is TECController)
+            {
+                newConnection.Controller = item1.Item1 as TECController;
+            }
+            else
+            {
+                newConnection.Controller = item2.Item1 as TECController;
+            }
+            newConnection.Scope.Add(item2.Item1 as TECScope);
+
+            return newConnection;
         }
         
         #endregion Helper Methods

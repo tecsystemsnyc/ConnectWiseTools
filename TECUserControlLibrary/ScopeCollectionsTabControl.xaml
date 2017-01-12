@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -155,9 +156,10 @@
                     <Label Grid.Column="0"
                         Grid.Row="3"
                         Content="Wire Type:"/>
-                    <TextBox Grid.Column="1"
+                    <ComboBox Grid.Column="1"
                             Grid.Row="3"
-                            Text="{Binding Path=ViewModel.DeviceWire}"
+                              ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
+                              SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
                     <Label Grid.Column="0"

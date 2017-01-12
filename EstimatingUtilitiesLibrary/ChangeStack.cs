@@ -345,6 +345,15 @@ namespace EstimatingUtilitiesLibrary
                     ((TECSubScope)StackItem.Item2).Points.Remove((TECPoint)StackItem.Item3);
                 }
             }
+            else if (StackItem.Item2 is TECPage)
+            {
+                ((TECPage)StackItem.Item2).PageScope.Remove((TECVisualScope)StackItem.Item3);
+            }
+            else if (StackItem.Item3 is TECDrawing)
+            {
+                ((TECDrawing)StackItem.Item2).Pages.Remove((TECPage)StackItem.Item3);
+            }
+
             else if(StackItem.Item2 is TECTemplates)
             {
                 if(StackItem.Item3 is TECSystem)
@@ -434,6 +443,15 @@ namespace EstimatingUtilitiesLibrary
                     ((TECSubScope)StackItem.Item2).Points.Add((TECPoint)StackItem.Item3);
                 }
             }
+            else if (StackItem.Item2 is TECPage)
+            {
+                ((TECPage)StackItem.Item2).PageScope.Add((TECVisualScope)StackItem.Item3);
+            }
+            else if (StackItem.Item3 is TECDrawing)
+            {
+                ((TECDrawing)StackItem.Item2).Pages.Add((TECPage)StackItem.Item3);
+            }
+
             else if (StackItem.Item2 is TECTemplates)
             {
                 if (StackItem.Item3 is TECSystem)

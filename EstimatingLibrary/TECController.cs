@@ -44,6 +44,11 @@ namespace EstimatingLibrary
             }
         }
 
+        public List<ConnectionType> AvailableConnections
+        {
+            get { return getAvailableConnectionTypes(); }
+        }
+
         public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
         {
             _cost = cost;
@@ -80,6 +85,24 @@ namespace EstimatingLibrary
         public override Object DragDropCopy()
         {
             throw new NotImplementedException();
+        }
+
+        private List<ConnectionType> getAvailableConnectionTypes()
+        {
+            var availableConnections = new List<ConnectionType>();
+            foreach (ConnectionType conType in this.Types)
+            {
+                availableConnections.Add(conType);
+            }
+            foreach (TECConnection connected in this.Connections)
+            {
+                foreach (ConnectionType conType in connected.ConnectionTypes)
+                {
+                    availableConnections.Remove(conType);
+                }
+            }
+
+            return availableConnections;
         }
         #endregion
     }

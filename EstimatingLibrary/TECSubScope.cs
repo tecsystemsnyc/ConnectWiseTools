@@ -49,6 +49,11 @@ namespace EstimatingLibrary
         {
             get { return getConnectionTypes(); }
         }
+
+        public List<ConnectionType> AvailableConnections
+        {
+            get { return getAvailableConnectionTypes(); }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -239,6 +244,16 @@ namespace EstimatingLibrary
             }
         }
 
+        private List<ConnectionType> getAvailableConnectionTypes()
+        {
+            var availableConnections = new List<ConnectionType>();
+            foreach (ConnectionType conType in this.ConnectionTypes)
+            {
+                availableConnections.Add(conType);
+            }
+
+            return availableConnections;
+        }
         #endregion
     }
 }
