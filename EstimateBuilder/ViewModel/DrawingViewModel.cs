@@ -177,11 +177,7 @@ namespace EstimateBuilder.ViewModel
             DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
-            registerBid();
-            /*
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("DrawingViewModelLoaded"));
-            */
+
         }
         
         #region Methods
@@ -285,57 +281,7 @@ namespace EstimateBuilder.ViewModel
             Bid.Controllers.Add(newController);
         }
         #endregion
-
-        #region Message Methods
-        /*
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
-        {
-            Bid.Systems.CollectionChanged -= Systems_CollectionChanged;
-            Bid = genericMessage.Content;
-            Bid.Systems.CollectionChanged += Systems_CollectionChanged;
-
-            CurrentDrawing = null;
-            pageIndexes.Clear();
-            DisplayScope = new ObservableCollection<TECScope>();
-            ObservableCollection<TECScope> checkScope = new ObservableCollection<TECScope>();
-            foreach(TECDrawing drawing in Bid.Drawings)
-            {
-                foreach(TECPage page in drawing.Pages)
-                {
-                    foreach(TECVisualScope scope in page.PageScope)
-                    {
-                        checkScope.Add(scope.Scope);
-                    }
-                }
-            }
-            foreach(TECSystem system in Bid.Systems)
-            {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    foreach(TECSubScope sub in equipment.SubScope)
-                    {
-                        if (!checkScope.Contains(sub))
-                        {
-                            DisplayScope.Add(sub);
-                        }
-                    }
-                }
-            }
-            
-            if (Bid.Drawings.Count > 0)
-            {
-                foreach (TECDrawing drawing in Bid.Drawings)
-                {
-                    pageIndexes.Add(drawing, 0);
-                }
-                
-                CurrentDrawing = Bid.Drawings[0];
-                CurrentPage = CurrentDrawing.Pages[getIndex(CurrentDrawing)];
-            }
-        }
-        */
-        #endregion Message Methods
-
+        
         #region Drag Drop
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
