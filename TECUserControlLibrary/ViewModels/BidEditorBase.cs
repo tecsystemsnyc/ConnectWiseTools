@@ -440,27 +440,38 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            string message = "Would you like to save your changes before creating a new scope?";
-            MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-            if (result == MessageBoxResult.Yes)
+            if (stack.SaveStack.Count > 0)
             {
-                SaveExecute();
-
-                if (saveSuccessful)
+                string message = "Would you like to save your changes before creating a new scope?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
                 {
+                    SaveExecute();
+
+                    if (saveSuccessful)
+                    {
+                        bidDBFilePath = null;
+                        Bid = new TECBid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save unsuccessful. New scope not created.");
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    Console.WriteLine("Creating new bid.");
                     bidDBFilePath = null;
                     Bid = new TECBid();
                 }
-                else
-                {
-                    MessageBox.Show("Save unsuccessful. New scope not created.");
-                }
             }
-            else if (result == MessageBoxResult.No)
+            else
             {
+                Console.WriteLine("Creating new bid.");
                 bidDBFilePath = null;
                 Bid = new TECBid();
             }
+            
         }
         private void LoadExecute()
         {
