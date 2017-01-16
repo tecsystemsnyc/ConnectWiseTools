@@ -152,6 +152,7 @@
                            Grid.Row="1"/>
                     <ComboBox ItemsSource="{Binding Bid.ControllerCatalog}"
                               DisplayMemberPath="{Binding Name}"
+                              SelectedValue="{Binding SelectedControllerTemplate}"
                               Grid.Row="1"
                               Grid.Column="1"
                               Margin="5"/>

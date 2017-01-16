@@ -29,6 +29,7 @@ namespace EstimateBuilder.ViewModel
         private ObservableCollection<TECSubScope> _displaySubScope;
         private ObservableCollection<TECVisualConnection> _displayConnections;
         private string _controllerName;
+        private TECController _selectedControllerTemplate;
 
         private Tuple<TECObject, TECVisualScope> connectionStart;
 
@@ -140,6 +141,15 @@ namespace EstimateBuilder.ViewModel
             {
                 _controllerName = value;
                 RaisePropertyChanged("ControllerName");
+            }
+        }
+        public TECController SelectedControllerTemplate
+        {
+            get { return _selectedControllerTemplate; }
+            set
+            {
+                _selectedControllerTemplate = value;
+                RaisePropertyChanged("SelectedControllerTemplate");
             }
         }
 
@@ -267,7 +277,11 @@ namespace EstimateBuilder.ViewModel
         private void AddControllerExecute()
         {
             var newController = new TECController();
-            //newController.Types.Add
+            newController.Name = ControllerName;
+            newController.Types = SelectedControllerTemplate.Types;
+            newController.Tags = SelectedControllerTemplate.Tags;
+            newController.Description = SelectedControllerTemplate.Description;
+            newController.Cost = SelectedControllerTemplate.Cost;
             Bid.Controllers.Add(newController);
         }
         #endregion
