@@ -507,6 +507,17 @@ namespace EstimatingUtilitiesLibrary
             {
                 editPoint(tarObject as TECPoint);
             }
+            else if (tarObject is TECManufacturer)
+            {
+                if (refObject is TECDevice)
+                {
+                    editManufacturerInDevice(refObject as TECDevice);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
             else if (tarObject is TECDrawing)
             {
                 editDrawing(tarObject as TECDrawing);
@@ -1191,6 +1202,18 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
+        static private void editManufacturerInDevice(TECDevice device)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceManufacturerTable.ManufacturerID.Name, device.Manufacturer.Guid.ToString());
+
+            if (!SQLiteDB.Replace(DeviceManufacturerTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update manufacturer in TECDeviceTECManufacturer table.");
+            }
+        }
+
         static private void editPoint(TECPoint point)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1366,6 +1389,11 @@ namespace EstimatingUtilitiesLibrary
         private static void removeSubScopePointRelation(TECPoint point)
         {
             SQLiteDB.Delete("TECSubScopeTECPoint", PointTable.PointID.Name, point.Guid);
+        }
+
+        private static void removeDeviceManufacturerRelation(TECDevice device)
+        {
+            SQLiteDB.Delete(DeviceManufacturerTable.TableName, DeviceManufacturerTable.DeviceID.Name, device.Guid);
         }
 
         private static void removeScopeBranchHierarchyRelation(TECScopeBranch branch)

@@ -81,7 +81,7 @@ namespace Tests
 
             templates.SystemTemplates.Remove(systemToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -104,7 +104,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Name = "Save System Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -128,7 +128,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Description = "Save System Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -151,7 +151,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -174,7 +174,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.BudgetPrice = 9876543.21;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -233,7 +233,7 @@ namespace Tests
 
             templates.EquipmentTemplates.Remove(EquipmentToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -255,7 +255,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Name = "Save Equipment Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -279,7 +279,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Description = "Save Equipment Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -302,7 +302,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -325,7 +325,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.BudgetPrice = 9876543.21;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -382,7 +382,7 @@ namespace Tests
 
             templates.SubScopeTemplates.Remove(SubScopeToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -404,7 +404,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Name = "Save SubScope Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -428,7 +428,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Description = "Save SubScope Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -451,7 +451,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -509,7 +509,7 @@ namespace Tests
 
             templates.DeviceCatalog.Remove(deviceToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -528,7 +528,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
             expectedDevice.Name = "Save Device Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -552,7 +552,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
             expectedDevice.Description = "Save Device Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -575,7 +575,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
             expectedDevice.Cost = 46.89;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -598,7 +598,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
             expectedDevice.ConnectionType = ConnectionType.WireTHHN12;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -620,8 +620,10 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
-            expectedDevice.Manufacturer = new TECManufacturer("Test", 1.0);
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            TECManufacturer manToAdd = new TECManufacturer("Test", 1.0);
+            templates.ManufacturerCatalog.Add(manToAdd);
+            expectedDevice.Manufacturer = manToAdd;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -635,7 +637,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.Manufacturer, actualDevice.Manufacturer);
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
         #endregion Save Device
 
