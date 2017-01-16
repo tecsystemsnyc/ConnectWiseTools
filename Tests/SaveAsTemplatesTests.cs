@@ -262,7 +262,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
             Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
-            Assert.AreEqual(expectedDevice.Manufacturer, actualDevice.Manufacturer);
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);

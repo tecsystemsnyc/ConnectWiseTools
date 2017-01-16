@@ -177,6 +177,8 @@ namespace Tests
 
             ConnectionType expectedWire = ConnectionType.Fiber;
             Assert.AreEqual(expectedWire, actualDevice.ConnectionType);
+
+            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
 
         [TestMethod]

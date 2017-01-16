@@ -141,6 +141,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECDevice device in bid.DeviceCatalog)
                 {
                     addDevice(device);
+                    addDeviceManufacturerRelation(device, device.Manufacturer);
                     addTagsInScope(device.Tags, device.Guid);
                 }
 
