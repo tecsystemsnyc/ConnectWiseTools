@@ -511,7 +511,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (refObject is TECDevice)
                 {
-                    editManufacturerInDevice(tarObject, refObject);
+                    editManufacturerInDevice(refObject as TECDevice);
                 }
                 else
                 {
@@ -1202,11 +1202,11 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void editManufacturerInDevice(TECManufacturer man, TECDevice dev)
+        static private void editManufacturerInDevice(TECDevice device)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceManufacturerTable.DeviceID.Name, dev.Guid.ToString());
-            data.Add(DeviceManufacturerTable.ManufacturerID.Name, man.Guid.ToString());
+            data.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceManufacturerTable.ManufacturerID.Name, device.Manufacturer.Guid.ToString());
 
             if (!SQLiteDB.Replace(DeviceManufacturerTable.TableName, data))
             {
