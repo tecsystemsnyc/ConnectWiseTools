@@ -28,6 +28,7 @@ namespace EstimateBuilder.ViewModel
         private ObservableCollection<TECEquipment> _displayEquipment;
         private ObservableCollection<TECSubScope> _displaySubScope;
         private ObservableCollection<TECVisualConnection> _displayConnections;
+        private string _controllerName;
 
         private Tuple<TECObject, TECVisualScope> connectionStart;
 
@@ -131,6 +132,14 @@ namespace EstimateBuilder.ViewModel
             {
                 _displayConnections = value;
                 RaisePropertyChanged("DisplayConnections");
+            }
+        }
+        public string ControllerName {
+            get { return _controllerName; }
+            set
+            {
+                _controllerName = value;
+                RaisePropertyChanged("ControllerName");
             }
         }
 
@@ -257,9 +266,8 @@ namespace EstimateBuilder.ViewModel
         
         private void AddControllerExecute()
         {
-            var newController = new TECController("Controller", "", Guid.NewGuid(), 100);
-            newController.Types.Add(ConnectionType.ThreeC18);
-            newController.Types.Add(ConnectionType.ThreeC18);
+            var newController = new TECController();
+            //newController.Types.Add
             Bid.Controllers.Add(newController);
         }
         #endregion

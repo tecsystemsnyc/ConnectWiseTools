@@ -150,7 +150,8 @@
                              Grid.Column="1"/>
                     <Label Content="Type"
                            Grid.Row="1"/>
-                    <ComboBox ItemsSource="{Binding ControllerCatalog}"
+                    <ComboBox ItemsSource="{Binding Bid.ControllerCatalog}"
+                              DisplayMemberPath="{Binding Name}"
                               Grid.Row="1"
                               Grid.Column="1"
                               Margin="5"/>

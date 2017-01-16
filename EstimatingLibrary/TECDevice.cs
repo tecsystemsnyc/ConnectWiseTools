@@ -31,7 +31,6 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _connectionType = value;
-                // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("ConnectionType", temp, this);
             }
         }
