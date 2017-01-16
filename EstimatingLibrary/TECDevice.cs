@@ -43,6 +43,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _manufacturer = value;
                 NotifyPropertyChanged("Manufacturer", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties
