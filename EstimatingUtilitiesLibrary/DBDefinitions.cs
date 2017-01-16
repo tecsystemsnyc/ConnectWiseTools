@@ -404,8 +404,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            DeviceID,
-            ManufacturerID
+            DeviceID
             };
 
     }

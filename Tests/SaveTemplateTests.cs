@@ -635,7 +635,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.Manufacturer, actualDevice.Manufacturer);
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
         #endregion Save Device
 
