@@ -147,10 +147,13 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Name"/>
                     <TextBox Text="{Binding ControllerName}"
-                             Grid.Column="1"/>
+                             Grid.Column="1"
+                             Margin="5"/>
                     <Label Content="Type"
                            Grid.Row="1"/>
-                    <ComboBox ItemsSource="{Binding ControllerCatalog}"
+                    <ComboBox ItemsSource="{Binding Bid.ControllerCatalog}"
+                              DisplayMemberPath="Name"
+                              SelectedValue="{Binding SelectedControllerTemplate}"
                               Grid.Row="1"
                               Grid.Column="1"
                               Margin="5"/>

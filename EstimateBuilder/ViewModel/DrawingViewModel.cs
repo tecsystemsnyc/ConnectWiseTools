@@ -28,6 +28,8 @@ namespace EstimateBuilder.ViewModel
         private ObservableCollection<TECEquipment> _displayEquipment;
         private ObservableCollection<TECSubScope> _displaySubScope;
         private ObservableCollection<TECVisualConnection> _displayConnections;
+        private string _controllerName;
+        private TECController _selectedControllerTemplate;
 
         private Tuple<TECObject, TECVisualScope> connectionStart;
 
@@ -133,6 +135,23 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DisplayConnections");
             }
         }
+        public string ControllerName {
+            get { return _controllerName; }
+            set
+            {
+                _controllerName = value;
+                RaisePropertyChanged("ControllerName");
+            }
+        }
+        public TECController SelectedControllerTemplate
+        {
+            get { return _selectedControllerTemplate; }
+            set
+            {
+                _selectedControllerTemplate = value;
+                RaisePropertyChanged("SelectedControllerTemplate");
+            }
+        }
 
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
@@ -158,11 +177,7 @@ namespace EstimateBuilder.ViewModel
             DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
-            registerBid();
-            /*
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("DrawingViewModelLoaded"));
-            */
+
         }
         
         #region Methods
@@ -257,63 +272,16 @@ namespace EstimateBuilder.ViewModel
         
         private void AddControllerExecute()
         {
-            var newController = new TECController("Controller", "", Guid.NewGuid(), 100);
-            newController.Types.Add(ConnectionType.ThreeC18);
-            newController.Types.Add(ConnectionType.ThreeC18);
+            var newController = new TECController();
+            newController.Name = ControllerName;
+            newController.Types = SelectedControllerTemplate.Types;
+            newController.Tags = SelectedControllerTemplate.Tags;
+            newController.Description = SelectedControllerTemplate.Description;
+            newController.Cost = SelectedControllerTemplate.Cost;
             Bid.Controllers.Add(newController);
         }
         #endregion
-
-        #region Message Methods
-        /*
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
-        {
-            Bid.Systems.CollectionChanged -= Systems_CollectionChanged;
-            Bid = genericMessage.Content;
-            Bid.Systems.CollectionChanged += Systems_CollectionChanged;
-
-            CurrentDrawing = null;
-            pageIndexes.Clear();
-            DisplayScope = new ObservableCollection<TECScope>();
-            ObservableCollection<TECScope> checkScope = new ObservableCollection<TECScope>();
-            foreach(TECDrawing drawing in Bid.Drawings)
-            {
-                foreach(TECPage page in drawing.Pages)
-                {
-                    foreach(TECVisualScope scope in page.PageScope)
-                    {
-                        checkScope.Add(scope.Scope);
-                    }
-                }
-            }
-            foreach(TECSystem system in Bid.Systems)
-            {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    foreach(TECSubScope sub in equipment.SubScope)
-                    {
-                        if (!checkScope.Contains(sub))
-                        {
-                            DisplayScope.Add(sub);
-                        }
-                    }
-                }
-            }
-            
-            if (Bid.Drawings.Count > 0)
-            {
-                foreach (TECDrawing drawing in Bid.Drawings)
-                {
-                    pageIndexes.Add(drawing, 0);
-                }
-                
-                CurrentDrawing = Bid.Drawings[0];
-                CurrentPage = CurrentDrawing.Pages[getIndex(CurrentDrawing)];
-            }
-        }
-        */
-        #endregion Message Methods
-
+        
         #region Drag Drop
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
