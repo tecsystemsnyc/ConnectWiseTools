@@ -43,21 +43,13 @@ namespace EstimateBuilder.ViewModel
             pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
-            /*
-            MessengerInstance.Register<NotificationMessage>(this, processNotification);
-            MessengerInstance.Register<NotificationMessage<String>>(this, processNotificationInformation);
-
+            
             BidSet += () =>
             {
-                MessengerInstance.Send(new GenericMessage<TECBid>(Bid));
+                setupAll();
             };
-            */
-            setupScopeEditorVM(Bid, Templates);
-            setupDrawingVM(Bid);
-            setupLaborVM(Bid);
-            setupReviewVM(Bid);
-            setupSettingsVM(Bid);
-            setupProposalVM(Bid);
+
+            setupAll();
         }
 
         #region Properties
@@ -161,6 +153,16 @@ namespace EstimateBuilder.ViewModel
         #endregion Commands Methods
 
         #region Helper Methods
+        private void setupAll()
+        {
+            setupScopeEditorVM(Bid, Templates);
+            setupDrawingVM(Bid);
+            setupLaborVM(Bid);
+            setupReviewVM(Bid);
+            setupSettingsVM(Bid);
+            setupProposalVM(Bid);
+        }
+
         private void getVersion()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
