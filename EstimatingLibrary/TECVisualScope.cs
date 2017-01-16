@@ -65,6 +65,7 @@ namespace EstimatingLibrary
             _x = x;
             _y = y;
         }
+
         public TECVisualScope(Guid guid, double x, double y)
         {
             Guid = guid;

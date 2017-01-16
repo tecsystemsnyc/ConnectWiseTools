@@ -401,6 +401,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
+                    if(item is TECScope)
+                    {
+                        checkForVisualsToRemove((TECScope)item);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -413,8 +417,42 @@ namespace EstimatingLibrary
         {
             NotifyPropertyChanged("ChildChanged", (object)this, (object)Labor);
         }
+
+
+        private void checkForVisualsToRemove(TECScope item)
+        {
+            foreach(TECDrawing drawing in this.Drawings)
+            {
+                foreach(TECPage page in drawing.Pages)
+                {
+                    var vScopeToRemove = new List<TECVisualScope>();
+                    var vConnectionsToRemove = new List<TECVisualConnection>();
+                    foreach(TECVisualScope vScope in page.PageScope)
+                    {
+                        if(vScope.Scope == item)
+                        {
+                            vScopeToRemove.Add(vScope);
+                            foreach(TECVisualConnection vConnection in page.Connections)
+                            {
+                                if((vConnection.Scope1 == vScope) || (vConnection.Scope2 == vScope))
+                                {
+                                    vConnectionsToRemove.Add(vConnection);
+                                }
+                            }
+                        }
+                    }
+                    foreach(TECVisualScope vScope in vScopeToRemove)
+                    {
+                        page.PageScope.Remove(vScope);
+                    }
+                    foreach(TECVisualConnection vConnection in vConnectionsToRemove)
+                    {
+                        page.Connections.Remove(vConnection);
+                    }
+                }
+            }
+        }
         #endregion
-
-
+        
     }
 }

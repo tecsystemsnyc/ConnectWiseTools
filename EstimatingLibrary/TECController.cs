@@ -101,7 +101,7 @@ namespace EstimatingLibrary
                     availableConnections.Remove(conType);
                 }
             }
-
+            Console.WriteLine("Number of connections available: " + availableConnections.Count);
             return availableConnections;
         }
         #endregion

@@ -141,21 +141,9 @@ namespace EstimateBuilder.ViewModel
 
         private bool isConnecting;
 
-        private string _connectingText;
-        public string ConnectingText
-        {
-            get { return _connectingText; }
-            set
-            {
-                _connectingText = value;
-                RaisePropertyChanged("ConnectingText");
-            }
-        }
-
         public DrawingViewModel()
         {
             isConnecting = false;
-            ConnectingText = "Start Connection";
 
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
@@ -217,7 +205,7 @@ namespace EstimateBuilder.ViewModel
         {
             if(arg != null)
             {
-                if (connectionStart == null)
+                if (!isConnecting)
                 {
                     return canStartConnection(arg.Item1);
                 }
@@ -238,6 +226,7 @@ namespace EstimateBuilder.ViewModel
             {
                 Console.WriteLine("Ending");
                 var newConnection = createConnection(connectionStart, arg, 1.0);
+                connectConnections(connectionStart.Item1, arg.Item1, newConnection);
                 Bid.Connections.Add(newConnection);
                 bool isShown = false;
                 foreach(TECVisualConnection vc in CurrentPage.Connections)
@@ -255,15 +244,12 @@ namespace EstimateBuilder.ViewModel
                     connectionToAdd.Connections.Add(newConnection);
                     CurrentPage.Connections.Add(connectionToAdd);
                 }
-                ConnectingText = "Start Connection";
                 isConnecting = false;
-                connectionStart = null;
             }
             else
             {
                 Console.WriteLine("Starting");
                 connectionStart = arg;
-                ConnectingText = "End Connection";
                 isConnecting = true;
             }
             
@@ -373,24 +359,7 @@ namespace EstimateBuilder.ViewModel
                     {
                         DisplaySubScope.Remove(item as TECSubScope);
                     }
-                    foreach(TECDrawing drawing in Bid.Drawings)
-                    {
-                        foreach(TECPage page in drawing.Pages)
-                        {
-                            var vScopeToRemove = new List<TECVisualScope>();
-                            foreach(TECVisualScope scope in page.PageScope)
-                            {
-                                if(scope.Scope == item)
-                                {
-                                    vScopeToRemove.Add(scope);
-                                }
-                            }
-                            foreach(TECVisualScope rScope in vScopeToRemove)
-                            {
-                                page.PageScope.Remove(rScope);
-                            }
-                        }
-                    }
+                  
                 }
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -580,14 +549,56 @@ namespace EstimateBuilder.ViewModel
             if (item1.Item1 is TECController)
             {
                 newConnection.Controller = item1.Item1 as TECController;
+                if(item2.Item1 is TECSubScope)
+                {
+                    var sub = item2.Item1 as TECSubScope;
+                    foreach (ConnectionType type in sub.ConnectionTypes)
+                    {
+                        newConnection.ConnectionTypes.Add(type);
+                    }
+                }
+                else
+                {
+                    var controller = item2.Item1 as TECController;
+                    foreach (ConnectionType type in controller.AvailableConnections)
+                    {
+                        newConnection.ConnectionTypes.Add(type);
+                    }
+                }
+                
             }
             else
             {
                 newConnection.Controller = item2.Item1 as TECController;
+                var sub = item1.Item1 as TECSubScope;
+                foreach (ConnectionType type in sub.ConnectionTypes)
+                {
+                    newConnection.ConnectionTypes.Add(type);
+                }
             }
             newConnection.Scope.Add(item2.Item1 as TECScope);
 
             return newConnection;
+        }
+
+        private void connectConnections(TECObject item1, TECObject item2, TECConnection connection)
+        {
+            if(item1 is TECController)
+            {
+                ((TECController)item1).Connections.Add(connection);
+            } else if (item1 is TECSubScope)
+            {
+                ((TECSubScope)item1).Connection = connection;
+            }
+
+            if (item2 is TECController)
+            {
+                ((TECController)item2).Connections.Add(connection);
+            }
+            else if (item2 is TECSubScope)
+            {
+                ((TECSubScope)item2).Connection = connection;
+            }
         }
         
         #endregion Helper Methods

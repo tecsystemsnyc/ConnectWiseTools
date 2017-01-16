@@ -101,7 +101,8 @@
                       SelectedItem="{Binding CurrentDrawing}"/>
         </Grid>
         <TabControl Grid.Column="0"
-                    Grid.Row="1">
+                    Grid.Row="1"
+                    Grid.RowSpan="2">
             <TabItem Header="Systems">
                 <DataGrid
                   ItemsSource="{Binding DisplaySystems}"
@@ -132,26 +133,47 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-        </TabControl>
-        
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0"
+            <TabItem Header="Controllers">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Name"/>
+                    <TextBox Text="{Binding ControllerName}"
+                             Grid.Column="1"/>
+                    <Label Content="Type"
+                           Grid.Row="1"/>
+                    <ComboBox ItemsSource="{Binding ControllerCatalog}"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="5"/>
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="2"
                     Command="{Binding AddControllerCommand}"
-                    Content="Add Controller"/>
-            <DataGrid Grid.Column="0" 
-                  Grid.Row="1"
+                    Content="Add Controller"
+                            Margin="5"/>
+                    <DataGrid Grid.Column="0" 
+                  Grid.Row="3"
+                              Grid.ColumnSpan="2"
                   ItemsSource="{Binding Bid.Controllers}"
                   dd:DragDrop.IsDragSource="True"
                   AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Name}" Header="Controller Name"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Controller Name"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+        
         
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
