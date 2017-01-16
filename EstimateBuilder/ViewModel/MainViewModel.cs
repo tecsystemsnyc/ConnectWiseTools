@@ -46,7 +46,8 @@ namespace EstimateBuilder.ViewModel
             
             BidSet += () =>
             {
-                setupAll();
+                Console.WriteLine("Bid Set");
+                refreshAll();
             };
 
             setupAll();
@@ -161,6 +162,17 @@ namespace EstimateBuilder.ViewModel
             setupReviewVM(Bid);
             setupSettingsVM(Bid);
             setupProposalVM(Bid);
+        }
+
+        private void refreshAll()
+        {
+            ScopeEditorVM.Bid = Bid;
+            DrawingVM.Bid = Bid;
+            LaborVM.Bid = Bid;
+            ReviewVM.Bid = Bid;
+            //SettingsVM.Bid = Bid;
+            ProposalVM.Bid = Bid;
+            
         }
 
         private void getVersion()
