@@ -11,7 +11,16 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class DocumentBuilderViewModel : ViewModelBase
     {
-        public TECBid Bid { get; set; }
+        private TECBid _bid;
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                _bid = value;
+                RaisePropertyChanged("Bid");
+            }
+        }
 
         public DocumentBuilderViewModel(TECBid bid)
         {
