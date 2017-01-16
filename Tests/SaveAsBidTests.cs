@@ -224,8 +224,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveAs test bid saved to: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveAs test bid saved to: " + path);
         }
 
         [TestMethod]
@@ -289,6 +289,8 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+
+            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
 
         [TestMethod]
