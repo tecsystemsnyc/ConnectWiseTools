@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:cnvt="clr-namespace:EstimateBuilder.HelperConverters"
+        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:helpers="clr-namespace:EstimateBuilder.Helpers"
@@ -16,7 +16,7 @@
     <Grid  Background="{DynamicResource WindowBackgroundBrush}"
            DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -93,6 +93,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            
         </TabControl>
 
         

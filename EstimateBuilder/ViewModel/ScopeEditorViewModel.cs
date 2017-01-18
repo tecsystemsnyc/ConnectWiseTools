@@ -37,6 +37,9 @@ namespace EstimateBuilder.ViewModel
             setupScopeCollection();
             setupScopeDataGrid();
             setupLocationDataGrid();
+
+            ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
+            TemplatesVisibility = Visibility.Visible;
             /*
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
             MessengerInstance.Register<GenericMessage<TECTemplates>>(this, PopulateTemplates);
@@ -91,12 +94,25 @@ namespace EstimateBuilder.ViewModel
         }
         private TECBid _bid;
         #endregion Scope Properties
-        
+
         #endregion //Interface Properties
 
         #region Commands Properties
-        
+        public ICommand ToggleTemplatesVisibilityCommand { get; private set; }
         #endregion //Commands Properties
+
+        #region Visibility Properties
+        private Visibility _templatesVisibility;
+        public Visibility TemplatesVisibility
+        {
+            get { return _templatesVisibility; }
+            set
+            {
+                _templatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
+            }
+        }
+        #endregion Visibility Properties
         #endregion //Properties
 
         #region Methods
@@ -127,7 +143,17 @@ namespace EstimateBuilder.ViewModel
         #endregion
         
         #region Commands Methods
-
+        private void ToggleTemplatesVisibilityExecute()
+        {
+            if (TemplatesVisibility == Visibility.Visible)
+            {
+                TemplatesVisibility = Visibility.Hidden;
+            }
+            else if (TemplatesVisibility == Visibility.Hidden)
+            {
+                TemplatesVisibility = Visibility.Visible;
+            }
+        }
 
         #endregion //Commands Methods
 

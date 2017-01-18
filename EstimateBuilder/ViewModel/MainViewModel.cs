@@ -68,6 +68,8 @@ namespace EstimateBuilder.ViewModel
         #region Command Properties
         public ICommand LoadDrawingCommand { get; private set; }
 
+        
+
         #endregion Command Properties
         #endregion Properties
 
