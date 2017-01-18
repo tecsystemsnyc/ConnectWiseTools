@@ -7,20 +7,62 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent">
-    <Grid DataContext="{Binding ElementName=parent}">
+<Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=ProposalScopeSource}"
-                  AutoGenerateColumns="False">
+            AutoGenerateColumns="False">
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Scope.Name}"
-                                Header="Name"
-                                Width="*"/>
+                    Header="Name"
+                    Width="*"/>
                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
-                                        Header="Include"
-                                        Width="Auto"/>
+                    Header="Include"
+                    Width="30"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
+                    <StackPanel>
+                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
+                        <DataGrid ItemsSource="{Binding Children}"
+                                AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+
+                                <DataGridTextColumn Binding="{Binding Scope.Name}"
+                                        Header="Name"
+                                        Width="*"/>
+                                <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
+                                        Header="Include"
+                                        Width="30"/>
+                            </DataGrid.Columns>
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
+                                        <DataGrid ItemsSource="{Binding Children}"
+                                                    AutoGenerateColumns="False">
+                                            <DataGrid.Columns>
+                                                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+
+                                                <DataGridTextColumn Binding="{Binding Scope.Name}"
+                                                            Header="Name"
+                                                            Width="*"/>
+                                                <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
+                                                            Header="Include"
+                                                            Width="30"/>
+                                            </DataGrid.Columns>
+                                            <DataGrid.RowDetailsTemplate>
+                                                <DataTemplate>
+                                                    <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
+
+                                                </DataTemplate>
+                                            </DataGrid.RowDetailsTemplate>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
+                        </DataGrid>
+                    </StackPanel>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
