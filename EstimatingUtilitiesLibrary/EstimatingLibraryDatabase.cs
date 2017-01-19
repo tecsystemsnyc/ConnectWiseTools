@@ -17,10 +17,11 @@ namespace EstimatingUtilitiesLibrary
 {
     public static class EstimatingLibraryDatabase
     {
-        static private SQLiteDatabase SQLiteDB;
-
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
+        //private const bool DEBUG = true;
+
+        static private SQLiteDatabase SQLiteDB;
 
         #region Public Functions
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
@@ -120,7 +121,7 @@ namespace EstimatingUtilitiesLibrary
                 MessageBox.Show("Could not load templates from database. Error: " + e.Message);
             }
 
-            SQLiteDB.Connection.Close();
+    SQLiteDB.Connection.Close();
 
             return templates;
         }
@@ -2280,7 +2281,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
 
-            string command = "select " + ControllerConnectionTypeTable.ConnectionType.Name + " from " + ControllerConnectionTypeTable.TableName + " where " +
+            string command = "select * from " + ControllerConnectionTypeTable.TableName + " where " +
                 ControllerConnectionTypeTable.ControllerID.Name + " = '" + controllerID + "'";
 
             try
