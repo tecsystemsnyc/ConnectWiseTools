@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent">
@@ -20,19 +21,20 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Scope.Name}"
-                    Header="Name"
-                    Width="Auto"
+                                    Header="Name"
+                                    Width="Auto"
                                     MinWidth="100"/>
                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                     Header="Include"
-                    Width="30"/>
+                    Width="60"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"
+                        <local:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding Notes}"
                                                     Margin="20,5,5,5"/>
                         <DataGrid ItemsSource="{Binding Children}"
+                                  Visibility="{Binding Children.Count, Converter={cnvt:CountVisibilityConverter}}"
                                 AutoGenerateColumns="False"
                                   Margin="20,5,5,5">
                             <DataGrid.Columns>
@@ -44,12 +46,12 @@
                                                     MinWidth="100"/>
                                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                                         Header="Include"
-                                        Width="30"/>
+                                        Width="60"/>
                             </DataGrid.Columns>
                             <DataGrid.RowDetailsTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"
+                                        <local:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding Notes}"
                                                                     Margin="20,5,5,5"/>
                                         <DataGrid ItemsSource="{Binding Children}"
                                                     AutoGenerateColumns="False"
@@ -63,11 +65,11 @@
                                                                     MinWidth="100"/>
                                                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                                                             Header="Include"
-                                                            Width="30"/>
+                                                            Width="60"/>
                                             </DataGrid.Columns>
                                             <DataGrid.RowDetailsTemplate>
                                                 <DataTemplate>
-                                                    <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"
+                                                    <local:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding Notes}"
                                                                                 Margin="20,5,5,5"/>
                                                 </DataTemplate>
                                             </DataGrid.RowDetailsTemplate>

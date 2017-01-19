@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="TECUserControlLibrary.ScopeBranchAsNoteGridControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d"
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent}">
+        <DataGrid  ItemsSource="{Binding Path=ScopeTreeSource}"
+                           AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
+                <DataGridTextColumn Binding="{Binding Name}" Header="Text" Width="Auto" MinWidth="100"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding SelectedItem.Branches}">
+                    <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type DataGrid}},
+                            Path=RowDetailsTemplate}"
+                                  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                            AncestorType={x:Type DataGrid}},
+                            Path=SelectedItem.Branches}"
+                                      AutoGenerateColumns="False"
+                           VirtualizingPanel.ScrollUnit="Pixel"
+                              Margin="20,5,5,5">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Text" Width="Auto" MinWidth="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </HierarchicalDataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+    </Grid>
+</UserControl>
