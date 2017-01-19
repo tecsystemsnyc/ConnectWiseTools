@@ -121,17 +121,42 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECTag _selectedTag;
+
+        private TECController _selectedController;
+        public TECController SelectedController
+        {
+            get { return _selectedController; }
+            set
+            {
+                _selectedController = value;
+                RaisePropertyChanged("SelectedController");
+            }
+        }
+
+        private ConnectionType _controllerType;
+        public ConnectionType ControllerType
+        {
+            get { return _controllerType; }
+            set
+            {
+                _controllerType = value;
+                RaisePropertyChanged("ControllerType");
+            }
+        }
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
         public ICommand AddTagToSubScopeCommand { get; private set; }
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToPointCommand { get; private set; }
+        public ICommand AddTagToControllerCommand { get; private set; }
+        public ICommand AddTypeToControllerCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
         public ICommand DeleteSelectedSubScopeCommand { get; private set; }
         public ICommand DeleteSelectedDeviceCommand { get; private set; }
         public ICommand DeleteSelectedPointCommand { get; private set; }
+        public ICommand DeleteSelectedControllerCommand { get; private set; }
         #endregion
         #endregion
 
@@ -153,11 +178,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
+            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
+            AddTypeToControllerCommand = new RelayCommand(AddTypeToControllerExecute);
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
             DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
+            DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
         }
         
         #region Commands
@@ -196,6 +224,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 SelectedPoint.Tags.Add(SelectedTag);
             }
+        }
+        private void AddTagToControllerExecute()
+        {
+            if (SelectedTag != null && SelectedController != null)
+            {
+                SelectedController.Tags.Add(SelectedTag);
+            }
+
+        }
+        private void AddTypeToControllerExecute()
+        {
+            SelectedController.Types.Add(ControllerType);
         }
         private void DeleteSelectedSystemExecute()
         {
@@ -246,6 +286,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             SelectedPoint = null;
         }
+        private void DeleteSelectedControllerExecute()
+        {
+            if (SelectedController != null)
+            {
+                Templates.ControllerTemplates.Remove(SelectedController);
+            }
+            SelectedController = null;
+        }
         #endregion
         
         #region Events
@@ -270,6 +318,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECPoint)
             {
                 SelectedPoint = selection as TECPoint;
+            }
+            else if (selection is TECController)
+            {
+                SelectedController = selection as TECController;
             }
         }
         #endregion

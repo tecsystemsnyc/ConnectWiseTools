@@ -131,6 +131,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectionChanged?.Invoke(value);
             }
         }
+        private TECController _selectedController;
+        public TECController SelectedController
+        {
+            get { return _selectedController; }
+            set
+            {
+                _selectedController = value;
+                RaisePropertyChanged("SelectedController");
+                SelectionChanged?.Invoke(value);
+            }
+        }
 
         #endregion
 
