@@ -469,6 +469,17 @@ namespace EstimatingUtilitiesLibrary
             {
                 addController(tarObject as TECController);
             }
+            else if (tarObject is TECTag)
+            {
+                if (refObject is TECScope)
+                {
+                    addTagInScope((tarObject as TECTag), (refObject as TECScope).Guid);
+                }
+                else if (refObject is TECTemplates)
+                {
+                    throw new NotImplementedException();
+                }
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -1030,6 +1041,17 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
                 }
+            }
+        }
+        static private void addTagInScope(TECTag tag, Guid scopeID)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ScopeTagTable.ScopeID.Name, scopeID.ToString());
+            data.Add(ScopeTagTable.TagID.Name, tag.Guid.ToString());
+
+            if (!SQLiteDB.Insert(ScopeTagTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
             }
         }
         static private void addDrawingPageRelation(TECDrawing drawing, TECPage page)
