@@ -19,22 +19,32 @@
 
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0">
-            <local:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"/>
-        </Grid>
-        <Grid Grid.Row="1">
-            <local:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"/>
-        </Grid>
-        <Grid Grid.Row="2">
+        
+        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="5"/>
+        <local:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
+                                        Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="5"/>
+        <Grid Grid.Row="2"
+              Margin="5">
             <local:NotesGridControl NotesSource="{Binding Bid.Notes}"/>
         </Grid>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2"
+              Grid.Column="1"
+              Margin="5">
             <local:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"/>
         </Grid>
 

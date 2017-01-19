@@ -33,6 +33,7 @@ namespace EstimatingLibrary
 
             if (scope is TECSystem)
             {
+                (scope as TECSystem).Equipment.CollectionChanged += CollectionChanged;
                 foreach (TECEquipment equip in (scope as TECSystem).Equipment)
                 {
                     Children.Add(new TECProposalScope(equip));
@@ -40,6 +41,7 @@ namespace EstimatingLibrary
             }
             else if (scope is TECEquipment)
             {
+                (scope as TECEquipment).SubScope.CollectionChanged += CollectionChanged;
                 foreach (TECSubScope ss in (scope as TECEquipment).SubScope)
                 {
                     Children.Add(new TECProposalScope(ss));
@@ -52,6 +54,24 @@ namespace EstimatingLibrary
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    addProposalScope(item as TECScope);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    removeProposalScope(item as TECScope);
+                }
             }
         }
 
@@ -72,5 +92,26 @@ namespace EstimatingLibrary
             return pScopeToReturn;
         }
 
+
+        private void addProposalScope(TECScope scope)
+        {
+            this.Children.Add(new TECProposalScope(scope));
+        }
+        private void removeProposalScope(TECScope scope)
+        {
+            List<TECProposalScope> scopeToRemove = new List<TECProposalScope>();
+            foreach (TECProposalScope pScope in this.Children)
+            {
+                if (pScope.Scope == scope)
+                {
+                    scopeToRemove.Add(pScope);
+                }
+            }
+            foreach (TECProposalScope pScope in scopeToRemove)
+            {
+                this.Children.Remove(pScope);
+            }
+
+        }
     }
 }

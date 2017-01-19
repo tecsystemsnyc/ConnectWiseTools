@@ -395,6 +395,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    if(item is TECSystem)
+                    {
+                        addProposalScope(item as TECSystem);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -405,6 +409,10 @@ namespace EstimatingLibrary
                     if(item is TECScope)
                     {
                         checkForVisualsToRemove((TECScope)item);
+                    }
+                    if (item is TECSystem)
+                    {
+                        removeProposalScope(item as TECSystem);
                     }
                 }
             }
@@ -418,8 +426,7 @@ namespace EstimatingLibrary
         {
             NotifyPropertyChanged("ChildChanged", (object)this, (object)Labor);
         }
-
-
+        
         private void checkForVisualsToRemove(TECScope item)
         {
             foreach(TECDrawing drawing in this.Drawings)
@@ -453,7 +460,28 @@ namespace EstimatingLibrary
                 }
             }
         }
+
+        private void addProposalScope(TECSystem system)
+        {
+            this.ProposalScope.Add(new TECProposalScope(system));
+        }
+        private void removeProposalScope(TECSystem system)
+        {
+            List<TECProposalScope> scopeToRemove = new List<TECProposalScope>();
+            foreach(TECProposalScope pScope in this.ProposalScope)
+            {
+                if(pScope.Scope == system)
+                {
+                    scopeToRemove.Add(pScope);
+                }
+            }
+            foreach(TECProposalScope pScope in scopeToRemove)
+            {
+                this.ProposalScope.Remove(pScope);
+            }
+            
+        }
         #endregion
-        
+
     }
 }

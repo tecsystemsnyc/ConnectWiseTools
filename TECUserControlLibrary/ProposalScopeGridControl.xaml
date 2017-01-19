@@ -7,6 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=ProposalScopeSource}"
             AutoGenerateColumns="False">
@@ -14,7 +21,8 @@
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Scope.Name}"
                     Header="Name"
-                    Width="*"/>
+                    Width="Auto"
+                                    MinWidth="100"/>
                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                     Header="Include"
                     Width="30"/>
@@ -30,7 +38,8 @@
 
                                 <DataGridTextColumn Binding="{Binding Scope.Name}"
                                         Header="Name"
-                                        Width="*"/>
+                                        Width="Auto"
+                                                    MinWidth="100"/>
                                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                                         Header="Include"
                                         Width="30"/>
@@ -38,23 +47,26 @@
                             <DataGrid.RowDetailsTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
+                                        <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"
+                                                                    Margin="20"/>
                                         <DataGrid ItemsSource="{Binding Children}"
-                                                    AutoGenerateColumns="False">
+                                                    AutoGenerateColumns="False"
+                                                  Margin="20">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
 
                                                 <DataGridTextColumn Binding="{Binding Scope.Name}"
                                                             Header="Name"
-                                                            Width="*"/>
+                                                            Width="Auto"
+                                                                    MinWidth="100"/>
                                                 <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
                                                             Header="Include"
                                                             Width="30"/>
                                             </DataGrid.Columns>
                                             <DataGrid.RowDetailsTemplate>
                                                 <DataTemplate>
-                                                    <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"/>
-
+                                                    <local:ScopeTreeGridControl ScopeTreeSource="{Binding Notes}"
+                                                                                Margin="20"/>
                                                 </DataTemplate>
                                             </DataGrid.RowDetailsTemplate>
                                         </DataGrid>
