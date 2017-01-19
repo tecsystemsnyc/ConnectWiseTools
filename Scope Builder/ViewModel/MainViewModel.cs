@@ -437,6 +437,7 @@ namespace Scope_Builder.ViewModel
             if(Properties.Settings.Default.StartupFile != "")
             {
                 LoadFromPath(Properties.Settings.Default.StartupFile);
+                Properties.Settings.Default.StartupFile = "";
             }
         }
         #endregion 

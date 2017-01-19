@@ -19,21 +19,34 @@ namespace Scope_Builder
             EventManager.RegisterClassHandler(typeof(TextBox),
                 TextBox.GotFocusEvent,
                 new RoutedEventHandler(TextBox_GotFocus));
-            base.OnStartup(e);
-        }
+
+            // Check if this was launched by double-clicking a doc. If so, use that as the
+            // startup file name.
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
+            {
+                string fname = "No filename given";
+                try
+                {
+                    fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+                    // It comes in as a URI; this helps to convert it to a path.
+                    Uri uri = new Uri(fname);
+                    fname = uri.LocalPath;
+
+                    Scope_Builder.Properties.Settings.Default.StartupFile = fname;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not open file. Error: " + ex.Message);
+                }
+            }
+            
+        base.OnStartup(e);
+
+     }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             (sender as TextBox).SelectAll();
-        }
-
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            if (e.Args.Length == 1)
-            {
-                Scope_Builder.Properties.Settings.Default.StartupFile = e.Args[0];
-                MessageBox.Show("Anything");
-            }
         }
     }
 }
