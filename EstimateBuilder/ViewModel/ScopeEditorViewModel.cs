@@ -38,14 +38,11 @@ namespace EstimateBuilder.ViewModel
             setupScopeDataGrid();
             setupLocationDataGrid();
 
+            setVisibility();
+
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
-            /*
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
-            MessengerInstance.Register<GenericMessage<TECTemplates>>(this, PopulateTemplates);
 
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("ScopeEditorViewModelLoaded"));
-            */
         }
 
         #region Properties
@@ -138,7 +135,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupEditTab()
         {
-            EditTab = new EditTabExtension(Templates);
+            EditTab = new EditTabExtension(Bid);
         }
         #endregion
         
@@ -156,24 +153,7 @@ namespace EstimateBuilder.ViewModel
         }
 
         #endregion //Commands Methods
-
-        #region Message Methods
-
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
-        {
-            Console.WriteLine("Populating");
-            Bid = genericMessage.Content;
-            ScopeDataGrid.Bid = Bid;
-        }
-
-        public void PopulateTemplates(GenericMessage<TECTemplates> genericMessage)
-        {
-            Templates = genericMessage.Content;
-            ScopeCollection.populateItemsCollections();
-        }
-
-        #endregion Message Methods
-
+        
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
@@ -224,7 +204,13 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region Helper Methods
-        
+        private void setVisibility()
+        {
+            ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+            ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+            ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+            ScopeCollection.TagsVisibility = Visibility.Collapsed;
+        }
         
         #endregion //Helper Methods
         #endregion //Methods

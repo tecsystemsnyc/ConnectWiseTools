@@ -84,7 +84,14 @@ namespace EstimatingLibrary
 
         public override Object DragDropCopy()
         {
-            throw new NotImplementedException();
+            var outController = new TECController();
+            outController.Name = Name;
+            outController.Description = Description;
+            outController.Cost = Cost;
+            outController.Types = Types;
+            outController.Tags = Tags;
+
+            return outController;
         }
 
         private List<ConnectionType> getAvailableConnectionTypes()

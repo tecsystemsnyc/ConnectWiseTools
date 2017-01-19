@@ -49,7 +49,7 @@
                  Visibility="{Binding Path=ViewModel.SubScopeVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SubScopeItemsCollection}"/>
             </TabItem>
-            <TabItem Header="Dev"
+            <TabItem Header="Devices"
                      Visibility="{Binding Path=ViewModel.DevicesVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.DevicesItemsCollection}"/>
             </TabItem>
@@ -115,7 +115,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Devices"
+            <TabItem Header="Add Devices"
                     Visibility="{Binding Path=ViewModel.DevicesEditVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -179,7 +179,7 @@
                         Command="{Binding Path=ViewModel.AddDeviceCommand}"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Controllers"
+            <TabItem Header="Add Controllers"
                      Visibility="{Binding Path=ViewModel.ControllerEditVisibility}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -240,6 +240,10 @@
                             Grid.ColumnSpan="2"
                             Margin="2"/>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Controllers"
+                     Visibility="{Binding Path=ViewModel.ControllerVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
             </TabItem>
         </TabControl>
     </Grid>

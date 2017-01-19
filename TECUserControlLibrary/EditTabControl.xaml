@@ -53,6 +53,14 @@
                 <local:ControllerEditControl
                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </TabItem>
+            <!--Choose Messgae-->
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Label Content="Select an item to edit its properties."
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
