@@ -245,6 +245,12 @@ namespace Tests
 
             templates.SubScopeTemplates.Add(subScope);
 
+            //Controller
+            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
+            controller.Types.Add(ConnectionType.FourC18);
+
+            templates.ControllerTemplates.Add(controller);
+
             return templates;
         }
 

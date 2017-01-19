@@ -18,6 +18,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
+        static TECController actualController;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -43,6 +44,8 @@ namespace Tests
             actualEquipment = actualTemplates.EquipmentTemplates[0];
 
             actualSubScope = actualTemplates.SubScopeTemplates[0];
+            
+            actualController = actualTemplates.ControllerTemplates[0];
 
             actualDevice = null;
             foreach (TECDevice dev in actualTemplates.DeviceCatalog)
@@ -198,6 +201,19 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual("Test Tag", actualTag.Text);
+        }
+
+        [TestMethod]
+        public void Load_Templates_Controller()
+        {
+
+            //Assert
+            Assert.AreEqual("Test Controller", actualController.Name);
+            Assert.AreEqual("test description", actualController.Description);
+            Assert.AreEqual(101, actualController.Cost);
+            Assert.AreEqual(5, actualController.Types.Count);
+            Assert.AreEqual(ConnectionType.FourC18, actualController.Types[0]);
+
         }
     }
 }

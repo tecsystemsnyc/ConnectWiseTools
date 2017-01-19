@@ -204,9 +204,12 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECController controller in bid.Controllers)
                 {
                     addController(controller);
-                    foreach(ConnectionType type in controller.Types)
+                    foreach(ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
                     {
-                        addControllerConnectionTypeRelation(controller, type.ToString());
+                        if (controller.Types.Contains(type))
+                        {
+                            addControllerConnectionTypeRelation(controller, type.ToString(), controller.NumberOfConnectionType(type));
+                        }
                     }
                 }
                 
@@ -959,9 +962,13 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ControllerTable.Description.Name, controller.Description);
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
 
-            foreach(ConnectionType conType in controller.Types)
+            foreach(ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
             {
-                addControllerConnectionTypeRelation(controller, conType.ToString());
+                int qty = controller.NumberOfConnectionType(type);
+                if (qty > 0)
+                {
+                    addControllerConnectionTypeRelation(controller, type.ToString(), qty);
+                }
             }
 
 
@@ -1097,11 +1104,12 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addControllerConnectionTypeRelation(TECController controller, string typeString)
+        static private void addControllerConnectionTypeRelation(TECController controller, string typeString, int qty)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(ControllerConnectionTypeTable.ControllerID.Name, controller.Guid.ToString());
             data.Add(ControllerConnectionTypeTable.ConnectionType.Name, typeString);
+            data.Add(ControllerConnectionTypeTable.Quantity.Name, qty.ToString());
 
             if (!SQLiteDB.Insert(ControllerConnectionTypeTable.TableName, data))
             {
@@ -2282,7 +2290,12 @@ namespace EstimatingUtilitiesLibrary
                 foreach (DataRow row in typeDT.Rows)
                 {
                     ConnectionType type = TECConnectionType.convertStringToType(row[ControllerConnectionTypeTable.ConnectionType.Name].ToString());
-                    types.Add(type);
+                    int qty = UtilitiesMethods.StringToInt(row[ControllerConnectionTypeTable.Quantity.Name].ToString());
+                    for(var i = 0; i<qty; i++)
+                    {
+                        types.Add(type);
+                    }
+                    
                 }
             }
             catch (Exception e)

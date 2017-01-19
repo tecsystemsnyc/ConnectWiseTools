@@ -104,6 +104,21 @@ namespace EstimatingLibrary
             Console.WriteLine("Number of connections available: " + availableConnections.Count);
             return availableConnections;
         }
+
+        public int NumberOfConnectionType(ConnectionType conType)
+        {
+            int outNum = 0;
+
+            foreach(ConnectionType type in Types)
+            {
+                if(type == conType)
+                {
+                    outNum += 1;
+                }
+            }
+
+            return outNum;
+        }
         #endregion
     }
 }

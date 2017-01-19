@@ -270,8 +270,9 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECControllerTECConnectionType";
 
-        public static TableField ControllerID = new TableField("ConnectionID", "TEXT");
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
         public static TableField ConnectionType = new TableField("ConnectionType", "TEXT");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
