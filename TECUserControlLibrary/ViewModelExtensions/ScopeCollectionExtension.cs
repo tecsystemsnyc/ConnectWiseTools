@@ -359,6 +359,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DevicesItemsCollection");
             }
         }
+
+        private ObservableCollection<TECController> _controllersItemsCollection;
+        public ObservableCollection<TECController> ControllersItemsCollection
+        {
+            get { return _controllersItemsCollection; }
+            set
+            {
+                _controllersItemsCollection = value;
+                RaisePropertyChanged("ControllersItemsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -516,6 +527,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             EquipmentItemsCollection = Templates.EquipmentTemplates;
             SubScopeItemsCollection = Templates.SubScopeTemplates;
             DevicesItemsCollection = Templates.DeviceCatalog;
+            ControllersItemsCollection = Templates.ControllerTemplates;
         }
 
         public void DragOver(IDropInfo dropInfo)

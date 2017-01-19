@@ -93,6 +93,10 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            <TabItem Header="Controllers">
+                <cLib:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
+                                            ViewModel="{Binding ScopeDataGrid}"/>
+            </TabItem>
             
         </TabControl>
 
