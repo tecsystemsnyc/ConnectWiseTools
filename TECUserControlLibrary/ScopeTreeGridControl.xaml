@@ -38,9 +38,9 @@
                            VirtualizingPanel.ScrollUnit="Pixel">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </HierarchicalDataTemplate>

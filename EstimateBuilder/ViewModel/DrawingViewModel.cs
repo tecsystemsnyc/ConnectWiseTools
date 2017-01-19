@@ -10,6 +10,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Generic;
 using EstimatingUtilitiesLibrary;
 using TECUserControlLibrary;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -24,6 +27,8 @@ namespace EstimateBuilder.ViewModel
         private TECBid _bid;
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
+        private Image _currentImage;
+        private BitmapImage _currentBitmap;
         private ObservableCollection<TECSystem> _displaySystems;
         private ObservableCollection<TECEquipment> _displayEquipment;
         private ObservableCollection<TECSubScope> _displaySubScope;
@@ -34,6 +39,8 @@ namespace EstimateBuilder.ViewModel
         private Tuple<TECObject, TECVisualScope> connectionStart;
 
         private Dictionary<TECDrawing, int> pageIndexes;
+
+        
 
         public TECBid Bid
         {
@@ -71,6 +78,32 @@ namespace EstimateBuilder.ViewModel
                 _currentPage = value;
                 RaisePropertyChanged("CurrentPage");
                 RaisePropertyChanged("CurrentIndex");
+                if (CurrentPage != null)
+                {
+                    CurrentImage = Image.FromFile(CurrentPage.Path);
+                }
+                
+            }
+        }
+        public Image CurrentImage
+        {
+            get { return _currentImage; }
+            set
+            {
+                _currentImage = value;
+                originalImageWidth = _currentImage.Width;
+                originalImageHeight = _currentImage.Height;
+                RaisePropertyChanged("CurrentImage");
+                setBitmap();
+            }
+        }
+        public BitmapImage CurrentBitmap
+        {
+            get { return _currentBitmap; }
+            set
+            {
+                _currentBitmap = value;
+                RaisePropertyChanged("CurrentBitmap");
             }
         }
         public int CurrentIndex
@@ -160,9 +193,28 @@ namespace EstimateBuilder.ViewModel
 
         private bool isConnecting;
 
+        #region Drawing Scale Properties
+        private double _percentageZoom;
+        public double PercentageZoom
+        {
+            get { return _percentageZoom; }
+            set
+            {
+                _percentageZoom = value;
+                RaisePropertyChanged("PercentageZoom");
+                setBitmap();
+            }
+        }
+
+        private int originalImageWidth;
+        private int originalImageHeight;
+
+        #endregion Drawing Scale Properties
+
         public DrawingViewModel()
         {
             isConnecting = false;
+            PercentageZoom = 1;
 
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
@@ -178,6 +230,7 @@ namespace EstimateBuilder.ViewModel
 
             Bid = new TECBid();
 
+            
         }
         
         #region Methods
@@ -297,7 +350,7 @@ namespace EstimateBuilder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
-            Point dropPoint = dropInfo.DropPosition;
+            System.Windows.Point dropPoint = dropInfo.DropPosition;
             TECVisualScope newScope = new TECVisualScope(sourceItem, dropPoint.X, dropPoint.Y);
             CurrentPage.PageScope.Add(newScope);
             /*
@@ -568,9 +621,18 @@ namespace EstimateBuilder.ViewModel
                 ((TECSubScope)item2).Connection = connection;
             }
         }
+
+        private void setBitmap()
+        {
+            int newWidth = (int)Math.Round(originalImageWidth * PercentageZoom);
+            int newHeight = (int)Math.Round(originalImageHeight * PercentageZoom);
+            if ((newWidth > 0) && (newHeight > 0))
+            {
+                CurrentBitmap = UtilitiesMethods.ResizeImage(CurrentImage, newWidth, newHeight);
+            }
+        }
         
         #endregion Helper Methods
-
         #endregion
     }
 }

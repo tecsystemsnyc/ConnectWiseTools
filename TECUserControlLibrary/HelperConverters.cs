@@ -8,10 +8,41 @@ using System.Text;
 using TECUserControlLibrary;
 using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
+using System.Globalization;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace TECUserControlLibrary.HelperConverters
 {
     [System.Windows.Markup.MarkupExtensionReturnType(typeof(IValueConverter))]
+
+    public class TemplatesVisibilityConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if ((Visibility)value == Visibility.Visible)
+            {
+                return 200;
+            }
+            else if ((Visibility)value == Visibility.Hidden)
+            {
+                return 0;
+            }
+            else
+            {
+                return 200;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 
     public class VisbilityToBooleanConverter : BaseConverter, IValueConverter
     {
@@ -207,5 +238,21 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class PercentageConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string percentageStr = (Math.Round((double)value * 100)).ToString();
+            return percentageStr + "%";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 }

@@ -69,6 +69,11 @@
                           Command="{Binding RedoCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Show/Hide Templates"
+                          Command="{Binding ScopeEditorVM.ToggleTemplatesVisibilityCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
                           Command="{Binding LoadTemplatesCommand}"

@@ -12,7 +12,6 @@ namespace EstimateBuilder.ViewModel
     /// </summary>
     public class ProposalViewModel : DocumentBuilderViewModel
     {
-
         public ProposalViewModel(TECBid bid) : base(bid) { }
     }
 }

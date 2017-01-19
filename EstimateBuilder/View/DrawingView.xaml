@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:EstimateBuilder.ViewModel"
         xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd ="urn:gong-wpf-dragdrop"
         mc:Ignorable="d ignore"
         x:Name="drawingControl" 
@@ -175,15 +176,16 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        
-        
-        
+
+
+
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="40"/>
@@ -214,18 +216,29 @@
             <Button Content="-&gt;" Command="{Binding NextPageCommand}"
                     Grid.Column="8" Margin="5"/>
         </Grid>
-        <ScrollViewer Grid.Column="1"
-                      Grid.Row="1"
-                       Grid.RowSpan="2"
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"
+                                  MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.ColumnSpan="2"
                       HorizontalScrollBarVisibility="Auto">
-            <Grid>
-                <Image x:Name="imageControl"
-            Source="{Binding CurrentPage.Path}"
+                <Grid>
+                    <Image x:Name="imageControl"
+                        Source="{Binding CurrentBitmap}"
                        Stretch="None"
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Left" 
-            Grid.Column="1"/>
-                <ItemsControl x:Name="connectionsOverlayItemsControl"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        Grid.Column="1"/>
+
+                    <ItemsControl x:Name="connectionsOverlayItemsControl"
                       Background="Transparent"
                       Grid.Column="1"
                       ItemsSource="{Binding CurrentPage.Connections}"
@@ -233,14 +246,14 @@
                       Height="{Binding ElementName=imageControl, Path=Height}"
                       dd:DragDrop.IsDropTarget="True"
                       dd:DragDrop.DropHandler="{Binding}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
-                <ItemsControl x:Name="scopeOverlayItemsControl"
+                    <ItemsControl x:Name="scopeOverlayItemsControl"
                       Background="Transparent"
                       Grid.Column="1"
                       ItemsSource="{Binding CurrentPage.PageScope}"
@@ -248,20 +261,36 @@
                       Height="{Binding ElementName=imageControl, Path=Height}"
                       dd:DragDrop.IsDropTarget="True"
                       dd:DragDrop.DropHandler="{Binding}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style>
-                            <Setter Property="Canvas.Left" Value="{Binding X}" />
-                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>
-                
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </Grid>
+            </ScrollViewer>
+            <Grid Grid.Column="1"
+                  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Value="{Binding PercentageZoom}"
+                        Minimum=".1"
+                        Maximum="2"/>
+                <Label Grid.Column="3"
+                       Content="{Binding PercentageZoom, Mode=OneWay, Converter={cnvt:PercentageConverter}}"/>
             </Grid>
-        </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>
