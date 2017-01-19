@@ -38,9 +38,11 @@ namespace Tests
 
             //Tags
             var tag1 = new TECTag("Tag 1");
+            var tag2 = new TECTag("Test Tag");
 
             var allTags = new ObservableCollection<TECTag>();
             allTags.Add(tag1);
+            allTags.Add(tag2);
 
             //Locations
             var cellar = new TECLocation("Cellar");

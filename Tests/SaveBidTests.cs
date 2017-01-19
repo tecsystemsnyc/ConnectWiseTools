@@ -1111,6 +1111,41 @@ namespace Tests
         #endregion Edit Point
         #endregion Save Point
 
+        #region Save Tag
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToSystem()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECSystem systemToEdit = bid.Systems[0];
+
+            systemToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSystem finalSystem = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                if (system.Guid == systemToEdit.Guid)
+                {
+                    finalSystem = system;
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalSystem.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+        #endregion Save Tag
+
         #region Save Scope Branch
 
         [TestMethod]
