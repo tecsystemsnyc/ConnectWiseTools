@@ -18,6 +18,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECDevice> _deviceCatalog;
         private ObservableCollection<TECManufacturer> _manufacturerCatalog;
         private ObservableCollection<TECTag> _tags;
+        private ObservableCollection<TECController> _controllerTemplates;
 
         public Guid InfoGuid
         {
@@ -95,6 +96,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Tags", temp, this);
             }
         }
+        public ObservableCollection<TECController> ControllerTemplates
+        {
+            get { return _controllerTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                ControllerTemplates.CollectionChanged -= CollectionChanged;
+                _controllerTemplates = value;
+                ControllerTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ControllerTemplates", temp, this);
+            }
+        }
        
         public override object Copy()
         {
@@ -117,6 +130,7 @@ namespace EstimatingLibrary
             _deviceCatalog = new ObservableCollection<TECDevice>();
             _tags = new ObservableCollection<TECTag>();
             _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
+            _controllerTemplates = new ObservableCollection<TECController>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -124,6 +138,7 @@ namespace EstimatingLibrary
             DeviceCatalog.CollectionChanged += CollectionChanged;
             Tags.CollectionChanged += CollectionChanged;
             ManufacturerCatalog.CollectionChanged += CollectionChanged;
+            ControllerTemplates.CollectionChanged += CollectionChanged;
         }
 
         public TECTemplates(TECTemplates templatesSource) : this()

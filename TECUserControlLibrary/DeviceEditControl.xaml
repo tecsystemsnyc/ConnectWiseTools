@@ -86,8 +86,10 @@
                            Content="Manufacturer:"/>
                 <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}"
                               DisplayMemberPath="Name"
-                              SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"
-                                           Grid.Row="4" Grid.Column="1" Margin="5"/>
+                          Grid.Row="4" Grid.Column="1" Margin="5"
+                          SelectedItem="{Binding SelectedDevice.Manufacturer}"/>
+                <!--SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"
+                                           Grid.Row="4" Grid.Column="1" Margin="5"/>-->
             </Grid>
         </Grid>
         <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding Templates.Tags}"

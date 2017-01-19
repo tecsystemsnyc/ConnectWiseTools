@@ -103,6 +103,10 @@
                     <cLib:DevicesGridControl DevicesSource="{Binding Templates.DeviceCatalog}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
+                <TabItem Header="Controllers">
+                    <cLib:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
+                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                </TabItem>
             </TabControl>
 
             <!--Right Tab Control-->

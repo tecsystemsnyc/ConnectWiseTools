@@ -113,6 +113,7 @@ namespace EstimatingUtilitiesLibrary
                 templates.DeviceCatalog = getAllDevices();
                 templates.Tags = getAllTags();
                 templates.ManufacturerCatalog = getAllManufacturers();
+                templates.ControllerTemplates = getControllers();
             }
             catch (Exception e)
             {
@@ -460,6 +461,10 @@ namespace EstimatingUtilitiesLibrary
                     addLocationInScope(refObject as TECScope);
                 }
             }
+            else if (tarObject is TECController)
+            {
+                addController(tarObject as TECController);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -545,6 +550,10 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is TECLocation)
             {
                 editLocation(tarObject as TECLocation);
+            }
+            else if (tarObject is TECController)
+            {
+                editController(tarObject as TECController);
             }
             else if (tarObject is ObservableCollection<TECSystem>)
             {
@@ -656,6 +665,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     removeLocationInScope(refObject as TECScope);
                 }
+            }
+            else if (tarObject is TECConnection)
+            {
+                removeController(tarObject as TECController);
             }
             else
             {
@@ -945,6 +958,12 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ControllerTable.Name.Name, controller.Name);
             data.Add(ControllerTable.Description.Name, controller.Description);
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
+
+            foreach(ConnectionType conType in controller.Types)
+            {
+                addControllerConnectionTypeRelation(controller, conType.ToString());
+            }
+
 
             if (!SQLiteDB.Insert(ControllerTable.TableName, data))
             {
@@ -1315,6 +1334,20 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't update item in TECTag table");
             }
         }
+
+        static private void editController(TECController controller)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerTable.Description.Name, controller.Description);
+            data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
+            data.Add(ControllerTable.Description.Name, controller.Description);
+
+            if (!SQLiteDB.Replace(TagTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECController table");
+            }
+        }
         #endregion Edit Methods
 
         #region Remove Methods
@@ -1368,6 +1401,11 @@ namespace EstimatingUtilitiesLibrary
         {
             SQLiteDB.Delete(VisualScopeTable.TableName, VisualScopeTable.VisualScopeID.Name, vs.Guid);
         }
+
+        static private void removeController(TECController controller)
+        {
+            SQLiteDB.Delete(ControllerTable.TableName, ControllerTable.ControllerID.Name, controller.Guid);
+        }
         #endregion Remove Objects
 
         #region Remove Relations
@@ -1410,6 +1448,11 @@ namespace EstimatingUtilitiesLibrary
         private static void removePageVisualScopeRelation(TECVisualScope vs)
         {
             SQLiteDB.Delete(PageVisualScopeTable.TableName, PageVisualScopeTable.VisualScopeID.Name, vs.Guid);
+        }
+
+        private static void removeControllerConnectionTypeRelation(TECController controller)
+        {
+            SQLiteDB.Delete(ControllerConnectionTypeTable.TableName, ControllerConnectionTypeTable.ControllerID.Name, controller.Guid);
         }
         #endregion
         #endregion Remove Methods

@@ -82,6 +82,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagCommand { get; private set; }
         public ICommand AddDeviceCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
+        public ICommand AddControllerCommand { get; private set; }
+        public ICommand AddTypeToControllerCommand { get; private set; }
 
         #endregion
 
@@ -162,6 +164,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _tagsVisibility;
+
+        public Visibility ControllerEditVisibility
+        {
+            get { return _controllerEditVisibility; }
+            set
+            {
+                _controllerEditVisibility = value;
+                RaisePropertyChanged("ControllerEditVisibility");
+            }
+        }
+        private Visibility _controllerEditVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -186,8 +199,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private string _deviceDescription;
-
-
+        
         public double DeviceCost
         {
             get { return _deviceCost; }
@@ -242,6 +254,64 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private double _deviceMultiplier;
+        #endregion //Device Interface Properties
+
+        #region Controller Interface Properties
+        public string ControllerName
+        {
+            get { return _controllerName; }
+            set
+            {
+                _controllerName = value;
+                RaisePropertyChanged("ControllerName");
+            }
+        }
+        private string _controllerName;
+
+        public string ControllerDescription
+        {
+            get { return _controllerDescription; }
+            set
+            {
+                _controllerDescription = value;
+                RaisePropertyChanged("ControllerDescription");
+            }
+        }
+        private string _controllerDescription;
+
+        public double ControllerCost
+        {
+            get { return _controllerCost; }
+            set
+            {
+                _controllerCost = value;
+                RaisePropertyChanged("ControllerCost");
+            }
+        }
+        private double _controllerCost;
+
+        public ConnectionType ControllerType
+        {
+            get { return _controllerType; }
+            set
+            {
+                _controllerType = value;
+                RaisePropertyChanged("ControllerType");
+            }
+        }
+        private ConnectionType _controllerType;
+
+        public ObservableCollection<ConnectionType> ControllerConnectionTypes
+        {
+            get { return _controllerConnectionTypes; }
+            set
+            {
+                _controllerConnectionTypes = value;
+                RaisePropertyChanged("ControllerConnectionTypes");
+            }
+        }
+        private ObservableCollection<ConnectionType> _controllerConnectionTypes;
+        
         #endregion //Device Interface Properties
 
         #region Scope Collections
@@ -314,6 +384,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagCommand = new RelayCommand(AddTagExecute);
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
             AddDeviceCommand = new RelayCommand(AddDeviceExecute);
+            AddControllerCommand = new RelayCommand(AddControllerExecute);
+            AddTypeToControllerCommand = new RelayCommand(AddTypeToControllerExecute);
+
+            ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
 
             populateItemsCollections();
         }
@@ -415,6 +489,23 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceCost = 0;
             DeviceConnectionType = 0;
             DeviceManufacturer = null;
+        }
+        private void AddControllerExecute()
+        {
+            var newController = new TECController();
+            newController.Name = ControllerName;
+            newController.Description = ControllerDescription;
+            newController.Cost = ControllerCost;
+            newController.Types = ControllerConnectionTypes;
+            Templates.ControllerTemplates.Add(newController);
+            ControllerName = "";
+            ControllerDescription = "";
+            ControllerCost = 0;
+            ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
+        }
+        private void AddTypeToControllerExecute()
+        {
+            ControllerConnectionTypes.Add(ControllerType);
         }
 
         #endregion

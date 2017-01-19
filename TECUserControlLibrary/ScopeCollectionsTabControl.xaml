@@ -128,7 +128,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0"
                         Grid.Row="0"
@@ -177,6 +177,68 @@
                         Margin="2"
                         Content="Add"
                         Command="{Binding Path=ViewModel.AddDeviceCommand}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Controllers"
+                     Visibility="{Binding Path=ViewModel.ControllerEditVisibility}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Name"
+                           Grid.Row="0"/>
+                    <TextBox Text="{Binding Path=ViewModel.ControllerName}"
+                             Grid.Column="1"
+                             Grid.Row="0"
+                             Margin="5"/>
+                    <Label Content="Description"
+                           Grid.Row="1"/>
+                    <TextBox Text="{Binding Path=ViewModel.ControllerDescription}"
+                             Grid.Column="1"
+                             Grid.Row="1"
+                             Margin="5"/>
+                    <Label Content="Cost"
+                           Grid.Row="2"/>
+                    <TextBox Text="{Binding Path=ViewModel.ControllerCost}"
+                             Grid.Column="1"
+                             Grid.Row="2"
+                             Margin="5"/>
+                    <Label Content="IO"
+                           Grid.Row="3"/>
+                    <Grid Grid.Column="1"
+                          Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
+                                  SelectedValue="{Binding Path=ViewModel.ControllerType}"/>
+                        <Button Content="Add IO"
+                                Command="{Binding Path=ViewModel.AddTypeToControllerCommand}"
+                                Grid.Column="1"/>
+                    </Grid>
+                    <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerConnectionTypes}"
+                              Grid.Row="4"
+                              Grid.ColumnSpan="2"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding}" Header="Type"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Add Controller"
+                            Command="{Binding Path=ViewModel.AddControllerCommand}"
+                            Grid.Row="5"
+                            Grid.ColumnSpan="2"
+                            Margin="2"/>
                 </Grid>
             </TabItem>
         </TabControl>
