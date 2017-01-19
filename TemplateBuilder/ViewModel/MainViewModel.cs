@@ -433,6 +433,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -451,6 +452,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
@@ -464,6 +467,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+
 
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
                     break;
@@ -476,6 +481,19 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesVisibility = Visibility.Collapsed;
                     ScopeCollection.DevicesEditVisibility = Visibility.Visible;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+
+                    break;
+                case 4:
+                    ScopeCollection.TabIndex = 7;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Visible;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Visible;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Visible;
+                    
                     break;
                 default:
                     ScopeCollection.TabIndex = 0;

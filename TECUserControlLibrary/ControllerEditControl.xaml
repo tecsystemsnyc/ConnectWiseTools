@@ -21,7 +21,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
@@ -33,10 +33,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label Content="Name:"/>
             <TextBox Text="{Binding SelectedController.Name}" Grid.Column="1" 
@@ -59,10 +59,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
-                                  SelectedValue="{Binding ControllerType}"/>
+                                  SelectedValue="{Binding ControllerType}"
+                          Margin="5"/>
                 <Button Content="Add IO"
                                 Command="{Binding AddTypeToControllerCommand}"
-                                Grid.Column="1"/>
+                                Grid.Column="1"
+                        Margin="5"/>
             </Grid>
             
         </Grid>

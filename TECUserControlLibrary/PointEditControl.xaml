@@ -22,10 +22,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -33,10 +33,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label Content="Name:"/>
             <TextBox Text="{Binding SelectedPoint.Name}" Grid.Column="1" 
@@ -48,7 +48,7 @@
                              Margin="5"/>
             <Label Content="Point Type:" Grid.Row="2"/>
             <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:PointTypes}}}" SelectedValue="{Binding SelectedPoint.Type, Mode=TwoWay}"
-                     Grid.Column="1" Grid.Row="2" Margin="5,5,5,30"/>
+                     Grid.Column="1" Grid.Row="2" Margin="5"/>
             <Label Content="Quantity:"
                                Grid.Column="0" Grid.Row="3"/>
             <TextBox Text="{Binding SelectedPoint.Quantity}" 

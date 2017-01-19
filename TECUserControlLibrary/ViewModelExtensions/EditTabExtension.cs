@@ -130,6 +130,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedController = value;
                 RaisePropertyChanged("SelectedController");
+                TabIndex = EditIndex.Controller;
             }
         }
 

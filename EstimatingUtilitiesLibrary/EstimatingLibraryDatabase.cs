@@ -670,7 +670,7 @@ namespace EstimatingUtilitiesLibrary
                     removeLocationInScope(refObject as TECScope);
                 }
             }
-            else if (tarObject is TECConnection)
+            else if (tarObject is TECController)
             {
                 removeController(tarObject as TECController);
             }
