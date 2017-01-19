@@ -35,7 +35,8 @@
                             AncestorType={x:Type DataGrid}},
                             Path=SelectedItem.Branches}"
                                       AutoGenerateColumns="False"
-                           VirtualizingPanel.ScrollUnit="Pixel">
+                           VirtualizingPanel.ScrollUnit="Pixel"
+                              Margin="20,5,5,5">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
                             <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="100"/>
