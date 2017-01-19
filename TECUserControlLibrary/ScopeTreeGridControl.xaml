@@ -21,9 +21,9 @@
                            AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="100"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="100"/>
+                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"
                                             ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
@@ -38,9 +38,9 @@
                            VirtualizingPanel.ScrollUnit="Pixel">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*" MinWidth="100"/>
-                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*" MinWidth="100"/>
-                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="100"/>
+                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="100"/>
+                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </HierarchicalDataTemplate>
