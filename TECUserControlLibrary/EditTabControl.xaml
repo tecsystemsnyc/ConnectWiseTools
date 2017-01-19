@@ -48,6 +48,11 @@
                 <local:PointEditControl
                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </TabItem>
+            <!--Controller Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:ControllerEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
