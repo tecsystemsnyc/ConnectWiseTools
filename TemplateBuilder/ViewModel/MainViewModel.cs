@@ -473,7 +473,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
                     break;
                 case 3:
-                    ScopeCollection.TabIndex = 4;
+                    ScopeCollection.TabIndex = 6;
 
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
