@@ -14,7 +14,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// </summary>
     public class EditTabExtension : ViewModelBase
     {
-
         #region Properties
         public EditIndex TabIndex
         {
@@ -37,6 +36,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECTemplates _templates;
+
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                _bid = value;
+            }
+        }
+        private TECBid _bid;
         
         public TECSystem SelectedSystem
         {
@@ -168,6 +177,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates = templates;
             setupCommands();
+            TabIndex = EditIndex.Nothing;
+        }
+
+        public EditTabExtension(TECBid bid)
+        {
+            Bid = bid;
+            setupCommands();
+            TabIndex = EditIndex.Nothing;
         }
 
         #region Methods
@@ -240,7 +257,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void DeleteSelectedSystemExecute()
         {
-            Templates.SystemTemplates.Remove(SelectedSystem);
+            if(Templates != null)
+            {
+                Templates.SystemTemplates.Remove(SelectedSystem);
+            } else if(Bid != null)
+            {
+                Bid.Systems.Remove(SelectedSystem);
+            }
+            
             SelectedSystem = null;
         }
         private void DeleteSelectedEquipmentExecute()
@@ -249,7 +273,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 SelectedSystem.Equipment.Remove(SelectedEquipment);
             }
-            else
+            else if (Templates != null)
             {
                 Templates.EquipmentTemplates.Remove(SelectedEquipment);
             }
@@ -261,7 +285,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 SelectedEquipment.SubScope.Remove(SelectedSubScope);
             }
-            else
+            else if (Templates != null)
             {
                 Templates.SubScopeTemplates.Remove(SelectedSubScope);
             }
@@ -273,7 +297,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 SelectedSubScope.Devices.Remove(SelectedDevice);
             }
-            else
+            else if (Templates != null)
             {
                 Templates.DeviceCatalog.Remove(SelectedDevice);
             }
@@ -289,9 +313,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void DeleteSelectedControllerExecute()
         {
-            if (SelectedController != null)
+            if (SelectedController != null && Templates != null)
             {
                 Templates.ControllerTemplates.Remove(SelectedController);
+            }
+            else if (SelectedController != null && Bid != null)
+            {
+                Bid.Controllers.Remove(SelectedController);
             }
             SelectedController = null;
         }
@@ -323,6 +351,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECController)
             {
                 SelectedController = selection as TECController;
+            } else
+            {
+                TabIndex = EditIndex.Nothing;
             }
         }
         #endregion
