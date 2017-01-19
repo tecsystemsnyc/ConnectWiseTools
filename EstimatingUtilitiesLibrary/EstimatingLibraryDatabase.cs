@@ -2286,6 +2286,7 @@ namespace EstimatingUtilitiesLibrary
                     TECController controller = new TECController(name, description, guid, cost);
 
                     controller.Types = getConnectionTypesInController(guid);
+                    controller.Tags = getTagsInScope(guid);
 
                     controllers.Add(controller);
                 }

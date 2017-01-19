@@ -285,6 +285,9 @@ namespace Tests
 
             Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualController.Tags[0].Text);
         }
 
         [TestMethod]

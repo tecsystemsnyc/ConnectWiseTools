@@ -155,6 +155,13 @@ namespace Tests
             var allExclusions = new ObservableCollection<TECExclusion>();
             allExclusions.Add(exclusion1);
 
+            //Controller
+            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
+            controller.Types.Add(ConnectionType.FourC18);
+
+            var allControllers = new ObservableCollection<TECController>();
+            allControllers.Add(controller);
+
             //Bid
             bid.Systems = allSystems;
             bid.DeviceCatalog = deviceCatalog;
@@ -165,6 +172,8 @@ namespace Tests
             bid.ScopeTree = scopeTree;
             bid.Notes = allNotes;
             bid.Exclusions = allExclusions;
+            bid.Controllers = allControllers;
+            bid.ControllerCatalog = allControllers;
 
             return bid;
         }

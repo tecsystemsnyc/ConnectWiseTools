@@ -1144,6 +1144,165 @@ namespace Tests
 
             Assert.IsTrue(tagExists);
         }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToEquipment()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
+
+            equipmentToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment finalEquipment = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    if (equipment.Guid == equipmentToEdit.Guid)
+                    {
+                        finalEquipment = equipment;
+                        break;
+                    }
+                }
+                if (finalEquipment != null)
+                {
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalEquipment.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToSubScope()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
+
+            subScopeToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope finalSubScope = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equip.SubScope)
+                    {
+                        if (subScope.Guid == subScopeToEdit.Guid)
+                        {
+                            finalSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if (finalSubScope != null) { break; }
+                }
+                if (finalSubScope != null) { break; }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalSubScope.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToPoint()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+
+            PointToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint finalPoint = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == PointToEdit.Guid)
+                            {
+                                finalPoint = point;
+                                break;
+                            }
+                        }
+                    }
+                    if (finalPoint != null) { break; }
+                }
+                if (finalPoint != null) { break; }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalPoint.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToController()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECController ControllerToEdit = bid.Controllers[0];
+
+            ControllerToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController finalController = null;
+            foreach (TECController Controller in finalBid.Controllers)
+            {
+                if (Controller.Guid == ControllerToEdit.Guid)
+                {
+                    finalController = Controller;
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalController.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
         #endregion Save Tag
 
         #region Save Scope Branch
