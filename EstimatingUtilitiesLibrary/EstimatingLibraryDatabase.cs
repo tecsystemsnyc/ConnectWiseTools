@@ -205,13 +205,6 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECController controller in bid.Controllers)
                 {
                     addController(controller);
-                    foreach(ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
-                    {
-                        if (controller.Types.Contains(type))
-                        {
-                            addControllerConnectionTypeRelation(controller, type.ToString(), controller.NumberOfConnectionType(type));
-                        }
-                    }
                 }
                 
             }

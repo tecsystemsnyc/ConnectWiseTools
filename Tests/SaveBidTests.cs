@@ -37,8 +37,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveBid test bid: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveBid test bid: " + path);
         }
 
         #region Save BidInfo

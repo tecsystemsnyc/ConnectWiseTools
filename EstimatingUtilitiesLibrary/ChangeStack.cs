@@ -111,6 +111,10 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
+            foreach (TECController controller in Bid.Controllers)
+            {
+                controller.PropertyChanged += Object_PropertyChanged;
+            }
         }
 
         private void registerTemplatesChanges(TECTemplates Templates)

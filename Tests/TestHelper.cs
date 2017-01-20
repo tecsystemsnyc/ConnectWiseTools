@@ -173,7 +173,6 @@ namespace Tests
             bid.Notes = allNotes;
             bid.Exclusions = allExclusions;
             bid.Controllers = allControllers;
-            bid.ControllerCatalog = allControllers;
 
             return bid;
         }
