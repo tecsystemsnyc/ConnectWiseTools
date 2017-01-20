@@ -144,6 +144,7 @@ namespace TemplateBuilder.ViewModel
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
         }
+
         private void getTemplates()
         {
             Templates = new TECTemplates();
