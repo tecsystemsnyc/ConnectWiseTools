@@ -163,19 +163,29 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates = new TECTemplates();
 
+            string path;
 
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
-
-            if (!Directory.Exists(resourcesFolder))
-            { Directory.CreateDirectory(resourcesFolder); }
-
-            defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
-
-            if (File.Exists(defaultTemplatesPath))
+            if (Properties.Settings.Default.TemplateDirectoryPath != "")
             {
-                if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath); }
+                path = Properties.Settings.Default.TemplateDirectoryPath;
+            }
+            else
+            {
+                path = getLoadTemplatesPath();
+            }
+
+            //string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
+
+            //if (!Directory.Exists(resourcesFolder))
+            //{ Directory.CreateDirectory(resourcesFolder); }
+
+            //defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
+
+            if (File.Exists(path))
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path); }
                 else
                 {
                     string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
@@ -357,10 +367,20 @@ namespace TECUserControlLibrary.ViewModels
         private string getLoadTemplatesPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Please choose a template database.";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             openFileDialog.Filter = "Template Database Files (*.tdb)|*.tdb";
             openFileDialog.DefaultExt = "tdb";
             openFileDialog.AddExtension = true;
+
+            if (Properties.Settings.Default.TemplateDirectoryPath != null)
+            {
+                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplateDirectoryPath;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
 
             string path = null;
 
@@ -369,6 +389,8 @@ namespace TECUserControlLibrary.ViewModels
                 try
                 {
                     path = openFileDialog.FileName;
+                    Properties.Settings.Default.TemplateDirectoryPath = path;
+                    Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {

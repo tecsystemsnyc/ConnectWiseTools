@@ -188,6 +188,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controllerEditVisibility;
+
+        public Visibility ControllerVisibility
+        {
+            get { return _controllerVisibility; }
+            set
+            {
+                _controllerVisibility = value;
+                RaisePropertyChanged("ControllerVisibility");
+            }
+        }
+        private Visibility _controllerVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties

@@ -470,7 +470,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if (refObject is TECTemplates)
                 {
-                    throw new NotImplementedException();
+                    addTag(tarObject as TECTag);
                 }
             }
             else
@@ -885,6 +885,17 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Console.WriteLine("Error: Couldn't add tag to TECTag table.");
                 }
+            }
+        }
+        static private void addTag(TECTag tag)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(TagTable.TagID.Name, tag.Guid.ToString());
+            data.Add(TagTable.TagString.Name, tag.Text);
+
+            if (!SQLiteDB.Insert(TagTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECNote table");
             }
         }
         static private void addNote(TECNote note)

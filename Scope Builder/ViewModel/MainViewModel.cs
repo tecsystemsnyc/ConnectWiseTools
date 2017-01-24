@@ -82,6 +82,11 @@ namespace Scope_Builder.ViewModel
         #region Helper Functions
         private void setVisibility(int tIndex)
         {
+            ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+            ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+            ScopeCollection.TagsVisibility = Visibility.Collapsed;
+            ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+
             switch (tIndex)
             {
                 case 0:
