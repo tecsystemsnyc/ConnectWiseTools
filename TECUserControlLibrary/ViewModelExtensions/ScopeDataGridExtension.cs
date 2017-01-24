@@ -259,7 +259,20 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         public void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            populateLocationSelections();
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(TECLocation location in e.NewItems)
+                {
+                    LocationSelections.Add(location);
+                }
+                
+            } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach(TECLocation location in e.OldItems)
+                {
+                    LocationSelections.Remove(location);
+                }
+            }
         }
         
         public void populateLocationSelections()
