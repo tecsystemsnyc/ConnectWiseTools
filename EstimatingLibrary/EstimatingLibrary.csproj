@@ -87,6 +87,7 @@
     <Compile Include="TECDrawing.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECExclusion.cs" />
+    <Compile Include="TECIO.cs" />
     <Compile Include="TECLabor.cs" />
     <Compile Include="TECLocation.cs" />
     <Compile Include="TECManufacturer.cs" />
