@@ -144,21 +144,31 @@ namespace TemplateBuilder.ViewModel
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
         }
+
         private void getTemplates()
         {
             Templates = new TECTemplates();
-            
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
-
-            if (!Directory.Exists(resourcesFolder))
-            { Directory.CreateDirectory(resourcesFolder); }
-            defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
-
-            if (File.Exists(defaultTemplatesPath))
+            string path;
+           
+            if (Properties.Settings.Default.TemplateDirectoryPath != "")
             {
-                if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath); }
+                path = Properties.Settings.Default.TemplateDirectoryPath;
+            } else
+            {
+                path = getLoadPath();
+            }
+
+            //string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
+
+            //if (!Directory.Exists(resourcesFolder))
+            //{ Directory.CreateDirectory(resourcesFolder); }
+            //defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
+
+            if (File.Exists(path))
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path); }
                 else
                 {
                     string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
@@ -199,12 +209,13 @@ namespace TemplateBuilder.ViewModel
 
             if (path != null)
             {
-                Properties.Settings.Default.TemplateDirectoryPath = path;
+                //Properties.Settings.Default.TemplateDirectoryPath = path;
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    File.Copy(path, defaultTemplatesPath, true);
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
+                    //File.Copy(path, defaultTemplatesPath, true);
+                    //Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
                 }
                 else
                 {
@@ -217,10 +228,12 @@ namespace TemplateBuilder.ViewModel
         private void SaveExecute()
         {
 
+            string path = Properties.Settings.Default.TemplateDirectoryPath;
+
             if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
             {
-                
-                EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
+                EstimatingLibraryDatabase.UpdateTemplatesToDB(path, Stack);
+                //EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
 
                 Stack.ClearStacks();
 
@@ -327,6 +340,8 @@ namespace TemplateBuilder.ViewModel
                 try
                 {
                     path = openFileDialog.FileName;
+                    Properties.Settings.Default.TemplateDirectoryPath = path;
+                    Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {

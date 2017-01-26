@@ -357,10 +357,20 @@ namespace TECUserControlLibrary.ViewModels
         private string getLoadTemplatesPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Please choose a template database.";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             openFileDialog.Filter = "Template Database Files (*.tdb)|*.tdb";
             openFileDialog.DefaultExt = "tdb";
             openFileDialog.AddExtension = true;
+
+            if (Properties.Settings.Default.TemplateDirectoryPath != null)
+            {
+                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplateDirectoryPath;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
 
             string path = null;
 
@@ -369,6 +379,8 @@ namespace TECUserControlLibrary.ViewModels
                 try
                 {
                     path = openFileDialog.FileName;
+                    Properties.Settings.Default.TemplateDirectoryPath = path;
+                    Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {

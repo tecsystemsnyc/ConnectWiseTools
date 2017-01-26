@@ -7,7 +7,7 @@
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="720 " d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -123,10 +123,12 @@
                         <ColumnDefinition Width="35*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
@@ -171,8 +173,16 @@
                             Grid.Row="4" Grid.Column="1"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0"/>
+                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
+                              SelectedItem="{Binding Path=ViewModel.SelectedTag}"
+                              DisplayMemberPath="Text"/>
+                    <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
+                            Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
+                            Margin="5"/>
+                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                                           TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
-                        Grid.Row="5"
+                        Grid.Row="7"
                         Grid.ColumnSpan="3"
                         Margin="2"
                         Content="Add"
@@ -186,6 +196,8 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
@@ -221,10 +233,12 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
-                                  SelectedValue="{Binding Path=ViewModel.ControllerType}"/>
+                                  SelectedValue="{Binding Path=ViewModel.ControllerType}"
+                                  Margin="5"/>
                         <Button Content="Add IO"
                                 Command="{Binding Path=ViewModel.AddTypeToControllerCommand}"
-                                Grid.Column="1"/>
+                                Grid.Column="1"
+                                Margin="5"/>
                     </Grid>
                     <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerConnectionTypes}"
                               Grid.Row="4"
@@ -234,9 +248,17 @@
                             <DataGridTextColumn Binding="{Binding}" Header="Type"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
+                              SelectedItem="{Binding Path=ViewModel.SelectedTag}"
+                              DisplayMemberPath="Text"/>
+                    <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
+                            Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
+                            Margin="5"/>
+                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                                           TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
                     <Button Content="Add Controller"
                             Command="{Binding Path=ViewModel.AddControllerCommand}"
-                            Grid.Row="5"
+                            Grid.Row="7"
                             Grid.ColumnSpan="2"
                             Margin="2"/>
                 </Grid>

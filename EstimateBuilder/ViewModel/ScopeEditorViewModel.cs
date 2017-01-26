@@ -173,24 +173,8 @@ namespace EstimateBuilder.ViewModel
         {
             Object sourceItem;
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
-            else
-            { sourceItem = dropInfo.Data; }
-
-            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
-                ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
-            }
-            else
-            {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
+                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -200,7 +184,27 @@ namespace EstimateBuilder.ViewModel
                     ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
             }
+            else
+            {
+                sourceItem = dropInfo.Data;
+                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
+                int removeIndex = currentIndex;
+                if (dropInfo.InsertIndex < currentIndex)
+                {
+                    removeIndex += 1;
+                }
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                {
+                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                }
+                else
+                {
+                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                }
+                ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
+            }
         }
+
         #endregion
 
         #region Helper Methods

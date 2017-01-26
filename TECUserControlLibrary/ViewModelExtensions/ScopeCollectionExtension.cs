@@ -71,6 +71,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ManufacturerMultiplier");
             }
         }
+
+        private TECTag _selectedTag;
+        public TECTag SelectedTag
+        {
+            get { return _selectedTag; }
+            set
+            {
+                _selectedTag = value;
+                RaisePropertyChanged("SelectedTag");
+            }
+        }
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -84,6 +95,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddControllerCommand { get; private set; }
         public ICommand AddTypeToControllerCommand { get; private set; }
+        public ICommand AddTagToDeviceCommand { get; private set; }
+        public ICommand AddTagToControllerCommand { get; private set; }
 
         #endregion
 
@@ -175,6 +188,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controllerEditVisibility;
+
+        public Visibility ControllerVisibility
+        {
+            get { return _controllerVisibility; }
+            set
+            {
+                _controllerVisibility = value;
+                RaisePropertyChanged("ControllerVisibility");
+            }
+        }
+        private Visibility _controllerVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -254,6 +278,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private double _deviceMultiplier;
+
+        public ObservableCollection<TECTag> DeviceTags
+        {
+            get { return _deviceTags; }
+            set
+            {
+                _deviceTags = value;
+                RaisePropertyChanged("DeviceTags");
+            }
+        }
+        private ObservableCollection<TECTag> _deviceTags;
         #endregion //Device Interface Properties
 
         #region Controller Interface Properties
@@ -311,6 +346,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private ObservableCollection<ConnectionType> _controllerConnectionTypes;
+
+        public ObservableCollection<TECTag> ControllerTags
+        {
+            get { return _controllerTags; }
+            set {
+                _controllerTags = value;
+                RaisePropertyChanged("ControllerTags");
+            }
+        }
+        private ObservableCollection<TECTag> _controllerTags;
         
         #endregion //Device Interface Properties
 
@@ -397,10 +442,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddDeviceCommand = new RelayCommand(AddDeviceExecute);
             AddControllerCommand = new RelayCommand(AddControllerExecute);
             AddTypeToControllerCommand = new RelayCommand(AddTypeToControllerExecute);
+            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
+            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
 
             ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
 
             populateItemsCollections();
+
+            DeviceTags = new ObservableCollection<TECTag>();
+            ControllerTags = new ObservableCollection<TECTag>();
         }
         #endregion
 
@@ -494,12 +544,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddDeviceExecute()
         {
-            Templates.DeviceCatalog.Add(new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer));
+            var newDevice = new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer);
+            newDevice.Tags = DeviceTags;
+            Templates.DeviceCatalog.Add(newDevice);
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
             DeviceConnectionType = 0;
             DeviceManufacturer = null;
+            DeviceTags = new ObservableCollection<TECTag>();
         }
         private void AddControllerExecute()
         {
@@ -508,15 +561,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newController.Description = ControllerDescription;
             newController.Cost = ControllerCost;
             newController.Types = ControllerConnectionTypes;
+            newController.Tags = ControllerTags;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
             ControllerCost = 0;
             ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
+            ControllerTags = new ObservableCollection<TECTag>();
         }
         private void AddTypeToControllerExecute()
         {
             ControllerConnectionTypes.Add(ControllerType);
+        }
+        private void AddTagToDeviceExecute()
+        {
+            DeviceTags.Add(SelectedTag);
+            SelectedTag = null;
+        }
+        private void AddTagToControllerExecute()
+        {
+            ControllerTags.Add(SelectedTag);
+            SelectedTag = null;
         }
 
         #endregion
