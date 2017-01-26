@@ -63,6 +63,7 @@ namespace Scope_Builder.ViewModel
         #region Intitializer
         public MainViewModel()
         {
+            
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();

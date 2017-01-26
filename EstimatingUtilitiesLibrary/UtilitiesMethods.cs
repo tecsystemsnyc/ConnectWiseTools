@@ -134,6 +134,11 @@ namespace EstimatingUtilitiesLibrary
             return bi;
         }
 
+        public static int ToInt(this bool b)
+        {
+            if (b) { return 1; }
+            else { return 0; }
+        }
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };

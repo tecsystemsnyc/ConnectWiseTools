@@ -106,27 +106,17 @@ namespace TECUserControlLibrary.ViewModels
         private ChangeStack stack;
         private bool saveSuccessful;
         private string bidDBFilePath;
-        private string defaultTemplatesPath;
         public string startupFile;
         public string pointCSVDirectoryPath;
         public string scopeDirectoryPath;
         public string documentDirectoryPath;
         #endregion
 
-        #region Resources Paths
-        const string APPDATA_FOLDER = @"TECSystems\";
-        const string TEMPLATES_FILE_NAME = @"TECTemplates.tdb";
-        #endregion //Resources Paths
-
         #region Delgates
         public Action BidSet;
         #endregion
 
         #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the BidEditorBase class.
-        /// </summary>
         public BidEditorBase()
         {
             SetBusyStatus("Initializing Program...");
@@ -162,30 +152,40 @@ namespace TECUserControlLibrary.ViewModels
         private void setupTemplates()
         {
             Templates = new TECTemplates();
-
-
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
-
-            if (!Directory.Exists(resourcesFolder))
-            { Directory.CreateDirectory(resourcesFolder); }
-
-            defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
-
-            if (File.Exists(defaultTemplatesPath))
+            
+            if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
-                if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath); }
+                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
+                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
                     MessageBox.Show(message);
                 }
             }
             else
             {
-                //string message = "No template database found. Use Template Builder to create and save templates and reload them in Scope Builder.";
-                //MessageBox.Show(message);
+                string message = "No templates file loaded. Would you like to load templates?";
+                MessageBoxResult result = MessageBox.Show(message, "Load Templates?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    //User choose path
+                    Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
+
+                    if (Properties.Settings.Default.TemplatesFilePath != null)
+                    {
+                        if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                        {
+                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                        }
+                        else
+                        {
+                            message = "File is open elsewhere";
+                            MessageBox.Show(message);
+                        }
+                        Console.WriteLine("Finished loading templates");
+                    }
+                }
             }
         }
         private void setupBid()
@@ -652,15 +652,15 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
             //User choose path
-            string path = getLoadTemplatesPath();
+            Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
 
-            if (path != null)
+            if (Properties.Settings.Default.TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + path);
-                if (!UtilitiesMethods.IsFileLocked(path))
+                SetBusyStatus("Loading templates from file: " + Properties.Settings.Default.TemplatesFilePath);
+                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                 {
-                    File.Copy(path, defaultTemplatesPath, true);
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                    
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
                     Bid.DeviceCatalog = Templates.DeviceCatalog;
                     Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
                     Bid.Tags = Templates.Tags;

@@ -31,6 +31,9 @@ namespace EstimatingLibrary
             Notes = new ObservableCollection<TECScopeBranch>();
             Children = new ObservableCollection<TECProposalScope>();
 
+            Children.CollectionChanged += CollectionChanged;
+            Notes.CollectionChanged += CollectionChanged;
+
             if (scope is TECSystem)
             {
                 (scope as TECSystem).Equipment.CollectionChanged += CollectionChanged;
@@ -63,14 +66,22 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    addProposalScope(item as TECScope);
+                    if (item is TECScope)
+                    {
+                        addProposalScope(item as TECScope);
+                    }
+                    NotifyPropertyChanged("Add", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    removeProposalScope(item as TECScope);
+                    if (item is TECScope)
+                    {
+                        removeProposalScope(item as TECScope);
+                    }
+                    NotifyPropertyChanged("Remove", this, item);
                 }
             }
         }
