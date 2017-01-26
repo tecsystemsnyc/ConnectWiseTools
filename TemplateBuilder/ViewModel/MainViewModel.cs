@@ -42,7 +42,6 @@ namespace TemplateBuilder.ViewModel
             TitleString = "Template Builder";
 
             setupCommands();
-
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
@@ -148,37 +147,40 @@ namespace TemplateBuilder.ViewModel
         private void getTemplates()
         {
             Templates = new TECTemplates();
-            string path;
-           
-            if (Properties.Settings.Default.TemplateDirectoryPath != "")
-            {
-                path = Properties.Settings.Default.TemplateDirectoryPath;
-            } else
-            {
-                path = getLoadPath();
-            }
 
-            //string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            //string resourcesFolder = Path.Combine(appData, APPDATA_FOLDER);
-
-            //if (!Directory.Exists(resourcesFolder))
-            //{ Directory.CreateDirectory(resourcesFolder); }
-            //defaultTemplatesPath = Path.Combine(resourcesFolder, TEMPLATES_FILE_NAME);
-
-            if (File.Exists(path))
+            if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
-                if (!UtilitiesMethods.IsFileLocked(path))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path); }
+                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load default templates. Please close TECTemplates.tdb and restart program.";
+                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
                     MessageBox.Show(message);
                 }
             }
             else
             {
-                string message = "No template database found. Reload templates to add one.";
-                MessageBox.Show(message);
+                string message = "No templates file loaded. Would you like to load templates?";
+                MessageBoxResult result = MessageBox.Show(message, "Load Templates?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    //User choose path
+                    Properties.Settings.Default.TemplatesFilePath = getLoadPath();
+
+                    if (Properties.Settings.Default.TemplatesFilePath != null)
+                    {
+                        if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                        {
+                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                        }
+                        else
+                        {
+                            message = "File is open elsewhere";
+                            MessageBox.Show(message);
+                        }
+                        Console.WriteLine("Finished loading templates");
+                    }
+                }
             }
         }
 
@@ -228,7 +230,7 @@ namespace TemplateBuilder.ViewModel
         private void SaveExecute()
         {
 
-            string path = Properties.Settings.Default.TemplateDirectoryPath;
+            string path = Properties.Settings.Default.TemplatesFilePath;
 
             if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
             {
@@ -251,7 +253,7 @@ namespace TemplateBuilder.ViewModel
             string path = getSavePath();
             if (path != null)
             {
-                Properties.Settings.Default.TemplateDirectoryPath = path;
+                Properties.Settings.Default.TemplatesFilePath = path;
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
@@ -320,9 +322,9 @@ namespace TemplateBuilder.ViewModel
         private string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (Properties.Settings.Default.TemplateDirectoryPath != null)
+            if (Properties.Settings.Default.TemplatesFilePath != null)
             {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplateDirectoryPath;
+                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplatesFilePath;
             }
             else
             {
@@ -340,7 +342,7 @@ namespace TemplateBuilder.ViewModel
                 try
                 {
                     path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplateDirectoryPath = path;
+                    Properties.Settings.Default.TemplatesFilePath = path;
                     Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
@@ -354,9 +356,9 @@ namespace TemplateBuilder.ViewModel
         private string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (Properties.Settings.Default.TemplateDirectoryPath != null)
+            if (Properties.Settings.Default.TemplatesFilePath != null)
             {
-                saveFileDialog.InitialDirectory = Properties.Settings.Default.TemplateDirectoryPath;
+                saveFileDialog.InitialDirectory = Properties.Settings.Default.TemplatesFilePath;
             }
             else
             {
