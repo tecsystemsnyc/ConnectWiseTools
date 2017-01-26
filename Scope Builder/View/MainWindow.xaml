@@ -9,6 +9,7 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
@@ -67,6 +68,13 @@
                           Command="{Binding RedoCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
+
+            <MenuItem Header="_View">
+                <MenuItem Header="_Show/Hide Templates"
+                          Command="{Binding ToggleTemplatesVisibilityCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
+
             <MenuItem Header="_Export">
                 <MenuItem Header="_To Document"
                           Command="{Binding DocumentCommand}"
@@ -75,6 +83,8 @@
                           Command="{Binding CSVExportCommand}"
                           Foreground="{DynamicResource WindowBackgroundBrush}"/>
             </MenuItem>
+
+            
             
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
@@ -90,8 +100,8 @@
         </Menu>
         <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>

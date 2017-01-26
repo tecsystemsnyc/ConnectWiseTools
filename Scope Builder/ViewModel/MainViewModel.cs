@@ -54,10 +54,30 @@ namespace Scope_Builder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
         #endregion
+
+        #region Commands Properties
+        public ICommand ToggleTemplatesVisibilityCommand { get; private set; }
+        #endregion //Commands Properties
+
+        #region Visibility Properties
+        private Visibility _templatesVisibility;
+        public Visibility TemplatesVisibility
+        {
+            get
+            {
+                return _templatesVisibility;
+            }
+            set
+            {
+                _templatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
+            }
+        }
+        #endregion Visibility Properties
         #endregion
 
         #region Fields
-       
+
         #endregion
 
         #region Intitializer
@@ -71,6 +91,10 @@ namespace Scope_Builder.ViewModel
             DGTabIndex = 0;
 
             setVisibility(0);
+
+            ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
+            TemplatesVisibility = Visibility.Visible;
+
             startupFile = Properties.Settings.Default.StartupFile;
             pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
@@ -79,6 +103,21 @@ namespace Scope_Builder.ViewModel
             checkForOpenWith(Properties.Settings.Default.StartupFile);
         }
         #endregion 
+
+        #region Commands Methods
+        private void ToggleTemplatesVisibilityExecute()
+        {
+            if (TemplatesVisibility == Visibility.Visible)
+            {
+                TemplatesVisibility = Visibility.Hidden;
+            }
+            else if (TemplatesVisibility == Visibility.Hidden)
+            {
+                TemplatesVisibility = Visibility.Visible;
+            }
+        }
+
+        #endregion //Commands Methods
 
         #region Helper Functions
         private void setVisibility(int tIndex)
