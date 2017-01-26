@@ -83,7 +83,8 @@ namespace Scope_Builder.ViewModel
         #region Intitializer
         public MainViewModel()
         {
-            
+            programName = "Scope Builder";
+
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();

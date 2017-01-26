@@ -29,6 +29,8 @@ namespace EstimateBuilder.ViewModel
     {
         public MainViewModel()
         {
+            programName = "Estimate Builder";
+
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;

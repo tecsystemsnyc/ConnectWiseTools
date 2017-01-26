@@ -35,6 +35,16 @@ namespace TECUserControlLibrary.ViewModels
             get;
             private set;
         }
+        private string _programName;
+        protected string programName
+        {
+            get { return _programName; }
+            set
+            {
+                _programName = value;
+                buildTitleString();
+            }
+        }
 
         private TECBid _bid;
         public TECBid Bid
@@ -384,7 +394,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void buildTitleString()
         {
-            TitleString = Bid.Name + " - Scope Builder";
+            TitleString = Bid.Name + " - " + programName;
         }
 
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
