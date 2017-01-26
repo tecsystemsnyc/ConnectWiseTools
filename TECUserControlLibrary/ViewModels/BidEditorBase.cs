@@ -363,15 +363,6 @@ namespace TECUserControlLibrary.ViewModels
             openFileDialog.DefaultExt = "tdb";
             openFileDialog.AddExtension = true;
 
-            if (Properties.Settings.Default.TemplateDirectoryPath != null)
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplateDirectoryPath;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
             string path = null;
 
             if (openFileDialog.ShowDialog() == true)
@@ -379,7 +370,7 @@ namespace TECUserControlLibrary.ViewModels
                 try
                 {
                     path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplateDirectoryPath = path;
+                    Properties.Settings.Default.TemplatesFilePath = path;
                     Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
