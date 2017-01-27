@@ -56,7 +56,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new NotImplementedException();
+                 throw new NotImplementedException();
             }
         }
 
@@ -66,7 +66,11 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECScope)
+                    if (item is TECScopeBranch)
+                    {
+                        //Do Nothing
+                    }
+                    else if (item is TECScope)
                     {
                         addProposalScope(item as TECScope);
                     }
@@ -77,7 +81,11 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECScope)
+                    if (item is TECScopeBranch)
+                    {
+                        //Do Nothing
+                    }
+                    else if (item is TECScope)
                     {
                         removeProposalScope(item as TECScope);
                     }
