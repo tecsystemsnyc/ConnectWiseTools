@@ -20,6 +20,7 @@ namespace Tests
         static TECDevice expectedDevice;
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
+        static TECController expectedController;
 
         static string path;
 
@@ -30,6 +31,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
+        static TECController actualController;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -55,6 +57,7 @@ namespace Tests
             expectedDevice = expectedTemplates.DeviceCatalog[0];
             expectedManufacturer = expectedTemplates.ManufacturerCatalog[0];
             expectedTag = expectedTemplates.Tags[0];
+            expectedController = expectedTemplates.ControllerTemplates[0];
 
             path = Path.GetTempFileName();
 
@@ -116,6 +119,15 @@ namespace Tests
                     break;
                 }
             }
+
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]
@@ -124,8 +136,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveAs test templates saved to: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveAs test templates saved to: " + path);
         }
 
         [TestMethod]
@@ -281,6 +293,29 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedTag.Text, actualTag.Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_Controller()
+        {
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+            
+            foreach (TECIO expectedIO in expectedController.IO)
+            {
+                bool ioExists = false;
+                foreach (TECIO actualIO in actualController.IO)
+                {
+                    if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
+                    {
+                        ioExists = true;
+                        break;
+                    }
+                }
+                Assert.IsTrue(ioExists);
+            }
         }
     }
 }

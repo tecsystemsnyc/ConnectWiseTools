@@ -255,6 +255,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addManufacturer(manufacturer);
                 }
+                foreach (TECController controller in templates.ControllerTemplates)
+                {
+                    addController(controller);
+                }
             }
             catch (Exception e)
             {
@@ -665,6 +669,18 @@ namespace EstimatingUtilitiesLibrary
                 if (refObject is TECScopeBranch)
                 {
                     removeScopeBranchHierarchyRelation(tarObject as TECScopeBranch);
+                }
+                else if (refObject is TECBid)
+                {
+                    removeScopeBranchBidRelation(tarObject as TECScopeBranch);
+                }
+                else if (refObject is TECProposalScope)
+                {
+                    removeScopeBranchProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
+                }
+                else
+                {
+                    throw new NotImplementedException();
                 }
             }
             else if (tarObject is TECLocation)
@@ -1453,6 +1469,11 @@ namespace EstimatingUtilitiesLibrary
         static private void removeScopeBranch(TECScopeBranch branch)
         {
             SQLiteDB.Delete(ScopeBranchTable.TableName, ScopeBranchTable.ScopeBranchID.Name, branch.Guid);
+            foreach(TECScopeBranch childBranch in branch.Branches)
+            {
+                removeScopeBranch(childBranch);
+                removeScopeBranchHierarchyRelation(childBranch);
+            }
         }
 
         static private void removeNote(TECNote note)
@@ -1510,6 +1531,16 @@ namespace EstimatingUtilitiesLibrary
         private static void removeScopeBranchHierarchyRelation(TECScopeBranch branch)
         {
             SQLiteDB.Delete("TECScopeBranchHierarchy", "BranchID", branch.Guid);
+
+        }
+
+        private static void removeScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
+        {
+
+        }
+
+        private static void removeScopeBranchProposalScopeRelation(TECScopeBranch branch, Guid scopeID)
+        {
 
         }
 

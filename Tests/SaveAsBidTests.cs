@@ -412,7 +412,7 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_PropScope()
         {
-
+            Assert.Fail();
         }
     }
 }

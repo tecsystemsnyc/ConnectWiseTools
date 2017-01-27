@@ -256,8 +256,10 @@ namespace Tests
             templates.SubScopeTemplates.Add(subScope);
 
             //Controller
-            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
-            controller.IO.Add(new TECIO(IOType.AI));
+            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42.6);
+            TECIO ioToAdd = new TECIO(IOType.AI);
+            ioToAdd.Quantity = 5;
+            controller.IO.Add(ioToAdd);
 
             templates.ControllerTemplates.Add(controller);
 
