@@ -682,6 +682,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 removeController(tarObject as TECController);
             }
+            else if(tarObject is TECProposalScope)
+            {
+                removeProposalScope(tarObject as TECProposalScope);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in remove branch. Target object type: " + tarObject.GetType());
@@ -1478,6 +1482,19 @@ namespace EstimatingUtilitiesLibrary
         static private void removeController(TECController controller)
         {
             SQLiteDB.Delete(ControllerTable.TableName, ControllerTable.ControllerID.Name, controller.Guid);
+        }
+
+        static private void removeProposalScope(TECProposalScope scope)
+        {
+            SQLiteDB.Delete(ProposalScopeTable.TableName, ProposalScopeTable.ProposalScopeID.Name, scope.Scope.Guid);
+            foreach(TECScopeBranch branch in scope.Notes)
+            {
+                removeScopeBranch(branch);
+            }
+            foreach(TECProposalScope children in scope.Children)
+            {
+                removeProposalScope(children);
+            }
         }
         #endregion Remove Objects
 

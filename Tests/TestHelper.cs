@@ -40,9 +40,8 @@ namespace Tests
             var tag1 = new TECTag("Tag 1");
             var tag2 = new TECTag("Test Tag");
 
-            var allTags = new ObservableCollection<TECTag>();
-            allTags.Add(tag1);
-            allTags.Add(tag2);
+            bid.Tags.Add(tag1);
+            bid.Tags.Add(tag2);
 
             //Locations
             var cellar = new TECLocation("Cellar");
@@ -50,55 +49,17 @@ namespace Tests
             var location2 = new TECLocation("2nd Floor");
             var location3 = new TECLocation("3rd Floor");
 
-            var allLocations = new ObservableCollection<TECLocation>();
-
-            allLocations.Add(cellar);
-            allLocations.Add(location1);
-            allLocations.Add(location2);
-            allLocations.Add(location3);
-
-            //Points
-            var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
-            point1.Quantity = 321;
-            point1.Tags.Add(tag1);
-
-            //Manufacturers
-            var manufacturer1 = new TECManufacturer("Test", 0.8);
-            var allManufacturers = new ObservableCollection<TECManufacturer>();
-            allManufacturers.Add(manufacturer1);
-
-            //Devices
-            var device1 = new TECDevice("Device 1", "Description 1", 987.6, ConnectionType.FourC18, manufacturer1);
-            device1.Quantity = 987;
-            device1.Tags.Add(tag1);
-
-            var allDevices = new ObservableCollection<TECDevice>();
-            allDevices.Add(device1);
-
-            //SubScope
-            var subScope1 = new TECSubScope("SubScope 1", "Description 1", allDevices, new ObservableCollection<TECPoint>());
-            subScope1.Quantity = 654;
-            subScope1.Location = location3;
-            subScope1.Points.Add(point1);
-            subScope1.Tags.Add(tag1);
-
-            var subScope2 = new TECSubScope("Empty SubScope", "Description 2", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
-
-            //Equipment
-            var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, new ObservableCollection<TECSubScope>());
-            equipment1.Quantity = 1234;
-            equipment1.Location = location1;
-            equipment1.SubScope.Add(subScope1);
-            equipment1.Tags.Add(tag1);
-
-            var equipment2 = new TECEquipment("Equipment 2", "Description 2", 0, new ObservableCollection<TECSubScope>());
-            equipment2.SubScope.Add(subScope2);
+            
+            bid.Locations.Add(cellar);
+            bid.Locations.Add(location1);
+            bid.Locations.Add(location2);
+            bid.Locations.Add(location3);
 
             //Systems
             var system1 = new TECSystem("System 1", "Locations all the way", 234.5, new ObservableCollection<TECEquipment>());
             system1.Quantity = 2345;
             system1.Location = location1;
-            system1.Equipment.Add(equipment1);
+            
             system1.Tags.Add(tag1);
 
             var system2 = new TECSystem("System 2", "Description 2", 234.52, new ObservableCollection<TECEquipment>());
@@ -106,73 +67,102 @@ namespace Tests
             system2.Location = location2;
 
             var system3 = new TECSystem("System 3", "No Location", 349, new ObservableCollection<TECEquipment>());
+
+
+            //Add to bid
+            bid.Systems.Add(system1);
+            bid.Systems.Add(system2);
+            bid.Systems.Add(system3);
+            
+            //Equipment
+            var equipment1 = new TECEquipment("Equipment 1", "Description 1", 123.4, new ObservableCollection<TECSubScope>());
+            equipment1.Quantity = 1234;
+            equipment1.Location = location1;
+           
+            equipment1.Tags.Add(tag1);
+
+            var equipment2 = new TECEquipment("Equipment 2", "Description 2", 0, new ObservableCollection<TECSubScope>());
+            
+
+            system1.Equipment.Add(equipment1);
             system3.Equipment.Add(equipment2);
 
-            var allSystems = new ObservableCollection<TECSystem>();
-            allSystems.Add(system1);
-            allSystems.Add(system2);
-            allSystems.Add(system3);
+            //SubScope
+            var subScope1 = new TECSubScope("SubScope 1", "Description 1", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            subScope1.Quantity = 654;
+            subScope1.Location = location3;
+            
+            subScope1.Tags.Add(tag1);
+
+            var subScope2 = new TECSubScope("Empty SubScope", "Description 2", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+
+            equipment1.SubScope.Add(subScope1);
+            equipment2.SubScope.Add(subScope2);
+
+            //Devices
+            var device1 = new TECDevice("Device 1", "Description 1", 987.6, ConnectionType.FourC18, new TECManufacturer());
+            device1.Quantity = 987;
+            device1.Tags.Add(tag1);
+            
+            subScope1.Devices.Add(device1);
+
+            //Manufacturers
+            var manufacturer1 = new TECManufacturer("Test", 0.8);
+            
+            device1.Manufacturer = manufacturer1;
+            bid.ManufacturerCatalog.Add(manufacturer1);
+
+            //Points
+            var point1 = new TECPoint(PointTypes.Serial, "Point 1", "Description 1");
+            point1.Quantity = 321;
+            point1.Tags.Add(tag1);
+
+            subScope1.Points.Add(point1);
 
             //VisualScope
             var vScope = new TECVisualScope(system1, 4.2, 4.2);
-            var allVScope = new ObservableCollection<TECVisualScope>();
-            allVScope.Add(vScope);
+
 
             //Drawings
             var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
             drawing1.Name = "Test";
             drawing1.Description = "Desc";
-            drawing1.Pages[0].PageScope = allVScope;
-            var allDrawings = new ObservableCollection<TECDrawing>();
-            allDrawings.Add(drawing1);
+            
+            bid.Drawings.Add(drawing1);
+
+            drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, ConnectionType.FourC18, new TECManufacturer());
-            var deviceCatalog = new ObservableCollection<TECDevice>();
-            deviceCatalog.Add(deviceC1);
-            deviceCatalog.Add(device1);
+            bid.DeviceCatalog.Add(deviceC1);
+            bid.DeviceCatalog.Add(device1);
 
             //Scope Branches
             var branch1 = new TECScopeBranch("Branch 1", "1st Description", new ObservableCollection<TECScopeBranch>());
             var branch2 = new TECScopeBranch("Branch 2", "2nd Description", new ObservableCollection<TECScopeBranch>());
             var branch3 = new TECScopeBranch("Branch 3", "3rd Description", new ObservableCollection<TECScopeBranch>());
 
+            bid.ScopeTree.Add(branch1);
             branch1.Branches.Add(branch2);
             branch2.Branches.Add(branch3);
-
-            var scopeTree = new ObservableCollection<TECScopeBranch>();
-            scopeTree.Add(branch1);
-
+            
             //Notes
             var note1 = new TECNote("Note 1");
 
-            var allNotes = new ObservableCollection<TECNote>();
-            allNotes.Add(note1);
+            bid.Notes.Add(note1);
 
             //Exclusions
             var exclusion1 = new TECExclusion("Exlusions 1");
 
-            var allExclusions = new ObservableCollection<TECExclusion>();
-            allExclusions.Add(exclusion1);
+            bid.Exclusions.Add(exclusion1);
 
             //Controller
             TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
             controller.IO.Add(new TECIO(IOType.AI));
 
-            var allControllers = new ObservableCollection<TECController>();
-            allControllers.Add(controller);
+            bid.Controllers.Add(controller);
 
             //Bid
-            bid.Systems = allSystems;
-            bid.DeviceCatalog = deviceCatalog;
-            bid.Drawings = allDrawings;
-            bid.ManufacturerCatalog = allManufacturers;
-            bid.Tags = allTags;
-            bid.Locations = allLocations;
-            bid.ScopeTree = scopeTree;
-            bid.Notes = allNotes;
-            bid.Exclusions = allExclusions;
-            bid.Controllers = allControllers;
 
             return bid;
         }
