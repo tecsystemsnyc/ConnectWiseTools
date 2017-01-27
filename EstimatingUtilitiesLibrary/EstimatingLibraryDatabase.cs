@@ -31,10 +31,10 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECBid));
 
             TECBid bid = new TECBid();
-    
-            //try
-            //{
-         
+
+            try
+            {
+
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
                 {
@@ -61,14 +61,9 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 bid = getBidInfo();
-                bid.ScopeTree = getMainScopeBranches();
+                bid.ScopeTree = getBidScopeBranches();
                 bid.Systems = getAllSystemsInBid();
-                //--Temporary--
-                foreach (TECSystem system in bid.Systems)
-                {
-                    bid.ProposalScope.Add(new TECProposalScope(system));
-                }
-                //--Temporary--
+                bid.ProposalScope = getAllProposalScope(bid.Systems);
                 bid.DeviceCatalog = getAllDevices();
                 bid.ManufacturerCatalog = getAllManufacturers();
                 bid.Locations = getAllLocations();
@@ -81,15 +76,15 @@ namespace EstimatingUtilitiesLibrary
                 linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-                //Breaks Visual Scope in a page
-                //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Could not load bid from database. Error: " + e.Message);
-            //}
-     
-            SQLiteDB.Connection.Close();
+            //Breaks Visual Scope in a page
+            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not load bid from database. Error: " + e.Message);
+            }
+
+    SQLiteDB.Connection.Close();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -205,6 +200,11 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECController controller in bid.Controllers)
                 {
                     addController(controller);
+                }
+
+                foreach(TECProposalScope propScope in bid.ProposalScope)
+                {
+                    addProposalScope(propScope);
                 }
                 
             }
@@ -973,6 +973,18 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Error: Couldn't add item to TECProposalScopeTable.");
             }
+            else
+            {
+                foreach(TECScopeBranch branch in proposalScope.Notes)
+                {
+                    addScopeTree(branch);
+                    addScopeBranchInProposalScope(branch.Guid, proposalScope.Scope.Guid);
+                }
+                foreach(TECProposalScope child in proposalScope.Children)
+                {
+                    addProposalScope(child);
+                }
+            }
         }
         static private void addLocation(TECLocation location)
         {
@@ -1159,6 +1171,17 @@ namespace EstimatingUtilitiesLibrary
             }
         }
         
+        static private void addScopeBranchInProposalScope(Guid branchID, Guid propScopeID)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branchID.ToString());
+            data.Add(ProposalScopeScopeBranchTable.ProposalScopeID.Name, propScopeID.ToString());
+
+            if (!SQLiteDB.Insert(ProposalScopeScopeBranchTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECProposalScopeTECScopeBranch table.");
+            }
+        }
 
         #endregion Add Relation Functions
         #endregion Add Methods
@@ -1626,12 +1649,12 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-                bid.Labor.PMCoef = UtilitiesMethods.StringToDouble(bidInfoRow["PMCoef"].ToString());
-                bid.Labor.ENGCoef = UtilitiesMethods.StringToDouble(bidInfoRow["ENGCoef"].ToString());
-                bid.Labor.CommCoef = UtilitiesMethods.StringToDouble(bidInfoRow["CommCoef"].ToString());
-                bid.Labor.SoftCoef = UtilitiesMethods.StringToDouble(bidInfoRow["SoftCoef"].ToString());
-                bid.Labor.GraphCoef = UtilitiesMethods.StringToDouble(bidInfoRow["GraphCoef"].ToString());
-                bid.Labor.ElectricalRate = UtilitiesMethods.StringToDouble(bidInfoRow["ElectricalRate"].ToString());
+                bid.Labor.PMCoef = bidInfoRow["PMCoef"].ToString().ToDouble();
+                bid.Labor.ENGCoef = bidInfoRow["ENGCoef"].ToString().ToDouble();
+                bid.Labor.CommCoef = bidInfoRow["CommCoef"].ToString().ToDouble();
+                bid.Labor.SoftCoef = bidInfoRow["SoftCoef"].ToString().ToDouble();
+                bid.Labor.GraphCoef = bidInfoRow["GraphCoef"].ToString().ToDouble();
+                bid.Labor.ElectricalRate = bidInfoRow["ElectricalRate"].ToString().ToDouble();
             }
             catch
             {
@@ -1658,7 +1681,7 @@ namespace EstimatingUtilitiesLibrary
             return new TECTemplates(infoGuid);
         }
 
-        static private ObservableCollection<TECScopeBranch> getMainScopeBranches()
+        static private ObservableCollection<TECScopeBranch> getBidScopeBranches()
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
 
@@ -1673,7 +1696,7 @@ namespace EstimatingUtilitiesLibrary
                 string name = row["Name"].ToString();
                 string description = row["Description"].ToString();
 
-                ObservableCollection<TECScopeBranch> childBranches = getChildBranches(scopeBranchID);
+                ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
 
                 TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
 
@@ -1685,7 +1708,42 @@ namespace EstimatingUtilitiesLibrary
             return mainBranches;
         }
 
-        static private ObservableCollection<TECScopeBranch> getChildBranches(Guid parentID)
+        static private ObservableCollection<TECScopeBranch> getProposalScopeBranches(Guid propScopeID)
+        {
+            ObservableCollection<TECScopeBranch> scopeBranches = new ObservableCollection<TECScopeBranch>();
+            string command = "select * from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in "
+                + "(select " + ProposalScopeScopeBranchTable.ScopeBranchID.Name + " from " + ProposalScopeScopeBranchTable.TableName + " where " + ProposalScopeScopeBranchTable.ProposalScopeID.Name + " = '"
+                + propScopeID + "')";
+
+            try
+            {
+                DataTable scopeBranchDT = SQLiteDB.getDataFromCommand(command);
+
+                foreach (DataRow row in scopeBranchDT.Rows)
+                {
+                    Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
+                    string name = row["Name"].ToString();
+                    string description = row["Description"].ToString();
+
+                    ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
+
+                    TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
+
+                    branch.Tags = getTagsInScope(scopeBranchID);
+
+                    scopeBranches.Add(branch);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: getProposalScopeBranches() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return scopeBranches;
+        }
+
+        static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID)
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
 
@@ -1702,7 +1760,7 @@ namespace EstimatingUtilitiesLibrary
                 string name = row[ScopeBranchTable.Name.Name].ToString();
                 string description = row[ScopeBranchTable.Description.Name].ToString();
 
-                ObservableCollection<TECScopeBranch> grandChildBranches = getChildBranches(childBranchID);
+                ObservableCollection<TECScopeBranch> grandChildBranches = getChildBranchesInBranch(childBranchID);
 
                 TECScopeBranch branch = new TECScopeBranch(name, description, grandChildBranches, childBranchID);
 
@@ -2203,7 +2261,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (DataRow row in pagesDT.Rows)
                 {
                     Guid guid = new Guid(row["PageID"].ToString());
-                    int pageNum = UtilitiesMethods.StringToInt(row["PageNum"].ToString());
+                    int pageNum = row["PageNum"].ToString().ToInt();
                     byte[] blob = row["Image"] as byte[];
 
                     TECPage page = new TECPage(pageNum, guid);
@@ -2245,8 +2303,8 @@ namespace EstimatingUtilitiesLibrary
                 foreach (DataRow row in vsDT.Rows)
                 {
                     Guid guid = new Guid(row["VisualScopeID"].ToString());
-                    double xPos = UtilitiesMethods.StringToDouble(row["XPos"].ToString());
-                    double yPos = UtilitiesMethods.StringToDouble(row["YPos"].ToString());
+                    double xPos = row["XPos"].ToString().ToDouble();
+                    double yPos = row["YPos"].ToString().ToDouble();
 
                     vs.Add(new TECVisualScope(guid, xPos, yPos));
                 }
@@ -2333,7 +2391,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (DataRow row in typeDT.Rows)
                 {
                     IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
-                    int qty = UtilitiesMethods.StringToInt(row[ControllerIOTypeTable.Quantity.Name].ToString());
+                    int qty = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
 
                     var io = new TECIO(type);
                     io.Quantity = qty;
@@ -2364,7 +2422,7 @@ namespace EstimatingUtilitiesLibrary
                     string lengthString = row[ConnectionTable.Length.Name].ToString();
                     //string typeString = row[ConnectionTable.Type.Name].ToString();
 
-                    double length = UtilitiesMethods.StringToDouble(lengthString);
+                    double length = lengthString.ToDouble();
                     //ConnectionType type = TECConnectionType.convertStringToType(typeString);
 
                     ObservableCollection<ConnectionType> connectionTypes = getConnectionTypesInConnection(guid);
@@ -2405,6 +2463,49 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return types;
+        }
+
+        static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
+        {
+            ObservableCollection<TECProposalScope> propScope = new ObservableCollection<TECProposalScope>();
+            foreach (TECSystem sys in systems)
+            {
+                TECProposalScope propSysToAdd = getProposalScopeFromScope(sys);
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    TECProposalScope propEquipToAdd = getProposalScopeFromScope(equip);
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        propEquipToAdd.Children.Add(getProposalScopeFromScope(ss));
+                    }
+                    propSysToAdd.Children.Add(propEquipToAdd);
+                }
+                propScope.Add(propSysToAdd);
+            }
+            return propScope;
+        }
+
+        static private TECProposalScope getProposalScopeFromScope(TECScope scope)
+        {
+            bool isProposed;
+            ObservableCollection<TECScopeBranch> notes = getProposalScopeBranches(scope.Guid);
+
+
+            string command = "select " + ProposalScopeTable.IsProposed.Name + " from " + ProposalScopeTable.TableName + " where " + ProposalScopeTable.ProposalScopeID.Name + " = '" + scope.Guid + "'";
+
+            try
+            {
+                DataTable isProposedDT = SQLiteDB.getDataFromCommand(command);
+
+                isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: getProposalScopeFromScope() failed. Code: " + e.Message);
+                throw e;
+            }
+
+            return new TECProposalScope(scope, isProposed, notes);
         }
         #endregion //Loading from DB Methods
         

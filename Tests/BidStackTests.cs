@@ -153,7 +153,7 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(2, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
