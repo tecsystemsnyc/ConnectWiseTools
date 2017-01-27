@@ -2497,7 +2497,14 @@ namespace EstimatingUtilitiesLibrary
             {
                 DataTable isProposedDT = SQLiteDB.getDataFromCommand(command);
 
-                isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool();
+                if (isProposedDT.Rows.Count > 0)
+                {
+                    isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool();
+                }
+                else
+                {
+                    isProposed = false;
+                }
             }
             catch (Exception e)
             {
