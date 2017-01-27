@@ -66,22 +66,16 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECScope)
-                    {
-                        addProposalScope(item as TECScope);
-                    }
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged("MetaAdd", this, item);
+                    addProposalScope(item as TECScope);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECScope)
-                    {
-                        removeProposalScope(item as TECScope);
-                    }
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged("MetaRemove", this, item);
+                    removeProposalScope(item as TECScope);
                 }
             }
         }

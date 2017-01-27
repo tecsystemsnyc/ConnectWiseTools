@@ -94,7 +94,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddDeviceCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddControllerCommand { get; private set; }
-        public ICommand AddTypeToControllerCommand { get; private set; }
+        public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
 
@@ -325,27 +325,38 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _controllerCost;
 
-        public ConnectionType ControllerType
+        public IOType ControllerIOType
         {
-            get { return _controllerType; }
+            get { return _controllerIOType; }
             set
             {
-                _controllerType = value;
-                RaisePropertyChanged("ControllerType");
+                _controllerIOType = value;
+                RaisePropertyChanged("ControllerIOType");
             }
         }
-        private ConnectionType _controllerType;
+        private IOType _controllerIOType;
 
-        public ObservableCollection<ConnectionType> ControllerConnectionTypes
+        private int _controllerIOQTY;
+        public int ControllerIOQTY
         {
-            get { return _controllerConnectionTypes; }
+            get { return _controllerIOQTY; }
             set
             {
-                _controllerConnectionTypes = value;
-                RaisePropertyChanged("ControllerConnectionTypes");
+                _controllerIOQTY = value;
+                RaisePropertyChanged("ControllerIOQTY");
             }
         }
-        private ObservableCollection<ConnectionType> _controllerConnectionTypes;
+        
+        public ObservableCollection<TECIO> ControllerIO
+        {
+            get { return _controllerIO; }
+            set
+            {
+                _controllerIO = value;
+                RaisePropertyChanged("ControllerIO");
+            }
+        }
+        private ObservableCollection<TECIO> _controllerIO;
 
         public ObservableCollection<TECTag> ControllerTags
         {
@@ -441,11 +452,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
             AddDeviceCommand = new RelayCommand(AddDeviceExecute);
             AddControllerCommand = new RelayCommand(AddControllerExecute);
-            AddTypeToControllerCommand = new RelayCommand(AddTypeToControllerExecute);
+            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
 
-            ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
+            ControllerIO = new ObservableCollection<TECIO>();
 
             populateItemsCollections();
 
@@ -560,18 +571,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newController.Name = ControllerName;
             newController.Description = ControllerDescription;
             newController.Cost = ControllerCost;
-            newController.Types = ControllerConnectionTypes;
+            newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
             ControllerCost = 0;
-            ControllerConnectionTypes = new ObservableCollection<ConnectionType>();
+            ControllerIO = new ObservableCollection<TECIO>();
             ControllerTags = new ObservableCollection<TECTag>();
         }
-        private void AddTypeToControllerExecute()
+        private void AddIOToControllerExecute()
         {
-            ControllerConnectionTypes.Add(ControllerType);
+            var newIO = new TECIO();
+            newIO.Type = ControllerIOType;
+            newIO.Quantity = ControllerIOQTY;
+            ControllerIO.Add(newIO);
         }
         private void AddTagToDeviceExecute()
         {

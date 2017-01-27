@@ -297,17 +297,17 @@ namespace EstimatingUtilitiesLibrary
             ControllerID
             };
     }
-    public class ControllerConnectionTypeTable : TableBase
+    public class ControllerIOTypeTable : TableBase
     {
-        public static new string TableName = "TECControllerTECConnectionType";
+        public static new string TableName = "TECControllerTECIO";
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT");
-        public static TableField ConnectionType = new TableField("ConnectionType", "TEXT");
+        public static TableField IOType = new TableField("IOType", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
-            ConnectionType
+            IOType
             };
     }
     public class ControllerConnectionTable : TableBase
@@ -526,7 +526,7 @@ namespace EstimatingUtilitiesLibrary
             new ConnectionTable(),
             new ControllerTable(),
             new ControllerConnectionTable(),
-            new ControllerConnectionTypeTable(),
+            new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
             new ConnectionConnectionTypeTable()
             };
@@ -550,7 +550,7 @@ namespace EstimatingUtilitiesLibrary
             new SubScopePointTable(),
             new ScopeTagTable(),
             new ControllerTable(),
-            new ControllerConnectionTypeTable(),
+            new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
             new DeviceManufacturerTable()
         };

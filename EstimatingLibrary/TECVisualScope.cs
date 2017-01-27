@@ -44,7 +44,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Y", temp, this);
             }
         }
-        public ObservableCollection<Tuple<TECObject, TECVisualScope>> ConnectableScope
+        public ObservableCollection<Tuple<TECObject, TECVisualScope, string>> ConnectableScope
         {
             get {
                 return getConnectableScope();
@@ -86,13 +86,19 @@ namespace EstimatingLibrary
             return outScope;
         }
 
-        private ObservableCollection<Tuple<TECObject, TECVisualScope>> getConnectableScope()
+        private ObservableCollection<Tuple<TECObject, TECVisualScope, string>> getConnectableScope()
         {
-            var outScope = new ObservableCollection<Tuple<TECObject, TECVisualScope>>();
+            var outScope = new ObservableCollection<Tuple<TECObject, TECVisualScope, string>>();
             if (this.Scope is TECController)
             {
-                outScope.Add(Tuple.Create< TECObject, TECVisualScope >((this.Scope as TECController), this));
-            }else
+                var controller = this.Scope as TECController;
+                foreach(IOType type in controller.NetworkIO)
+                {
+                    outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(controller, this, TECIO.convertTypeToString(type)));
+                }
+                
+            }
+            else
             {
                 if (this.Scope is TECSystem)
                 {
@@ -101,7 +107,7 @@ namespace EstimatingLibrary
                     {
                         foreach (TECSubScope sub in equipment.SubScope)
                         {
-                            outScope.Add(Tuple.Create<TECObject, TECVisualScope>((sub), this));
+                            outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(sub, this, sub.Name));
                         }
                     }
                 }
@@ -110,12 +116,13 @@ namespace EstimatingLibrary
                     var equipment = this.Scope as TECEquipment;
                     foreach (TECSubScope sub in equipment.SubScope)
                     {
-                        outScope.Add(Tuple.Create<TECObject, TECVisualScope>((sub), this));
+                        outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(sub, this, sub.Name));
                     }
                 }
                 else if (this.Scope is TECSubScope)
                 {
-                    outScope.Add(Tuple.Create<TECObject, TECVisualScope>((this.Scope as TECSubScope), this));
+                    var sub = this.Scope as TECSubScope;
+                    outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(sub, this, sub.Name));
                 }
             }
 
