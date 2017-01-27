@@ -741,8 +741,39 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
-        #endregion
+
+        [TestMethod]
+        public void Save_Templates_Controller_IO()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            bool hasBacIP = false;
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+            foreach(TECIO io in actualController.IO)
+            {
+                if(io.Type == IOType.BACnetIP)
+                {
+                    hasBacIP = true;
+                }
+            }
+
+            Assert.IsTrue(hasBacIP);
+
+        }
+
+            #endregion
 
 
-    }
+        }
 }

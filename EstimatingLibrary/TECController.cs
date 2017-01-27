@@ -58,6 +58,37 @@ namespace EstimatingLibrary
             _cost = cost;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
+
+            IO.CollectionChanged += CollectionChanged;
+        }
+
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(Object item in e.NewItems)
+                {
+                    (item as TECIO).PropertyChanged += ObjectPropertyChanged;
+                    NotifyPropertyChanged("Add", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Object item in e.NewItems)
+                {
+                    (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
+                    NotifyPropertyChanged("Remove", this, item);
+                }
+            }
+        }
+
+        private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+            if (e.PropertyName == "Quantity")
+            {
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
+            }
         }
 
         public TECController() : this("", "", Guid.NewGuid(), 0)
