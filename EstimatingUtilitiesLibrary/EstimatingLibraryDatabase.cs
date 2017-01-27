@@ -2391,7 +2391,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (DataRow row in typeDT.Rows)
                 {
                     IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
-                    int qty = UtilitiesMethods.StringToInt(row[ControllerIOTypeTable.Quantity.Name].ToString());
+                    int qty = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
 
                     var io = new TECIO(type);
                     io.Quantity = qty;
