@@ -211,7 +211,7 @@ namespace Tests
             Assert.AreEqual("Test Controller", actualController.Name);
             Assert.AreEqual("test description", actualController.Description);
             Assert.AreEqual(101, actualController.Cost);
-            Assert.AreEqual(5, actualController.IO.Count);
+            Assert.AreEqual(2, actualController.IO.Count);
             Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
 
         }
