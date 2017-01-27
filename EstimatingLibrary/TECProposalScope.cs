@@ -56,7 +56,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new NotImplementedException();
+                 throw new NotImplementedException();
             }
         }
 
@@ -66,16 +66,34 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
+                    if (item is TECScopeBranch)
+                    {
+                        //Do Nothing
+                    }
+                    else if (item is TECScope)
+                    {
+                        addProposalScope(item as TECScope);
+                    }
+                   
                     NotifyPropertyChanged("MetaAdd", this, item);
-                    addProposalScope(item as TECScope);
+                    
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
+                    if (item is TECScopeBranch)
+                    {
+                        //Do Nothing
+                    }
+                    else if (item is TECScope)
+                    {
+                        removeProposalScope(item as TECScope);
+                    }
+                    
                     NotifyPropertyChanged("MetaRemove", this, item);
-                    removeProposalScope(item as TECScope);
+                    
                 }
             }
         }
