@@ -251,7 +251,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECProposalScope";
 
         public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
-        public static TableField IsProposed = new TableField("IsProposed", "BOOL");
+        public static TableField IsProposed = new TableField("IsProposed", "INTEGER");
     }
 
     public class ProposalScopeScopeBranchTable : TableBase
@@ -528,7 +528,9 @@ namespace EstimatingUtilitiesLibrary
             new ControllerConnectionTable(),
             new ControllerConnectionTypeTable(),
             new ScopeConnectionTable(),
-            new ConnectionConnectionTypeTable()
+            new ConnectionConnectionTypeTable(),
+            new ProposalScopeTable(),
+            new ProposalScopeScopeBranchTable()
             };
     }
 

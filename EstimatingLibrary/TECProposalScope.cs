@@ -60,6 +60,17 @@ namespace EstimatingLibrary
             }
         }
 
+        public TECProposalScope(TECScope scope, bool isProposed, ObservableCollection<TECScopeBranch> notes)
+        {
+            Scope = scope;
+            _isProposed = isProposed;
+            Notes = notes;
+            Children = new ObservableCollection<TECProposalScope>();
+
+            Notes.CollectionChanged += CollectionChanged;
+            Children.CollectionChanged += CollectionChanged;
+        }
+
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

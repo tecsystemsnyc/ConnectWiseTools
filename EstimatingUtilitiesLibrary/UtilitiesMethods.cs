@@ -50,31 +50,7 @@ namespace EstimatingUtilitiesLibrary
             return false;
         }
 
-        public static int StringToInt(string str)
-        {
-            int i;
-            if (!int.TryParse(str, out i))
-            {
-                throw new InvalidCastException("StringToInt() failed. String: " + str);
-            }
-            else
-            {
-                return i;
-            }
-        }
-
-        public static double StringToDouble(string str)
-        {
-            double d;
-            if (!double.TryParse(str, out d))
-            {
-                throw new InvalidCastException("StringToDouble() failed. String: " + str);
-            }
-            else
-            {
-                return d;
-            }
-        }
+        
 
         public static string CommaSeparatedString(List<string> strings)
         {
@@ -134,11 +110,52 @@ namespace EstimatingUtilitiesLibrary
             return bi;
         }
 
+        #region Cast Conversions
+
+        #region String Extensions
+
+        public static int ToInt(this string str)
+        {
+            int i;
+            if (!int.TryParse(str, out i))
+            {
+                throw new InvalidCastException("StringToInt() failed. String: " + str);
+            }
+            else
+            {
+                return i;
+            }
+        }
+
+        public static double ToDouble(this string str)
+        {
+            double d;
+            if (!double.TryParse(str, out d))
+            {
+                throw new InvalidCastException("StringToDouble() failed. String: " + str);
+            }
+            else
+            {
+                return d;
+            }
+        }
+
+        #endregion String Extensions
+
         public static int ToInt(this bool b)
         {
             if (b) { return 1; }
             else { return 0; }
         }
+
+        public static bool ToBool(this int i)
+        {
+            if (i == 1) { return true; }
+            else if (i == 0) { return false; }
+            else { throw new InvalidCastException("Int to Bool cast failed. Int: " + i); }
+        }
+
+        #endregion Cast Conversions
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };
