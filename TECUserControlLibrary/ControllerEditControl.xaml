@@ -71,7 +71,7 @@
                                   SelectedValue="{Binding ControllerIO}"
                           Margin="5"/>
                 <Button Content="Add IO"
-                                Command="{Binding ADD}"
+                                Command="{Binding AddIOToControllerCommand}"
                                 Grid.Column="1"
                         Margin="5"/>
             </Grid>

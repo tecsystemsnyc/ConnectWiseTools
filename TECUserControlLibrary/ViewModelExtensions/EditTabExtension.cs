@@ -143,8 +143,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private TECIO _controllerIO;
-        public TECIO ControllerIO
+        private IOType _controllerIO;
+        public IOType ControllerIO
         {
             get { return _controllerIO; }
             set
@@ -264,11 +264,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddIOToControllerExecute()
         {
-            ControllerIO.Quantity = ControllerIOQTY;
-            SelectedController.IO.Add(ControllerIO);
+            var newIO = new TECIO();
+            newIO.Type = ControllerIO;
+            newIO.Quantity = ControllerIOQTY;
+            SelectedController.IO.Add(newIO);
 
             ControllerIOQTY = 1;
-            ControllerIO = null;
         }
         private void DeleteSelectedSystemExecute()
         {
