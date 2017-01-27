@@ -1004,14 +1004,12 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ControllerTable.Name.Name, controller.Name);
             data.Add(ControllerTable.Description.Name, controller.Description);
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
-
-            foreach(ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
+            
+            foreach(TECIO io in controller.IO)
             {
-                int qty = controller.NumberOfConnectionType(type);
-                if (qty > 0)
-                {
-                    addControllerConnectionTypeRelation(controller, type.ToString(), qty);
-                }
+                
+               addControllerIORelation(controller, io.Type.ToString(), io.Quantity);
+               
             }
 
 
@@ -1019,6 +1017,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Error: Couldn't add item to TECController table.");
             }
+            
+
         }
 
         static private void addConnection(TECConnection connection)
@@ -1158,14 +1158,14 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addControllerConnectionTypeRelation(TECController controller, string typeString, int qty)
+        static private void addControllerIORelation(TECController controller, string typeString, int qty)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerConnectionTypeTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerConnectionTypeTable.ConnectionType.Name, typeString);
-            data.Add(ControllerConnectionTypeTable.Quantity.Name, qty.ToString());
+            data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerIOTypeTable.IOType.Name, typeString);
+            data.Add(ControllerIOTypeTable.Quantity.Name, qty.ToString());
 
-            if (!SQLiteDB.Insert(ControllerConnectionTypeTable.TableName, data))
+            if (!SQLiteDB.Insert(ControllerIOTypeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECControllerTECConnectionType table.");
             }
@@ -1525,7 +1525,7 @@ namespace EstimatingUtilitiesLibrary
 
         private static void removeControllerConnectionTypeRelation(TECController controller)
         {
-            SQLiteDB.Delete(ControllerConnectionTypeTable.TableName, ControllerConnectionTypeTable.ControllerID.Name, controller.Guid);
+            SQLiteDB.Delete(ControllerIOTypeTable.TableName, ControllerIOTypeTable.ControllerID.Name, controller.Guid);
         }
         #endregion
         #endregion Remove Methods
@@ -2362,7 +2362,7 @@ namespace EstimatingUtilitiesLibrary
 
                     TECController controller = new TECController(name, description, guid, cost);
 
-                    controller.Types = getConnectionTypesInController(guid);
+                    controller.IO = getIOInController(guid);
                     controller.Tags = getTagsInScope(guid);
 
                     controllers.Add(controller);
@@ -2377,12 +2377,12 @@ namespace EstimatingUtilitiesLibrary
             return controllers;
         }
 
-        static private ObservableCollection<ConnectionType> getConnectionTypesInController(Guid controllerID)
+        static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
         {
-            ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
+            ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
 
-            string command = "select * from " + ControllerConnectionTypeTable.TableName + " where " +
-                ControllerConnectionTypeTable.ControllerID.Name + " = '" + controllerID + "'";
+            string command = "select * from " + ControllerIOTypeTable.TableName + " where " +
+                ControllerIOTypeTable.ControllerID.Name + " = '" + controllerID + "'";
 
             try
             {
@@ -2390,12 +2390,12 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (DataRow row in typeDT.Rows)
                 {
-                    ConnectionType type = TECConnectionType.convertStringToType(row[ControllerConnectionTypeTable.ConnectionType.Name].ToString());
-                    int qty = row[ControllerConnectionTypeTable.Quantity.Name].ToString().ToInt();
-                    for(var i = 0; i<qty; i++)
-                    {
-                        types.Add(type);
-                    }
+                    IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
+                    int qty = UtilitiesMethods.StringToInt(row[ControllerIOTypeTable.Quantity.Name].ToString());
+
+                    var io = new TECIO(type);
+                    io.Quantity = qty;
+                    outIO.Add(io);
                     
                 }
             }
@@ -2405,7 +2405,7 @@ namespace EstimatingUtilitiesLibrary
                 throw e;
             }
 
-            return types;
+            return outIO;
         }
 
         static private ObservableCollection<TECConnection> getConnections()

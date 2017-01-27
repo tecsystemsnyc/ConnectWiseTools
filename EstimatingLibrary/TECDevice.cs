@@ -12,6 +12,7 @@ namespace EstimatingLibrary
         #region Properties
         private double _cost;
         private ConnectionType _connectionType;
+        private IOType _ioType;
         private TECManufacturer _manufacturer;
 
         public double Cost {
@@ -32,6 +33,16 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _connectionType = value;
                 NotifyPropertyChanged("ConnectionType", temp, this);
+            }
+        }
+        public IOType IOType
+        {
+            get { return _ioType; }
+            set
+            {
+                var temp = this.Copy();
+                _ioType = value;
+                NotifyPropertyChanged("IOType", temp, this);
             }
         }
         public TECManufacturer Manufacturer
@@ -63,6 +74,7 @@ namespace EstimatingLibrary
             : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.ConnectionType, deviceSource.Manufacturer, deviceSource.Guid)
         {
             _connectionType = deviceSource.ConnectionType;
+            _ioType = deviceSource.IOType;
             _quantity = deviceSource.Quantity;
             _tags = new ObservableCollection<TECTag>(deviceSource.Tags);
         }

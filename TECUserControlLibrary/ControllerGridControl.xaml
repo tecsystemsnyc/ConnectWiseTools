@@ -24,7 +24,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Types.Count}" Header="IO" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding IO.Count}" Header="IO" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto"/>
             </DataGrid.Columns>
             

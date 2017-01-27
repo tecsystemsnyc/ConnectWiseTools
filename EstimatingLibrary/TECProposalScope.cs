@@ -85,7 +85,9 @@ namespace EstimatingLibrary
                     {
                         addProposalScope(item as TECScope);
                     }
-                    NotifyPropertyChanged("Add", this, item);
+                   
+                    NotifyPropertyChanged("MetaAdd", this, item);
+                    
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -100,7 +102,9 @@ namespace EstimatingLibrary
                     {
                         removeProposalScope(item as TECScope);
                     }
-                    NotifyPropertyChanged("Remove", this, item);
+                    
+                    NotifyPropertyChanged("MetaRemove", this, item);
+                    
                 }
             }
         }

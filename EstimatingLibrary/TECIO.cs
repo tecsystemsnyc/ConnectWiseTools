@@ -20,8 +20,44 @@ namespace EstimatingLibrary
         ModbusTCP,
         ModbusRTU
     }
-    class TECIO
+    public class TECIO : TECObject
     {
+        private IOType _type;
+        public IOType Type
+        {
+            get { return _type; }
+            set
+            {
+                var temp = this.Copy();
+                _type = value;
+                NotifyPropertyChanged("Type", temp, this);
+            }
+        }
+
+        private int _quantity;
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                var temp = this.Copy();
+                _quantity = value;
+                NotifyPropertyChanged("Quantity", temp, this);
+            }
+        }
+
+
+        public TECIO()
+        {
+
+        }
+
+        public TECIO(IOType type)
+        {
+            _type = type;
+            _quantity = 1;
+        }
+
         public static IOType convertStringToType(string type)
         {
             switch (type.ToUpper())
@@ -60,6 +96,14 @@ namespace EstimatingLibrary
 
                 default: return "";
             }
+        }
+
+        public override object Copy()
+        {
+            var outIO = new TECIO();
+            outIO._type = Type;
+            outIO._quantity = Quantity;
+            return outIO;
         }
     }
 }

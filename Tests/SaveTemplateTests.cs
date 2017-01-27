@@ -641,6 +641,108 @@ namespace Tests
         }
         #endregion Save Device
 
+        #region Save Controller
+        [TestMethod]
+        public void Save_Templates_Add_Controller()
+        {
+            //Act
+            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+
+            templates.ControllerTemplates.Add(expectedController);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Name()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Name = "Test save controller name";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Description()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Description = "Save Device Description";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Cost()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Cost = 46.89;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+        #endregion
+
 
     }
 }

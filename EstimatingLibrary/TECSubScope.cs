@@ -54,6 +54,18 @@ namespace EstimatingLibrary
         {
             get { return getAvailableConnectionTypes(); }
         }
+
+        public ObservableCollection<PointTypes> AllPointTypes
+        {
+            get { return getAllPointTypes(); }
+        }
+
+        public ObservableCollection<IOType> AllIOTypes
+        {
+            get { return getAllIOTypes(); }
+        }
+
+
         #endregion //Properties
 
         #region Constructors
@@ -253,6 +265,29 @@ namespace EstimatingLibrary
             }
 
             return availableConnections;
+        }
+
+        private ObservableCollection<PointTypes> getAllPointTypes()
+        {
+            var allPointTypes = new ObservableCollection<PointTypes>();
+
+            foreach(TECPoint point in Points)
+            {
+                allPointTypes.Add(point.Type);
+            }
+            
+            return allPointTypes;
+        }
+
+        private ObservableCollection<IOType> getAllIOTypes()
+        {
+            var allIOTypes = new ObservableCollection<IOType>();
+
+            foreach(TECDevice device in Devices)
+            {
+                allIOTypes.Add(device.IOType);
+            }
+            return allIOTypes;
         }
         #endregion
     }

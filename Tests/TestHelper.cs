@@ -157,7 +157,7 @@ namespace Tests
 
             //Controller
             TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
-            controller.Types.Add(ConnectionType.FourC18);
+            controller.IO.Add(new TECIO(IOType.AI));
 
             var allControllers = new ObservableCollection<TECController>();
             allControllers.Add(controller);
@@ -257,7 +257,7 @@ namespace Tests
 
             //Controller
             TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
-            controller.Types.Add(ConnectionType.FourC18);
+            controller.IO.Add(new TECIO(IOType.AI));
 
             templates.ControllerTemplates.Add(controller);
 

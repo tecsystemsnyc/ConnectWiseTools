@@ -143,14 +143,25 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ConnectionType _controllerType;
-        public ConnectionType ControllerType
+        private TECIO _controllerIO;
+        public TECIO ControllerIO
         {
-            get { return _controllerType; }
+            get { return _controllerIO; }
             set
             {
-                _controllerType = value;
-                RaisePropertyChanged("ControllerType");
+                _controllerIO = value;
+                RaisePropertyChanged("ControllerIO");
+            }
+        }
+
+        private int _controllerIOQTY;
+        public int ControllerIOQTY
+        {
+            get { return _controllerIOQTY; }
+            set
+            {
+                _controllerIOQTY = value;
+                RaisePropertyChanged("ControllerIOQTY");
             }
         }
         #region CommandProperties
@@ -160,7 +171,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToPointCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
-        public ICommand AddTypeToControllerCommand { get; private set; }
+        public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
         public ICommand DeleteSelectedSubScopeCommand { get; private set; }
@@ -197,7 +208,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
-            AddTypeToControllerCommand = new RelayCommand(AddTypeToControllerExecute);
+            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
@@ -251,9 +262,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
 
         }
-        private void AddTypeToControllerExecute()
+        private void AddIOToControllerExecute()
         {
-            SelectedController.Types.Add(ControllerType);
+            ControllerIO.Quantity = ControllerIOQTY;
+            SelectedController.IO.Add(ControllerIO);
+
+            ControllerIOQTY = 1;
+            ControllerIO = null;
         }
         private void DeleteSelectedSystemExecute()
         {

@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         private double _cost;
         private ObservableCollection<TECConnection> _connections;
-        private ObservableCollection<ConnectionType> _types;
+        private ObservableCollection<TECIO> _io;
 
         public double Cost
         {
@@ -33,27 +33,30 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Connections", temp, this);
             }
         }
-        public ObservableCollection<ConnectionType> Types
+        public ObservableCollection<TECIO> IO
         {
-            get { return _types; }
+            get { return _io; }
             set
             {
                 var temp = this.Copy();
-                _types = value;
-                NotifyPropertyChanged("Types", temp, this);
+                _io = value;
+                NotifyPropertyChanged("IO", temp, this);
             }
         }
 
-        public List<ConnectionType> AvailableConnections
+        public List<IOType> AvailableIO
         {
-            get { return getAvailableConnectionTypes(); }
+            get { return getAvailableIO(); }
+        }
+        public List<IOType> NetworkIO
+        {
+            get { return getNetworkIO(); }
         }
 
         public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
         {
             _cost = cost;
-            _types = new ObservableCollection<ConnectionType>();
-            _types.Add(ConnectionType.TwoC18);
+            _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
         }
 
@@ -69,9 +72,9 @@ namespace EstimatingLibrary
                 this.Guid,
                 this.Cost);
 
-            foreach (ConnectionType type in this.Types)
+            foreach (TECIO io in this.IO)
             {
-                outController.Types.Add(type);
+                outController.IO.Add(io);
             }
 
             foreach (TECConnection conn in this.Connections)
@@ -88,44 +91,72 @@ namespace EstimatingLibrary
             outController.Name = Name;
             outController.Description = Description;
             outController.Cost = Cost;
-            outController.Types = Types;
+            outController.IO = IO;
             outController.Tags = Tags;
 
             return outController;
         }
 
-        private List<ConnectionType> getAvailableConnectionTypes()
+        private List<IOType> getAvailableIO()
         {
-            var availableConnections = new List<ConnectionType>();
-            foreach (ConnectionType conType in this.Types)
+            var availableIO = new List<IOType>();
+            foreach (TECIO type in this.IO)
             {
-                availableConnections.Add(conType);
-            }
-            foreach (TECConnection connected in this.Connections)
-            {
-                foreach (ConnectionType conType in connected.ConnectionTypes)
+                for(var x = 0; x < type.Quantity; x++)
                 {
-                    availableConnections.Remove(conType);
+                    availableIO.Add(type.Type);
                 }
             }
-            Console.WriteLine("Number of connections available: " + availableConnections.Count);
-            return availableConnections;
+
+            foreach (TECConnection connected in this.Connections)
+            {
+                foreach(TECScope scope in connected.Scope)
+                {
+                    if(scope is TECSubScope)
+                    {
+                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
+                        {
+                            availableIO.Remove(device.IOType);
+                        }
+                    }
+                }
+            }
+            return availableIO;
         }
 
-        public int NumberOfConnectionType(ConnectionType conType)
+        private List<IOType> getNetworkIO()
+        {
+            var outIO = new List<IOType>();
+            foreach (TECIO io in this.IO)
+            {
+                var type = io.Type;
+                if(type != IOType.AI && type != IOType.AO && type != IOType.DI && type != IOType.DO)
+                {
+                    for (var x = 0; x < io.Quantity; x++)
+                    {
+                        outIO.Add(type);
+                    }
+                }
+            }
+
+            return outIO;
+        }
+
+        public int NumberOfIOType(IOType ioType)
         {
             int outNum = 0;
 
-            foreach(ConnectionType type in Types)
+            foreach(TECIO type in IO)
             {
-                if(type == conType)
+                if(type.Type == ioType)
                 {
-                    outNum += 1;
+                    outNum = type.Quantity;
                 }
             }
 
             return outNum;
         }
+
         #endregion
     }
 }
