@@ -50,31 +50,38 @@
             <TextBox Text="{Binding SelectedController.Cost}" Grid.Column="1" Grid.Row="2" 
                                  VerticalAlignment="Top"
                              Margin="5"/>
-            <Label Content="IO"
-                           Grid.Row="3"/>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="IO"/>
+                <TextBox Text="{Binding ControllerIOQTY}"
+                         Grid.Column="1"
+                         Margin="5"/>
+            </Grid>
+           
             <Grid Grid.Column="1"
                           Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
-                                  SelectedValue="{Binding ControllerType}"
+                <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:IOType}}}"
+                                  SelectedValue="{Binding ControllerIO}"
                           Margin="5"/>
                 <Button Content="Add IO"
-                                Command="{Binding AddTypeToControllerCommand}"
+                                Command="{Binding ADD}"
                                 Grid.Column="1"
                         Margin="5"/>
             </Grid>
             
         </Grid>
-        <DataGrid ItemsSource="{Binding SelectedController.Types}"
+        <DataGrid ItemsSource="{Binding SelectedController.IO}"
                       Grid.Row="1"
                       Grid.ColumnSpan="2"
                       CanUserAddRows="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding}" Header="Type"/>
-            </DataGrid.Columns>
+            
         </DataGrid>
         <ComboBox Grid.Row="2" Margin="5" ItemsSource="{Binding Templates.Tags}"
                               SelectedItem="{Binding SelectedTag}"

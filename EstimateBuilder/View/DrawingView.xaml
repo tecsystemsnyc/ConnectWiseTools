@@ -30,7 +30,7 @@
                                         <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
                                         <Grid.ContextMenu>
                                             <ContextMenu ItemsSource="{Binding ConnectableScope}"
-                                                         DisplayMemberPath="Item1.Name">
+                                                         DisplayMemberPath="Item3">
                                                 <ContextMenu.ItemContainerStyle>
                                                     <Style TargetType="MenuItem">
                                                         <Setter Property="Command" Value="{Binding Source={x:Reference drawingControl}, Path=ViewModel.ConnectCommand}" />

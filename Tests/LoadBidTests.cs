@@ -331,18 +331,18 @@ namespace Tests
             string expectedDescription = "Test Controller Description";
             double expectedCost = 64.94;
 
-            bool hasTHHN14 = false;
-            bool hasThreeC18 = false;
+            bool hasAI = false;
+            bool hasAO = false;
 
-            foreach (ConnectionType type in actualController.Types)
+            foreach (TECIO io in actualController.IO)
             {
-                if (type == ConnectionType.WireTHHN14)
+                if (io.Type == IOType.AI)
                 {
-                    hasTHHN14 = true;
+                    hasAI = true;
                 }
-                else if (type == ConnectionType.ThreeC18)
+                else if (io.Type == IOType.AO)
                 {
-                    hasThreeC18 = true;
+                    hasAO = true;
                 }
             }
 
@@ -359,8 +359,8 @@ namespace Tests
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Cost);
-            Assert.IsTrue(hasTHHN14);
-            Assert.IsTrue(hasThreeC18);
+            Assert.IsTrue(hasAI);
+            Assert.IsTrue(hasAO);
 
             Assert.IsTrue(hasConnection);
         }

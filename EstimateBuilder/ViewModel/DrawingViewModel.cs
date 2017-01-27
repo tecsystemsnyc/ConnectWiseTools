@@ -39,7 +39,6 @@ namespace EstimateBuilder.ViewModel
         private Tuple<TECObject, TECVisualScope> connectionStart;
 
         private Dictionary<TECDrawing, int> pageIndexes;
-
         
 
         public TECBid Bid
@@ -327,7 +326,7 @@ namespace EstimateBuilder.ViewModel
         {
             var newController = new TECController();
             newController.Name = ControllerName;
-            newController.Types = SelectedControllerTemplate.Types;
+            newController.IO = SelectedControllerTemplate.IO;
             newController.Tags = SelectedControllerTemplate.Tags;
             newController.Description = SelectedControllerTemplate.Description;
             newController.Cost = SelectedControllerTemplate.Cost;
@@ -496,18 +495,24 @@ namespace EstimateBuilder.ViewModel
             {
                 var controller = item as TECController;
 
-                var availableConnections = controller.AvailableConnections;
+                var availableIO = controller.AvailableIO;
                 
-                foreach(ConnectionType conType in connection.ConnectionTypes)
+                foreach(TECScope scope in connection.Scope)
                 {
-                    if (availableConnections.Contains(conType))
+                    if(scope is TECSubScope)
                     {
-                        availableConnections.Remove(conType);
-                        canConnect = true;
-                    }
-                    else
-                    {
-                        canConnect = false;
+                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
+                        {
+                            if (availableIO.Contains(device.IOType))
+                            {
+                                availableIO.Remove(device.IOType);
+                                canConnect = true;
+                            } else
+                            {
+                                canConnect = false;
+                            }
+                            
+                        }
                     }
                 }
             } 
@@ -541,6 +546,7 @@ namespace EstimateBuilder.ViewModel
         }
         private bool canStartConnection(TECObject item)
         {
+            /*
             bool canStart = false;
             if(item is TECController)
             {
@@ -560,6 +566,8 @@ namespace EstimateBuilder.ViewModel
             }
             
             return canStart;
+            */
+            return true;
         }
 
         private TECConnection createConnection(Tuple<TECObject, TECVisualScope> item1, Tuple<TECObject, TECVisualScope> item2, double scale)
@@ -577,11 +585,15 @@ namespace EstimateBuilder.ViewModel
                     {
                         newConnection.ConnectionTypes.Add(type);
                     }
+                    foreach(IOType ioType in sub.AllIOTypes)
+                    {
+                        newConnection.IOTypes.Add(ioType);
+                    }
                 }
                 else
                 {
                     var controller = item2.Item1 as TECController;
-                    foreach (ConnectionType type in controller.AvailableConnections)
+                    foreach (ConnectionType type in controller.NetworkIO)
                     {
                         newConnection.ConnectionTypes.Add(type);
                     }

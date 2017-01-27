@@ -224,28 +224,40 @@
                              Grid.Column="1"
                              Grid.Row="2"
                              Margin="5"/>
-                    <Label Content="IO"
-                           Grid.Row="3"/>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="IO"/>
+                        <TextBox Grid.Column="1" Text="{Binding Path=ViewModel.ControllerIOQTY}"
+                                 Margin="5"/>
+                    </Grid>
+
+                    
                     <Grid Grid.Column="1"
                           Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
-                                  SelectedValue="{Binding Path=ViewModel.ControllerType}"
+                        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:IOType}}}"
+                                  SelectedValue="{Binding Path=ViewModel.ControllerIOType}"
                                   Margin="5"/>
                         <Button Content="Add IO"
-                                Command="{Binding Path=ViewModel.AddTypeToControllerCommand}"
+                                Command="{Binding Path=ViewModel.AddIOToControllerCommand}"
                                 Grid.Column="1"
                                 Margin="5"/>
                     </Grid>
-                    <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerConnectionTypes}"
+                    <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerIO}"
                               Grid.Row="4"
                               Grid.ColumnSpan="2"
-                              IsReadOnly="True">
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding}" Header="Type"/>
+                            <DataGridTextColumn Binding="{Binding Type}" Header="Type"
+                                                IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
