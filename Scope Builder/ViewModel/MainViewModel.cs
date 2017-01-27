@@ -53,6 +53,8 @@ namespace Scope_Builder.ViewModel
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
+
+        public DocumentBuilderViewModel DocumentBuilderVM { get; set; }
         #endregion
 
         #region Commands Properties
