@@ -394,5 +394,23 @@ namespace Tests
             Assert.IsTrue(hasThreeC18);
             Assert.IsTrue(hasSubScope);
         }
+
+        [TestMethod]
+        public void Load_Bid_ProposalScope()
+        {
+            //Arrange
+            TECProposalScope actualPropScope = actualBid.ProposalScope[0];
+
+            TECScope expectedScope = actualSystem;
+
+            bool expectedIsProposed = true;
+
+            string expectedPropScopeBranchName = "Proposal Scope";
+
+            //Assert
+            Assert.AreEqual(expectedScope, actualPropScope.Scope);
+            Assert.AreEqual(expectedIsProposed, actualPropScope.IsProposed);
+            Assert.AreEqual(expectedPropScopeBranchName, actualPropScope.Notes[0].Name);
+        }
     }
 }

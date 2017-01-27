@@ -408,5 +408,11 @@ namespace Tests
 
             Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_PropScope()
+        {
+
+        }
     }
 }
