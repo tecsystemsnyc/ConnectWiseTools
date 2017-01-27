@@ -9,6 +9,7 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
@@ -67,6 +68,13 @@
                           Command="{Binding RedoCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
+
+            <MenuItem Header="_View">
+                <MenuItem Header="_Show/Hide Templates"
+                          Command="{Binding ToggleTemplatesVisibilityCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
+
             <MenuItem Header="_Export">
                 <MenuItem Header="_To Document"
                           Command="{Binding DocumentCommand}"
@@ -75,6 +83,8 @@
                           Command="{Binding CSVExportCommand}"
                           Foreground="{DynamicResource WindowBackgroundBrush}"/>
             </MenuItem>
+
+            
             
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
@@ -90,8 +100,8 @@
         </Menu>
         <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -170,43 +180,9 @@
                                             SubScopeSource="{Binding LocationDataGrid.SubScopeByLocation}"
                                             ViewModel="{Binding LocationDataGrid}"/>
                 </TabItem>
-                <TabItem Header="Scope">
-                    <DataGrid  ItemsSource="{Binding Bid.ScopeTree}" 
-                           AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"
-                                            ElementStyle="{StaticResource RightCell}"/>
-                        </DataGrid.Columns>
-                        <DataGrid.RowDetailsTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding SelectedItem.Branches}">
-                                <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                            AncestorType={x:Type DataGrid}},
-                            Path=RowDetailsTemplate}"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                            AncestorType={x:Type DataGrid}},
-                            Path=SelectedItem.Branches}"
-                                      AutoGenerateColumns="False"
-                           VirtualizingPanel.ScrollUnit="Pixel">
-                                    <DataGrid.Columns>
-                                        <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                                        <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                                        <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" IsReadOnly="True"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </HierarchicalDataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
-                </TabItem>
                 
-                <TabItem Header="Notes">
-                    <cLib:NotesGridControl NotesSource="{Binding Bid.Notes}"/>
-                </TabItem>
-                <TabItem Header="Exclusions">
-                    <cLib:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"/>
+                <TabItem Header="Proposal">
+                    <cLib:DocumentBuilderControl ViewModel="{Binding}"/>
                 </TabItem>
             </TabControl>
             

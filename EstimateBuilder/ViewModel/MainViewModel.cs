@@ -29,6 +29,8 @@ namespace EstimateBuilder.ViewModel
     {
         public MainViewModel()
         {
+            programName = "Estimate Builder";
+
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;
@@ -187,7 +189,7 @@ namespace EstimateBuilder.ViewModel
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (Properties.Settings.Default.TemplateDirectoryPath != null)
+            if (Properties.Settings.Default.DrawingDirectoryPath != null)
             {
                 openFileDialog.InitialDirectory = Properties.Settings.Default.DrawingDirectoryPath;
             }

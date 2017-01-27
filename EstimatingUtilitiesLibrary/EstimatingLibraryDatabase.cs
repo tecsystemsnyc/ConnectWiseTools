@@ -473,6 +473,10 @@ namespace EstimatingUtilitiesLibrary
                     addTag(tarObject as TECTag);
                 }
             }
+            else if (tarObject is TECProposalScope)
+            {
+                addProposalScope(tarObject as TECProposalScope);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -957,6 +961,17 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Insert(VisualScopeTable.TableName, vsData))
             {
                 Console.WriteLine("Error: Couldn't add item to TECVisualScopeTable.");
+            }
+        }
+        static private void addProposalScope(TECProposalScope proposalScope)
+        {
+            Dictionary<string, string> psData = new Dictionary<string, string>();
+            psData.Add(ProposalScopeTable.ProposalScopeID.Name, proposalScope.Scope.Guid.ToString());
+            psData.Add(ProposalScopeTable.IsProposed.Name, proposalScope.IsProposed.ToInt().ToString());
+
+            if (!SQLiteDB.Insert(ProposalScopeTable.TableName, psData))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECProposalScopeTable.");
             }
         }
         static private void addLocation(TECLocation location)

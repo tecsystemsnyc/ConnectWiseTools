@@ -68,6 +68,21 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+
+    public class BidScopeBranchTable : TableBase
+    {
+        public static new string TableName = "TECBidTECScopeBranch";
+
+        public static TableField BidID = new TableField("BidID", "TEXT");
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            ScopeBranchID
+        };
+    }
+
     public class ScopeBranchTable : TableBase
     {
         public static new string TableName = "TECScopeBranch";
@@ -231,6 +246,22 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+    public class ProposalScopeTable : TableBase
+    {
+        public static new string TableName = "TECProposalScope";
+
+        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
+        public static TableField IsProposed = new TableField("IsProposed", "BOOL");
+    }
+
+    public class ProposalScopeScopeBranchTable : TableBase
+    {
+        public static new string TableName = "TECProposalScopeTECScopeBranch";
+
+        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
+    }
+
     public class ConnectionTable : TableBase
     {
         public static new string TableName = "TECConnection";

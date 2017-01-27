@@ -26,12 +26,12 @@ namespace TECUserControlLibrary.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplateDirectoryPath {
+        public string TemplatesFilePath {
             get {
-                return ((string)(this["TemplateDirectoryPath"]));
+                return ((string)(this["TemplatesFilePath"]));
             }
             set {
-                this["TemplateDirectoryPath"] = value;
+                this["TemplatesFilePath"] = value;
             }
         }
     }
