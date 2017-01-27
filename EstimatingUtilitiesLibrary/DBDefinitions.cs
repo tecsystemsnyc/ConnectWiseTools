@@ -554,7 +554,8 @@ namespace EstimatingUtilitiesLibrary
             new ControllerTable(),
             new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
-            new DeviceManufacturerTable()
+            new DeviceManufacturerTable(),
+            new SystemIndexTable()
         };
     }
 
