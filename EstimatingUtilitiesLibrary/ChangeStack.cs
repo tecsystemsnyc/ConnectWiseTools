@@ -590,6 +590,22 @@ namespace EstimatingUtilitiesLibrary
                     }
                     if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
                 }
+                else if(e.PropertyName == "MetaAdd")
+                {
+                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaAdd change: " + oldValue); }
+                    item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
+                    ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
+                    SaveStack.Add(item);
+                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+                }
+                else if (e.PropertyName == "MetaRemove")
+                {
+                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaRemove change: " + oldValue); }
+                    item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
+                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
+                    SaveStack.Add(item);
+                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+                }
                 else
                 {
                     if (DEBUG_PROPERTIES) { Console.WriteLine("Edit change: " + oldValue); }

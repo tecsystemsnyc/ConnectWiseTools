@@ -977,14 +977,12 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ControllerTable.Name.Name, controller.Name);
             data.Add(ControllerTable.Description.Name, controller.Description);
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
-            /*
-            foreach(ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
+            
+            foreach(TECIO io in controller.IO)
             {
-                int qty = controller.NumberOfConnectionType(type);
-                if (qty > 0)
-                {
-                    addControllerConnectionTypeRelation(controller, type.ToString(), qty);
-                }
+                
+               addControllerIORelation(controller, io.Type.ToString(), io.Quantity);
+               
             }
 
 
@@ -992,9 +990,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Error: Couldn't add item to TECController table.");
             }
-            */
+            
 
-            throw new NotImplementedException();
         }
 
         static private void addConnection(TECConnection connection)
@@ -1134,7 +1131,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addControllerConnectionTypeRelation(TECController controller, string typeString, int qty)
+        static private void addControllerIORelation(TECController controller, string typeString, int qty)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());

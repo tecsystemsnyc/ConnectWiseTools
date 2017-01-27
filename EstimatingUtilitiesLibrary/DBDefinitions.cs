@@ -268,7 +268,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ControllerIOTypeTable : TableBase
     {
-        public static new string TableName = "TECControllerTECConnectionType";
+        public static new string TableName = "TECControllerTECIO";
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT");
         public static TableField IOType = new TableField("IOType", "TEXT");

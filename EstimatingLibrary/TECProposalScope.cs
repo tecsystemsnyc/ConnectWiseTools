@@ -63,6 +63,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
+                    NotifyPropertyChanged("MetaAdd", this, item);
                     addProposalScope(item as TECScope);
                 }
             }
@@ -70,6 +71,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
+                    NotifyPropertyChanged("MetaRemove", this, item);
                     removeProposalScope(item as TECScope);
                 }
             }

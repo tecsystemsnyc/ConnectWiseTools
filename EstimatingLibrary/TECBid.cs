@@ -388,25 +388,41 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
-                    if(item is TECSystem)
+                    if(item is TECProposalScope)
                     {
-                        addProposalScope(item as TECSystem);
+                        NotifyPropertyChanged("MetaAdd", this, item);
                     }
+                    else
+                    {
+                        NotifyPropertyChanged("Add", this, item);
+                        if (item is TECSystem)
+                        {
+                            addProposalScope(item as TECSystem);
+                        }
+                    }
+
+                    
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
-                    if(item is TECScope)
+                    if (item is TECProposalScope)
                     {
-                        checkForVisualsToRemove((TECScope)item);
+                        NotifyPropertyChanged("MetaRemove", this, item);
                     }
-                    if (item is TECSystem)
+                    else
                     {
-                        removeProposalScope(item as TECSystem);
+                        NotifyPropertyChanged("Remove", this, item);
+                        if (item is TECScope)
+                        {
+                            checkForVisualsToRemove((TECScope)item);
+                        }
+                        if (item is TECSystem)
+                        {
+                            removeProposalScope(item as TECSystem);
+                        }
                     }
                 }
             }
