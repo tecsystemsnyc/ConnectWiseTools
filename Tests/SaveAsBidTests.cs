@@ -75,7 +75,17 @@ namespace Tests
             expectedDevice = expectedSubScope.Devices[0];
             expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
-            expectedBranch = expectedBid.ScopeTree[0];
+
+            expectedBranch = null;
+            foreach (TECScopeBranch branch in expectedBid.ScopeTree)
+            {
+                if (branch.Name == "Branch 1")
+                {
+                    expectedBranch = branch;
+                    break;
+                }
+            }
+
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Tags[0];
