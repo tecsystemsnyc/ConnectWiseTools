@@ -19,6 +19,7 @@ namespace EstimatingLibrary
             {
                 var temp = Copy();
                 _isProposed = value;
+                Console.WriteLine(value);
                 NotifyPropertyChanged("IsProposed", temp, this);
             }
         }

@@ -41,7 +41,6 @@ namespace EstimateBuilder.ViewModel
 
         private Dictionary<TECDrawing, int> pageIndexes;
         
-
         public TECBid Bid
         {
             get { return _bid; }
