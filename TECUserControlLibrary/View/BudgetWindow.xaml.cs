@@ -19,23 +19,29 @@ namespace TECUserControlLibrary.View
     /// <summary>
     /// Interaction logic for BudgetWindow.xaml
     /// </summary>
-    public partial class BudgetWindow : Window
+    public partial class BudgetWindow : UserControl
     {
+
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(BudgetWindow));
 
         public BudgetWindow()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Scope Builder Main Window Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
+            
 
-            Show();
         }
     }
 }
