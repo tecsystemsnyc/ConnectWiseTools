@@ -676,7 +676,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if (refObject is TECProposalScope)
                 {
-                    removeScopeBranchProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
+                    removeScopeBranchProposalScopeRelation(tarObject as TECScopeBranch);
                 }
                 else
                 {
@@ -1551,14 +1551,14 @@ namespace EstimatingUtilitiesLibrary
 
         }
 
-        private static void removeScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
+        private static void removeScopeBranchBidRelation(TECScopeBranch branch)
         {
-
+            SQLiteDB.Delete(BidScopeBranchTable.TableName, BidScopeBranchTable.ScopeBranchID.Name, branch.Guid);
         }
 
-        private static void removeScopeBranchProposalScopeRelation(TECScopeBranch branch, Guid scopeID)
+        private static void removeScopeBranchProposalScopeRelation(TECScopeBranch branch)
         {
-
+            SQLiteDB.Delete(ProposalScopeScopeBranchTable.TableName, ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid);
         }
 
         private static void removeLocationInScope(TECScope scope)

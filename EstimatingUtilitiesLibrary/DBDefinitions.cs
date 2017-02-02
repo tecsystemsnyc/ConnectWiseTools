@@ -260,6 +260,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
         public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ScopeBranchID
+        };
     }
 
     public class ConnectionTable : TableBase
