@@ -1395,7 +1395,17 @@ namespace Tests
         public void Save_Bid_Remove_Branch_FromBranch()
         {
             //Act
-            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            TECScopeBranch branchToModify = null;
+
+            foreach (TECScopeBranch branch in bid.ScopeTree)
+            {
+                if (branch.Branches.Count > 0)
+                {
+                    branchToModify = branch;
+                    break;
+                }
+            } 
+
             int oldNumBranches = branchToModify.Branches.Count();
             TECScopeBranch branchToRemove = branchToModify.Branches[0];
             branchToModify.Branches.Remove(branchToRemove);
