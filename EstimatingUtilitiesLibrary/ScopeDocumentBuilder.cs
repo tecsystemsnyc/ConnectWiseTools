@@ -179,9 +179,9 @@ namespace EstimatingUtilitiesLibrary
             {
                 addScopeBranch(branch, paragraph, 0);
             }
-            paragraph.AddFormattedText("•   Provide a BMS and Automatic Tempwerature functions for the following mechanical systems:");
+            paragraph.AddFormattedText("•   Provide a BMS and Automatic Temperature functions for the following mechanical systems:");
             paragraph.AddLineBreak();
-            createSystemTree(paragraph, bid.Systems);
+            createSystemTree(paragraph, bid);
             
         }
 
@@ -205,54 +205,68 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        private static void createSystemTree(Paragraph paragraph, ObservableCollection<TECSystem> systems)
+        private static void createSystemTree(Paragraph paragraph, TECBid bid)
         {
             int itemNum = 1;
-            foreach (TECSystem system in systems)
+            foreach (TECProposalScope systemProp in bid.ProposalScope)
             {
-                paragraph.AddTab();
-                string systemString = system.Name;
-                if(system.Quantity > 1)
+                if (systemProp.IsProposed)
                 {
-                    systemString += " (" + system.Quantity.ToString() + ")";
-                }
-                if(system.Description != "")
-                {
-                    systemString += ": " + system.Description;
+                    TECScope system = systemProp.Scope;
+                    paragraph.AddTab();
+                    string systemString = system.Name;
+                    if (system.Quantity > 1)
+                    {
+                        systemString += " (" + system.Quantity.ToString() + ")";
+                    }
+                    if (system.Description != "")
+                    {
+                        systemString += ": " + system.Description;
+                    }
+
+                    paragraph.AddFormattedText(itemNum.ToString() + " " + systemString);
+                    paragraph.AddLineBreak();
+                    foreach (TECProposalScope equipProp in systemProp.Children)
+                    {
+                        if (equipProp.IsProposed)
+                        {
+                            TECScope equipment = equipProp.Scope;
+                            paragraph.AddTab();
+                            string equipmentString = equipment.Name;
+                            if (equipment.Quantity > 1)
+                            {
+                                equipmentString += " (" + equipment.Quantity.ToString() + ")";
+                            }
+                            if (equipment.Description != "")
+                            {
+                                equipmentString += ": " + equipment.Description;
+                            }
+
+                            paragraph.AddTab();
+                            paragraph.AddFormattedText("•" + equipmentString);
+                            paragraph.AddLineBreak();
+
+                            foreach (TECProposalScope ssProp in equipProp.Children)
+                            {
+                                if (ssProp.IsProposed)
+                                {
+                                    TECScope subScope = ssProp.Scope;
+                                    paragraph.AddTab();
+                                    string subScopeString = subScope.Name;
+
+                                    paragraph.AddTab();
+                                    paragraph.AddTab();
+                                    paragraph.AddFormattedText("•" + subScopeString);
+                                    paragraph.AddLineBreak();
+                                }
+                            }
+                        }
+                        
+                    }
+                    paragraph.AddLineBreak();
+                    itemNum++;
                 }
                 
-                paragraph.AddFormattedText(itemNum.ToString() + " " + systemString);
-                paragraph.AddLineBreak();
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    paragraph.AddTab();
-                    string equipmentString = equipment.Name;
-                    if(equipment.Quantity > 1)
-                    {
-                        equipmentString += " (" + equipment.Quantity.ToString() + ")";
-                    }
-                    if (equipment.Description != "")
-                    {
-                        equipmentString += ": " + equipment.Description;
-                    }
-                    
-                    paragraph.AddTab();
-                    paragraph.AddFormattedText("•" + equipmentString);
-                    paragraph.AddLineBreak();
-                    
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        paragraph.AddTab();
-                        string subScopeString = subScope.Name;
-
-                        paragraph.AddTab();
-                        paragraph.AddTab();
-                        paragraph.AddFormattedText("•" + subScopeString);
-                        paragraph.AddLineBreak();
-                    }
-                }
-                paragraph.AddLineBreak();
-                itemNum++;
             }
         }
 
