@@ -188,6 +188,22 @@ namespace EstimatingLibrary
             return outNum;
         }
 
+        public List<IOType> getUniqueIO()
+        {
+            var outList = new List<IOType>();
+
+            foreach(TECIO io in this.IO)
+            {
+                if (!outList.Contains(io.Type))
+                {
+                    outList.Add(io.Type);
+                }
+            }
+            Console.WriteLine("IO: " + outList.Count);
+            return outList;
+        }
+
+
         #endregion
     }
 }

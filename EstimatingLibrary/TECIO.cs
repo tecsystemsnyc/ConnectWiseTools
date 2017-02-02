@@ -8,7 +8,7 @@ namespace EstimatingLibrary
 {
     public enum IOType
     {
-        AI = 0,
+        AI = 1,
         AO,
         DI,
         DO,
@@ -68,11 +68,11 @@ namespace EstimatingLibrary
                 case "DO": return IOType.DO;
                 case "UI": return IOType.UI;
                 case "UO": return IOType.UO;
-                case "BACnetMSTP": return IOType.BACnetMSTP;
-                case "BACnetIP": return IOType.BACnetIP;
-                case "LonWorks": return IOType.LonWorks;
-                case "ModbusTCP": return IOType.ModbusTCP;
-                case "ModbusRTU": return IOType.ModbusRTU;
+                case "BACNETMSTP": return IOType.BACnetMSTP;
+                case "BACNETIP": return IOType.BACnetIP;
+                case "LONWORKS": return IOType.LonWorks;
+                case "MODBUSTCP": return IOType.ModbusTCP;
+                case "MODBUSRTU": return IOType.ModbusRTU;
 
                 default: return 0;
             }

@@ -24,7 +24,7 @@
                                     Header="Name"
                                     Width="Auto"
                                     MinWidth="100"/>
-                <DataGridCheckBoxColumn Binding="{Binding IsProposed}"
+                <DataGridCheckBoxColumn Binding="{Binding IsProposed, UpdateSourceTrigger=LostFocus}"
                     Header="Include"
                     Width="60"/>
             </DataGrid.Columns>

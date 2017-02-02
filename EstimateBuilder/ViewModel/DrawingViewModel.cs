@@ -25,6 +25,7 @@ namespace EstimateBuilder.ViewModel
     public class DrawingViewModel : ViewModelBase, IDropTarget
     {
         private TECBid _bid;
+        private TECTemplates _templates;
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
         private Image _currentImage;
@@ -36,7 +37,7 @@ namespace EstimateBuilder.ViewModel
         private string _controllerName;
         private TECController _selectedControllerTemplate;
 
-        private Tuple<TECObject, TECVisualScope> connectionStart;
+        private Tuple<TECObject, TECVisualScope, string> connectionStart;
 
         private Dictionary<TECDrawing, int> pageIndexes;
         
@@ -50,6 +51,15 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("Bid");
                 registerBid();
                 populateDisplayed();
+            }
+        }
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                RaisePropertyChanged("Templates");
             }
         }
         public TECDrawing CurrentDrawing
@@ -217,7 +227,7 @@ namespace EstimateBuilder.ViewModel
 
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
-            ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
+            ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
             AddControllerCommand = new RelayCommand(AddControllerExecute);
 
             pageIndexes = new Dictionary<TECDrawing, int>();
@@ -268,8 +278,9 @@ namespace EstimateBuilder.ViewModel
             
         }
 
-        private bool CanConnectExecute(Tuple<TECObject, TECVisualScope> arg)
+        private bool CanConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
         {
+            /*
             if(arg != null)
             {
                 if (!isConnecting)
@@ -286,8 +297,11 @@ namespace EstimateBuilder.ViewModel
             {
                 return false;
             }
+            */
+            return true;
         }
-        private void ConnectExecute(Tuple<TECObject, TECVisualScope> arg)
+
+        private void ConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
         {
             if (isConnecting)
             {
@@ -570,7 +584,7 @@ namespace EstimateBuilder.ViewModel
             return true;
         }
 
-        private TECConnection createConnection(Tuple<TECObject, TECVisualScope> item1, Tuple<TECObject, TECVisualScope> item2, double scale)
+        private TECConnection createConnection(Tuple<TECObject, TECVisualScope, string> item1, Tuple<TECObject, TECVisualScope, string> item2, double scale)
         {
             double length = UtilitiesMethods.getLength(item1.Item2, item2.Item2, scale);
             var newConnection = new TECConnection();
