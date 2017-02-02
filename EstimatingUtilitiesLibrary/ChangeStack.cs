@@ -335,6 +335,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Locations.Remove((TECLocation)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECController)
+                {
+                    ((TECBid)StackItem.Item2).Controllers.Remove((TECController)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECSystem)
             {
@@ -390,6 +394,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).ManufacturerCatalog.Remove((TECManufacturer)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECController)
+                {
+                    ((TECTemplates)StackItem.Item2).ControllerTemplates.Remove((TECController)StackItem.Item3);
+                }
             }
         }
 
@@ -432,6 +440,10 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECLocation)
                 {
                     ((TECBid)StackItem.Item2).Locations.Add((TECLocation)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECController)
+                {
+                    ((TECBid)StackItem.Item2).Controllers.Add((TECController)StackItem.Item3);
                 }
             }
             else if (StackItem.Item2 is TECSystem)
@@ -487,6 +499,10 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECManufacturer)
                 {
                     ((TECTemplates)StackItem.Item2).ManufacturerCatalog.Add((TECManufacturer)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECController)
+                {
+                    ((TECTemplates)StackItem.Item2).ControllerTemplates.Add((TECController)StackItem.Item3);
                 }
             }
         }
