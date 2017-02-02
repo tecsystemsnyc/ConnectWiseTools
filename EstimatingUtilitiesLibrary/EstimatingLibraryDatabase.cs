@@ -1436,7 +1436,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
             data.Add(ControllerTable.Description.Name, controller.Description);
 
-            if (!SQLiteDB.Replace(TagTable.TableName, data))
+            if (!SQLiteDB.Replace(ControllerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECController table");
             }
