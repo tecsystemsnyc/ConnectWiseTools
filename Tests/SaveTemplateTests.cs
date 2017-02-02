@@ -748,7 +748,7 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.IO.Add(new TECIO(IOType.BACnetIP));
-            bool hasBacIP = false;
+            bool hasAI = false;
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
             TECController actualController = null;
@@ -762,13 +762,13 @@ namespace Tests
             }
             foreach(TECIO io in actualController.IO)
             {
-                if(io.Type == IOType.BACnetIP)
+                if(io.Type == IOType.AI)
                 {
-                    hasBacIP = true;
+                    hasAI = true;
                 }
             }
 
-            Assert.IsTrue(hasBacIP);
+            Assert.IsTrue(hasAI);
 
         }
 
