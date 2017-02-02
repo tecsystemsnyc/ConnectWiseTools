@@ -146,6 +146,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 manufacturer.PropertyChanged += Object_PropertyChanged;
             }
+            foreach(TECController controller in Templates.ControllerTemplates)
+            {
+                controller.PropertyChanged += Object_PropertyChanged;
+            }
         }
 
         private void registerSubScope(TECSubScope subScope)
