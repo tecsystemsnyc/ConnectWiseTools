@@ -92,7 +92,7 @@ namespace EstimatingLibrary
             if (this.Scope is TECController)
             {
                 var controller = this.Scope as TECController;
-                foreach(IOType type in controller.NetworkIO)
+                foreach(IOType type in controller.getUniqueIO())
                 {
                     outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(controller, this, TECIO.convertTypeToString(type)));
                 }
@@ -128,5 +128,6 @@ namespace EstimatingLibrary
 
             return outScope;
         }
+
     }
 }

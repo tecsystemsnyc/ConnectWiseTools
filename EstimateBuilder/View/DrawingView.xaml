@@ -152,7 +152,7 @@
                              Margin="5"/>
                     <Label Content="Type"
                            Grid.Row="1"/>
-                    <ComboBox ItemsSource="{Binding Bid.ControllerCatalog}"
+                    <ComboBox ItemsSource="{Binding Templates.ControllerTemplates}"
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding SelectedControllerTemplate}"
                               Grid.Row="1"
