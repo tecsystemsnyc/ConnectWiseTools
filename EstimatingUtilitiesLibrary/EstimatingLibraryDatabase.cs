@@ -1432,7 +1432,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerTable.Description.Name, controller.Description);
+            data.Add(ControllerTable.Name.Name, controller.Name);
             data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
             data.Add(ControllerTable.Description.Name, controller.Description);
 

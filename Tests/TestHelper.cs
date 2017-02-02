@@ -157,9 +157,10 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42);
-            controller.IO.Add(new TECIO(IOType.AI));
-
+            TECController controller = new TECController("Test Controller", "test description", Guid.NewGuid(), 42.6);
+            TECIO ioToAdd = new TECIO(IOType.AI);
+            ioToAdd.Quantity = 5;
+            controller.IO.Add(ioToAdd);
             bid.Controllers.Add(controller);
 
             //Bid
