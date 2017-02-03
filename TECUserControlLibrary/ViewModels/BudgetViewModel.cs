@@ -156,6 +156,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Systems = bid.Systems;
             Systems.CollectionChanged += Systems_CollectionChanged;
+            BudgetedSystems.Add(new TECSystem());
         }
 
         private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

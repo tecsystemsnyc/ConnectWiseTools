@@ -133,6 +133,9 @@
     <Compile Include="SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TECResourceDictionary.xaml.cs">
+      <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />

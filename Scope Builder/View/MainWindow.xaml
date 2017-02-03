@@ -91,12 +91,7 @@
                           Command="{Binding LoadTemplatesCommand}"
                           Foreground="{DynamicResource WindowBackgroundBrush}"/>
             </MenuItem>
-            
-            <MenuItem Header="_Budget">
-                <MenuItem Header="_Open Window"
-                          Command="{Binding BudgetCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
+           
         </Menu>
         <Grid>
         <Grid.ColumnDefinitions>
