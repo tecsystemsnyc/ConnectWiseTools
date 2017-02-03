@@ -103,7 +103,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*" MinHeight="40"/>
             <RowDefinition Height="30"/>
@@ -125,8 +125,9 @@
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Name}"
-                         Height="20"
-                         Margin="2" FontSize="12"
+                         VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          Grid.Column="1"
                          VerticalAlignment="Center">
                 </TextBox>
@@ -135,7 +136,6 @@
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
-                         Height="20"
                  Grid.Column="3"
                  Margin="2"
                          VerticalAlignment="Center">
@@ -145,7 +145,6 @@
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
-                         Height="20"
                 Grid.Column="5"
                 Margin="2"
                          VerticalAlignment="Center">
@@ -155,7 +154,6 @@
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
-                         Height="20"
                 Grid.Column="7"
                 Margin="2"
                          VerticalAlignment="Center">
