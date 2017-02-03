@@ -163,8 +163,27 @@ namespace Tests
             controller.IO.Add(ioToAdd);
             bid.Controllers.Add(controller);
 
-            //Bid
+            //ProposalScope
+            TECSystem propSystem = new TECSystem("Prop System", "", 0, new ObservableCollection<TECEquipment>());
 
+            TECScopeBranch propNote = new TECScopeBranch("Proposal Note", "", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch propNoteNote = new TECScopeBranch("Proposal Note Note", "", new ObservableCollection<TECScopeBranch>());
+            propNote.Branches.Add(propNoteNote);
+
+            bid.Systems.Add(propSystem);
+
+            TECProposalScope propScope = null;
+            foreach (TECProposalScope pS in bid.ProposalScope)
+            {
+                if (pS.Scope.Guid == propSystem.Guid)
+                {
+                    propScope = pS;
+                }
+            }
+            propScope.IsProposed = true;
+            propScope.Notes.Add(propNote);
+
+            //Bid
             return bid;
         }
 
