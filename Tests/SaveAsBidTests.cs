@@ -29,6 +29,7 @@ namespace Tests
         static TECDrawing expectedDrawing;
         static TECPage expectedPage;
         static TECVisualScope expectedVisualScope;
+        static TECController expectedController;
 
         static string path;
 
@@ -48,6 +49,7 @@ namespace Tests
         static TECDrawing actualDrawing;
         static TECPage actualPage;
         static TECVisualScope actualVisualScope;
+        static TECController actualController;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -93,6 +95,8 @@ namespace Tests
             expectedDrawing = expectedBid.Drawings[0];
             expectedPage = expectedDrawing.Pages[0];
             expectedVisualScope = expectedPage.PageScope[0];
+
+            expectedController = expectedBid.Controllers[0];
 
             path = Path.GetTempFileName();
 
@@ -223,6 +227,15 @@ namespace Tests
                 if (vs.Guid == expectedVisualScope.Guid)
                 {
                     actualVisualScope = vs;
+                    break;
+                }
+            }
+            
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
                     break;
                 }
             }
@@ -423,6 +436,29 @@ namespace Tests
         public void SaveAs_Bid_PropScope()
         {
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Controller()
+        {
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+
+            foreach (TECIO expectedIO in expectedController.IO)
+            {
+                bool ioExists = false;
+                foreach (TECIO actualIO in actualController.IO)
+                {
+                    if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
+                    {
+                        ioExists = true;
+                        break;
+                    }
+                }
+                Assert.IsTrue(ioExists);
+            }
         }
     }
 }

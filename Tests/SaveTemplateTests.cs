@@ -671,6 +671,31 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Templates_Remove_Controller()
+        {
+            //Act
+            int oldNumControllers = templates.ControllerTemplates.Count;
+            TECController controllerToRemove = templates.ControllerTemplates[0];
+
+            templates.ControllerTemplates.Remove(controllerToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
+                
+        }
+
+
+
+        [TestMethod]
         public void Save_Templates_Controller_Name()
         {
             //Act
@@ -742,13 +767,15 @@ namespace Tests
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
 
+        #region Controller IO
         [TestMethod]
-        public void Save_Templates_Controller_IO()
+        public void Save_Templates_Controller_Add_IO()
         {
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.IO.Add(new TECIO(IOType.BACnetIP));
-            bool hasAI = false;
+            bool hasBACnetIP = false;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
             TECController actualController = null;
@@ -760,20 +787,89 @@ namespace Tests
                     break;
                 }
             }
-            foreach(TECIO io in actualController.IO)
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
             {
-                if(io.Type == IOType.AI)
+                if (io.Type == IOType.BACnetIP)
                 {
-                    hasAI = true;
+                    hasBACnetIP = true;
                 }
             }
 
-            Assert.IsTrue(hasAI);
+            Assert.IsTrue(hasBACnetIP);
 
         }
 
-            #endregion
+        [TestMethod]
+        public void Save_Templates_Controller_Remove_IO()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            int oldNumIO = expectedController.IO.Count;
+            TECIO ioToRemove = expectedController.IO[0];
 
+            expectedController.IO.Remove(ioToRemove);
 
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController con in actualTemplates.ControllerTemplates)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
         }
+
+        [TestMethod]
+        public void Save_Templates_Controller_IO_Quantity()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            TECIO ioToChange = expectedController.IO[0];
+            ioToChange.Quantity = 69;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController con in actualTemplates.ControllerTemplates)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToChange.Type)
+                {
+                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+                    break;
+                }
+            }
+        }
+        #endregion Controller IO
+
+        #endregion
+
+
+    }
 }

@@ -481,6 +481,18 @@ namespace EstimatingUtilitiesLibrary
             {
                 addProposalScope(tarObject as TECProposalScope);
             }
+            else if (tarObject is TECIO)
+            {
+                if (refObject is TECController)
+                {
+                    addControllerIORelation(refObject as TECController, tarObject as TECIO);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -590,6 +602,17 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is ObservableCollection<TECPoint>)
             {
                 updateSubScopePointRelation(refObject as TECSubScope);
+            }
+            else if (tarObject is TECIO)
+            {
+                if (refObject is TECController)
+                {
+                    editIOInController(tarObject as TECIO, refObject as TECController);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {
@@ -701,6 +724,17 @@ namespace EstimatingUtilitiesLibrary
             else if(tarObject is TECProposalScope)
             {
                 removeProposalScope(tarObject as TECProposalScope);
+            }
+            else if (tarObject is TECIO)
+            {
+                if (refObject is TECController)
+                {
+                    removeControllerIORelation(refObject as TECController, tarObject as TECIO);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {
@@ -1027,9 +1061,7 @@ namespace EstimatingUtilitiesLibrary
             
             foreach(TECIO io in controller.IO)
             {
-                
-               addControllerIORelation(controller, io.Type.ToString(), io.Quantity);
-               
+               addControllerIORelation(controller, io);
             }
 
 
@@ -1178,12 +1210,12 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addControllerIORelation(TECController controller, string typeString, int qty)
+        static private void addControllerIORelation(TECController controller, TECIO io)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerIOTypeTable.IOType.Name, typeString);
-            data.Add(ControllerIOTypeTable.Quantity.Name, qty.ToString());
+            data.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
+            data.Add(ControllerIOTypeTable.Quantity.Name, io.Quantity.ToString());
 
             if (!SQLiteDB.Insert(ControllerIOTypeTable.TableName, data))
             {
@@ -1447,32 +1479,44 @@ namespace EstimatingUtilitiesLibrary
         #region Remove Objects
         static private void removeSystem(TECSystem system)
         {
-            SQLiteDB.Delete(SystemTable.TableName, "SystemID", system.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(SystemTable.SystemID.Name, system.Guid.ToString());
+            SQLiteDB.Delete(SystemTable.TableName, pk);
         }
 
         static private void removeEquipment(TECEquipment equipment)
         {
-            SQLiteDB.Delete(EquipmentTable.TableName, EquipmentTable.EquipmentID.Name, equipment.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
+            SQLiteDB.Delete(EquipmentTable.TableName, pk);
         }
 
         static private void removeSubScope(TECSubScope subScope)
         {
-            SQLiteDB.Delete(SubScopeTable.TableName, SubScopeTable.SubScopeID.Name, subScope.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+            SQLiteDB.Delete(SubScopeTable.TableName, pk);
         }
 
         static private void removeDevice(TECDevice device)
         {
-            SQLiteDB.Delete(DeviceTable.TableName, DeviceTable.DeviceID.Name, device.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
+            SQLiteDB.Delete(DeviceTable.TableName, pk);
         }
 
         static private void removePoint(TECPoint point)
         {
-            SQLiteDB.Delete(PointTable.TableName, PointTable.PointID.Name, point.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(PointTable.PointID.Name, point.Guid.ToString());
+            SQLiteDB.Delete(PointTable.TableName, pk);
         }
 
         static private void removeScopeBranch(TECScopeBranch branch)
         {
-            SQLiteDB.Delete(ScopeBranchTable.TableName, ScopeBranchTable.ScopeBranchID.Name, branch.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            SQLiteDB.Delete(ScopeBranchTable.TableName, pk);
             foreach(TECScopeBranch childBranch in branch.Branches)
             {
                 removeScopeBranch(childBranch);
@@ -1482,32 +1526,44 @@ namespace EstimatingUtilitiesLibrary
 
         static private void removeNote(TECNote note)
         {
-            SQLiteDB.Delete(NoteTable.TableName, NoteTable.NoteID.Name, note.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(NoteTable.NoteID.Name, note.Guid.ToString());
+            SQLiteDB.Delete(NoteTable.TableName, pk);
         }
 
         static private void removeExclusion(TECExclusion exclusion)
         {
-            SQLiteDB.Delete("TECExclusion", "ExclusionID", exclusion.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
+            SQLiteDB.Delete(ExclusionTable.TableName, pk);
         }
 
         static private void removeLocation(TECLocation location)
         {
-            SQLiteDB.Delete("TECLocation", "LocationID", location.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(LocationTable.LocationID.Name, location.Guid.ToString());
+            SQLiteDB.Delete(LocationTable.TableName, pk);
         }
 
         static private void removeVisualScope(TECVisualScope vs)
         {
-            SQLiteDB.Delete(VisualScopeTable.TableName, VisualScopeTable.VisualScopeID.Name, vs.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(VisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
+            SQLiteDB.Delete(VisualScopeTable.TableName, pk);
         }
 
         static private void removeController(TECController controller)
         {
-            SQLiteDB.Delete(ControllerTable.TableName, ControllerTable.ControllerID.Name, controller.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
+            SQLiteDB.Delete(ControllerTable.TableName, pk);
         }
 
         static private void removeProposalScope(TECProposalScope scope)
         {
-            SQLiteDB.Delete(ProposalScopeTable.TableName, ProposalScopeTable.ProposalScopeID.Name, scope.Scope.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ProposalScopeTable.ProposalScopeID.Name, scope.Scope.Guid.ToString());
+            SQLiteDB.Delete(ProposalScopeTable.TableName, pk);
             foreach(TECScopeBranch branch in scope.Notes)
             {
                 removeScopeBranch(branch);
@@ -1522,58 +1578,81 @@ namespace EstimatingUtilitiesLibrary
         #region Remove Relations
         private static void removeSystemEquipmentRelation(TECEquipment equipment)
         {
-            SQLiteDB.Delete("TECSystemTECEquipment", EquipmentTable.EquipmentID.Name, equipment.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
+            SQLiteDB.Delete(SystemEquipmentTable.TableName, pk);
         }
 
         private static void removeEquipmentSubScopeRelation(TECSubScope subScope)
         {
-            SQLiteDB.Delete("TECEquipmentTECSubScope", SubScopeTable.SubScopeID.Name, subScope.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
+            SQLiteDB.Delete(EquipmentSubScopeTable.TableName, pk);
         }
 
         private static void removeSubScopeDeviceRelation(TECDevice device)
         {
-            SQLiteDB.Delete("TECSubScopeTECDevice", DeviceTable.DeviceID.Name, device.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
+            SQLiteDB.Delete(SubScopeDeviceTable.TableName, pk);
         }
 
         private static void removeSubScopePointRelation(TECPoint point)
         {
-            SQLiteDB.Delete("TECSubScopeTECPoint", PointTable.PointID.Name, point.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(PointTable.PointID.Name, point.Guid.ToString());
+            SQLiteDB.Delete(SubScopePointTable.TableName, pk);
         }
 
         private static void removeDeviceManufacturerRelation(TECDevice device)
         {
-            SQLiteDB.Delete(DeviceManufacturerTable.TableName, DeviceManufacturerTable.DeviceID.Name, device.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
+            SQLiteDB.Delete(DeviceManufacturerTable.TableName, pk);
         }
 
         private static void removeScopeBranchHierarchyRelation(TECScopeBranch branch)
         {
-            SQLiteDB.Delete("TECScopeBranchHierarchy", "BranchID", branch.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ScopeBranchHierarchyTable.ChildID.Name, branch.Guid.ToString());
+            SQLiteDB.Delete(ScopeBranchHierarchyTable.TableName, pk);
 
         }
 
         private static void removeScopeBranchBidRelation(TECScopeBranch branch)
         {
-            SQLiteDB.Delete(BidScopeBranchTable.TableName, BidScopeBranchTable.ScopeBranchID.Name, branch.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(BidScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            SQLiteDB.Delete(BidScopeBranchTable.TableName, pk);
         }
 
         private static void removeScopeBranchProposalScopeRelation(TECScopeBranch branch)
         {
-            SQLiteDB.Delete(ProposalScopeScopeBranchTable.TableName, ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            SQLiteDB.Delete(ProposalScopeScopeBranchTable.TableName, pk);
         }
 
         private static void removeLocationInScope(TECScope scope)
         {
-            SQLiteDB.Delete("TECLocationTECScope", "ScopeID", scope.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(LocationScopeTable.ScopeID.Name, scope.Guid.ToString());
+            SQLiteDB.Delete(LocationScopeTable.TableName, pk);
         }
 
         private static void removePageVisualScopeRelation(TECVisualScope vs)
         {
-            SQLiteDB.Delete(PageVisualScopeTable.TableName, PageVisualScopeTable.VisualScopeID.Name, vs.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(PageVisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
+            SQLiteDB.Delete(PageVisualScopeTable.TableName, pk);
         }
 
-        private static void removeControllerConnectionTypeRelation(TECController controller)
+        private static void removeControllerIORelation(TECController controller, TECIO io)
         {
-            SQLiteDB.Delete(ControllerIOTypeTable.TableName, ControllerIOTypeTable.ControllerID.Name, controller.Guid);
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
+            pk.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
+            SQLiteDB.Delete(ControllerIOTypeTable.TableName, pk);
         }
         #endregion
         #endregion Remove Methods
@@ -1663,6 +1742,19 @@ namespace EstimatingUtilitiesLibrary
                     Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECPoint table.");
                 }
                 i++;
+            }
+        }
+
+        static private void editIOInController(TECIO io, TECController controller)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
+            data.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
+            data.Add(ControllerIOTypeTable.Quantity.Name, io.Quantity.ToString());
+
+            if (!SQLiteDB.Replace(ControllerIOTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in " + ControllerIOTypeTable.TableName);
             }
         }
 

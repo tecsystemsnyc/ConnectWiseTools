@@ -1987,5 +1987,236 @@ namespace Tests
             Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
         }
         #endregion Save Visual Scope
+
+        #region Save Controller
+        [TestMethod]
+        public void Save_Bid_Add_Controller()
+        {
+            //Act
+            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+
+            bid.Controllers.Add(expectedController);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Controller()
+        {
+            //Act
+            int oldNumControllers = bid.Controllers.Count;
+            TECController controllerToRemove = bid.Controllers[0];
+
+            bid.Controllers.Remove(controllerToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumControllers - 1), actualBid.Controllers.Count);
+
+        }
+
+
+
+        [TestMethod]
+        public void Save_Bid_Controller_Name()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Name = "Test save controller name";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Description()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Description = "Save Device Description";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Cost()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Cost = 46.89;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+
+        #region Controller IO
+        [TestMethod]
+        public void Save_Bid_Controller_Add_IO()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            bool hasBACnetIP = false;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == IOType.BACnetIP)
+                {
+                    hasBACnetIP = true;
+                }
+            }
+
+            Assert.IsTrue(hasBACnetIP);
+
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Remove_IO()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            int oldNumIO = expectedController.IO.Count;
+            TECIO ioToRemove = expectedController.IO[0];
+
+            expectedController.IO.Remove(ioToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_IO_Quantity()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            TECIO ioToChange = expectedController.IO[0];
+            ioToChange.Quantity = 69;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToChange.Type)
+                {
+                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+                    break;
+                }
+            }
+        }
+        #endregion Controller IO
+
+
+        #endregion
     }
 }

@@ -154,14 +154,25 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public bool Delete(string tableName, string idName, Guid guid)
+        public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues) 
         {
             bool returnCode = true;
-            string commandString = "DELETE FROM " + tableName + " WHERE ";
             try
             {
-                string objectCommandString = commandString + "(" + idName + " = '" + guid + "');";
-                nonQueryCommand(objectCommandString);
+                string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
+                bool first = true;
+                foreach (KeyValuePair<string, string> pk in primaryKeyValues)
+                {
+                    if (!first)
+                    {
+                        commandString += " AND ";
+                    }
+                    commandString += pk.Key + " = '" + pk.Value + "'";
+                    first = false;
+                }
+                commandString += ");";
+                
+                nonQueryCommand(commandString);
             }
             catch (Exception e)
             {

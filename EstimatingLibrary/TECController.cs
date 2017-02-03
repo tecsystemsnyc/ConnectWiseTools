@@ -74,7 +74,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (Object item in e.NewItems)
+                foreach (Object item in e.OldItems)
                 {
                     (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
                     NotifyPropertyChanged("Remove", this, item);
