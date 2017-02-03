@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.View
+namespace TECUserControlLibrary
 {
     /// <summary>
     /// Interaction logic for BudgetWindow.xaml
@@ -40,7 +40,16 @@ namespace TECUserControlLibrary.View
 
         public BudgetWindow()
         {
-            
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                string message = "Budget Control Initalization Failed: " + e.Message;
+                Console.WriteLine(message);
+                throw new Exception(message);
+            }
 
         }
     }

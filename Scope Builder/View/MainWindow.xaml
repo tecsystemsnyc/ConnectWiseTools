@@ -184,6 +184,9 @@
                 <TabItem Header="Proposal">
                     <cLib:DocumentBuilderControl ViewModel="{Binding}"/>
                 </TabItem>
+                <TabItem Header="Budget">
+                    <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
+                </TabItem>
             </TabControl>
             
             <StatusBar Grid.Row="3"

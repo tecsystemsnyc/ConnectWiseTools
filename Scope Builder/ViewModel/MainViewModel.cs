@@ -55,6 +55,7 @@ namespace Scope_Builder.ViewModel
         public ScopeCollectionExtension ScopeCollection { get; set; }
 
         public DocumentBuilderViewModel DocumentBuilderVM { get; set; }
+        public BudgetViewModel BudgetVM { get; set; }
         #endregion
 
         #region Commands Properties
@@ -90,6 +91,7 @@ namespace Scope_Builder.ViewModel
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();
+            setupBudget();
             getVersion();
             DGTabIndex = 0;
 
@@ -167,6 +169,11 @@ namespace Scope_Builder.ViewModel
             ScopeCollection = new ScopeCollectionExtension(Templates);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
+        }
+        private void setupBudget()
+        {
+            BudgetVM = new BudgetViewModel();
+            BudgetVM.Bid = Bid;
         }
         #endregion
         

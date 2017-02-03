@@ -654,8 +654,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void BudgetExecute()
         {
-            new View.BudgetWindow();
-            MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
+            //new View.BudgetWindow();
+            //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
         }
         private void LoadTemplatesExecute()
         {
