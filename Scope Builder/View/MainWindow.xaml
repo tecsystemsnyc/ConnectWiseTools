@@ -103,7 +103,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*" MinHeight="40"/>
             <RowDefinition Height="30"/>
@@ -122,32 +122,40 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="Name:" Grid.Column="0" 
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Name}"
+                         Height="20"
                          Margin="2" FontSize="12"
                          Grid.Column="1"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Bid Number:" Grid.Column="2"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
+                         Height="20"
                  Grid.Column="3"
                  Margin="2"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Estimator:" Grid.Column="4"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
+                         Height="20"
                 Grid.Column="5"
                 Margin="2"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Salesperson:" Grid.Column="6"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
+                         Height="20"
                 Grid.Column="7"
                 Margin="2"
                          VerticalAlignment="Center">

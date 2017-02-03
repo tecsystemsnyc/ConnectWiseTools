@@ -7,7 +7,7 @@
                 BorderThickness="{TemplateBinding BorderThickness}" 
                 Background="{TemplateBinding Background}" 
                 SnapsToDevicePixels="True"
-                CornerRadius="2">
+                CornerRadius="4">
             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
         </Border>
         <ControlTemplate.Triggers>
@@ -35,7 +35,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
         <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"
-                CornerRadius="2">
+                CornerRadius="4">
             <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
         </Border>
         <ControlTemplate.Triggers>
@@ -51,13 +51,18 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="DataGridControlTemplate" TargetType="{x:Type DataGrid}">
-        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+        <Grid>
+            <Border BorderBrush="{TemplateBinding BorderBrush}" 
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Background="{TemplateBinding Background}" 
                 Padding="{TemplateBinding Padding}" 
                 SnapsToDevicePixels="True"
-                CornerRadius="4">
+                CornerRadius="4"
+                x:Name="border"/>
             <ScrollViewer x:Name="DG_ScrollViewer" Focusable="False">
+                <ScrollViewer.OpacityMask>
+                    <VisualBrush Visual="{Binding ElementName=border}"/>
+                </ScrollViewer.OpacityMask>
                 <ScrollViewer.Template>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
                         <Grid>
@@ -71,7 +76,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Button Command="ApplicationCommands.SelectAll" Focusable="False" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}">
+                            <!--<Button Command="ApplicationCommands.SelectAll" Focusable="False" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}">
                                 <Button.Visibility>
                                     <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
                                         <Binding.ConverterParameter>
@@ -79,7 +84,7 @@
                                         </Binding.ConverterParameter>
                                     </Binding>
                                 </Button.Visibility>
-                            </Button>
+                            </Button>-->
                             <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1">
                                 <DataGridColumnHeadersPresenter.Visibility>
                                     <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
@@ -103,7 +108,7 @@
                 </ScrollViewer.Template>
                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
             </ScrollViewer>
-        </Border>
+        </Grid>
     </ControlTemplate>
 
 </ResourceDictionary>

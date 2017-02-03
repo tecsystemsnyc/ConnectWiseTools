@@ -26,12 +26,15 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Path=ViewModel.SearchString}"/>
+            <TextBox Text="{Binding Path=ViewModel.SearchString}"
+                     Margin="2,5,2,5"/>
             <Button Grid.Column="1"
                     Content="Search"
+                    Margin="2"
                     Command="{Binding Path=ViewModel.SearchCollectionCommand}"/>
             <Button Grid.Column="2"
                     Content="Done"
+                    Margin="2"
                     Command="{Binding Path=ViewModel.EndSearchCommand}"/>
         </Grid>
         <TabControl Grid.Row="1"

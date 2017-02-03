@@ -52,7 +52,7 @@
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
         <Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>
-
+        <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
     </Style>
 
     <Style TargetType="DataGridColumnHeader">
@@ -62,6 +62,8 @@
         <Setter Property="FontSize" Value="12" />
     </Style>
     <Style TargetType="DataGridCell">
+        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"/>
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
@@ -71,7 +73,6 @@
                 <Setter Property="Background" Value="{DynamicResource TextBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
-        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"/>
     </Style>
     <Style TargetType="Menu">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
