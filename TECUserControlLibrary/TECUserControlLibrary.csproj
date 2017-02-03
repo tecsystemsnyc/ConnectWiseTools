@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -132,6 +133,9 @@
     <Compile Include="SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TECResourceDictionary.xaml.cs">
+      <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
@@ -141,7 +145,7 @@
     <Compile Include="ViewModels\BudgetViewModel.cs" />
     <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
-    <Compile Include="View\BudgetWindow.xaml.cs">
+    <Compile Include="BudgetWindow.xaml.cs">
       <DependentUpon>BudgetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="VisibilityModel.cs" />
@@ -290,7 +294,7 @@
     <Compile Include="TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\BudgetWindow.xaml">
+    <Page Include="BudgetWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -337,6 +341,7 @@
   <ItemGroup>
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

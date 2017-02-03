@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
-namespace TECUserControlLibrary.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -20,6 +20,18 @@ namespace TECUserControlLibrary.ViewModel
     public class BudgetViewModel : ViewModelBase
     {
         private double _manualAdjustmentAmount;
+
+        private TECBid _bid;
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                _bid = value;
+                RaisePropertyChanged("Bid");
+                PopulateSystems(_bid);
+            }
+        }
 
         private ObservableCollection<TECSystem> _systems;
 
@@ -135,15 +147,49 @@ namespace TECUserControlLibrary.ViewModel
         public BudgetViewModel()
         {
             Systems = new ObservableCollection<TECSystem>();
-            MessengerInstance.Register<GenericMessage<ObservableCollection<TECSystem>>>(this, PopulateSystems);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
 
             ManualAdjustmentPercentage = 0;
         }
 
-        public void PopulateSystems(GenericMessage<ObservableCollection<TECSystem>> genericMessage)
+        public void PopulateSystems(TECBid bid)
         {
-            Systems = genericMessage.Content;
+            Systems = bid.Systems;
+            Systems.CollectionChanged += Systems_CollectionChanged;
+            BudgetedSystems.Add(new TECSystem());
+        }
+
+        private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(Object item in e.NewItems)
+                {
+                    var sys = item as TECSystem;
+                    if(sys.PriceWithEquipment != -1)
+                    {
+                        BudgetedSystems.Add(sys);
+                    }
+                    else if (sys.PriceWithEquipment == -1)
+                    {
+                        UnbudgetedSystems.Add(sys);
+                    }
+                }
+            }
+            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Object item in e.OldItems)
+                {
+                    var sys = item as TECSystem;
+                    if (BudgetedSystems.Contains(sys))
+                    {
+                        BudgetedSystems.Remove(sys);
+                    } else if (UnbudgetedSystems.Contains(sys))
+                    {
+                        UnbudgetedSystems.Remove(sys);
+                    }
+                }
+            }
         }
 
         public void ExportBudgetExecute()
