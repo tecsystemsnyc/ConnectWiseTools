@@ -155,6 +155,40 @@ namespace TECUserControlLibrary.ViewModels
         public void PopulateSystems(TECBid bid)
         {
             Systems = bid.Systems;
+            Systems.CollectionChanged += Systems_CollectionChanged;
+        }
+
+        private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(Object item in e.NewItems)
+                {
+                    var sys = item as TECSystem;
+                    if(sys.PriceWithEquipment != -1)
+                    {
+                        BudgetedSystems.Add(sys);
+                    }
+                    else if (sys.PriceWithEquipment == -1)
+                    {
+                        UnbudgetedSystems.Add(sys);
+                    }
+                }
+            }
+            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Object item in e.OldItems)
+                {
+                    var sys = item as TECSystem;
+                    if (BudgetedSystems.Contains(sys))
+                    {
+                        BudgetedSystems.Remove(sys);
+                    } else if (UnbudgetedSystems.Contains(sys))
+                    {
+                        UnbudgetedSystems.Remove(sys);
+                    }
+                }
+            }
         }
 
         public void ExportBudgetExecute()
