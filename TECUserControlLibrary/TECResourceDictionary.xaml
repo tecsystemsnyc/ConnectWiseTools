@@ -37,9 +37,11 @@
     <Style TargetType="Button">
         <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
@@ -49,7 +51,8 @@
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
-        
+        <Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>
+
     </Style>
 
     <Style TargetType="DataGridColumnHeader">
