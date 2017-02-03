@@ -30,6 +30,7 @@ namespace Tests
         static TECPage expectedPage;
         static TECVisualScope expectedVisualScope;
         static TECController expectedController;
+        static TECProposalScope expectedPropScope;
 
         static string path;
 
@@ -50,6 +51,7 @@ namespace Tests
         static TECPage actualPage;
         static TECVisualScope actualVisualScope;
         static TECController actualController;
+        static TECProposalScope actualPropScope;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -97,6 +99,16 @@ namespace Tests
             expectedVisualScope = expectedPage.PageScope[0];
 
             expectedController = expectedBid.Controllers[0];
+
+            expectedPropScope = null;
+            foreach (TECProposalScope propScope in expectedBid.ProposalScope)
+            {
+                if (propScope.Scope.Name == "Prop System")
+                {
+                    expectedPropScope = propScope;
+                    break;
+                }
+            }
 
             path = Path.GetTempFileName();
 
@@ -236,6 +248,15 @@ namespace Tests
                 if (con.Guid == expectedController.Guid)
                 {
                     actualController = con;
+                    break;
+                }
+            }
+
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
                     break;
                 }
             }
@@ -435,7 +456,10 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_PropScope()
         {
-            Assert.Fail();
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+            Assert.AreEqual(expectedPropScope.Notes[0].Guid, actualPropScope.Notes[0].Guid);
+            Assert.AreEqual(expectedPropScope.Notes[0].Branches[0].Guid, actualPropScope.Notes[0].Branches[0].Guid);
         }
 
         [TestMethod]

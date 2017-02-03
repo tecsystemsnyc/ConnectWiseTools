@@ -2218,5 +2218,154 @@ namespace Tests
 
 
         #endregion
+
+        #region Save Proposal Scope
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_IsProposed()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0];
+            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Add_Note()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0];
+            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note", "", new ObservableCollection<TECScopeBranch>());
+            expectedPropScope.Notes.Add(expectedNote);
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch actualNote = null;
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Name, actualNote.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Remove_Note()
+        {
+            //Act
+            TECProposalScope propScopeToModify = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    propScopeToModify = propScope;
+                    break;
+                }
+            }
+            int numOldNotes = propScopeToModify.Notes.Count;
+            TECScopeBranch noteToRemove = propScopeToModify.Notes[0];
+            propScopeToModify.Notes.Remove(noteToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == propScopeToModify.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == noteToRemove.Guid) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((numOldNotes - 1), actualPropScope.Notes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Edit_Note()
+        {
+            //Act
+            TECProposalScope expectedPropScope = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    expectedPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch noteToModify = expectedPropScope.Notes[0];
+            noteToModify.Name = "Edited note";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch actualNote = null;
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == noteToModify.Guid)
+                {
+                    actualNote = noteToModify;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(noteToModify.Name, actualNote.Name);
+            Assert.IsNotNull(actualNote);
+        }
+
+        #endregion Save Proposal Scope
     }
 }
