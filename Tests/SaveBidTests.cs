@@ -15,7 +15,7 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
-        const bool DEBUG = false;
+        const bool DEBUG = true;
 
         TECBid bid;
         ChangeStack testStack;
@@ -2249,6 +2249,34 @@ namespace Tests
                     actualPropScope = propScope;
                     break;
                 }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_IsProposed_InProposalScope()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0].Children[0];
+            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                foreach (TECProposalScope child in propScope.Children)
+                {
+                    if (child.Scope.Guid == expectedPropScope.Scope.Guid)
+                    {
+                        actualPropScope = propScope;
+                        break;
+                    }
+                }
+                if (actualPropScope != null) break;
             }
 
             //Assert

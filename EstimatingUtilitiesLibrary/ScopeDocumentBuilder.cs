@@ -22,11 +22,16 @@ namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
-        private const string indentSize = "1cm";
-        private const string doubleIndentSize = "2cm";
+        private const string tabSize = "0.5cm";
         private const string beforeParagraphSize = "0.5cm";
-        private static List<String> itemLetters = new List<string>(new string[] {
-        "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","BB","CC","DD","EE","FF","GG","HH","II","JJ","KK","LL","MM","NN","OO","PP"});
+        private static List<string> itemLetters = new List<string>(new string[] 
+        {
+            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP"
+        });
+        private static List<string> itemNumerals = new List<string>(new string[]
+        {
+            "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"
+        });
 
         public static void CreateScopeDocument(TECBid bid, string path)
         {
@@ -175,17 +180,24 @@ namespace EstimatingUtilitiesLibrary
             paragraph.Format.Shading.Color = Colors.LightGray;
             paragraph = document.LastSection.AddParagraph();
             paragraph.AddLineBreak();
+
+            int i = 0;
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {
-                addScopeBranch(branch, paragraph, 0);
+                addScopeBranch(branch, paragraph, 0, (itemLetters[i] + "."));
+                i++;
+                paragraph.AddLineBreak();
             }
-            paragraph.AddFormattedText("•   Provide a BMS and Automatic Temperature functions for the following mechanical systems:");
+            paragraph.AddFormattedText(itemLetters[i] + ".");
+            paragraph.AddTab();
+            paragraph.AddFormattedText("Provide a BMS and Automatic Temperature functions for the following mechanical systems:");
+            paragraph.AddLineBreak();
             paragraph.AddLineBreak();
             createSystemTree(paragraph, bid);
             
         }
 
-        private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs)
+        private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs, string tabChar = "•")
         {
             string scopeString = branch.Name;
             if (branch.Description != "")
@@ -196,7 +208,12 @@ namespace EstimatingUtilitiesLibrary
             {
                 paragraph.AddTab();
             }
-            paragraph.AddFormattedText("•   " + scopeString);
+            paragraph.AddFormattedText(tabChar);
+            if (tabChar != "•")
+            {
+                paragraph.AddTab();
+            }
+            paragraph.AddFormattedText(scopeString);
             paragraph.AddLineBreak();
             
             foreach (TECScopeBranch childBranch in branch.Branches)
@@ -207,7 +224,7 @@ namespace EstimatingUtilitiesLibrary
 
         private static void createSystemTree(Paragraph paragraph, TECBid bid)
         {
-            int itemNum = 1;
+            int sysNum = 1;
             foreach (TECProposalScope systemProp in bid.ProposalScope)
             {
                 if (systemProp.IsProposed)
@@ -224,8 +241,16 @@ namespace EstimatingUtilitiesLibrary
                         systemString += ": " + system.Description;
                     }
 
-                    paragraph.AddFormattedText(itemNum.ToString() + " " + systemString);
+                    paragraph.AddFormattedText(sysNum.ToString() + ".");
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(systemString);
                     paragraph.AddLineBreak();
+
+                    foreach (TECScopeBranch branch in systemProp.Notes)
+                    {
+                        addScopeBranch(branch, paragraph, 2);
+                    }
+
                     foreach (TECProposalScope equipProp in systemProp.Children)
                     {
                         if (equipProp.IsProposed)
@@ -246,6 +271,11 @@ namespace EstimatingUtilitiesLibrary
                             paragraph.AddFormattedText("•" + equipmentString);
                             paragraph.AddLineBreak();
 
+                            foreach(TECScopeBranch branch in equipProp.Notes)
+                            {
+                                addScopeBranch(branch, paragraph, 3);
+                            }
+
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
                                 if (ssProp.IsProposed)
@@ -258,13 +288,18 @@ namespace EstimatingUtilitiesLibrary
                                     paragraph.AddTab();
                                     paragraph.AddFormattedText("•" + subScopeString);
                                     paragraph.AddLineBreak();
+
+                                    foreach(TECScopeBranch branch in ssProp.Notes)
+                                    {
+                                        addScopeBranch(branch, paragraph, 4);
+                                    }
                                 }
                             }
                         }
                         
                     }
                     paragraph.AddLineBreak();
-                    itemNum++;
+                    sysNum++;
                 }
                 
             }
