@@ -137,7 +137,9 @@
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
                  Grid.Column="3"
-                 Margin="2"
+                 VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Estimator:" Grid.Column="4"
@@ -146,7 +148,9 @@
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
                 Grid.Column="5"
-                Margin="2"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Salesperson:" Grid.Column="6"
@@ -155,7 +159,9 @@
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
                 Grid.Column="7"
-                Margin="2"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
             </Grid>
