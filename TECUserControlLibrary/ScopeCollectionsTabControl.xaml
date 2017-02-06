@@ -27,7 +27,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Path=ViewModel.SearchString}"
-                     Margin="2,5,2,5"/>
+                     Height="24"
+                     VerticalContentAlignment="Center"/>
             <Button Grid.Column="1"
                     Content="Search"
                     Margin="2"
