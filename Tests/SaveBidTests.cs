@@ -2272,7 +2272,7 @@ namespace Tests
                 {
                     if (child.Scope.Guid == expectedPropScope.Scope.Guid)
                     {
-                        actualPropScope = propScope;
+                        actualPropScope = child;
                         break;
                     }
                 }

@@ -117,9 +117,7 @@ namespace TECUserControlLibrary.ViewModels
         private bool saveSuccessful;
         private string bidDBFilePath;
         public string startupFile;
-        public string pointCSVDirectoryPath;
         public string scopeDirectoryPath;
-        public string documentDirectoryPath;
         #endregion
 
         #region Delgates
@@ -268,9 +266,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
-            if (documentDirectoryPath != null)
+            if (scopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = documentDirectoryPath;
+                saveFileDialog.InitialDirectory = scopeDirectoryPath;
             }
             else
             {
@@ -301,9 +299,9 @@ namespace TECUserControlLibrary.ViewModels
         private string getCSVSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (pointCSVDirectoryPath != null)
+            if (scopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = pointCSVDirectoryPath;
+                saveFileDialog.InitialDirectory = scopeDirectoryPath;
             }
             else
             {
@@ -617,7 +615,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (path != null)
             {
-                documentDirectoryPath = Path.GetDirectoryName(path);
+                scopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
@@ -637,7 +635,7 @@ namespace TECUserControlLibrary.ViewModels
             string path = getCSVSavePath();
             if (path != null)
             {
-                pointCSVDirectoryPath = Path.GetDirectoryName(path);
+                scopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
