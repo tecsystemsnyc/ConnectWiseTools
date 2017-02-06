@@ -252,6 +252,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
         public static TableField IsProposed = new TableField("IsProposed", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ProposalScopeID
+        };
     }
 
     public class ProposalScopeScopeBranchTable : TableBase
@@ -535,7 +540,8 @@ namespace EstimatingUtilitiesLibrary
             new ScopeConnectionTable(),
             new ConnectionConnectionTypeTable(),
             new ProposalScopeTable(),
-            new ProposalScopeScopeBranchTable()
+            new ProposalScopeScopeBranchTable(),
+            new BidScopeBranchTable()
             };
     }
 

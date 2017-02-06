@@ -24,8 +24,8 @@ namespace EstimatingUtilitiesLibrary
         public TECBid Bid;
         public TECTemplates Templates;
 
-        private const bool DEBUG_PROPERTIES = true;
-        private const bool DEBUG_STACK = true;
+        private const bool DEBUG_PROPERTIES = false;
+        private const bool DEBUG_STACK = false;
         
         private bool isDoing = false;
         
@@ -114,6 +114,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECController controller in Bid.Controllers)
             {
                 controller.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach (TECProposalScope propScope in Bid.ProposalScope)
+            {
+                propScope.PropertyChanged += Object_PropertyChanged;
             }
         }
 

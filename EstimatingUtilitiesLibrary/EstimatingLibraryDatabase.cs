@@ -156,6 +156,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECScopeBranch branch in bid.ScopeTree)
                 {
                     addScopeTree(branch);
+                    addScopeBranchBidRelation(branch, bid.InfoGuid);
                 }
                 
                 foreach (TECNote note in bid.Notes)
@@ -204,7 +205,7 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach(TECProposalScope propScope in bid.ProposalScope)
                 {
-                    addProposalScope(propScope);
+                    addFullProposalScope(propScope);
                 }
                 
             }
@@ -435,6 +436,14 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addScopeTreeRelation(refObject as TECScopeBranch, tarObject as TECScopeBranch);
                 }
+                else if (refObject is TECProposalScope)
+                {
+                    addScopeBranchInProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
+                }
+                else if (refObject is TECBid)
+                {
+                    addScopeBranchBidRelation(tarObject as TECScopeBranch, (refObject as TECBid).InfoGuid);
+                }
             }
             else if (tarObject is TECManufacturer)
             {
@@ -613,6 +622,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     throw new NotImplementedException();
                 }
+            }
+            else if (tarObject is TECProposalScope)
+            {
+                editProposalScope(tarObject as TECProposalScope);
             }
             else
             {
@@ -836,6 +849,20 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
+        static private void addFullProposalScope(TECProposalScope propScope)
+        {
+            addProposalScope(propScope);
+            foreach (TECScopeBranch branch in propScope.Notes)
+            {
+                addScopeTree(branch);
+                addScopeBranchInProposalScope(branch, propScope);
+            }
+            foreach (TECProposalScope child in propScope.Children)
+            {
+                addFullProposalScope(child);
+            }
+        }
+
         #region Add Object Functions
 
         static private void addSystem(TECSystem system)
@@ -1027,18 +1054,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Error: Couldn't add item to TECProposalScopeTable.");
             }
-            else
-            {
-                foreach(TECScopeBranch branch in proposalScope.Notes)
-                {
-                    addScopeTree(branch);
-                    addScopeBranchInProposalScope(branch.Guid, proposalScope.Scope.Guid);
-                }
-                foreach(TECProposalScope child in proposalScope.Children)
-                {
-                    addProposalScope(child);
-                }
-            }
         }
         static private void addLocation(TECLocation location)
         {
@@ -1099,6 +1114,17 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDeviceTECManufacturer table.");
+            }
+        }
+        static private void addScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(BidScopeBranchTable.BidID.Name, bidID.ToString());
+            data.Add(BidScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+
+            if (!SQLiteDB.Insert(BidScopeBranchTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECBidTECScopeBranch table.");
             }
         }
         static private void addScopeTreeRelation(TECScopeBranch parentBranch, TECScopeBranch childBranch)
@@ -1223,11 +1249,11 @@ namespace EstimatingUtilitiesLibrary
             }
         }
         
-        static private void addScopeBranchInProposalScope(Guid branchID, Guid propScopeID)
+        static private void addScopeBranchInProposalScope(TECScopeBranch branch, TECProposalScope propScope)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branchID.ToString());
-            data.Add(ProposalScopeScopeBranchTable.ProposalScopeID.Name, propScopeID.ToString());
+            data.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
+            data.Add(ProposalScopeScopeBranchTable.ProposalScopeID.Name, propScope.Scope.Guid.ToString());
 
             if (!SQLiteDB.Insert(ProposalScopeScopeBranchTable.TableName, data))
             {
@@ -1471,6 +1497,18 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Replace(ControllerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't update item in TECController table");
+            }
+        }
+
+        static private void editProposalScope(TECProposalScope propScope)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ProposalScopeTable.ProposalScopeID.Name, propScope.Scope.Guid.ToString());
+            data.Add(ProposalScopeTable.IsProposed.Name, propScope.IsProposed.ToInt().ToString());
+
+            if (!SQLiteDB.Replace(ProposalScopeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECProposalScope table");
             }
         }
         #endregion Edit Methods
@@ -1825,8 +1863,8 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
 
-            string command =    "select * from TECScopeBranch where ScopeBranchID not in ";
-            command +=          "(select ChildID from TECScopeBranchHierarchy)";
+            string command =    "select * from TECScopeBranch where ScopeBranchID in (select ScopeBranchID from TECBidTECScopeBranch where ScopeBranchID not in ";
+            command +=          "(select ChildID from TECScopeBranchHierarchy))";
 
             DataTable mainBranchDT = SQLiteDB.getDataFromCommand(command);
 
