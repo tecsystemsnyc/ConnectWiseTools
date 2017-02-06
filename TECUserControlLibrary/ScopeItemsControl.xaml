@@ -14,12 +14,22 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="ScopeDragAdorner">
+                <StackPanel>
+                    <local:ScopeControl Content="{Binding}"
+                                        Height="72" Width="72"
+                                        NameLabel="{Binding Name}"
+                                        DescriptionLabel="{Binding Description}"/>
+                </StackPanel>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Path=ScopeSource}"
                           dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True"
+                          dd:DragDrop.DragAdornerTemplate="{StaticResource ScopeDragAdorner}"
                           Background="{StaticResource SectionBackgroundBrush}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

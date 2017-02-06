@@ -50,7 +50,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Key="DataGridControlTemplate" TargetType="{x:Type DataGrid}">
+    <!--<ControlTemplate x:Key="DataGridControlTemplate" TargetType="{x:Type DataGrid}">
         <Grid>
             <Border BorderBrush="{TemplateBinding BorderBrush}" 
                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -76,7 +76,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <!--<Button Command="ApplicationCommands.SelectAll" Focusable="False" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}">
+                            <Button Command="ApplicationCommands.SelectAll" Focusable="False" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}}">
                                 <Button.Visibility>
                                     <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
                                         <Binding.ConverterParameter>
@@ -84,7 +84,7 @@
                                         </Binding.ConverterParameter>
                                     </Binding>
                                 </Button.Visibility>
-                            </Button>-->
+                            </Button>
                             <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1">
                                 <DataGridColumnHeadersPresenter.Visibility>
                                     <Binding Path="HeadersVisibility" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DataGrid}}">
@@ -109,6 +109,6 @@
                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
             </ScrollViewer>
         </Grid>
-    </ControlTemplate>
+    </ControlTemplate>-->
 
 </ResourceDictionary>

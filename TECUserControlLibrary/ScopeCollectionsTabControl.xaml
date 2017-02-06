@@ -22,13 +22,14 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Path=ViewModel.SearchString}"
                      Height="24"
-                     VerticalContentAlignment="Center"/>
+                     VerticalContentAlignment="Center"
+                     Margin="2"/>
             <Button Grid.Column="1"
                     Content="Search"
                     Margin="2"
