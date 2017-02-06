@@ -117,7 +117,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECProposalScope propScope in Bid.ProposalScope)
             {
-                propScope.PropertyChanged += Object_PropertyChanged;
+                registerPropScope(propScope);
             }
         }
 
@@ -207,6 +207,15 @@ namespace EstimatingUtilitiesLibrary
             {
                 scope.PropertyChanged -= Object_PropertyChanged;
                 unregisterScope(scope);
+            }
+        }
+
+        private void registerPropScope(TECProposalScope pScope)
+        {
+            pScope.PropertyChanged += Object_PropertyChanged;
+            foreach(TECProposalScope child in pScope.Children)
+            {
+                child.PropertyChanged += Object_PropertyChanged;
             }
         }
 
