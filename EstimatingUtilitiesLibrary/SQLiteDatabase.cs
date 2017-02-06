@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (!File.Exists(DBPath))
                 {
-                    Console.WriteLine("File Created");
+                    Console.WriteLine("Database File Created");
                     SQLiteConnection.CreateFile(DBPath);
                 }
                 
@@ -47,7 +47,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch
             {
-                Console.WriteLine("Connection already closed");
+                Console.WriteLine("Deconstructing SQLiteDatabase. Connection already closed.");
             }
         }
 

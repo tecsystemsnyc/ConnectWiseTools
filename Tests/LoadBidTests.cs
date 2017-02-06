@@ -244,6 +244,8 @@ namespace Tests
 
             Assert.AreEqual("Scope 3", actualScopeGrandChild.Name);
             Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
+
+            Assert.AreEqual(1, actualBid.ScopeTree.Count);
         }
 
         [TestMethod]

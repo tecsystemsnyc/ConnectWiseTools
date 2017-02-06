@@ -192,17 +192,14 @@ namespace EstimatingLibrary
 
         private void EquipmentChanged(string name)
         {
-            Console.WriteLine(name);
             if(name == "Quantity")
             {
-                Console.WriteLine("Quantity Raised");
                 RaisePropertyChanged("SubScopeQuantity");
                 RaisePropertyChanged("TotalBudgetPrice");
                 RaisePropertyChanged("PriceWithEquipment");
                 RaisePropertyChanged("EquipmentQuantity");
             } else if (name == "SubScopeQuantity")
             {
-                Console.WriteLine("SubScopeQuantity Raised");
                 RaisePropertyChanged("SubScopeQuantity");
             } else if (name == "BudgetPrice")
             {

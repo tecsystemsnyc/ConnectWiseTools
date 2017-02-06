@@ -15,6 +15,8 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
+        const bool DEBUG = false;
+
         TECBid bid;
         ChangeStack testStack;
         string path;
@@ -37,8 +39,14 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveBid test bid: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveBid test bid: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
         }
 
         #region Save BidInfo
@@ -1311,6 +1319,7 @@ namespace Tests
         public void Save_Bid_Add_Branch()
         {
             //Act
+            int oldNumBranches = bid.ScopeTree.Count();
             TECScopeBranch expectedBranch = new TECScopeBranch("New Branch", "Branch description", new ObservableCollection<TECScopeBranch>());
             bid.ScopeTree.Add(expectedBranch);
 
@@ -1331,6 +1340,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
             Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual((oldNumBranches + 1), actualBid.ScopeTree.Count);
         }
 
         [TestMethod]
@@ -1388,7 +1398,7 @@ namespace Tests
                 if (branch.Guid == branchToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumBranches - 1), actualBid.ScopeTree.Count());
+            Assert.AreEqual((oldNumBranches - 1), actualBid.ScopeTree.Count);
         }
 
         [TestMethod]
@@ -2250,6 +2260,7 @@ namespace Tests
         {
             //Act
             TECProposalScope expectedPropScope = bid.ProposalScope[0];
+            int oldNumNotes = expectedPropScope.Notes.Count;
             TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note", "", new ObservableCollection<TECScopeBranch>());
             expectedPropScope.Notes.Add(expectedNote);
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -2278,6 +2289,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedNote.Name, actualNote.Name);
+            Assert.AreEqual((oldNumNotes + 1), actualPropScope.Notes.Count);
         }
 
         [TestMethod]
