@@ -34,41 +34,5 @@ namespace EstimateBuilder.Properties {
                 this["ScopeDirectoryPath"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DrawingDirectoryPath {
-            get {
-                return ((string)(this["DrawingDirectoryPath"]));
-            }
-            set {
-                this["DrawingDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PointCSVDirectoryPath {
-            get {
-                return ((string)(this["PointCSVDirectoryPath"]));
-            }
-            set {
-                this["PointCSVDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DocumentDirectoryPath {
-            get {
-                return ((string)(this["DocumentDirectoryPath"]));
-            }
-            set {
-                this["DocumentDirectoryPath"] = value;
-            }
-        }
     }
 }

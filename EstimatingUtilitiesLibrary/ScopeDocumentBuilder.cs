@@ -250,6 +250,9 @@ namespace EstimatingUtilitiesLibrary
                         addScopeBranch(branch, paragraph, 2);
                     }
 
+                    paragraph.AddLineBreak();
+
+                    int equipIndex = 0;
                     foreach (TECProposalScope equipProp in systemProp.Children)
                     {
                         if (equipProp.IsProposed)
@@ -267,7 +270,9 @@ namespace EstimatingUtilitiesLibrary
                             }
 
                             paragraph.AddTab();
-                            paragraph.AddFormattedText("• " + equipmentString);
+                            paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ".");
+                            paragraph.AddTab();
+                            paragraph.AddFormattedText(equipmentString);
                             paragraph.AddLineBreak();
 
                             foreach(TECScopeBranch branch in equipProp.Notes)
@@ -275,6 +280,9 @@ namespace EstimatingUtilitiesLibrary
                                 addScopeBranch(branch, paragraph, 3);
                             }
 
+                            paragraph.AddLineBreak();
+
+                            int ssIndex = 0;
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
                                 if (ssProp.IsProposed)
@@ -285,15 +293,19 @@ namespace EstimatingUtilitiesLibrary
 
                                     paragraph.AddTab();
                                     paragraph.AddTab();
-                                    paragraph.AddFormattedText("• " + subScopeString);
+                                    paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ".");
+                                    paragraph.AddTab();
+                                    paragraph.AddFormattedText(subScopeString);
                                     paragraph.AddLineBreak();
 
                                     foreach(TECScopeBranch branch in ssProp.Notes)
                                     {
                                         addScopeBranch(branch, paragraph, 4);
                                     }
+                                    ssIndex++;
                                 }
                             }
+                            equipIndex++;
                         }
                         
                     }

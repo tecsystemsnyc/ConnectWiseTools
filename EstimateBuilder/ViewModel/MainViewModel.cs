@@ -42,9 +42,7 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             
-            pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
-            documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
             
             BidSet += () =>
             {
@@ -122,7 +120,7 @@ namespace EstimateBuilder.ViewModel
                     MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                     return;
                 }
-                Properties.Settings.Default.DrawingDirectoryPath = Path.GetDirectoryName(path);
+                Properties.Settings.Default.ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
@@ -190,9 +188,9 @@ namespace EstimateBuilder.ViewModel
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (Properties.Settings.Default.DrawingDirectoryPath != null)
+            if (Properties.Settings.Default.ScopeDirectoryPath != null)
             {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.DrawingDirectoryPath;
+                openFileDialog.InitialDirectory = Properties.Settings.Default.ScopeDirectoryPath;
             }
             else
             {

@@ -101,9 +101,7 @@ namespace Scope_Builder.ViewModel
             TemplatesVisibility = Visibility.Visible;
 
             startupFile = Properties.Settings.Default.StartupFile;
-            pointCSVDirectoryPath = Properties.Settings.Default.PointCSVDirectoryPath;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
-            documentDirectoryPath = Properties.Settings.Default.DocumentDirectoryPath;
 
             checkForOpenWith(Properties.Settings.Default.StartupFile);
         }

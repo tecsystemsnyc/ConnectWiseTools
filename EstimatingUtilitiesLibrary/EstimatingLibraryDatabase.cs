@@ -625,7 +625,7 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (tarObject is TECProposalScope)
             {
-                editProposalScope(tarObject as TECProposalScope);
+                  editProposalScope(tarObject as TECProposalScope);
             }
             else
             {
