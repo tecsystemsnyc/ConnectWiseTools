@@ -29,7 +29,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                PopulateSystems(_bid);
             }
         }
 
@@ -144,9 +143,11 @@ namespace TECUserControlLibrary.ViewModels
         
         public ICommand ExportBudgetCommand { get; private set; }
 
-        public BudgetViewModel()
+        public BudgetViewModel(TECBid bid)
         {
-            Systems = new ObservableCollection<TECSystem>();
+            Console.WriteLine("here");
+            Bid = bid;
+            PopulateSystems(bid);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
 
             ManualAdjustmentPercentage = 0;
@@ -165,13 +166,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach(Object item in e.NewItems)
                 {
+                    Console.WriteLine("System added");
                     var sys = item as TECSystem;
                     if(sys.PriceWithEquipment != -1)
                     {
+                        Console.WriteLine("Added to budgeted");
                         BudgetedSystems.Add(sys);
                     }
                     else if (sys.PriceWithEquipment == -1)
                     {
+                        Console.WriteLine("Added to unbudeg");
                         UnbudgetedSystems.Add(sys);
                     }
                 }

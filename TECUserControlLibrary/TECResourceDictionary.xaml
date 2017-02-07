@@ -51,7 +51,7 @@
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
-        <Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>
+        <!--<Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>-->
         <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
     </Style>
 

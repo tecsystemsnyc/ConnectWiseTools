@@ -172,8 +172,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupBudget()
         {
-            BudgetVM = new BudgetViewModel();
-            BudgetVM.Bid = Bid;
+            BudgetVM = new BudgetViewModel(Bid);
         }
         #endregion
         

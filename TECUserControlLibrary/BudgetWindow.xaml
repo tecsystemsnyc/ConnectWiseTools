@@ -1,17 +1,17 @@
 ﻿<UserControl x:Class="TECUserControlLibrary.BudgetWindow"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:local="clr-namespace:TECUserControlLibrary"
-            mc:Ignorable="d"
-            xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d"
+             xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:uLib="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
-            MinHeight="350"
-            MinWidth="500"
+             MinHeight="350"
+             MinWidth="500"
              x:Name="parent"
-            Background="{DynamicResource WindowBackgroundBrush}">
+             Background="{DynamicResource WindowBackgroundBrush}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -145,7 +145,7 @@
                            Grid.Row="2" 
                            Background="{DynamicResource WindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,15" Width="275"/>
         <Button Content="Export Budget" Command="{Binding ExportBudgetCommand}" Grid.Row="2" Grid.Column="1" Margin="5"/>
     </Grid>
 </UserControl>

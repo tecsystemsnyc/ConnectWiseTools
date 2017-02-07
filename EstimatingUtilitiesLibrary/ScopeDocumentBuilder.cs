@@ -241,8 +241,7 @@ namespace EstimatingUtilitiesLibrary
                         systemString += ": " + system.Description;
                     }
 
-                    paragraph.AddFormattedText(sysNum.ToString() + ".");
-                    paragraph.AddTab();
+                    paragraph.AddFormattedText(sysNum.ToString() + ". ");
                     paragraph.AddFormattedText(systemString);
                     paragraph.AddLineBreak();
 
@@ -268,7 +267,7 @@ namespace EstimatingUtilitiesLibrary
                             }
 
                             paragraph.AddTab();
-                            paragraph.AddFormattedText("•" + equipmentString);
+                            paragraph.AddFormattedText("• " + equipmentString);
                             paragraph.AddLineBreak();
 
                             foreach(TECScopeBranch branch in equipProp.Notes)
@@ -286,7 +285,7 @@ namespace EstimatingUtilitiesLibrary
 
                                     paragraph.AddTab();
                                     paragraph.AddTab();
-                                    paragraph.AddFormattedText("•" + subScopeString);
+                                    paragraph.AddFormattedText("• " + subScopeString);
                                     paragraph.AddLineBreak();
 
                                     foreach(TECScopeBranch branch in ssProp.Notes)
