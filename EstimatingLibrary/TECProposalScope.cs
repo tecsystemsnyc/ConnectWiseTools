@@ -79,14 +79,15 @@ namespace EstimatingLibrary
                 {
                     if (item is TECScopeBranch)
                     {
-                        //Do Nothing
+                        NotifyPropertyChanged("Add", this, item);
                     }
                     else if (item is TECScope)
                     {
                         addProposalScope(item as TECScope);
+                        NotifyPropertyChanged("MetaAdd", this, item);
                     }
                    
-                    NotifyPropertyChanged("MetaAdd", this, item);
+                    
                     
                 }
             }
@@ -96,14 +97,13 @@ namespace EstimatingLibrary
                 {
                     if (item is TECScopeBranch)
                     {
-                        //Do Nothing
+                        NotifyPropertyChanged("Remove", this, item);
                     }
                     else if (item is TECScope)
                     {
                         removeProposalScope(item as TECScope);
+                        NotifyPropertyChanged("MetaRemove", this, item);
                     }
-                    
-                    NotifyPropertyChanged("MetaRemove", this, item);
                     
                 }
             }
