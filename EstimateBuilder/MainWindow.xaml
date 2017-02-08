@@ -79,7 +79,7 @@
                           Command="{Binding LoadTemplatesCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
-            <MenuItem Header="_Drawing">
+            <MenuItem Header="_Drawing" Visibility="Collapsed">
                 <MenuItem Header="_Load"
                           Command="{Binding LoadDrawingCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
@@ -122,7 +122,7 @@
                     <view:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
-                <TabItem Header="Drawing">
+                <TabItem Header="Drawing" Visibility="Collapsed">
                     <view:DrawingView
                         ViewModel="{Binding DrawingVM}"/>
                 </TabItem>

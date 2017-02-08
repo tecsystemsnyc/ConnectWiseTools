@@ -14,7 +14,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
+                <ResourceDictionary Source="/TECUserControlLibrary;component/TECControlTemplateDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!--Global View Model Locator-->
