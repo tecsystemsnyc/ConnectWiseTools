@@ -1,9 +1,14 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -45,31 +50,7 @@ namespace EstimatingUtilitiesLibrary
             return false;
         }
 
-        public static int StringToInt(string str)
-        {
-            int i;
-            if (!int.TryParse(str, out i))
-            {
-                throw new InvalidCastException("StringToInt() failed. String: " + str);
-            }
-            else
-            {
-                return i;
-            }
-        }
-
-        public static double StringToDouble(string str)
-        {
-            double d;
-            if (!double.TryParse(str, out d))
-            {
-                throw new InvalidCastException("StringToDouble() failed. String: " + str);
-            }
-            else
-            {
-                return d;
-            }
-        }
+        
 
         public static string CommaSeparatedString(List<string> strings)
         {
@@ -86,9 +67,98 @@ namespace EstimatingUtilitiesLibrary
             }
             return css;
         }
+
+        public static double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
+        {
+            var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
+
+            return length;
+        }
+
+        public static BitmapImage ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destBitmap = new Bitmap(width, height);
+
+            destBitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destBitmap))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+            MemoryStream ms = new MemoryStream();
+            destBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            ms.Position = 0;
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.StreamSource = ms;
+            bi.EndInit();
+            bi.Freeze();
+            
+            destBitmap.Dispose();
+
+            return bi;
+        }
+
+        #region Cast Conversions
+
+        #region String Extensions
+
+        public static int ToInt(this string str)
+        {
+            int i;
+            if (!int.TryParse(str, out i))
+            {
+                throw new InvalidCastException("StringToInt() failed. String: " + str);
+            }
+            else
+            {
+                return i;
+            }
+        }
+
+        public static double ToDouble(this string str)
+        {
+            double d;
+            if (!double.TryParse(str, out d))
+            {
+                throw new InvalidCastException("StringToDouble() failed. String: " + str);
+            }
+            else
+            {
+                return d;
+            }
+        }
+
+        #endregion String Extensions
+
+        public static int ToInt(this bool b)
+        {
+            if (b) { return 1; }
+            else { return 0; }
+        }
+
+        public static bool ToBool(this int i)
+        {
+            if (i == 1) { return true; }
+            else if (i == 0) { return false; }
+            else { throw new InvalidCastException("Int to Bool cast failed. Int: " + i); }
+        }
+
+        #endregion Cast Conversions
     }
 
-    public enum EditIndex { System, Equipment, SubScope, Device, Point };
+    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };
     public enum GridIndex { Systems, Scope, Notes, Exclusions};
     public enum AddIndex { System, Equipment, SubScope, Devices, Tags};
     public enum LocationScopeType { System, Equipment, SubScope};

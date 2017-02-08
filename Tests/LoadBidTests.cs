@@ -23,6 +23,13 @@ namespace Tests
 
         static TECTag actualTag;
 
+        static TECDrawing actualDrawing;
+        static TECPage actualPage;
+        static TECVisualScope actualVisScope;
+
+        static TECController actualController;
+        static TECConnection actualConnection;
+
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -50,6 +57,13 @@ namespace Tests
             actualManufacturer = actualBid.ManufacturerCatalog[0];
 
             actualTag = actualBid.Tags[0];
+
+            actualDrawing = actualBid.Drawings[0];
+            actualPage = actualDrawing.Pages[0];
+            actualVisScope = actualPage.PageScope[0];
+
+            actualController = actualBid.Controllers[0];
+            actualConnection = actualBid.Connections[0];
         }
 
         [TestMethod]
@@ -141,6 +155,8 @@ namespace Tests
             
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
+
+            Assert.AreEqual(actualConnection, actualSubScope.Connection);
         }
 
         [TestMethod]
@@ -158,9 +174,11 @@ namespace Tests
             
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
-            
-            string expectedWire = "Test Wire";
-            Assert.AreEqual(expectedWire, actualDevice.Wire);
+
+            ConnectionType expectedWire = ConnectionType.Fiber;
+            Assert.AreEqual(expectedWire, actualDevice.ConnectionType);
+
+            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
 
         [TestMethod]
@@ -226,6 +244,8 @@ namespace Tests
 
             Assert.AreEqual("Scope 3", actualScopeGrandChild.Name);
             Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
+
+            Assert.AreEqual(1, actualBid.ScopeTree.Count);
         }
 
         [TestMethod]
@@ -267,6 +287,132 @@ namespace Tests
 
             Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
+
+            Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
+            Assert.AreEqual(expectedText, actualController.Tags[0].Text);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Drawing()
+        {
+            //Assert
+            string expectedName = "Test Drawing";
+            string expectedDescription = "Test Drawing Description";
+
+            Assert.AreEqual(expectedName, actualDrawing.Name);
+            Assert.AreEqual(expectedDescription, actualDrawing.Description);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Page()
+        {
+            //Assert
+            int expectedPageNum = 1;
+
+            Assert.AreEqual(expectedPageNum, actualPage.PageNum);
+            Assert.AreEqual(actualVisScope, actualPage.PageScope[0]);
+        }
+
+        [TestMethod]
+        public void Load_Bid_VisualScope()
+        {
+            //Assert
+            double expectedXPos = 119;
+            double expectedYPos = 69.08;
+
+            Assert.AreEqual(expectedXPos, actualVisScope.X);
+            Assert.AreEqual(expectedYPos, actualVisScope.Y);
+            Assert.AreEqual(actualSystem, actualVisScope.Scope);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Controller()
+        {
+            //Arrange
+            string expectedName = "Test Controller";
+            string expectedDescription = "Test Controller Description";
+            double expectedCost = 64.94;
+
+            bool hasAI = false;
+            bool hasAO = false;
+
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == IOType.AI)
+                {
+                    hasAI = true;
+                }
+                else if (io.Type == IOType.AO)
+                {
+                    hasAO = true;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.Connections)
+            {
+                if (conn == actualConnection)
+                {
+                    hasConnection = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.IsTrue(hasAI);
+            Assert.IsTrue(hasAO);
+
+            Assert.IsTrue(hasConnection);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Connection()
+        {
+            //Arrange
+            double expectedLength = 493.45;
+
+            bool hasThreeC18 = false;
+            foreach (ConnectionType type in actualConnection.ConnectionTypes)
+            {
+                if (type == ConnectionType.ThreeC18)
+                {
+                    hasThreeC18 = true;
+                }
+            }
+
+            bool hasSubScope = false;
+            foreach (TECScope scope in actualConnection.Scope)
+            {
+                if (scope == actualSubScope)
+                {
+                    hasSubScope = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualConnection.Length);
+            Assert.IsTrue(hasThreeC18);
+            Assert.IsTrue(hasSubScope);
+        }
+
+        [TestMethod]
+        public void Load_Bid_ProposalScope()
+        {
+            //Arrange
+            TECProposalScope actualPropScope = actualBid.ProposalScope[0];
+
+            TECScope expectedScope = actualSystem;
+
+            bool expectedIsProposed = true;
+
+            string expectedPropScopeBranchName = "Proposal Scope";
+
+            //Assert
+            Assert.AreEqual(expectedScope, actualPropScope.Scope);
+            Assert.AreEqual(expectedIsProposed, actualPropScope.IsProposed);
+            Assert.AreEqual(expectedPropScopeBranchName, actualPropScope.Notes[0].Name);
         }
     }
 }

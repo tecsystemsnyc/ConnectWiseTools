@@ -15,7 +15,7 @@
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight.Ioc;
-
+using TECUserControlLibrary.ViewModels;
 
 namespace Scope_Builder.ViewModel
 {
@@ -44,20 +44,17 @@ namespace Scope_Builder.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<BudgetViewModel>();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
         public MainViewModel MainViewModel
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
-        }
-
-        public BudgetViewModel BudgetViewModel
-        {
-            get { return ServiceLocator.Current.GetInstance<BudgetViewModel>(); }
         }
         
         public static void Cleanup()

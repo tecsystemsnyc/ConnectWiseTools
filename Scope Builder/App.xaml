@@ -14,7 +14,8 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
-      </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/TECUserControlLibrary;component/TECControlTemplateDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
       <vm:ViewModelLocator x:Key="Locator" 
                            d:IsDataSource="True" />
       <Style x:Key="BudgetDataGridStyle" TargetType="{x:Type DataGrid}">

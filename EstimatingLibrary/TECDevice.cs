@@ -11,7 +11,8 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private string _wire;
+        private ConnectionType _connectionType;
+        private IOType _ioType;
         private TECManufacturer _manufacturer;
 
         public double Cost {
@@ -24,15 +25,24 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public string Wire
+        public ConnectionType ConnectionType
         {
-            get { return _wire; }
+            get { return _connectionType; }
             set
             {
                 var temp = this.Copy();
-                _wire = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Wire", temp, this);
+                _connectionType = value;
+                NotifyPropertyChanged("ConnectionType", temp, this);
+            }
+        }
+        public IOType IOType
+        {
+            get { return _ioType; }
+            set
+            {
+                var temp = this.Copy();
+                _ioType = value;
+                NotifyPropertyChanged("IOType", temp, this);
             }
         }
         public TECManufacturer Manufacturer
@@ -43,25 +53,28 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _manufacturer = value;
                 NotifyPropertyChanged("Manufacturer", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(string name, string description, double cost, string wire, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
+        public TECDevice(string name, string description, double cost, ConnectionType connectiontype, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
         {
             _cost = cost;
-            _wire = wire;
+            _connectionType = connectiontype;
             _manufacturer = manufacturer;
         }
-        public TECDevice(string name, string description, double cost, string wire, TECManufacturer manufacturer)
-            : this(name, description, cost, wire, manufacturer, Guid.NewGuid()) { }
-        public TECDevice() : this("", "", 0, "2c", new TECManufacturer()) { }
+        public TECDevice(string name, string description, double cost, ConnectionType connectionType, TECManufacturer manufacturer)
+            : this(name, description, cost, connectionType, manufacturer, Guid.NewGuid()) { }
+        public TECDevice() : this("", "", 0, 0, new TECManufacturer()) { }
         
         //Copy Constructor
         public TECDevice(TECDevice deviceSource) 
-            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.Wire, deviceSource.Manufacturer, deviceSource.Guid)
+            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.ConnectionType, deviceSource.Manufacturer, deviceSource.Guid)
         {
+            _connectionType = deviceSource.ConnectionType;
+            _ioType = deviceSource.IOType;
             _quantity = deviceSource.Quantity;
             _tags = new ObservableCollection<TECTag>(deviceSource.Tags);
         }

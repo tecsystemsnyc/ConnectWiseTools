@@ -26,60 +26,12 @@ namespace EstimateBuilder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplateDirectoryPath {
-            get {
-                return ((string)(this["TemplateDirectoryPath"]));
-            }
-            set {
-                this["TemplateDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ScopeDirectoryPath {
             get {
                 return ((string)(this["ScopeDirectoryPath"]));
             }
             set {
                 this["ScopeDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DrawingDirectoryPath {
-            get {
-                return ((string)(this["DrawingDirectoryPath"]));
-            }
-            set {
-                this["DrawingDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PointCSVDirectoryPath {
-            get {
-                return ((string)(this["PointCSVDirectoryPath"]));
-            }
-            set {
-                this["PointCSVDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DocumentDirectoryPath {
-            get {
-                return ((string)(this["DocumentDirectoryPath"]));
-            }
-            set {
-                this["DocumentDirectoryPath"] = value;
             }
         }
     }

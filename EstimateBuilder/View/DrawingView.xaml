@@ -5,45 +5,86 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:vm="clr-namespace:EstimateBuilder.ViewModel"
-             xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd ="urn:gong-wpf-dragdrop"
         mc:Ignorable="d ignore"
-        DataContext="{Binding Drawing, Source={StaticResource Locator}}" d:DesignWidth="960" d:DesignHeight="660">
+        x:Name="drawingControl" 
+             d:DesignWidth="960" d:DesignHeight="660">
 
     <UserControl.Resources>
-        <DataTemplate 
+        <ResourceDictionary>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=drawingControl, Path=ViewModel}"/>
+            <DataTemplate 
             DataType="{x:Type eLib:TECVisualScope}">
-            <Grid>
-                <Thumb
+                <Grid>
+                    <Thumb
                     Width="40"
                     Height="20"
                     DragDelta="Thumb_DragDelta">
-                    <Thumb.Template>
-                        <ControlTemplate>
-                            <Border BorderThickness="2" BorderBrush="Black">
-                                <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
-                                    <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Thumb.Template>
-                </Thumb>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                        <Thumb.Template>
+                            <ControlTemplate>
+                                <Border BorderThickness="2" BorderBrush="Black">
+                                    <Grid Background="{DynamicResource ItemBrush}" Cursor="Hand">
+                                        <TextBlock Text="{Binding Scope.Name}" HorizontalAlignment="Center"/>
+                                        <Grid.ContextMenu>
+                                            <ContextMenu ItemsSource="{Binding ConnectableScope}"
+                                                         DisplayMemberPath="Item3">
+                                                <ContextMenu.ItemContainerStyle>
+                                                    <Style TargetType="MenuItem">
+                                                        <Setter Property="Command" Value="{Binding Source={x:Reference drawingControl}, Path=ViewModel.ConnectCommand}" />
+                                                        <Setter Property="CommandParameter" Value="{Binding}"/>
+                                                    </Style>
+                                                </ContextMenu.ItemContainerStyle>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </DataTemplate>
+            </DataTemplate>
+
+            <DataTemplate
+            DataType="{x:Type eLib:TECVisualConnection}">
+                <Canvas>
+                    <Line
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    X1="{Binding Scope1.X}"
+                    Y1="{Binding Scope1.Y}"
+                    X2="{Binding Scope2.X}"
+                    Y2="{Binding Scope1.Y}"
+                        />
+                    <Line
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    X1="{Binding Scope2.X}"
+                    Y1="{Binding Scope1.Y}"
+                    X2="{Binding Scope2.X}"
+                    Y2="{Binding Scope2.Y}"
+                        />
+                </Canvas>
+            </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid 
+        DataContext="{Binding ElementName=drawingControl, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -60,22 +101,91 @@
                       DisplayMemberPath="Name"
                       SelectedItem="{Binding CurrentDrawing}"/>
         </Grid>
-
-        <DataGrid Grid.Column="0" 
-                  Grid.Row="1"
+        <TabControl Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.RowSpan="2">
+            <TabItem Header="Systems">
+                <DataGrid
                   ItemsSource="{Binding DisplaySystems}"
                   dd:DragDrop.IsDragSource="True"
                   AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Equipment">
+                <DataGrid
+                  ItemsSource="{Binding DisplayEquipment}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="SubScope">
+                <DataGrid
+                  ItemsSource="{Binding DisplaySubScope}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="System Name"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Controllers">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Name"/>
+                    <TextBox Text="{Binding ControllerName}"
+                             Grid.Column="1"
+                             Margin="5"/>
+                    <Label Content="Type"
+                           Grid.Row="1"/>
+                    <ComboBox ItemsSource="{Binding Templates.ControllerTemplates}"
+                              DisplayMemberPath="Name"
+                              SelectedValue="{Binding SelectedControllerTemplate}"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="5"/>
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                    Command="{Binding AddControllerCommand}"
+                    Content="Add Controller"
+                            Margin="5"/>
+                    <DataGrid Grid.Column="0" 
+                  Grid.Row="3"
+                              Grid.ColumnSpan="2"
+                  ItemsSource="{Binding Bid.Controllers}"
+                  dd:DragDrop.IsDragSource="True"
+                  AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Controller Name"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
+
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="40"/>
@@ -106,17 +216,44 @@
             <Button Content="-&gt;" Command="{Binding NextPageCommand}"
                     Grid.Column="8" Margin="5"/>
         </Grid>
-        <ScrollViewer Grid.Column="1"
-                      Grid.Row="1"
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"
+                                  MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.ColumnSpan="2"
                       HorizontalScrollBarVisibility="Auto">
-            <Grid>
-                <Image x:Name="imageControl"
-            Source="{Binding CurrentPage.Path}"
+                <Grid>
+                    <Image x:Name="imageControl"
+                        Source="{Binding CurrentBitmap}"
                        Stretch="None"
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Left" 
-            Grid.Column="1"/>
-                <ItemsControl x:Name="scopeOverlayItemsControl"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        Grid.Column="1"/>
+
+                    <ItemsControl x:Name="connectionsOverlayItemsControl"
+                      Background="Transparent"
+                      Grid.Column="1"
+                      ItemsSource="{Binding CurrentPage.Connections}"
+                      Width="{Binding ElementName=imageControl, Path=Width}"
+                      Height="{Binding ElementName=imageControl, Path=Height}"
+                      dd:DragDrop.IsDropTarget="True"
+                      dd:DragDrop.DropHandler="{Binding}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+                    <ItemsControl x:Name="scopeOverlayItemsControl"
                       Background="Transparent"
                       Grid.Column="1"
                       ItemsSource="{Binding CurrentPage.PageScope}"
@@ -124,19 +261,36 @@
                       Height="{Binding ElementName=imageControl, Path=Height}"
                       dd:DragDrop.IsDropTarget="True"
                       dd:DragDrop.DropHandler="{Binding}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style>
-                            <Setter Property="Canvas.Left" Value="{Binding X}" />
-                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </Grid>
+            </ScrollViewer>
+            <Grid Grid.Column="1"
+                  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Value="{Binding PercentageZoom}"
+                        Minimum=".1"
+                        Maximum="2"/>
+                <Label Grid.Column="3"
+                       Content="{Binding PercentageZoom, Mode=OneWay, Converter={cnvt:PercentageConverter}}"/>
             </Grid>
-        </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

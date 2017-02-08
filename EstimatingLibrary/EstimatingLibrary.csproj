@@ -81,17 +81,20 @@
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
     <Compile Include="TECBid.cs" />
     <Compile Include="TECConnection.cs" />
+    <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECController.cs" />
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECDrawing.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECExclusion.cs" />
+    <Compile Include="TECIO.cs" />
     <Compile Include="TECLabor.cs" />
     <Compile Include="TECLocation.cs" />
     <Compile Include="TECManufacturer.cs" />
     <Compile Include="TECNote.cs" />
     <Compile Include="TECObject.cs" />
     <Compile Include="TECPage.cs" />
+    <Compile Include="TECProposalScope.cs" />
     <Compile Include="TECSubScope.cs" />
     <Compile Include="TECPoint.cs" />
     <Compile Include="TECScope.cs" />
@@ -100,6 +103,7 @@
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTag.cs" />
     <Compile Include="TECTemplates.cs" />
+    <Compile Include="TECVisualConnection.cs" />
     <Compile Include="TECVisualScope.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

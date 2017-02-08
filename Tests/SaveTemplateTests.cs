@@ -36,8 +36,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveTemplates test templates: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveTemplates test templates: " + path);
         }
 
         #region Save System
@@ -81,7 +81,7 @@ namespace Tests
 
             templates.SystemTemplates.Remove(systemToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -104,7 +104,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Name = "Save System Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -128,7 +128,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Description = "Save System Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -151,7 +151,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -174,7 +174,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.BudgetPrice = 9876543.21;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -233,7 +233,7 @@ namespace Tests
 
             templates.EquipmentTemplates.Remove(EquipmentToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -255,7 +255,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Name = "Save Equipment Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -279,7 +279,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Description = "Save Equipment Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -302,7 +302,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -325,7 +325,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.BudgetPrice = 9876543.21;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -358,11 +358,11 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECSubScope actualSubScope = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
             {
-                if (expectedSubScope.Guid == SubScope.Guid)
+                if (expectedSubScope.Guid == subScope.Guid)
                 {
-                    actualSubScope = SubScope;
+                    actualSubScope = subScope;
                     break;
                 }
             }
@@ -382,12 +382,12 @@ namespace Tests
 
             templates.SubScopeTemplates.Remove(SubScopeToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
-            TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECSubScope SubScope in templates.SubScopeTemplates)
+            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
             {
                 if (SubScope.Guid == SubScopeToRemove.Guid)
                 {
@@ -395,7 +395,7 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual((oldNumSubScopes - 1), templates.SubScopeTemplates.Count);
+            Assert.AreEqual((oldNumSubScopes - 1), actualTemplates.SubScopeTemplates.Count);
         }
 
         [TestMethod]
@@ -404,7 +404,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Name = "Save SubScope Name";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -428,7 +428,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Description = "Save SubScope Description";
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -451,7 +451,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Quantity = 987654321;
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
@@ -470,7 +470,406 @@ namespace Tests
         #endregion Save SubScope
 
         #region Save Device
+        [TestMethod]
+        public void Save_Templates_Add_Device()
+        {
+            //Act
+            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, ConnectionType.WireTHHN12, new TECManufacturer(), Guid.NewGuid());
 
+            templates.DeviceCatalog.Add(expectedDevice);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice device in actualTemplates.DeviceCatalog)
+            {
+                if (device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = device;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
+            Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
+            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Device()
+        {
+            //Act
+            int oldNumDevices = templates.DeviceCatalog.Count;
+            TECDevice deviceToRemove = templates.DeviceCatalog[0];
+
+            templates.DeviceCatalog.Remove(deviceToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECDevice dev in actualTemplates.DeviceCatalog)
+            {
+                if (dev.Guid == deviceToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumDevices - 1), actualTemplates.SubScopeTemplates.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Device_Name()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            expectedDevice.Name = "Save Device Name";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Device_Description()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            expectedDevice.Description = "Save Device Description";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Device_Cost()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            expectedDevice.Cost = 46.89;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Device_ConnectionType()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            expectedDevice.ConnectionType = ConnectionType.WireTHHN12;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Device_Manufacturer()
+        {
+            //Act
+            TECDevice expectedDevice = templates.DeviceCatalog[0];
+            TECManufacturer manToAdd = new TECManufacturer("Test", 1.0);
+            templates.ManufacturerCatalog.Add(manToAdd);
+            expectedDevice.Manufacturer = manToAdd;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice Device in actualTemplates.DeviceCatalog)
+            {
+                if (Device.Guid == expectedDevice.Guid)
+                {
+                    actualDevice = Device;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
+        }
         #endregion Save Device
+
+        #region Save Controller
+        [TestMethod]
+        public void Save_Templates_Add_Controller()
+        {
+            //Act
+            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+
+            templates.ControllerTemplates.Add(expectedController);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Controller()
+        {
+            //Act
+            int oldNumControllers = templates.ControllerTemplates.Count;
+            TECController controllerToRemove = templates.ControllerTemplates[0];
+
+            templates.ControllerTemplates.Remove(controllerToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
+                
+        }
+
+
+
+        [TestMethod]
+        public void Save_Templates_Controller_Name()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Name = "Test save controller name";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Description()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Description = "Save Device Description";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Cost()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Cost = 46.89;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+        #region Controller IO
+        [TestMethod]
+        public void Save_Templates_Controller_Add_IO()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            bool hasBACnetIP = false;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == IOType.BACnetIP)
+                {
+                    hasBACnetIP = true;
+                }
+            }
+
+            Assert.IsTrue(hasBACnetIP);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_Remove_IO()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            int oldNumIO = expectedController.IO.Count;
+            TECIO ioToRemove = expectedController.IO[0];
+
+            expectedController.IO.Remove(ioToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController con in actualTemplates.ControllerTemplates)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Controller_IO_Quantity()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            TECIO ioToChange = expectedController.IO[0];
+            ioToChange.Quantity = 69;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController con in actualTemplates.ControllerTemplates)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToChange.Type)
+                {
+                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+                    break;
+                }
+            }
+        }
+        #endregion Controller IO
+
+        #endregion
+
+
     }
 }

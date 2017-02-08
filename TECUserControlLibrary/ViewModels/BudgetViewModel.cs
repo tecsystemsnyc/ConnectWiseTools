@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Scope_Builder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -19,22 +19,16 @@ namespace Scope_Builder.ViewModel
     /// </summary>
     public class BudgetViewModel : ViewModelBase
     {
-
         private double _manualAdjustmentAmount;
 
-        private ObservableCollection<TECSystem> _systems;
-
-        public ObservableCollection<TECSystem> Systems
+        private TECBid _bid;
+        public TECBid Bid
         {
-            get { return _systems; }
+            get { return _bid; }
             set
             {
-                _systems = value;
-                RaisePropertyChanged("Systems");
-                RaisePropertyChanged("BudgetedSystems");
-                RaisePropertyChanged("UnbudgetedSystems");
-                RaisePropertyChanged("BudgetSubTotal");
-                RaisePropertyChanged("TotalPrice");
+                _bid = value;
+                RaisePropertyChanged("Bid");
             }
         }
 
@@ -43,7 +37,7 @@ namespace Scope_Builder.ViewModel
             get
             {
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
-                foreach (TECSystem system in _systems)
+                foreach (TECSystem system in Bid.Systems)
                 {
                     if (system.PriceWithEquipment >= 0)
                     {
@@ -59,7 +53,7 @@ namespace Scope_Builder.ViewModel
             get
             {
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
-                foreach (TECSystem system in _systems)
+                foreach (TECSystem system in Bid.Systems)
                 {
                     if (system.PriceWithEquipment < 0)
                     {
@@ -131,18 +125,51 @@ namespace Scope_Builder.ViewModel
         
         public ICommand ExportBudgetCommand { get; private set; }
 
-        public BudgetViewModel()
+        public BudgetViewModel(TECBid bid)
         {
-            Systems = new ObservableCollection<TECSystem>();
-            MessengerInstance.Register<GenericMessage<ObservableCollection<TECSystem>>>(this, PopulateSystems);
+            Bid = bid;
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
+
+            bid.Systems.CollectionChanged += Systems_CollectionChanged;
+
+            foreach (TECSystem system in bid.Systems)
+            {
+                registerSystem(system);
+            }
 
             ManualAdjustmentPercentage = 0;
         }
 
-        public void PopulateSystems(GenericMessage<ObservableCollection<TECSystem>> genericMessage)
+        private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Systems = genericMessage.Content;
+            raiseBudgetChanges();
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    registerSystem(item as TECSystem);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    (item as TECSystem).PropertyChanged -= System_PropertyChanged;
+                }
+            }
+        }
+
+        private void registerSystem(TECSystem system)
+        {
+            system.PropertyChanged += System_PropertyChanged;
+        }
+
+        private void System_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TotalBudgetPrice")
+            {
+                raiseBudgetChanges();
+            }
         }
 
         public void ExportBudgetExecute()
@@ -154,7 +181,7 @@ namespace Scope_Builder.ViewModel
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     CSVWriter writer = new CSVWriter(path);
-                    writer.BudgetToCSV(Systems, ManualAdjustmentPercentage/100);
+                    writer.BudgetToCSV(Bid.Systems, ManualAdjustmentPercentage/100);
                 }
                 else
                 {
@@ -188,6 +215,14 @@ namespace Scope_Builder.ViewModel
             }
 
             return path;
+        }
+
+        private void raiseBudgetChanges()
+        {
+            RaisePropertyChanged("BudgetedSystems");
+            RaisePropertyChanged("UnbudgetedSystems");
+            RaisePropertyChanged("BudgetSubTotal");
+            RaisePropertyChanged("TotalPrice");
         }
     }
 }

@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +60,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -82,8 +85,17 @@
     <Compile Include="ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControllerEditControl.xaml.cs">
+      <DependentUpon>ControllerEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControllerGridControl.xaml.cs">
+      <DependentUpon>ControllerGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentBuilderControl.xaml.cs">
+      <DependentUpon>DocumentBuilderControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditTabControl.xaml.cs">
       <DependentUpon>EditTabControl.xaml</DependentUpon>
@@ -91,11 +103,29 @@
     <Compile Include="EquipmentEditControl.xaml.cs">
       <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExclusionsGridControl.xaml.cs">
+      <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocationGridControl.xaml.cs">
       <DependentUpon>LocationGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NotesGridControl.xaml.cs">
+      <DependentUpon>NotesGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProposalScopeGridControl.xaml.cs">
+      <DependentUpon>ProposalScopeGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScopeBranchAsNoteGridControl.xaml.cs">
+      <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScopeCollectionsTabControl.xaml.cs">
+      <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScopeTreeGridControl.xaml.cs">
+      <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
@@ -103,12 +133,31 @@
     <Compile Include="SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TECResourceDictionary.xaml.cs">
+      <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
-    <Compile Include="ViewModels\DevicesPointsViewModel.cs" />
-    <Compile Include="ViewModels\ScopeViewModelBase.cs" />
-    <Compile Include="ViewModels\SystemsViewModel.cs" />
+    <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
+    <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
+    <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
+    <Compile Include="ViewModels\BidEditorBase.cs" />
+    <Compile Include="ViewModels\BudgetViewModel.cs" />
+    <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
+    <Compile Include="ViewModels\MenuItemViewModel.cs" />
+    <Compile Include="BudgetWindow.xaml.cs">
+      <DependentUpon>BudgetWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VisibilityModel.cs" />
     <Page Include="ByLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControllerEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="DocumentBuilderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,11 +189,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ExclusionsGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LocationGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ManufacturersGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NotesGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,11 +213,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ProposalScopeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScopeBranchAsNoteGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScopeCollectionsTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScopeControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ScopeItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScopeTreeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,6 +256,10 @@
     <Page Include="TagsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TECControlTemplateDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TECResourceDictionary.xaml">
       <SubType>Designer</SubType>
@@ -217,6 +298,10 @@
     <Compile Include="TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="BudgetWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -257,6 +342,10 @@
       <Name>EstimatingUtilitiesLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TECLogo.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

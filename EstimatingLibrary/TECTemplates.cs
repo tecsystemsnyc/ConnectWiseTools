@@ -11,21 +11,29 @@ namespace EstimatingLibrary
     public class TECTemplates : TECObject
     {
         #region Properties
+        private Guid _infoGuid;
         private ObservableCollection<TECSystem> _systemTemplates;
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECDevice> _deviceCatalog;
         private ObservableCollection<TECManufacturer> _manufacturerCatalog;
         private ObservableCollection<TECTag> _tags;
+        private ObservableCollection<TECController> _controllerTemplates;
 
+        public Guid InfoGuid
+        {
+            get { return _infoGuid; }
+        }
         public ObservableCollection<TECSystem> SystemTemplates
         {
             get { return _systemTemplates; }
             set
             {
+                var temp = this.Copy();
+                SystemTemplates.CollectionChanged -= CollectionChanged;
                 _systemTemplates = value;
                 SystemTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("SystemTemplates");
+                NotifyPropertyChanged("SystemTemplates", temp, this);
             }
         }
         public ObservableCollection<TECEquipment> EquipmentTemplates
@@ -33,9 +41,11 @@ namespace EstimatingLibrary
             get { return _equipmentTemplates; }
             set
             {
+                var temp = this.Copy();
+                EquipmentTemplates.CollectionChanged -= CollectionChanged;
                 _equipmentTemplates = value;
                 EquipmentTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("EquipmentTemplates");
+                NotifyPropertyChanged("EquipmentTemplates", temp, this);
             }
         }
         public ObservableCollection<TECSubScope> SubScopeTemplates
@@ -43,9 +53,11 @@ namespace EstimatingLibrary
             get { return _subScopeTemplates; }
             set
             {
+                var temp = this.Copy();
+                SubScopeTemplates.CollectionChanged -= CollectionChanged;
                 _subScopeTemplates = value;
                 SubScopeTemplates.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("SubScopeTemplates");
+                NotifyPropertyChanged("SubScopeTemplates", temp, this);
             }
         }
         public ObservableCollection<TECDevice> DeviceCatalog
@@ -53,9 +65,11 @@ namespace EstimatingLibrary
             get { return _deviceCatalog; }
             set
             {
+                var temp = this.Copy();
+                DeviceCatalog.CollectionChanged -= CollectionChanged;
                 _deviceCatalog = value;
                 DeviceCatalog.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("DeviceCatalog");
+                NotifyPropertyChanged("DeviceCatalog", temp, this);
             }
         }
         public ObservableCollection<TECManufacturer> ManufacturerCatalog
@@ -63,9 +77,11 @@ namespace EstimatingLibrary
             get { return _manufacturerCatalog; }
             set
             {
+                var temp = this.Copy();
+                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
                 _manufacturerCatalog = value;
                 ManufacturerCatalog.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("ManufacturerCatalog");
+                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
             }
         }
         public ObservableCollection<TECTag> Tags
@@ -73,30 +89,84 @@ namespace EstimatingLibrary
             get { return _tags; }
             set
             {
+                var temp = this.Copy();
+                Tags.CollectionChanged -= CollectionChanged;
                 _tags = value;
                 Tags.CollectionChanged += CollectionChanged;
-                RaisePropertyChanged("Tags");
+                NotifyPropertyChanged("Tags", temp, this);
+            }
+        }
+        public ObservableCollection<TECController> ControllerTemplates
+        {
+            get { return _controllerTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                ControllerTemplates.CollectionChanged -= CollectionChanged;
+                _controllerTemplates = value;
+                ControllerTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ControllerTemplates", temp, this);
             }
         }
        
         public override object Copy()
         {
-            throw new NotImplementedException();
+            return new TECTemplates(this);
         }
 
         #endregion //Properties
 
         #region Constructors
 
-        public TECTemplates()
+        public TECTemplates() : this(Guid.NewGuid()) {}
+
+        public TECTemplates(Guid guid)
         {
-            SystemTemplates = new ObservableCollection<TECSystem>();
-            EquipmentTemplates = new ObservableCollection<TECEquipment>();
-            SubScopeTemplates = new ObservableCollection<TECSubScope>();
-            DeviceCatalog = new ObservableCollection<TECDevice>();
-            Tags = new ObservableCollection<TECTag>();
-            ManufacturerCatalog = new ObservableCollection<TECManufacturer>();
-            
+            _infoGuid = guid;
+
+            _systemTemplates = new ObservableCollection<TECSystem>();
+            _equipmentTemplates = new ObservableCollection<TECEquipment>();
+            _subScopeTemplates = new ObservableCollection<TECSubScope>();
+            _deviceCatalog = new ObservableCollection<TECDevice>();
+            _tags = new ObservableCollection<TECTag>();
+            _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
+            _controllerTemplates = new ObservableCollection<TECController>();
+
+            SystemTemplates.CollectionChanged += CollectionChanged;
+            EquipmentTemplates.CollectionChanged += CollectionChanged;
+            SubScopeTemplates.CollectionChanged += CollectionChanged;
+            DeviceCatalog.CollectionChanged += CollectionChanged;
+            Tags.CollectionChanged += CollectionChanged;
+            ManufacturerCatalog.CollectionChanged += CollectionChanged;
+            ControllerTemplates.CollectionChanged += CollectionChanged;
+        }
+
+        public TECTemplates(TECTemplates templatesSource) : this()
+        {
+            foreach(TECSystem system in templatesSource.SystemTemplates)
+            {
+                SystemTemplates.Add(system);
+            }
+            foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
+            {
+                EquipmentTemplates.Add(equip);
+            }
+            foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
+            {
+                SubScopeTemplates.Add(subScope);
+            }
+            foreach (TECDevice device in templatesSource.DeviceCatalog)
+            {
+                DeviceCatalog.Add(device);
+            }
+            foreach (TECTag tag in templatesSource.Tags)
+            {
+                Tags.Add(tag);
+            }
+            foreach (TECManufacturer man in templatesSource.ManufacturerCatalog)
+            {
+                ManufacturerCatalog.Add(man);
+            }
         }
 
         #endregion //Constructors
@@ -104,7 +174,6 @@ namespace EstimatingLibrary
         #region Collection Changed
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Console.WriteLine("Collection changed");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)

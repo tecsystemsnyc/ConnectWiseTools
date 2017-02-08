@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -22,10 +23,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -42,11 +43,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0"
                            Grid.Row="0"
@@ -75,18 +76,20 @@
                 <Label Grid.Column="0"
                            Grid.Row="3"
                            Content="Wire Type:"/>
-                <TextBox Grid.Column="1"
+                <ComboBox Grid.Column="1"
                                 Grid.Row="3"
-                                Text="{Binding SelectedDevice.Wire}"
-                                     VerticalAlignment="Top"
+                                ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
+                              SelectedValue="{Binding SelectedDevice.ConnectionType}"
                              Margin="5"/>
                 <Label Grid.Column="0"
                            Grid.Row="4"
                            Content="Manufacturer:"/>
                 <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}"
                               DisplayMemberPath="Name"
-                              SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"
-                                           Grid.Row="4" Grid.Column="1" Margin="5"/>
+                          Grid.Row="4" Grid.Column="1" Margin="5"
+                          SelectedItem="{Binding SelectedDevice.Manufacturer}"/>
+                <!--SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"
+                                           Grid.Row="4" Grid.Column="1" Margin="5"/>-->
             </Grid>
         </Grid>
         <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding Templates.Tags}"

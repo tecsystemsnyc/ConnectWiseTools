@@ -25,6 +25,17 @@ namespace EstimatingLibrary
 
         public ObservableCollection<TECPoint> Points { get; set; }
 
+        private TECConnection _connection { get; set; }
+        public TECConnection Connection {
+            get { return _connection; }
+            set
+            {
+                var temp = this.Copy();
+                _connection = value;
+                NotifyPropertyChanged("Connection", temp, this);
+            }
+        }
+
         public double MaterialCost
         {
             get { return getMaterialCost(); }
@@ -33,6 +44,28 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
+
+        public ObservableCollection<ConnectionType> ConnectionTypes
+        {
+            get { return getConnectionTypes(); }
+        }
+
+        public List<ConnectionType> AvailableConnections
+        {
+            get { return getAvailableConnectionTypes(); }
+        }
+
+        public ObservableCollection<PointTypes> AllPointTypes
+        {
+            get { return getAllPointTypes(); }
+        }
+
+        public ObservableCollection<IOType> AllIOTypes
+        {
+            get { return getAllIOTypes(); }
+        }
+
+
         #endregion //Properties
 
         #region Constructors
@@ -164,6 +197,15 @@ namespace EstimatingLibrary
             return outScope;
         }
 
+        private ObservableCollection<ConnectionType> getConnectionTypes()
+        {
+            var outTypes = new ObservableCollection<ConnectionType>();
+            foreach(TECDevice device in Devices)
+            {
+                outTypes.Add(device.ConnectionType);
+            }
+            return outTypes;
+        }
 
         private double getMaterialCost()
         {
@@ -214,6 +256,39 @@ namespace EstimatingLibrary
             }
         }
 
+        private List<ConnectionType> getAvailableConnectionTypes()
+        {
+            var availableConnections = new List<ConnectionType>();
+            foreach (ConnectionType conType in this.ConnectionTypes)
+            {
+                availableConnections.Add(conType);
+            }
+
+            return availableConnections;
+        }
+
+        private ObservableCollection<PointTypes> getAllPointTypes()
+        {
+            var allPointTypes = new ObservableCollection<PointTypes>();
+
+            foreach(TECPoint point in Points)
+            {
+                allPointTypes.Add(point.Type);
+            }
+            
+            return allPointTypes;
+        }
+
+        private ObservableCollection<IOType> getAllIOTypes()
+        {
+            var allIOTypes = new ObservableCollection<IOType>();
+
+            foreach(TECDevice device in Devices)
+            {
+                allIOTypes.Add(device.IOType);
+            }
+            return allIOTypes;
+        }
         #endregion
     }
 }

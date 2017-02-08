@@ -34,6 +34,18 @@ namespace EstimatingLibrary
         }
         private string _description;
 
+        public double FeetPerPoint
+        {
+            get { return _feetPerPoint; }
+            set
+            {
+                var temp = Copy();
+                _feetPerPoint = value;
+                NotifyPropertyChanged("FeetPerPoint", temp, this);
+            }
+        }
+        private double _feetPerPoint;
+
         public Guid Guid;
 
         public ObservableCollection<TECPage> Pages

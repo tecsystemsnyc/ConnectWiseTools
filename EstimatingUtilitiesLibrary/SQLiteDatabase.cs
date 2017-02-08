@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (!File.Exists(DBPath))
                 {
-                    Console.WriteLine("File Created");
+                    Console.WriteLine("Database File Created");
                     SQLiteConnection.CreateFile(DBPath);
                 }
                 
@@ -47,7 +47,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch
             {
-                Console.WriteLine("Connection already closed");
+                Console.WriteLine("Deconstructing SQLiteDatabase. Connection already closed.");
             }
         }
 
@@ -154,14 +154,25 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public bool Delete(string tableName, string idName, Guid guid)
+        public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues) 
         {
             bool returnCode = true;
-            string commandString = "DELETE FROM " + tableName + " WHERE ";
             try
             {
-                string objectCommandString = commandString + "(" + idName + " = '" + guid + "');";
-                nonQueryCommand(objectCommandString);
+                string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
+                bool first = true;
+                foreach (KeyValuePair<string, string> pk in primaryKeyValues)
+                {
+                    if (!first)
+                    {
+                        commandString += " AND ";
+                    }
+                    commandString += pk.Key + " = '" + pk.Value + "'";
+                    first = false;
+                }
+                commandString += ");";
+                
+                nonQueryCommand(commandString);
             }
             catch (Exception e)
             {

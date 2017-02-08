@@ -1,4 +1,5 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary x:Class="TECUserControlLibrary.TECResourceDictionary" 
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TECUserControlLibrary"
                     xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
@@ -36,9 +37,11 @@
     <Style TargetType="Button">
         <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
@@ -48,7 +51,10 @@
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
+        <!--<Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>-->
+        <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
     </Style>
+
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Height" Value="25"/>
         <Setter Property="Background" Value="{StaticResource HeaderBrush}"/>
@@ -56,6 +62,8 @@
         <Setter Property="FontSize" Value="12" />
     </Style>
     <Style TargetType="DataGridCell">
+        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"/>
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>

@@ -32,6 +32,19 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+    public class TemplatesInfoTable : TableBase
+    {
+        public static new string TableName = "TECTemplatesInfo";
+
+        public static TableField TemplatesInfoID = new TableField("TemplatesInfoID", "TEXT");
+        public static TableField DBVersion = new TableField("DBVersion", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            TemplatesInfoID
+        };
+    }
+
     public class NoteTable : TableBase
     {
         public static new string TableName = "TECNote";
@@ -55,6 +68,21 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+
+    public class BidScopeBranchTable : TableBase
+    {
+        public static new string TableName = "TECBidTECScopeBranch";
+
+        public static TableField BidID = new TableField("BidID", "TEXT");
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            ScopeBranchID
+        };
+    }
+
     public class ScopeBranchTable : TableBase
     {
         public static new string TableName = "TECScopeBranch";
@@ -120,7 +148,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Cost = new TableField("Cost", "REAL");
-        public static TableField Wire = new TableField("Wire", "TEXT");
+        public static TableField ConnectionType = new TableField("ConnectionType", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             DeviceID
@@ -185,7 +213,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECPage";
 
         public static TableField PageID = new TableField("PageID", "TEXT");
-        public static TableField Image = new TableField("Image", "TEXT");
+        public static TableField Image = new TableField("Image", "BLOB");
         public static TableField PageNum = new TableField("PageNum", "INTEGER");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
@@ -218,7 +246,104 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+    public class ProposalScopeTable : TableBase
+    {
+        public static new string TableName = "TECProposalScope";
 
+        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
+        public static TableField IsProposed = new TableField("IsProposed", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ProposalScopeID
+        };
+    }
+
+    public class ProposalScopeScopeBranchTable : TableBase
+    {
+        public static new string TableName = "TECProposalScopeTECScopeBranch";
+
+        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT");
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ScopeBranchID
+        };
+    }
+
+    public class ConnectionTable : TableBase
+    {
+        public static new string TableName = "TECConnection";
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+        public static TableField Length = new TableField("Length", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ConnectionID
+            };
+    }
+    public class ConnectionConnectionTypeTable : TableBase
+    {
+        public static new string TableName = "TECConnectionTECConnectionType";
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+        public static TableField Type = new TableField("Type", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+
+            };
+    }
+    public class ControllerTable : TableBase
+    {
+        public static new string TableName = "TECController";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Description = new TableField("Description", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID
+            };
+    }
+    public class ControllerIOTypeTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECIO";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField IOType = new TableField("IOType", "TEXT");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID,
+            IOType
+            };
+    }
+    public class ControllerConnectionTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECConection";
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT");
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID,
+            ConnectionID
+            };
+    }
+    public class ScopeConnectionTable : TableBase
+    {
+        public static new string TableName = "TECScopeTECConnection";
+
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT");
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ScopeID,
+            ConnectionID
+            };
+    }
     public class ScopeBranchHierarchyTable : TableBase
     {
         public static new string TableName = "TECScopeBranchHierarchy";
@@ -232,7 +357,6 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
-
     public class SystemIndexTable : TableBase
     {
         public static new string TableName = "TECSystemIndex";
@@ -322,8 +446,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            DeviceID,
-            ManufacturerID
+            DeviceID
             };
 
     }
@@ -409,7 +532,16 @@ namespace EstimatingUtilitiesLibrary
             new DrawingPageTable(),
             new PageVisualScopeTable(),
             new VisualScopeScopeTable(),
-            new LocationScopeTable()
+            new LocationScopeTable(),
+            new ConnectionTable(),
+            new ControllerTable(),
+            new ControllerConnectionTable(),
+            new ControllerIOTypeTable(),
+            new ScopeConnectionTable(),
+            new ConnectionConnectionTypeTable(),
+            new ProposalScopeTable(),
+            new ProposalScopeScopeBranchTable(),
+            new BidScopeBranchTable()
             };
     }
 
@@ -417,6 +549,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static List<object> Tables = new List<object>()
         {
+            new TemplatesInfoTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
@@ -429,7 +562,11 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
             new ScopeTagTable(),
-            new DeviceManufacturerTable()
+            new ControllerTable(),
+            new ControllerIOTypeTable(),
+            new ScopeConnectionTable(),
+            new DeviceManufacturerTable(),
+            new SystemIndexTable()
         };
     }
 
@@ -452,8 +589,6 @@ namespace EstimatingUtilitiesLibrary
             FieldType = fieldType;
         }
     }
-
-    
     
     #endregion
 }

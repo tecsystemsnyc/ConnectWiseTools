@@ -10,10 +10,9 @@ namespace EstimatingLibrary
 {
     public class TECPage : TECObject
     {
-        private string _path;
-
+        #region Poperties
         public Guid Guid { get; set; }
-
+        private string _path;
         public string Path
         {
             get { return _path; }
@@ -23,51 +22,69 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("Path");
             }
         }
-
         public int PageNum { get; set; }
-
         public ObservableCollection<TECVisualScope> PageScope
         {
             get { return _pageScope; }
             set
             {
+                var temp = this.Copy();
+                PageScope.CollectionChanged -= collectionChanged;
                 _pageScope = value;
-                RaisePropertyChanged("PageScope");
-                PageScope.CollectionChanged += PageScope_CollectionChanged;
+                NotifyPropertyChanged("PageScope", temp, this);
+                PageScope.CollectionChanged += collectionChanged;
             }
         }
         private ObservableCollection<TECVisualScope> _pageScope;
+        public ObservableCollection<TECVisualConnection> Connections
+        {
+            get { return _connections; }
+            set
+            {
+                var temp = this.Copy();
+                Connections.CollectionChanged -= collectionChanged;
+                _connections = value;
+                NotifyPropertyChanged("Connections", temp, this);
+                Connections.CollectionChanged += collectionChanged;
+            }
+        }
+        private ObservableCollection<TECVisualConnection> _connections;
+        #endregion
 
         public TECPage(string path, int pageNum)
         {
             PageNum = pageNum;
             Guid = Guid.NewGuid();
-            Path = path;
-            PageScope = new ObservableCollection<TECVisualScope>();
-            PageScope.CollectionChanged += PageScope_CollectionChanged;
+            _path = path;
+            _pageScope = new ObservableCollection<TECVisualScope>();
+            _connections = new ObservableCollection<TECVisualConnection>();
+            PageScope.CollectionChanged += collectionChanged;
+            Connections.CollectionChanged += collectionChanged;
         }
-
         
-
         public TECPage(int pageNum, Guid guid)
         {
             PageNum = pageNum;
             Guid = guid;
-            Path = null;
-            PageScope = new ObservableCollection<TECVisualScope>();
-            PageScope.CollectionChanged += PageScope_CollectionChanged;
+            _path = null;
+            _pageScope = new ObservableCollection<TECVisualScope>();
+            _connections = new ObservableCollection<TECVisualConnection>();
+            PageScope.CollectionChanged += collectionChanged;
+            Connections.CollectionChanged += collectionChanged;
         }
 
         public TECPage(TECPage page)
         {
             Guid = page.Guid;
-            Path = page.Path;
-            PageScope = new ObservableCollection<TECVisualScope>();
+            _path = page.Path;
+            _pageScope = new ObservableCollection<TECVisualScope>();
+            _connections = new ObservableCollection<TECVisualConnection>();
             foreach (TECVisualScope vs in page.PageScope)
             {
                 _pageScope.Add(new TECVisualScope(vs));
             }
-            PageScope.CollectionChanged += PageScope_CollectionChanged;
+            PageScope.CollectionChanged += collectionChanged;
+            Connections.CollectionChanged += collectionChanged;
         }
 
         public override Object Copy()
@@ -76,9 +93,8 @@ namespace EstimatingLibrary
             return outPage;
         }
 
-        private void PageScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Console.WriteLine("PageScope collection changed.");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)

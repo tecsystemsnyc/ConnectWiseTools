@@ -20,6 +20,7 @@ namespace Tests
         static TECDevice expectedDevice;
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
+        static TECController expectedController;
 
         static string path;
 
@@ -30,6 +31,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
+        static TECController actualController;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -55,6 +57,7 @@ namespace Tests
             expectedDevice = expectedTemplates.DeviceCatalog[0];
             expectedManufacturer = expectedTemplates.ManufacturerCatalog[0];
             expectedTag = expectedTemplates.Tags[0];
+            expectedController = expectedTemplates.ControllerTemplates[0];
 
             path = Path.GetTempFileName();
 
@@ -116,6 +119,15 @@ namespace Tests
                     break;
                 }
             }
+
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]
@@ -124,8 +136,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveAs test templates saved to: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveAs test templates saved to: " + path);
         }
 
         [TestMethod]
@@ -164,7 +176,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
@@ -204,7 +216,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
@@ -236,7 +248,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.Wire, actualChildDevice.Wire);
+            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
@@ -260,8 +272,9 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
             Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
+            Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
@@ -280,6 +293,29 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedTag.Text, actualTag.Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_Controller()
+        {
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+            
+            foreach (TECIO expectedIO in expectedController.IO)
+            {
+                bool ioExists = false;
+                foreach (TECIO actualIO in actualController.IO)
+                {
+                    if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
+                    {
+                        ioExists = true;
+                        break;
+                    }
+                }
+                Assert.IsTrue(ioExists);
+            }
         }
     }
 }

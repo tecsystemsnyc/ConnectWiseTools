@@ -45,9 +45,11 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = new TECBid();
             Labor = new TECLabor();
+            /*
             MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
 
             MessengerInstance.Send<NotificationMessage>(new NotificationMessage("LaborViewModelLoaded"));
+            */
         }
 
         #region Methods

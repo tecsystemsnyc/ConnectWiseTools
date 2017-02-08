@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        DataContext="{Binding Labor, Source={StaticResource Locator}}" 
+             x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
 
-    <Grid>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>

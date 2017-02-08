@@ -69,12 +69,17 @@
                           Command="{Binding RedoCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Show/Hide Templates"
+                          Command="{Binding ScopeEditorVM.ToggleTemplatesVisibilityCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
                           Command="{Binding LoadTemplatesCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
-            <MenuItem Header="_Drawing">
+            <MenuItem Header="_Drawing" Visibility="Collapsed">
                 <MenuItem Header="_Load"
                           Command="{Binding LoadDrawingCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
@@ -114,19 +119,28 @@
 
             <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                 <TabItem Header="Scope Editor">
-                    <view:ScopeEditorView/>
+                    <view:ScopeEditorView
+                        ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
-                <TabItem Header="Drawing">
-                    <view:DrawingView/>
+                <TabItem Header="Drawing" Visibility="Collapsed">
+                    <view:DrawingView
+                        ViewModel="{Binding DrawingVM}"/>
                 </TabItem>
                 <TabItem Header="Labor">
-                    <view:LaborView/>
+                    <view:LaborView
+                        ViewModel="{Binding LaborVM}"/>
+                </TabItem>
+                <TabItem Header="Proposal">
+                    <view:ProposalView
+                        ViewModel="{Binding ProposalVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewView/>
+                    <view:ReviewView
+                        ViewModel="{Binding ReviewVM}"/>
                 </TabItem>
                 <TabItem Header="Settings">
-                    <view:SettingsView/>
+                    <view:SettingsView
+                        ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
             <StatusBar Grid.Row="3"

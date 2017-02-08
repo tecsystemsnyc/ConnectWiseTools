@@ -9,6 +9,7 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
@@ -67,6 +68,13 @@
                           Command="{Binding RedoCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
+
+            <MenuItem Header="_View">
+                <MenuItem Header="_Show/Hide Templates"
+                          Command="{Binding ToggleTemplatesVisibilityCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
+
             <MenuItem Header="_Export">
                 <MenuItem Header="_To Document"
                           Command="{Binding DocumentCommand}"
@@ -75,23 +83,20 @@
                           Command="{Binding CSVExportCommand}"
                           Foreground="{DynamicResource WindowBackgroundBrush}"/>
             </MenuItem>
+
+            
             
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
                           Command="{Binding LoadTemplatesCommand}"
                           Foreground="{DynamicResource WindowBackgroundBrush}"/>
             </MenuItem>
-            
-            <MenuItem Header="_Budget">
-                <MenuItem Header="_Open Window"
-                          Command="{Binding BudgetCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
+           
         </Menu>
         <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -117,54 +122,54 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="Name:" Grid.Column="0" 
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Name}"
-                         Margin="2" FontSize="12"
+                         VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          Grid.Column="1"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Bid Number:" Grid.Column="2"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
                  Grid.Column="3"
-                 Margin="2"
+                 VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Estimator:" Grid.Column="4"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
                 Grid.Column="5"
-                Margin="2"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Salesperson:" Grid.Column="6"
                        Background="{DynamicResource WindowBackgroundBrush}"
-                       Foreground="{DynamicResource LightTextBrush}"/>
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
                 Grid.Column="7"
-                Margin="2"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
             </Grid>
         
             <Image Source="{Binding TECLogo}"
                    Grid.Column="5"/>
-            <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SearchString}"/>
-            <Button Grid.Column="1"
-                    Content="Search"
-                    Command="{Binding SearchCollectionCommand}"/>
-            <Button Grid.Column="2"
-                    Content="Done"
-                    Command="{Binding EndSearchCommand}"/>
-        </Grid>
+            <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
+                                             Grid.Row="1" Grid.RowSpan="2"/>
             <TabControl Grid.Row="1"
                     Grid.Column="1"
                     Grid.ColumnSpan="5"
@@ -173,88 +178,24 @@
                 
                 <TabItem Header="Systems">
                     <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
-                                             ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
+                                             ViewModel="{Binding ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="By Location">
                     <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
-                                            SystemsSource="{Binding SystemsByLocation}"
-                                            EquipmentSource="{Binding EquipmentByLocation}"
-                                            SubScopeSource="{Binding SubScopeByLocation}"
-                                            ViewModel="{Binding ElementName=Window, Path=DataContext}"/>
-                </TabItem>
-                <TabItem Header="Scope">
-                    <DataGrid  ItemsSource="{Binding Bid.ScopeTree}" 
-                           AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"
-                                            ElementStyle="{StaticResource RightCell}"/>
-                        </DataGrid.Columns>
-                        <DataGrid.RowDetailsTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding SelectedItem.Branches}">
-                                <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                            AncestorType={x:Type DataGrid}},
-                            Path=RowDetailsTemplate}"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                            AncestorType={x:Type DataGrid}},
-                            Path=SelectedItem.Branches}"
-                                      AutoGenerateColumns="False"
-                           VirtualizingPanel.ScrollUnit="Pixel">
-                                    <DataGrid.Columns>
-                                        <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                                        <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                                        <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" IsReadOnly="True"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </HierarchicalDataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                                            SystemsSource="{Binding LocationDataGrid.SystemsByLocation}"
+                                            EquipmentSource="{Binding LocationDataGrid.EquipmentByLocation}"
+                                            SubScopeSource="{Binding LocationDataGrid.SubScopeByLocation}"
+                                            ViewModel="{Binding LocationDataGrid}"/>
                 </TabItem>
                 
-                <TabItem Header="Notes">
-                    <DataGrid x:Name="notesDataGrid"  
-                  ItemsSource="{Binding Bid.Notes}"
-                  AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <TabItem Header="Proposal">
+                    <cLib:DocumentBuilderControl ViewModel="{Binding}"/>
                 </TabItem>
-                <TabItem Header="Exclusions">
-                    <DataGrid x:Name="exclusionsDataGrid"  
-                  ItemsSource="{Binding Bid.Exclusions}"
-                          CanUserAddRows="True"
-                  AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <TabItem Header="Budget">
+                    <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
                 </TabItem>
             </TabControl>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <TabControl Margin="5,5,5,5"
-                SelectedIndex="{Binding LeftTabIndex}">
-                    <TabItem Header="Sys">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding SystemItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Equip">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding EquipmentItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Points">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding SubScopeItemsCollection}"/>
-                    </TabItem>
-                    <TabItem Header="Devices">
-                        <cLib:ScopeItemsControl ScopeSource="{Binding Templates.DeviceCatalog}"/>
-                    </TabItem>
-                </TabControl>
-            </Grid>
+            
             <StatusBar Grid.Row="3"
                        Grid.ColumnSpan="6">
                 <StatusBar.ItemsPanel>

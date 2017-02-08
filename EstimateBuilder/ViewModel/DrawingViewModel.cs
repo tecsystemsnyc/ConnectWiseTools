@@ -9,6 +9,10 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Generic;
 using EstimatingUtilitiesLibrary;
+using TECUserControlLibrary;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -21,12 +25,22 @@ namespace EstimateBuilder.ViewModel
     public class DrawingViewModel : ViewModelBase, IDropTarget
     {
         private TECBid _bid;
+        private TECTemplates _templates;
         private TECDrawing _currentDrawing;
         private TECPage _currentPage;
+        private Image _currentImage;
+        private BitmapImage _currentBitmap;
         private ObservableCollection<TECSystem> _displaySystems;
+        private ObservableCollection<TECEquipment> _displayEquipment;
+        private ObservableCollection<TECSubScope> _displaySubScope;
+        private ObservableCollection<TECVisualConnection> _displayConnections;
+        private string _controllerName;
+        private TECController _selectedControllerTemplate;
+
+        private Tuple<TECObject, TECVisualScope, string> connectionStart;
 
         private Dictionary<TECDrawing, int> pageIndexes;
-
+        
         public TECBid Bid
         {
             get { return _bid; }
@@ -34,6 +48,17 @@ namespace EstimateBuilder.ViewModel
             {
                 _bid = value;
                 RaisePropertyChanged("Bid");
+                registerBid();
+                populateDisplayed();
+            }
+        }
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                RaisePropertyChanged("Templates");
             }
         }
         public TECDrawing CurrentDrawing
@@ -61,6 +86,32 @@ namespace EstimateBuilder.ViewModel
                 _currentPage = value;
                 RaisePropertyChanged("CurrentPage");
                 RaisePropertyChanged("CurrentIndex");
+                if (CurrentPage != null)
+                {
+                    CurrentImage = Image.FromFile(CurrentPage.Path);
+                }
+                
+            }
+        }
+        public Image CurrentImage
+        {
+            get { return _currentImage; }
+            set
+            {
+                _currentImage = value;
+                originalImageWidth = _currentImage.Width;
+                originalImageHeight = _currentImage.Height;
+                RaisePropertyChanged("CurrentImage");
+                setBitmap();
+            }
+        }
+        public BitmapImage CurrentBitmap
+        {
+            get { return _currentBitmap; }
+            set
+            {
+                _currentBitmap = value;
+                RaisePropertyChanged("CurrentBitmap");
             }
         }
         public int CurrentIndex
@@ -98,24 +149,96 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DisplaySystems");
             }
         }
+        public ObservableCollection<TECEquipment> DisplayEquipment
+        {
+            get { return _displayEquipment; }
+            set
+            {
+                _displayEquipment = value;
+                RaisePropertyChanged("DisplayEquipment");
+            }
+        }
+        public ObservableCollection<TECSubScope> DisplaySubScope
+        {
+            get { return _displaySubScope; }
+            set
+            {
+                _displaySubScope = value;
+                RaisePropertyChanged("DisplaySubScope");
+            }
+        }
+        public ObservableCollection<TECVisualConnection> DisplayConnections
+        {
+            get { return _displayConnections; }
+            set
+            {
+                _displayConnections = value;
+                RaisePropertyChanged("DisplayConnections");
+            }
+        }
+        public string ControllerName {
+            get { return _controllerName; }
+            set
+            {
+                _controllerName = value;
+                RaisePropertyChanged("ControllerName");
+            }
+        }
+        public TECController SelectedControllerTemplate
+        {
+            get { return _selectedControllerTemplate; }
+            set
+            {
+                _selectedControllerTemplate = value;
+                RaisePropertyChanged("SelectedControllerTemplate");
+            }
+        }
 
-        
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
+        public ICommand ConnectCommand { get; private set; }
+        public ICommand AddControllerCommand { get; private set; }
+
+        private bool isConnecting;
+
+        #region Drawing Scale Properties
+        private double _percentageZoom;
+        public double PercentageZoom
+        {
+            get { return _percentageZoom; }
+            set
+            {
+                _percentageZoom = value;
+                RaisePropertyChanged("PercentageZoom");
+                setBitmap();
+            }
+        }
+
+        private int originalImageWidth;
+        private int originalImageHeight;
+
+        #endregion Drawing Scale Properties
 
         public DrawingViewModel()
         {
+            isConnecting = false;
+            PercentageZoom = 1;
+
             PreviousPageCommand = new RelayCommand(PreviousPageExecute);
             NextPageCommand = new RelayCommand(NextPageExecute);
+            ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
+            AddControllerCommand = new RelayCommand(AddControllerExecute);
 
             pageIndexes = new Dictionary<TECDrawing, int>();
 
             DisplaySystems = new ObservableCollection<TECSystem>();
+            DisplayEquipment = new ObservableCollection<TECEquipment>();
+            DisplaySubScope = new ObservableCollection<TECSubScope>();
+            DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
             Bid = new TECBid();
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
 
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("DrawingViewModelLoaded"));
+            
         }
         
         #region Methods
@@ -153,56 +276,81 @@ namespace EstimateBuilder.ViewModel
 
             
         }
-        #endregion
 
-        #region Message Methods
-
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
+        private bool CanConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
         {
-            Bid.Systems.CollectionChanged -= Systems_CollectionChanged;
-            Bid = genericMessage.Content;
-            Bid.Systems.CollectionChanged += Systems_CollectionChanged;
-
-            CurrentDrawing = null;
-            pageIndexes.Clear();
-            DisplaySystems = new ObservableCollection<TECSystem>();
-            ObservableCollection<TECScope> checkSystems = new ObservableCollection<TECScope>();
-            foreach(TECDrawing drawing in Bid.Drawings)
+            /*
+            if(arg != null)
             {
-                foreach(TECPage page in drawing.Pages)
+                if (!isConnecting)
                 {
-                    foreach(TECVisualScope scope in page.PageScope)
+                    return canStartConnection(arg.Item1);
+                }
+                else
+                {
+                    var newConnection = createConnection(connectionStart, arg, 1.0);
+                    return canAcceptConnection(arg.Item1, newConnection);
+                }
+            }
+            else
+            {
+                return false;
+            }
+            */
+            return true;
+        }
+
+        private void ConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
+        {
+            if (isConnecting)
+            {
+                Console.WriteLine("Ending");
+                var newConnection = createConnection(connectionStart, arg, 1.0);
+                connectConnections(connectionStart.Item1, arg.Item1, newConnection);
+                Bid.Connections.Add(newConnection);
+                bool isShown = false;
+                foreach(TECVisualConnection vc in CurrentPage.Connections)
+                {
+                    if(((vc.Scope1 == connectionStart.Item2) && (vc.Scope2 == arg.Item2))
+                        || ((vc.Scope2 == connectionStart.Item2) && (vc.Scope1 == arg.Item2)))
                     {
-                        checkSystems.Add(scope.Scope);
+                        isShown = true;
                     }
                 }
-            }
-            foreach(TECSystem system in Bid.Systems)
-            {
-                if (!checkSystems.Contains(system))
+                if (!isShown)
                 {
-                    DisplaySystems.Add(system);
+                    TECVisualConnection connectionToAdd = new TECVisualConnection(connectionStart.Item2, arg.Item2);
+                    connectionToAdd.Connections = new ObservableCollection<TECConnection>();
+                    connectionToAdd.Connections.Add(newConnection);
+                    CurrentPage.Connections.Add(connectionToAdd);
                 }
+                isConnecting = false;
+            }
+            else
+            {
+                Console.WriteLine("Starting");
+                connectionStart = arg;
+                isConnecting = true;
             }
             
-            if (Bid.Drawings.Count > 0)
-            {
-                foreach (TECDrawing drawing in Bid.Drawings)
-                {
-                    pageIndexes.Add(drawing, 0);
-                }
-                
-                CurrentDrawing = Bid.Drawings[0];
-                CurrentPage = CurrentDrawing.Pages[getIndex(CurrentDrawing)];
-            }
         }
         
-        #endregion Message Methods
-
+        private void AddControllerExecute()
+        {
+            var newController = new TECController();
+            newController.Name = ControllerName;
+            newController.IO = SelectedControllerTemplate.IO;
+            newController.Tags = SelectedControllerTemplate.Tags;
+            newController.Description = SelectedControllerTemplate.Description;
+            newController.Cost = SelectedControllerTemplate.Cost;
+            Bid.Controllers.Add(newController);
+        }
+        #endregion
+        
         #region Drag Drop
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            TECSystem sourceItem = dropInfo.Data as TECSystem;
+            TECScope sourceItem = dropInfo.Data as TECScope;
             var targetCollection = dropInfo.TargetCollection;
             if ((sourceItem != null) && (CurrentPage != null))
             {
@@ -214,45 +362,61 @@ namespace EstimateBuilder.ViewModel
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
-            Point dropPoint = dropInfo.DropPosition;
+            System.Windows.Point dropPoint = dropInfo.DropPosition;
             TECVisualScope newScope = new TECVisualScope(sourceItem, dropPoint.X, dropPoint.Y);
             CurrentPage.PageScope.Add(newScope);
-            DisplaySystems.Remove(dropInfo.Data as TECSystem);
+            /*
+            if(sourceItem is TECSystem)
+            {
+                DisplayScope.Remove(dropInfo.Data as TECSystem);
+            }
+            */
         }
         #endregion
         
         #region Event Handlers
-        private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach(TECSystem item in e.OldItems)
+                foreach(TECScope item in e.OldItems)
                 {
-                    DisplaySystems.Remove(item);
-                    foreach(TECDrawing drawing in Bid.Drawings)
+                    if(item is TECSystem)
                     {
-                        foreach(TECPage page in drawing.Pages)
-                        {
-                            var vScopeToRemove = new List<TECVisualScope>();
-                            foreach(TECVisualScope scope in page.PageScope)
-                            {
-                                if(scope.Scope == item)
-                                {
-                                    vScopeToRemove.Add(scope);
-                                }
-                            }
-                            foreach(TECVisualScope rScope in vScopeToRemove)
-                            {
-                                page.PageScope.Remove(rScope);
-                            }
-                        }
+                        DisplaySystems.Remove(item as TECSystem);
+                    } else if (item is TECEquipment)
+                    {
+                        DisplayEquipment.Remove(item as TECEquipment);
                     }
+                    else if (item is TECSubScope)
+                    {
+                        DisplaySubScope.Remove(item as TECSubScope);
+                    }
+                  
                 }
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (TECSystem item in e.NewItems)
+                foreach (Object item in e.NewItems)
                 {
-                    DisplaySystems.Add(item);
+                    if (item is TECSystem)
+                    {
+                        DisplaySystems.Add(item as TECSystem);
+                        ((TECSystem)item).Equipment.CollectionChanged += collectionChanged;
+                        foreach (TECEquipment equipment in ((TECSystem)item).Equipment)
+                        {
+                            equipment.SubScope.CollectionChanged += collectionChanged;
+                        }
+                    }
+                    else if (item is TECEquipment)
+                    {
+                        DisplayEquipment.Add(item as TECEquipment);
+                        ((TECEquipment)item).SubScope.CollectionChanged += collectionChanged;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        DisplaySubScope.Add(item as TECSubScope);
+                    }
+
                 }
             }
         }
@@ -281,9 +445,219 @@ namespace EstimateBuilder.ViewModel
             }
             
         }
+        private void registerBid()
+        {
+            Bid.Systems.CollectionChanged += collectionChanged;
+            foreach (TECSystem system in Bid.Systems)
+            {
+                system.Equipment.CollectionChanged += collectionChanged;
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    equipment.SubScope.CollectionChanged += collectionChanged;
+                }
+            }
+        }
+        private void populateDisplayed()
+        {
+            Console.WriteLine("populating");
+            foreach (TECSystem system in Bid.Systems)
+            {
+                DisplaySystems.Add(system);
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    DisplayEquipment.Add(equipment);
+                    foreach(TECSubScope subScope  in equipment.SubScope)
+                    {
+                        DisplaySubScope.Add(subScope);
+                    }
+                }
+            }
 
+            CurrentDrawing = null;
+            pageIndexes.Clear();
+            ObservableCollection<TECScope> checkScope = new ObservableCollection<TECScope>();
+            foreach (TECDrawing drawing in Bid.Drawings)
+            {
+                foreach (TECPage page in drawing.Pages)
+                {
+                    foreach (TECVisualScope scope in page.PageScope)
+                    {
+                        checkScope.Add(scope.Scope);
+                    }
+                }
+            }
+            
+
+            if (Bid.Drawings.Count > 0)
+            {
+                foreach (TECDrawing drawing in Bid.Drawings)
+                {
+                    pageIndexes.Add(drawing, 0);
+                }
+
+                CurrentDrawing = Bid.Drawings[0];
+                CurrentPage = CurrentDrawing.Pages[getIndex(CurrentDrawing)];
+            }
+        }
+
+        private bool canAcceptConnection(TECObject item, TECConnection connection)
+        {
+            bool canConnect = false;
+
+            if(item is TECController)
+            {
+                var controller = item as TECController;
+
+                var availableIO = controller.AvailableIO;
+                
+                foreach(TECScope scope in connection.Scope)
+                {
+                    if(scope is TECSubScope)
+                    {
+                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
+                        {
+                            if (availableIO.Contains(device.IOType))
+                            {
+                                availableIO.Remove(device.IOType);
+                                canConnect = true;
+                            } else
+                            {
+                                canConnect = false;
+                            }
+                            
+                        }
+                    }
+                }
+            } 
+            else if (item is TECSubScope)
+            {
+                var subScope = item as TECSubScope;
+                if(subScope.Connection == null)
+                {
+                    var availableConnections = subScope.AvailableConnections;
+
+                    foreach (ConnectionType conType in connection.ConnectionTypes)
+                    {
+                        if (availableConnections.Contains(conType))
+                        {
+                            availableConnections.Remove(conType);
+                            canConnect = true;
+                        }
+                        else
+                        {
+                            canConnect = false;
+                        }
+                    }
+                }
+                else
+                {
+                    canConnect = false;
+                }
+            }
+
+            return canConnect;
+        }
+        private bool canStartConnection(TECObject item)
+        {
+            /*
+            bool canStart = false;
+            if(item is TECController)
+            {
+                var controller = item as TECController;
+                var avaiableConnections = controller.AvailableConnections;
+                if(avaiableConnections.Count > 0)
+                {
+                    canStart = true;
+                }
+            } else if(item is TECSubScope)
+            {
+                var subScope = item as TECSubScope;
+                if(subScope.Connection == null)
+                {
+                    canStart = true;
+                }
+            }
+            
+            return canStart;
+            */
+            return true;
+        }
+
+        private TECConnection createConnection(Tuple<TECObject, TECVisualScope, string> item1, Tuple<TECObject, TECVisualScope, string> item2, double scale)
+        {
+            double length = UtilitiesMethods.getLength(item1.Item2, item2.Item2, scale);
+            var newConnection = new TECConnection();
+            newConnection.Length = length;
+            if (item1.Item1 is TECController)
+            {
+                newConnection.Controller = item1.Item1 as TECController;
+                if(item2.Item1 is TECSubScope)
+                {
+                    var sub = item2.Item1 as TECSubScope;
+                    foreach (ConnectionType type in sub.ConnectionTypes)
+                    {
+                        newConnection.ConnectionTypes.Add(type);
+                    }
+                    foreach(IOType ioType in sub.AllIOTypes)
+                    {
+                        newConnection.IOTypes.Add(ioType);
+                    }
+                }
+                else
+                {
+                    var controller = item2.Item1 as TECController;
+                    foreach (ConnectionType type in controller.NetworkIO)
+                    {
+                        newConnection.ConnectionTypes.Add(type);
+                    }
+                }
+                
+            }
+            else
+            {
+                newConnection.Controller = item2.Item1 as TECController;
+                var sub = item1.Item1 as TECSubScope;
+                foreach (ConnectionType type in sub.ConnectionTypes)
+                {
+                    newConnection.ConnectionTypes.Add(type);
+                }
+            }
+            newConnection.Scope.Add(item2.Item1 as TECScope);
+
+            return newConnection;
+        }
+
+        private void connectConnections(TECObject item1, TECObject item2, TECConnection connection)
+        {
+            if(item1 is TECController)
+            {
+                ((TECController)item1).Connections.Add(connection);
+            } else if (item1 is TECSubScope)
+            {
+                ((TECSubScope)item1).Connection = connection;
+            }
+
+            if (item2 is TECController)
+            {
+                ((TECController)item2).Connections.Add(connection);
+            }
+            else if (item2 is TECSubScope)
+            {
+                ((TECSubScope)item2).Connection = connection;
+            }
+        }
+
+        private void setBitmap()
+        {
+            int newWidth = (int)Math.Round(originalImageWidth * PercentageZoom);
+            int newHeight = (int)Math.Round(originalImageHeight * PercentageZoom);
+            if ((newWidth > 0) && (newHeight > 0))
+            {
+                CurrentBitmap = UtilitiesMethods.ResizeImage(CurrentImage, newWidth, newHeight);
+            }
+        }
+        
         #endregion Helper Methods
-
         #endregion
     }
 }

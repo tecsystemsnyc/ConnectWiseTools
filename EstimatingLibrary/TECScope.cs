@@ -95,10 +95,33 @@ namespace EstimatingLibrary
 
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
+            Tags.CollectionChanged += collectionChanged;
         }
-        
+
         abstract public Object DragDropCopy();
         #endregion //Constructors
+
+        #region Methods
+
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("Add", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("Remove", this, item);
+                }
+            }
+        }
+
+        #endregion Methods
 
     }
 }

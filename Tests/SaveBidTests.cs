@@ -15,6 +15,8 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
+        const bool DEBUG = false;
+
         TECBid bid;
         ChangeStack testStack;
         string path;
@@ -37,8 +39,14 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveBid test bid: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveBid test bid: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
         }
 
         #region Save BidInfo
@@ -778,7 +786,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
         }
 
         [TestMethod]
@@ -1111,12 +1119,207 @@ namespace Tests
         #endregion Edit Point
         #endregion Save Point
 
+        #region Save Tag
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToSystem()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECSystem systemToEdit = bid.Systems[0];
+
+            systemToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSystem finalSystem = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                if (system.Guid == systemToEdit.Guid)
+                {
+                    finalSystem = system;
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalSystem.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToEquipment()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
+
+            equipmentToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECEquipment finalEquipment = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    if (equipment.Guid == equipmentToEdit.Guid)
+                    {
+                        finalEquipment = equipment;
+                        break;
+                    }
+                }
+                if (finalEquipment != null)
+                {
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalEquipment.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToSubScope()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
+
+            subScopeToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope finalSubScope = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equip.SubScope)
+                    {
+                        if (subScope.Guid == subScopeToEdit.Guid)
+                        {
+                            finalSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if (finalSubScope != null) { break; }
+                }
+                if (finalSubScope != null) { break; }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalSubScope.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToPoint()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+
+            PointToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPoint finalPoint = null;
+            foreach (TECSystem system in finalBid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == PointToEdit.Guid)
+                            {
+                                finalPoint = point;
+                                break;
+                            }
+                        }
+                    }
+                    if (finalPoint != null) { break; }
+                }
+                if (finalPoint != null) { break; }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalPoint.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_Tag_ToController()
+        {
+            TECTag tagToAdd = bid.Tags[1];
+            Console.WriteLine(tagToAdd.Text);
+            TECController ControllerToEdit = bid.Controllers[0];
+
+            ControllerToEdit.Tags.Add(tagToAdd);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid finalBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController finalController = null;
+            foreach (TECController Controller in finalBid.Controllers)
+            {
+                if (Controller.Guid == ControllerToEdit.Guid)
+                {
+                    finalController = Controller;
+                    break;
+                }
+            }
+
+            bool tagExists = false;
+            foreach (TECTag tag in finalController.Tags)
+            {
+                Console.WriteLine(tag.Text);
+                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
+            }
+
+            Assert.IsTrue(tagExists);
+        }
+
+        #endregion Save Tag
+
         #region Save Scope Branch
 
         [TestMethod]
         public void Save_Bid_Add_Branch()
         {
             //Act
+            int oldNumBranches = bid.ScopeTree.Count();
             TECScopeBranch expectedBranch = new TECScopeBranch("New Branch", "Branch description", new ObservableCollection<TECScopeBranch>());
             bid.ScopeTree.Add(expectedBranch);
 
@@ -1137,6 +1340,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
             Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual((oldNumBranches + 1), actualBid.ScopeTree.Count);
         }
 
         [TestMethod]
@@ -1194,14 +1398,24 @@ namespace Tests
                 if (branch.Guid == branchToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumBranches - 1), actualBid.ScopeTree.Count());
+            Assert.AreEqual((oldNumBranches - 1), actualBid.ScopeTree.Count);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_Branch_FromBranch()
         {
             //Act
-            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            TECScopeBranch branchToModify = null;
+
+            foreach (TECScopeBranch branch in bid.ScopeTree)
+            {
+                if (branch.Branches.Count > 0)
+                {
+                    branchToModify = branch;
+                    break;
+                }
+            } 
+
             int oldNumBranches = branchToModify.Branches.Count();
             TECScopeBranch branchToRemove = branchToModify.Branches[0];
             branchToModify.Branches.Remove(branchToRemove);
@@ -1663,5 +1877,586 @@ namespace Tests
             Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
         }
         #endregion Save Exclusion
+
+        #region Save Drawing
+        [TestMethod]
+        public void Save_Bid_Add_Drawing()
+        {
+            //Act
+            TECDrawing expectedDrawing = PDFConverter.convertPDFToDrawing(TestHelper.TestPDF2);
+            expectedDrawing.Name = "New Drawing";
+            expectedDrawing.Description = "New Drawing Description";
+
+            bid.Drawings.Add(expectedDrawing);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECDrawing actualDrawing = null;
+            foreach (TECDrawing drawing in actualBid.Drawings)
+            {
+                if (drawing.Guid == expectedDrawing.Guid)
+                {
+                    actualDrawing = drawing;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+            Assert.AreEqual(expectedDrawing.Pages.Count, actualDrawing.Pages.Count);
+
+            byte[] expectedBytes = File.ReadAllBytes(expectedDrawing.Pages[0].Path);
+            byte[] actualBytes = File.ReadAllBytes(actualDrawing.Pages[0].Path);
+
+            Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
+
+            bool pagesAreEqual = true;
+            int i = 0;
+            foreach (byte b in expectedBytes)
+            {
+                if (b != actualBytes[i])
+                {
+                    pagesAreEqual = false;
+                    break;
+                }
+                i++;
+            }
+
+            Assert.IsTrue(pagesAreEqual);
+        }
+        #endregion Save Drawing
+
+        #region Save Visual Scope
+        [TestMethod]
+        public void Save_Bid_Add_VS()
+        {
+            //Act
+            TECScope expectedScope = bid.Systems[0];
+            TECVisualScope expectedVS = new TECVisualScope(expectedScope, 15, 743);
+            bid.Drawings[0].Pages[0].PageScope.Add(expectedVS);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECVisualScope actualVS = null;
+            foreach (TECVisualScope vs in actualBid.Drawings[0].Pages[0].PageScope)
+            {
+                if (expectedVS.Guid == vs.Guid)
+                {
+                    actualVS = vs;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedScope.Guid, actualVS.Scope.Guid);
+            Assert.AreEqual(expectedVS.X, actualVS.X);
+            Assert.AreEqual(expectedVS.Y, actualVS.Y);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_VS()
+        {
+            //Act
+            TECPage pageToModify = bid.Drawings[0].Pages[0];
+            int oldNumVS = pageToModify.PageScope.Count;
+            TECVisualScope vsToRemove = pageToModify.PageScope[0];
+            bid.Drawings[0].Pages[0].PageScope.Remove(vsToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPage actualPage = null;
+            foreach (TECDrawing drawing in bid.Drawings)
+            {
+                foreach (TECPage page in drawing.Pages)
+                {
+                    if (page.Guid == pageToModify.Guid)
+                    {
+                        actualPage = page;
+                        break;
+                    }
+                }
+                if (actualPage != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECVisualScope vs in actualPage.PageScope)
+            {
+                if (vs.Guid == vsToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
+        }
+        #endregion Save Visual Scope
+
+        #region Save Controller
+        [TestMethod]
+        public void Save_Bid_Add_Controller()
+        {
+            //Act
+            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+
+            bid.Controllers.Add(expectedController);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Controller()
+        {
+            //Act
+            int oldNumControllers = bid.Controllers.Count;
+            TECController controllerToRemove = bid.Controllers[0];
+
+            bid.Controllers.Remove(controllerToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumControllers - 1), actualBid.Controllers.Count);
+
+        }
+
+
+
+        [TestMethod]
+        public void Save_Bid_Controller_Name()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Name = "Test save controller name";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Description()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Description = "Save Device Description";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Cost()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.Cost = 46.89;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        }
+
+
+        #region Controller IO
+        [TestMethod]
+        public void Save_Bid_Controller_Add_IO()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            bool hasBACnetIP = false;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == IOType.BACnetIP)
+                {
+                    hasBACnetIP = true;
+                }
+            }
+
+            Assert.IsTrue(hasBACnetIP);
+
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_Remove_IO()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            int oldNumIO = expectedController.IO.Count;
+            TECIO ioToRemove = expectedController.IO[0];
+
+            expectedController.IO.Remove(ioToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Controller_IO_Quantity()
+        {
+            //Act
+            TECController expectedController = bid.Controllers[0];
+            TECIO ioToChange = expectedController.IO[0];
+            ioToChange.Quantity = 69;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECController actualController = null;
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Type == ioToChange.Type)
+                {
+                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+                    break;
+                }
+            }
+        }
+        #endregion Controller IO
+
+
+        #endregion
+
+        #region Save Proposal Scope
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_IsProposed()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0];
+            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_IsProposed_InProposalScope()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0].Children[0];
+            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                foreach (TECProposalScope child in propScope.Children)
+                {
+                    if (child.Scope.Guid == expectedPropScope.Scope.Guid)
+                    {
+                        actualPropScope = child;
+                        break;
+                    }
+                }
+                if (actualPropScope != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Add_Note()
+        {
+            //Act
+            TECProposalScope expectedPropScope = bid.ProposalScope[0];
+            int oldNumNotes = expectedPropScope.Notes.Count;
+            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note", "", new ObservableCollection<TECScopeBranch>());
+            expectedPropScope.Notes.Add(expectedNote);
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch actualNote = null;
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Name, actualNote.Name);
+            Assert.AreEqual((oldNumNotes + 1), actualPropScope.Notes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Add_Note_InNote()
+        {
+            //Act
+            TECScopeBranch noteToModify = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    noteToModify = propScope.Notes[0];
+                    //Console.WriteLine("Setting noteToModify as: " + noteToModify.Name);
+                    break;
+                }
+            }
+            int oldNumNotes = noteToModify.Branches.Count;
+            //Console.WriteLine("OldNumNotes: " + oldNumNotes);
+            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note Note", "", new ObservableCollection<TECScopeBranch>());
+            noteToModify.Branches.Add(expectedNote);
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch actualNote = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                foreach (TECScopeBranch note in propScope.Notes)
+                {
+                    if (note.Guid == noteToModify.Guid)
+                    {
+                        //Console.WriteLine("noteToModify Guid found in actual bid. Note name: " + note.Name);
+                        //Console.WriteLine("NewNumNotes: " + note.Branches.Count);
+                        Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
+                        foreach (TECScopeBranch noteNote in note.Branches)
+                        {
+                            if (noteNote.Guid == expectedNote.Guid)
+                            {
+                                actualNote = noteNote;
+                                break;
+                            }
+                        }
+                    }
+                    if (actualNote != null) { break; }
+                }
+                if (actualNote != null) { break; }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Name, actualNote.Name);
+
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Remove_Note()
+        {
+            //Act
+            TECProposalScope propScopeToModify = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    propScopeToModify = propScope;
+                    break;
+                }
+            }
+            int numOldNotes = propScopeToModify.Notes.Count;
+            TECScopeBranch noteToRemove = propScopeToModify.Notes[0];
+            propScopeToModify.Notes.Remove(noteToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == propScopeToModify.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            //Assert
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == noteToRemove.Guid) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((numOldNotes - 1), actualPropScope.Notes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_ProposalScope_Edit_Note()
+        {
+            //Act
+            TECProposalScope expectedPropScope = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    expectedPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch noteToModify = expectedPropScope.Notes[0];
+            noteToModify.Name = "Edited note";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECProposalScope actualPropScope = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            TECScopeBranch actualNote = null;
+            foreach (TECScopeBranch note in actualPropScope.Notes)
+            {
+                if (note.Guid == noteToModify.Guid)
+                {
+                    actualNote = noteToModify;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(noteToModify.Name, actualNote.Name);
+            Assert.IsNotNull(actualNote);
+        }
+
+        #endregion Save Proposal Scope
     }
 }

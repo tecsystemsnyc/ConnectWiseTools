@@ -22,5 +22,17 @@ namespace TECUserControlLibrary.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TemplatesFilePath {
+            get {
+                return ((string)(this["TemplatesFilePath"]));
+            }
+            set {
+                this["TemplatesFilePath"] = value;
+            }
+        }
     }
 }

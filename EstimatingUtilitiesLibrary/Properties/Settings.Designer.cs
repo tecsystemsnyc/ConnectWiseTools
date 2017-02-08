@@ -23,15 +23,12 @@ namespace EstimatingUtilitiesLibrary.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.1.2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
-            }
-            set {
-                this["Version"] = value;
             }
         }
     }

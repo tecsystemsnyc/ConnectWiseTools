@@ -26,6 +26,11 @@ namespace Tests
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
+        static TECDrawing expectedDrawing;
+        static TECPage expectedPage;
+        static TECVisualScope expectedVisualScope;
+        static TECController expectedController;
+        static TECProposalScope expectedPropScope;
 
         static string path;
 
@@ -42,6 +47,11 @@ namespace Tests
         static TECNote actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
+        static TECDrawing actualDrawing;
+        static TECPage actualPage;
+        static TECVisualScope actualVisualScope;
+        static TECController actualController;
+        static TECProposalScope actualPropScope;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -69,10 +79,36 @@ namespace Tests
             expectedDevice = expectedSubScope.Devices[0];
             expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
-            expectedBranch = expectedBid.ScopeTree[0];
+
+            expectedBranch = null;
+            foreach (TECScopeBranch branch in expectedBid.ScopeTree)
+            {
+                if (branch.Name == "Branch 1")
+                {
+                    expectedBranch = branch;
+                    break;
+                }
+            }
+
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Tags[0];
+
+            expectedDrawing = expectedBid.Drawings[0];
+            expectedPage = expectedDrawing.Pages[0];
+            expectedVisualScope = expectedPage.PageScope[0];
+
+            expectedController = expectedBid.Controllers[0];
+
+            expectedPropScope = null;
+            foreach (TECProposalScope propScope in expectedBid.ProposalScope)
+            {
+                if (propScope.Scope.Name == "Prop System")
+                {
+                    expectedPropScope = propScope;
+                    break;
+                }
+            }
 
             path = Path.GetTempFileName();
 
@@ -179,6 +215,51 @@ namespace Tests
                     break;
                 }
             }
+
+            foreach (TECDrawing drawing in actualBid.Drawings)
+            {
+                if (drawing.Guid == expectedDrawing.Guid)
+                {
+                    actualDrawing = drawing;
+                    break;
+                }
+            }
+
+            foreach (TECPage page in actualDrawing.Pages)
+            {
+                if (page.Guid == expectedPage.Guid)
+                {
+                    actualPage = page;
+                    break;
+                }
+            }
+
+            foreach (TECVisualScope vs in actualPage.PageScope)
+            {
+                if (vs.Guid == expectedVisualScope.Guid)
+                {
+                    actualVisualScope = vs;
+                    break;
+                }
+            }
+            
+            foreach (TECController con in actualBid.Controllers)
+            {
+                if (con.Guid == expectedController.Guid)
+                {
+                    actualController = con;
+                    break;
+                }
+            }
+
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
+                {
+                    actualPropScope = propScope;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]
@@ -187,8 +268,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveAs test bid saved to: " + path);
+            //File.Delete(path);
+            Console.WriteLine("SaveAs test bid saved to: " + path);
         }
 
         [TestMethod]
@@ -251,7 +332,9 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.Wire, actualDevice.Wire);
+            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+
+            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
 
         [TestMethod]
@@ -343,6 +426,63 @@ namespace Tests
 
             Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Drawing()
+        {
+            //Assert
+            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Page()
+        {
+            //Assert
+            Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_VisScope()
+        {
+            //Assert
+            Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
+            Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
+
+            Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_PropScope()
+        {
+            //Assert
+            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
+            Assert.AreEqual(expectedPropScope.Notes[0].Guid, actualPropScope.Notes[0].Guid);
+            Assert.AreEqual(expectedPropScope.Notes[0].Branches[0].Guid, actualPropScope.Notes[0].Branches[0].Guid);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Controller()
+        {
+            //Assert
+            Assert.AreEqual(expectedController.Name, actualController.Name);
+            Assert.AreEqual(expectedController.Description, actualController.Description);
+            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+
+            foreach (TECIO expectedIO in expectedController.IO)
+            {
+                bool ioExists = false;
+                foreach (TECIO actualIO in actualController.IO)
+                {
+                    if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
+                    {
+                        ioExists = true;
+                        break;
+                    }
+                }
+                Assert.IsTrue(ioExists);
+            }
         }
     }
 }
