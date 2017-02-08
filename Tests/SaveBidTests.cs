@@ -2321,6 +2321,53 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Bid_ProposalScope_Add_Note_InNote()
+        {
+            //Act
+            TECScopeBranch noteToModify = null;
+            foreach (TECProposalScope propScope in bid.ProposalScope)
+            {
+                if (propScope.Notes.Count > 0)
+                {
+                    noteToModify = propScope.Notes[0];
+                    break;
+                }
+            }
+            int oldNumNotes = noteToModify.Branches.Count;
+            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note Note", "", new ObservableCollection<TECScopeBranch>());
+            noteToModify.Branches.Add(expectedNote);
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECScopeBranch actualNote = null;
+            foreach (TECProposalScope propScope in actualBid.ProposalScope)
+            {
+                foreach (TECScopeBranch note in propScope.Notes)
+                {
+                    if (note.Guid == noteToModify.Guid)
+                    {
+                        Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
+                        foreach (TECScopeBranch noteNote in note.Branches)
+                        {
+                            if (noteNote.Guid == expectedNote.Guid)
+                            {
+                                actualNote = noteNote;
+                                break;
+                            }
+                        }
+                    }
+                    if (actualNote != null) { break; }
+                }
+                if (actualNote != null) { break; }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Name, actualNote.Name);
+
+        }
+
+        [TestMethod]
         public void Save_Bid_ProposalScope_Remove_Note()
         {
             //Act

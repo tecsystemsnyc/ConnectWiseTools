@@ -145,7 +145,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public BudgetViewModel(TECBid bid)
         {
-            Console.WriteLine("here");
             Bid = bid;
             PopulateSystems(bid);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);

@@ -471,7 +471,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void SearchCollectionExecute()
         {
-            Console.WriteLine("here");
             if (SearchString != null)
             {
                 switch (TabIndex)
@@ -543,7 +542,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddTagExecute()
         {
-            Console.WriteLine("here");
             TECTag newTag = new TECTag();
             newTag.Text = TagName;
             Templates.Tags.Add(newTag);
