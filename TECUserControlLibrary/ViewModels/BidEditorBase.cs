@@ -114,7 +114,6 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Fields
         private ChangeStack stack;
-        private bool saveSuccessful;
         private string bidDBFilePath;
         public string startupFile;
         public string scopeDirectoryPath;
@@ -457,9 +456,8 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SaveExecute();
 
-                    if (saveSuccessful)
+                    if (saveSynchronously())
                     {
                         bidDBFilePath = null;
                         Bid = new TECBid();
@@ -521,46 +519,8 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
 
-            saveSuccessful = false;
-            if (bidDBFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                    {
-                        try
-                        {
-                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        }
-                        saveSuccessful = true;
-                    }
-                    else
-                    {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                SaveAsExecute();
-            }
+            saveBid();
+            
         }
         private void SaveAsExecute()
         {
@@ -569,45 +529,7 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            //User choose path
-            saveSuccessful = false;
-            string path = getSavePath();
-            if (path != null)
-            {
-                bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                        saveSuccessful = true;
-                    }
-                    else
-                    {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    Console.WriteLine("Finished saving SQL Database.");
-                    ResetStatus();
-                };
-
-                worker.RunWorkerAsync();
-                
-            }
+            saveBidAs();
         }
         private void DocumentExecute()
         {
@@ -724,8 +646,7 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SaveExecute();
-                    if (!saveSuccessful)
+                    if (!saveSynchronously())
                     {
                         e.Cancel = true;
                         MessageBox.Show("Save unsuccessful, cancelling quit.");
@@ -741,6 +662,171 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private void saveBid()
+        {
+            if (bidDBFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + bidDBFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                    {
+                        try
+                        {
+                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
+                    }
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                saveBidAs();
+            }
+        }
+
+        private void saveBidAs()
+        {
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                bidDBFilePath = path;
+                scopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    }
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    Console.WriteLine("Finished saving SQL Database.");
+                    ResetStatus();
+                };
+
+                worker.RunWorkerAsync();
+
+            }
+
+        }
+
+        private bool saveAsSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                bidDBFilePath = path;
+                scopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+                
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    saveSuccessful = true;
+                    }
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    saveSuccessful = false;
+                }
+               
+
+            }
+
+            return saveSuccessful;
+        }
+
+        private bool saveSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            if (bidDBFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + bidDBFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+                
+                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                    {
+                        try
+                        {
+                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                        saveSuccessful = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
+                    }
+                    else
+                    {
+                        string message = "File is open elsewhere";
+                        MessageBox.Show(message);
+                    }
+               
+            }
+            else
+            {
+                if (saveAsSynchronously())
+                {
+                    saveSuccessful = true;
+                }else
+                {
+                    saveSuccessful = false;
+                }
+            }
+
+            return saveSuccessful;
         }
         #endregion
         

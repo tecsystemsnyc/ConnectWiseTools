@@ -84,7 +84,7 @@ namespace EstimatingUtilitiesLibrary
                 MessageBox.Show("Could not load bid from database. Error: " + e.Message);
             }
 
-    SQLiteDB.Connection.Close();
+            SQLiteDB.Connection.Close();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
