@@ -20,25 +20,7 @@ namespace EstimatingLibrary
             Branches = branches;
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
-
-        private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    NotifyPropertyChanged("Add", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    NotifyPropertyChanged("Remove", this, item);
-                }
-            }
-        }
-
+        
         public TECScopeBranch(string name, string description, ObservableCollection<TECScopeBranch> branches) : this(name, description, branches, Guid.NewGuid()) { }
         public TECScopeBranch() : this("", "", new ObservableCollection<TECScopeBranch>()) { }
 
@@ -65,5 +47,24 @@ namespace EstimatingLibrary
             TECScopeBranch outScope = new TECScopeBranch(this);
             return outScope;
         }
+
+        private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("Add", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("Remove", this, item);
+                }
+            }
+        }
+
     }
 }
