@@ -2330,10 +2330,12 @@ namespace Tests
                 if (propScope.Notes.Count > 0)
                 {
                     noteToModify = propScope.Notes[0];
+                    Console.WriteLine("Setting noteToModify as: " + noteToModify.Name);
                     break;
                 }
             }
             int oldNumNotes = noteToModify.Branches.Count;
+            Console.WriteLine("OldNumNotes: " + oldNumNotes);
             TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note Note", "", new ObservableCollection<TECScopeBranch>());
             noteToModify.Branches.Add(expectedNote);
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -2347,6 +2349,8 @@ namespace Tests
                 {
                     if (note.Guid == noteToModify.Guid)
                     {
+                        Console.WriteLine("noteToModify Guid found in actual bid. Note name: " + note.Name);
+                        Console.WriteLine("NewNumNotes: " + note.Branches.Count);
                         Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
                         foreach (TECScopeBranch noteNote in note.Branches)
                         {

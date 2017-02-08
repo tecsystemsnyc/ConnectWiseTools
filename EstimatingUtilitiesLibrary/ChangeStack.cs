@@ -26,6 +26,7 @@ namespace EstimatingUtilitiesLibrary
 
         private const bool DEBUG_PROPERTIES = false;
         private const bool DEBUG_STACK = false;
+        private const bool DEBUG_REGISTER = false;
         
         private bool isDoing = false;
         
@@ -194,6 +195,10 @@ namespace EstimatingUtilitiesLibrary
 
         private void registerScope(TECScopeBranch branch)
         {
+            if (DEBUG_REGISTER)
+            {
+                Console.WriteLine("Scope Branch Registered. Name: " + branch.Name);
+            }
             foreach(TECScopeBranch scope in branch.Branches)
             {
                 scope.PropertyChanged += Object_PropertyChanged;
@@ -216,6 +221,10 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECProposalScope child in pScope.Children)
             {
                 child.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECScopeBranch child in pScope.Notes)
+            {
+                registerScope(child);
             }
         }
 
