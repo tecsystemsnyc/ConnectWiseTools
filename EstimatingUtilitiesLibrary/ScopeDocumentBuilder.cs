@@ -197,7 +197,7 @@ namespace EstimatingUtilitiesLibrary
             
         }
 
-        private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs, string tabChar = "•")
+        private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
             string scopeString = branch.Name;
             if (branch.Description != "")
@@ -209,7 +209,7 @@ namespace EstimatingUtilitiesLibrary
                 paragraph.AddTab();
             }
             paragraph.AddFormattedText(tabChar);
-            if (tabChar != "•")
+            if (tabChar != "• ")
             {
                 paragraph.AddTab();
             }
@@ -270,8 +270,7 @@ namespace EstimatingUtilitiesLibrary
                             }
 
                             paragraph.AddTab();
-                            paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ".");
-                            paragraph.AddTab();
+                            paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
                             paragraph.AddFormattedText(equipmentString);
                             paragraph.AddLineBreak();
 
@@ -293,8 +292,7 @@ namespace EstimatingUtilitiesLibrary
 
                                     paragraph.AddTab();
                                     paragraph.AddTab();
-                                    paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ".");
-                                    paragraph.AddTab();
+                                    paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
                                     paragraph.AddFormattedText(subScopeString);
                                     paragraph.AddLineBreak();
 
