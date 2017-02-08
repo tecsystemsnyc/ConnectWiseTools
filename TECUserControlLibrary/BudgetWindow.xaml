@@ -23,7 +23,7 @@
 
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="115"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -36,7 +36,6 @@
             <Border BorderThickness="2">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -80,18 +79,7 @@
                              Height="Auto"
                              Margin="5"
                              TextAlignment="Right"/>
-                    <Label Content="Total Price:" FontSize="12"
-                           Grid.Row="3" Grid.ColumnSpan="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
-                           Foreground="{DynamicResource LightTextBrush}"
-                           VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:C}}" FontSize="12"
-                           Grid.Row="3"
-                           Grid.Column="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
-                           Foreground="{DynamicResource LightTextBrush}"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Center"/>
+                    
                 </Grid>
             </Border>
         </Grid>
@@ -141,11 +129,22 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Label Content="{Binding EquipmentQuantity}" FontSize="12"
-                           Grid.Row="2" 
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Total Price:" FontSize="12"
                            Background="{DynamicResource WindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
-                           VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,15" Width="275"/>
+                           VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:C}}" FontSize="12"
+                           Grid.Column="2"
+                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Foreground="{DynamicResource LightTextBrush}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"/>
+        </Grid>
         <Button Content="Export Budget" Command="{Binding ExportBudgetCommand}" Grid.Row="2" Grid.Column="1" Margin="5"/>
     </Grid>
 </UserControl>

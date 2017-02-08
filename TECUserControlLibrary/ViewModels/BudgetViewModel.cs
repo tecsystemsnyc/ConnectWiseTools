@@ -32,28 +32,12 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECSystem> _systems;
-
-        public ObservableCollection<TECSystem> Systems
-        {
-            get { return _systems; }
-            set
-            {
-                _systems = value;
-                RaisePropertyChanged("Systems");
-                RaisePropertyChanged("BudgetedSystems");
-                RaisePropertyChanged("UnbudgetedSystems");
-                RaisePropertyChanged("BudgetSubTotal");
-                RaisePropertyChanged("TotalPrice");
-            }
-        }
-
         public ObservableCollection<TECSystem> BudgetedSystems
         {
             get
             {
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
-                foreach (TECSystem system in _systems)
+                foreach (TECSystem system in Bid.Systems)
                 {
                     if (system.PriceWithEquipment >= 0)
                     {
@@ -69,7 +53,7 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
-                foreach (TECSystem system in _systems)
+                foreach (TECSystem system in Bid.Systems)
                 {
                     if (system.PriceWithEquipment < 0)
                     {
@@ -138,60 +122,53 @@ namespace TECUserControlLibrary.ViewModels
                 
             }
         }
-
-        public int EquipmentQuantity { get { return getEquipmentQuantity(); } }
         
         public ICommand ExportBudgetCommand { get; private set; }
 
         public BudgetViewModel(TECBid bid)
         {
             Bid = bid;
-            PopulateSystems(bid);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
+
+            bid.Systems.CollectionChanged += Systems_CollectionChanged;
+
+            foreach (TECSystem system in bid.Systems)
+            {
+                registerSystem(system);
+            }
 
             ManualAdjustmentPercentage = 0;
         }
 
-        public void PopulateSystems(TECBid bid)
-        {
-            Systems = bid.Systems;
-            Systems.CollectionChanged += Systems_CollectionChanged;
-            BudgetedSystems.Add(new TECSystem());
-        }
-
         private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            raiseBudgetChanges();
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(Object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
-                    Console.WriteLine("System added");
-                    var sys = item as TECSystem;
-                    if(sys.PriceWithEquipment != -1)
-                    {
-                        Console.WriteLine("Added to budgeted");
-                        BudgetedSystems.Add(sys);
-                    }
-                    else if (sys.PriceWithEquipment == -1)
-                    {
-                        Console.WriteLine("Added to unbudeg");
-                        UnbudgetedSystems.Add(sys);
-                    }
+                    registerSystem(item as TECSystem);
                 }
             }
-            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (Object item in e.OldItems)
+                foreach (object item in e.OldItems)
                 {
-                    var sys = item as TECSystem;
-                    if (BudgetedSystems.Contains(sys))
-                    {
-                        BudgetedSystems.Remove(sys);
-                    } else if (UnbudgetedSystems.Contains(sys))
-                    {
-                        UnbudgetedSystems.Remove(sys);
-                    }
+                    (item as TECSystem).PropertyChanged -= System_PropertyChanged;
                 }
+            }
+        }
+
+        private void registerSystem(TECSystem system)
+        {
+            system.PropertyChanged += System_PropertyChanged;
+        }
+
+        private void System_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TotalBudgetPrice")
+            {
+                raiseBudgetChanges();
             }
         }
 
@@ -204,7 +181,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     CSVWriter writer = new CSVWriter(path);
-                    writer.BudgetToCSV(Systems, ManualAdjustmentPercentage/100);
+                    writer.BudgetToCSV(Bid.Systems, ManualAdjustmentPercentage/100);
                 }
                 else
                 {
@@ -240,18 +217,12 @@ namespace TECUserControlLibrary.ViewModels
             return path;
         }
 
-        private int getEquipmentQuantity()
+        private void raiseBudgetChanges()
         {
-            int outNum = 0;
-            foreach(TECSystem system in Systems)
-            {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    outNum += equipment.Quantity * system.Quantity;
-                }
-            }
-
-            return outNum;
+            RaisePropertyChanged("BudgetedSystems");
+            RaisePropertyChanged("UnbudgetedSystems");
+            RaisePropertyChanged("BudgetSubTotal");
+            RaisePropertyChanged("TotalPrice");
         }
     }
 }
