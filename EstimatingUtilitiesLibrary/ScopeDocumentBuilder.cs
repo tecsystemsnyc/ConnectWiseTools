@@ -250,13 +250,12 @@ namespace EstimatingUtilitiesLibrary
                         addScopeBranch(branch, paragraph, 2);
                     }
 
-                    paragraph.AddLineBreak();
-
                     int equipIndex = 0;
                     foreach (TECProposalScope equipProp in systemProp.Children)
                     {
                         if (equipProp.IsProposed)
                         {
+                            paragraph.AddLineBreak();
                             TECScope equipment = equipProp.Scope;
                             paragraph.AddTab();
                             string equipmentString = equipment.Name;
@@ -279,13 +278,14 @@ namespace EstimatingUtilitiesLibrary
                                 addScopeBranch(branch, paragraph, 3);
                             }
 
-                            paragraph.AddLineBreak();
+                            
 
                             int ssIndex = 0;
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
                                 if (ssProp.IsProposed)
                                 {
+                                    paragraph.AddLineBreak();
                                     TECScope subScope = ssProp.Scope;
                                     paragraph.AddTab();
                                     string subScopeString = subScope.Name;

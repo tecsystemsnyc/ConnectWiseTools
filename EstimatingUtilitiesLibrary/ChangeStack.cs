@@ -64,7 +64,6 @@ namespace EstimatingUtilitiesLibrary
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
             //System Changed
             foreach (TECScopeBranch branch in Bid.ScopeTree) {
-                branch.PropertyChanged += Object_PropertyChanged;
                 registerScope(branch); }
             //Notes changed
             foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
@@ -199,9 +198,9 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Scope Branch Registered. Name: " + branch.Name);
             }
+            branch.PropertyChanged += Object_PropertyChanged;
             foreach(TECScopeBranch scope in branch.Branches)
             {
-                scope.PropertyChanged += Object_PropertyChanged;
                 registerScope(scope);
             }
         }
@@ -220,7 +219,7 @@ namespace EstimatingUtilitiesLibrary
             pScope.PropertyChanged += Object_PropertyChanged;
             foreach(TECProposalScope child in pScope.Children)
             {
-                child.PropertyChanged += Object_PropertyChanged;
+                registerPropScope(child);
             }
             foreach(TECScopeBranch child in pScope.Notes)
             {

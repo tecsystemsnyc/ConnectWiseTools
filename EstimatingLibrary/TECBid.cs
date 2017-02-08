@@ -369,7 +369,10 @@ namespace EstimatingLibrary
             double price = 0;
             foreach (TECSystem system in this.Systems)
             {
-                price += system.TotalBudgetPrice;
+                if (system.TotalBudgetPrice >= 0)
+                {
+                    price += system.TotalBudgetPrice;
+                }
             }
             return price;
         }
