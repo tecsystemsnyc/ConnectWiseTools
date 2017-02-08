@@ -42,57 +42,6 @@
 
             </TabItem>
             
-            <TabItem Header="Scope">
-                <DataGrid  ItemsSource="{Binding Bid.ScopeTree}" 
-                           AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="..." CellTemplate="{StaticResource ExpandDetails}" Width="30" />
-                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                        <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="*"/>
-                        <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="*" IsReadOnly="True"
-                                            ElementStyle="{StaticResource RightCell}"/>
-                    </DataGrid.Columns>
-                    <DataGrid.RowDetailsTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding SelectedItem.Branches}">
-                            <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                            AncestorType={x:Type DataGrid}},
-                            Path=RowDetailsTemplate}"
-                                  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                            AncestorType={x:Type DataGrid}},
-                            Path=SelectedItem.Branches}"
-                                      AutoGenerateColumns="False"
-                           VirtualizingPanel.ScrollUnit="Pixel">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                                    <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                                    <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                                    <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </HierarchicalDataTemplate>
-                    </DataGrid.RowDetailsTemplate>
-                </DataGrid>
-            </TabItem>
-            
-            <TabItem Header="Notes">
-                <DataGrid x:Name="notesDataGrid"  
-                  ItemsSource="{Binding Bid.Notes}"
-                  AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-            <TabItem Header="Exclusions">
-                <DataGrid x:Name="exclusionsDataGrid"  
-                  ItemsSource="{Binding Bid.Exclusions}"
-                          CanUserAddRows="True"
-                  AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
             <TabItem Header="Controllers">
                 <cLib:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
                                             ViewModel="{Binding ScopeDataGrid}"/>
