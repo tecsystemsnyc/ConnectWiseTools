@@ -28,6 +28,7 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -79,7 +80,58 @@
                HorizontalContentAlignment="Right"/>
 
 
-
+        <Label Content="Parameters" FontWeight="Bold"
+               Grid.Row="3"  Grid.Column="3"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        
+        <Label Content="Overhead:" 
+               Grid.Row="5"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Overhead}"
+                 Grid.Row="5"
+                 Grid.Column="4"
+                 Margin="5"/>
+        
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
+        <Label Content="Escalation:" 
+               Grid.Row="4"  Grid.Column="3"/>
+        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+                 Grid.Row="4"
+                 Grid.Column="4"
+                 Margin="5"/>
 
     </Grid>
 </UserControl>
