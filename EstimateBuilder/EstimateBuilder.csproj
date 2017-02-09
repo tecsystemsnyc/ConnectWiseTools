@@ -152,6 +152,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
+    <Compile Include="ViewModel\ElectricalViewModel.cs" />
     <Compile Include="ViewModel\LaborViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProposalViewModel.cs" />
@@ -163,6 +164,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ElectricalView.xaml.cs">
+      <DependentUpon>ElectricalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
@@ -196,6 +200,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\DrawingView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ElectricalView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

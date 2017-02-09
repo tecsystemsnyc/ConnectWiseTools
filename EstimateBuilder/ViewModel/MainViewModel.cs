@@ -63,6 +63,7 @@ namespace EstimateBuilder.ViewModel
         public SettingsViewModel SettingsVM { get; set; }
         public ReviewViewModel ReviewVM { get; set; }
         public ProposalViewModel ProposalVM { get; set; }
+        public ElectricalViewModel ElectricalVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -105,6 +106,10 @@ namespace EstimateBuilder.ViewModel
         private void setupProposalVM(TECBid bid)
         {
             ProposalVM = new ProposalViewModel(bid);
+        }
+        private void setupElectricalVM(TECBid bid)
+        {
+            ElectricalVM = new ElectricalViewModel(bid);
         }
         #endregion
 
@@ -165,6 +170,7 @@ namespace EstimateBuilder.ViewModel
             setupReviewVM(Bid);
             setupSettingsVM(Bid);
             setupProposalVM(Bid);
+            setupElectricalVM(Bid);
         }
 
         private void refreshAll()
@@ -175,7 +181,7 @@ namespace EstimateBuilder.ViewModel
             ReviewVM.Bid = Bid;
             //SettingsVM.Bid = Bid;
             ProposalVM.Bid = Bid;
-            
+            ElectricalVM.Bid = Bid;
         }
 
         private void getVersion()

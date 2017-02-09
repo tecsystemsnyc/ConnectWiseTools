@@ -122,6 +122,10 @@
                     <view:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
+                <TabItem Header="Electrical">
+                    <view:ElectricalView
+                        ViewModel="{Binding ElectricalVM}"/>
+                </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
                     <view:DrawingView
                         ViewModel="{Binding DrawingVM}"/>
