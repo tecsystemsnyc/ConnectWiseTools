@@ -102,7 +102,15 @@ namespace EstimatingLibrary
 
         public TECBidParameters()
         {
+            _isTaxExempt = false;
+            _requiresBond = false;
+            _requiresWrapUp = false;
 
+            _escalation = 0;
+            _overhead = 0;
+            _profit = 0;
+            _subcontractorMarkup = 0;
+            _subcontractorEscalation = 0;
         }
 
         public override object Copy()
