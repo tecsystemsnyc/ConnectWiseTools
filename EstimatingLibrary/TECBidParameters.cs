@@ -108,7 +108,17 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            throw new NotImplementedException();
+            var outParameters = new TECBidParameters();
+            outParameters._escalation = _escalation;
+            outParameters._overhead = _overhead;
+            outParameters._profit = _profit;
+            outParameters._subcontractorMarkup = _subcontractorMarkup;
+            outParameters._subcontractorEscalation = _subcontractorEscalation;
+            outParameters._isTaxExempt = _isTaxExempt;
+            outParameters._requiresBond = _requiresBond;
+            outParameters._requiresWrapUp = _requiresWrapUp;
+
+            return outParameters;
         }
     }
 }
