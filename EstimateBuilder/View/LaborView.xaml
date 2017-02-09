@@ -56,6 +56,7 @@
 
 
         <!--Project Management Values-->
+        
         <Label Content="Project Management: "
                Grid.Row="1"/>
         <Label Content="{Binding Labor.NumPoints}"
@@ -221,6 +222,33 @@
             <TextBlock TextWrapping="Wrap"
                        TextAlignment="Center">Reload Coefficients<LineBreak/>and Rates</TextBlock>
         </Button>
+
+        <Border Grid.Column="1" 
+                  Grid.Row="1"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="2"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="3"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="4"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="5"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+
 
     </Grid>
 </UserControl>
