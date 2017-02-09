@@ -20,6 +20,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -193,5 +195,21 @@
         <TextBox Text="{Binding Labor.ElectricalSubTotal}"
                  Grid.Row="8" Grid.Column="7"
                  IsReadOnly="True"/>
+        
+        
+        <!--Total Values-->
+        <Label Content="Total"
+               Grid.Row="9" Grid.Column="7"/>
+        <TextBox Text="{Binding Labor.TotalLaborCost}"
+                 Grid.Row="10" Grid.Column="7"/>
+        
+        <!--Reload Button-->
+        <Button Grid.Row="9" Grid.Column="0"
+                Grid.RowSpan="2"
+                Margin="5">
+            <TextBlock TextWrapping="Wrap"
+                       TextAlignment="Center">Reload Coefficients<LineBreak/>and Rates</TextBlock>
+        </Button>
+
     </Grid>
 </UserControl>
