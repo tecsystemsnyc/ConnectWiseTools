@@ -65,6 +65,19 @@ namespace EstimatingLibrary
             get { return getAllIOTypes(); }
         }
 
+        public Double Length
+        {
+            get
+            {
+                return Connection.Length;
+            }
+            set
+            {
+                Connection.Length = value;
+                RaisePropertyChanged("Length");
+            }
+        }
+
 
         #endregion //Properties
 
@@ -76,6 +89,7 @@ namespace EstimatingLibrary
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
+            _connection = new TECConnection();
         }
         
         public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points) : this(name, description, devices, points, Guid.NewGuid()) { }

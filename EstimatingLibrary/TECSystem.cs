@@ -127,6 +127,22 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
+
+        public ObservableCollection<TECSubScope> SubScope
+        {
+            get
+            {
+                var outSubScope = new ObservableCollection<TECSubScope>();
+                foreach(TECEquipment equip in Equipment)
+                {
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        outSubScope.Add(sub);
+                    }
+                }
+                return outSubScope;
+            }
+        }
         #endregion //Properties
 
         #region Constructors

@@ -130,6 +130,9 @@
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubScopeWiringGridControl.xaml.cs">
+      <DependentUpon>SubScopeWiringGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
@@ -244,6 +247,10 @@
     <Page Include="SubScopeGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SubScopeWiringGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SystemEditControl.xaml">
       <SubType>Designer</SubType>
