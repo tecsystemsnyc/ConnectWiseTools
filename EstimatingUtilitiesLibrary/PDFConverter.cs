@@ -27,7 +27,15 @@ namespace EstimatingUtilitiesLibrary
             TECDrawing drawing = new TECDrawing(name);
 
             MagickImageCollection pdf = new MagickImageCollection();
-            pdf.Read(pdfPath);
+
+            try
+            {
+                pdf.Read(pdfPath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("pdf.Read() failed in convertPDFToDrawing(). Error: " + e.Message);
+            }
 
             string directory = Path.GetTempPath();
 
