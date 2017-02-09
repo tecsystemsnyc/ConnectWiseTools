@@ -68,7 +68,7 @@
                Grid.Row="7" Grid.Column="1"
                HorizontalContentAlignment="Right"/>
         <Label Content="Labor:" Grid.Row="8"/>
-        <Label Content="{Binding Bid.LaborCost}" 
+        <Label Content="{Binding Bid.Labor.TECSubtotal}" 
                Grid.Row="8" Grid.Column="1"
                HorizontalContentAlignment="Right"/>
 
@@ -79,7 +79,7 @@
                Grid.Row="7" Grid.Column="4"
                HorizontalContentAlignment="Right"/>
         <Label Content="Labor:" Grid.Row="8" Grid.Column="3"/>
-        <Label Content="{Binding Bid.LaborCost}" 
+        <Label Content="{Binding Bid.Labor.SubcontractorSubtotal}" 
                Grid.Row="8" Grid.Column="4"
                HorizontalContentAlignment="Right"/>
         <Label Content="Escalation:" 
