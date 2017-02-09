@@ -170,13 +170,13 @@
         <TextBox Text="{Binding Labor.CommExtraHours}"
                  Grid.Row="5" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.CommTotalHours, Mode=OneWay}"
+        <Label Content="{Binding Labor.CommTotalHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="5"
                  />
-        <TextBox Text="{Binding Labor.CommRate}"
+        <Label Content="{Binding Labor.CommRate}"
                  Grid.Row="5" Grid.Column="6"
                  />
-        <TextBox Text="{Binding Labor.CommSubTotal, Mode=OneWay}"
+        <Label Content="{Binding Labor.CommSubTotal, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="7"
                  />
 
