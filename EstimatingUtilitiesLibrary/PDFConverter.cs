@@ -16,6 +16,12 @@ namespace EstimatingUtilitiesLibrary
     {
         public static TECDrawing convertPDFToDrawing(string pdfPath)
         {
+            if (!File.Exists(pdfPath))
+            {
+                string message = "No file exists at: " + pdfPath + ". ConvertPDFToDrawing() failed.";
+                throw new FileLoadException(message);
+            }
+
             string name = Path.GetFileNameWithoutExtension(pdfPath);
 
             TECDrawing drawing = new TECDrawing(name);
