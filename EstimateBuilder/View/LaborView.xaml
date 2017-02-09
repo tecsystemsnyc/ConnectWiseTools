@@ -8,7 +8,8 @@
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
 
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -22,43 +23,175 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <Label Content="TEC Labor"/>
-        <Label Content="Project Management Coefficient: "
-               Grid.Row="1"/>
-        <TextBox Text="{Binding Labor.PMCoef}"
-                 Grid.Row="1" Grid.Column="1"/>
-        
-        <Label Content="Engineering Coefficient: "
-               Grid.Row="2"/>
-        <TextBox Text="{Binding Labor.ENGCoef}"
-                 Grid.Row="2" Grid.Column="1"/>
+        <!--TEC Labor Headers-->
+        <Label Content="TEC Labor"
+               FontWeight="Bold"/>
+        <Label Content="Points"
+               Grid.Column="1"/>
+        <Label Content="Hours/Point"
+               Grid.Column="2"/>
+        <Label Content="Hours (Points)"
+               Grid.Column="3"/>
+        <Label Content="Extra Hours"
+               Grid.Column="4"/>
+        <Label Content="Total Hours"
+               Grid.Column="5"/>
+        <Label Content="$/Hour"
+               Grid.Column="6"/>
+        <Label Content="SubTotal"
+               Grid.Column="7"/>
 
-        <Label Content="Software Coefficient: "
+
+        <!--Project Management Values-->
+        <Label Content="Project Management: "
+               Grid.Row="1"/>
+        <TextBox Text="{Binding TotalPointNumber}"
+                 Grid.Row="1" Grid.Column="1"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.PMCoef}"
+                 Grid.Row="1" Grid.Column="2"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.PMPointHours}"
+                 Grid.Row="1" Grid.Column="3"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.PMExtraHours}"
+                 Grid.Row="1" Grid.Column="4"/>
+        <TextBox Text="{Binding Labor.PMTotalHours}"
+                 Grid.Row="1" Grid.Column="5"/>
+        <TextBox Text="{Binding Labor.PMRate}"
+                 Grid.Row="1" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.PMSubTotal}"
+                 Grid.Row="1" Grid.Column="7"
+                 IsReadOnly="True"/>
+
+        <!--Engineering Values-->
+        <Label Content="Engineering: "
+               Grid.Row="2"/>
+        <TextBox Text="{Binding TotalPointNumber}"
+                 Grid.Row="2" Grid.Column="1"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.ENGCoef}"
+                 Grid.Row="2" Grid.Column="2"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.ENGPointHours}"
+                 Grid.Row="2" Grid.Column="3"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.ENGExtraHours}"
+                 Grid.Row="2" Grid.Column="4"/>
+        <TextBox Text="{Binding Labor.ENGTotalHours}"
+                 Grid.Row="2" Grid.Column="5"/>
+        <TextBox Text="{Binding Labor.ENGRate}"
+                 Grid.Row="2" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.ENGSubTotal}"
+                 Grid.Row="2" Grid.Column="7"
+                 IsReadOnly="True"/>
+
+        <!--Software Values-->
+        <Label Content="Software: "
                Grid.Row="3"/>
+        <TextBox Text="{Binding TotalPointNumber}"
+                 Grid.Row="3" Grid.Column="1"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftCoef}"
-                 Grid.Row="3" Grid.Column="1"/>
-        
-        <Label Content="Graphics Coefficient: "
+                 Grid.Row="3" Grid.Column="2"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.SoftPointHours}"
+                 Grid.Row="3" Grid.Column="3"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.SoftExtraHours}"
+                 Grid.Row="3" Grid.Column="4"/>
+        <TextBox Text="{Binding Labor.SoftTotalHours}"
+                 Grid.Row="3" Grid.Column="5"/>
+        <TextBox Text="{Binding Labor.SoftRate}"
+                 Grid.Row="3" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.SoftSubTotal}"
+                 Grid.Row="3" Grid.Column="7"
+                 IsReadOnly="True"/>
+
+        <!--Graphics Values-->
+        <Label Content="Graphics: "
                Grid.Row="4"/>
+        <TextBox Text="{Binding TotalPointNumber}"
+                 Grid.Row="4" Grid.Column="1"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphCoef}"
-                 Grid.Row="4" Grid.Column="1"/>
+                 Grid.Row="4" Grid.Column="2"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.GraphPointHours}"
+                 Grid.Row="4" Grid.Column="3"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.GraphExtraHours}"
+                 Grid.Row="4" Grid.Column="4"/>
+        <TextBox Text="{Binding Labor.GraphTotalHours}"
+                 Grid.Row="4" Grid.Column="5"/>
+        <TextBox Text="{Binding Labor.GraphRate}"
+                 Grid.Row="4" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.GraphSubTotal}"
+                 Grid.Row="4" Grid.Column="7"
+                 IsReadOnly="True"/>
         
-        <Label Content="Commisioning Coefficient: "
+        <!--Commisioning Values-->
+        <Label Content="Commisioning: "
                Grid.Row="5"/>
+        <TextBox Text="{Binding TotalPointNumber}"
+                 Grid.Row="5" Grid.Column="1"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommCoef}"
-                 Grid.Row="5" Grid.Column="1"/>
+                 Grid.Row="5" Grid.Column="2"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.CommPointHours}"
+                 Grid.Row="5" Grid.Column="3"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.CommExtraHours}"
+                 Grid.Row="5" Grid.Column="4"/>
+        <TextBox Text="{Binding Labor.CommTotalHours}"
+                 Grid.Row="5" Grid.Column="5"/>
+        <TextBox Text="{Binding Labor.CommRate}"
+                 Grid.Row="5" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.CommSubTotal}"
+                 Grid.Row="5" Grid.Column="7"
+                 IsReadOnly="True"/>
+
         
+        <!--Subcontractor Labor Headers-->
         <Label Content="Subcontractor Labor"
+               FontWeight="Bold"
                Grid.Row="7"/>
+        <Label Content="Hours"
+               Grid.Row="7" Grid.Column="5"/>
+        <Label Content="$/Hour"
+               Grid.Row="7" Grid.Column="6"/>
+        <Label Content="SubTotal"
+               Grid.Row="7" Grid.Column="7"/>
         
-        <Label Content="Electrical Subcontractor Rate: "
+
+        <!--Electrical Values-->
+        <Label Content="Electrical: "
                Grid.Row="8"/>
+        <TextBox Text="{Binding Labor.ElectricalHours}"
+                 Grid.Row="8" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ElectricalRate}"
-                 Grid.Row="8" Grid.Column="1"/>
+                 Grid.Row="8" Grid.Column="6"
+                 IsReadOnly="True"/>
+        <TextBox Text="{Binding Labor.ElectricalSubTotal}"
+                 Grid.Row="8" Grid.Column="7"
+                 IsReadOnly="True"/>
     </Grid>
 </UserControl>
