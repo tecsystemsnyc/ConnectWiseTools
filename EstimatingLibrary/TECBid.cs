@@ -424,8 +424,6 @@ namespace EstimatingLibrary
             outCost += MaterialCost;
             outCost *= Parameters.Escalation;
             outCost *= Parameters.Overhead;
-            outCost *= Parameters.Profit;
-
             outCost += Tax;
 
             return outCost;
@@ -433,22 +431,27 @@ namespace EstimatingLibrary
         private double getTECSubtotal()
         {
             double outCost = 0;
-            outCost += Labor.TECSubTotal;
-            outCost += MaterialCost;
-            outCost *= Parameters.Escalation;
-            outCost *= Parameters.Overhead;
-            outCost *= Parameters.Profit;
+            outCost += getTECCost();
 
-            outCost += Tax;
+            outCost *= Parameters.Profit;
 
             return outCost;
         }
-        private double getSubcontractorSubtotal()
+
+        private double getSubcontractorCost()
         {
             double outCost = 0;
             outCost += Labor.SubcontractorSubTotal;
             outCost += ElectricalMaterialCost;
             outCost *= Parameters.SubcontractorEscalation;
+
+            return outCost;
+        }
+
+        private double getSubcontractorSubtotal()
+        {
+            double outCost = 0;
+            outCost += getSubcontractorCost();
             outCost *= Parameters.SubcontractorMarkup;
 
             return outCost;
