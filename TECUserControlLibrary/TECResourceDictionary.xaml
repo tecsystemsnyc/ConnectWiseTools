@@ -19,8 +19,9 @@
     <Color x:Key="TECFlatDarkBlue">#2C3E50</Color>
     <Color x:Key="TECFlatRed">#E74C3C</Color>
     <Color x:Key="TECFlatWhite">#ECF0F1</Color>
+    <Color x:Key="TEInputWhite">#fbfcfc</Color>
     <Color x:Key="TECFlatBlue">#3498DB</Color>
-    <Color x:Key="TECFlatShadedBlue">#2980B9</Color>
+    <Color x:Key="TECFlatShadedBlue">#2980B9</Color> 
 
     <!--Brushes-->
     <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource TECFlatDarkBlue}"/>
@@ -32,6 +33,7 @@
     <SolidColorBrush x:Key="ItemBrush" Color="{StaticResource TECFlatBlue}"/>
     <SolidColorBrush x:Key="TextBackgroundBrush" Color="{StaticResource TECFlatWhite}"/>
     <SolidColorBrush x:Key="AlertActionBrush" Color="{StaticResource TECFlatRed}"/>
+    <SolidColorBrush x:Key="TextInputBrush" Color="{StaticResource TEInputWhite}"/>
 
     <!--GlobalStyles-->
     <Style TargetType="Button">
@@ -40,7 +42,7 @@
         <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
     <Style TargetType="TextBox">
-        <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
     </Style>
     <Style TargetType="DataGrid">
@@ -70,7 +72,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource LightTextBrush}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="False">
-                <Setter Property="Background" Value="{DynamicResource TextBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource TextInputBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -103,7 +105,7 @@
         </Setter>
     </Style>
     <Style TargetType="ComboBox">
-        <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
     </Style>
     <Style TargetType="ToggleButton">
         <Setter Property="Background" Value="{StaticResource ItemBrush}"/>

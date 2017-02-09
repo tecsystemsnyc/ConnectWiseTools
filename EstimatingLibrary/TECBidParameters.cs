@@ -100,7 +100,6 @@ namespace EstimatingLibrary
             }
         }
 
-
         public TECBidParameters()
         {
 

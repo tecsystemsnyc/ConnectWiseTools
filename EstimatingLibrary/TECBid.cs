@@ -119,10 +119,15 @@ namespace EstimatingLibrary
         {
             get { return getMaterialCost(); }
         }
-        public double LaborCost
+
+        public double TECSubtotal
         {
-            get { return getLaborCost(); }
+            get
+            {
+                return getTECSubtotal();
+            }
         }
+
         public double BudgetPrice
         {
             get { return getBudgetPrice(); }
@@ -142,14 +147,6 @@ namespace EstimatingLibrary
                 return getElectricalMaterialCost();
             }
         }
-        public double ElectricalLaborCost
-        {
-            get
-            {
-                return getElectricalLaborCost();
-            }
-        }
-
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
@@ -395,15 +392,23 @@ namespace EstimatingLibrary
             }
             return cost;
         }
-        private double getLaborCost()
+        private double getTECSubtotal()
         {
-            double cost = 0;
-            foreach (TECSystem system in this.Systems)
+            double outCost = 0;
+            outCost += Labor.TECSubTotal;
+            outCost += MaterialCost;
+            outCost *= Parameters.Escalation;
+            outCost *= Parameters.Overhead;
+            outCost *= Parameters.Profit;
+            if (!Parameters.IsTaxExempt)
             {
-                cost += system.LaborCost;
+                outCost += 1.0875;
             }
-            return cost;
+
+
+            return outCost;
         }
+
         private double getBudgetPrice()
         {
             double price = 0;
@@ -452,20 +457,6 @@ namespace EstimatingLibrary
 
         }
 
-        //ONLY RETURNS TOTAL LENGTH AT THE MOMENT
-        private double getElectricalLaborCost()
-        {
-
-            double cost = 0;
-
-            foreach (TECConnection conn in Connections)
-            {
-                cost += conn.Length;
-            }
-
-            return cost;
-
-        }
 
         public override object Copy()
         {
