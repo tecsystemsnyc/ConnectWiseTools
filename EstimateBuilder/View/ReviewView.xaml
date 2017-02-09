@@ -139,17 +139,15 @@
 
         <Label Content="Subtotal" 
                Grid.Row="11"  Grid.Column="3"/>
-        <TextBox Text="NEED BID VARIABLE"
+        <Label Content="NEED BID VARIABLE"
                  Grid.Row="11"
-                 Grid.Column="4"
-                 Margin="5"/>
+                 Grid.Column="4"/>
 
         <Label Content="Subtotal" 
                Grid.Row="12"  Grid.Column="0"/>
-        <TextBox Text="NEED BID VARIABLE"
+        <Label Content="NEED BID VARIABLE"
                  Grid.Row="12"
-                 Grid.Column="1"
-                 Margin="5"/>
+                 Grid.Column="1"/>
 
         <Label Content="Total" 
                Grid.Row="14"  Grid.Column="3"
