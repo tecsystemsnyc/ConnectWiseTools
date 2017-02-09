@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using System;
 using System.Collections.ObjectModel;
 
 namespace EstimateBuilder.ViewModel
@@ -77,6 +78,34 @@ namespace EstimateBuilder.ViewModel
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    if(item is TECSystem)
+                    {
+                        (item as TECSystem).Equipment.CollectionChanged += SubScope_CollectionChanged;
+                    }
+                    else if (item is TECEquipment)
+                    {
+                        (item as TECEquipment).SubScope.CollectionChanged += SubScope_CollectionChanged;
+                    }
+                }
+            }
+            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECSystem)
+                    {
+                        (item as TECSystem).Equipment.CollectionChanged -= SubScope_CollectionChanged;
+                    }
+                    else if (item is TECEquipment)
+                    {
+                        (item as TECEquipment).SubScope.CollectionChanged -= SubScope_CollectionChanged;
+                    }
+                }
+            }
             getAllSubScope();
         }
     }
