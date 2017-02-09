@@ -127,6 +127,21 @@ namespace EstimatingLibrary
                 return getTECSubtotal();
             }
         }
+        public double SubcontractorSubtotal
+        {
+            get
+            {
+                return getSubcontractorSubtotal();
+            }
+        }
+
+        public double TotalPrice
+        {
+            get
+            {
+                return getTotalPrice();
+            }
+        }
 
         public double BudgetPrice
         {
@@ -401,6 +416,20 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+
+        private double getTECCost()
+        {
+            double outCost = 0;
+            outCost += Labor.TECSubTotal;
+            outCost += MaterialCost;
+            outCost *= Parameters.Escalation;
+            outCost *= Parameters.Overhead;
+            outCost *= Parameters.Profit;
+
+            outCost += Tax;
+
+            return outCost;
+        }
         private double getTECSubtotal()
         {
             double outCost = 0;
@@ -437,8 +466,17 @@ namespace EstimatingLibrary
             return outTax;
         }
 
+        private double getTotalPrice()
+        {
+            double outPrice = 0;
 
+            outPrice += TECSubtotal;
+            outPrice += SubcontractorSubtotal;
 
+            return outPrice;
+        }
+
+        
         private double getBudgetPrice()
         {
             double price = 0;
