@@ -467,12 +467,12 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("NumPoints");
 
-            RaisePropertyChanged("CommCoef");
-            RaisePropertyChanged("CommPointHours");
-            RaisePropertyChanged("CommExtraHours");
-            RaisePropertyChanged("CommTotalHours");
-            RaisePropertyChanged("CommRate");
-            RaisePropertyChanged("CommSubTotal");
+            RaisePropertyChanged("PMCoef");
+            RaisePropertyChanged("PMPointHours");
+            RaisePropertyChanged("PMExtraHours");
+            RaisePropertyChanged("PMTotalHours");
+            RaisePropertyChanged("PMRate");
+            RaisePropertyChanged("PMSubTotal");
 
             RaisePropertyChanged("ENGCoef");
             RaisePropertyChanged("ENGPointHours");
@@ -510,7 +510,7 @@ namespace EstimatingLibrary
 
             RaisePropertyChanged("SubcontractorSubTotal");
 
-            RaisePropertyChanged("TotalLaborCost");
+            RaisePropertyChanged("TotalCost");
         }
 
         public override object Copy()
