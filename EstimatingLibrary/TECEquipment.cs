@@ -143,8 +143,7 @@ namespace EstimatingLibrary
             }
             return cost;
         }
-
-
+        
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("SubScopeQuantity");
