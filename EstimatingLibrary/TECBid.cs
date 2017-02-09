@@ -625,14 +625,20 @@ namespace EstimatingLibrary
                     if (item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged -= CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
                     }
                     else if (item is TECEquipment)
                     {
                         (item as TECEquipment).SubScope.CollectionChanged -= CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
                     }
                     else if (item is TECSubScope)
                     {
                         (item as TECSubScope).Points.CollectionChanged -= Points_CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
                     }
                 }
             }
@@ -706,6 +712,8 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("TotalPrice");
             RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("Tax");
             RaisePropertyChanged("SubcontractorSubtotal");
         }
         #endregion

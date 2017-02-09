@@ -27,9 +27,9 @@ namespace TECUserControlLibrary
         /// <summary>
         /// Gets or sets the SubScopeSource which is displayed
         /// </summary>
-        public ObservableCollection<TECSubScope> SubScopeSource
+        public ObservableCollection<Tuple<string, string, TECSubScope>> SubScopeSource
         {
-            get { return (ObservableCollection<TECSubScope>)GetValue(SubScopeSourceProperty); }
+            get { return (ObservableCollection<Tuple<string, string, TECSubScope>>)GetValue(SubScopeSourceProperty); }
             set { SetValue(SubScopeSourceProperty, value); }
         }
 
@@ -37,8 +37,8 @@ namespace TECUserControlLibrary
         /// Identified the SubScopeSource dependency property
         /// </summary>
         public static readonly DependencyProperty SubScopeSourceProperty =
-            DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<TECSubScope>),
-              typeof(SubScopeWiringGridControl), new PropertyMetadata(default(ObservableCollection<TECSubScope>)));
+            DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<Tuple<string, string, TECSubScope>>),
+              typeof(SubScopeWiringGridControl), new PropertyMetadata(default(ObservableCollection<Tuple<string, string, TECSubScope>>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
