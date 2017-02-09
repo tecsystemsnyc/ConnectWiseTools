@@ -147,6 +147,13 @@ namespace EstimatingLibrary
                 return getElectricalMaterialCost();
             }
         }
+        public double Tax
+        {
+            get
+            {
+                return getTax();
+            }
+        }
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
@@ -400,24 +407,35 @@ namespace EstimatingLibrary
             outCost *= Parameters.Escalation;
             outCost *= Parameters.Overhead;
             outCost *= Parameters.Profit;
-            if (!Parameters.IsTaxExempt)
-            {
-                outCost += 1.0875;
-            }
 
+            outCost += Tax;
 
             return outCost;
         }
         private double getSubcontractorSubtotal()
         {
             double outCost = 0;
-            outCost += Labor.SubcontractorSubtotal;
+            outCost += Labor.SubcontractorSubTotal;
             outCost += ElectricalMaterialCost;
             outCost *= Parameters.SubcontractorEscalation;
             outCost *= Parameters.SubcontractorMarkup;
 
             return outCost;
         }
+
+        private double getTax()
+        {
+            double outTax = 0;
+
+            if (!Parameters.IsTaxExempt)
+            {
+                outTax += 1.0875 * MaterialCost;
+            }
+
+            return outTax;
+        }
+
+
 
         private double getBudgetPrice()
         {
