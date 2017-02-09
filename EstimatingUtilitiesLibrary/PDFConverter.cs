@@ -35,7 +35,6 @@ namespace EstimatingUtilitiesLibrary
             catch (Exception e)
             {
                 Console.WriteLine("pdf.Read() failed in convertPDFToDrawing(). Error: " + e.Message);
-                return new TECDrawing("");
             }
 
             string directory = Path.GetTempPath();
