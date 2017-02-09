@@ -37,181 +37,181 @@
         </Grid.ColumnDefinitions>
         
         <!--TEC Labor Headers-->
-        <Label Content="TEC Labor"
+        <TextBlock Text="TEC Labor"
                FontWeight="Bold"/>
-        <Label Content="Points"
+        <TextBlock Text="Points"
                Grid.Column="1"/>
-        <Label Content="Hours/Point"
+        <TextBlock Text="Hours/Point"
                Grid.Column="2"/>
-        <Label Content="Hours (Points)"
+        <TextBlock Text="Hours (Points)"
                Grid.Column="3"/>
-        <Label Content="Extra Hours"
+        <TextBlock Text="Extra Hours"
                Grid.Column="4"/>
-        <Label Content="Total Hours"
+        <TextBlock Text="Total Hours"
                Grid.Column="5"/>
-        <Label Content="$/Hour"
+        <TextBlock Text="$/Hour"
                Grid.Column="6"/>
-        <Label Content="SubTotal"
+        <TextBlock Text="SubTotal"
                Grid.Column="7"/>
 
 
         <!--Project Management Values-->
         
-        <Label Content="Project Management: "
+        <TextBlock Text="Project Management: "
                Grid.Row="1"/>
-        <Label Content="{Binding Labor.NumPoints}"
+        <TextBlock Text="{Binding Labor.NumPoints}"
                  Grid.Row="1" Grid.Column="1"
                  />
-        <Label Content="{Binding Labor.PMCoef}"
+        <TextBlock Text="{Binding Labor.PMCoef}"
                  Grid.Row="1" Grid.Column="2"
                  />
-        <Label Content="{Binding Labor.PMPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.PMPointHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.PMExtraHours}"
                  Grid.Row="1" Grid.Column="4"
                  Margin="2"/>
-        <Label Content="{Binding Labor.PMTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.PMTotalHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.PMRate}"
+        <TextBlock Text="{Binding Labor.PMRate, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.PMSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.PMSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="7"
                  />
 
         <!--Engineering Values-->
-        <Label Content="Engineering: "
+        <TextBlock Text="Engineering: "
                Grid.Row="2"/>
-        <Label Content="{Binding Labor.NumPoints}"
+        <TextBlock Text="{Binding Labor.NumPoints}"
                  Grid.Row="2" Grid.Column="1"
                  />
-        <Label Content="{Binding Labor.ENGCoef}"
+        <TextBlock Text="{Binding Labor.ENGCoef}"
                  Grid.Row="2" Grid.Column="2"
                  />
-        <Label Content="{Binding Labor.ENGPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.ENGPointHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.ENGExtraHours}"
                  Grid.Row="2" Grid.Column="4"
                  Margin="2"/>
-        <Label Content="{Binding Labor.ENGTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.ENGTotalHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.ENGRate}"
+        <TextBlock Text="{Binding Labor.ENGRate, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.ENGSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.ENGSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="7"
                  />
 
         <!--Software Values-->
-        <Label Content="Software: "
+        <TextBlock Text="Software: "
                Grid.Row="3"/>
-        <Label Content="{Binding Labor.NumPoints}"
+        <TextBlock Text="{Binding Labor.NumPoints}"
                  Grid.Row="3" Grid.Column="1"
                  />
-        <Label Content="{Binding Labor.SoftCoef}"
+        <TextBlock Text="{Binding Labor.SoftCoef}"
                  Grid.Row="3" Grid.Column="2"
                  />
-        <Label Content="{Binding Labor.SoftPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.SoftPointHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.SoftExtraHours}"
                  Grid.Row="3" Grid.Column="4"
                  Margin="2"/>
-        <Label Content="{Binding Labor.SoftTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.SoftTotalHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.SoftRate}"
+        <TextBlock Text="{Binding Labor.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.SoftSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.SoftSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="7"
                  />
 
         <!--Graphics Values-->
-        <Label Content="Graphics: "
+        <TextBlock Text="Graphics: "
                Grid.Row="4"/>
-        <Label Content="{Binding Labor.NumPoints}"
+        <TextBlock Text="{Binding Labor.NumPoints}"
                  Grid.Row="4" Grid.Column="1"
                  />
-        <Label Content="{Binding Labor.GraphCoef}"
+        <TextBlock Text="{Binding Labor.GraphCoef}"
                  Grid.Row="4" Grid.Column="2"
                  />
-        <Label Content="{Binding Labor.GraphPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.GraphPointHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.GraphExtraHours}"
                  Grid.Row="4" Grid.Column="4"
                  Margin="2"/>
-        <Label Content="{Binding Labor.GraphTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.GraphTotalHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.GraphRate}"
+        <TextBlock Text="{Binding Labor.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.GraphSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.GraphSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="7"
                  />
         
         <!--Commisioning Values-->
-        <Label Content="Commisioning: "
+        <TextBlock Text="Commisioning: "
                Grid.Row="5"/>
-        <Label Content="{Binding Labor.NumPoints}"
+        <TextBlock Text="{Binding Labor.NumPoints}"
                  Grid.Row="5" Grid.Column="1"
                  />
-        <Label Content="{Binding Labor.CommCoef}"
+        <TextBlock Text="{Binding Labor.CommCoef}"
                  Grid.Row="5" Grid.Column="2"
                  />
-        <Label Content="{Binding Labor.CommPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.CommPointHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.CommExtraHours}"
                  Grid.Row="5" Grid.Column="4"
                  Margin="2"/>
-        <Label Content="{Binding Labor.CommTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.CommTotalHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.CommRate}"
+        <TextBlock Text="{Binding Labor.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.CommSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.CommSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="7"
                  />
 
         
         <!--Subcontractor Labor Headers-->
-        <Label Content="Subcontractor Labor"
+        <TextBlock Text="Subcontractor Labor"
                FontWeight="Bold"
                Grid.Row="7"/>
-        <Label Content="Hours"
+        <TextBlock Text="Hours"
                Grid.Row="7" Grid.Column="5"/>
-        <Label Content="$/Hour"
+        <TextBlock Text="$/Hour"
                Grid.Row="7" Grid.Column="6"/>
-        <Label Content="SubTotal"
+        <TextBlock Text="SubTotal"
                Grid.Row="7" Grid.Column="7"/>
         
 
         <!--Electrical Values-->
-        <Label Content="Electrical: "
+        <TextBlock Text="Electrical: "
                Grid.Row="8"/>
-        <Label Content="{Binding Labor.ElectricalHours}"
+        <TextBlock Text="{Binding Labor.ElectricalHours}"
                  Grid.Row="8" Grid.Column="5"
                  />
-        <Label Content="{Binding Labor.ElectricalRate}"
+        <TextBlock Text="{Binding Labor.ElectricalRate, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="6"
                  />
-        <Label Content="{Binding Labor.ElectricalSubTotal, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.ElectricalSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="7"
                  />
         
         
         <!--Total Values-->
-        <Label Content="Total"
+        <TextBlock Text="Total"
                Grid.Row="9" Grid.Column="7"/>
-        <Label Content="{Binding Labor.TotalCost, Mode=OneWay}"
+        <TextBlock Text="{Binding Labor.TotalCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="10" Grid.Column="7"
                  />
         
@@ -245,6 +245,11 @@
                 BorderBrush="Black"/>
         <Border Grid.Column="1" 
                   Grid.Row="5"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="8"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
