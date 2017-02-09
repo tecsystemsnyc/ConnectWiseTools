@@ -24,18 +24,12 @@
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                
-                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
-                                    Visibility="{Binding Data.DataGridVisibilty.SubScopeName, 
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
-                                    Visibility="{Binding Data.DataGridVisibilty.SubScopeDescription, 
-                                    Source={StaticResource proxy}}"/>
-                
-                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
-                                    Visibility="{Binding Data.DataGridVisibilty.SubScopeQuantity, 
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" Header="Length" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item1}" Header="System" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item2}" Header="Equipment" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item3.Name}" Header="Point" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item3.Description}" Header="Description" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item3.Quantity}" Header="Quantity" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Item3.Length}" Header="Length" Width="Auto"/>
 
             </DataGrid.Columns>
            

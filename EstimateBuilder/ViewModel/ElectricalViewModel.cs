@@ -25,8 +25,8 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private ObservableCollection<TECSubScope> _allSubScope;
-        public ObservableCollection<TECSubScope> AllSubScope
+        private ObservableCollection<Tuple<string, string, TECSubScope>> _allSubScope;
+        public ObservableCollection<Tuple<string, string, TECSubScope>> AllSubScope
         {
             get
             {
@@ -51,12 +51,15 @@ namespace EstimateBuilder.ViewModel
 
         private void getAllSubScope()
         {
-            AllSubScope = new ObservableCollection<TECSubScope>();
+            AllSubScope = new ObservableCollection<Tuple<string, string, TECSubScope>>();
             foreach(TECSystem sys in Bid.Systems)
             {
-                foreach(TECSubScope sub in sys.SubScope)
+                foreach(TECEquipment equip in sys.Equipment)
                 {
-                    AllSubScope.Add(sub);
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        AllSubScope.Add(Tuple.Create<string, string, TECSubScope>(sys.Name, equip.Name, sub));
+                    }
                 }
             }
 
