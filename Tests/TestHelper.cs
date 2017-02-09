@@ -124,13 +124,13 @@ namespace Tests
 
 
             //Drawings
-            //var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
-            //drawing1.Name = "Test";
-            //drawing1.Description = "Desc";
+            var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
+            drawing1.Name = "Test";
+            drawing1.Description = "Desc";
             
-            //bid.Drawings.Add(drawing1);
+            bid.Drawings.Add(drawing1);
 
-            //drawing1.Pages[0].PageScope.Add(vScope);
+            drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, ConnectionType.FourC18, new TECManufacturer());
