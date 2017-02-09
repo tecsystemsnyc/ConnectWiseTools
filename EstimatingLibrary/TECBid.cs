@@ -408,6 +408,16 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        private double getSubcontractorSubtotal()
+        {
+            double outCost = 0;
+            outCost += Labor.SubcontractorSubtotal;
+            outCost += ElectricalMaterialCost;
+            outCost *= Parameters.SubcontractorEscalation;
+            outCost *= Parameters.SubcontractorMarkup;
+
+            return outCost;
+        }
 
         private double getBudgetPrice()
         {
