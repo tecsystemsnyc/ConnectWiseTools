@@ -68,7 +68,8 @@
                  Grid.Row="1" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.PMExtraHours}"
-                 Grid.Row="1" Grid.Column="4"/>
+                 Grid.Row="1" Grid.Column="4"
+                 Margin="2"/>
         <Label Content="{Binding Labor.PMTotalHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="5"
                  />
@@ -92,7 +93,8 @@
                  Grid.Row="2" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.ENGExtraHours}"
-                 Grid.Row="2" Grid.Column="4"/>
+                 Grid.Row="2" Grid.Column="4"
+                 Margin="2"/>
         <Label Content="{Binding Labor.ENGTotalHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="5"
                  />
@@ -116,7 +118,8 @@
                  Grid.Row="3" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.SoftExtraHours}"
-                 Grid.Row="3" Grid.Column="4"/>
+                 Grid.Row="3" Grid.Column="4"
+                 Margin="2"/>
         <Label Content="{Binding Labor.SoftTotalHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="5"
                  />
@@ -140,7 +143,8 @@
                  Grid.Row="4" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.GraphExtraHours}"
-                 Grid.Row="4" Grid.Column="4"/>
+                 Grid.Row="4" Grid.Column="4"
+                 Margin="2"/>
         <Label Content="{Binding Labor.GraphTotalHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="5"
                  />
@@ -164,7 +168,8 @@
                  Grid.Row="5" Grid.Column="3"
                  />
         <TextBox Text="{Binding Labor.CommExtraHours}"
-                 Grid.Row="5" Grid.Column="4"/>
+                 Grid.Row="5" Grid.Column="4"
+                 Margin="2"/>
         <Label Content="{Binding Labor.CommTotalHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="5"
                  />
