@@ -354,7 +354,11 @@ namespace EstimatingLibrary
             Controllers.CollectionChanged += CollectionChanged;
             Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
+
+            registerPointNumChanges();
+            
         }
+
         public TECBid(
             string name, 
             string bidNumber,
@@ -407,6 +411,24 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
+
+
+        private void registerPointNumChanges()
+        {
+            foreach(TECSystem sys in Systems)
+            {
+                sys.Equipment.CollectionChanged += CollectionChanged;
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    equip.SubScope.CollectionChanged += CollectionChanged;
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        sub.Points.CollectionChanged += Points_CollectionChanged;
+                    }
+                }
+            }
+        }
+
         private double getMaterialCost()
         {
             double cost = 0;
@@ -447,7 +469,6 @@ namespace EstimatingLibrary
 
             return outCost;
         }
-
         private double getSubcontractorSubtotal()
         {
             double outCost = 0;
@@ -478,7 +499,6 @@ namespace EstimatingLibrary
 
             return outPrice;
         }
-
         
         private double getBudgetPrice()
         {
@@ -527,13 +547,17 @@ namespace EstimatingLibrary
             return cost;
 
         }
-
-
+        
         public override object Copy()
         {
             TECBid bid = new TECBid(this);
             bid._infoGuid = InfoGuid;
             return bid;
+        }
+
+        private void Points_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Labor.NumPoints = getPointNumber();
         }
 
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -556,6 +580,24 @@ namespace EstimatingLibrary
                         }
                     }
 
+                    if(item is TECSystem)
+                    {
+                        (item as TECSystem).Equipment.CollectionChanged += CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
+                    } 
+                    else if (item is TECEquipment)
+                    {
+                        (item as TECEquipment).SubScope.CollectionChanged += CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        (item as TECSubScope).Points.CollectionChanged += Points_CollectionChanged;
+                        Labor.NumPoints = getPointNumber();
+                        raiseReviewChanges();
+                    }
                     
                 }
             }
@@ -578,6 +620,19 @@ namespace EstimatingLibrary
                         {
                             removeProposalScope(item as TECSystem);
                         }
+                    }
+
+                    if (item is TECSystem)
+                    {
+                        (item as TECSystem).Equipment.CollectionChanged -= CollectionChanged;
+                    }
+                    else if (item is TECEquipment)
+                    {
+                        (item as TECEquipment).SubScope.CollectionChanged -= CollectionChanged;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        (item as TECSubScope).Points.CollectionChanged -= Points_CollectionChanged;
                     }
                 }
             }
@@ -645,6 +700,13 @@ namespace EstimatingLibrary
                 this.ProposalScope.Remove(pScope);
             }
             
+        }
+
+        private void raiseReviewChanges()
+        {
+            RaisePropertyChanged("TotalPrice");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
         }
         #endregion
 
