@@ -239,7 +239,7 @@ namespace EstimatingLibrary
 
             foreach (TECPoint point in this.Points)
             {
-                labCost += 1;
+                labCost += 1 * point.Quantity;
             }
 
             return labCost;

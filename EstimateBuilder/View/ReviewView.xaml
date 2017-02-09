@@ -12,6 +12,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -47,6 +56,29 @@
                  Grid.Row="1"
                  Grid.Column="3"
                  Margin="5"/>
+        <Label Content="TEC Cost" FontWeight="Bold"
+               Grid.Row="3"/>
+        <Label Content="Material:" Grid.Row="4"/>
+        <Label Content="{Binding Bid.MaterialCost}" 
+               Grid.Row="4" Grid.Column="1"
+               HorizontalContentAlignment="Right"/>
+        <Label Content="Labor:" Grid.Row="5"/>
+        <Label Content="{Binding Bid.LaborCost}" 
+               Grid.Row="5" Grid.Column="1"
+               HorizontalContentAlignment="Right"/>
+
+        <Label Content="Subcontractor Cost" FontWeight="Bold"
+               Grid.Row="7"/>
+        <Label Content="Material:" Grid.Row="8"/>
+        <Label Content="{Binding Bid.ElectricalMaterialCost}" 
+               Grid.Row="8" Grid.Column="1"
+               HorizontalContentAlignment="Right"/>
+        <Label Content="Labor:" Grid.Row="9"/>
+        <Label Content="{Binding Bid.LaborCost}" 
+               Grid.Row="9" Grid.Column="1"
+               HorizontalContentAlignment="Right"/>
+
+
 
 
     </Grid>

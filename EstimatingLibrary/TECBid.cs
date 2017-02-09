@@ -18,6 +18,8 @@ namespace EstimatingLibrary
         private string _estimator;
         private Guid _infoGuid;
         private TECLabor _labor;
+        private TECBidParameters _parameters;
+
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
         private ObservableCollection<TECSystem> _systems { get; set; }
         private ObservableCollection<TECDevice> _deviceCatalog { get; set; }
@@ -97,6 +99,21 @@ namespace EstimatingLibrary
                 Labor.PropertyChanged += objectPropertyChanged;
             }
         }
+
+        public TECBidParameters Parameters
+        {
+            get
+            {
+                return _parameters;
+            }
+            set
+            {
+                var temp = Copy();
+                _parameters = value;
+                NotifyPropertyChanged("Parameters", temp, this);
+                Parameters.PropertyChanged += objectPropertyChanged;
+            }
+        }
         
         public double MaterialCost
         {
@@ -110,6 +127,29 @@ namespace EstimatingLibrary
         {
             get { return getBudgetPrice(); }
         }
+        public int TotalPointNumber
+        {
+            get
+            {
+                return getPointNumber();
+            }
+        }
+
+        public double ElectricalMaterialCost
+        {
+            get
+            {
+                return getElectricalMaterialCost();
+            }
+        }
+        public double ElectricalLaborCost
+        {
+            get
+            {
+                return getElectricalLaborCost();
+            }
+        }
+
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
@@ -375,6 +415,56 @@ namespace EstimatingLibrary
                 }
             }
             return price;
+        }
+
+        private int getPointNumber()
+        {
+            int totalPoints = 0;
+            foreach(TECSystem sys in Systems)
+            {
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        foreach(TECPoint point in sub.Points)
+                        {
+                            totalPoints += point.Quantity;
+                        }
+                    }
+                }
+            }
+
+            return totalPoints;
+        }
+
+        //ONLY RETURNS TOTAL LENGTH AT THE MOMENT
+        private double getElectricalMaterialCost()
+        {
+            
+            double cost = 0;
+
+            foreach(TECConnection conn in Connections)
+            {
+                cost += conn.Length;
+            }
+
+            return cost;
+
+        }
+
+        //ONLY RETURNS TOTAL LENGTH AT THE MOMENT
+        private double getElectricalLaborCost()
+        {
+
+            double cost = 0;
+
+            foreach (TECConnection conn in Connections)
+            {
+                cost += conn.Length;
+            }
+
+            return cost;
+
         }
 
         public override object Copy()
