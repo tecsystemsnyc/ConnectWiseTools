@@ -7,7 +7,13 @@
         mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
-
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
