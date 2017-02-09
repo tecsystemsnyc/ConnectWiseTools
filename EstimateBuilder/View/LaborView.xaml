@@ -60,23 +60,23 @@
                Grid.Row="1"/>
         <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="1" Grid.Column="1"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.PMCoef}"
                  Grid.Row="1" Grid.Column="2"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.PMPointHours}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.PMPointHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.PMExtraHours}"
                  Grid.Row="1" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.PMTotalHours}"
+        <TextBox Text="{Binding Labor.PMTotalHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="5"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.PMRate}"
                  Grid.Row="1" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.PMSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.PMSubTotal, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="7"
                  IsReadOnly="True"/>
 
@@ -85,23 +85,23 @@
                Grid.Row="2"/>
         <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="2" Grid.Column="1"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.ENGCoef}"
                  Grid.Row="2" Grid.Column="2"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.ENGPointHours}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.ENGPointHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ENGExtraHours}"
                  Grid.Row="2" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.ENGTotalHours}"
+        <TextBox Text="{Binding Labor.ENGTotalHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="5"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ENGRate}"
                  Grid.Row="2" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.ENGSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.ENGSubTotal, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="7"
                  IsReadOnly="True"/>
 
@@ -110,23 +110,23 @@
                Grid.Row="3"/>
         <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="3" Grid.Column="1"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.SoftCoef}"
                  Grid.Row="3" Grid.Column="2"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.SoftPointHours}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.SoftPointHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftExtraHours}"
                  Grid.Row="3" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.SoftTotalHours}"
+        <TextBox Text="{Binding Labor.SoftTotalHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="5"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftRate}"
                  Grid.Row="3" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.SoftSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.SoftSubTotal, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="7"
                  IsReadOnly="True"/>
 
@@ -135,23 +135,23 @@
                Grid.Row="4"/>
         <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="4" Grid.Column="1"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.GraphCoef}"
                  Grid.Row="4" Grid.Column="2"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.GraphPointHours}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.GraphPointHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphExtraHours}"
                  Grid.Row="4" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.GraphTotalHours}"
+        <TextBox Text="{Binding Labor.GraphTotalHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="5"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphRate}"
                  Grid.Row="4" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.GraphSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.GraphSubTotal, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="7"
                  IsReadOnly="True"/>
         
@@ -160,23 +160,23 @@
                Grid.Row="5"/>
         <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="5" Grid.Column="1"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.CommCoef}"
                  Grid.Row="5" Grid.Column="2"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.CommPointHours}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.CommPointHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommExtraHours}"
                  Grid.Row="5" Grid.Column="4"
                  Background="White"/>
-        <TextBox Text="{Binding Labor.CommTotalHours}"
+        <TextBox Text="{Binding Labor.CommTotalHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="5"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommRate}"
                  Grid.Row="5" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.CommSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.CommSubTotal, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="7"
                  IsReadOnly="True"/>
 
@@ -198,11 +198,11 @@
                Grid.Row="8"/>
         <TextBox Text="{Binding Labor.ElectricalHours}"
                  Grid.Row="8" Grid.Column="5"
-                 IsReadOnly="True"/>
+                 IsReadOnly="False"/>
         <TextBox Text="{Binding Labor.ElectricalRate}"
                  Grid.Row="8" Grid.Column="6"
-                 IsReadOnly="True"/>
-        <TextBox Text="{Binding Labor.ElectricalSubTotal}"
+                 IsReadOnly="False"/>
+        <TextBox Text="{Binding Labor.ElectricalSubTotal, Mode=OneWay}"
                  Grid.Row="8" Grid.Column="7"
                  IsReadOnly="True"/>
         
@@ -210,7 +210,7 @@
         <!--Total Values-->
         <Label Content="Total"
                Grid.Row="9" Grid.Column="7"/>
-        <TextBox Text="{Binding Labor.TotalCost}"
+        <TextBox Text="{Binding Labor.TotalCost, Mode=OneWay}"
                  Grid.Row="10" Grid.Column="7"
                  IsReadOnly="True"/>
         
