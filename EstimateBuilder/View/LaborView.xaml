@@ -58,7 +58,7 @@
         <!--Project Management Values-->
         <Label Content="Project Management: "
                Grid.Row="1"/>
-        <TextBox Text="{Binding TotalPointNumber}"
+        <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="1" Grid.Column="1"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.PMCoef}"
@@ -68,9 +68,11 @@
                  Grid.Row="1" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.PMExtraHours}"
-                 Grid.Row="1" Grid.Column="4"/>
+                 Grid.Row="1" Grid.Column="4"
+                 Background="White"/>
         <TextBox Text="{Binding Labor.PMTotalHours}"
-                 Grid.Row="1" Grid.Column="5"/>
+                 Grid.Row="1" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.PMRate}"
                  Grid.Row="1" Grid.Column="6"
                  IsReadOnly="True"/>
@@ -81,7 +83,7 @@
         <!--Engineering Values-->
         <Label Content="Engineering: "
                Grid.Row="2"/>
-        <TextBox Text="{Binding TotalPointNumber}"
+        <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="2" Grid.Column="1"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ENGCoef}"
@@ -91,9 +93,11 @@
                  Grid.Row="2" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ENGExtraHours}"
-                 Grid.Row="2" Grid.Column="4"/>
+                 Grid.Row="2" Grid.Column="4"
+                 Background="White"/>
         <TextBox Text="{Binding Labor.ENGTotalHours}"
-                 Grid.Row="2" Grid.Column="5"/>
+                 Grid.Row="2" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.ENGRate}"
                  Grid.Row="2" Grid.Column="6"
                  IsReadOnly="True"/>
@@ -104,7 +108,7 @@
         <!--Software Values-->
         <Label Content="Software: "
                Grid.Row="3"/>
-        <TextBox Text="{Binding TotalPointNumber}"
+        <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="3" Grid.Column="1"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftCoef}"
@@ -114,9 +118,11 @@
                  Grid.Row="3" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftExtraHours}"
-                 Grid.Row="3" Grid.Column="4"/>
+                 Grid.Row="3" Grid.Column="4"
+                 Background="White"/>
         <TextBox Text="{Binding Labor.SoftTotalHours}"
-                 Grid.Row="3" Grid.Column="5"/>
+                 Grid.Row="3" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.SoftRate}"
                  Grid.Row="3" Grid.Column="6"
                  IsReadOnly="True"/>
@@ -127,7 +133,7 @@
         <!--Graphics Values-->
         <Label Content="Graphics: "
                Grid.Row="4"/>
-        <TextBox Text="{Binding TotalPointNumber}"
+        <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="4" Grid.Column="1"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphCoef}"
@@ -137,9 +143,11 @@
                  Grid.Row="4" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphExtraHours}"
-                 Grid.Row="4" Grid.Column="4"/>
+                 Grid.Row="4" Grid.Column="4"
+                 Background="White"/>
         <TextBox Text="{Binding Labor.GraphTotalHours}"
-                 Grid.Row="4" Grid.Column="5"/>
+                 Grid.Row="4" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.GraphRate}"
                  Grid.Row="4" Grid.Column="6"
                  IsReadOnly="True"/>
@@ -150,7 +158,7 @@
         <!--Commisioning Values-->
         <Label Content="Commisioning: "
                Grid.Row="5"/>
-        <TextBox Text="{Binding TotalPointNumber}"
+        <TextBox Text="{Binding Labor.NumPoints}"
                  Grid.Row="5" Grid.Column="1"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommCoef}"
@@ -160,9 +168,11 @@
                  Grid.Row="5" Grid.Column="3"
                  IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommExtraHours}"
-                 Grid.Row="5" Grid.Column="4"/>
+                 Grid.Row="5" Grid.Column="4"
+                 Background="White"/>
         <TextBox Text="{Binding Labor.CommTotalHours}"
-                 Grid.Row="5" Grid.Column="5"/>
+                 Grid.Row="5" Grid.Column="5"
+                 IsReadOnly="True"/>
         <TextBox Text="{Binding Labor.CommRate}"
                  Grid.Row="5" Grid.Column="6"
                  IsReadOnly="True"/>
@@ -200,8 +210,9 @@
         <!--Total Values-->
         <Label Content="Total"
                Grid.Row="9" Grid.Column="7"/>
-        <TextBox Text="{Binding Labor.TotalLaborCost}"
-                 Grid.Row="10" Grid.Column="7"/>
+        <TextBox Text="{Binding Labor.TotalCost}"
+                 Grid.Row="10" Grid.Column="7"
+                 IsReadOnly="True"/>
         
         <!--Reload Button-->
         <Button Grid.Row="9" Grid.Column="0"
