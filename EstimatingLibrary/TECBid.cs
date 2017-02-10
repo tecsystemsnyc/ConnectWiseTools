@@ -517,8 +517,8 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += Labor.TECSubTotal;
             outCost += MaterialCost;
-            outCost += outCost*Parameters.Escalation;
-            outCost += outCost*Parameters.Overhead;
+            outCost += outCost*Parameters.Escalation/100;
+            outCost += outCost*Parameters.Overhead/100;
             outCost += Tax;
 
             return outCost;
@@ -528,7 +528,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += getTECCost();
 
-            outCost += outCost*Parameters.Profit;
+            outCost += outCost*Parameters.Profit/100;
 
             return outCost;
         }
@@ -538,7 +538,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += Labor.SubcontractorSubTotal;
             outCost += ElectricalMaterialCost;
-            outCost += outCost*Parameters.SubcontractorEscalation;
+            outCost += outCost*Parameters.SubcontractorEscalation/100;
 
             return outCost;
         }
@@ -546,7 +546,7 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += getSubcontractorCost();
-            outCost += outCost*Parameters.SubcontractorMarkup;
+            outCost += outCost*Parameters.SubcontractorMarkup/100;
 
             return outCost;
         }
@@ -614,6 +614,20 @@ namespace EstimatingLibrary
             foreach(TECConnection conn in Connections)
             {
                 cost += conn.Length;
+            }
+
+            foreach(TECSystem system in Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope sub in equipment.SubScope)
+                    {
+                        if(sub.Connection == null)
+                        {
+                            cost += sub.Length;
+                        }
+                    }
+                }
             }
 
             return cost;
@@ -707,6 +721,7 @@ namespace EstimatingLibrary
         private void updateElectricalMaterial()
         {
             RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("TotalPrice");
         }
         private void updateFromParameters()

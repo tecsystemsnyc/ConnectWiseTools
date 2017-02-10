@@ -502,7 +502,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("CommRate");
             RaisePropertyChanged("CommSubTotal");
 
-            RaisePropertyChanged("TECLaborSubTotal");
+            RaisePropertyChanged("TECSubTotal");
 
             RaisePropertyChanged("ElectricalHours");
             RaisePropertyChanged("ElectricalRate");
