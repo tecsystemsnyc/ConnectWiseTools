@@ -23,7 +23,18 @@ namespace EstimatingLibrary
             }
         }
 
-        public ObservableCollection<TECPoint> Points { get; set; }
+        private ObservableCollection<TECPoint> _points;
+        public ObservableCollection<TECPoint> Points
+        {
+            get { return _points; }
+            set
+            {
+                var temp = this.Copy();
+                _points = value;
+                NotifyPropertyChanged("Points", temp, this);
+            }
+        }
+
 
         private TECConnection _connection { get; set; }
         public TECConnection Connection {
@@ -65,16 +76,18 @@ namespace EstimatingLibrary
             get { return getAllIOTypes(); }
         }
 
-        public Double Length
+        private double _length;
+        public double Length
         {
             get
             {
-                return Connection.Length;
+                return _length;
             }
             set
             {
-                Connection.Length = value;
-                RaisePropertyChanged("Length");
+                var temp = this.Copy();
+                _length = value;
+                NotifyPropertyChanged("Length", temp, this);
             }
         }
 
@@ -85,11 +98,10 @@ namespace EstimatingLibrary
         public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points, Guid guid) : base(name, description, guid)
         {
             _devices = devices;
-            Points = points;
+            _points = points;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
-            _connection = new TECConnection();
         }
         
         public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points) : this(name, description, devices, points, Guid.NewGuid()) { }
@@ -156,6 +168,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Add", this, item);
                 }
+                RaisePropertyChanged("TotalPoints");
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -163,6 +176,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Remove", this, item);
                 }
+                RaisePropertyChanged("TotalPoints");
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -178,6 +192,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Add", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
+                    RaisePropertyChanged("TotalDevices");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -186,6 +201,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Remove", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
+                    RaisePropertyChanged("TotalDevices");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -193,6 +209,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Edit", this, sender);
             }
         }
+
+        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+            if (e.PropertyName == "Quantity")
+            {
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
+            }
+        }
+
 
         #endregion
 
@@ -258,15 +284,6 @@ namespace EstimatingLibrary
             foreach (TECDevice item in this._devices)
             {
                 item.PropertyChanged -= DeviceChanged;
-            }
-        }
-
-        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-            if (e.PropertyName == "Quantity")
-            {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
 

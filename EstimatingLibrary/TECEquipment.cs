@@ -92,8 +92,7 @@ namespace EstimatingLibrary
 
             SubScope.CollectionChanged += SubScope_CollectionChanged;
         }
-
-
+        
         public TECEquipment(string name, string description, double budgetPrice, ObservableCollection<TECSubScope> subScope) : this(name, description, budgetPrice, subScope, Guid.NewGuid()) { }
         public TECEquipment() : this("", "", -1, new ObservableCollection<TECSubScope>()) { }
 
@@ -152,6 +151,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    checkForTotalsInSubScope(item as TECSubScope);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -174,6 +174,18 @@ namespace EstimatingLibrary
             {
                 RaisePropertyChanged("SubScopeQuantity");
             }
+            else if(name == "TotalPoints")
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            else if (name == "TotalDevices")
+            {
+                RaisePropertyChanged("TotalDevices");
+            } 
+            else if (name == "Length")
+            {
+                RaisePropertyChanged("SubLength");
+            }
         }
 
         private void subscribeToSubScope()
@@ -184,8 +196,19 @@ namespace EstimatingLibrary
             }
         }
 
+        private void checkForTotalsInSubScope(TECSubScope subScope)
+        {
+            if (subScope.Points.Count > 0)
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            if (subScope.Devices.Count > 0)
+            {
+                RaisePropertyChanged("TotalDevices");
+            }
+        }
 
         #endregion
-        
+
     }
 }
