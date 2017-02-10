@@ -76,6 +76,8 @@ namespace EstimatingUtilitiesLibrary
                 linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+                linkAllDevices(bid.Systems, bid.DeviceCatalog);
+                linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
             }
@@ -3091,6 +3093,48 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+
+        static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
+        {
+            foreach(TECSystem system in bidSystems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope sub in equipment.SubScope)
+                    {
+                        var linkedDevices = new ObservableCollection<TECDevice>();
+                        foreach(TECDevice device in sub.Devices)
+                        {
+                            foreach(TECDevice cDev in deviceCatalog)
+                            {
+                                if(cDev.Guid == device.Guid)
+                                {
+                                    linkedDevices.Add(cDev);
+                                }
+                            }
+                        }
+                        sub.Devices = linkedDevices;
+                    }
+                }
+            }
+        }
+
+
+        static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
+        {
+            foreach(TECDevice device in devices)
+            {
+                foreach(TECManufacturer man in mans)
+                {
+                    if (device.Manufacturer.Guid == man.Guid)
+                    {
+                        device.Manufacturer = man;
+                    }
+                }
+                
+            }
+        }
+
 
         #endregion Link Methods
 
