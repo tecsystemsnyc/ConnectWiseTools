@@ -61,6 +61,19 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL");
     }
 
+    public class SubcontractorConstantsTable : TableBase
+    {
+        public static new string TableName = "TECSubcontractorConst";
+
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Const = new TableField("Const", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            Name
+        };
+    }
+
     public class MiscCostTable : TableBase
     {
         public static new string TableName = "TECMiscCost";
@@ -537,6 +550,7 @@ namespace EstimatingUtilitiesLibrary
             new BidInfoTable(),
             new LaborConstantsTable(),
             new MiscCostTable(),
+            new SubcontractorConstantsTable(),
             new NoteTable(),
             new ExclusionTable(),
             new ScopeBranchTable(),
@@ -581,6 +595,7 @@ namespace EstimatingUtilitiesLibrary
         {
             new TemplatesInfoTable(),
             new LaborConstantsTable(),
+            new SubcontractorConstantsTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
