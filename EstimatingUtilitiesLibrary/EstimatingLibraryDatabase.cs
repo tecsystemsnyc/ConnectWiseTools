@@ -772,13 +772,6 @@ namespace EstimatingUtilitiesLibrary
             data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
             data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
 
-            data.Add(BidInfoTable.PMCoef.Name, bid.Labor.PMCoef.ToString());
-            data.Add(BidInfoTable.ENGCoef.Name, bid.Labor.ENGCoef.ToString());
-            data.Add(BidInfoTable.CommCoef.Name, bid.Labor.CommCoef.ToString());
-            data.Add(BidInfoTable.SoftCoef.Name, bid.Labor.SoftCoef.ToString());
-            data.Add(BidInfoTable.GraphCoef.Name, bid.Labor.GraphCoef.ToString());
-            data.Add(BidInfoTable.ElectricalRate.Name, bid.Labor.ElectricalRate.ToString());
-
             if (!SQLiteDB.Insert(BidInfoTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECBidInfo table.");
@@ -1274,12 +1267,6 @@ namespace EstimatingUtilitiesLibrary
             data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
             data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
             data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
-            data.Add(BidInfoTable.PMCoef.Name, bid.Labor.PMCoef.ToString());
-            data.Add(BidInfoTable.ENGCoef.Name, bid.Labor.ENGCoef.ToString());
-            data.Add(BidInfoTable.CommCoef.Name, bid.Labor.CommCoef.ToString());
-            data.Add(BidInfoTable.SoftCoef.Name, bid.Labor.SoftCoef.ToString());
-            data.Add(BidInfoTable.GraphCoef.Name, bid.Labor.GraphCoef.ToString());
-            data.Add(BidInfoTable.ElectricalRate.Name, bid.Labor.ElectricalRate.ToString());
 
             if (!SQLiteDB.Replace(BidInfoTable.TableName, data))
             {

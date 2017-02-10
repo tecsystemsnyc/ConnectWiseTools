@@ -19,19 +19,12 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Salesperson = new TableField("Salesperson", "TEXT");
         public static TableField Estimator = new TableField("Estimator", "TEXT");
 
-        public static TableField PMCoef = new TableField("PMCoef", "REAL");
-        public static TableField ENGCoef = new TableField("ENGCoef", "REAL");
-        public static TableField CommCoef = new TableField("CommCoef", "REAL");
-        public static TableField SoftCoef = new TableField("SoftCoef", "REAL");
-        public static TableField GraphCoef = new TableField("GraphCoef", "REAL");
-
-        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
-
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             BidInfoID
             };
 
     }
+
     public class TemplatesInfoTable : TableBase
     {
         public static new string TableName = "TECTemplatesInfo";
@@ -43,6 +36,54 @@ namespace EstimatingUtilitiesLibrary
         {
             TemplatesInfoID
         };
+    }
+
+    public class LaborConstantsTable : TableBase
+    {
+        public static new string TableName = "TECLaborConst";
+
+        public static TableField PMCoef = new TableField("PMCoef", "REAL");
+        public static TableField PMRate = new TableField("PMRate", "REAL");
+
+        public static TableField ENGCoef = new TableField("ENGCoef", "REAL");
+        public static TableField ENGRate = new TableField("ENGRate", "REAL");
+
+        public static TableField CommCoef = new TableField("CommCoef", "REAL");
+        public static TableField CommRate = new TableField("CommRate", "REAL");
+
+        public static TableField SoftCoef = new TableField("SoftCoef", "REAL");
+        public static TableField SoftRate = new TableField("SoftRate", "REAL");
+
+        public static TableField GraphCoef = new TableField("GraphCoef", "REAL");
+        public static TableField GraphRate = new TableField("GraphRate", "REAL");
+
+        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
+        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL");
+    }
+
+    public class SubcontractorConstantsTable : TableBase
+    {
+        public static new string TableName = "TECSubcontractorConst";
+
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Const = new TableField("Const", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            Name
+        };
+    }
+
+    public class MiscCostTable : TableBase
+    {
+        public static new string TableName = "TECMiscCost";
+
+        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL");
+        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL");
+        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL");
+        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL");
+        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL");
+
     }
 
     public class NoteTable : TableBase
@@ -507,6 +548,9 @@ namespace EstimatingUtilitiesLibrary
     {
         public static List<object> Tables = new List<object>() {
             new BidInfoTable(),
+            new LaborConstantsTable(),
+            new MiscCostTable(),
+            new SubcontractorConstantsTable(),
             new NoteTable(),
             new ExclusionTable(),
             new ScopeBranchTable(),
@@ -550,6 +594,8 @@ namespace EstimatingUtilitiesLibrary
         public static List<object> Tables = new List<object>()
         {
             new TemplatesInfoTable(),
+            new LaborConstantsTable(),
+            new SubcontractorConstantsTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),

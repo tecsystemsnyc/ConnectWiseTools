@@ -87,7 +87,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_Labor()
+        public void Load_Bid_LaborConsts()
         {
             //Assert
             double expectedPM = 2;
