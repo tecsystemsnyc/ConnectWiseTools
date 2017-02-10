@@ -153,8 +153,7 @@ namespace EstimatingLibrary
 
             Equipment.CollectionChanged += Equipment_CollectionChanged;
         }
-
-
+        
         public TECSystem(string name, string description, double budgetPrice, ObservableCollection<TECEquipment> equipment) : this(name, description, budgetPrice, equipment, Guid.NewGuid()) { }
         public TECSystem() : this("", "", -1, new ObservableCollection<TECEquipment>()) { }
 
@@ -221,6 +220,16 @@ namespace EstimatingLibrary
             {
                 RaisePropertyChanged("TotalBudgetPrice");
                 RaisePropertyChanged("PriceWithEquipment");
+            } else if (name == "TotalPoints")
+            {
+                RaisePropertyChanged("TotalPoints");
+            } else if (name == "TotalDevices")
+            {
+                RaisePropertyChanged("TotalDevices");
+            }
+            else if (name == "SubLength")
+            {
+                RaisePropertyChanged("SubLength");
             }
         }
 
@@ -233,7 +242,9 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    checkForTotalsInEquipment(item as TECEquipment);
                 }
+
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
@@ -257,6 +268,20 @@ namespace EstimatingLibrary
             }
         }
 
+        private void checkForTotalsInEquipment(TECEquipment equipment)
+        {
+            foreach (TECSubScope sub in equipment.SubScope)
+            {
+                if (sub.Points.Count > 0)
+                {
+                    RaisePropertyChanged("TotalPoints");
+                }
+                if (sub.Devices.Count > 0)
+                {
+                    RaisePropertyChanged("TotalDevices");
+                }
+            }
+        }
 
         #endregion
 

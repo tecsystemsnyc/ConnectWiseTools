@@ -117,7 +117,10 @@ namespace EstimatingLibrary
         
         public double MaterialCost
         {
-            get { return getMaterialCost(); }
+            get
+            {
+                return getMaterialCost();
+            }
         }
 
         public double TECSubtotal
@@ -355,7 +358,7 @@ namespace EstimatingLibrary
             Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
 
-            registerPointNumChanges();
+            registerSystems();
             
         }
 
@@ -412,22 +415,92 @@ namespace EstimatingLibrary
 
         #region Methods
 
-
-        private void registerPointNumChanges()
+        #region Event Handlers
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach(TECSystem sys in Systems)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                sys.Equipment.CollectionChanged += CollectionChanged;
-                foreach (TECEquipment equip in sys.Equipment)
+                foreach (object item in e.NewItems)
                 {
-                    equip.SubScope.CollectionChanged += CollectionChanged;
-                    foreach(TECSubScope sub in equip.SubScope)
+                    if (item is TECProposalScope)
                     {
-                        sub.Points.CollectionChanged += Points_CollectionChanged;
+                        NotifyPropertyChanged("MetaAdd", this, item);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged("Add", this, item);
+                        if (item is TECSystem)
+                        {
+                            var sys = item as TECSystem;
+                            addProposalScope(sys);
+                            sys.PropertyChanged += System_PropertyChanged;
+                            checkForTotalsInSystem(sys);
+                        }
+                    }
+
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECProposalScope)
+                    {
+                        NotifyPropertyChanged("MetaRemove", this, item);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged("Remove", this, item);
+                        if (item is TECScope)
+                        {
+                            checkForVisualsToRemove((TECScope)item);
+                        }
+                        if (item is TECSystem)
+                        {
+                            var sys = item as TECSystem;
+                            sys.PropertyChanged -= System_PropertyChanged;
+                            removeProposalScope(sys);
+                        }
                     }
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                NotifyPropertyChanged("Edit", this, sender);
+            }
         }
+
+        private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TotalPoints")
+            {
+                updatePoints();
+            }
+            else if (e.PropertyName == "TotalDevices")
+            {
+                updateDevices();
+            }
+            else if (e.PropertyName == "SubLength")
+            {
+                updateElectricalMaterial();
+            }
+        }
+
+        private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged("ChildChanged", this, sender);
+            if (sender is TECLabor)
+            {
+                RaisePropertyChanged("TECSubtotal");
+                RaisePropertyChanged("SubcontractorSubtotal");
+            }
+            else if (sender is TECBidParameters)
+            {
+                updateFromParameters();
+            }
+        }
+
+        #endregion
 
         private double getMaterialCost()
         {
@@ -444,8 +517,8 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += Labor.TECSubTotal;
             outCost += MaterialCost;
-            outCost *= Parameters.Escalation;
-            outCost *= Parameters.Overhead;
+            outCost += outCost*Parameters.Escalation;
+            outCost += outCost*Parameters.Overhead;
             outCost += Tax;
 
             return outCost;
@@ -455,7 +528,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += getTECCost();
 
-            outCost *= Parameters.Profit;
+            outCost += outCost*Parameters.Profit;
 
             return outCost;
         }
@@ -465,7 +538,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += Labor.SubcontractorSubTotal;
             outCost += ElectricalMaterialCost;
-            outCost *= Parameters.SubcontractorEscalation;
+            outCost += outCost*Parameters.SubcontractorEscalation;
 
             return outCost;
         }
@@ -473,7 +546,7 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += getSubcontractorCost();
-            outCost *= Parameters.SubcontractorMarkup;
+            outCost += outCost*Parameters.SubcontractorMarkup;
 
             return outCost;
         }
@@ -484,7 +557,7 @@ namespace EstimatingLibrary
 
             if (!Parameters.IsTaxExempt)
             {
-                outTax += 1.0875 * MaterialCost;
+                outTax += .0875 * MaterialCost;
             }
 
             return outTax;
@@ -529,7 +602,6 @@ namespace EstimatingLibrary
                     }
                 }
             }
-
             return totalPoints;
         }
 
@@ -553,104 +625,6 @@ namespace EstimatingLibrary
             TECBid bid = new TECBid(this);
             bid._infoGuid = InfoGuid;
             return bid;
-        }
-
-        private void Points_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Labor.NumPoints = getPointNumber();
-        }
-
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    if(item is TECProposalScope)
-                    {
-                        NotifyPropertyChanged("MetaAdd", this, item);
-                    }
-                    else
-                    {
-                        NotifyPropertyChanged("Add", this, item);
-                        if (item is TECSystem)
-                        {
-                            addProposalScope(item as TECSystem);
-                        }
-                    }
-
-                    if(item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged += CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    } 
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged += CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Points.CollectionChanged += Points_CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    if (item is TECProposalScope)
-                    {
-                        NotifyPropertyChanged("MetaRemove", this, item);
-                    }
-                    else
-                    {
-                        NotifyPropertyChanged("Remove", this, item);
-                        if (item is TECScope)
-                        {
-                            checkForVisualsToRemove((TECScope)item);
-                        }
-                        if (item is TECSystem)
-                        {
-                            removeProposalScope(item as TECSystem);
-                        }
-                    }
-
-                    if (item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged -= CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged -= CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Points.CollectionChanged -= Points_CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                NotifyPropertyChanged("Edit", this, sender);
-            }
-        }
-        
-        private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            NotifyPropertyChanged("ChildChanged", (object)this, (object)Labor);
         }
         
         private void checkForVisualsToRemove(TECScope item)
@@ -708,14 +682,59 @@ namespace EstimatingLibrary
             
         }
 
-        private void raiseReviewChanges()
+        private void registerSystems()
         {
-            RaisePropertyChanged("TotalPrice");
+            foreach(TECSystem system in Systems)
+            {
+                system.PropertyChanged += System_PropertyChanged;
+            }
+        }
+
+        private void updatePoints()
+        {
+            Labor.NumPoints = getPointNumber();
             RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("TotalPrice");
+        }
+        private void updateDevices()
+        {
             RaisePropertyChanged("MaterialCost");
             RaisePropertyChanged("Tax");
-            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("TotalPrice");
         }
+        private void updateElectricalMaterial()
+        {
+            RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("TotalPrice");
+        }
+        private void updateFromParameters()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("TotalPrice");
+        }
+
+        private void checkForTotalsInSystem(TECSystem system)
+        {
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                foreach(TECSubScope sub in equip.SubScope)
+                {
+                    if(sub.Points.Count > 0)
+                    {
+                        updatePoints();
+                    }
+                    if(sub.Devices.Count > 0)
+                    {
+                        updateDevices();
+                    }
+                }
+            }
+        }
+
         #endregion
 
     }
