@@ -128,7 +128,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (((TECManufacturer)value).Name == "Unnamed Manufacturer")
+            if (((TECManufacturer)value).Name == "")
             {
                 return null;
             }

@@ -1743,15 +1743,31 @@ namespace EstimatingUtilitiesLibrary
         static private void updateSubScopeDeviceRelation(TECSubScope subScope)
         {
             int i = 0;
+            Dictionary<Guid, int> quantityList = new Dictionary<Guid, int>();
+            Console.WriteLine("Device QTY: " + subScope.Devices.Count);
+            foreach (TECDevice device in subScope.Devices)
+            {
+                if (quantityList.ContainsKey(device.Guid))
+                {
+                    Console.WriteLine("Device Quantity updated");
+                    quantityList[device.Guid] += 1;
+                }
+                else
+                {
+                    Console.WriteLine("Device and quantity added");
+                    quantityList.Add(device.Guid, 1);
+                }
+            }
+
             foreach (TECDevice device in subScope.Devices)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-                data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-                data.Add("Quantity", device.Quantity.ToString());
-                data.Add("ScopeIndex", i.ToString());
+                data.Add(SubScopeDeviceTable.SubScopeID.Name, subScope.Guid.ToString());
+                data.Add(SubScopeDeviceTable.DeviceID.Name, device.Guid.ToString());
+                data.Add(SubScopeDeviceTable.Quantity.Name, quantityList[device.Guid].ToString());
+                data.Add(SubScopeDeviceTable.ScopeIndex.Name, i.ToString());
 
-                if (!SQLiteDB.Replace("TECSubScopeTECDevice", data))
+                if (!SQLiteDB.Replace(SubScopeDeviceTable.TableName, data))
                 {
                     Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECDevice table.");
                 }
@@ -2247,11 +2263,13 @@ namespace EstimatingUtilitiesLibrary
                     quantity = 1;
                     Console.WriteLine("Cannot convert quantity to int in device, setting to 1");
                 }
-
-                deviceToAdd.Quantity = quantity;
                 deviceToAdd.Tags = getTagsInScope(deviceID);
-
-                devices.Add(deviceToAdd);
+                //deviceToAdd.Quantity = quantity;
+                for (int x = 0; x < quantity; x++)
+                {
+                    devices.Add(deviceToAdd);
+                }
+                
             }
 
             return devices;

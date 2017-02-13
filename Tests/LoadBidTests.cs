@@ -3,6 +3,7 @@ using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Tests
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
+        static ObservableCollection<TECDevice> actualDevices;
         static TECPoint actualPoint;
 
         static TECManufacturer actualManufacturer;
@@ -52,6 +54,7 @@ namespace Tests
             actualEquipment = actualSystem.Equipment[0];
             actualSubScope = actualEquipment.SubScope[0];
             actualDevice = actualSubScope.Devices[0];
+            actualDevices = actualSubScope.Devices;
             actualPoint = actualSubScope.Points[0];
 
             actualManufacturer = actualBid.ManufacturerCatalog[0];
@@ -169,8 +172,16 @@ namespace Tests
             string expectedDescription = "Test Device Description";
             Assert.AreEqual(expectedDescription, actualDevice.Description);
             
-            int expectedQuantity = 987;
-            Assert.AreEqual(expectedQuantity, actualDevice.Quantity);
+            int expectedQuantity = 3;
+            int actualQuantity = 0;
+            foreach(TECDevice device in actualDevices)
+            {
+                if(device.Guid == actualDevice.Guid)
+                {
+                    actualQuantity++;
+                }
+            }
+            Assert.AreEqual(expectedQuantity, actualQuantity);
             
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
