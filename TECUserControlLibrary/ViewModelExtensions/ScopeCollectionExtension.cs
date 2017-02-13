@@ -235,7 +235,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _deviceCost;
 
-        public ConnectionType DeviceConnectionType
+        public TECConnectionType DeviceConnectionType
         {
             get { return _deviceConnectionType; }
             set
@@ -244,7 +244,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DeviceConnectionType");
             }
         }
-        private ConnectionType _deviceConnectionType;
+        private TECConnectionType _deviceConnectionType;
 
         public string DeviceButtonContent
         {
@@ -559,7 +559,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceConnectionType = 0;
+            DeviceConnectionType = null;
             DeviceManufacturer = null;
             DeviceTags = new ObservableCollection<TECTag>();
         }

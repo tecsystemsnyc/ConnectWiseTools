@@ -175,6 +175,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT");
         public static TableField Description = new TableField("Description", "TEXT");
         public static TableField Quantity = new TableField("Quantity", "INTEGER");
+        public static TableField Length = new TableField("Length", "REAL");
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID
@@ -299,6 +300,20 @@ namespace EstimatingUtilitiesLibrary
             ProposalScopeID
         };
     }
+    public class ConnectionTypeTable : TableBase
+    {
+        public static new string TableName = "TECConnectionType";
+
+        public static TableField ConnectionTypeID = new TableField("ConnectionTypeID", "TEXT");
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+        public static TableField Labor = new TableField("Labor", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ConnectionTypeID
+        };
+    }
 
     public class ProposalScopeScopeBranchTable : TableBase
     {
@@ -322,17 +337,6 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ConnectionID
-            };
-    }
-    public class ConnectionConnectionTypeTable : TableBase
-    {
-        public static new string TableName = "TECConnectionTECConnectionType";
-
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT");
-        public static TableField Type = new TableField("Type", "TEXT");
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-
             };
     }
     public class ControllerTable : TableBase
@@ -491,6 +495,18 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+    public class DeviceConnectionTypeTable : TableBase
+    {
+        public static new string TableName = "TECDeviceTECConnectionType";
+
+        public static TableField DeviceID = new TableField("DeviceID", "TEXT");
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+
+        };
+    }
     public class DrawingPageTable : TableBase
     {
         public static new string TableName = "TECDrawingTECPage";
@@ -565,6 +581,7 @@ namespace EstimatingUtilitiesLibrary
             new PageTable(),
             new LocationTable(),
             new VisualScopeTable(),
+            new ConnectionTypeTable(),
             new ScopeBranchHierarchyTable(),
             new SystemIndexTable(),
             new SystemEquipmentTable(),
@@ -582,10 +599,10 @@ namespace EstimatingUtilitiesLibrary
             new ControllerConnectionTable(),
             new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
-            new ConnectionConnectionTypeTable(),
             new ProposalScopeTable(),
             new ProposalScopeScopeBranchTable(),
-            new BidScopeBranchTable()
+            new BidScopeBranchTable(),
+            new DeviceConnectionTypeTable()
             };
     }
 
@@ -603,6 +620,7 @@ namespace EstimatingUtilitiesLibrary
             new PointTable(),
             new TagTable(),
             new ManufacturerTable(),
+            new ConnectionTypeTable(),
             new SystemEquipmentTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),
@@ -612,7 +630,8 @@ namespace EstimatingUtilitiesLibrary
             new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
             new DeviceManufacturerTable(),
-            new SystemIndexTable()
+            new SystemIndexTable(),
+            new DeviceConnectionTypeTable()
         };
     }
 

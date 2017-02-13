@@ -73,9 +73,11 @@ namespace EstimatingUtilitiesLibrary
                 bid.Drawings = getDrawings();
                 bid.Connections = getConnections();
                 bid.Controllers = getControllers();
+                bid.ConnectionTypes = getConnectionTypes();
                 linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
                 linkAllLocations(bid.Locations, bid.Systems);
                 linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+                linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
                 linkAllDevices(bid.Systems, bid.DeviceCatalog);
                 linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
             //Breaks Visual Scope in a page
@@ -112,6 +114,10 @@ namespace EstimatingUtilitiesLibrary
                 templates.Tags = getAllTags();
                 templates.ManufacturerCatalog = getAllManufacturers();
                 templates.ControllerTemplates = getControllers();
+                templates.ConnectionTypes = getConnectionTypes();
+                linkConnectionTypeWithDevices(templates.ConnectionTypes, templates.DeviceCatalog);
+                linkAllDevices(templates.SystemTemplates, templates.DeviceCatalog);
+                linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
             }
             catch (Exception e)
             {
@@ -895,6 +901,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(SubScopeTable.Name.Name, subScope.Name);
             data.Add(SubScopeTable.Description.Name, subScope.Description);
             data.Add(SubScopeTable.Quantity.Name, subScope.Quantity.ToString());
+            data.Add(SubScopeTable.Length.Name, subScope.Length.ToString());
 
             if (!SQLiteDB.Insert(SubScopeTable.TableName, data))
             {
@@ -908,7 +915,6 @@ namespace EstimatingUtilitiesLibrary
             data.Add(DeviceTable.Name.Name, device.Name);
             data.Add(DeviceTable.Description.Name, device.Description);
             data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-            data.Add(DeviceTable.ConnectionType.Name, TECConnectionType.convertTypeToString(device.ConnectionType));
 
             if (!SQLiteDB.Insert(DeviceTable.TableName, data))
             {
@@ -1327,7 +1333,6 @@ namespace EstimatingUtilitiesLibrary
             data.Add(DeviceTable.Name.Name, device.Name);
             data.Add(DeviceTable.Description.Name, device.Description);
             data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-            data.Add(DeviceTable.ConnectionType.Name, TECConnectionType.convertTypeToString(device.ConnectionType));
 
             if (!SQLiteDB.Replace(DeviceTable.TableName, data))
             {
@@ -2072,7 +2077,6 @@ namespace EstimatingUtilitiesLibrary
                 string name = row[DeviceTable.Name.Name].ToString();
                 string description = row[DeviceTable.Description.Name].ToString();
                 string costString = row[DeviceTable.Cost.Name].ToString();
-                ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -2082,8 +2086,9 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+                TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
 
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
+                TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
                 deviceToAdd.Tags = getTagsInScope(deviceID);
                 deviceToAdd.ConnectionType = connectionType;
 
@@ -2217,7 +2222,6 @@ namespace EstimatingUtilitiesLibrary
                 string name = row[DeviceTable.Name.Name].ToString();
                 string description = row[DeviceTable.Description.Name].ToString();
                 string costString = row[DeviceTable.Cost.Name].ToString();
-                ConnectionType connectionType = TECConnectionType.convertStringToType(row[DeviceTable.ConnectionType.Name].ToString());
 
                 double cost;
                 if (!double.TryParse(costString, out cost))
@@ -2227,8 +2231,10 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+                TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
 
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, connectionType, manufacturer, deviceID);
+                TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
+                deviceToAdd.ConnectionType = connectionType;
 
                 string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
                 quantityCommand += (subScopeID + "' and DeviceID = '" + deviceID + "'");
@@ -2316,6 +2322,25 @@ namespace EstimatingUtilitiesLibrary
             else
             {
                 return new TECManufacturer();
+            }
+        }
+        
+        static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
+        {
+            string command = "select * from TECConnectionType where ConnectionTypeID in ";
+            command += "(select ConnectionTypeID from TECDeviceTECConnectionType where DeviceID = '";
+            command += deviceID;
+            command += "')";
+
+            DataTable connectionTypeTable = SQLiteDB.getDataFromCommand(command);
+
+            if (connectionTypeTable.Rows.Count > 0)
+            {
+                return (getConnectionTypeFromRow(connectionTypeTable.Rows[0]));
+            }
+            else
+            {
+                return new TECConnectionType();
             }
         }
 
@@ -2544,6 +2569,26 @@ namespace EstimatingUtilitiesLibrary
             return controllers;
         }
 
+        static private ObservableCollection<TECConnectionType> getConnectionTypes()
+        {
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
+            try
+            {
+                DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
+                foreach(DataRow row in connectionTypesDT.Rows)
+                {
+                    connectionTypes.Add(getConnectionTypeFromRow(row));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: getConnectionTypes() failed. Code: " + e.Message);
+                throw e;
+            }
+            return connectionTypes;
+
+        }
+
         static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
         {
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
@@ -2587,14 +2632,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
                     string lengthString = row[ConnectionTable.Length.Name].ToString();
-                    //string typeString = row[ConnectionTable.Type.Name].ToString();
 
                     double length = lengthString.ToDouble();
-                    //ConnectionType type = TECConnectionType.convertStringToType(typeString);
-
-                    ObservableCollection<ConnectionType> connectionTypes = getConnectionTypesInConnection(guid);
-
-                    connections.Add(new TECConnection(length, connectionTypes, guid));
+                    
+                    connections.Add(new TECConnection(length, guid));
                 }
             }
             catch (Exception e)
@@ -2604,32 +2645,6 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return connections;
-        }
-
-        static private ObservableCollection<ConnectionType> getConnectionTypesInConnection(Guid connectionID)
-        {
-            ObservableCollection<ConnectionType> types = new ObservableCollection<ConnectionType>();
-
-            string command = "select " + ConnectionConnectionTypeTable.Type.Name + " from " + ConnectionConnectionTypeTable.TableName + " where " +
-                ConnectionConnectionTypeTable.ConnectionID.Name + " = '" + connectionID + "'";
-
-            try
-            {
-                DataTable typeDT = SQLiteDB.getDataFromCommand(command);
-
-                foreach (DataRow row in typeDT.Rows)
-                {
-                    ConnectionType type = TECConnectionType.convertStringToType(row[ConnectionConnectionTypeTable.Type.Name].ToString());
-                    types.Add(type);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("getConnectionTypesInController() failed. Code: " + e.Message);
-                throw e;
-            }
-
-            return types;
         }
 
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
@@ -3118,8 +3133,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
-
+        
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach(TECDevice device in devices)
@@ -3131,11 +3145,22 @@ namespace EstimatingUtilitiesLibrary
                         device.Manufacturer = man;
                     }
                 }
-                
             }
         }
 
-
+        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
+        {
+            foreach(TECDevice device in devices)
+            {
+                foreach(TECConnectionType type in connectionTypes)
+                {
+                    if(device.ConnectionType.Guid == type.Guid)
+                    {
+                        device.ConnectionType = type;
+                    }
+                }
+            }
+        }
         #endregion Link Methods
 
         #region Populate Derived
@@ -3559,6 +3584,7 @@ namespace EstimatingUtilitiesLibrary
             string name = row[SubScopeTable.Name.Name].ToString();
             string description = row[SubScopeTable.Description.Name].ToString();
             string quantityString = row[SubScopeTable.Quantity.Name].ToString();
+            string lengthString = row[SubScopeTable.Length.Name].ToString();
 
             int quantity;
             if (!int.TryParse(quantityString, out quantity))
@@ -3567,15 +3593,51 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
             }
 
+            double length;
+            if (!double.TryParse(lengthString, out length))
+            {
+                length = 1;
+                Console.WriteLine("Cannot convert length to double in subscope, setting to 1");
+            }
+
             ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
             ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
 
             TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
 
+            subScopeToAdd.Length = length;
             subScopeToAdd.Quantity = quantity;
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
 
             return subScopeToAdd;
+        }
+
+        private static TECConnectionType getConnectionTypeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
+            string name = row[ConnectionTypeTable.Name.Name].ToString();
+            string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
+            string costString = row[ConnectionTypeTable.Cost.Name].ToString();
+
+            double cost;
+            if (!double.TryParse(costString, out cost))
+            {
+                cost = 0;
+                Console.WriteLine("Cannot convert cost to double, setting to 0");
+            }
+            double labor;
+            if (!double.TryParse(laborString, out labor))
+            {
+                labor = 0;
+                Console.WriteLine("Cannot convert labor to double, setting to 0");
+            }
+
+            var outConnectionType = new TECConnectionType(guid);
+            outConnectionType.Name = name;
+            outConnectionType.Cost = cost;
+            outConnectionType.Labor = labor;
+
+            return outConnectionType;
         }
 
         #endregion

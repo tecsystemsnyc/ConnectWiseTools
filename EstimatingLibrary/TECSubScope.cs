@@ -56,12 +56,12 @@ namespace EstimatingLibrary
             get { return getLaborCost(); }
         }
 
-        public ObservableCollection<ConnectionType> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return getConnectionTypes(); }
         }
 
-        public List<ConnectionType> AvailableConnections
+        public List<TECConnectionType> AvailableConnections
         {
             get { return getAvailableConnectionTypes(); }
         }
@@ -90,8 +90,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Length", temp, this);
             }
         }
-
-
+        
         #endregion //Properties
 
         #region Constructors
@@ -237,9 +236,9 @@ namespace EstimatingLibrary
             return outScope;
         }
 
-        private ObservableCollection<ConnectionType> getConnectionTypes()
+        private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
-            var outTypes = new ObservableCollection<ConnectionType>();
+            var outTypes = new ObservableCollection<TECConnectionType>();
             foreach(TECDevice device in Devices)
             {
                 outTypes.Add(device.ConnectionType);
@@ -287,10 +286,10 @@ namespace EstimatingLibrary
             }
         }
 
-        private List<ConnectionType> getAvailableConnectionTypes()
+        private List<TECConnectionType> getAvailableConnectionTypes()
         {
-            var availableConnections = new List<ConnectionType>();
-            foreach (ConnectionType conType in this.ConnectionTypes)
+            var availableConnections = new List<TECConnectionType>();
+            foreach (TECConnectionType conType in this.ConnectionTypes)
             {
                 availableConnections.Add(conType);
             }

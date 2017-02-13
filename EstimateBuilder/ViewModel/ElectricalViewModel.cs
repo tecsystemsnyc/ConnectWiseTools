@@ -49,6 +49,13 @@ namespace EstimateBuilder.ViewModel
             registerSubScope();
         }
 
+        public void refresh(TECBid bid)
+        {
+            Bid = bid;
+            getAllSubScope();
+            registerSubScope();
+        }
+        
         private void getAllSubScope()
         {
             AllSubScope = new ObservableCollection<Tuple<string, string, TECSubScope>>();

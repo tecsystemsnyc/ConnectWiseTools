@@ -536,7 +536,7 @@ namespace EstimateBuilder.ViewModel
                 {
                     var availableConnections = subScope.AvailableConnections;
 
-                    foreach (ConnectionType conType in connection.ConnectionTypes)
+                    foreach (TECConnectionType conType in connection.ConnectionTypes)
                     {
                         if (availableConnections.Contains(conType))
                         {
@@ -594,7 +594,7 @@ namespace EstimateBuilder.ViewModel
                 if(item2.Item1 is TECSubScope)
                 {
                     var sub = item2.Item1 as TECSubScope;
-                    foreach (ConnectionType type in sub.ConnectionTypes)
+                    foreach (TECConnectionType type in sub.ConnectionTypes)
                     {
                         newConnection.ConnectionTypes.Add(type);
                     }
@@ -605,11 +605,12 @@ namespace EstimateBuilder.ViewModel
                 }
                 else
                 {
-                    var controller = item2.Item1 as TECController;
-                    foreach (ConnectionType type in controller.NetworkIO)
-                    {
-                        newConnection.ConnectionTypes.Add(type);
-                    }
+                    //MUST REIMPLIMENT
+                    //var controller = item2.Item1 as TECController;
+                    //foreach (IOType type in controller.NetworkIO)
+                    //{
+                    //    newConnection.ConnectionTypes.Add(type);
+                    //}
                 }
                 
             }
@@ -617,7 +618,7 @@ namespace EstimateBuilder.ViewModel
             {
                 newConnection.Controller = item2.Item1 as TECController;
                 var sub = item1.Item1 as TECSubScope;
-                foreach (ConnectionType type in sub.ConnectionTypes)
+                foreach (TECConnectionType type in sub.ConnectionTypes)
                 {
                     newConnection.ConnectionTypes.Add(type);
                 }

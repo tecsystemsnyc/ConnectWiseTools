@@ -81,7 +81,7 @@ namespace EstimatingLibrary
         }
         public bool RequiresBond
         {
-            get { return _isTaxExempt; }
+            get { return _requiresBond; }
             set
             {
                 var temp = this.Copy();

@@ -46,7 +46,6 @@ namespace EstimateBuilder.ViewModel
             
             BidSet += () =>
             {
-                Console.WriteLine("Bid Set");
                 refreshAll();
             };
 
@@ -181,7 +180,7 @@ namespace EstimateBuilder.ViewModel
             ReviewVM.Bid = Bid;
             //SettingsVM.Bid = Bid;
             ProposalVM.Bid = Bid;
-            ElectricalVM.Bid = Bid;
+            ElectricalVM.refresh(Bid);
         }
 
         private void getVersion()

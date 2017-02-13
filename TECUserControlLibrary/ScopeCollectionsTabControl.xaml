@@ -165,7 +165,8 @@
                         Content="Wire Type:"/>
                     <ComboBox Grid.Column="1"
                             Grid.Row="3"
-                              ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
+                              ItemsSource="{Binding Path=ViewModel.Templates.ConnectionTypes}"
+                              DisplayMemberPath="Name"
                               SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>

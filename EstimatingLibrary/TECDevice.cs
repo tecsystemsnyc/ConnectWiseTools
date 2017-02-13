@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private ConnectionType _connectionType;
+        private TECConnectionType _connectionType;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
 
@@ -25,7 +25,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public ConnectionType ConnectionType
+        public TECConnectionType ConnectionType
         {
             get { return _connectionType; }
             set
@@ -59,19 +59,19 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(string name, string description, double cost, ConnectionType connectiontype, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
+        public TECDevice(string name, string description, double cost, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
         {
             _cost = cost;
-            _connectionType = connectiontype;
+            _connectionType = new TECConnectionType();
             _manufacturer = manufacturer;
         }
-        public TECDevice(string name, string description, double cost, ConnectionType connectionType, TECManufacturer manufacturer)
-            : this(name, description, cost, connectionType, manufacturer, Guid.NewGuid()) { }
-        public TECDevice() : this("", "", 0, 0, new TECManufacturer()) { }
+        public TECDevice(string name, string description, double cost, TECConnectionType connectionType, TECManufacturer manufacturer)
+            : this(name, description, cost, manufacturer, Guid.NewGuid()) { }
+        public TECDevice() : this("", "", 0, new TECConnectionType(), new TECManufacturer()) { }
         
         //Copy Constructor
         public TECDevice(TECDevice deviceSource) 
-            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.ConnectionType, deviceSource.Manufacturer, deviceSource.Guid)
+            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.Manufacturer, deviceSource.Guid)
         {
             _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;

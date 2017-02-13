@@ -32,6 +32,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnection> _connections { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
+        private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
 
         public string Name {
             get { return _name; }
@@ -301,6 +302,18 @@ namespace EstimatingLibrary
         {
             get { return _proposalScope; }
             set { _proposalScope = value; }
+        }
+        public ObservableCollection<TECConnectionType> ConnectionTypes
+        {
+            get { return _connectionTypes; }
+            set
+            {
+                var temp = this.Copy();
+                ConnectionTypes.CollectionChanged -= CollectionChanged;
+                _connectionTypes = value;
+                ConnectionTypes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConnectionTypes", temp, this);
+            }
         }
 
         #endregion //Properties

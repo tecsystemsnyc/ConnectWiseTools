@@ -6,51 +6,76 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public enum ConnectionType
+    
+    public class TECConnectionType : TECObject
     {
-        TwoC18 = 1, ThreeC18, FourC18, SixC18,
-        WireTHHN14, WireTHHN12,
-        Cat6, Fiber
-    }
-
-    public static class TECConnectionType
-    {
-        public static ConnectionType convertStringToType(string type)
+        #region Properties
+        private Guid _guid;
+        public Guid Guid
         {
-            switch (type.ToUpper())
+            get { return _guid; }
+        }
+        
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
             {
-                case "TWOC18": return ConnectionType.TwoC18;
-                case "THREEC18": return ConnectionType.ThreeC18;
-                case "FOURC18": return ConnectionType.FourC18;
-                case "SIXC18": return ConnectionType.SixC18;
-
-                case "WIRETHHN14": return ConnectionType.WireTHHN14;
-                case "WIRETHHN12": return ConnectionType.WireTHHN12;
-
-                case "CAT6": return ConnectionType.Cat6;
-                case "FIBER": return ConnectionType.Fiber;
-
-                default: return 0;
+                var temp = Copy();
+                _name = value;
+                NotifyPropertyChanged("Name", temp, this);
             }
         }
 
-        public static string convertTypeToString(ConnectionType type)
+        private double _cost;
+        public double Cost
         {
-            switch (type)
+            get { return _cost; }
+            set
             {
-                case ConnectionType.TwoC18: return "TwoC18";
-                case ConnectionType.ThreeC18: return "ThreeC18";
-                case ConnectionType.FourC18: return "FourC18";
-                case ConnectionType.SixC18: return "SixC18";
-
-                case ConnectionType.WireTHHN12: return "WireTHHN12";
-                case ConnectionType.WireTHHN14: return "WireTHHN14";
-
-                case ConnectionType.Cat6: return "Cat6";
-                case ConnectionType.Fiber: return "Fiber";
-
-                default: return "";
+                var temp = Copy();
+                _cost = value;
+                NotifyPropertyChanged("Cost", temp, this);
             }
+        }
+
+        private double _labor;
+        public double Labor
+        {
+            get { return _cost; }
+            set
+            {
+                var temp = Copy();
+                _labor = value;
+                NotifyPropertyChanged("Labor", temp, this);
+            }
+        }
+
+        #endregion
+
+        #region Initializers
+        public TECConnectionType() : this(Guid.NewGuid())
+        {
+            
+        }
+        public TECConnectionType(Guid guid)
+        {
+            _guid = guid;
+            _name = "";
+            _cost = 0;
+            _labor = 0;
+        }
+        #endregion
+
+        public override object Copy()
+        {
+            var outType = new TECConnectionType();
+            outType._guid = this._guid;
+            outType._name = this._name;
+            outType._cost = this._cost;
+            outType._labor = this._labor;
+            return outType;
         }
     }
 }
