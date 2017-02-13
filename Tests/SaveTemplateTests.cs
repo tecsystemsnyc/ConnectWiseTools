@@ -690,7 +690,7 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
-                
+
         }
 
 
@@ -870,6 +870,106 @@ namespace Tests
 
         #endregion
 
+        #region Save Manufacturer
+        [TestMethod]
+        public void Save_Templates_Add_Manufacturer()
+        {
+            //Act
+            int oldNumManufacturers = templates.ManufacturerCatalog.Count;
+            TECManufacturer expectedManufacturer = new TECManufacturer("Test Manufactuerer", 21.34);
 
+            templates.ManufacturerCatalog.Add(expectedManufacturer);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            {
+                if (man.Guid == expectedManufacturer.Guid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
+            Assert.AreEqual(expectedManufacturer.Location, actualManufacturer.Multiplier);
+            Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.ManufacturerCatalog.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Manufacturer()
+        {
+            //Act
+            int oldNumManufacturers = templates.ManufacturerCatalog.Count;
+            TECManufacturer manToRemove = templates.ManufacturerCatalog[0];
+
+            templates.ManufacturerCatalog.Remove(manToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            {
+                if (man.Guid == manToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumManufacturers - 1), actualTemplates.ManufacturerCatalog.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Manufacturer_Name()
+        {
+            //Act
+            TECManufacturer expectedManufacturer = templates.ManufacturerCatalog[0];
+            expectedManufacturer.Name = "Test save manufacturer name";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECManufacturer actualMan = null;
+            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            {
+                if (man.Guid == expectedManufacturer.Guid)
+                {
+                    actualMan = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedManufacturer.Name, actualMan.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Manufacturer_Multiplier()
+        {
+            //Act
+            TECManufacturer expectedManufacturer = templates.ManufacturerCatalog[0];
+            expectedManufacturer.Multiplier = 987.41;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECManufacturer actualMan = null;
+            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            {
+                if (man.Guid == expectedManufacturer.Guid)
+                {
+                    actualMan = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedManufacturer.Multiplier, actualMan.Multiplier);
+            #endregion Save Manufacturer
+        }
     }
 }
