@@ -119,11 +119,11 @@ namespace Tests
 
             subScope1.Points.Add(point1);
 
-            //VisualScope
-            var vScope = new TECVisualScope(system1, 4.2, 4.2);
+            ////VisualScope
+            //var vScope = new TECVisualScope(system1, 4.2, 4.2);
 
 
-            //Drawings
+            ////Drawings
             //var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
             //drawing1.Name = "Test";
             //drawing1.Description = "Desc";
