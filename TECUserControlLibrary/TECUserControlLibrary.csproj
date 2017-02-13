@@ -80,6 +80,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachableForStyleBehavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="BubbleScrollEvent .cs" />
     <Compile Include="ByLocationControl.xaml.cs">
