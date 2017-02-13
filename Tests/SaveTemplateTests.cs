@@ -36,8 +36,8 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveTemplates test templates: " + path);
+            File.Delete(path);
+            //Console.WriteLine("SaveTemplates test templates: " + path);
         }
 
         #region Save System
