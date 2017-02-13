@@ -119,18 +119,18 @@ namespace Tests
 
             subScope1.Points.Add(point1);
 
-            //VisualScope
-            var vScope = new TECVisualScope(system1, 4.2, 4.2);
+            ////VisualScope
+            //var vScope = new TECVisualScope(system1, 4.2, 4.2);
 
 
-            //Drawings
-            var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
-            drawing1.Name = "Test";
-            drawing1.Description = "Desc";
+            ////Drawings
+            //var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
+            //drawing1.Name = "Test";
+            //drawing1.Description = "Desc";
             
-            bid.Drawings.Add(drawing1);
+            //bid.Drawings.Add(drawing1);
 
-            drawing1.Pages[0].PageScope.Add(vScope);
+            //drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, ConnectionType.FourC18, new TECManufacturer());
