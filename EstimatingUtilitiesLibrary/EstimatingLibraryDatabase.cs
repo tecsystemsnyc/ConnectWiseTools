@@ -664,6 +664,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 editProposalScope(tarObject as TECProposalScope);
             }
+            else if(tarObject is TECConnectionType)
+            {
+                editConnectionType(tarObject as TECConnectionType);
+            }
             else
             {
                 Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
@@ -810,6 +814,17 @@ namespace EstimatingUtilitiesLibrary
                 else if (refObject is TECScope)
                 {
                     throw new NotImplementedException();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else if (tarObject is TECConnectionType)
+            {
+                if(refObject is TECTemplates)
+                {
+                    removeConnectionType(tarObject as TECConnectionType);
                 }
                 else
                 {
@@ -1589,6 +1604,20 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't update item in TECProposalScope table");
             }
         }
+
+        static private void editConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
+            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
+            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
+
+            if (!SQLiteDB.Replace(ConnectionTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECController table");
+            }
+        }
         #endregion Edit Methods
 
         #region Remove Methods
@@ -1703,6 +1732,13 @@ namespace EstimatingUtilitiesLibrary
             pk.Add(TagTable.TagID.Name, tag.Guid.ToString());
             SQLiteDB.Delete(TagTable.TableName, pk);
         }
+
+        static private void removeConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
+        }
         #endregion Remove Objects
 
         #region Remove Relations
@@ -1783,6 +1819,14 @@ namespace EstimatingUtilitiesLibrary
             pk.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
             pk.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
             SQLiteDB.Delete(ControllerIOTypeTable.TableName, pk);
+        }
+
+        private static void removeDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectionType)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
+            pk.Add(DeviceConnectionTypeTable.TypeID.Name, connectionType.Guid.ToString());
+            SQLiteDB.Delete(DeviceConnectionTypeTable.TableName, pk);
         }
         #endregion
         #endregion Remove Methods
