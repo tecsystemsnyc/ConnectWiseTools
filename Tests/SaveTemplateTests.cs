@@ -484,7 +484,7 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, ConnectionType.WireTHHN12, new TECManufacturer(), Guid.NewGuid());
+            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, new TECManufacturer(), Guid.NewGuid());
 
             templates.DeviceCatalog.Add(expectedDevice);
 
@@ -506,7 +506,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.ConnectionType.Name, actualDevice.ConnectionType.Name);
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
         }
 
@@ -607,7 +607,7 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
-            expectedDevice.ConnectionType = ConnectionType.WireTHHN12;
+            expectedDevice.ConnectionType.Name = "WireTHHN12";
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);

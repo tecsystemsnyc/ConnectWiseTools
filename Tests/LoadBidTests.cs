@@ -186,7 +186,8 @@ namespace Tests
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
 
-            ConnectionType expectedWire = ConnectionType.Fiber;
+            //ConnectionType expectedWire = ConnectionType.Fiber;
+            TECConnectionType expectedWire = new TECConnectionType();
             Assert.AreEqual(expectedWire, actualDevice.ConnectionType);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
@@ -385,9 +386,9 @@ namespace Tests
             double expectedLength = 493.45;
 
             bool hasThreeC18 = false;
-            foreach (ConnectionType type in actualConnection.ConnectionTypes)
+            foreach (TECConnectionType type in actualConnection.ConnectionTypes)
             {
-                if (type == ConnectionType.ThreeC18)
+                if (type.Name == "Threec18")
                 {
                     hasThreeC18 = true;
                 }

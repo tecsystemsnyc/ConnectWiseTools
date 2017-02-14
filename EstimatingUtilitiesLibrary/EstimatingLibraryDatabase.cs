@@ -80,6 +80,7 @@ namespace EstimatingUtilitiesLibrary
                 linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
                 linkAllDevices(bid.Systems, bid.DeviceCatalog);
                 linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+                linkTagsInBid(bid.Tags, bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
             }
@@ -120,6 +121,7 @@ namespace EstimatingUtilitiesLibrary
                 linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
                 templates.ConnectionTypes = getConnectionTypes();
                 linkConnectionTypeWithDevices(templates.ConnectionTypes, templates.DeviceCatalog);
+                linkTagsInTemplates(templates.Tags, templates);
             }
             catch (Exception e)
             {
@@ -3232,8 +3234,7 @@ namespace EstimatingUtilitiesLibrary
                 sub.Devices = linkedDevices;
             }
         }
-
-
+        
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach (TECDevice device in devices)
@@ -3253,7 +3254,91 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECSystem system in bid.Systems)
             {
-                
+                linkTags(tags, system);
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    linkTags(tags, equipment);
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        linkTags(tags, subScope);
+                        foreach(TECDevice device in subScope.Devices)
+                        {
+                            linkTags(tags, device);
+                        }
+                        foreach(TECPoint point in subScope.Points)
+                        {
+                            linkTags(tags, point);
+                        }
+                    }
+                }
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                linkTags(tags, controller);
+            }
+            foreach(TECDevice device in bid.DeviceCatalog)
+            {
+                linkTags(tags, device);
+            }
+        }
+
+        static private void linkTagsInTemplates(ObservableCollection<TECTag> tags, TECTemplates templates)
+        {
+            foreach (TECSystem system in templates.SystemTemplates)
+            {
+                linkTags(tags, system);
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    linkTags(tags, equipment);
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        linkTags(tags, subScope);
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            linkTags(tags, device);
+                        }
+                        foreach (TECPoint point in subScope.Points)
+                        {
+                            linkTags(tags, point);
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                linkTags(tags, equipment);
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    linkTags(tags, subScope);
+                    foreach (TECDevice device in subScope.Devices)
+                    {
+                        linkTags(tags, device);
+                    }
+                    foreach (TECPoint point in subScope.Points)
+                    {
+                        linkTags(tags, point);
+                    }
+                }
+            }
+            foreach (TECSubScope subScope in templates.SubScopeTemplates)
+            {
+                linkTags(tags, subScope);
+                foreach (TECDevice device in subScope.Devices)
+                {
+                    linkTags(tags, device);
+                }
+                foreach (TECPoint point in subScope.Points)
+                {
+                    linkTags(tags, point);
+                }
+            }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                linkTags(tags, controller);
+            }
+            foreach (TECDevice device in templates.DeviceCatalog)
+            {
+                linkTags(tags, device);
             }
         }
 
@@ -3271,6 +3356,20 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             scope.Tags = linkedTags;
+        }
+
+        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
+        {
+            foreach(TECDevice device in devices)
+            {
+                foreach(TECConnectionType connectionType in connectionTypes)
+                {
+                    if(device.ConnectionType.Guid == connectionType.Guid)
+                    {
+                        device.ConnectionType = connectionType;
+                    }
+                }
+            }
         }
 
 
