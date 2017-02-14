@@ -93,23 +93,44 @@ namespace Tests
         public void Load_Bid_LaborConsts()
         {
             //Assert
-            double expectedPM = 2;
-            Assert.AreEqual(expectedPM, actualBid.Labor.PMCoef);
+            double expectedPMCoef = 2;
+            double expectedPMRate = 2.1;
+            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef);
+            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate);
 
-            double expectedENG = 3;
-            Assert.AreEqual(expectedENG, actualBid.Labor.ENGCoef);
+            double expectedENGCoef = 3;
+            double expectedENGRate = 3.1;
+            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef);
+            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate);
 
-            double expectedComm = 4;
-            Assert.AreEqual(expectedComm, actualBid.Labor.CommCoef);
+            double expectedCommCoef = 4;
+            double expectedCommRate = 4.1;
+            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef);
+            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate);
 
-            double expectedSoft = 5;
-            Assert.AreEqual(expectedSoft, actualBid.Labor.SoftCoef);
+            double expectedSoftCoef = 5;
+            double expectedSoftRate = 5.1;
+            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef);
+            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate);
 
-            double expectedGraph = 6;
-            Assert.AreEqual(expectedGraph, actualBid.Labor.GraphCoef);
+            double expectedGraphCoef = 6;
+            double expectedGraphRate = 6.1;
+            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef);
+            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate);
+        }
 
-            double expectedElec = 7;
-            Assert.AreEqual(expectedElec, actualBid.Labor.ElectricalRate);
+        [TestMethod]
+        public void Load_Bid_SubcontractorConsts()
+        {
+            //Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void Load_Bid_MiscCosts()
+        {
+            //Assert
+            Assert.Fail();
         }
 
         [TestMethod]
