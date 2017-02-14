@@ -101,9 +101,11 @@ namespace Tests
 
             //Devices
             var device1 = new TECDevice("Device 1", "Description 1", 987.6, ConnectionType.FourC18, new TECManufacturer());
-            device1.Quantity = 987;
+            device1.Quantity = 3;
             device1.Tags.Add(tag1);
             
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
             subScope1.Devices.Add(device1);
 
             //Manufacturers
