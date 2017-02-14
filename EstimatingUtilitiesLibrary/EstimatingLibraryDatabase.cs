@@ -1184,7 +1184,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
             //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
 
-            if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
+            if (!SQLiteDB.Insert(ConnectionTypeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
             }

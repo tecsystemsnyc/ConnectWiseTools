@@ -158,7 +158,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 controller.PropertyChanged += Object_PropertyChanged;
             }
-            foreach (TECConnectionType connectionType in Templates.ConnectionTypes)
+            foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
             {
                 connectionType.PropertyChanged += Object_PropertyChanged;
             }
