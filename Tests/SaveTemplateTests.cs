@@ -14,6 +14,8 @@ namespace Tests
     [TestClass]
     public class SaveTemplateTests
     {
+        static bool DEBUG = false;
+
         TECTemplates templates;
         ChangeStack testStack;
         string path;
@@ -36,8 +38,16 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            File.Delete(path);
-            //Console.WriteLine("SaveTemplates test templates: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveTemplates test templates: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
+
+
         }
 
         #region Save System
@@ -876,7 +886,7 @@ namespace Tests
         {
             //Act
             int oldNumManufacturers = templates.ManufacturerCatalog.Count;
-            TECManufacturer expectedManufacturer = new TECManufacturer("Test Manufactuerer", 21.34);
+            TECManufacturer expectedManufacturer = new TECManufacturer("Test Add Manufacturer", 21.34);
 
             templates.ManufacturerCatalog.Add(expectedManufacturer);
 
@@ -896,7 +906,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
-            Assert.AreEqual(expectedManufacturer.Location, actualManufacturer.Multiplier);
+            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
             Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.ManufacturerCatalog.Count);
 
         }
@@ -969,7 +979,61 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedManufacturer.Multiplier, actualMan.Multiplier);
-            #endregion Save Manufacturer
+
+
         }
+        #endregion SaveManufacturer
+
+        #region Save Tag
+        [TestMethod]
+        public void Save_Templates_Add_Tag()
+        {
+            //Act
+            int oldNumTags = templates.Tags.Count;
+            TECTag expectedTag = new TECTag("Test add tag");
+
+            templates.Tags.Add(expectedTag);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECTag actualTag = null;
+            foreach (TECTag tag in actualTemplates.Tags)
+            {
+                if (tag.Guid == expectedTag.Guid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedTag.Text, actualTag.Text);
+            Assert.AreEqual((oldNumTags + 1), actualTemplates.Tags.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Tag()
+        {
+            //Act
+            int oldNumTags = templates.Tags.Count;
+            TECTag tagToRemove = templates.Tags[0];
+
+            templates.Tags.Remove(tagToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            
+            //Assert
+            foreach (TECTag tag in actualTemplates.Tags)
+            {
+                if (tag.Guid == tagToRemove.Guid) { Assert.Fail(); }
+            }
+
+            Assert.AreEqual((oldNumTags - 1), actualTemplates.Tags.Count);
+        }
+        #endregion Save Tag
     }
 }

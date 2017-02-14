@@ -563,7 +563,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    editManufacturer(tarObject as TECManufacturer);
                 }
             }
             else if (tarObject is TECDrawing)
@@ -749,6 +749,36 @@ namespace EstimatingUtilitiesLibrary
                 if (refObject is TECController)
                 {
                     removeControllerIORelation(refObject as TECController, tarObject as TECIO);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else if (tarObject is TECManufacturer)
+            {
+                if (refObject is TECTemplates)
+                {
+                    removeManufacturer(tarObject as TECManufacturer);
+                }
+                else if (refObject is TECDevice)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else if (tarObject is TECTag)
+            {
+                if (refObject is TECTemplates)
+                {
+                    removeTag(tarObject as TECTag);
+                }
+                else if (refObject is TECScope)
+                {
+                    throw new NotImplementedException();
                 }
                 else
                 {
@@ -1604,6 +1634,20 @@ namespace EstimatingUtilitiesLibrary
                 removeProposalScope(children);
             }
         }
+
+        static private void removeManufacturer(TECManufacturer man)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ManufacturerTable.ManufacturerID.Name, man.Guid.ToString());
+            SQLiteDB.Delete(ManufacturerTable.TableName, pk);
+        }
+
+        static private void removeTag(TECTag tag)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(TagTable.TagID.Name, tag.Guid.ToString());
+            SQLiteDB.Delete(TagTable.TableName, pk);
+        }
         #endregion Remove Objects
 
         #region Remove Relations
@@ -1744,17 +1788,17 @@ namespace EstimatingUtilitiesLibrary
         {
             int i = 0;
             Dictionary<Guid, int> quantityList = new Dictionary<Guid, int>();
-            Console.WriteLine("Device QTY: " + subScope.Devices.Count);
+            //Console.WriteLine("Device QTY: " + subScope.Devices.Count);
             foreach (TECDevice device in subScope.Devices)
             {
                 if (quantityList.ContainsKey(device.Guid))
                 {
-                    Console.WriteLine("Device Quantity updated");
+                    //Console.WriteLine("Device Quantity updated");
                     quantityList[device.Guid] += 1;
                 }
                 else
                 {
-                    Console.WriteLine("Device and quantity added");
+                    //Console.WriteLine("Device and quantity added");
                     quantityList.Add(device.Guid, 1);
                 }
             }
