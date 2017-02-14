@@ -229,16 +229,25 @@ namespace Tests
             templates.ManufacturerCatalog.Add(testDevMan);
             templates.ManufacturerCatalog.Add(childDevMan);
 
-            //Devices
+            //Connection Types
             TECConnectionType testDevConnType = new TECConnectionType();
             testDevConnType.Name = "FourC18";
-            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, testDevMan, Guid.NewGuid());
-            testDev.ConnectionType = testDevConnType;
 
             TECConnectionType childDevConnType = new TECConnectionType();
             childDevConnType.Name = "FourC18";
+
+            templates.ConnectionTypeCatalog.Add(testDevConnType);
+            templates.ConnectionTypeCatalog.Add(childDevConnType);
+
+            //Devices
+            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, testDevMan, Guid.NewGuid());
+            testDev.ConnectionType = testDevConnType;
+
+            
             TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, childDevMan, Guid.NewGuid());
             childDev.ConnectionType = childDevConnType;
+
+            
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
