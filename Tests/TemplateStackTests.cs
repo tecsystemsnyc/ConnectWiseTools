@@ -471,12 +471,13 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            int beforeCount = testStack.UndoStack.Count;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(Template.DeviceCatalog[0]);
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(Template.DeviceCatalog[0]);
+            Assert.AreEqual((beforeCount + 2), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert

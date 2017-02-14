@@ -372,8 +372,7 @@ namespace Tests
         }
 
         #endregion
-
-
+        
         #region Labor Properties
         [TestMethod]
         public void Undo_Labor_Soft()
