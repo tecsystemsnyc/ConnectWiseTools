@@ -354,6 +354,7 @@ namespace EstimatingLibrary
             _connections = new ObservableCollection<TECConnection>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
             _parameters = new TECBidParameters();
+            _connectionTypes = new ObservableCollection<TECConnectionType>();
 
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
@@ -370,6 +371,7 @@ namespace EstimatingLibrary
             Controllers.CollectionChanged += CollectionChanged;
             Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
+            ConnectionTypes.CollectionChanged += CollectionChanged;
 
             registerSystems();
             

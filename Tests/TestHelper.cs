@@ -100,7 +100,12 @@ namespace Tests
             equipment2.SubScope.Add(subScope2);
 
             //Devices
-            var device1 = new TECDevice("Device 1", "Description 1", 987.6, ConnectionType.FourC18, new TECManufacturer());
+            var device1 = new TECDevice("Device 1", "Description 1", 987.6, new TECManufacturer(), Guid.NewGuid());
+            var connectionType1 = new TECConnectionType();
+            connectionType1.Name = "FourC18";
+            connectionType1.Cost = 10;
+            connectionType1.Labor = 12;
+            device1.ConnectionType = connectionType1;
             device1.Quantity = 3;
             device1.Tags.Add(tag1);
             
@@ -135,7 +140,10 @@ namespace Tests
             //drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
-            var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, ConnectionType.FourC18, new TECManufacturer());
+            var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, new TECManufacturer(), Guid.NewGuid());
+            var connectionType2 = new TECConnectionType();
+            connectionType2.Name = "FourC18";
+            deviceC1.ConnectionType = connectionType2;
             bid.DeviceCatalog.Add(deviceC1);
             bid.DeviceCatalog.Add(device1);
 
@@ -216,8 +224,15 @@ namespace Tests
             templates.ManufacturerCatalog.Add(childDevMan);
 
             //Devices
-            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, ConnectionType.FourC18, testDevMan);
-            TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, ConnectionType.FourC18, childDevMan);
+            TECConnectionType testDevConnType = new TECConnectionType();
+            testDevConnType.Name = "FourC18";
+            TECDevice testDev = new TECDevice("Test Device", "Device Description", 20.3, testDevMan, Guid.NewGuid());
+            testDev.ConnectionType = testDevConnType;
+
+            TECConnectionType childDevConnType = new TECConnectionType();
+            childDevConnType.Name = "FourC18";
+            TECDevice childDev = new TECDevice("Child Device", "Child Device Description", 54.1, childDevMan, Guid.NewGuid());
+            childDev.ConnectionType = childDevConnType;
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);

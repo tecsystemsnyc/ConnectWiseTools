@@ -108,6 +108,20 @@
                     <cLib:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
+                <TabItem Header="Materials">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <cLib:ConnectionTypeGridControl Grid.Row="1"
+                                                        ConnectionTypesSource="{Binding Templates.ConnectionTypes}"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
 
             <!--Right Tab Control-->

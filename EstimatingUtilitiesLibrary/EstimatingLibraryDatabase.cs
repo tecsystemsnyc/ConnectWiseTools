@@ -32,8 +32,8 @@ namespace EstimatingUtilitiesLibrary
 
             TECBid bid = new TECBid();
 
-            try
-            {
+            //try
+            //{
 
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
@@ -80,13 +80,14 @@ namespace EstimatingUtilitiesLibrary
                 linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
                 linkAllDevices(bid.Systems, bid.DeviceCatalog);
                 linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+                linkTagsInBid(bid.Tags, bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Could not load bid from database. Error: " + e.Message);
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //MessageBox.Show("Could not load bid from database. Error: " + e.Message);
+            //}
 
             SQLiteDB.Connection.Close();
 
@@ -120,6 +121,7 @@ namespace EstimatingUtilitiesLibrary
                 linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
                 templates.ConnectionTypes = getConnectionTypes();
                 linkConnectionTypeWithDevices(templates.ConnectionTypes, templates.DeviceCatalog);
+                linkTagsInTemplates(templates.Tags, templates);
             }
             catch (Exception e)
             {
@@ -149,6 +151,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addDevice(device);
                     addDeviceManufacturerRelation(device, device.Manufacturer);
+                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
                     addTagsInScope(device.Tags, device.Guid);
                 }
 
@@ -217,6 +220,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addFullProposalScope(propScope);
                 }
+                foreach(TECConnectionType connectionType in bid.ConnectionTypes)
+                {
+                    addConnectionType(connectionType);
+                }
 
             }
             catch (Exception e)
@@ -260,6 +267,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addDevice(device);
                     addDeviceManufacturerRelation(device, device.Manufacturer);
+                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
                     addTagsInScope(device.Tags, device.Guid);
                 }
                 foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
@@ -269,6 +277,10 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECController controller in templates.ControllerTemplates)
                 {
                     addController(controller);
+                }
+                foreach (TECConnectionType connectionType in templates.ConnectionTypes)
+                {
+                    addConnectionType(connectionType);
                 }
             }
             catch (Exception e)
@@ -512,6 +524,21 @@ namespace EstimatingUtilitiesLibrary
                 }
 
             }
+            else if (tarObject is TECConnectionType)
+            {
+                if (refObject is TECTemplates)
+                {
+                    addConnectionType(tarObject as TECConnectionType);
+                }
+                else if(refObject is TECBid)
+                {
+                    addConnectionType(tarObject as TECConnectionType);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -636,6 +663,10 @@ namespace EstimatingUtilitiesLibrary
             else if (tarObject is TECProposalScope)
             {
                 editProposalScope(tarObject as TECProposalScope);
+            }
+            else if(tarObject is TECConnectionType)
+            {
+                editConnectionType(tarObject as TECConnectionType);
             }
             else
             {
@@ -783,6 +814,17 @@ namespace EstimatingUtilitiesLibrary
                 else if (refObject is TECScope)
                 {
                     throw new NotImplementedException();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else if (tarObject is TECConnectionType)
+            {
+                if(refObject is TECTemplates)
+                {
+                    removeConnectionType(tarObject as TECConnectionType);
                 }
                 else
                 {
@@ -1133,6 +1175,20 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't add item to TECConnection table.");
             }
         }
+        static private void addConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
+            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
+            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
+            //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
+
+            if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
+            }
+        }
 
         #endregion Add Object Functions
 
@@ -1147,6 +1203,17 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDeviceTECManufacturer table.");
+            }
+        }
+        static private void addDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectiontype)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceConnectionTypeTable.TypeID.Name, connectiontype.Guid.ToString());
+
+            if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECDeviceTECConnectionType table.");
             }
         }
         static private void addScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
@@ -1537,6 +1604,20 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't update item in TECProposalScope table");
             }
         }
+
+        static private void editConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
+            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
+            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
+
+            if (!SQLiteDB.Replace(ConnectionTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECController table");
+            }
+        }
         #endregion Edit Methods
 
         #region Remove Methods
@@ -1651,6 +1732,13 @@ namespace EstimatingUtilitiesLibrary
             pk.Add(TagTable.TagID.Name, tag.Guid.ToString());
             SQLiteDB.Delete(TagTable.TableName, pk);
         }
+
+        static private void removeConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
+        }
         #endregion Remove Objects
 
         #region Remove Relations
@@ -1731,6 +1819,14 @@ namespace EstimatingUtilitiesLibrary
             pk.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
             pk.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
             SQLiteDB.Delete(ControllerIOTypeTable.TableName, pk);
+        }
+
+        private static void removeDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectionType)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
+            pk.Add(DeviceConnectionTypeTable.TypeID.Name, connectionType.Guid.ToString());
+            SQLiteDB.Delete(DeviceConnectionTypeTable.TableName, pk);
         }
         #endregion
         #endregion Remove Methods
@@ -3232,8 +3328,7 @@ namespace EstimatingUtilitiesLibrary
                 sub.Devices = linkedDevices;
             }
         }
-
-
+        
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach (TECDevice device in devices)
@@ -3246,6 +3341,128 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
 
+            }
+        }
+
+        static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
+        {
+            foreach(TECSystem system in bid.Systems)
+            {
+                linkTags(tags, system);
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    linkTags(tags, equipment);
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        linkTags(tags, subScope);
+                        foreach(TECDevice device in subScope.Devices)
+                        {
+                            linkTags(tags, device);
+                        }
+                        foreach(TECPoint point in subScope.Points)
+                        {
+                            linkTags(tags, point);
+                        }
+                    }
+                }
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                linkTags(tags, controller);
+            }
+            foreach(TECDevice device in bid.DeviceCatalog)
+            {
+                linkTags(tags, device);
+            }
+        }
+
+        static private void linkTagsInTemplates(ObservableCollection<TECTag> tags, TECTemplates templates)
+        {
+            foreach (TECSystem system in templates.SystemTemplates)
+            {
+                linkTags(tags, system);
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    linkTags(tags, equipment);
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        linkTags(tags, subScope);
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            linkTags(tags, device);
+                        }
+                        foreach (TECPoint point in subScope.Points)
+                        {
+                            linkTags(tags, point);
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                linkTags(tags, equipment);
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    linkTags(tags, subScope);
+                    foreach (TECDevice device in subScope.Devices)
+                    {
+                        linkTags(tags, device);
+                    }
+                    foreach (TECPoint point in subScope.Points)
+                    {
+                        linkTags(tags, point);
+                    }
+                }
+            }
+            foreach (TECSubScope subScope in templates.SubScopeTemplates)
+            {
+                linkTags(tags, subScope);
+                foreach (TECDevice device in subScope.Devices)
+                {
+                    linkTags(tags, device);
+                }
+                foreach (TECPoint point in subScope.Points)
+                {
+                    linkTags(tags, point);
+                }
+            }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                linkTags(tags, controller);
+            }
+            foreach (TECDevice device in templates.DeviceCatalog)
+            {
+                linkTags(tags, device);
+            }
+        }
+
+        static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
+        {
+            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
+            foreach(TECTag tag in scope.Tags)
+            {
+                foreach(TECTag referenceTag in tags)
+                {
+                    if(tag.Guid == referenceTag.Guid)
+                    {
+                        linkedTags.Add(referenceTag);
+                    }
+                }
+            }
+            scope.Tags = linkedTags;
+        }
+
+        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
+        {
+            foreach(TECDevice device in devices)
+            {
+                foreach(TECConnectionType connectionType in connectionTypes)
+                {
+                    if(device.ConnectionType.Guid == connectionType.Guid)
+                    {
+                        device.ConnectionType = connectionType;
+                    }
+                }
             }
         }
 

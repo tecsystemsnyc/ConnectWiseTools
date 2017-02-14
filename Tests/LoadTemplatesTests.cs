@@ -18,6 +18,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
+        static TECConnectionType actualConnectionType;
         static TECController actualController;
 
         private TestContext testContextInstance;
@@ -64,6 +65,12 @@ namespace Tests
             {
                 if (tag.Text == "Test Tag") actualTag = tag;
             }
+
+            actualConnectionType = null;
+            foreach(TECConnectionType connectionType in actualTemplates.ConnectionTypes)
+            {
+                if (connectionType.Name == "Test ConnectionType") actualConnectionType = connectionType;
+            }
         }
 
         [TestMethod]
@@ -96,7 +103,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual(ConnectionType.TwoC18, childDevice.ConnectionType);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("System Point", sysPoint.Name);
@@ -131,7 +138,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual(ConnectionType.TwoC18, childDevice.ConnectionType);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("Equipment Point", equipPoint.Name);
@@ -159,7 +166,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual(ConnectionType.TwoC18, childDevice.ConnectionType);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("SubScope Point", ssPoint.Name);
@@ -181,7 +188,7 @@ namespace Tests
             Assert.AreEqual("Test Device", actualDevice.Name);
             Assert.AreEqual("Device Description", actualDevice.Description);
             Assert.AreEqual(72.9, actualDevice.Cost);
-            Assert.AreEqual(ConnectionType.Cat6, actualDevice.ConnectionType);
+            Assert.AreEqual("Cat6", actualDevice.ConnectionType.Name);
             Assert.AreEqual("Device Tag", actualDevice.Tags[0].Text);
 
             Assert.AreEqual("Child Manufacturer (Test Device)", childMan.Name);
@@ -214,6 +221,14 @@ namespace Tests
             Assert.AreEqual(2, actualController.IO.Count);
             Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
 
+        }
+
+        [TestMethod]
+        public void Load_Templates_ConnectionType()
+        {
+            Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
+            Assert.AreEqual(10, actualConnectionType.Cost);
+            Assert.AreEqual(12, actualConnectionType.Labor);
         }
     }
 }
