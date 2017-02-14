@@ -3133,7 +3133,48 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-        
+
+        static private void linkAllDevicesInEquipment(ObservableCollection<TECEquipment> equipment, ObservableCollection<TECDevice> deviceCatalog)
+        {
+                foreach (TECEquipment equip in equipment)
+                {
+                    foreach (TECSubScope sub in equip.SubScope)
+                    {
+                        var linkedDevices = new ObservableCollection<TECDevice>();
+                        foreach (TECDevice device in sub.Devices)
+                        {
+                            foreach (TECDevice cDev in deviceCatalog)
+                            {
+                                if (cDev.Guid == device.Guid)
+                                {
+                                    linkedDevices.Add(cDev);
+                                }
+                            }
+                        }
+                        sub.Devices = linkedDevices;
+                    }
+                }
+        }
+
+        static private void linkAllDevicesInSubScope(ObservableCollection<TECSubScope> subScope, ObservableCollection<TECDevice> deviceCatalog)
+        {
+                foreach (TECSubScope sub in subScope)
+                {
+                    var linkedDevices = new ObservableCollection<TECDevice>();
+                    foreach (TECDevice device in sub.Devices)
+                    {
+                        foreach (TECDevice cDev in deviceCatalog)
+                        {
+                            if (cDev.Guid == device.Guid)
+                            {
+                                linkedDevices.Add(cDev);
+                            }
+                        }
+                    }
+                    sub.Devices = linkedDevices;
+                }
+        }
+
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach(TECDevice device in devices)
@@ -3160,6 +3201,30 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
+        }
+
+        static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
+        {
+            foreach(TECSystem system in bid.Systems)
+            {
+                
+            }
+        }
+
+        static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
+        {
+            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
+            foreach(TECTag tag in scope.Tags)
+            {
+                foreach(TECTag referenceTag in tags)
+                {
+                    if(tag.Guid == referenceTag.Guid)
+                    {
+                        linkedTags.Add(referenceTag);
+                    }
+                }
+            }
+            scope.Tags = linkedTags;
         }
         #endregion Link Methods
 
