@@ -101,11 +101,6 @@ namespace Tests
 
             //Devices
             var device1 = new TECDevice("Device 1", "Description 1", 987.6, new TECManufacturer(), Guid.NewGuid());
-            var connectionType1 = new TECConnectionType();
-            connectionType1.Name = "FourC18";
-            connectionType1.Cost = 10;
-            connectionType1.Labor = 12;
-            device1.ConnectionType = connectionType1;
             device1.Quantity = 3;
             device1.Tags.Add(tag1);
             
@@ -113,6 +108,18 @@ namespace Tests
             subScope1.Devices.Add(device1);
             subScope1.Devices.Add(device1);
 
+            //ConnectionTypes
+            var connectionType1 = new TECConnectionType();
+            connectionType1.Name = "FourC18";
+            connectionType1.Cost = 10;
+            connectionType1.Labor = 12;
+
+            var connectionType2 = new TECConnectionType();
+            connectionType2.Name = "FourC18";
+
+            device1.ConnectionType = connectionType1;
+            bid.ConnectionTypes.Add(connectionType1);
+            bid.ConnectionTypes.Add(connectionType2);
             //Manufacturers
             var manufacturer1 = new TECManufacturer("Test", 0.8);
             
@@ -141,8 +148,7 @@ namespace Tests
 
             //Devices Catalog
             var deviceC1 = new TECDevice("Device C1", "Description C1", 987.6, new TECManufacturer(), Guid.NewGuid());
-            var connectionType2 = new TECConnectionType();
-            connectionType2.Name = "FourC18";
+            
             deviceC1.ConnectionType = connectionType2;
             bid.DeviceCatalog.Add(deviceC1);
             bid.DeviceCatalog.Add(device1);
