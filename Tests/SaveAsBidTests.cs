@@ -3,6 +3,7 @@ using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,7 @@ namespace Tests
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
+        static ObservableCollection<TECDevice> actualDevices;
         static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
         static TECScopeBranch actualBranch;
@@ -152,7 +154,7 @@ namespace Tests
                     break;
                 }
             }
-
+            actualDevices = actualSubScope.Devices;
             foreach (TECDevice dev in actualSubScope.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid)
@@ -330,7 +332,15 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+            int actualQuantity = 0;
+            foreach(TECDevice device in actualDevices)
+            {
+                if(device.Guid == actualDevice.Guid)
+                {
+                    actualQuantity++;
+                }
+            }
+            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
 

@@ -751,12 +751,17 @@ namespace Tests
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             TECDevice actualDevice = null;
+            int actualQuantity = 0;
             foreach (TECSystem sys in actualBid.Systems)
             {
                 foreach (TECEquipment equip in sys.Equipment)
@@ -765,6 +770,13 @@ namespace Tests
                     {
                         if (ss.Guid == subScopeToModify.Guid)
                         {
+                            foreach (TECDevice dev in ss.Devices)
+                            {
+                                if (dev.Guid == expectedDevice.Guid)
+                                {
+                                    actualQuantity++;
+                                }
+                            }
                             foreach (TECDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
@@ -784,7 +796,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
         }
@@ -844,18 +856,21 @@ namespace Tests
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
             TECDevice expectedDevice = ssToModify.Devices[0];
-            expectedDevice.Quantity = 465456456;
+            expectedDevice.Quantity = 3;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             TECSubScope modifiedSS = null;
+            int actualQuantity = 0;
+
             foreach (TECSystem sys in actualBid.Systems)
             {
                 foreach (TECEquipment equip in sys.Equipment)
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
+
                         if (ss.Guid == ssToModify.Guid)
                         {
                             modifiedSS = ss;
@@ -870,6 +885,13 @@ namespace Tests
             TECDevice actualDevice = null;
             foreach (TECDevice dev in modifiedSS.Devices)
             {
+                if (dev.Guid == expectedDevice.Guid)
+                {
+                    actualQuantity++;
+                }
+            }
+            foreach (TECDevice dev in modifiedSS.Devices)
+            {
                 if (expectedDevice.Guid == dev.Guid)
                 {
                     actualDevice = dev;
@@ -878,7 +900,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
+            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
         }
         #endregion Edit Device
 
