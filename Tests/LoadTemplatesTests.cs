@@ -18,6 +18,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
+        static TECConnectionType actualConnectionType;
         static TECController actualController;
 
         private TestContext testContextInstance;
@@ -63,6 +64,12 @@ namespace Tests
             foreach (TECTag tag in actualTemplates.Tags)
             {
                 if (tag.Text == "Test Tag") actualTag = tag;
+            }
+
+            actualConnectionType = null;
+            foreach(TECConnectionType connectionType in actualTemplates.ConnectionTypes)
+            {
+                if (connectionType.Name == "Test ConnectionType") actualConnectionType = connectionType;
             }
         }
 
@@ -214,6 +221,14 @@ namespace Tests
             Assert.AreEqual(2, actualController.IO.Count);
             Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
 
+        }
+
+        [TestMethod]
+        public void Load_Templates_ConnectionType()
+        {
+            Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
+            Assert.AreEqual(10, actualConnectionType.Cost);
+            Assert.AreEqual(12, actualConnectionType.Labor);
         }
     }
 }

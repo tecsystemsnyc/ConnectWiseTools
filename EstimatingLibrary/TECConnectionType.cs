@@ -43,7 +43,7 @@ namespace EstimatingLibrary
         private double _labor;
         public double Labor
         {
-            get { return _cost; }
+            get { return _labor; }
             set
             {
                 var temp = Copy();

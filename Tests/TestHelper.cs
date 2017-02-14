@@ -103,6 +103,8 @@ namespace Tests
             var device1 = new TECDevice("Device 1", "Description 1", 987.6, new TECManufacturer(), Guid.NewGuid());
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
+            connectionType1.Cost = 10;
+            connectionType1.Labor = 12;
             device1.ConnectionType = connectionType1;
             device1.Quantity = 3;
             device1.Tags.Add(tag1);

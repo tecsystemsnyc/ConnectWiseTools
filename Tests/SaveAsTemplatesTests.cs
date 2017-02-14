@@ -248,7 +248,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
+            Assert.AreEqual(expectedChildDevice.ConnectionType.Name, actualChildDevice.ConnectionType.Name);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);

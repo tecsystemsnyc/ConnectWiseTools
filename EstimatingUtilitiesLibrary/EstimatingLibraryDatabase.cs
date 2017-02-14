@@ -32,8 +32,8 @@ namespace EstimatingUtilitiesLibrary
 
             TECBid bid = new TECBid();
 
-            try
-            {
+            //try
+            //{
 
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
@@ -83,11 +83,11 @@ namespace EstimatingUtilitiesLibrary
                 linkTagsInBid(bid.Tags, bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Could not load bid from database. Error: " + e.Message);
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //MessageBox.Show("Could not load bid from database. Error: " + e.Message);
+            //}
 
             SQLiteDB.Connection.Close();
 
