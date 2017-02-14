@@ -67,7 +67,7 @@ namespace Tests
             }
 
             actualConnectionType = null;
-            foreach(TECConnectionType connectionType in actualTemplates.ConnectionTypes)
+            foreach(TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
             {
                 if (connectionType.Name == "Test ConnectionType") actualConnectionType = connectionType;
             }

@@ -119,8 +119,8 @@ namespace EstimatingUtilitiesLibrary
                 linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.DeviceCatalog);
                 linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
                 linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
-                templates.ConnectionTypes = getConnectionTypes();
-                linkConnectionTypeWithDevices(templates.ConnectionTypes, templates.DeviceCatalog);
+                templates.ConnectionTypeCatalog = getConnectionTypes();
+                linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
                 linkTagsInTemplates(templates.Tags, templates);
             }
             catch (Exception e)
@@ -278,7 +278,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addController(controller);
                 }
-                foreach (TECConnectionType connectionType in templates.ConnectionTypes)
+                foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
                 {
                     addConnectionType(connectionType);
                 }
@@ -1211,7 +1211,7 @@ namespace EstimatingUtilitiesLibrary
             data.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
             data.Add(DeviceConnectionTypeTable.TypeID.Name, connectiontype.Guid.ToString());
 
-            if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
+            if (!SQLiteDB.Insert(DeviceConnectionTypeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDeviceTECConnectionType table.");
             }

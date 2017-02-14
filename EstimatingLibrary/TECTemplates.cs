@@ -19,7 +19,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECManufacturer> _manufacturerCatalog;
         private ObservableCollection<TECTag> _tags;
         private ObservableCollection<TECController> _controllerTemplates;
-        private ObservableCollection<TECConnectionType> _connectionTypes;
+        private ObservableCollection<TECConnectionType> _connectionTypeCatalog;
 
         public Guid InfoGuid
         {
@@ -109,15 +109,15 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ControllerTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypeCatalog
         {
-            get { return _connectionTypes; }
+            get { return _connectionTypeCatalog; }
             set
             {
                 var temp = this.Copy();
-                ConnectionTypes.CollectionChanged -= CollectionChanged;
-                _connectionTypes = value;
-                ConnectionTypes.CollectionChanged += CollectionChanged;
+                ConnectionTypeCatalog.CollectionChanged -= CollectionChanged;
+                _connectionTypeCatalog = value;
+                ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("ConnectionTypes", temp, this);
             }
         }
@@ -144,7 +144,7 @@ namespace EstimatingLibrary
             _tags = new ObservableCollection<TECTag>();
             _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
             _controllerTemplates = new ObservableCollection<TECController>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
+            _connectionTypeCatalog = new ObservableCollection<TECConnectionType>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -153,7 +153,7 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += CollectionChanged;
             ManufacturerCatalog.CollectionChanged += CollectionChanged;
             ControllerTemplates.CollectionChanged += CollectionChanged;
-            ConnectionTypes.CollectionChanged += CollectionChanged;
+            ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
         }
 
         public TECTemplates(TECTemplates templatesSource) : this()
