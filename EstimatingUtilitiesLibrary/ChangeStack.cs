@@ -119,6 +119,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 registerPropScope(propScope);
             }
+            foreach(TECConnectionType connectionType in Bid.ConnectionTypes)
+            {
+                connectionType.PropertyChanged += Object_PropertyChanged;
+            }
         }
 
         private void registerTemplatesChanges(TECTemplates Templates)
@@ -153,6 +157,10 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECController controller in Templates.ControllerTemplates)
             {
                 controller.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach (TECConnectionType connectionType in Templates.ConnectionTypes)
+            {
+                connectionType.PropertyChanged += Object_PropertyChanged;
             }
         }
 

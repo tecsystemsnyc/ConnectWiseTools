@@ -118,7 +118,10 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <cLib:ConnectionTypeGridControl Grid.Row="1"
+                        <TextBlock Text="Wiring" Grid.Column="0" Grid.Row="0"
+                                   FontWeight="Bold" Foreground="Black"
+                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <cLib:ConnectionTypeGridControl Grid.Row="1" Margin="5"
                                                         ConnectionTypesSource="{Binding Templates.ConnectionTypes}"/>
                     </Grid>
                 </TabItem>

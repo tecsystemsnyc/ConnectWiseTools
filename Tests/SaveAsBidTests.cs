@@ -342,7 +342,7 @@ namespace Tests
             }
             Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.ConnectionType.Name, actualDevice.ConnectionType.Name);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
