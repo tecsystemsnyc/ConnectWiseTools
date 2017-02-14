@@ -151,6 +151,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addDevice(device);
                     addDeviceManufacturerRelation(device, device.Manufacturer);
+                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
                     addTagsInScope(device.Tags, device.Guid);
                 }
 
@@ -219,6 +220,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addFullProposalScope(propScope);
                 }
+                foreach(TECConnectionType connectionType in bid.ConnectionTypes)
+                {
+                    addConnectionType(connectionType);
+                }
 
             }
             catch (Exception e)
@@ -262,6 +267,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addDevice(device);
                     addDeviceManufacturerRelation(device, device.Manufacturer);
+                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
                     addTagsInScope(device.Tags, device.Guid);
                 }
                 foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
@@ -271,6 +277,10 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECController controller in templates.ControllerTemplates)
                 {
                     addController(controller);
+                }
+                foreach (TECConnectionType connectionType in templates.ConnectionTypes)
+                {
+                    addConnectionType(connectionType);
                 }
             }
             catch (Exception e)
@@ -513,6 +523,21 @@ namespace EstimatingUtilitiesLibrary
                     throw new NotImplementedException();
                 }
 
+            }
+            else if (tarObject is TECConnectionType)
+            {
+                if (refObject is TECTemplates)
+                {
+                    addConnectionType(tarObject as TECConnectionType);
+                }
+                else if(refObject is TECBid)
+                {
+                    addConnectionType(tarObject as TECConnectionType);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {
@@ -1135,6 +1160,20 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't add item to TECConnection table.");
             }
         }
+        static private void addConnectionType(TECConnectionType connectionType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
+            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
+            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
+            //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
+
+            if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
+            }
+        }
 
         #endregion Add Object Functions
 
@@ -1149,6 +1188,17 @@ namespace EstimatingUtilitiesLibrary
             if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add relation to TECDeviceTECManufacturer table.");
+            }
+        }
+        static private void addDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectiontype)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
+            data.Add(DeviceConnectionTypeTable.TypeID.Name, connectiontype.Guid.ToString());
+
+            if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add relation to TECDeviceTECConnectionType table.");
             }
         }
         static private void addScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
