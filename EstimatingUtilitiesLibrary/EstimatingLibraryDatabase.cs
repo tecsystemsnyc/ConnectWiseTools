@@ -704,7 +704,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (refObject is TECSubScope)
                 {
-                    removeSubScopeDeviceRelation(tarObject as TECDevice);
+                    removeSubScopeDeviceRelation(refObject as TECSubScope, tarObject as TECDevice);
                 }
                 else if (refObject is TECTemplates)
                 {
@@ -1756,11 +1756,29 @@ namespace EstimatingUtilitiesLibrary
             SQLiteDB.Delete(EquipmentSubScopeTable.TableName, pk);
         }
 
-        private static void removeSubScopeDeviceRelation(TECDevice device)
+        private static void removeSubScopeDeviceRelation(TECSubScope sub, TECDevice device)
         {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-            SQLiteDB.Delete(SubScopeDeviceTable.TableName, pk);
+            bool devInSub = false;
+            foreach (TECDevice dev in sub.Devices)
+            {
+                if (dev == device)
+                {
+                    devInSub = true;
+                    break;
+                }
+            }
+
+            if (devInSub)
+            {
+                updateSubScopeDeviceRelation(sub);
+            }
+            else
+            {
+                Dictionary<string, string> pk = new Dictionary<string, string>();
+                pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
+                SQLiteDB.Delete(SubScopeDeviceTable.TableName, pk);
+            }
+            
         }
 
         private static void removeSubScopePointRelation(TECPoint point)

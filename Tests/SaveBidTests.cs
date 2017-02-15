@@ -798,11 +798,71 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType.Name, actualDevice.ConnectionType.Name);
+            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
         }
 
         [TestMethod]
         public void Save_Bid_Remove_Device()
+        {
+            //Act
+            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            int oldNumDevices = ssToModify.Devices.Count();
+            TECDevice deviceToRemove = ssToModify.Devices[0];
+
+            int numThisDevice = 0;
+            foreach (TECDevice dev in ssToModify.Devices)
+            {
+                if (dev == deviceToRemove)
+                {
+                    numThisDevice++;
+                }
+            }
+
+            for (int i = 0; i < numThisDevice; i++)
+            {
+                ssToModify.Devices.Remove(deviceToRemove);
+            }
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECSubScope modifiedSubScope = null;
+            foreach (TECSystem sys in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Guid == ssToModify.Guid)
+                        {
+                            modifiedSubScope = ss;
+                            break;
+                        }
+                    }
+                    if (modifiedSubScope != null) break;
+                }
+                if (modifiedSubScope != null) break;
+            }
+
+            //Assert
+            foreach (TECDevice dev in modifiedSubScope.Devices)
+            {
+                if (deviceToRemove.Guid == dev.Guid) Assert.Fail();
+            }
+            bool devFound = false;
+            foreach (TECDevice dev in actualBid.DeviceCatalog)
+            {
+                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+            }
+            if (!devFound) Assert.Fail();
+
+            Assert.AreEqual(bid.DeviceCatalog.Count(), actualBid.DeviceCatalog.Count());
+            Assert.AreEqual((oldNumDevices - numThisDevice), modifiedSubScope.Devices.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_LowerQuantity_Device()
         {
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
@@ -834,10 +894,6 @@ namespace Tests
             }
 
             //Assert
-            foreach (TECDevice dev in modifiedSubScope.Devices)
-            {
-                if (deviceToRemove.Guid == dev.Guid) Assert.Fail();
-            }
             bool devFound = false;
             foreach (TECDevice dev in actualBid.DeviceCatalog)
             {
@@ -1952,72 +2008,72 @@ namespace Tests
         #endregion Save Drawing
 
         #region Save Visual Scope
-        [TestMethod]
-        public void Save_Bid_Add_VS()
-        {
-            //Act
-            TECScope expectedScope = bid.Systems[0];
-            TECVisualScope expectedVS = new TECVisualScope(expectedScope, 15, 743);
-            bid.Drawings[0].Pages[0].PageScope.Add(expectedVS);
+        //[TestMethod]
+        //public void Save_Bid_Add_VS()
+        //{
+        //    //Act
+        //    TECScope expectedScope = bid.Systems[0];
+        //    TECVisualScope expectedVS = new TECVisualScope(expectedScope, 15, 743);
+        //    bid.Drawings[0].Pages[0].PageScope.Add(expectedVS);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+        //    EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
-            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+        //    TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECVisualScope actualVS = null;
-            foreach (TECVisualScope vs in actualBid.Drawings[0].Pages[0].PageScope)
-            {
-                if (expectedVS.Guid == vs.Guid)
-                {
-                    actualVS = vs;
-                    break;
-                }
-            }
+        //    TECVisualScope actualVS = null;
+        //    foreach (TECVisualScope vs in actualBid.Drawings[0].Pages[0].PageScope)
+        //    {
+        //        if (expectedVS.Guid == vs.Guid)
+        //        {
+        //            actualVS = vs;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            Assert.AreEqual(expectedScope.Guid, actualVS.Scope.Guid);
-            Assert.AreEqual(expectedVS.X, actualVS.X);
-            Assert.AreEqual(expectedVS.Y, actualVS.Y);
-        }
+        //    //Assert
+        //    Assert.AreEqual(expectedScope.Guid, actualVS.Scope.Guid);
+        //    Assert.AreEqual(expectedVS.X, actualVS.X);
+        //    Assert.AreEqual(expectedVS.Y, actualVS.Y);
+        //}
 
-        [TestMethod]
-        public void Save_Bid_Remove_VS()
-        {
-            //Act
-            TECPage pageToModify = bid.Drawings[0].Pages[0];
-            int oldNumVS = pageToModify.PageScope.Count;
-            TECVisualScope vsToRemove = pageToModify.PageScope[0];
-            bid.Drawings[0].Pages[0].PageScope.Remove(vsToRemove);
+        //[TestMethod]
+        //public void Save_Bid_Remove_VS()
+        //{
+        //    //Act
+        //    TECPage pageToModify = bid.Drawings[0].Pages[0];
+        //    int oldNumVS = pageToModify.PageScope.Count;
+        //    TECVisualScope vsToRemove = pageToModify.PageScope[0];
+        //    bid.Drawings[0].Pages[0].PageScope.Remove(vsToRemove);
 
-            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+        //    EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
-            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+        //    TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECPage actualPage = null;
-            foreach (TECDrawing drawing in bid.Drawings)
-            {
-                foreach (TECPage page in drawing.Pages)
-                {
-                    if (page.Guid == pageToModify.Guid)
-                    {
-                        actualPage = page;
-                        break;
-                    }
-                }
-                if (actualPage != null)
-                {
-                    break;
-                }
-            }
+        //    TECPage actualPage = null;
+        //    foreach (TECDrawing drawing in bid.Drawings)
+        //    {
+        //        foreach (TECPage page in drawing.Pages)
+        //        {
+        //            if (page.Guid == pageToModify.Guid)
+        //            {
+        //                actualPage = page;
+        //                break;
+        //            }
+        //        }
+        //        if (actualPage != null)
+        //        {
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECVisualScope vs in actualPage.PageScope)
-            {
-                if (vs.Guid == vsToRemove.Guid) Assert.Fail();
-            }
+        //    //Assert
+        //    foreach (TECVisualScope vs in actualPage.PageScope)
+        //    {
+        //        if (vs.Guid == vsToRemove.Guid) Assert.Fail();
+        //    }
 
-            Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
-        }
+        //    Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
+        //}
         #endregion Save Visual Scope
 
         #region Save Controller

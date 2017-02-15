@@ -79,6 +79,7 @@ namespace Tests
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
+
             expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
 
@@ -340,9 +341,17 @@ namespace Tests
                     actualQuantity++;
                 }
             }
-            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
+            int expectedQuantity = 0;
+            foreach (TECDevice device in expectedSubScope.Devices)
+            {
+                if (device.Guid == expectedDevice.Guid)
+                {
+                    expectedQuantity++;
+                }
+            }
+            Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType.Name, actualDevice.ConnectionType.Name);
+            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
@@ -438,30 +447,30 @@ namespace Tests
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
         }
 
-        [TestMethod]
-        public void SaveAs_Bid_Drawing()
-        {
-            //Assert
-            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
-            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
-        }
+        //[TestMethod]
+        //public void SaveAs_Bid_Drawing()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+        //}
 
-        [TestMethod]
-        public void SaveAs_Bid_Page()
-        {
-            //Assert
-            Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
-        }
+        //[TestMethod]
+        //public void SaveAs_Bid_Page()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
+        //}
 
-        [TestMethod]
-        public void SaveAs_Bid_VisScope()
-        {
-            //Assert
-            Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
-            Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
+        //[TestMethod]
+        //public void SaveAs_Bid_VisScope()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
+        //    Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
 
-            Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
-        }
+        //    Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
+        //}
 
         [TestMethod]
         public void SaveAs_Bid_PropScope()
