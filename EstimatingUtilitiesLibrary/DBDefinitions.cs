@@ -314,6 +314,33 @@ namespace EstimatingUtilitiesLibrary
             ConnectionTypeID
         };
     }
+    public class ConduitTypeTable : TableBase
+    {
+        public static new string TableName = "TECConduitType";
+
+        public static TableField ConduitTypeID = new TableField("ConduitTypeID", "TEXT");
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+        public static TableField Labor = new TableField("Labor", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ConduitTypeID
+        };
+    }
+    public class AssociatedCostTable : TableBase
+    {
+        public static new string TableName = "TECAssociatedCost";
+
+        public static TableField AssociatedCostID = new TableField("AssociatedCostID", "TEXT");
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            AssociatedCostID
+        };
+    }
 
     public class ProposalScopeScopeBranchTable : TableBase
     {
@@ -559,6 +586,20 @@ namespace EstimatingUtilitiesLibrary
             };
 
     }
+    public class ScopeAssociatedCostTable : TableBase
+    {
+        public static new string TableName = "TECScopeTECAssociatedCost";
+
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT");
+        public static TableField AssociatedCostID = new TableField("AssociatedCostID", "TEXT");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ScopeID,
+            AssociatedCostID
+        };
+    }
 
     public static class AllBidTables
     {
@@ -582,6 +623,7 @@ namespace EstimatingUtilitiesLibrary
             new LocationTable(),
             new VisualScopeTable(),
             new ConnectionTypeTable(),
+            new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
             new SystemIndexTable(),
             new SystemEquipmentTable(),
@@ -596,13 +638,15 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ConnectionTable(),
             new ControllerTable(),
+            new AssociatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
             new ProposalScopeTable(),
             new ProposalScopeScopeBranchTable(),
             new BidScopeBranchTable(),
-            new DeviceConnectionTypeTable()
+            new DeviceConnectionTypeTable(),
+            new ScopeAssociatedCostTable()
             };
     }
 
@@ -621,6 +665,8 @@ namespace EstimatingUtilitiesLibrary
             new TagTable(),
             new ManufacturerTable(),
             new ConnectionTypeTable(),
+            new ConduitTypeTable(),
+            new AssociatedCostTable(),
             new SystemEquipmentTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),
@@ -631,7 +677,8 @@ namespace EstimatingUtilitiesLibrary
             new ScopeConnectionTable(),
             new DeviceManufacturerTable(),
             new SystemIndexTable(),
-            new DeviceConnectionTypeTable()
+            new DeviceConnectionTypeTable(),
+            new ScopeAssociatedCostTable()
         };
     }
 
