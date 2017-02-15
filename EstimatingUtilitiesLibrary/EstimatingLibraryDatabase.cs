@@ -82,12 +82,13 @@ namespace EstimatingUtilitiesLibrary
                 linkAllDevices(bid.Systems, bid.DeviceCatalog);
                 linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
                 linkTagsInBid(bid.Tags, bid);
+            getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
             //}
             //catch (Exception e)
             //{
-                //MessageBox.Show("Could not load bid from database. Error: " + e.Message);
+            //MessageBox.Show("Could not load bid from database. Error: " + e.Message);
             //}
 
             SQLiteDB.Connection.Close();
@@ -2036,6 +2037,25 @@ namespace EstimatingUtilitiesLibrary
             string estimator = bidInfoRow["Estimator"].ToString();
 
             return new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
+        }
+
+        static private void getUserAdjustments(TECBid bid)
+        {
+            DataTable adjDT = SQLiteDB.getDataFromTable(UserAdjustmentsTable.TableName);
+
+            if (adjDT.Rows.Count < 1)
+            {
+                Console.WriteLine("getUserAdjustments() failed. No datarows exist.");
+                return;
+            }
+
+            DataRow adjRow = adjDT.Rows[0];
+
+            bid.Labor.PMExtraHours = adjRow[UserAdjustmentsTable.PMExtraHours.Name].ToString().ToDouble();
+            bid.Labor.ENGExtraHours = adjRow[UserAdjustmentsTable.ENGExtraHours.Name].ToString().ToDouble();
+            bid.Labor.CommExtraHours = adjRow[UserAdjustmentsTable.CommExtraHours.Name].ToString().ToDouble();
+            bid.Labor.SoftExtraHours = adjRow[UserAdjustmentsTable.SoftExtraHours.Name].ToString().ToDouble();
+            bid.Labor.GraphExtraHours = adjRow[UserAdjustmentsTable.GraphExtraHours.Name].ToString().ToDouble();
         }
 
         static private TECLabor getLaborConsts()

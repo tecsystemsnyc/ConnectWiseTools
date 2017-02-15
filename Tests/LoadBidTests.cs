@@ -130,10 +130,20 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_MiscCosts()
+        public void Load_Bid_UserAdjustments()
         {
             //Assert
-            Assert.Fail();
+            double expectedPMExtra = 10;
+            double expectedENGExtra = 10.1;
+            double expectedCommExtra = 10.2;
+            double expectedSoftExtra = 10.3;
+            double expectedGraphExtra = 10.4;
+
+            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours);
+            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours);
+            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours);
+            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours);
+            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours);
         }
 
         [TestMethod]
