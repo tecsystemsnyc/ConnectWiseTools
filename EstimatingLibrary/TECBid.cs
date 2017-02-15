@@ -33,6 +33,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
         private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
+        private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
 
         public string Name {
             get { return _name; }
@@ -315,6 +316,19 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConnectionTypes", temp, this);
             }
         }
+        public ObservableCollection<TECConduitType> ConduitTypes
+        {
+            get { return _conduitTypes; }
+            set
+            {
+                var temp = this.Copy();
+                ConduitTypes.CollectionChanged -= CollectionChanged;
+                _conduitTypes = value;
+                ConduitTypes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConduitTypes", temp, this);
+            }
+        }
+
 
         #endregion //Properties
 
@@ -355,6 +369,7 @@ namespace EstimatingLibrary
             _proposalScope = new ObservableCollection<TECProposalScope>();
             _parameters = new TECBidParameters();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
+            _conduitTypes = new ObservableCollection<TECConduitType>();
 
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
@@ -372,6 +387,7 @@ namespace EstimatingLibrary
             Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
             ConnectionTypes.CollectionChanged += CollectionChanged;
+            ConduitTypes.CollectionChanged += CollectionChanged;
 
             registerSystems();
             
