@@ -622,7 +622,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
         }
 
         [TestMethod]
