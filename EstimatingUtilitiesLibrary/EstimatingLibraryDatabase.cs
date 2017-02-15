@@ -165,6 +165,10 @@ namespace EstimatingUtilitiesLibrary
 
                 addBidInfo(bid);
 
+                addLabor(bid.Labor);
+
+                addSubContractorConsts(bid.Labor);
+
                 addFullSystems(bid.Systems);
 
                 foreach (TECScopeBranch branch in bid.ScopeTree)
@@ -1190,6 +1194,43 @@ namespace EstimatingUtilitiesLibrary
                 Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
             }
         }
+        static private void addLabor(TECLabor labor)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            data.Add(LaborConstantsTable.PMCoef.Name, labor.PMCoef.ToString());
+            data.Add(LaborConstantsTable.PMRate.Name, labor.PMRate.ToString());
+
+            data.Add(LaborConstantsTable.ENGCoef.Name, labor.ENGCoef.ToString());
+            data.Add(LaborConstantsTable.ENGRate.Name, labor.ENGRate.ToString());
+
+            data.Add(LaborConstantsTable.CommCoef.Name, labor.CommCoef.ToString());
+            data.Add(LaborConstantsTable.CommRate.Name, labor.CommRate.ToString());
+
+            data.Add(LaborConstantsTable.SoftCoef.Name, labor.SoftCoef.ToString());
+            data.Add(LaborConstantsTable.SoftRate.Name, labor.SoftRate.ToString());
+
+            data.Add(LaborConstantsTable.GraphCoef.Name, labor.GraphCoef.ToString());
+            data.Add(LaborConstantsTable.GraphRate.Name, labor.GraphRate.ToString());
+
+            if (!SQLiteDB.Insert(LaborConstantsTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECLaborConst table.");
+            }
+        }
+
+        static private void addSubContractorConsts(TECLabor labor)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            data.Add(SubcontractorConstantsTable.ElectricalRate.Name, labor.ElectricalRate.ToString());
+            data.Add(SubcontractorConstantsTable.ElectricalSuperRate.Name, labor.ElecrticalSuperRate.ToString());
+
+            if (!SQLiteDB.Insert(SubcontractorConstantsTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECSubcontractorConst table.");
+            }
+        }
 
         #endregion Add Object Functions
 
@@ -2076,7 +2117,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECTemplates getTemplatesInfo()
         {
-            DataTable bidInfoDT = SQLiteDB.getDataFromTable("TECTemplatesInfo");
+            DataTable bidInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
 
             if (bidInfoDT.Rows.Count < 1)
             {
@@ -2085,7 +2126,7 @@ namespace EstimatingUtilitiesLibrary
             }
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(bidInfoRow["TemplatesInfoID"].ToString());
+            Guid infoGuid = new Guid(bidInfoRow[TemplatesInfoTable.TemplatesInfoID.Name].ToString());
 
             return new TECTemplates(infoGuid);
         }
