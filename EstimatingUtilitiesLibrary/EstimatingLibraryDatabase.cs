@@ -540,6 +540,21 @@ namespace EstimatingUtilitiesLibrary
                     throw new NotImplementedException();
                 }
             }
+            else if (tarObject is TECConduitType)
+            {
+                if (refObject is TECTemplates)
+                {
+                    addConduitType(tarObject as TECConduitType);
+                }
+                else if (refObject is TECBid)
+                {
+                    addConduitType(tarObject as TECConduitType);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
             else
             {
                 Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
@@ -668,6 +683,10 @@ namespace EstimatingUtilitiesLibrary
             else if(tarObject is TECConnectionType)
             {
                 editConnectionType(tarObject as TECConnectionType);
+            }
+            else if (tarObject is TECConduitType)
+            {
+                editConduitType(tarObject as TECConduitType);
             }
             else
             {
@@ -826,6 +845,17 @@ namespace EstimatingUtilitiesLibrary
                 if(refObject is TECTemplates)
                 {
                     removeConnectionType(tarObject as TECConnectionType);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else if (tarObject is TECConduitType)
+            {
+                if (refObject is TECTemplates)
+                {
+                    removeConduitType(tarObject as TECConduitType);
                 }
                 else
                 {
@@ -1186,6 +1216,19 @@ namespace EstimatingUtilitiesLibrary
             //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
 
             if (!SQLiteDB.Insert(ConnectionTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
+            }
+        }
+        static private void addConduitType(TECConduitType conduitType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConduitTypeTable.ConduitTypeID.Name, conduitType.Guid.ToString());
+            data.Add(ConduitTypeTable.Name.Name, conduitType.Name);
+            data.Add(ConduitTypeTable.Cost.Name, conduitType.Cost.ToString());
+            data.Add(ConduitTypeTable.Labor.Name, conduitType.Labor.ToString());
+
+            if (!SQLiteDB.Insert(ConduitTypeTable.TableName, data))
             {
                 Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
             }
@@ -1616,7 +1659,21 @@ namespace EstimatingUtilitiesLibrary
 
             if (!SQLiteDB.Replace(ConnectionTypeTable.TableName, data))
             {
-                Console.WriteLine("Error: Couldn't update item in TECController table");
+                Console.WriteLine("Error: Couldn't update item in TECConnectionType table");
+            }
+        }
+
+        static private void editConduitType(TECConduitType conduitType)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(ConduitTypeTable.ConduitTypeID.Name, conduitType.Guid.ToString());
+            data.Add(ConduitTypeTable.Name.Name, conduitType.Name);
+            data.Add(ConduitTypeTable.Cost.Name, conduitType.Cost.ToString());
+            data.Add(ConduitTypeTable.Labor.Name, conduitType.Labor.ToString());
+
+            if (!SQLiteDB.Replace(ConduitTypeTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't update item in TECConduitType table");
             }
         }
         #endregion Edit Methods
@@ -1738,6 +1795,13 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> pk = new Dictionary<string, string>();
             pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
+            SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
+        }
+
+        static private void removeConduitType(TECConduitType conduitType)
+        {
+            Dictionary<string, string> pk = new Dictionary<string, string>();
+            pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, conduitType.Guid.ToString());
             SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
         }
         #endregion Remove Objects

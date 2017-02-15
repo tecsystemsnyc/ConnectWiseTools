@@ -123,6 +123,8 @@
                                    VerticalAlignment="Center" Margin="5,0,0,0"/>
                         <cLib:ConnectionTypeGridControl Grid.Row="1" Margin="5"
                                                         ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"/>
+                        <cLib:ConduitTypeGridControl Grid.Row="1" Grid.Column="1" Margin="5"
+                                                     ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"/>
                     </Grid>
                 </TabItem>
             </TabControl>
