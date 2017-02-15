@@ -78,7 +78,7 @@
                            Content="Wire Type:"/>
                 <ComboBox Grid.Column="1"
                                 Grid.Row="3"
-                                ItemsSource="{Binding Templates.ConnectionTypes}"
+                                ItemsSource="{Binding Templates.ConnectionTypeCatalog}"
                           DisplayMemberPath="Name"
                               SelectedValue="{Binding SelectedDevice.ConnectionType}"
                              Margin="5"/>

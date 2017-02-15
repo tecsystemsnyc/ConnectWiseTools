@@ -12,8 +12,8 @@ using System.Windows;
 namespace EstimatingUtilitiesLibrary
 {
     public enum Change {Add, Remove, Edit};
-
     public class ChangeStack
+
     {
         //List of change, target object, reference object
         //Example: Add, Bid, System

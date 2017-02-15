@@ -17,9 +17,11 @@ namespace EstimatingLibrary
             get { return _devices; }
             set
             {
+                Devices.CollectionChanged -= Devices_CollectionChanged;
                 var temp = this.Copy();
                 _devices = value;
                 NotifyPropertyChanged("Devices", temp, this);
+                Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
 

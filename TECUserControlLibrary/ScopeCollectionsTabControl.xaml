@@ -165,7 +165,7 @@
                         Content="Wire Type:"/>
                     <ComboBox Grid.Column="1"
                             Grid.Row="3"
-                              ItemsSource="{Binding Path=ViewModel.Templates.ConnectionTypes}"
+                              ItemsSource="{Binding Path=ViewModel.Templates.ConnectionTypeCatalog}"
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
