@@ -123,7 +123,10 @@ namespace Tests
         public void Load_Bid_SubcontractorConsts()
         {
             //Assert
-            Assert.Fail();
+            double expectedElectricalRate = 7;
+            double expectedElectricalSuperRate = 7.1;
+            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
+            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElecrticalSuperRate);
         }
 
         [TestMethod]
