@@ -287,7 +287,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_Labor()
+        public void SaveAs_Bid_LaborConstants()
         {
             //Assert
             Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);

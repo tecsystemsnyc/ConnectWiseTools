@@ -56,27 +56,19 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField GraphCoef = new TableField("GraphCoef", "REAL");
         public static TableField GraphRate = new TableField("GraphRate", "REAL");
-
-        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
-        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL");
     }
 
     public class SubcontractorConstantsTable : TableBase
     {
         public static new string TableName = "TECSubcontractorConst";
 
-        public static TableField Name = new TableField("Name", "TEXT");
-        public static TableField Const = new TableField("Const", "TEXT");
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            Name
-        };
+        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL");
+        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL");
     }
 
-    public class MiscCostTable : TableBase
+    public class UserAdjustmentsTable : TableBase
     {
-        public static new string TableName = "TECMiscCost";
+        public static new string TableName = "TECUserAdjustments";
 
         public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL");
         public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL");
@@ -84,6 +76,19 @@ namespace EstimatingUtilitiesLibrary
         public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL");
         public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL");
 
+    }
+
+    public class CostAdditionsTable : TableBase
+    {
+        public static new string TableName = "TECCostAdditions";
+
+        public static TableField Name = new TableField("Name", "TEXT");
+        public static TableField Cost = new TableField("Cost", "REAL");
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            Name
+        };
     }
 
     public class NoteTable : TableBase
@@ -565,7 +570,7 @@ namespace EstimatingUtilitiesLibrary
         public static List<object> Tables = new List<object>() {
             new BidInfoTable(),
             new LaborConstantsTable(),
-            new MiscCostTable(),
+            new UserAdjustmentsTable(),
             new SubcontractorConstantsTable(),
             new NoteTable(),
             new ExclusionTable(),

@@ -381,6 +381,18 @@ namespace EstimatingLibrary
             }
         }
 
+        private double _electricalSuperRate;
+        public double ElecrticalSuperRate
+        {
+            get { return _electricalSuperRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalSuperRate = value;
+                NotifyPropertyChanged("ElectricalSuperRate", temp, this);
+            }
+        }
+
         public double ElectricalSubTotal
         {
             get
@@ -433,6 +445,7 @@ namespace EstimatingLibrary
 
             _electricalHours = 0;
             _electricalRate = 115;
+            _electricalSuperRate = 125;
         }
 
         public TECLabor(TECLabor labor)

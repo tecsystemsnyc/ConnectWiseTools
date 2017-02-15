@@ -61,6 +61,7 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 bid = getBidInfo();
+                bid.Labor = getLaborConsts();
                 bid.ScopeTree = getBidScopeBranches();
                 bid.Systems = getAllSystemsInBid();
                 bid.ProposalScope = getAllProposalScope(bid.Systems);
@@ -1993,24 +1994,84 @@ namespace EstimatingUtilitiesLibrary
             string salesperson = bidInfoRow["Salesperson"].ToString();
             string estimator = bidInfoRow["Estimator"].ToString();
 
-            TECBid bid = new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
+            return new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
+        }
 
-            try
+        static private TECLabor getLaborConsts()
+        {
+            TECLabor labor = new TECLabor();
+
+            DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
+            DataTable subContractDT = SQLiteDB.getDataFromTable(SubcontractorConstantsTable.TableName);
+
+            if (laborDT.Rows.Count < 1 )
             {
-                bid.Labor.PMCoef = bidInfoRow["PMCoef"].ToString().ToDouble();
-                bid.Labor.ENGCoef = bidInfoRow["ENGCoef"].ToString().ToDouble();
-                bid.Labor.CommCoef = bidInfoRow["CommCoef"].ToString().ToDouble();
-                bid.Labor.SoftCoef = bidInfoRow["SoftCoef"].ToString().ToDouble();
-                bid.Labor.GraphCoef = bidInfoRow["GraphCoef"].ToString().ToDouble();
-                bid.Labor.ElectricalRate = bidInfoRow["ElectricalRate"].ToString().ToDouble();
+                MessageBox.Show("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return labor;
             }
-            catch
+            else
             {
-                Console.WriteLine("Reading labor values from database failed. Using default values.");
-                bid.Labor = new TECLabor();
+                DataRow laborRow = laborDT.Rows[0];
+
+                try
+                {
+                    labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble();
+                    labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble();
+
+                    labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble();
+                    labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble();
+
+                    labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble();
+                    labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble();
+
+                    labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble();
+                    labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble();
+
+                    labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble();
+                    labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+                    Console.WriteLine("Reading labor values from database failed. Using default values.");
+                    return labor;
+                }
+                
+                if (subContractDT.Rows.Count < 1)
+                {
+                    MessageBox.Show("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+
+                    labor.ElectricalRate = 115;
+                    labor.ElecrticalSuperRate = 125;
+
+                    return labor;
+                }
+                else
+                {
+                    DataRow subContractRow = subContractDT.Rows[0];
+
+                    try
+                    {
+                        labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble();
+                        labor.ElecrticalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error: " + e.Message);
+                        Console.WriteLine("Reading subcontractor values from database failed. Using default values.");
+
+                        labor.ElectricalRate = 115;
+                        labor.ElecrticalSuperRate = 125;
+                    }
+
+                    return labor;
+                }
             }
 
-            return bid;
+            
+
+            
+
         }
 
         static private TECTemplates getTemplatesInfo()
