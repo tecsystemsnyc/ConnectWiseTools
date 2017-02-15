@@ -20,6 +20,7 @@ namespace EstimatingLibrary
         protected TECLocation _location;
 
         protected ObservableCollection<TECTag> _tags;
+        protected ObservableCollection<TECAssociatedCost> _associatedCosts;
 
         public string Name {
             get { return _name; }
@@ -70,6 +71,16 @@ namespace EstimatingLibrary
                 
             }
         }
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts
+        {
+            get { return _associatedCosts; }
+            set
+            {
+                var temp = this.Copy();
+                _associatedCosts = value;
+                NotifyPropertyChanged("AssociatedCosts", temp, this);
+            }
+        }
 
         public TECLocation Location
         {
@@ -95,7 +106,9 @@ namespace EstimatingLibrary
 
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
             Tags.CollectionChanged += collectionChanged;
+            AssociatedCosts.CollectionChanged += collectionChanged;
         }
 
         abstract public Object DragDropCopy();

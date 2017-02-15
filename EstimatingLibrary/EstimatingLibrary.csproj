@@ -102,13 +102,16 @@
   <ItemGroup>
     <Compile Include="Defaults.cs" />
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
+    <Compile Include="TECAssociatedCost.cs" />
     <Compile Include="TECBid.cs" />
     <Compile Include="TECBidParameters.cs" />
+    <Compile Include="TECConduitType.cs" />
     <Compile Include="TECConnection.cs" />
     <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECController.cs" />
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECDrawing.cs" />
+    <Compile Include="TECElectricalMaterial.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECExclusion.cs" />
     <Compile Include="TECIO.cs" />
