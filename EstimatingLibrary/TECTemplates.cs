@@ -20,7 +20,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECTag> _tags;
         private ObservableCollection<TECController> _controllerTemplates;
         private ObservableCollection<TECConnectionType> _connectionTypeCatalog;
-
+        private ObservableCollection<TECConduitType> _conduitTypeCatalog;
+    
         public Guid InfoGuid
         {
             get { return _infoGuid; }
@@ -121,7 +122,19 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConnectionTypes", temp, this);
             }
         }
-        
+        public ObservableCollection<TECConduitType> ConduitTypeCatalog
+        {
+            get { return _conduitTypeCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                ConduitTypeCatalog.CollectionChanged -= CollectionChanged;
+                _conduitTypeCatalog = value;
+                ConduitTypeCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConduitTypeCatalog", temp, this);
+            }
+        }
+
         public override object Copy()
         {
             return new TECTemplates(this);
@@ -145,6 +158,7 @@ namespace EstimatingLibrary
             _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
             _controllerTemplates = new ObservableCollection<TECController>();
             _connectionTypeCatalog = new ObservableCollection<TECConnectionType>();
+            _conduitTypeCatalog = new ObservableCollection<TECConduitType>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -154,6 +168,7 @@ namespace EstimatingLibrary
             ManufacturerCatalog.CollectionChanged += CollectionChanged;
             ControllerTemplates.CollectionChanged += CollectionChanged;
             ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
+            ConduitTypeCatalog.CollectionChanged += CollectionChanged;
         }
 
         public TECTemplates(TECTemplates templatesSource) : this()
@@ -181,6 +196,14 @@ namespace EstimatingLibrary
             foreach (TECManufacturer man in templatesSource.ManufacturerCatalog)
             {
                 ManufacturerCatalog.Add(man);
+            }
+            foreach(TECConnectionType connectionType in templatesSource.ConnectionTypeCatalog)
+            {
+                ConnectionTypeCatalog.Add(connectionType);
+            }
+            foreach (TECConduitType conduitType in templatesSource.ConduitTypeCatalog)
+            {
+                ConduitTypeCatalog.Add(conduitType);
             }
         }
 

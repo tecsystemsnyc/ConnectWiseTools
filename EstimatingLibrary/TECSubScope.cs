@@ -36,8 +36,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Points", temp, this);
             }
         }
-
-
+        
         private TECConnection _connection { get; set; }
         public TECConnection Connection {
             get { return _connection; }
@@ -92,6 +91,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Length", temp, this);
             }
         }
+
+        private TECConduitType _conduitType;
+        public TECConduitType ConduitType
+        {
+            get { return _conduitType; }
+            set
+            {
+                var temp = this.Copy();
+                _conduitType = value;
+                NotifyPropertyChanged("ConduitType", temp, this);
+            }
+        }
         
         #endregion //Properties
 
@@ -100,6 +111,7 @@ namespace EstimatingLibrary
         {
             _devices = devices;
             _points = points;
+            _length = 0;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
@@ -219,8 +231,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
-
-
+        
         #endregion
 
         #region Methods
