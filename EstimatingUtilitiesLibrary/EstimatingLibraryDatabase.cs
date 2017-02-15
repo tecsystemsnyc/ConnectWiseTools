@@ -179,12 +179,14 @@ namespace EstimatingUtilitiesLibrary
 
                 foreach (TECNote note in bid.Notes)
                 {
-                    addNote(note);
+                    //addNote(note);
+                    addObject(note);
                 }
 
                 foreach (TECExclusion exclusion in bid.Exclusions)
                 {
-                    addExclusion(exclusion);
+                    //addExclusion(exclusion);
+                    addObject(exclusion);
                 }
 
                 foreach (TECDrawing drawing in bid.Drawings)
@@ -419,13 +421,9 @@ namespace EstimatingUtilitiesLibrary
                 {
                     updateSubScopeDeviceRelation(refObject as TECSubScope);
                 }
-                else if (refObject is TECBid)
+                else if (refObject is TECBid || refObject is TECTemplates)
                 {
-                    addDevice(tarObject as TECDevice);
-                }
-                else if (refObject is TECTemplates)
-                {
-                    addDevice(tarObject as TECDevice);
+                    addObject(tarObject as TECDevice);
                 }
             }
             else if (tarObject is TECPoint)
@@ -3937,11 +3935,13 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private Tuple<string, List<TableField>, List<TableField>> getTableInfo(TableBase table)
+        static private Tuple<string, List<TableField>, List<TableField>, Type, Type> getTableInfo(TableBase table)
         {
             string tableName = "";
             List<TableField> primaryKey = new List<TableField>();
             List<TableField> fields = new List<TableField>();
+            Type modelType = null;
+            Type relationType = null;
             var type = table.GetType();
 
             foreach (var p in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
@@ -3957,6 +3957,14 @@ namespace EstimatingUtilitiesLibrary
                     foreach (TableField field in v)
                     { primaryKey.Add(field); }
                 }
+                else if (p.Name == "ModelType")
+                {
+                    modelType = p.GetValue(null) as Type;
+                }
+                else if (p.Name == "RelationType")
+                {
+                    relationType = p.GetValue(null) as Type;
+                }
                 else
                 {
                     var v = p.GetValue(null) as TableField;
@@ -3964,7 +3972,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            return Tuple.Create<string, List<TableField>, List<TableField>>(tableName, fields, primaryKey);
+            return Tuple.Create<string, List<TableField>, List<TableField>, Type, Type>(tableName, fields, primaryKey, modelType, relationType);
         }
         #endregion
 
@@ -4133,6 +4141,46 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.Labor = labor;
 
             return outConnectionType;
+        }
+
+        #endregion
+
+        #region Generic Add Methods
+        private static void addObject(Object objectToAdd)
+        {
+            Type type = objectToAdd.GetType();
+            var relevantTables = new List<TableBase>();
+            foreach(TableBase table in AllTables.Tables)
+            {
+                var tableInfo = getTableInfo(table);
+                if(tableInfo.Item4 == type)
+                {
+                    relevantTables.Add(table);
+                }
+            }
+            foreach(TableBase table in relevantTables)
+            {
+                addObjectToTable(objectToAdd, table);
+            }
+            
+        }
+
+        private static void addObjectToTable(Object objectToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            foreach(TableField field in tableInfo.Item2)
+            {
+                data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+            }
+
+            if (!SQLiteDB.Insert(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+            }
         }
 
         #endregion
