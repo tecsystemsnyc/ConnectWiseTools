@@ -50,7 +50,7 @@ namespace Tests
             bid.Labor.GraphExtraHours = 5.5;
 
             bid.Labor.ElectricalRate = 0.6;
-            bid.Labor.ElecrticalSuperRate = 0.66;
+            bid.Labor.ElectricalSuperRate = 0.66;
 
             //Tags
             var tag1 = new TECTag("Tag 1");
