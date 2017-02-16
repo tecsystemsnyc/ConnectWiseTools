@@ -199,7 +199,7 @@ namespace EstimatingUtilitiesLibrary
     public class DeviceTable : TableBase
     {
         public static new string TableName = "TECDevice";
-        public static new Type ModelType = typeof(TECSubScope);
+        public static new Type ModelType = typeof(TECDevice);
 
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ModelType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ModelType.GetProperty("Name"));
