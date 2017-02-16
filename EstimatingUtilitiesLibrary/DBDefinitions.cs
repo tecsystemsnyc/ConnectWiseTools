@@ -40,25 +40,33 @@ namespace EstimatingUtilitiesLibrary
             TemplatesInfoID
         };
     }
-    public class LaborConstantsTable : TableBase
+    public class LaborConstantsTable : RelationTableBase
     {
         public static new string TableName = "TECLaborConst";
-        public static new Type ModelType = typeof(TECLabor);
+        public static new Type ModelType = typeof(TECBid);
+        public static new Type RelationType = typeof(TECLabor);
 
-        public static TableField PMCoef = new TableField("PMCoef", "REAL", ModelType.GetProperty("PMCoef"));
-        public static TableField PMRate = new TableField("PMRate", "REAL", ModelType.GetProperty("PMRate"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ModelType.GetProperty("InfoGuid"));
 
-        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ModelType.GetProperty("ENGCoef"));
-        public static TableField ENGRate = new TableField("ENGRate", "REAL", ModelType.GetProperty("ENGRate"));
+        public static TableField PMCoef = new TableField("PMCoef", "REAL", RelationType.GetProperty("PMCoef"));
+        public static TableField PMRate = new TableField("PMRate", "REAL", RelationType.GetProperty("PMRate"));
 
-        public static TableField CommCoef = new TableField("CommCoef", "REAL", ModelType.GetProperty("CommCoef"));
-        public static TableField CommRate = new TableField("CommRate", "REAL", ModelType.GetProperty("CommRate"));
+        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", RelationType.GetProperty("ENGCoef"));
+        public static TableField ENGRate = new TableField("ENGRate", "REAL", RelationType.GetProperty("ENGRate"));
 
-        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ModelType.GetProperty("SoftCoef"));
-        public static TableField SoftRate = new TableField("SoftRate", "REAL", ModelType.GetProperty("SoftRate"));
+        public static TableField CommCoef = new TableField("CommCoef", "REAL", RelationType.GetProperty("CommCoef"));
+        public static TableField CommRate = new TableField("CommRate", "REAL", RelationType.GetProperty("CommRate"));
 
-        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ModelType.GetProperty("GraphCoef"));
-        public static TableField GraphRate = new TableField("GraphRate", "REAL", ModelType.GetProperty("GraphRate"));
+        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", RelationType.GetProperty("SoftCoef"));
+        public static TableField SoftRate = new TableField("SoftRate", "REAL", RelationType.GetProperty("SoftRate"));
+
+        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", RelationType.GetProperty("GraphCoef"));
+        public static TableField GraphRate = new TableField("GraphRate", "REAL", RelationType.GetProperty("GraphRate"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID
+        };
     }
     public class SubcontractorConstantsTable : TableBase
     {
