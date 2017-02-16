@@ -4464,12 +4464,12 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = getTableInfo(table);
                 if (tableInfo.Item5 == null)
                 {
-                    Console.WriteLine("Adding object");
+                    Console.WriteLine("Editing object");
                     editObjectInTable(objectsToAdd[0], table);
                 }
                 else
                 {
-                    Console.WriteLine("Adding Relation");
+                    Console.WriteLine("Editing Relation");
                     editObjectInRelationTable(objectsToAdd[0], objectsToAdd[1], table);
                 }
 
