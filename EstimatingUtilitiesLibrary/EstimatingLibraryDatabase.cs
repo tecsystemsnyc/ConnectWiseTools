@@ -4461,11 +4461,14 @@ namespace EstimatingUtilitiesLibrary
                     data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
                 }
             }
-
-            if (!SQLiteDB.Replace(tableInfo.Item1, data))
+            if(data.Count > 0)
             {
-                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                if (!SQLiteDB.Replace(tableInfo.Item1, data))
+                {
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                }
             }
+            
         }
         private static void editObjectInRelationTable(Object objectToAdd, Object relationToAdd, TableBase table)
         {
@@ -4506,15 +4509,32 @@ namespace EstimatingUtilitiesLibrary
 
                 }
             }
-            if (!SQLiteDB.Replace(tableInfo.Item1, data))
+            if (data.Count > 0)
             {
-                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                if (!SQLiteDB.Replace(tableInfo.Item1, data))
+                {
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                }
             }
         }
         #endregion
 
         #region Generic Load Methods
+        //private static ObservableCollection<Object> loadObjects(Type typeToLoad)
+        //{
+        //    ObservableCollection<Object> loadedObjects = new ObservableCollection<Object>();
+        //    DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
 
+        //    foreach (DataRow row in exclusionsDT.Rows)
+        //    {
+        //        Guid exclusionId = new Guid(row["ExclusionID"].ToString());
+        //        string exclusionText = row["ExclusionText"].ToString();
+
+        //        exclusions.Add(new TECExclusion(exclusionText, exclusionId));
+        //    }
+
+        //    return exclusions;
+        //}
         #endregion
 
         #region Generic Helper Methods
