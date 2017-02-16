@@ -18,7 +18,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField BidName = new TableField("BidName", "TEXT", ModelType.GetProperty("Name"));
         public static TableField BidInfoID = new TableField("BidInfoID", "TEXT", ModelType.GetProperty("InfoGuid"));
         public static TableField BidNumber = new TableField("BidNumber", "TEXT", ModelType.GetProperty("BidNumber"));
-        public static TableField DueDate = new TableField("DueDate", "TEXT", ModelType.GetProperty("DueDate"));
+        public static TableField DueDate = new TableField("DueDate", "TEXT", ModelType.GetProperty("DueDateString"));
         public static TableField Salesperson = new TableField("Salesperson", "TEXT", ModelType.GetProperty("Salesperson"));
         public static TableField Estimator = new TableField("Estimator", "TEXT", ModelType.GetProperty("Estimator"));
 
