@@ -4445,7 +4445,7 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Edit Methods
         private static void editObject(params Object[] objectsToAdd)
         {
-            var relevantTables = getRelevantTables(objectsToAdd);
+            var relevantTables = getRelevantTablesToEdit(objectsToAdd);
             Type type = objectsToAdd[0].GetType();
             Type relationType = null;
             if (objectsToAdd.Length == 2)
@@ -4546,6 +4546,34 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+        private static List<TableBase> getRelevantTablesToEdit(params Object[] objectsToAdd)
+        {
+            var relevantTables = new List<TableBase>();
+
+            var objectToAdd = objectsToAdd[0];
+            Type type = objectToAdd.GetType();
+
+            Type relationType = null;
+            if (objectsToAdd.Length == 2)
+            {
+                relationType = objectsToAdd[1].GetType();
+            }
+
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = getTableInfo(table);
+
+                //if (tableInfo.Item4 == type && tableInfo.Item5 == relationType)
+                if ((tableInfo.Item4 == type && tableInfo.Item5 == null))
+                {
+                    relevantTables.Add(table);
+                }
+            }
+
+            return relevantTables;
+
+        }
+
         #endregion
 
         #region Generic Load Methods
