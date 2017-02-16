@@ -4314,7 +4314,7 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Remove Methods
         private static void removeObject(params Object[] objectsToRemove)
         {
-            var relevantTables = getRelevantTables(objectsToRemove);
+            var relevantTables = getRelevantTablesForRemoval(objectsToRemove);
             Type type = objectsToRemove[0].GetType();
             Type relationType = null;
             if (objectsToRemove.Length == 2)
@@ -4409,6 +4409,35 @@ namespace EstimatingUtilitiesLibrary
             {
                 Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
             }
+        }
+
+        private static List<TableBase> getRelevantTablesForRemoval(params Object[] objectsToAdd)
+        {
+            var relevantTables = new List<TableBase>();
+
+            var objectToAdd = objectsToAdd[0];
+            Type type = objectToAdd.GetType();
+
+            Type relationType = null;
+            if (objectsToAdd.Length == 2)
+            {
+                relationType = objectsToAdd[1].GetType();
+            }
+
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = getTableInfo(table);
+
+                //if (tableInfo.Item4 == type && tableInfo.Item5 == relationType)
+                if ((tableInfo.Item4 == type) ||
+                    (tableInfo.Item4 == type.BaseType) )
+                {
+                    relevantTables.Add(table);
+                }
+            }
+
+            return relevantTables;
+
         }
 
         #endregion
@@ -4523,6 +4552,8 @@ namespace EstimatingUtilitiesLibrary
         //private static ObservableCollection<Object> loadObjects(Type typeToLoad)
         //{
         //    ObservableCollection<Object> loadedObjects = new ObservableCollection<Object>();
+        //    List<TableBase> relevantTables = getRelevantTables(new object() as typeToLoad);
+
         //    DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
 
         //    foreach (DataRow row in exclusionsDT.Rows)
@@ -4533,7 +4564,7 @@ namespace EstimatingUtilitiesLibrary
         //        exclusions.Add(new TECExclusion(exclusionText, exclusionId));
         //    }
 
-        //    return exclusions;
+        //    return loadedObjects;
         //}
         #endregion
 
@@ -4558,7 +4589,8 @@ namespace EstimatingUtilitiesLibrary
                 //if (tableInfo.Item4 == type && tableInfo.Item5 == relationType)
                 if ((tableInfo.Item4 == type && tableInfo.Item5 == null) ||
                     (tableInfo.Item4 == relationType && tableInfo.Item5 == type) ||
-                    (tableInfo.Item4 == relationType.BaseType && tableInfo.Item5 == type))
+                    (tableInfo.Item4 == relationType.BaseType && tableInfo.Item5 == type) ||
+                    (tableInfo.Item4 == type.BaseType && tableInfo.Item5 == relationType))
                 {
                     relevantTables.Add(table);
                 }

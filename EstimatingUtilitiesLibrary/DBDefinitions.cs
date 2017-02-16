@@ -633,11 +633,11 @@ namespace EstimatingUtilitiesLibrary
     public class LocationScopeTable : RelationTableBase
     {
         public static new string TableName = "TECLocationTECScope";
-        public static new Type ModelType = typeof(TECLocation);
-        public static new Type RelationType = typeof(TECScope);
+        public static new Type ModelType = typeof(TECScope);
+        public static new Type RelationType = typeof(TECLocation);
 
-        public static TableField LocationID = new TableField("LocationID", "TEXT", ModelType.GetProperty("Guid"));
-        public static TableField ScopeID = new TableField("ScopeID", "TEXT", RelationType.GetProperty("Guid"));
+        public static TableField LocationID = new TableField("LocationID", "TEXT", RelationType.GetProperty("Guid"));
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ModelType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             LocationID,
