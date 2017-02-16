@@ -73,11 +73,11 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECUserAdjustments";
         public static new Type ModelType = typeof(TECLabor);
 
-        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", null);
-        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", null);
-        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", null);
-        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", null);
-        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", null);
+        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", ModelType.GetProperty("PMExtraHours"));
+        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", ModelType.GetProperty("ENGExtraHours"));
+        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", ModelType.GetProperty("CommExtraHours"));
+        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", ModelType.GetProperty("SoftExtraHours"));
+        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", ModelType.GetProperty("GraphExtraHours"));
 
     }
     public class CostAdditionsTable : TableBase
