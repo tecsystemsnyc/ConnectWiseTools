@@ -30,11 +30,27 @@ namespace Tests
 
             //Bid Labor
             bid.Labor.PMCoef = 0.1;
+            bid.Labor.PMRate = 0.11;
+            bid.Labor.PMExtraHours = 1.1;
+
             bid.Labor.ENGCoef = 0.2;
+            bid.Labor.ENGRate = 0.22;
+            bid.Labor.ENGExtraHours = 2.2;
+
             bid.Labor.CommCoef = 0.3;
+            bid.Labor.CommRate = 0.33;
+            bid.Labor.CommExtraHours = 3.3;
+
             bid.Labor.SoftCoef = 0.4;
+            bid.Labor.SoftRate = 0.44;
+            bid.Labor.SoftExtraHours = 4.4;
+
             bid.Labor.GraphCoef = 0.5;
+            bid.Labor.GraphRate = 0.55;
+            bid.Labor.GraphExtraHours = 5.5;
+
             bid.Labor.ElectricalRate = 0.6;
+            bid.Labor.ElecrticalSuperRate = 0.66;
 
             //Tags
             var tag1 = new TECTag("Tag 1");

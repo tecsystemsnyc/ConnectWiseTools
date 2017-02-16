@@ -291,11 +291,38 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+
             Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+
             Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+
             Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+
             Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_SubContracterConstants()
+        {
+            //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElecrticalSuperRate, actualLabor.ElecrticalSuperRate);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_UserAdjustments()
+        {
+            //Assert
+            Assert.AreEqual(expectedLabor.PMExtraHours, actualLabor.PMExtraHours);
+            Assert.AreEqual(expectedLabor.ENGExtraHours, actualLabor.ENGExtraHours);
+            Assert.AreEqual(expectedLabor.CommExtraHours, actualLabor.CommExtraHours);
+            Assert.AreEqual(expectedLabor.SoftExtraHours, actualLabor.SoftExtraHours);
+            Assert.AreEqual(expectedLabor.GraphExtraHours, actualLabor.GraphExtraHours);
         }
 
         [TestMethod]
