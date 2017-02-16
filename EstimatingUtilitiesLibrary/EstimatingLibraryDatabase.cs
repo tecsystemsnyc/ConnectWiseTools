@@ -35,53 +35,53 @@ namespace EstimatingUtilitiesLibrary
             //try
             //{
 
-                //Update catalogs from templates.
-                if (templates.DeviceCatalog.Count > 0)
+            //Update catalogs from templates.
+            if (templates.DeviceCatalog.Count > 0)
+            {
+                foreach (TECDevice device in templates.DeviceCatalog)
                 {
-                    foreach (TECDevice device in templates.DeviceCatalog)
-                    {
-                        editDevice(device);
-                    }
+                    editDevice(device);
                 }
+            }
 
-                if (templates.ManufacturerCatalog.Count > 0)
+            if (templates.ManufacturerCatalog.Count > 0)
+            {
+                foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
                 {
-                    foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-                    {
-                        editManufacturer(manufacturer);
-                    }
+                    editManufacturer(manufacturer);
                 }
+            }
 
-                if (templates.Tags.Count > 0)
+            if (templates.Tags.Count > 0)
+            {
+                foreach (TECTag tag in templates.Tags)
                 {
-                    foreach (TECTag tag in templates.Tags)
-                    {
-                        editTag(tag);
-                    }
+                    editTag(tag);
                 }
+            }
 
-                bid = getBidInfo();
-                bid.Labor = getLaborConsts();
-                bid.ScopeTree = getBidScopeBranches();
-                bid.Systems = getAllSystemsInBid();
-                bid.ProposalScope = getAllProposalScope(bid.Systems);
-                bid.DeviceCatalog = getAllDevices();
-                bid.ManufacturerCatalog = getAllManufacturers();
-                bid.Locations = getAllLocations();
-                bid.Tags = getAllTags();
-                bid.Notes = getNotes();
-                bid.Exclusions = getExclusions();
-                bid.Drawings = getDrawings();
-                bid.Connections = getConnections();
-                bid.Controllers = getControllers();
-                bid.ConnectionTypes = getConnectionTypes();
-                linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
-                linkAllLocations(bid.Locations, bid.Systems);
-                linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-                linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
-                linkAllDevices(bid.Systems, bid.DeviceCatalog);
-                linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
-                linkTagsInBid(bid.Tags, bid);
+            bid = getBidInfo();
+            bid.Labor = getLaborConsts();
+            bid.ScopeTree = getBidScopeBranches();
+            bid.Systems = getAllSystemsInBid();
+            bid.ProposalScope = getAllProposalScope(bid.Systems);
+            bid.DeviceCatalog = getAllDevices();
+            bid.ManufacturerCatalog = getAllManufacturers();
+            bid.Locations = getAllLocations();
+            bid.Tags = getAllTags();
+            bid.Notes = getNotes();
+            bid.Exclusions = getExclusions();
+            bid.Drawings = getDrawings();
+            bid.Connections = getConnections();
+            bid.Controllers = getControllers();
+            bid.ConnectionTypes = getConnectionTypes();
+            linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
+            linkAllLocations(bid.Locations, bid.Systems);
+            linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+            linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
+            linkAllDevices(bid.Systems, bid.DeviceCatalog);
+            linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+            linkTagsInBid(bid.Tags, bid);
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
@@ -181,13 +181,13 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECNote note in bid.Notes)
                 {
                     //addNote(note);
-                    addObject(note);
+                    addNote(note);
                 }
 
                 foreach (TECExclusion exclusion in bid.Exclusions)
                 {
                     //addExclusion(exclusion);
-                    addObject(exclusion);
+                    addExclusion(exclusion);
                 }
 
                 foreach (TECDrawing drawing in bid.Drawings)
@@ -228,7 +228,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     addFullProposalScope(propScope);
                 }
-                foreach(TECConnectionType connectionType in bid.ConnectionTypes)
+                foreach (TECConnectionType connectionType in bid.ConnectionTypes)
                 {
                     addConnectionType(connectionType);
                 }
@@ -384,493 +384,521 @@ namespace EstimatingUtilitiesLibrary
         #endregion Public Functions
 
         #region Update Functions
-
         static private void addUpdate(object tarObject, object refObject)
         {
-            if (tarObject is TECSystem)
-            {
-                if (refObject is TECBid)
-                {
-                    //Console.WriteLine("Num systems to update: " + (refObject as TECBid).Systems.Count);
-                    addSystem(tarObject as TECSystem);
-                    updateSystemIndexes((refObject as TECBid).Systems);
-                }
-                else if (refObject is TECTemplates)
-                {
-                    addSystem(tarObject as TECSystem);
-                }
-            }
-            else if (tarObject is TECEquipment)
-            {
-                addEquipment(tarObject as TECEquipment);
-                if (refObject is TECSystem)
-                {
-                    updateSystemEquipmentRelation(refObject as TECSystem);
-                }
-            }
-            else if (tarObject is TECSubScope)
-            {
-                addSubScope(tarObject as TECSubScope);
-                if (refObject is TECEquipment)
-                {
-                    updateEquipmentSubScopeRelation(refObject as TECEquipment);
-                }
-            }
-            else if (tarObject is TECDevice)
-            {
-                if (refObject is TECSubScope)
-                {
-                    updateSubScopeDeviceRelation(refObject as TECSubScope);
-                }
-                else if (refObject is TECBid || refObject is TECTemplates)
-                {
-                    addObject(tarObject as TECDevice);
-                }
-            }
-            else if (tarObject is TECPoint)
-            {
-                addPoint(tarObject as TECPoint);
-                updateSubScopePointRelation(refObject as TECSubScope);
-            }
-            else if (tarObject is TECDrawing)
-            {
-                addDrawing(tarObject as TECDrawing);
-            }
-            else if (tarObject is TECPage)
-            {
-                addPage(tarObject as TECPage);
-                addDrawingPageRelation(refObject as TECDrawing, tarObject as TECPage);
-            }
-            else if (tarObject is TECVisualScope)
-            {
-                addVisualScope(tarObject as TECVisualScope);
-                addPageVisualScopeRelation(refObject as TECPage, tarObject as TECVisualScope);
-                addVisualScopeScopeRelation(tarObject as TECVisualScope);
-            }
-            else if (tarObject is TECNote)
-            {
-                addNote(tarObject as TECNote);
-            }
-            else if (tarObject is TECExclusion)
-            {
-                addExclusion(tarObject as TECExclusion);
-            }
-            else if (tarObject is TECScopeBranch)
-            {
-                addScopeBranch(tarObject as TECScopeBranch);
-                if (refObject is TECScopeBranch)
-                {
-                    addScopeTreeRelation(refObject as TECScopeBranch, tarObject as TECScopeBranch);
-                }
-                else if (refObject is TECProposalScope)
-                {
-                    addScopeBranchInProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
-                }
-                else if (refObject is TECBid)
-                {
-                    addScopeBranchBidRelation(tarObject as TECScopeBranch, (refObject as TECBid).InfoGuid);
-                }
-            }
-            else if (tarObject is TECManufacturer)
-            {
-                if (refObject is TECDevice)
-                {
-                    addDeviceManufacturerRelation(refObject as TECDevice, tarObject as TECManufacturer);
-                }
-                else if (refObject is TECBid)
-                {
-                    addManufacturer(tarObject as TECManufacturer);
-                }
-                else if (refObject is TECTemplates)
-                {
-                    addManufacturer(tarObject as TECManufacturer);
-                }
-            }
-            else if (tarObject is TECLocation)
-            {
-                if (refObject is TECBid)
-                {
-                    addLocation(tarObject as TECLocation);
-                }
-                else
-                {
-                    addLocationInScope(refObject as TECScope);
-                }
-            }
-            else if (tarObject is TECController)
-            {
-                addController(tarObject as TECController);
-            }
-            else if (tarObject is TECTag)
-            {
-                if (refObject is TECScope)
-                {
-                    addTagInScope((tarObject as TECTag), (refObject as TECScope).Guid);
-                }
-                else if (refObject is TECTemplates)
-                {
-                    addTag(tarObject as TECTag);
-                }
-            }
-            else if (tarObject is TECProposalScope)
-            {
-                addProposalScope(tarObject as TECProposalScope);
-            }
-            else if (tarObject is TECIO)
-            {
-                if (refObject is TECController)
-                {
-                    addControllerIORelation(refObject as TECController, tarObject as TECIO);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
 
-            }
-            else if (tarObject is TECConnectionType)
-            {
-                if (refObject is TECTemplates)
-                {
-                    addConnectionType(tarObject as TECConnectionType);
-                }
-                else if(refObject is TECBid)
-                {
-                    addConnectionType(tarObject as TECConnectionType);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECConduitType)
-            {
-                if (refObject is TECTemplates)
-                {
-                    addConduitType(tarObject as TECConduitType);
-                }
-                else if (refObject is TECBid)
-                {
-                    addConduitType(tarObject as TECConduitType);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
-                throw new NotImplementedException();
-            }
-        }
+            addObject(tarObject, refObject);
 
-        static private void editUpdate(object tarObject, object refObject)
-        {
-            if (tarObject is TECBid)
-            {
-                editBidInfo(tarObject as TECBid);
-            }
-            else if (tarObject is TECLabor)
-            {
-                if (refObject is TECBid)
-                {
-                    editBidInfo(refObject as TECBid);
-                }
-            }
-            else if (tarObject is TECSystem)
-            {
-                editSystem(tarObject as TECSystem);
-            }
-            else if (tarObject is TECEquipment)
-            {
-                editEquipment(tarObject as TECEquipment);
-            }
-            else if (tarObject is TECSubScope)
-            {
-                editSubScope(tarObject as TECSubScope);
-            }
-            else if (tarObject is TECDevice)
-            {
-                if (refObject is TECDevice)
-                {
-                    editDevice(tarObject as TECDevice);
-                }
-                else if (refObject is TECSubScope)
-                {
-                    editDeviceQuantity(refObject as TECSubScope, tarObject as TECDevice);
-                }
-            }
-            else if (tarObject is TECPoint)
-            {
-                editPoint(tarObject as TECPoint);
-            }
-            else if (tarObject is TECManufacturer)
-            {
-                if (refObject is TECDevice)
-                {
-                    editManufacturerInDevice(refObject as TECDevice);
-                }
-                else
-                {
-                    editManufacturer(tarObject as TECManufacturer);
-                }
-            }
-            else if (tarObject is TECDrawing)
-            {
-                editDrawing(tarObject as TECDrawing);
-            }
-            else if (tarObject is TECPage)
-            {
-                throw new NotImplementedException();
-            }
-            else if (tarObject is TECVisualScope)
-            {
-                editVisualScope(tarObject as TECVisualScope);
-            }
-            else if (tarObject is TECNote)
-            {
-                editNote(tarObject as TECNote);
-            }
-            else if (tarObject is TECExclusion)
-            {
-                editExclusion(tarObject as TECExclusion);
-            }
-            else if (tarObject is TECScopeBranch)
-            {
-                editScopeBranch(tarObject as TECScopeBranch);
-            }
-            else if (tarObject is TECLocation)
-            {
-                editLocation(tarObject as TECLocation);
-            }
-            else if (tarObject is TECController)
-            {
-                editController(tarObject as TECController);
-            }
-            else if (tarObject is ObservableCollection<TECSystem>)
-            {
-                updateSystemIndexes(tarObject as ObservableCollection<TECSystem>);
-            }
-            else if (tarObject is ObservableCollection<TECEquipment>)
-            {
-                updateSystemEquipmentRelation(refObject as TECSystem);
-            }
-            else if (tarObject is ObservableCollection<TECSubScope>)
-            {
-                updateEquipmentSubScopeRelation(refObject as TECEquipment);
-            }
-            else if (tarObject is ObservableCollection<TECDevice>)
-            {
-                updateSubScopeDeviceRelation(refObject as TECSubScope);
-            }
-            else if (tarObject is ObservableCollection<TECPoint>)
-            {
-                updateSubScopePointRelation(refObject as TECSubScope);
-            }
-            else if (tarObject is TECIO)
-            {
-                if (refObject is TECController)
-                {
-                    editIOInController(tarObject as TECIO, refObject as TECController);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECProposalScope)
-            {
-                editProposalScope(tarObject as TECProposalScope);
-            }
-            else if(tarObject is TECConnectionType)
-            {
-                editConnectionType(tarObject as TECConnectionType);
-            }
-            else if (tarObject is TECConduitType)
-            {
-                editConduitType(tarObject as TECConduitType);
-            }
-            else
-            {
-                Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
-                throw new NotImplementedException();
-            }
         }
 
         static private void removeUpdate(object tarObject, object refObject)
         {
-            if (tarObject is TECSystem)
-            {
-                removeSystem(tarObject as TECSystem);
-                removeLocationInScope(tarObject as TECSystem);
-            }
-            else if (tarObject is TECEquipment)
-            {
-                removeEquipment(tarObject as TECEquipment);
-                removeLocationInScope(tarObject as TECEquipment);
-                if (refObject is TECSystem)
-                {
-                    removeSystemEquipmentRelation(tarObject as TECEquipment);
-                }
-            }
-            else if (tarObject is TECSubScope)
-            {
-                removeSubScope(tarObject as TECSubScope);
-                removeLocationInScope(tarObject as TECSubScope);
-                if (refObject is TECEquipment)
-                {
-                    removeEquipmentSubScopeRelation(tarObject as TECSubScope);
-                }
-            }
-            else if (tarObject is TECDevice)
-            {
-                if (refObject is TECSubScope)
-                {
-                    removeSubScopeDeviceRelation(refObject as TECSubScope, tarObject as TECDevice);
-                }
-                else if (refObject is TECTemplates)
-                {
-                    removeDevice(tarObject as TECDevice);
-                }
-            }
-            else if (tarObject is TECPoint)
-            {
-                removePoint(tarObject as TECPoint);
-                if (refObject is TECSubScope)
-                {
-                    removeSubScopePointRelation(tarObject as TECPoint);
-                }
-            }
-            else if (tarObject is TECDrawing)
-            {
-                throw new NotImplementedException();
-            }
-            else if (tarObject is TECPage)
-            {
-                throw new NotImplementedException();
-            }
-            else if (tarObject is TECVisualScope)
-            {
-                removeVisualScope(tarObject as TECVisualScope);
-                removePageVisualScopeRelation(tarObject as TECVisualScope);
-            }
-            else if (tarObject is TECNote)
-            {
-                removeNote(tarObject as TECNote);
-            }
-            else if (tarObject is TECExclusion)
-            {
-                removeExclusion(tarObject as TECExclusion);
-            }
-            else if (tarObject is TECScopeBranch)
-            {
-                removeScopeBranch(tarObject as TECScopeBranch);
-                if (refObject is TECScopeBranch)
-                {
-                    removeScopeBranchHierarchyRelation(tarObject as TECScopeBranch);
-                }
-                else if (refObject is TECBid)
-                {
-                    removeScopeBranchBidRelation(tarObject as TECScopeBranch);
-                }
-                else if (refObject is TECProposalScope)
-                {
-                    removeScopeBranchProposalScopeRelation(tarObject as TECScopeBranch);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECLocation)
-            {
-                if (refObject is TECBid)
-                {
-                    removeLocation(tarObject as TECLocation);
-                }
-                else
-                {
-                    removeLocationInScope(refObject as TECScope);
-                }
-            }
-            else if (tarObject is TECController)
-            {
-                removeController(tarObject as TECController);
-            }
-            else if (tarObject is TECProposalScope)
-            {
-                removeProposalScope(tarObject as TECProposalScope);
-            }
-            else if (tarObject is TECIO)
-            {
-                if (refObject is TECController)
-                {
-                    removeControllerIORelation(refObject as TECController, tarObject as TECIO);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECManufacturer)
-            {
-                if (refObject is TECTemplates)
-                {
-                    removeManufacturer(tarObject as TECManufacturer);
-                }
-                else if (refObject is TECDevice)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECTag)
-            {
-                if (refObject is TECTemplates)
-                {
-                    removeTag(tarObject as TECTag);
-                }
-                else if (refObject is TECScope)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECConnectionType)
-            {
-                if(refObject is TECTemplates)
-                {
-                    removeConnectionType(tarObject as TECConnectionType);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else if (tarObject is TECConduitType)
-            {
-                if (refObject is TECTemplates)
-                {
-                    removeConduitType(tarObject as TECConduitType);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Target object type not included in remove branch. Target object type: " + tarObject.GetType());
-                throw new NotImplementedException();
-            }
+            removeObject(tarObject, refObject);
         }
+
+        static private void editUpdate(object tarObject, object refObject)
+        {
+            editObject(tarObject, refObject);
+        }
+
+        #region Old Add Update
+
+        //static private void addUpdate(object tarObject, object refObject)
+        //{
+        //    if (tarObject is TECSystem)
+        //    {
+        //        if (refObject is TECBid)
+        //        {
+        //            //Console.WriteLine("Num systems to update: " + (refObject as TECBid).Systems.Count);
+        //            addSystem(tarObject as TECSystem);
+        //            updateSystemIndexes((refObject as TECBid).Systems);
+        //        }
+        //        else if (refObject is TECTemplates)
+        //        {
+        //            addSystem(tarObject as TECSystem);
+        //        }
+        //    }
+        //    else if (tarObject is TECEquipment)
+        //    {
+        //        addEquipment(tarObject as TECEquipment);
+        //        if (refObject is TECSystem)
+        //        {
+        //            updateSystemEquipmentRelation(refObject as TECSystem);
+        //        }
+        //    }
+        //    else if (tarObject is TECSubScope)
+        //    {
+        //        addSubScope(tarObject as TECSubScope);
+        //        if (refObject is TECEquipment)
+        //        {
+        //            updateEquipmentSubScopeRelation(refObject as TECEquipment);
+        //        }
+        //    }
+        //    else if (tarObject is TECDevice)
+        //    {
+        //        if (refObject is TECSubScope)
+        //        {
+        //            updateSubScopeDeviceRelation(refObject as TECSubScope);
+        //        }
+        //        else if (refObject is TECBid || refObject is TECTemplates)
+        //        {
+        //            addDevice(tarObject as TECDevice);
+        //        }
+        //    }
+        //    else if (tarObject is TECPoint)
+        //    {
+        //        addPoint(tarObject as TECPoint);
+        //        updateSubScopePointRelation(refObject as TECSubScope);
+        //    }
+        //    else if (tarObject is TECDrawing)
+        //    {
+        //        addDrawing(tarObject as TECDrawing);
+        //    }
+        //    else if (tarObject is TECPage)
+        //    {
+        //        addPage(tarObject as TECPage);
+        //        addDrawingPageRelation(refObject as TECDrawing, tarObject as TECPage);
+        //    }
+        //    else if (tarObject is TECVisualScope)
+        //    {
+        //        addVisualScope(tarObject as TECVisualScope);
+        //        addPageVisualScopeRelation(refObject as TECPage, tarObject as TECVisualScope);
+        //        addVisualScopeScopeRelation(tarObject as TECVisualScope);
+        //    }
+        //    else if (tarObject is TECNote)
+        //    {
+        //        addNote(tarObject as TECNote);
+        //    }
+        //    else if (tarObject is TECExclusion)
+        //    {
+        //        addExclusion(tarObject as TECExclusion);
+        //    }
+        //    else if (tarObject is TECScopeBranch)
+        //    {
+        //        addScopeBranch(tarObject as TECScopeBranch);
+        //        if (refObject is TECScopeBranch)
+        //        {
+        //            addScopeTreeRelation(refObject as TECScopeBranch, tarObject as TECScopeBranch);
+        //        }
+        //        else if (refObject is TECProposalScope)
+        //        {
+        //            addScopeBranchInProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
+        //        }
+        //        else if (refObject is TECBid)
+        //        {
+        //            addScopeBranchBidRelation(tarObject as TECScopeBranch, (refObject as TECBid).InfoGuid);
+        //        }
+        //    }
+        //    else if (tarObject is TECManufacturer)
+        //    {
+        //        if (refObject is TECDevice)
+        //        {
+        //            addDeviceManufacturerRelation(refObject as TECDevice, tarObject as TECManufacturer);
+        //        }
+        //        else if (refObject is TECBid)
+        //        {
+        //            addManufacturer(tarObject as TECManufacturer);
+        //        }
+        //        else if (refObject is TECTemplates)
+        //        {
+        //            addManufacturer(tarObject as TECManufacturer);
+        //        }
+        //    }
+        //    else if (tarObject is TECLocation)
+        //    {
+        //        if (refObject is TECBid)
+        //        {
+        //            addLocation(tarObject as TECLocation);
+        //        }
+        //        else
+        //        {
+        //            addLocationInScope(refObject as TECScope);
+        //        }
+        //    }
+        //    else if (tarObject is TECController)
+        //    {
+        //        addController(tarObject as TECController);
+        //    }
+        //    else if (tarObject is TECTag)
+        //    {
+        //        if (refObject is TECScope)
+        //        {
+        //            addTagInScope((tarObject as TECTag), (refObject as TECScope).Guid);
+        //        }
+        //        else if (refObject is TECTemplates)
+        //        {
+        //            addTag(tarObject as TECTag);
+        //        }
+        //    }
+        //    else if (tarObject is TECProposalScope)
+        //    {
+        //        addProposalScope(tarObject as TECProposalScope);
+        //    }
+        //    else if (tarObject is TECIO)
+        //    {
+        //        if (refObject is TECController)
+        //        {
+        //            addControllerIORelation(refObject as TECController, tarObject as TECIO);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+
+        //    }
+        //    else if (tarObject is TECConnectionType)
+        //    {
+        //        if (refObject is TECTemplates)
+        //        {
+        //            addConnectionType(tarObject as TECConnectionType);
+        //        }
+        //        else if(refObject is TECBid)
+        //        {
+        //            addConnectionType(tarObject as TECConnectionType);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECConduitType)
+        //    {
+        //        if (refObject is TECTemplates)
+        //        {
+        //            addConduitType(tarObject as TECConduitType);
+        //        }
+        //        else if (refObject is TECBid)
+        //        {
+        //            addConduitType(tarObject as TECConduitType);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
+        //        throw new NotImplementedException();
+        //    }
+        //}
+        #endregion
+
+        #region Old Edit Update
+
+        //static private void editUpdate(object tarObject, object refObject)
+        //{
+        //    if (tarObject is TECBid)
+        //    {
+        //        editBidInfo(tarObject as TECBid);
+        //    }
+        //    else if (tarObject is TECLabor)
+        //    {
+        //        if (refObject is TECBid)
+        //        {
+        //            editBidInfo(refObject as TECBid);
+        //        }
+        //    }
+        //    else if (tarObject is TECSystem)
+        //    {
+        //        editSystem(tarObject as TECSystem);
+        //    }
+        //    else if (tarObject is TECEquipment)
+        //    {
+        //        editEquipment(tarObject as TECEquipment);
+        //    }
+        //    else if (tarObject is TECSubScope)
+        //    {
+        //        editSubScope(tarObject as TECSubScope);
+        //    }
+        //    else if (tarObject is TECDevice)
+        //    {
+        //        if (refObject is TECDevice)
+        //        {
+        //            editDevice(tarObject as TECDevice);
+        //        }
+        //        else if (refObject is TECSubScope)
+        //        {
+        //            editDeviceQuantity(refObject as TECSubScope, tarObject as TECDevice);
+        //        }
+        //    }
+        //    else if (tarObject is TECPoint)
+        //    {
+        //        editPoint(tarObject as TECPoint);
+        //    }
+        //    else if (tarObject is TECManufacturer)
+        //    {
+        //        if (refObject is TECDevice)
+        //        {
+        //            editManufacturerInDevice(refObject as TECDevice);
+        //        }
+        //        else
+        //        {
+        //            editManufacturer(tarObject as TECManufacturer);
+        //        }
+        //    }
+        //    else if (tarObject is TECDrawing)
+        //    {
+        //        editDrawing(tarObject as TECDrawing);
+        //    }
+        //    else if (tarObject is TECPage)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    else if (tarObject is TECVisualScope)
+        //    {
+        //        editVisualScope(tarObject as TECVisualScope);
+        //    }
+        //    else if (tarObject is TECNote)
+        //    {
+        //        editNote(tarObject as TECNote);
+        //    }
+        //    else if (tarObject is TECExclusion)
+        //    {
+        //        editExclusion(tarObject as TECExclusion);
+        //    }
+        //    else if (tarObject is TECScopeBranch)
+        //    {
+        //        editScopeBranch(tarObject as TECScopeBranch);
+        //    }
+        //    else if (tarObject is TECLocation)
+        //    {
+        //        editLocation(tarObject as TECLocation);
+        //    }
+        //    else if (tarObject is TECController)
+        //    {
+        //        editController(tarObject as TECController);
+        //    }
+        //    else if (tarObject is ObservableCollection<TECSystem>)
+        //    {
+        //        updateSystemIndexes(tarObject as ObservableCollection<TECSystem>);
+        //    }
+        //    else if (tarObject is ObservableCollection<TECEquipment>)
+        //    {
+        //        updateSystemEquipmentRelation(refObject as TECSystem);
+        //    }
+        //    else if (tarObject is ObservableCollection<TECSubScope>)
+        //    {
+        //        updateEquipmentSubScopeRelation(refObject as TECEquipment);
+        //    }
+        //    else if (tarObject is ObservableCollection<TECDevice>)
+        //    {
+        //        updateSubScopeDeviceRelation(refObject as TECSubScope);
+        //    }
+        //    else if (tarObject is ObservableCollection<TECPoint>)
+        //    {
+        //        updateSubScopePointRelation(refObject as TECSubScope);
+        //    }
+        //    else if (tarObject is TECIO)
+        //    {
+        //        if (refObject is TECController)
+        //        {
+        //            editIOInController(tarObject as TECIO, refObject as TECController);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECProposalScope)
+        //    {
+        //        editProposalScope(tarObject as TECProposalScope);
+        //    }
+        //    else if(tarObject is TECConnectionType)
+        //    {
+        //        editConnectionType(tarObject as TECConnectionType);
+        //    }
+        //    else if (tarObject is TECConduitType)
+        //    {
+        //        editConduitType(tarObject as TECConduitType);
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
+        #endregion
+
+        #region old remove update
+
+        //static private void removeUpdate(object tarObject, object refObject)
+        //{
+        //    if (tarObject is TECSystem)
+        //    {
+        //        removeSystem(tarObject as TECSystem);
+        //        removeLocationInScope(tarObject as TECSystem);
+        //    }
+        //    else if (tarObject is TECEquipment)
+        //    {
+        //        removeEquipment(tarObject as TECEquipment);
+        //        removeLocationInScope(tarObject as TECEquipment);
+        //        if (refObject is TECSystem)
+        //        {
+        //            removeSystemEquipmentRelation(tarObject as TECEquipment);
+        //        }
+        //    }
+        //    else if (tarObject is TECSubScope)
+        //    {
+        //        removeSubScope(tarObject as TECSubScope);
+        //        removeLocationInScope(tarObject as TECSubScope);
+        //        if (refObject is TECEquipment)
+        //        {
+        //            removeEquipmentSubScopeRelation(tarObject as TECSubScope);
+        //        }
+        //    }
+        //    else if (tarObject is TECDevice)
+        //    {
+        //        if (refObject is TECSubScope)
+        //        {
+        //            removeSubScopeDeviceRelation(refObject as TECSubScope, tarObject as TECDevice);
+        //        }
+        //        else if (refObject is TECTemplates)
+        //        {
+        //            removeDevice(tarObject as TECDevice);
+        //        }
+        //    }
+        //    else if (tarObject is TECPoint)
+        //    {
+        //        removePoint(tarObject as TECPoint);
+        //        if (refObject is TECSubScope)
+        //        {
+        //            removeSubScopePointRelation(tarObject as TECPoint);
+        //        }
+        //    }
+        //    else if (tarObject is TECDrawing)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    else if (tarObject is TECPage)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    else if (tarObject is TECVisualScope)
+        //    {
+        //        removeVisualScope(tarObject as TECVisualScope);
+        //        removePageVisualScopeRelation(tarObject as TECVisualScope);
+        //    }
+        //    else if (tarObject is TECNote)
+        //    {
+        //        removeNote(tarObject as TECNote);
+        //    }
+        //    else if (tarObject is TECExclusion)
+        //    {
+        //        removeExclusion(tarObject as TECExclusion);
+        //    }
+        //    else if (tarObject is TECScopeBranch)
+        //    {
+        //        removeScopeBranch(tarObject as TECScopeBranch);
+        //        if (refObject is TECScopeBranch)
+        //        {
+        //            removeScopeBranchHierarchyRelation(tarObject as TECScopeBranch);
+        //        }
+        //        else if (refObject is TECBid)
+        //        {
+        //            removeScopeBranchBidRelation(tarObject as TECScopeBranch);
+        //        }
+        //        else if (refObject is TECProposalScope)
+        //        {
+        //            removeScopeBranchProposalScopeRelation(tarObject as TECScopeBranch);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECLocation)
+        //    {
+        //        if (refObject is TECBid)
+        //        {
+        //            removeLocation(tarObject as TECLocation);
+        //        }
+        //        else
+        //        {
+        //            removeLocationInScope(refObject as TECScope);
+        //        }
+        //    }
+        //    else if (tarObject is TECController)
+        //    {
+        //        removeController(tarObject as TECController);
+        //    }
+        //    else if (tarObject is TECProposalScope)
+        //    {
+        //        removeProposalScope(tarObject as TECProposalScope);
+        //    }
+        //    else if (tarObject is TECIO)
+        //    {
+        //        if (refObject is TECController)
+        //        {
+        //            removeControllerIORelation(refObject as TECController, tarObject as TECIO);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECManufacturer)
+        //    {
+        //        if (refObject is TECTemplates)
+        //        {
+        //            removeManufacturer(tarObject as TECManufacturer);
+        //        }
+        //        else if (refObject is TECDevice)
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECTag)
+        //    {
+        //        if (refObject is TECTemplates)
+        //        {
+        //            removeTag(tarObject as TECTag);
+        //        }
+        //        else if (refObject is TECScope)
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECConnectionType)
+        //    {
+        //        if(refObject is TECTemplates)
+        //        {
+        //            removeConnectionType(tarObject as TECConnectionType);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else if (tarObject is TECConduitType)
+        //    {
+        //        if (refObject is TECTemplates)
+        //        {
+        //            removeConduitType(tarObject as TECConduitType);
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Target object type not included in remove branch. Target object type: " + tarObject.GetType());
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
+        #endregion
+
 
         #endregion Update Functions
 
@@ -1883,7 +1911,7 @@ namespace EstimatingUtilitiesLibrary
                 pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
                 SQLiteDB.Delete(SubScopeDeviceTable.TableName, pk);
             }
-            
+
         }
 
         private static void removeSubScopePointRelation(TECPoint point)
@@ -2127,7 +2155,7 @@ namespace EstimatingUtilitiesLibrary
             DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
             DataTable subContractDT = SQLiteDB.getDataFromTable(SubcontractorConstantsTable.TableName);
 
-            if (laborDT.Rows.Count < 1 )
+            if (laborDT.Rows.Count < 1)
             {
                 MessageBox.Show("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
                 return labor;
@@ -2159,7 +2187,7 @@ namespace EstimatingUtilitiesLibrary
                     Console.WriteLine("Reading labor values from database failed. Using default values.");
                     return labor;
                 }
-                
+
                 if (subContractDT.Rows.Count < 1)
                 {
                     MessageBox.Show("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
@@ -2191,9 +2219,9 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            
 
-            
+
+
 
         }
 
@@ -2615,7 +2643,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     devices.Add(deviceToAdd);
                 }
-                
+
             }
 
             return devices;
@@ -2686,7 +2714,7 @@ namespace EstimatingUtilitiesLibrary
                 return new TECManufacturer();
             }
         }
-        
+
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
         {
             string command = "select * from TECConnectionType where ConnectionTypeID in ";
@@ -2937,7 +2965,7 @@ namespace EstimatingUtilitiesLibrary
             try
             {
                 DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
-                foreach(DataRow row in connectionTypesDT.Rows)
+                foreach (DataRow row in connectionTypesDT.Rows)
                 {
                     connectionTypes.Add(getConnectionTypeFromRow(row));
                 }
@@ -2996,7 +3024,7 @@ namespace EstimatingUtilitiesLibrary
                     string lengthString = row[ConnectionTable.Length.Name].ToString();
 
                     double length = lengthString.ToDouble();
-                    
+
                     connections.Add(new TECConnection(length, guid));
                 }
             }
@@ -3530,7 +3558,7 @@ namespace EstimatingUtilitiesLibrary
                 sub.Devices = linkedDevices;
             }
         }
-        
+
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach (TECDevice device in devices)
@@ -3548,31 +3576,31 @@ namespace EstimatingUtilitiesLibrary
 
         static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
         {
-            foreach(TECSystem system in bid.Systems)
+            foreach (TECSystem system in bid.Systems)
             {
                 linkTags(tags, system);
-                foreach(TECEquipment equipment in system.Equipment)
+                foreach (TECEquipment equipment in system.Equipment)
                 {
                     linkTags(tags, equipment);
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         linkTags(tags, subScope);
-                        foreach(TECDevice device in subScope.Devices)
+                        foreach (TECDevice device in subScope.Devices)
                         {
                             linkTags(tags, device);
                         }
-                        foreach(TECPoint point in subScope.Points)
+                        foreach (TECPoint point in subScope.Points)
                         {
                             linkTags(tags, point);
                         }
                     }
                 }
             }
-            foreach(TECController controller in bid.Controllers)
+            foreach (TECController controller in bid.Controllers)
             {
                 linkTags(tags, controller);
             }
-            foreach(TECDevice device in bid.DeviceCatalog)
+            foreach (TECDevice device in bid.DeviceCatalog)
             {
                 linkTags(tags, device);
             }
@@ -3641,11 +3669,11 @@ namespace EstimatingUtilitiesLibrary
         static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
         {
             ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
-            foreach(TECTag tag in scope.Tags)
+            foreach (TECTag tag in scope.Tags)
             {
-                foreach(TECTag referenceTag in tags)
+                foreach (TECTag referenceTag in tags)
                 {
-                    if(tag.Guid == referenceTag.Guid)
+                    if (tag.Guid == referenceTag.Guid)
                     {
                         linkedTags.Add(referenceTag);
                     }
@@ -3656,11 +3684,11 @@ namespace EstimatingUtilitiesLibrary
 
         static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
         {
-            foreach(TECDevice device in devices)
+            foreach (TECDevice device in devices)
             {
-                foreach(TECConnectionType connectionType in connectionTypes)
+                foreach (TECConnectionType connectionType in connectionTypes)
                 {
-                    if(device.ConnectionType.Guid == connectionType.Guid)
+                    if (device.ConnectionType.Guid == connectionType.Guid)
                     {
                         device.ConnectionType = connectionType;
                     }
@@ -4166,41 +4194,337 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Generic Add Methods
-        private static void addObject(Object objectToAdd)
+        private static void addObject(params Object[] objectsToAdd)
         {
-            Type type = objectToAdd.GetType();
-            var relevantTables = new List<TableBase>();
-            foreach(TableBase table in AllTables.Tables)
+            var relevantTables = getRelevantTables(objectsToAdd);
+            Type type = objectsToAdd[0].GetType();
+            Type relationType = null;
+            if (objectsToAdd.Length == 2)
+            {
+                relationType = objectsToAdd[1].GetType();
+            }
+
+            foreach (TableBase table in relevantTables)
             {
                 var tableInfo = getTableInfo(table);
-                if(tableInfo.Item4 == type)
+                if (tableInfo.Item5 == null)
                 {
-                    relevantTables.Add(table);
+                    Console.WriteLine("Adding object");
+                    addObjectToTable(objectsToAdd[0], table);
                 }
-            }
-            foreach(TableBase table in relevantTables)
-            {
-                addObjectToTable(objectToAdd, table);
-            }
-            
-        }
+                else
+                {
+                    Console.WriteLine("Adding Relation");
+                    addObjectToRelationTable(objectsToAdd[0], objectsToAdd[1], table);
+                }
 
+            }
+
+        }
         private static void addObjectToTable(Object objectToAdd, TableBase table)
         {
             var tableInfo = getTableInfo(table);
             Type type = objectToAdd.GetType();
+            Console.WriteLine("Adding object of type " + type + " to table " + tableInfo.Item1);
+            var typedObject = objectToAdd;
 
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            foreach(TableField field in tableInfo.Item2)
+            foreach (TableField field in tableInfo.Item2)
             {
-                data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                if (field.Property == null)
+                {
+                    //throw new NotImplementedException();
+                }
+                else
+                {
+                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                }
             }
 
             if (!SQLiteDB.Insert(tableInfo.Item1, data))
             {
                 Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
             }
+        }
+        private static void addObjectToRelationTable(Object objectToAdd, Object relationToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+            Type relationType = relationToAdd.GetType();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            if (type == relationType)
+            {
+                data.Add(tableInfo.Item2[0].Name, tableInfo.Item2[0].Property.GetValue(objectToAdd, null).ToString());
+                data.Add(tableInfo.Item2[1].Name, tableInfo.Item2[1].Property.GetValue(relationToAdd, null).ToString());
+            }
+            else
+            {
+                foreach (TableField field in tableInfo.Item2)
+                {
+                    if (field.Property == null)
+                    {
+                        //throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        if (field.Property.ReflectedType == type)
+                        {
+                            Console.WriteLine("Model Type: " + type);
+                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                        }
+                        else if (field.Property.ReflectedType == relationType ||
+                            field.Property.ReflectedType == relationType.BaseType)
+                        {
+                            Console.WriteLine("Relation Type: " + relationType);
+                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                        }
+
+                    }
+
+                }
+            }
+            if (!SQLiteDB.Insert(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+            }
+        }
+
+        #endregion
+
+        #region Generic Remove Methods
+        private static void removeObject(params Object[] objectsToRemove)
+        {
+            var relevantTables = getRelevantTables(objectsToRemove);
+            Type type = objectsToRemove[0].GetType();
+            Type relationType = null;
+            if (objectsToRemove.Length == 2)
+            {
+                relationType = objectsToRemove[1].GetType();
+            }
+
+            foreach (TableBase table in relevantTables)
+            {
+                var tableInfo = getTableInfo(table);
+                if (tableInfo.Item5 == null)
+                {
+                    Console.WriteLine("Removing object");
+                    removeObjectFromTable(objectsToRemove[0], table);
+                }
+                else
+                {
+                    Console.WriteLine("Removing Relation");
+                    removeObjectFromRelationTable(objectsToRemove[0], objectsToRemove[1], table);
+                }
+
+            }
+
+        }
+
+        private static void removeObjectFromTable(Object objectToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+            Console.WriteLine("Remvoing object of type " + type + " from table " + tableInfo.Item1);
+            var typedObject = objectToAdd;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            foreach (TableField field in tableInfo.Item3)
+            {
+                if (field.Property == null)
+                {
+                    //throw new NotImplementedException();
+                }
+                else
+                {
+                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                }
+            }
+
+            if (!SQLiteDB.Delete(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't delete data from " + tableInfo.Item1 + " table.");
+            }
+        }
+        private static void removeObjectFromRelationTable(Object objectToAdd, Object relationToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+            Type relationType = relationToAdd.GetType();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            if (type == relationType)
+            {
+                data.Add(tableInfo.Item3[0].Name, tableInfo.Item2[0].Property.GetValue(objectToAdd, null).ToString());
+                data.Add(tableInfo.Item3[1].Name, tableInfo.Item2[1].Property.GetValue(relationToAdd, null).ToString());
+            }
+            else
+            {
+                foreach (TableField field in tableInfo.Item3)
+                {
+                    if (field.Property == null)
+                    {
+                        //throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        if (field.Property.ReflectedType == type)
+                        {
+                            Console.WriteLine("Model Type: " + type);
+                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                        }
+                        else if (field.Property.ReflectedType == relationType ||
+                            field.Property.ReflectedType == relationType.BaseType)
+                        {
+                            Console.WriteLine("Relation Type: " + relationType);
+                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                        }
+
+                    }
+
+                }
+            }
+            if (!SQLiteDB.Delete(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+            }
+        }
+
+        #endregion
+
+        #region Generic Edit Methods
+        private static void editObject(params Object[] objectsToAdd)
+        {
+            var relevantTables = getRelevantTables(objectsToAdd);
+            Type type = objectsToAdd[0].GetType();
+            Type relationType = null;
+            if (objectsToAdd.Length == 2)
+            {
+                relationType = objectsToAdd[1].GetType();
+            }
+
+            foreach (TableBase table in relevantTables)
+            {
+                var tableInfo = getTableInfo(table);
+                if (tableInfo.Item5 == null)
+                {
+                    Console.WriteLine("Adding object");
+                    editObjectInTable(objectsToAdd[0], table);
+                }
+                else
+                {
+                    Console.WriteLine("Adding Relation");
+                    editObjectInRelationTable(objectsToAdd[0], objectsToAdd[1], table);
+                }
+
+            }
+
+        }
+        private static void editObjectInTable(Object objectToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+            Console.WriteLine("Adding object of type " + type + " to table " + tableInfo.Item1);
+            var typedObject = objectToAdd;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            foreach (TableField field in tableInfo.Item2)
+            {
+                if (field.Property == null)
+                {
+                    //throw new NotImplementedException();
+                }
+                else
+                {
+                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                }
+            }
+
+            if (!SQLiteDB.Replace(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+            }
+        }
+        private static void editObjectInRelationTable(Object objectToAdd, Object relationToAdd, TableBase table)
+        {
+            var tableInfo = getTableInfo(table);
+            Type type = objectToAdd.GetType();
+            Type relationType = relationToAdd.GetType();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            if (type == relationType)
+            {
+                data.Add(tableInfo.Item2[0].Name, tableInfo.Item2[0].Property.GetValue(objectToAdd, null).ToString());
+                data.Add(tableInfo.Item2[1].Name, tableInfo.Item2[1].Property.GetValue(relationToAdd, null).ToString());
+            }
+            else
+            {
+                foreach (TableField field in tableInfo.Item2)
+                {
+                    if (field.Property == null)
+                    {
+                        //throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        if (field.Property.ReflectedType == type)
+                        {
+                            Console.WriteLine("Model Type: " + type);
+                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                        }
+                        else if (field.Property.ReflectedType == relationType ||
+                            field.Property.ReflectedType == relationType.BaseType)
+                        {
+                            Console.WriteLine("Relation Type: " + relationType);
+                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                        }
+
+                    }
+
+                }
+            }
+            if (!SQLiteDB.Replace(tableInfo.Item1, data))
+            {
+                Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+            }
+        }
+        #endregion
+
+        #region Generic Helper Methods
+        private static List<TableBase> getRelevantTables(params Object[] objectsToAdd)
+        {
+            var relevantTables = new List<TableBase>();
+
+            var objectToAdd = objectsToAdd[0];
+            Type type = objectToAdd.GetType();
+
+            Type relationType = null;
+            if (objectsToAdd.Length == 2)
+            {
+                relationType = objectsToAdd[1].GetType();
+            }
+
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = getTableInfo(table);
+
+                //if (tableInfo.Item4 == type && tableInfo.Item5 == relationType)
+                if ((tableInfo.Item4 == type && tableInfo.Item5 == null) ||
+                    (tableInfo.Item4 == relationType && tableInfo.Item5 == type) ||
+                    (tableInfo.Item4 == relationType.BaseType && tableInfo.Item5 == type))
+                {
+                    relevantTables.Add(table);
+                }
+            }
+
+            return relevantTables;
+
         }
 
         #endregion

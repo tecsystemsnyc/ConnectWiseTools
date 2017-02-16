@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary
 {
-    #region Table String Definitions
+    #region Table Definitions
     public class BidInfoTable : TableBase
     {
         public static new string TableName = "TECBidInfo";
@@ -395,7 +395,7 @@ namespace EstimatingUtilitiesLibrary
     public class ControllerTable : TableBase
     {
         public static new string TableName = "TECController";
-        public static new Type ModelType = typeof(TECConnection);
+        public static new Type ModelType = typeof(TECController);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ModelType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ModelType.GetProperty("Name"));
