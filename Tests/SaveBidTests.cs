@@ -128,7 +128,7 @@ namespace Tests
 
         #region Save Labor
         [TestMethod]
-        public void Save_Labor_PMCoef()
+        public void Save_Bid_Labor_PMCoef()
         {
             //Act
             double expectedPM = 0.123;
@@ -143,7 +143,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_PMRate()
+        public void Save_Bid_Labor_PMRate()
         {
             //Act
             double expectedRate = 564.05;
@@ -158,7 +158,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_PMExtraHours()
+        public void Save_Bid_Labor_PMExtraHours()
         {
             //Act
             double expectedHours = 457.69;
@@ -173,7 +173,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_ENGCoef()
+        public void Save_Bid_Labor_ENGCoef()
         {
             //Act
             double expectedENG = 0.123;
@@ -188,7 +188,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_ENGRate()
+        public void Save_Bid_Labor_ENGRate()
         {
             //Act
             double expectedRate = 564.05;
@@ -203,7 +203,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_ENGExtraHours()
+        public void Save_Bid_Labor_ENGExtraHours()
         {
             //Act
             double expectedHours = 457.69;
@@ -218,7 +218,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_CommCoef()
+        public void Save_Bid_Labor_CommCoef()
         {
             //Act
             double expectedComm = 0.123;
@@ -233,7 +233,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_CommRate()
+        public void Save_Bid_Labor_CommRate()
         {
             //Act
             double expectedRate = 564.05;
@@ -248,7 +248,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_CommExtraHours()
+        public void Save_Bid_Labor_CommExtraHours()
         {
             //Act
             double expectedHours = 457.69;
@@ -263,7 +263,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_SoftCoef()
+        public void Save_Bid_Labor_SoftCoef()
         {
             //Act
             double expectedSoft = 0.123;
@@ -278,7 +278,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_SoftRate()
+        public void Save_Bid_Labor_SoftRate()
         {
             //Act
             double expectedRate = 564.05;
@@ -293,7 +293,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_SoftExtraHours()
+        public void Save_Bid_Labor_SoftExtraHours()
         {
             //Act
             double expectedHours = 457.69;
@@ -308,7 +308,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_GraphCoef()
+        public void Save_Bid_Labor_GraphCoef()
         {
             //Act
             double expectedGraph = 0.123;
@@ -323,7 +323,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_GraphRate()
+        public void Save_Bid_Labor_GraphRate()
         {
             //Act
             double expectedRate = 564.05;
@@ -338,7 +338,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_GraphExtraHours()
+        public void Save_Bid_Labor_GraphExtraHours()
         {
             //Act
             double expectedHours = 457.69;
@@ -353,7 +353,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_ElecRate()
+        public void Save_Bid_Labor_ElecRate()
         {
             //Act
             double expectedRate = 0.123;
@@ -368,7 +368,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Labor_ElecSuperRate()
+        public void Save_Bid_Labor_ElecSuperRate()
         {
             //Act
             double expectedRate = 0.123;
