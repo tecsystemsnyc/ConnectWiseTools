@@ -24,6 +24,8 @@ namespace EstimatingLibrary
         }
         private bool _isProposed;
 
+        public Guid Guid { get { return Scope.Guid; } }
+
         public TECProposalScope(TECScope scope)
         {
             Scope = scope;
