@@ -126,7 +126,7 @@ namespace Tests
             double expectedElectricalRate = 7;
             double expectedElectricalSuperRate = 7.1;
             Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
-            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElecrticalSuperRate);
+            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate);
         }
 
         [TestMethod]

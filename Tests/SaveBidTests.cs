@@ -143,6 +143,36 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Labor_PMRate()
+        {
+            //Act
+            double expectedRate = 564.05;
+            bid.Labor.PMRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualbid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualbid.Labor.PMRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_PMExtraHours()
+        {
+            //Act
+            double expectedHours = 457.69;
+            bid.Labor.PMExtraHours = expectedHours;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualHours = actualBid.Labor.PMExtraHours;
+
+            //Assert
+            Assert.AreEqual(expectedHours, actualHours);
+        }
+
+        [TestMethod]
         public void Save_Labor_ENGCoef()
         {
             //Act
@@ -155,6 +185,36 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedENG, actualENG);
+        }
+
+        [TestMethod]
+        public void Save_Labor_ENGRate()
+        {
+            //Act
+            double expectedRate = 564.05;
+            bid.Labor.ENGRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualbid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualbid.Labor.ENGRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_ENGExtraHours()
+        {
+            //Act
+            double expectedHours = 457.69;
+            bid.Labor.ENGExtraHours = expectedHours;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualHours = actualBid.Labor.ENGExtraHours;
+
+            //Assert
+            Assert.AreEqual(expectedHours, actualHours);
         }
 
         [TestMethod]
@@ -173,6 +233,36 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Labor_CommRate()
+        {
+            //Act
+            double expectedRate = 564.05;
+            bid.Labor.CommRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualbid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualbid.Labor.CommRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_CommExtraHours()
+        {
+            //Act
+            double expectedHours = 457.69;
+            bid.Labor.CommExtraHours = expectedHours;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualHours = actualBid.Labor.CommExtraHours;
+
+            //Assert
+            Assert.AreEqual(expectedHours, actualHours);
+        }
+
+        [TestMethod]
         public void Save_Labor_SoftCoef()
         {
             //Act
@@ -185,6 +275,36 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSoft, actualSoft);
+        }
+
+        [TestMethod]
+        public void Save_Labor_SoftRate()
+        {
+            //Act
+            double expectedRate = 564.05;
+            bid.Labor.SoftRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualbid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualbid.Labor.SoftRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_SoftExtraHours()
+        {
+            //Act
+            double expectedHours = 457.69;
+            bid.Labor.SoftExtraHours = expectedHours;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualHours = actualBid.Labor.SoftExtraHours;
+
+            //Assert
+            Assert.AreEqual(expectedHours, actualHours);
         }
 
         [TestMethod]
@@ -203,6 +323,36 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Labor_GraphRate()
+        {
+            //Act
+            double expectedRate = 564.05;
+            bid.Labor.GraphRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualbid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualbid.Labor.GraphRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_GraphExtraHours()
+        {
+            //Act
+            double expectedHours = 457.69;
+            bid.Labor.GraphExtraHours = expectedHours;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualHours = actualBid.Labor.GraphExtraHours;
+
+            //Assert
+            Assert.AreEqual(expectedHours, actualHours);
+        }
+
+        [TestMethod]
         public void Save_Labor_ElecRate()
         {
             //Act
@@ -212,6 +362,21 @@ namespace Tests
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
             double actualRate = actualBid.Labor.ElectricalRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Labor_ElecSuperRate()
+        {
+            //Act
+            double expectedRate = 0.123;
+            bid.Labor.ElectricalSuperRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualBid.Labor.ElectricalSuperRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);

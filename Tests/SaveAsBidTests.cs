@@ -311,7 +311,7 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
-            Assert.AreEqual(expectedLabor.ElecrticalSuperRate, actualLabor.ElecrticalSuperRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
         }
 
         [TestMethod]

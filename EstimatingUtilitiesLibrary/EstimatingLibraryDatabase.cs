@@ -577,7 +577,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (refObject is TECBid)
                 {
-                    editBidInfo(refObject as TECBid);
+                    editLabor(tarObject as TECLabor);
+                }
+                else if (refObject is TECTemplates)
+                {
+                    throw new NullReferenceException();
                 }
             }
             else if (tarObject is TECSystem)
@@ -1283,7 +1287,7 @@ namespace EstimatingUtilitiesLibrary
             Dictionary<string, string> data = new Dictionary<string, string>();
 
             data.Add(SubcontractorConstantsTable.ElectricalRate.Name, labor.ElectricalRate.ToString());
-            data.Add(SubcontractorConstantsTable.ElectricalSuperRate.Name, labor.ElecrticalSuperRate.ToString());
+            data.Add(SubcontractorConstantsTable.ElectricalSuperRate.Name, labor.ElectricalSuperRate.ToString());
 
             if (!SQLiteDB.Insert(SubcontractorConstantsTable.TableName, data))
             {
@@ -2182,7 +2186,7 @@ namespace EstimatingUtilitiesLibrary
                     MessageBox.Show("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
 
                     labor.ElectricalRate = 115;
-                    labor.ElecrticalSuperRate = 125;
+                    labor.ElectricalSuperRate = 125;
 
                     return labor;
                 }
@@ -2193,7 +2197,7 @@ namespace EstimatingUtilitiesLibrary
                     try
                     {
                         labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble();
-                        labor.ElecrticalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble();
+                        labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble();
                     }
                     catch (Exception e)
                     {
@@ -2201,7 +2205,7 @@ namespace EstimatingUtilitiesLibrary
                         Console.WriteLine("Reading subcontractor values from database failed. Using default values.");
 
                         labor.ElectricalRate = 115;
-                        labor.ElecrticalSuperRate = 125;
+                        labor.ElectricalSuperRate = 125;
                     }
 
                     return labor;

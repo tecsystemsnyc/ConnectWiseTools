@@ -382,7 +382,7 @@ namespace EstimatingLibrary
         }
 
         private double _electricalSuperRate;
-        public double ElecrticalSuperRate
+        public double ElectricalSuperRate
         {
             get { return _electricalSuperRate; }
             set
