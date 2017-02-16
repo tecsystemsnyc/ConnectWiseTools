@@ -233,6 +233,8 @@ namespace EstimatingUtilitiesLibrary
                     addConnectionType(connectionType);
                 }
 
+                addUserAdjustments(bid);
+
             }
             catch (Exception e)
             {
@@ -997,6 +999,21 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECProposalScope child in propScope.Children)
             {
                 addFullProposalScope(child);
+            }
+        }
+
+        static private void addUserAdjustments(TECBid bid)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(UserAdjustmentsTable.PMExtraHours.Name, bid.Labor.PMExtraHours.ToString());
+            data.Add(UserAdjustmentsTable.ENGExtraHours.Name, bid.Labor.ENGExtraHours.ToString());
+            data.Add(UserAdjustmentsTable.CommExtraHours.Name, bid.Labor.CommExtraHours.ToString());
+            data.Add(UserAdjustmentsTable.SoftExtraHours.Name, bid.Labor.SoftExtraHours.ToString());
+            data.Add(UserAdjustmentsTable.GraphExtraHours.Name, bid.Labor.GraphExtraHours.ToString());
+
+            if (!SQLiteDB.Insert(UserAdjustmentsTable.TableName, data))
+            {
+                Console.WriteLine("Error: Couldn't add to TECUserAdjustments table.");
             }
         }
 
