@@ -419,10 +419,10 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECControllerTECIO";
         public static new Type ModelType = typeof(TECController);
         public static new Type RelationType = typeof(TECIO);
-
+      
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ModelType.GetProperty("Guid"));
         public static TableField IOType = new TableField("IOType", "TEXT", RelationType.GetProperty("Type"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ModelType.GetProperty("Quantity"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", RelationType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,

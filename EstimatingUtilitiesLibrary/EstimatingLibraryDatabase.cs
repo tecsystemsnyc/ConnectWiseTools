@@ -4255,7 +4255,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                    var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                    data.Add(field.Name, dataString);
                 }
             }
 
@@ -4290,13 +4291,15 @@ namespace EstimatingUtilitiesLibrary
                         if (field.Property.ReflectedType == type)
                         {
                             Console.WriteLine("Model Type: " + type);
-                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
                         else if (field.Property.ReflectedType == relationType ||
                             field.Property.ReflectedType == relationType.BaseType)
                         {
                             Console.WriteLine("Relation Type: " + relationType);
-                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(relationToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
 
                     }
@@ -4357,7 +4360,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                    var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                    data.Add(field.Name, dataString);
                 }
             }
 
@@ -4392,13 +4396,15 @@ namespace EstimatingUtilitiesLibrary
                         if (field.Property.ReflectedType == type)
                         {
                             Console.WriteLine("Model Type: " + type);
-                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
                         else if (field.Property.ReflectedType == relationType ||
                             field.Property.ReflectedType == relationType.BaseType)
                         {
                             Console.WriteLine("Relation Type: " + relationType);
-                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(relationToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
 
                     }
@@ -4458,12 +4464,12 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = getTableInfo(table);
                 if (tableInfo.Item5 == null)
                 {
-                    Console.WriteLine("Adding object");
+                    Console.WriteLine("Editing object");
                     editObjectInTable(objectsToAdd[0], table);
                 }
                 else
                 {
-                    Console.WriteLine("Adding Relation");
+                    Console.WriteLine("Editing Relation");
                     editObjectInRelationTable(objectsToAdd[0], objectsToAdd[1], table);
                 }
 
@@ -4487,7 +4493,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                    var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                    data.Add(field.Name, dataString);
                 }
             }
             if(data.Count > 0)
@@ -4525,13 +4532,15 @@ namespace EstimatingUtilitiesLibrary
                         if (field.Property.ReflectedType == type)
                         {
                             Console.WriteLine("Model Type: " + type);
-                            data.Add(field.Name, field.Property.GetValue(objectToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(objectToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
                         else if (field.Property.ReflectedType == relationType ||
                             field.Property.ReflectedType == relationType.BaseType)
                         {
                             Console.WriteLine("Relation Type: " + relationType);
-                            data.Add(field.Name, field.Property.GetValue(relationToAdd, null).ToString());
+                            var dataString = objectToDBString(field.Property.GetValue(relationToAdd, null));
+                            data.Add(field.Name, dataString);
                         }
 
                     }
@@ -4627,7 +4636,20 @@ namespace EstimatingUtilitiesLibrary
             return relevantTables;
 
         }
-
+        private static string objectToDBString(Object inObject)
+        {
+            string outstring = "";
+            if(inObject is bool)
+            {
+                outstring = ((bool)inObject).ToInt().ToString();
+            }
+            else
+            {
+                outstring = inObject.ToString();
+            }
+            
+            return outstring;
+        }
         #endregion
     }
 
