@@ -65,6 +65,10 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("DueDate", temp, this);
             }
         }
+        public string DueDateString
+        {
+            get { return _dueDate.ToString("O"); }
+        }
         public string Salesperson
         {
             get { return _salesperson; }
