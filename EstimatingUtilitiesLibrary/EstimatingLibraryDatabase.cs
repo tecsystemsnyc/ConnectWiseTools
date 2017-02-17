@@ -4005,6 +4005,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
+        //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>>
         static private Tuple<string, List<TableField>, List<TableField>, List<Type>> getTableInfo(TableBase table)
         {
             string tableName = "";
@@ -4216,6 +4217,7 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Add Methods
         private static void addObject(params Object[] objectsToAdd)
         {
+            //ObjectsToAdd = [targetObject, referenceObject];
             var relevantTables = getRelevantTablesToAdd(objectsToAdd);
             
             foreach (TableBase table in relevantTables)
@@ -4267,6 +4269,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in AllTables.Tables)
             {
                 var tableInfo = getTableInfo(table);
+
+                //TableInfo.Item4 = List<TableType>
                 if (sharesAllTypes(objectTypes, tableInfo.Item4))
                 { relevantTables.Add(table); }
             }
