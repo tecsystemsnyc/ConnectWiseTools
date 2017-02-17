@@ -4230,9 +4230,19 @@ namespace EstimatingUtilitiesLibrary
         private static void addObjectToTable(TableBase table, params Object[] objectsToAdd)
         {
             var tableInfo = getTableInfo(table);
-
+            object childObject = null;
+            object parentObject = null;
+            bool isHierarchial = false;
+            
             Dictionary<string, string> data = new Dictionary<string, string>();
+            if (objectsToAdd.Length == 2 && objectsToAdd[0].GetType() == objectsToAdd[1].GetType())
+            {
+                childObject = objectsToAdd[0];
+                parentObject= objectsToAdd[1];
+                isHierarchial = true;
+            }
 
+            int currentFieldIndex = 0;
             foreach (TableField field in tableInfo.Item2)
             {
                 if (field.Property == null)
@@ -4241,17 +4251,38 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    foreach(Object item in objectsToAdd)
+
+                    foreach (Object item in objectsToAdd)
                     {
                         if (field.Property.ReflectedType == item.GetType())
                         {
+                            object relevantObject = null;
                             Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
-                            var dataString = objectToDBString(field.Property.GetValue(item, null));
+                            if (isHierarchial)
+                            {
+                                if(currentFieldIndex == 0)
+                                {
+                                    relevantObject = parentObject;
+                                } else if (currentFieldIndex == 1)
+                                {
+                                    relevantObject = childObject;
+                                }
+                                
+                            }else
+                            {
+                                relevantObject = item;
+                            }
+                            var dataString = objectToDBString(field.Property.GetValue(relevantObject, null));
                             data.Add(field.Name, dataString);
                         }
+                        
                     }
+                    currentFieldIndex++;
                 }
             }
+         
+
+            
             if(data.Count > 0)
             {
                 if (!SQLiteDB.Insert(tableInfo.Item1, data))
@@ -4271,7 +4302,8 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = getTableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                if (sharesAllTypes(objectTypes, tableInfo.Item4))
+                if (sharesAllTypes(objectTypes, tableInfo.Item4) || 
+                    hasOnlyTypes(objectTypes[0], tableInfo.Item4))
                 { relevantTables.Add(table); }
             }
 
@@ -4495,6 +4527,19 @@ namespace EstimatingUtilitiesLibrary
                     {
                         doesShare = false;
                     }
+                }
+            }
+            return doesShare;
+        }
+
+        private static bool hasOnlyTypes(Type primaryType, List<Type> list2)
+        {
+            bool doesShare = false;
+            if(list2.Count == 1)
+            {
+                if(primaryType == list2[0])
+                {
+                    doesShare = true;
                 }
             }
             return doesShare;
