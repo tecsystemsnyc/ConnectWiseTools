@@ -4243,7 +4243,25 @@ namespace EstimatingUtilitiesLibrary
             int currentFieldIndex = 0;
             foreach (TableField field in tableInfo.Item2)
             {
-                if (field.Property == null)
+                if (isHierarchial)
+                {
+                    object relevantObject = null;
+
+                    if(currentFieldIndex == 0)
+                    {
+                        relevantObject = parentObject;
+                    }
+                    else
+                    {
+                        relevantObject = childObject;
+                    }
+                    Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + relevantObject.GetType());
+
+                    var dataString = objectToDBString(field.Property.GetValue(relevantObject, null));
+                    data.Add(field.Name, dataString);
+
+                }
+                else if (field.Property == null)
                 {
                     //throw new NotImplementedException();
                 }
@@ -4254,29 +4272,14 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if (field.Property.ReflectedType == item.GetType())
                         {
-                            object relevantObject = null;
                             Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
-                            if (isHierarchial)
-                            {
-                                if(currentFieldIndex == 0)
-                                {
-                                    relevantObject = parentObject;
-                                } else if (currentFieldIndex == 1)
-                                {
-                                    relevantObject = childObject;
-                                }
-                                
-                            }else
-                            {
-                                relevantObject = item;
-                            }
-                            var dataString = objectToDBString(field.Property.GetValue(relevantObject, null));
+                            var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
                         
                     }
-                    currentFieldIndex++;
                 }
+                currentFieldIndex++;
             }
          
 
