@@ -4292,6 +4292,8 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
+
+
         private static List<TableBase> getRelevantTablesToAdd(params Object[] objectsToAdd)
         {
             var relevantTables = new List<TableBase>();
