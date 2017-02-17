@@ -1005,6 +1005,7 @@ namespace EstimatingUtilitiesLibrary
         static private void addUserAdjustments(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add(UserAdjustmentsTable.BidID.Name, bid.InfoGuid.ToString());
             data.Add(UserAdjustmentsTable.PMExtraHours.Name, bid.Labor.PMExtraHours.ToString());
             data.Add(UserAdjustmentsTable.ENGExtraHours.Name, bid.Labor.ENGExtraHours.ToString());
             data.Add(UserAdjustmentsTable.CommExtraHours.Name, bid.Labor.CommExtraHours.ToString());
