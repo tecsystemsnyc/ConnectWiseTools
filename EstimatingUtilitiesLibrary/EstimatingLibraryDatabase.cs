@@ -4241,7 +4241,7 @@ namespace EstimatingUtilitiesLibrary
                         if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
                         var dataString = objectToDBString(field.Property.GetValue(item, null));
                         data.Add(field.Name, dataString);
-                    } else if(field.Property.Name == "Quantity")
+                    } else if(field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
                         data.Add(field.Name, dataString);
