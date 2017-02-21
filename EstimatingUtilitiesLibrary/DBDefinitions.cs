@@ -16,14 +16,14 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField DBVersion = new TableField("DBVersion", "TEXT", null);
         public static TableField BidName = new TableField("BidName", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField BidInfoID = new TableField("BidInfoID", "TEXT", ObjectType.GetProperty("InfoGuid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField BidNumber = new TableField("BidNumber", "TEXT", ObjectType.GetProperty("BidNumber"));
         public static TableField DueDate = new TableField("DueDate", "TEXT", ObjectType.GetProperty("DueDateString"));
         public static TableField Salesperson = new TableField("Salesperson", "TEXT", ObjectType.GetProperty("Salesperson"));
         public static TableField Estimator = new TableField("Estimator", "TEXT", ObjectType.GetProperty("Estimator"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            BidInfoID
+            BidID
         };
 
         public static new List<Type> Types = new List<Type>() {
@@ -36,12 +36,12 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECTemplatesInfo";
         public static Type ObjectType = typeof(TECTemplates);
 
-        public static TableField TemplatesInfoID = new TableField("TemplatesInfoID", "TEXT", ObjectType.GetProperty("InfoGuid"));
+        public static TableField TemplateID = new TableField("TemplateID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField DBVersion = new TableField("DBVersion", "TEXT", null);
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            TemplatesInfoID
+            TemplateID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -55,7 +55,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECLabor);
         public static  Type ReferenceType = typeof(TECBid);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("InfoGuid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static TableField PMCoef = new TableField("PMCoef", "REAL", ObjectType.GetProperty("PMCoef"));
         public static TableField PMRate = new TableField("PMRate", "REAL", ObjectType.GetProperty("PMRate"));
@@ -89,7 +89,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECLabor);
         public static  Type ReferenceType = typeof(TECBid);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("InfoGuid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", ObjectType.GetProperty("ElectricalRate"));
         public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", ObjectType.GetProperty("ElectricalSuperRate"));
@@ -111,7 +111,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECBid);
         public static Type ReferenceType = typeof(TECLabor);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("InfoGuid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", ObjectType.GetProperty("PMExtraHours"));
         public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", ObjectType.GetProperty("ENGExtraHours"));
