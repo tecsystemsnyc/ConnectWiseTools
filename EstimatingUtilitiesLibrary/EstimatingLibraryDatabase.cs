@@ -4248,17 +4248,17 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TableField field in tableInfo.Item2)
                 //tableInfo.Item2 = AllTableFields;
                 {
+                    if (field.Property.Name == "Index")
+                    {
+                        var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
+                        data.Add(field.Name, dataString);
+                    }
                     foreach (Object item in objectsToAdd)
                     {
                         if(field.Property.ReflectedType == item.GetType())
                         {
                             Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-                        else if (field.Property.Name == "Index")
-                        {
-                            var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
                             data.Add(field.Name, dataString);
                         }
 
