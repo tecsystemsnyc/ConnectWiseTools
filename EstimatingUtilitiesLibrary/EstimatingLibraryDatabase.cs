@@ -176,7 +176,7 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECScopeBranch branch in bid.ScopeTree)
                 {
                     addScopeTree(branch);
-                    addScopeBranchBidRelation(branch, bid.InfoGuid);
+                    addScopeBranchBidRelation(branch, bid.Guid);
                 }
 
                 foreach (TECNote note in bid.Notes)
@@ -912,7 +912,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
+            data.Add(BidInfoTable.BidInfoID.Name, bid.Guid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
             data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
@@ -1006,7 +1006,7 @@ namespace EstimatingUtilitiesLibrary
         static private void addUserAdjustments(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(UserAdjustmentsTable.BidID.Name, bid.InfoGuid.ToString());
+            data.Add(UserAdjustmentsTable.BidID.Name, bid.Guid.ToString());
             data.Add(UserAdjustmentsTable.PMExtraHours.Name, bid.Labor.PMExtraHours.ToString());
             data.Add(UserAdjustmentsTable.ENGExtraHours.Name, bid.Labor.ENGExtraHours.ToString());
             data.Add(UserAdjustmentsTable.CommExtraHours.Name, bid.Labor.CommExtraHours.ToString());
@@ -1287,7 +1287,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            data.Add(LaborConstantsTable.BidID.Name, bid.InfoGuid.ToString());
+            data.Add(LaborConstantsTable.BidID.Name, bid.Guid.ToString());
 
             data.Add(LaborConstantsTable.PMCoef.Name, labor.PMCoef.ToString());
             data.Add(LaborConstantsTable.PMRate.Name, labor.PMRate.ToString());
@@ -1314,7 +1314,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            data.Add(SubcontractorConstantsTable.BidID.Name, bid.InfoGuid.ToString());
+            data.Add(SubcontractorConstantsTable.BidID.Name, bid.Guid.ToString());
 
             data.Add(SubcontractorConstantsTable.ElectricalRate.Name, labor.ElectricalRate.ToString());
             data.Add(SubcontractorConstantsTable.ElectricalSuperRate.Name, labor.ElectricalSuperRate.ToString());
@@ -1503,7 +1503,7 @@ namespace EstimatingUtilitiesLibrary
         static private void editBidInfo(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(BidInfoTable.BidInfoID.Name, bid.InfoGuid.ToString());
+            data.Add(BidInfoTable.BidInfoID.Name, bid.Guid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
             data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
@@ -4002,7 +4002,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     var infoBid = getBidInfo();
                     commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + BidInfoTable.BidInfoID.Name + " = '" + infoBid.InfoGuid.ToString() + "'";
+                    commandString += "where " + BidInfoTable.BidInfoID.Name + " = '" + infoBid.Guid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
                 else
@@ -4250,18 +4250,18 @@ namespace EstimatingUtilitiesLibrary
                 {
                     foreach (Object item in objectsToAdd)
                     {
-                        if (field.Property.Name == "Index")
-                        {
-                            var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
-                            data.Add(field.Name, dataString);
-                        }
-                        else if(field.Property.ReflectedType == item.GetType())
+                        if(field.Property.ReflectedType == item.GetType())
                         {
                             Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
-                         
+                        else if (field.Property.Name == "Index")
+                        {
+                            var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
+                            data.Add(field.Name, dataString);
+                        }
+
                     }
                 }
                 if (data.Count > 0)

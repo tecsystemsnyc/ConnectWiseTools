@@ -16,7 +16,7 @@ namespace EstimatingLibrary
         private DateTime _dueDate;
         private string _salesperson;
         private string _estimator;
-        private Guid _infoGuid;
+        private Guid _guid;
         private TECLabor _labor;
         private TECBidParameters _parameters;
 
@@ -89,9 +89,9 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Estimator", temp, this);
             }
         }
-        public Guid InfoGuid
+        public Guid Guid
         {
-            get { return _infoGuid; }
+            get { return _guid; }
         }
 
         public TECLabor Labor
@@ -350,7 +350,7 @@ namespace EstimatingLibrary
             ObservableCollection<TECNote> notes, 
             ObservableCollection<TECExclusion> exclusions,
             ObservableCollection<TECTag> tags, 
-            Guid infoGuid)
+            Guid guid)
         {
             _name = name;
             _bidNumber = bidNumber;
@@ -364,7 +364,7 @@ namespace EstimatingLibrary
             _notes = notes;
             _exclusions = exclusions;
             _tags = tags;
-            _infoGuid = infoGuid;
+            _guid = guid;
             _labor = new TECLabor();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
@@ -672,7 +672,7 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             TECBid bid = new TECBid(this);
-            bid._infoGuid = InfoGuid;
+            bid._guid = Guid;
             return bid;
         }
         
