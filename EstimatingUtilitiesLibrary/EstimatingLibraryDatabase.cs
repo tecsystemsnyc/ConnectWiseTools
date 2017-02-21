@@ -912,7 +912,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            data.Add(BidInfoTable.BidInfoID.Name, bid.Guid.ToString());
+            data.Add(BidInfoTable.BidID.Name, bid.Guid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
             data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
@@ -928,7 +928,7 @@ namespace EstimatingUtilitiesLibrary
         static private void addTemplatesInfo(TECTemplates templates)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(TemplatesInfoTable.TemplatesInfoID.Name, templates.InfoGuid.ToString());
+            data.Add(TemplatesInfoTable.TemplateID.Name, templates.InfoGuid.ToString());
             data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
 
             if (!SQLiteDB.Insert(TemplatesInfoTable.TableName, data))
@@ -1518,7 +1518,7 @@ namespace EstimatingUtilitiesLibrary
         static private void editBidInfo(TECBid bid)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(BidInfoTable.BidInfoID.Name, bid.Guid.ToString());
+            data.Add(BidInfoTable.BidID.Name, bid.Guid.ToString());
             data.Add(BidInfoTable.BidName.Name, bid.Name);
             data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
             data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
@@ -2275,7 +2275,7 @@ namespace EstimatingUtilitiesLibrary
             }
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(bidInfoRow[TemplatesInfoTable.TemplatesInfoID.Name].ToString());
+            Guid infoGuid = new Guid(bidInfoRow[TemplatesInfoTable.TemplateID.Name].ToString());
 
             return new TECTemplates(infoGuid);
         }
@@ -3871,7 +3871,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Dictionary<string, string> Data = new Dictionary<string, string>();
             Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            Data.Add(TemplatesInfoTable.TemplatesInfoID.Name, Guid.NewGuid().ToString());
+            Data.Add(TemplatesInfoTable.TemplateID.Name, Guid.NewGuid().ToString());
             SQLiteDB.Insert(TemplatesInfoTable.TableName, Data);
         }
 
@@ -4018,14 +4018,14 @@ namespace EstimatingUtilitiesLibrary
                 {
                     var infoBid = getBidInfo();
                     commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + BidInfoTable.BidInfoID.Name + " = '" + infoBid.Guid.ToString() + "'";
+                    commandString += "where " + BidInfoTable.BidID.Name + " = '" + infoBid.Guid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
                 else
                 {
                     var infoTemplates = getTemplatesInfo();
                     commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + TemplatesInfoTable.TemplatesInfoID.Name + " = '" + infoTemplates.InfoGuid.ToString() + "'";
+                    commandString += "where " + TemplatesInfoTable.TemplateID.Name + " = '" + infoTemplates.InfoGuid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
             }
