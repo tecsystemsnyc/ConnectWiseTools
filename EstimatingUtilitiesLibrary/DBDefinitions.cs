@@ -633,24 +633,29 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SystemIndexTable : TableBase
+    public class BidSystemTable : TableBase
     {
-        public static new string TableName = "TECSystemIndex";
-        public static Type ObjectType = typeof(TECSystem);
-        public static Type ReferenceType = typeof(TECBid);
+        public static new string TableName = "TECBidTECSystem";
+        public static Type SystemType = typeof(TECSystem);
+        public static Type BidType = typeof(TECBid);
+
         public static Type Helpers = typeof(HelperProperties);
 
-        public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
+     
         public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            SystemID
+            SystemID,
+            BidID
         };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            SystemType,
+            BidType
         };
     }
     public class SystemEquipmentTable : TableBase

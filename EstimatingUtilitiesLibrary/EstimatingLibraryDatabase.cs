@@ -4229,6 +4229,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void addObjectToTable(TableBase table, params Object[] objectsToAdd)
         {
+            //ObjectsToAdd = [targetObject, referenceObject];
             var tableInfo = getTableInfo(table);
             object childObject = null;
             object parentObject = null;
@@ -4244,6 +4245,7 @@ namespace EstimatingUtilitiesLibrary
 
             int currentFieldIndex = 0;
             foreach (TableField field in tableInfo.Item2)
+                //tableInfo.Item2 = AllTableFields;
             {
                 if (isHierarchial)
                 {
