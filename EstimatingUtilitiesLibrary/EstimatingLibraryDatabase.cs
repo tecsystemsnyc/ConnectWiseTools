@@ -4265,8 +4265,9 @@ namespace EstimatingUtilitiesLibrary
                     data.Add(field.Name, dataString);
 
                 }
-                else if (field.Property == null)
+                else if (field.Property.Name == "Index")
                 {
+                    updateRelationIndices(objectsToAdd[0], objectsToAdd[1]);
                     //throw new NotImplementedException();
                 }
                 else
@@ -4296,6 +4297,16 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             
+        }
+
+        private static void updateRelationIndices(Object parentObject, Object childObject)
+        {
+            Type parnetType = parentObject.GetType();
+            foreach (var p in parnetType.GetFields(BindingFlags.Public))
+            {
+                Console.WriteLine(p);
+            }
+
         }
 
 
