@@ -641,11 +641,10 @@ namespace EstimatingUtilitiesLibrary
 
         public static Type Helpers = typeof(HelperProperties);
         
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
         
-
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             SystemID,
@@ -1061,7 +1060,10 @@ namespace EstimatingUtilitiesLibrary
     {
         public bool Index;
 
-        public HelperProperties() { }
+        public HelperProperties()
+        {
+            Index = true;
+        }
 
     }
     #endregion
