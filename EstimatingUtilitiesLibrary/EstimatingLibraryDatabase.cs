@@ -2012,10 +2012,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSystem system in systems)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(SystemIndexTable.SystemID.Name, system.Guid.ToString());
-                data.Add(SystemIndexTable.Index.Name, i.ToString());
+                data.Add(BidSystemTable.SystemID.Name, system.Guid.ToString());
+                data.Add(BidSystemTable.Index.Name, i.ToString());
 
-                if (!SQLiteDB.Replace(SystemIndexTable.TableName, data))
+                if (!SQLiteDB.Replace(BidSystemTable.TableName, data))
                 {
                     Console.WriteLine("Error: Couldn't add system to TECSystemIndex table");
                 }

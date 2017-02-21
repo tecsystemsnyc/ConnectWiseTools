@@ -922,7 +922,7 @@ namespace EstimatingUtilitiesLibrary
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
-            new SystemIndexTable(),
+            new BidSystemTable(),
             new SystemEquipmentTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),
@@ -973,7 +973,6 @@ namespace EstimatingUtilitiesLibrary
             new ControllerIOTypeTable(),
             new ScopeConnectionTable(),
             new DeviceManufacturerTable(),
-            new SystemIndexTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable()
         };
@@ -1015,7 +1014,7 @@ namespace EstimatingUtilitiesLibrary
             new ControllerConnectionTable(),
             new ScopeConnectionTable(),
             new ScopeBranchHierarchyTable(),
-            new SystemIndexTable(),
+            new BidSystemTable(),
             new SystemEquipmentTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),
