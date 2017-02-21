@@ -2146,7 +2146,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECBid getBidInfo()
         {
-            DataTable bidInfoDT = SQLiteDB.getDataFromTable("TECBidInfo");
+            DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
 
             if (bidInfoDT.Rows.Count < 1)
             {
@@ -2155,15 +2155,15 @@ namespace EstimatingUtilitiesLibrary
             }
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(bidInfoRow["BidInfoID"].ToString());
-            string name = bidInfoRow["BidName"].ToString();
-            string bidNumber = bidInfoRow["BidNumber"].ToString();
+            Guid infoGuid = new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString());
+            string name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
+            string bidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
 
-            string dueDateString = bidInfoRow["DueDate"].ToString();
+            string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
             DateTime dueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
 
-            string salesperson = bidInfoRow["Salesperson"].ToString();
-            string estimator = bidInfoRow["Estimator"].ToString();
+            string salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
+            string estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
 
             return new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
         }

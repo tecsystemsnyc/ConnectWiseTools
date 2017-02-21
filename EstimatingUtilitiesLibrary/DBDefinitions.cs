@@ -191,7 +191,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECScopeBranch);
         public static Type ReferenceType = typeof(TECBid);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("InfoGuid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
