@@ -4273,9 +4273,13 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = getTableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                if (sharesAllTypes(objectTypes, tableInfo.Item4) || 
-                    hasOnlyTypes(objectTypes[0], tableInfo.Item4))
-                { relevantTables.Add(table); }
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
+
+                if (allTypesMatch || tableHasOnlyType)
+                {
+                    relevantTables.Add(table);
+                }
             }
 
             return relevantTables;
@@ -4533,21 +4537,21 @@ namespace EstimatingUtilitiesLibrary
 
         private static bool sharesAllTypes(List<Type> list1, List<Type> list2)
         {
-            bool doesShare = true;
+            var numMatch = 0;
             foreach (Type type in list1)
             {
                 foreach (Type otherType in list2)
                 {
-                    if (type != otherType)
+                    if (type == otherType)
                     {
-                        doesShare = false;
+                        numMatch++;
                     }
                 }
             }
-            return doesShare;
+            return ((numMatch == list1.Count) && (numMatch == list2.Count));
         }
 
-        private static bool hasOnlyTypes(Type primaryType, List<Type> list2)
+        private static bool hasOnlyType(Type primaryType, List<Type> list2)
         {
             bool doesShare = false;
             if(list2.Count == 1)
