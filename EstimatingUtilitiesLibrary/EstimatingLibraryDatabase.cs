@@ -4005,44 +4005,6 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>>
-        static private Tuple<string, List<TableField>, List<TableField>, List<Type>> getTableInfo(TableBase table)
-        {
-            string tableName = "";
-            List<TableField> primaryKey = new List<TableField>();
-            List<TableField> fields = new List<TableField>();
-            List<Type> types = new List<Type>();
-            var tableType = table.GetType();
-
-            foreach (var p in tableType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-            {
-                if (p.Name == "TableName")
-                {
-                    var v = p.GetValue(null);
-                    tableName += (string)v;
-                }
-                else if (p.Name == "PrimaryKey")
-                {
-                    var v = p.GetValue(null) as List<TableField>;
-                    foreach (TableField field in v)
-                    { primaryKey.Add(field); }
-                }
-                else if (p.Name == "Types")
-                {
-                    var v = p.GetValue(null) as List<Type>;
-                    foreach (Type type in v)
-                    { types.Add(type); }
-                }
-                else if(p.FieldType.Name == "TableField")
-                {
-                    var v = p.GetValue(null) as TableField;
-                    fields.Add(v);
-                }
-                
-            }
-
-            return Tuple.Create<string, List<TableField>, List<TableField>, List<Type>>(tableName, fields, primaryKey, types);
-        }
         #endregion
 
         #region Backup Methods
@@ -4223,6 +4185,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = getTableInfo(table);
+                if (tableInfo.Item5)
+                {
+                    updateRelation(table, objectsToAdd);
+                }
                 addObjectToTable(table, objectsToAdd);
             }
 
@@ -4231,48 +4197,44 @@ namespace EstimatingUtilitiesLibrary
         {
             //ObjectsToAdd = [targetObject, referenceObject];
             var tableInfo = getTableInfo(table);
-            object childObject = null;
-            object parentObject = null;
-            bool isHierarchial = false;
             
             Dictionary<string, string> data = new Dictionary<string, string>();
-            if (objectsToAdd.Length == 2 && objectsToAdd[0].GetType() == objectsToAdd[1].GetType())
-            {
-                childObject = objectsToAdd[0];
-                parentObject= objectsToAdd[1];
-                isHierarchial = true;
-            }
 
-            int currentFieldIndex = 0;
             foreach (TableField field in tableInfo.Item2)
                 //tableInfo.Item2 = AllTableFields;
             {
-                if (isHierarchial)
+                foreach (Object item in objectsToAdd)
                 {
-                    object relevantObject = null;
-
-                    if(currentFieldIndex == 0)
+                    if (field.Property.ReflectedType == item.GetType())
                     {
-                        relevantObject = parentObject;
+                        Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
+                        var dataString = objectToDBString(field.Property.GetValue(item, null));
+                        data.Add(field.Name, dataString);
                     }
-                    else
-                    {
-                        relevantObject = childObject;
-                    }
-                    Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + relevantObject.GetType());
-
-                    var dataString = objectToDBString(field.Property.GetValue(relevantObject, null));
-                    data.Add(field.Name, dataString);
-
                 }
-                else if (field.Property.Name == "Index")
+            }
+         
+            if(data.Count > 0)
+            {
+                if (!SQLiteDB.Insert(tableInfo.Item1, data))
                 {
-                    updateRelationIndices(objectsToAdd[0], objectsToAdd[1]);
-                    //throw new NotImplementedException();
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
                 }
-                else
-                {
+            }
+        }
 
+        private static void updateRelation(TableBase table, params Object[] objectsToAdd)
+        {
+            var childType = objectsToAdd[0].GetType();
+            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]) as IList<TECObject>;
+            var tableInfo = getTableInfo(table);
+            
+            foreach(TECObject child in childrenCollection)
+            {
+                Dictionary<string, string> data = new Dictionary<string, string>();
+                foreach (TableField field in tableInfo.Item2)
+                //tableInfo.Item2 = AllTableFields;
+                {
                     foreach (Object item in objectsToAdd)
                     {
                         if (field.Property.ReflectedType == item.GetType())
@@ -4281,32 +4243,23 @@ namespace EstimatingUtilitiesLibrary
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
-                        
+                        else if (field.Property.Name == "Index")
+                        {
+                            var dataString = objectToDBString(childrenCollection.IndexOf(child));
+                            data.Add(field.Name, dataString);
+                        }
+
                     }
                 }
-                currentFieldIndex++;
-            }
-         
-
-            
-            if(data.Count > 0)
-            {
-                if (!SQLiteDB.Insert(tableInfo.Item1, data))
+                if (data.Count > 0)
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                    if (!SQLiteDB.Replace(tableInfo.Item1, data))
+                    {
+                        Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                    }
                 }
             }
             
-        }
-
-        private static void updateRelationIndices(Object parentObject, Object childObject)
-        {
-            Type parnetType = parentObject.GetType();
-            foreach (var p in parnetType.GetFields(BindingFlags.Public))
-            {
-                Console.WriteLine(p);
-            }
-
         }
 
 
@@ -4490,6 +4443,50 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Generic Helper Methods
+            
+        //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>, isRelationTable>
+        static private Tuple<string, List<TableField>, List<TableField>, List<Type>, bool> getTableInfo(TableBase table)
+        {
+            string tableName = "";
+            List<TableField> primaryKey = new List<TableField>();
+            List<TableField> fields = new List<TableField>();
+            List<Type> types = new List<Type>();
+            var tableType = table.GetType();
+            bool isRelationTable = false;
+            if (tableType == typeof(RelationTableBase))
+            {
+                isRelationTable = true;
+            }
+
+            foreach (var p in tableType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                if (p.Name == "TableName")
+                {
+                    var v = p.GetValue(null);
+                    tableName += (string)v;
+                }
+                else if (p.Name == "PrimaryKey")
+                {
+                    var v = p.GetValue(null) as List<TableField>;
+                    foreach (TableField field in v)
+                    { primaryKey.Add(field); }
+                }
+                else if (p.Name == "Types")
+                {
+                    var v = p.GetValue(null) as List<Type>;
+                    foreach (Type type in v)
+                    { types.Add(type); }
+                }
+                else if (p.FieldType.Name == "TableField")
+                {
+                    var v = p.GetValue(null) as TableField;
+                    fields.Add(v);
+                }
+
+            }
+
+            return Tuple.Create<string, List<TableField>, List<TableField>, List<Type>, bool>(tableName, fields, primaryKey, types, isRelationTable);
+        }
 
         private static string objectToDBString(Object inObject)
         {
@@ -4562,6 +4559,24 @@ namespace EstimatingUtilitiesLibrary
             }
             return doesShare;
         }
+
+        private static object getChildCollection(object childObject, object parentObject)
+        {
+
+            Type wantedType = childObject.GetType();
+
+            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
+            {
+
+                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { wantedType }))
+                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
+
+            }
+
+            return null;
+
+        }
+
         #endregion
     }
 
