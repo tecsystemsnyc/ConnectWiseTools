@@ -171,7 +171,7 @@ namespace EstimatingUtilitiesLibrary
 
                 addSubContractorConsts(bid.Labor, bid);
 
-                addFullSystems(bid.Systems);
+                addFullBidSystems(bid);
 
                 foreach (TECScopeBranch branch in bid.ScopeTree)
                 {
@@ -265,7 +265,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 addTemplatesInfo(templates);
                 addTags(templates.Tags);
-                addFullSystems(templates.SystemTemplates);
+                addFullTemplateSystems(templates);
                 foreach (TECEquipment equipment in templates.EquipmentTemplates)
                 {
                     addFullEquipment(equipment);
@@ -937,10 +937,25 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        static private void addFullSystems(ObservableCollection<TECSystem> systems)
+        static private void addFullBidSystems(TECBid bid)
         {
-            updateSystemIndexes(systems);
-            foreach (TECSystem system in systems)
+            updateBidSystemRelation(bid);
+            foreach (TECSystem system in bid.Systems)
+            {
+                addTagsInScope(system.Tags, system.Guid);
+                addLocationInScope(system);
+                addSystem(system);
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    addFullEquipment(equip);
+                }
+                updateSystemEquipmentRelation(system);
+            }
+        }
+
+        static private void addFullTemplateSystems(TECTemplates templates)
+        {
+            foreach (TECSystem system in templates.SystemTemplates)
             {
                 addTagsInScope(system.Tags, system.Guid);
                 addLocationInScope(system);
@@ -2007,12 +2022,13 @@ namespace EstimatingUtilitiesLibrary
 
         #region Update Relations/Order
 
-        static private void updateSystemIndexes(ObservableCollection<TECSystem> systems)
+        static private void updateBidSystemRelation(TECBid bid)
         {
             int i = 0;
-            foreach (TECSystem system in systems)
+            foreach (TECSystem system in bid.Systems)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add(BidSystemTable.BidID.Name, bid.Guid.ToString());
                 data.Add(BidSystemTable.SystemID.Name, system.Guid.ToString());
                 data.Add(BidSystemTable.Index.Name, i.ToString());
 
