@@ -638,9 +638,10 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECSystemIndex";
         public static Type ObjectType = typeof(TECSystem);
         public static Type ReferenceType = null;
+        public static Type Helpers = typeof(HelperProperties);
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", null);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -1051,5 +1052,9 @@ namespace EstimatingUtilitiesLibrary
         }
     }
     
+    public class HelperProperties
+    {
+        public bool Index;
+    }
     #endregion
 }
