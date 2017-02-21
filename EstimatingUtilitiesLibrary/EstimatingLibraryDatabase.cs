@@ -12,6 +12,7 @@ using System.IO;
 using System.Windows;
 using System.Drawing;
 using System.Reflection;
+using System.Collections;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -4188,8 +4189,11 @@ namespace EstimatingUtilitiesLibrary
                 if (tableInfo.Item5)
                 {
                     updateRelation(table, objectsToAdd);
+                }else
+                {
+                    addObjectToTable(table, objectsToAdd);
                 }
-                addObjectToTable(table, objectsToAdd);
+                
             }
 
         }
@@ -4226,10 +4230,10 @@ namespace EstimatingUtilitiesLibrary
         private static void updateRelation(TableBase table, params Object[] objectsToAdd)
         {
             var childType = objectsToAdd[0].GetType();
-            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]) as IList<TECObject>;
+            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]);
             var tableInfo = getTableInfo(table);
             
-            foreach(TECObject child in childrenCollection)
+            foreach(TECObject child in (IList)childrenCollection)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 foreach (TableField field in tableInfo.Item2)
@@ -4237,18 +4241,18 @@ namespace EstimatingUtilitiesLibrary
                 {
                     foreach (Object item in objectsToAdd)
                     {
-                        if (field.Property.ReflectedType == item.GetType())
+                        if (field.Property.Name == "Index")
+                        {
+                            var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
+                            data.Add(field.Name, dataString);
+                        }
+                        else if(field.Property.ReflectedType == item.GetType())
                         {
                             Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
-                        else if (field.Property.Name == "Index")
-                        {
-                            var dataString = objectToDBString(childrenCollection.IndexOf(child));
-                            data.Add(field.Name, dataString);
-                        }
-
+                         
                     }
                 }
                 if (data.Count > 0)
@@ -4457,7 +4461,7 @@ namespace EstimatingUtilitiesLibrary
             List<Type> types = new List<Type>();
             var tableType = table.GetType();
             bool isRelationTable = false;
-            if (tableType == typeof(RelationTableBase))
+            if (tableType.BaseType == typeof(RelationTableBase))
             {
                 isRelationTable = true;
             }
@@ -4566,19 +4570,14 @@ namespace EstimatingUtilitiesLibrary
 
         private static object getChildCollection(object childObject, object parentObject)
         {
-
-            Type wantedType = childObject.GetType();
+            Type childType = childObject.GetType();
 
             foreach (PropertyInfo info in parentObject.GetType().GetProperties())
             {
-
-                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { wantedType }))
+                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
                     return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
-
             }
-
             return null;
-
         }
 
         #endregion

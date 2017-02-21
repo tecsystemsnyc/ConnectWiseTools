@@ -640,8 +640,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type BidType = typeof(TECBid);
 
         public static Type Helpers = typeof(HelperProperties);
-
-     
+        
         public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
@@ -1061,6 +1060,9 @@ namespace EstimatingUtilitiesLibrary
     public class HelperProperties
     {
         public bool Index;
+
+        public HelperProperties() { }
+
     }
     #endregion
 }
