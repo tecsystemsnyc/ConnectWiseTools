@@ -637,7 +637,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECSystemIndex";
         public static Type ObjectType = typeof(TECSystem);
-        public static Type ReferenceType = null;
+        public static Type ReferenceType = typeof(TECBid);
         public static Type Helpers = typeof(HelperProperties);
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
