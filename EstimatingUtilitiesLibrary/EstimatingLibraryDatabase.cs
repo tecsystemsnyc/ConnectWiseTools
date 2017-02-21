@@ -4215,7 +4215,7 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = getTableInfo(table);
                 if (tableInfo.Item5)
                 {
-                    updateRelation(table, objectsToAdd);
+                    updateIndexedRelation(table, objectsToAdd);
                 }else
                 {
                     addObjectToTable(table, objectsToAdd);
@@ -4241,6 +4241,10 @@ namespace EstimatingUtilitiesLibrary
                         if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
                         var dataString = objectToDBString(field.Property.GetValue(item, null));
                         data.Add(field.Name, dataString);
+                    } else if(field.Property.Name == "Quantity")
+                    {
+                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
+                        data.Add(field.Name, dataString);
                     }
                 }
             }
@@ -4254,11 +4258,11 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        private static void updateRelation(TableBase table, params Object[] objectsToAdd)
+        private static void updateIndexedRelation(TableBase table, params Object[] objectsToAdd)
         {
-            var childType = objectsToAdd[0].GetType();
-            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]);
             var tableInfo = getTableInfo(table);
+
+            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]);
             
             foreach(TECObject child in (IList)childrenCollection)
             {
@@ -4305,8 +4309,9 @@ namespace EstimatingUtilitiesLibrary
                 //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
                 bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Item4);
 
-                if (allTypesMatch || tableHasOnlyType)
+                if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
                 {
                     relevantTables.Add(table);
                 }
@@ -4326,7 +4331,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = getTableInfo(table);
-                Console.WriteLine("Adding objects");
+                Console.WriteLine("Removing objects");
                 removeObjectFromTable(table, objectsToRemove);
             }
 
@@ -4368,12 +4373,20 @@ namespace EstimatingUtilitiesLibrary
         {
             var relevantTables = new List<TableBase>();
             var objectTypes = getObjectTypes(objectsToRemove);
-            
+
             foreach (TableBase table in AllTables.Tables)
             {
                 var tableInfo = getTableInfo(table);
-                if (sharesAllTypes(objectTypes, tableInfo.Item4))
-                { relevantTables.Add(table); }
+
+                //TableInfo.Item4 = List<TableType>
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Item4);
+
+                if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
+                {
+                    relevantTables.Add(table);
+                }
             }
 
             return relevantTables;
@@ -4423,6 +4436,11 @@ namespace EstimatingUtilitiesLibrary
                         {
                             Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Item1 + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
+                            data.Add(field.Name, dataString);
+                        }
+                        else if (field.Property.Name == "Quantity")
+                        {
+                            var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
                             data.Add(field.Name, dataString);
                         }
                     }
@@ -4492,10 +4510,10 @@ namespace EstimatingUtilitiesLibrary
             List<TableField> fields = new List<TableField>();
             List<Type> types = new List<Type>();
             var tableType = table.GetType();
-            bool isRelationTable = false;
-            if (tableType.BaseType == typeof(RelationTableBase))
+            bool isIndexedRelationTable = false;
+            if (tableType.BaseType == typeof(IndexedRelationTableBase))
             {
-                isRelationTable = true;
+                isIndexedRelationTable = true;
             }
 
             foreach (var p in tableType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
@@ -4525,7 +4543,7 @@ namespace EstimatingUtilitiesLibrary
 
             }
 
-            return Tuple.Create<string, List<TableField>, List<TableField>, List<Type>, bool>(tableName, fields, primaryKey, types, isRelationTable);
+            return Tuple.Create<string, List<TableField>, List<TableField>, List<Type>, bool>(tableName, fields, primaryKey, types, isIndexedRelationTable);
         }
 
         private static string objectToDBString(Object inObject)
@@ -4574,9 +4592,12 @@ namespace EstimatingUtilitiesLibrary
         private static bool sharesAllTypes(List<Type> list1, List<Type> list2)
         {
             var numMatch = 0;
-            foreach (Type type in list1)
+            var uniqueList1 = getUniqueTypes(list1);
+            var uniqueList2 = getUniqueTypes(list2);
+
+            foreach (Type type in uniqueList1)
             {
-                foreach (Type otherType in list2)
+                foreach (Type otherType in uniqueList2)
                 {
                     if (type == otherType)
                     {
@@ -4600,6 +4621,46 @@ namespace EstimatingUtilitiesLibrary
             return doesShare;
         }
 
+        private static bool hasBaseTypeAndType(List<Type> list1, List<Type> list2)
+        {
+            var uniqueList1 = getUniqueTypes(list1);
+            var uniqueList2 = getUniqueTypes(list2);
+            Type list1Type1 = null;
+            Type list1Type2 = null;
+            Type list2Type1 = null;
+            Type list2Type2 = null;
+
+            if (uniqueList1.Count == 2)
+            {
+                list1Type1 = uniqueList1[0];
+                list1Type2 = uniqueList1[1];
+            } else
+            {
+                return false;
+            }
+
+            if (uniqueList2.Count == 2)
+            {
+                list2Type1 = uniqueList2[0];
+                list2Type2 = uniqueList2[1];
+            }
+            else
+            {
+                return false;
+            }
+
+
+            if(((list1Type1.BaseType == list2Type1 && list1Type2 == list2Type2) || (list1Type1.BaseType == list2Type2 && list1Type2 == list2Type1)) ||
+                ((list1Type2.BaseType == list2Type1 && list1Type1 == list2Type2) || (list1Type2.BaseType == list2Type2 && list1Type1 == list2Type1)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private static object getChildCollection(object childObject, object parentObject)
         {
             Type childType = childObject.GetType();
@@ -4611,7 +4672,34 @@ namespace EstimatingUtilitiesLibrary
             }
             return null;
         }
+        
+        private static List<Type> getUniqueTypes(List<Type> types)
+        {
+            var outList = new List<Type>();
+            foreach(Type type in types)
+            {
+                if (!outList.Contains(type))
+                {
+                    outList.Add(type);
+                }
+            }
+            return outList;
+        }
 
+        private static int getQuantityInParentCollection(object childObject, object parentObject)
+        {
+            int quantity = 0;
+            var childCollection = getChildCollection(childObject, parentObject);
+
+            foreach(object item in (IList)childCollection)
+            {
+                if(item == childObject)
+                {
+                    quantity++;
+                }
+            }
+            return quantity;
+        }
         #endregion
     }
 

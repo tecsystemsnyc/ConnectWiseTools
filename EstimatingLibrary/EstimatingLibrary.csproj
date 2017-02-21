@@ -109,6 +109,7 @@
     <Compile Include="TECConnection.cs" />
     <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECController.cs" />
+    <Compile Include="TECCostAddition.cs" />
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECDrawing.cs" />
     <Compile Include="TECElectricalMaterial.cs" />

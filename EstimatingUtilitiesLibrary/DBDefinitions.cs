@@ -134,14 +134,16 @@ namespace EstimatingUtilitiesLibrary
     public class CostAdditionsTable : TableBase
     {
         public static new string TableName = "TECCostAdditions";
-        public static Type ObjectType = null;
+        public static Type ObjectType = typeof(TECCostAddition);
 
-        public static TableField Name = new TableField("Name", "TEXT", null);
-        public static TableField Cost = new TableField("Cost", "REAL", null);
+        public static TableField CostAdditionID = new TableField("CostAdditionID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            Name
+            CostAdditionID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -502,7 +504,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ProposalScopeScopeBranchTable : RelationTableBase
+    public class ProposalScopeScopeBranchTable : TableBase
     {
         public static new string TableName = "TECProposalScopeTECScopeBranch";
         public static Type ObjectType = typeof(TECProposalScope);
@@ -555,7 +557,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ControllerIOTypeTable : RelationTableBase
+    public class ControllerIOTypeTable : TableBase
     {
         public static new string TableName = "TECControllerTECIO";
         public static Type ObjectType = typeof(TECController);
@@ -575,7 +577,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ControllerConnectionTable : RelationTableBase
+    public class ControllerConnectionTable : TableBase
     {
         public static new string TableName = "TECControllerTECConection";
         public static Type ObjectType = typeof(TECController);
@@ -594,7 +596,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeConnectionTable : RelationTableBase
+    public class ScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECScopeTECConnection";
         public static Type ObjectType = typeof(TECScope);
@@ -613,7 +615,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeBranchHierarchyTable : RelationTableBase
+    public class ScopeBranchHierarchyTable : TableBase
     {
         public static new string TableName = "TECScopeBranchHierarchy";
         public static Type ObjectType = typeof(TECScopeBranch);
@@ -633,7 +635,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class BidSystemTable : RelationTableBase
+    public class BidSystemTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECBidTECSystem";
         public static Type SystemType = typeof(TECSystem);
@@ -656,7 +658,7 @@ namespace EstimatingUtilitiesLibrary
             SystemType
         };
     }
-    public class SystemEquipmentTable : RelationTableBase
+    public class SystemEquipmentTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECSystemTECEquipment";
         public static Type ObjectType = typeof(TECSystem);
@@ -679,7 +681,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class EquipmentSubScopeTable : RelationTableBase
+    public class EquipmentSubScopeTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECEquipmentTECSubScope";
         public static Type ObjectType = typeof(TECEquipment);
@@ -702,7 +704,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SubScopeDeviceTable : RelationTableBase
+    public class SubScopeDeviceTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECSubScopeTECDevice";
         public static Type ObjectType = typeof(TECSubScope);
@@ -726,7 +728,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SubScopePointTable : RelationTableBase
+    public class SubScopePointTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECSubScopeTECPoint";
         public static Type ObjectType = typeof(TECSubScope);
@@ -749,7 +751,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ScopeTagTable : RelationTableBase
+    public class ScopeTagTable : TableBase
     {
         public static new string TableName = "TECScopeTECTag";
         public static Type ObjectType = typeof(TECScope);
@@ -768,7 +770,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class DeviceManufacturerTable : RelationTableBase
+    public class DeviceManufacturerTable : TableBase
     {
         public static new string TableName = "TECDeviceTECManufacturer";
         public static Type ObjectType = typeof(TECDevice);
@@ -787,7 +789,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceConnectionTypeTable : RelationTableBase
+    public class DeviceConnectionTypeTable : TableBase
     {
         public static new string TableName = "TECDeviceTECConnectionType";
         public static Type ObjectType = typeof(TECDevice);
@@ -806,7 +808,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class DrawingPageTable : RelationTableBase
+    public class DrawingPageTable : TableBase
     {
         public static new string TableName = "TECDrawingTECPage";
         public static Type ObjectType = typeof(TECDrawing);
@@ -826,7 +828,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class PageVisualScopeTable : RelationTableBase
+    public class PageVisualScopeTable : TableBase
     {
         public static new string TableName = "TECPageTECVisualScope";
         public static Type ObjectType = typeof(TECPage);
@@ -847,7 +849,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class VisualScopeScopeTable : RelationTableBase
+    public class VisualScopeScopeTable : TableBase
     {
         public static new string TableName = "TECVisualScopeTECScope";
         public static Type ObjectType = typeof(TECVisualScope);
@@ -867,7 +869,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class LocationScopeTable : RelationTableBase
+    public class LocationScopeTable : TableBase
     {
         public static new string TableName = "TECLocationTECScope";
         public static Type ObjectType = typeof(TECScope);
@@ -886,11 +888,11 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeAssociatedCostTable : RelationTableBase
+    public class ScopeAssociatedCostTable : TableBase
     {
         public static new string TableName = "TECScopeTECAssociatedCost";
-        public static Type ObjectType = typeof(TECAssociatedCost);
-        public static Type ReferenceType = typeof(TECScope);
+        public static Type ObjectType = typeof(TECScope);
+        public static Type ReferenceType = typeof(TECAssociatedCost);
 
         public static Type HelperType = typeof(HelperProperties);
 
@@ -1050,7 +1052,7 @@ namespace EstimatingUtilitiesLibrary
         public static List<TableField> PrimaryKey;
     }
 
-    public class RelationTableBase : TableBase { }
+    public class IndexedRelationTableBase : TableBase { }
 
     public class TableField
     {
