@@ -63,7 +63,7 @@ namespace EstimatingUtilitiesLibrary
             bid = getBidInfo();
             bid.Labor = getLaborConsts();
             bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid();
+            bid.Systems = getAllSystemsInBid(bid);
             bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.DeviceCatalog = getAllDevices();
             bid.ManufacturerCatalog = getAllManufacturers();
@@ -2017,7 +2017,7 @@ namespace EstimatingUtilitiesLibrary
 
                 if (!SQLiteDB.Replace(BidSystemTable.TableName, data))
                 {
-                    Console.WriteLine("Error: Couldn't add system to TECSystemIndex table");
+                    Console.WriteLine("Error: Couldn't add system to TECBidTECSystem table");
                 }
                 i++;
             }
@@ -2371,27 +2371,36 @@ namespace EstimatingUtilitiesLibrary
             return systems;
         }
 
-        static private ObservableCollection<TECSystem> getAllSystemsInBid()
+        static private ObservableCollection<TECSystem> getAllSystemsInBid(TECBid bid)
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
-            string command = "select * from (TECSystem inner join TECSystemIndex on (TECSystem.SystemID = TECSystemIndex.SystemID)) order by ScopeIndex";
+            string command = "select * from ("
+                + SystemTable.TableName
+                + " inner join "
+                + BidSystemTable.TableName
+                + " on ("
+                + SystemTable.TableName + "." + SystemTable.SystemID.Name 
+                + " = " 
+                + BidSystemTable.TableName + "." + BidSystemTable.SystemID.Name
+                + ")) order by " 
+                + BidSystemTable.Index.Name;
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
             if (systemsDT.Rows.Count < 1)
             {
-                command = "select * from TECSystem";
+                command = "select * from " + SystemTable.TableName;
                 systemsDT = SQLiteDB.getDataFromCommand(command);
             }
 
             foreach (DataRow row in systemsDT.Rows)
             {
-                Guid systemID = new Guid(row["SystemID"].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-                string budgetPriceString = row["BudgetPrice"].ToString();
+                Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
+                string name = row[SystemTable.Name.Name].ToString();
+                string description = row[SystemTable.Description.Name].ToString();
+                string quantityString = row[SystemTable.Quantity.Name].ToString();
+                string budgetPriceString = row[SystemTable.BudgetPrice.Name].ToString();
 
                 int quantity;
                 if (!int.TryParse(quantityString, out quantity))
