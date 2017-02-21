@@ -22,6 +22,8 @@ namespace EstimatingUtilitiesLibrary
         private const string DB_FMT = "O";
         //private const bool DEBUG = true;
 
+        private const bool DEBUG_GENERIC = false;
+
         static private SQLiteDatabase SQLiteDB;
 
         #region Public Functions
@@ -4236,7 +4238,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (field.Property.ReflectedType == item.GetType())
                     {
-                        Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
+                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
                         var dataString = objectToDBString(field.Property.GetValue(item, null));
                         data.Add(field.Name, dataString);
                     }
@@ -4273,7 +4275,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if(field.Property.ReflectedType == item.GetType())
                         {
-                            Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType());
+                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
@@ -4290,8 +4292,7 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
-
-
+        
         private static List<TableBase> getRelevantTablesToAdd(params Object[] objectsToAdd)
         {
             var relevantTables = new List<TableBase>();
@@ -4389,7 +4390,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = getTableInfo(table);
-                Console.WriteLine("Editing Objects");
                 editObjectInTable(table, objectsToEdit);
             }
 
@@ -4445,8 +4445,15 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in AllTables.Tables)
             {
                 var tableInfo = getTableInfo(table);
-                if (sharesAllTypes(objectTypes, tableInfo.Item4))
-                { relevantTables.Add(table); }
+
+                //TableInfo.Item4 = List<TableType>
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
+
+                if (allTypesMatch || tableHasOnlyType)
+                {
+                    relevantTables.Add(table);
+                }
             }
 
             return relevantTables;

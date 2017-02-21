@@ -662,9 +662,11 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECSystem);
         public static Type ReferenceType = typeof(TECEquipment);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", null);
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID,
@@ -683,9 +685,11 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECEquipment);
         public static Type ReferenceType = typeof(TECSubScope);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", null);
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             EquipmentID,
@@ -704,10 +708,12 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECSubScope);
         public static Type ReferenceType = typeof(TECDevice);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", null);
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", null);
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID,
@@ -726,9 +732,11 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECSubScope);
         public static Type ReferenceType = typeof(TECPoint);
 
+        public static Type HelperType = typeof(HelperProperties);
+        
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", null);
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID,
@@ -881,12 +889,14 @@ namespace EstimatingUtilitiesLibrary
     public class ScopeAssociatedCostTable : RelationTableBase
     {
         public static new string TableName = "TECScopeTECAssociatedCost";
-        public static Type ObjectType = typeof(TECLocation);
+        public static Type ObjectType = typeof(TECAssociatedCost);
         public static Type ReferenceType = typeof(TECScope);
+
+        public static Type HelperType = typeof(HelperProperties);
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField AssociatedCostID = new TableField("AssociatedCostID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", null);
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -1059,10 +1069,12 @@ namespace EstimatingUtilitiesLibrary
     public class HelperProperties
     {
         public bool Index { get; set; }
+        public bool Quantity { get; set; }
 
         public HelperProperties()
         {
             Index = true;
+            Quantity = true;
         }
 
     }
