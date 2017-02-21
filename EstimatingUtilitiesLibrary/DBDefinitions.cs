@@ -654,8 +654,8 @@ namespace EstimatingUtilitiesLibrary
         };
         public static new List<Type> Types = new List<Type>()
         {
-            SystemType,
-            BidType
+            BidType,
+            SystemType
         };
     }
     public class SystemEquipmentTable : TableBase
