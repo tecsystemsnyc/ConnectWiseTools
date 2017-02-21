@@ -1059,7 +1059,7 @@ namespace EstimatingUtilitiesLibrary
     
     public class HelperProperties
     {
-        public bool Index;
+        public bool Index { get; set; }
 
         public HelperProperties() { }
 
