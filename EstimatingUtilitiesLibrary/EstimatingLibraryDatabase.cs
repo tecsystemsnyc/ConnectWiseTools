@@ -2969,11 +2969,11 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            if (scopeToLink.Count > 0)
-            {
-                Exception e = new Exception("Error: " + scopeToLink.Count + " Visual Scope not found. Unable to link.");
-                throw e;
-            }
+            //if (scopeToLink.Count > 0)
+            //{
+            //    Exception e = new Exception("Error: " + scopeToLink.Count + " Visual Scope not found. Unable to link.");
+            //    throw e;
+            //}
         }
 
         static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
@@ -3062,11 +3062,11 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
-            if (scopeToLink.Count > 0)
-            {
-                Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
-                throw e;
-            }
+            //if (scopeToLink.Count > 0)
+            //{
+            //    Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
+            //    throw e;
+            //}
         }
 
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
