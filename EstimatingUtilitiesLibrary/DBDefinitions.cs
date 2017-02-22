@@ -108,16 +108,16 @@ namespace EstimatingUtilitiesLibrary
     public class UserAdjustmentsTable : TableBase
     {
         public static new string TableName = "TECUserAdjustments";
-        public static Type ObjectType = typeof(TECBid);
-        public static Type ReferenceType = typeof(TECLabor);
+        public static Type BidType = typeof(TECBid);
+        public static Type LaborType = typeof(TECLabor);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
 
-        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", ObjectType.GetProperty("PMExtraHours"));
-        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", ObjectType.GetProperty("ENGExtraHours"));
-        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", ObjectType.GetProperty("CommExtraHours"));
-        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", ObjectType.GetProperty("SoftExtraHours"));
-        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", ObjectType.GetProperty("GraphExtraHours"));
+        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", LaborType.GetProperty("PMExtraHours"));
+        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", LaborType.GetProperty("ENGExtraHours"));
+        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", LaborType.GetProperty("CommExtraHours"));
+        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", LaborType.GetProperty("SoftExtraHours"));
+        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", LaborType.GetProperty("GraphExtraHours"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -126,8 +126,8 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            BidType,
+            LaborType
         };
 
     }

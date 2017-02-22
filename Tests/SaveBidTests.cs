@@ -15,7 +15,7 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
-        const bool DEBUG = true;
+        const bool DEBUG = false;
 
         TECBid bid;
         ChangeStack testStack;
@@ -1031,8 +1031,15 @@ namespace Tests
         {
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
-            int oldNumDevices = ssToModify.Devices.Count();
+
             TECDevice deviceToRemove = ssToModify.Devices[0];
+
+            int oldNumDevices = 0;
+            
+            foreach (TECDevice dev in ssToModify.Devices)
+            {
+                if (dev.Guid == deviceToRemove.Guid) oldNumDevices++;
+            }
 
             ssToModify.Devices.Remove(deviceToRemove);
 
