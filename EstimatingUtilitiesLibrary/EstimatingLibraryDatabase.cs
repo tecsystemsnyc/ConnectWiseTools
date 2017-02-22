@@ -4234,7 +4234,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableField field in tableInfo.Item2)
                 //tableInfo.Item2 = AllTableFields;
             {
-                if (field.Property.Name == "Quantity")
+                if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                 {
                     var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
                     data.Add(field.Name, dataString);
@@ -4271,12 +4271,12 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TableField field in tableInfo.Item2)
                 //tableInfo.Item2 = AllTableFields;
                 {
-                    if (field.Property.Name == "Index")
+                    if (field.Property.Name == "Index" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
                         data.Add(field.Name, dataString);
                     }
-                    else if (field.Property.Name == "Quantity")
+                    else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
                         data.Add(field.Name, dataString);
@@ -4436,7 +4436,7 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (field.Property.Name == "Quantity")
+                    if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
                         data.Add(field.Name, dataString);
