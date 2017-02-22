@@ -4214,6 +4214,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = getTableInfo(table);
                 if (tableInfo.Item5)
+                    //Item5 = isIndexed relation table
                 {
                     updateIndexedRelation(table, objectsToAdd);
                 }else

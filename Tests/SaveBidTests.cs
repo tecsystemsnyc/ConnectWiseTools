@@ -910,7 +910,6 @@ namespace Tests
                     break;
                 }
             }
-            expectedDevice.Quantity = 5;
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
@@ -1077,7 +1076,17 @@ namespace Tests
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
             TECDevice expectedDevice = ssToModify.Devices[0];
-            expectedDevice.Quantity = 3;
+
+            int expectedNumDevices = 0;
+
+            foreach (TECDevice dev in ssToModify.Devices)
+            {
+                if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
+            }
+
+            ssToModify.Devices.Add(new TECDevice(expectedDevice));
+            expectedNumDevices++;
+
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
@@ -1121,7 +1130,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
+            Assert.AreEqual(expectedNumDevices, actualQuantity);
         }
         #endregion Edit Device
 
