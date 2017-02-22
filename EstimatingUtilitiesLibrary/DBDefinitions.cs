@@ -286,7 +286,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceTable : TableBase
+    public class DeviceTable : CatalogTableBase
     {
         public static new string TableName = "TECDevice";
         public static Type ObjectType = typeof(TECDevice);
@@ -325,7 +325,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class TagTable : TableBase
+    public class TagTable : CatalogTableBase
     {
         public static new string TableName = "TECTag";
         public static Type ObjectType = typeof(TECTag);
@@ -342,7 +342,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ManufacturerTable : TableBase
+    public class ManufacturerTable : CatalogTableBase
     {
         public static new string TableName = "TECManufacturer";
         public static Type ObjectType = typeof(TECManufacturer);
@@ -396,7 +396,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class LocationTable : TableBase
+    public class LocationTable : CatalogTableBase
     {
         public static new string TableName = "TECLocation";
         public static Type ObjectType = typeof(TECLocation);
@@ -448,7 +448,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ConnectionTypeTable : TableBase
+    public class ConnectionTypeTable : CatalogTableBase
     {
         public static new string TableName = "TECConnectionType";
         public static Type ObjectType = typeof(TECConnectionType);
@@ -467,7 +467,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ConduitTypeTable : TableBase
+    public class ConduitTypeTable : CatalogTableBase
     {
         public static new string TableName = "TECConduitType";
         public static Type ObjectType = typeof(TECConduitType);
@@ -486,7 +486,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class AssociatedCostTable : TableBase
+    public class AssociatedCostTable : CatalogTableBase
     {
         public static new string TableName = "TECAssociatedCost";
         public static Type ObjectType = typeof(TECAssociatedCost);
@@ -1054,6 +1054,8 @@ namespace EstimatingUtilitiesLibrary
 
     public class IndexedRelationTableBase : TableBase { }
 
+    public class CatalogTableBase : TableBase { }
+
     public class TableField
     {
         public string Name;
@@ -1077,6 +1079,72 @@ namespace EstimatingUtilitiesLibrary
         {
             Index = true;
             Quantity = true;
+        }
+
+    }
+
+    public class TableInfo
+    {
+        //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>, isRelationTable>
+        public string Name { get; set; }
+        public List<TableField> Fields { get; set; }
+        public List<TableField> PrimaryFields { get; set; }
+        public List<Type> Types { get; set; }
+        public bool IsRelationTable { get; set; }
+        public bool IsCatalogTable { get; set; }
+
+        public TableInfo(TableBase table)
+        {
+            string tableName = "";
+            List<TableField> primaryKey = new List<TableField>();
+            List<TableField> fields = new List<TableField>();
+            List<Type> types = new List<Type>();
+            var tableType = table.GetType();
+            bool isIndexedRelationTable = false;
+            if (tableType.BaseType == typeof(IndexedRelationTableBase))
+            {
+                isIndexedRelationTable = true;
+            }
+
+            bool isCatalogTable = false;
+            if (tableType.BaseType == typeof(CatalogTableBase))
+            {
+                isCatalogTable = true;
+            }
+
+            foreach (var p in tableType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+            {
+                if (p.Name == "TableName")
+                {
+                    var v = p.GetValue(null);
+                    tableName += (string)v;
+                }
+                else if (p.Name == "PrimaryKey")
+                {
+                    var v = p.GetValue(null) as List<TableField>;
+                    foreach (TableField field in v)
+                    { primaryKey.Add(field); }
+                }
+                else if (p.Name == "Types")
+                {
+                    var v = p.GetValue(null) as List<Type>;
+                    foreach (Type type in v)
+                    { types.Add(type); }
+                }
+                else if (p.FieldType.Name == "TableField")
+                {
+                    var v = p.GetValue(null) as TableField;
+                    fields.Add(v);
+                }
+
+            }
+            
+            Name = tableName;
+            Fields = fields;
+            PrimaryFields = primaryKey;
+            Types = types;
+            IsRelationTable = isIndexedRelationTable;
+            IsCatalogTable = isCatalogTable;
         }
 
     }
