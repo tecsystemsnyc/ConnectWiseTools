@@ -4234,16 +4234,17 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableField field in tableInfo.Item2)
                 //tableInfo.Item2 = AllTableFields;
             {
+                if (field.Property.Name == "Quantity")
+                {
+                    var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
+                    data.Add(field.Name, dataString);
+                }
                 foreach (Object item in objectsToAdd)
                 {
                     if (field.Property.ReflectedType == item.GetType())
                     {
                         if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
                         var dataString = objectToDBString(field.Property.GetValue(item, null));
-                        data.Add(field.Name, dataString);
-                    } else if(field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
-                    {
-                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
                         data.Add(field.Name, dataString);
                     }
                 }
@@ -4430,17 +4431,17 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
+                    if (field.Property.Name == "Quantity")
+                    {
+                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
+                        data.Add(field.Name, dataString);
+                    }
                     foreach (Object item in relevantObjects)
                     {
                         if (field.Property.ReflectedType == item.GetType())
                         {
                             Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Item1 + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-                        else if (field.Property.Name == "Quantity")
-                        {
-                            var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
                             data.Add(field.Name, dataString);
                         }
                     }
