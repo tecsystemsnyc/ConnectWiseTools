@@ -4214,6 +4214,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = getTableInfo(table);
                 if (tableInfo.Item5)
+                    //Item5 = isIndexed relation table
                 {
                     updateIndexedRelation(table, objectsToAdd);
                 }else
@@ -4694,12 +4695,27 @@ namespace EstimatingUtilitiesLibrary
 
         private static int getQuantityInParentCollection(object childObject, object parentObject)
         {
+            TECScope child;
+            TECScope parent;
+
+            try
+            {
+
+                child = (childObject as TECScope);
+                parent = (parentObject as TECScope);
+
+            }
+            catch (Exception e)
+            {
+                throw new InvalidCastException(e.Message);
+            }
+
             int quantity = 0;
             var childCollection = getChildCollection(childObject, parentObject);
 
-            foreach(object item in (IList)childCollection)
+            foreach(TECScope item in (IList)childCollection)
             {
-                if(item == childObject)
+                if(item.Guid == child.Guid)
                 {
                     quantity++;
                 }

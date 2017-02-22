@@ -15,7 +15,7 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
-        const bool DEBUG = true;
+        const bool DEBUG = false;
 
         TECBid bid;
         ChangeStack testStack;
@@ -910,11 +910,11 @@ namespace Tests
                     break;
                 }
             }
-            expectedDevice.Quantity = 5;
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
             //Makes a copy, as devices can only be added via drag drop.
+            int expectedQuantity = 5;
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
@@ -961,7 +961,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
+            Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
         }
@@ -1031,8 +1031,15 @@ namespace Tests
         {
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
-            int oldNumDevices = ssToModify.Devices.Count();
+
             TECDevice deviceToRemove = ssToModify.Devices[0];
+
+            int oldNumDevices = 0;
+            
+            foreach (TECDevice dev in ssToModify.Devices)
+            {
+                if (dev.Guid == deviceToRemove.Guid) oldNumDevices++;
+            }
 
             ssToModify.Devices.Remove(deviceToRemove);
 
@@ -1077,7 +1084,17 @@ namespace Tests
             //Act
             TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
             TECDevice expectedDevice = ssToModify.Devices[0];
-            expectedDevice.Quantity = 3;
+
+            int expectedNumDevices = 0;
+
+            foreach (TECDevice dev in ssToModify.Devices)
+            {
+                if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
+            }
+
+            ssToModify.Devices.Add(new TECDevice(expectedDevice));
+            expectedNumDevices++;
+
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
@@ -1121,7 +1138,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
+            Assert.AreEqual(expectedNumDevices, actualQuantity);
         }
         #endregion Edit Device
 
