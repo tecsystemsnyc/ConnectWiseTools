@@ -4277,6 +4277,11 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(((IList)childrenCollection).IndexOf(child));
                         data.Add(field.Name, dataString);
                     }
+                    else if (field.Property.Name == "Quantity")
+                    {
+                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
+                        data.Add(field.Name, dataString);
+                    }
                     foreach (Object item in objectsToAdd)
                     {
                         if(field.Property.ReflectedType == item.GetType())
