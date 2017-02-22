@@ -3141,10 +3141,10 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Create Methods
         static private void createTableFromDefinition(TableBase table)
         {
-            var tableInfo = getTableInfo(table);
-            string tableName = tableInfo.Item1;
-            List<TableField> primaryKey = tableInfo.Item3;
-            List<TableField> fields = tableInfo.Item2;
+            var tableInfo = new TableInfo(table);
+            string tableName = tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
 
             string createString = "CREATE TABLE '" + tableName + "' (";
             foreach (TableField field in fields)
@@ -3173,10 +3173,10 @@ namespace EstimatingUtilitiesLibrary
         }
         static private void createTempTableFromDefinition(TableBase table)
         {
-            var tableInfo = getTableInfo(table);
-            string tableName = "temp_" + tableInfo.Item1;
-            List<TableField> primaryKey = tableInfo.Item3;
-            List<TableField> fields = tableInfo.Item2;
+            var tableInfo =  new TableInfo(table);
+            string tableName = "temp_" + tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
 
             string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
             foreach (TableField field in fields)
@@ -3949,8 +3949,8 @@ namespace EstimatingUtilitiesLibrary
             { throw new ArgumentException("updateDatabase() given invalid type"); }
             foreach (TableBase table in databaseTableList)
             {
-                var tableInfo = getTableInfo(table);
-                if (tableNames.Contains(tableInfo.Item1))
+                var tableInfo = new TableInfo(table);
+                if (tableNames.Contains(tableInfo.Name))
                 {
                     updateTableFromType(table);
                 }
@@ -3983,11 +3983,11 @@ namespace EstimatingUtilitiesLibrary
 
         static private void updateTableFromType(TableBase table)
         {
-            var tableInfo = getTableInfo(table);
-            string tableName = tableInfo.Item1;
+            var tableInfo = new TableInfo(table);
+            string tableName = tableInfo.Name;
             string tempName = "temp_" + tableName;
-            List<TableField> primaryKey = tableInfo.Item3;
-            List<TableField> fields = tableInfo.Item2;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
 
             List<string> currentFields = getAllTableFields(tableName);
             List<string> commonFields = new List<string>();
@@ -4212,8 +4212,8 @@ namespace EstimatingUtilitiesLibrary
             
             foreach (TableBase table in relevantTables)
             {
-                var tableInfo = getTableInfo(table);
-                if (tableInfo.Item5)
+                var tableInfo = new TableInfo(table);
+                if (tableInfo.IsRelationTable)
                     //Item5 = isIndexed relation table
                 {
                     updateIndexedRelation(table, objectsToAdd);
@@ -4228,11 +4228,11 @@ namespace EstimatingUtilitiesLibrary
         private static void addObjectToTable(TableBase table, params Object[] objectsToAdd)
         {
             //ObjectsToAdd = [targetObject, referenceObject];
-            var tableInfo = getTableInfo(table);
+            var tableInfo = new TableInfo(table);
             
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            foreach (TableField field in tableInfo.Item2)
+            foreach (TableField field in tableInfo.Fields)
                 //tableInfo.Item2 = AllTableFields;
             {
                 if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
@@ -4244,7 +4244,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (field.Property.ReflectedType == item.GetType())
                     {
-                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
+                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
                         var dataString = objectToDBString(field.Property.GetValue(item, null));
                         data.Add(field.Name, dataString);
                     }
@@ -4253,23 +4253,23 @@ namespace EstimatingUtilitiesLibrary
          
             if(data.Count > 0)
             {
-                if (!SQLiteDB.Insert(tableInfo.Item1, data))
+                if (!SQLiteDB.Insert(tableInfo.Name, data))
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
                 }
             }
         }
 
         private static void updateIndexedRelation(TableBase table, params Object[] objectsToAdd)
         {
-            var tableInfo = getTableInfo(table);
+            var tableInfo = new TableInfo(table);
 
             var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]);
             
             foreach(TECObject child in (IList)childrenCollection)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                foreach (TableField field in tableInfo.Item2)
+                foreach (TableField field in tableInfo.Fields)
                 //tableInfo.Item2 = AllTableFields;
                 {
                     if (field.Property.Name == "Index" && field.Property.ReflectedType == typeof(HelperProperties))
@@ -4286,7 +4286,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if(field.Property.ReflectedType == item.GetType())
                         {
-                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Item1 + " with type " + item.GetType()); }
+                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
@@ -4295,9 +4295,9 @@ namespace EstimatingUtilitiesLibrary
                 }
                 if (data.Count > 0)
                 {
-                    if (!SQLiteDB.Replace(tableInfo.Item1, data))
+                    if (!SQLiteDB.Replace(tableInfo.Name, data))
                     {
-                        Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                        Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
                     }
                 }
             }
@@ -4311,12 +4311,12 @@ namespace EstimatingUtilitiesLibrary
             
             foreach (TableBase table in AllTables.Tables)
             {
-                var tableInfo = getTableInfo(table);
+                var tableInfo = new TableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Item4);
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
 
                 if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
                 {
@@ -4337,7 +4337,7 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (TableBase table in relevantTables)
             {
-                var tableInfo = getTableInfo(table);
+                var tableInfo = new TableInfo(table);
                 Console.WriteLine("Removing objects");
                 removeObjectFromTable(table, objectsToRemove);
             }
@@ -4345,11 +4345,11 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void removeObjectFromTable(TableBase table, params Object[] objectsToRemove)
         {
-            var tableInfo = getTableInfo(table);
+            var tableInfo = new TableInfo(table);
 
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            foreach (TableField field in tableInfo.Item2)
+            foreach (TableField field in tableInfo.Fields)
             {
                 if (field.Property == null)
                 {
@@ -4361,7 +4361,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if (field.Property.ReflectedType == item.GetType())
                         {
-                            Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Item1 + " with type " + item.GetType());
+                            Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
@@ -4370,9 +4370,9 @@ namespace EstimatingUtilitiesLibrary
             }
             if (data.Count > 0)
             {
-                if (!SQLiteDB.Delete(tableInfo.Item1, data))
+                if (!SQLiteDB.Delete(tableInfo.Name, data))
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
                 }
             }
         }
@@ -4383,12 +4383,12 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (TableBase table in AllTables.Tables)
             {
-                var tableInfo = getTableInfo(table);
+                var tableInfo = new TableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Item4);
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
 
                 if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
                 {
@@ -4409,14 +4409,14 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (TableBase table in relevantTables)
             {
-                var tableInfo = getTableInfo(table);
+                var tableInfo = new TableInfo(table);
                 editObjectInTable(table, objectsToEdit);
             }
 
         }
         private static void editObjectInTable(TableBase table, params Object[] objectsToEdit)
         {
-            var tableInfo = getTableInfo(table);
+            var tableInfo = new TableInfo(table);
             var relevantObjects = objectsToEdit;
             Dictionary<string, string> data = new Dictionary<string, string>();
             if(objectsToEdit.Length == 2)
@@ -4429,7 +4429,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            foreach (TableField field in tableInfo.Item2)
+            foreach (TableField field in tableInfo.Fields)
             {
                 if (field.Property == null)
                 {
@@ -4446,7 +4446,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if (field.Property.ReflectedType == item.GetType())
                         {
-                            Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Item1 + " with type " + item.GetType());
+                            Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType());
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
@@ -4456,9 +4456,9 @@ namespace EstimatingUtilitiesLibrary
 
             if (data.Count > 0)
             {
-                if (!SQLiteDB.Replace(tableInfo.Item1, data))
+                if (!SQLiteDB.Replace(tableInfo.Name, data))
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Item1 + " table.");
+                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
                 }
             }
         }
@@ -4469,11 +4469,11 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (TableBase table in AllTables.Tables)
             {
-                var tableInfo = getTableInfo(table);
+                var tableInfo = new TableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Item4);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Item4);
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
 
                 if (allTypesMatch || tableHasOnlyType)
                 {
@@ -4510,48 +4510,8 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Helper Methods
             
         //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>, isRelationTable>
-        static private Tuple<string, List<TableField>, List<TableField>, List<Type>, bool> getTableInfo(TableBase table)
-        {
-            string tableName = "";
-            List<TableField> primaryKey = new List<TableField>();
-            List<TableField> fields = new List<TableField>();
-            List<Type> types = new List<Type>();
-            var tableType = table.GetType();
-            bool isIndexedRelationTable = false;
-            if (tableType.BaseType == typeof(IndexedRelationTableBase))
-            {
-                isIndexedRelationTable = true;
-            }
+ //       static private TableInfo getTableInfo(TableBase table)
 
-            foreach (var p in tableType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-            {
-                if (p.Name == "TableName")
-                {
-                    var v = p.GetValue(null);
-                    tableName += (string)v;
-                }
-                else if (p.Name == "PrimaryKey")
-                {
-                    var v = p.GetValue(null) as List<TableField>;
-                    foreach (TableField field in v)
-                    { primaryKey.Add(field); }
-                }
-                else if (p.Name == "Types")
-                {
-                    var v = p.GetValue(null) as List<Type>;
-                    foreach (Type type in v)
-                    { types.Add(type); }
-                }
-                else if (p.FieldType.Name == "TableField")
-                {
-                    var v = p.GetValue(null) as TableField;
-                    fields.Add(v);
-                }
-
-            }
-
-            return Tuple.Create<string, List<TableField>, List<TableField>, List<Type>, bool>(tableName, fields, primaryKey, types, isIndexedRelationTable);
-        }
 
         private static string objectToDBString(Object inObject)
         {
