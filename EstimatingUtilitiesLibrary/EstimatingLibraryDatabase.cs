@@ -3358,11 +3358,11 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            if (scopeToLink.Count > 0)
-            {
-                Exception e = new Exception("Error: " + scopeToLink.Count + " Visual Scope not found. Unable to link.");
-                throw e;
-            }
+            //if (scopeToLink.Count > 0)
+            //{
+            //    Exception e = new Exception("Error: " + scopeToLink.Count + " Visual Scope not found. Unable to link.");
+            //    throw e;
+            //}
         }
 
         static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
@@ -3451,11 +3451,11 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
-            if (scopeToLink.Count > 0)
-            {
-                Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
-                throw e;
-            }
+            //if (scopeToLink.Count > 0)
+            //{
+            //    Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
+            //    throw e;
+            //}
         }
 
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
@@ -4229,26 +4229,60 @@ namespace EstimatingUtilitiesLibrary
         {
             //ObjectsToAdd = [targetObject, referenceObject];
             var tableInfo = new TableInfo(table);
-            
+            var relevantObjects = objectsToAdd;
+
             Dictionary<string, string> data = new Dictionary<string, string>();
 
+            var isHierarchial = false;
+            if (tableInfo.Types.Count == 2 && tableInfo.Types[0] == tableInfo.Types[1])
+            {
+                isHierarchial = true;
+                relevantObjects = new object[]
+                {
+                    objectsToAdd[1],
+                    objectsToAdd[0]
+                };
+                
+            }
+            else if (tableInfo.Types.Count == 1)
+            {
+                relevantObjects = new object[]
+                {
+                    objectsToAdd[0]
+                };
+            }
+
+            int currentField = 0;
             foreach (TableField field in tableInfo.Fields)
                 //tableInfo.Item2 = AllTableFields;
             {
-                if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                if (isHierarchial)
                 {
-                    var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
-                    data.Add(field.Name, dataString);
-                }
-                foreach (Object item in objectsToAdd)
-                {
-                    if (field.Property.ReflectedType == item.GetType())
+                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
                     {
-                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
-                        var dataString = objectToDBString(field.Property.GetValue(item, null));
+                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
+                        var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
                         data.Add(field.Name, dataString);
                     }
                 }
+                else
+                {
+                    if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                    {
+                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
+                        data.Add(field.Name, dataString);
+                    }
+                    foreach (Object item in relevantObjects)
+                    {
+                        if (isFieldType(tableInfo, field, item))
+                        {
+                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
+                            var dataString = objectToDBString(field.Property.GetValue(item, null));
+                            data.Add(field.Name, dataString);
+                        }
+                    }
+                }
+                currentField++;
             }
          
             if(data.Count > 0)
@@ -4317,8 +4351,9 @@ namespace EstimatingUtilitiesLibrary
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
                 bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
                 bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
-                if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
+                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }
@@ -4346,27 +4381,63 @@ namespace EstimatingUtilitiesLibrary
         private static void removeObjectFromTable(TableBase table, params Object[] objectsToRemove)
         {
             var tableInfo = new TableInfo(table);
-
+            var relevantObjects = objectsToRemove;
             Dictionary<string, string> data = new Dictionary<string, string>();
 
+            var isHierarchial = false;
+            if(tableInfo.Types.Count == 2 && tableInfo.Types[0] == tableInfo.Types[1])
+            {
+                isHierarchial = true;
+                relevantObjects = new object[]
+                {
+                    objectsToRemove[1],
+                    objectsToRemove[0]
+                };
+            } else if(tableInfo.Types.Count == 1)
+            {
+                relevantObjects = new object[]
+                {
+                    objectsToRemove[0]
+                };
+            }
+
+            if (fieldsIncludeQuantity(tableInfo.Fields))
+            {
+                var qty = getQuantityInParentCollection(objectsToRemove[0], objectsToRemove[1]);
+                if(qty > 0)
+                {
+                    editObjectInTable(table, objectsToRemove);
+                    return;
+                }
+            }
+
+            int currentField = 0;
             foreach (TableField field in tableInfo.Fields)
             {
-                if (field.Property == null)
+                if (isHierarchial)
                 {
-                    //throw new NotImplementedException();
+                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
+                    {
+                        if (DEBUG_GENERIC) { Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
+                        var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
+                        data.Add(field.Name, dataString);
+                    }
                 }
                 else
                 {
-                    foreach (Object item in objectsToRemove)
+                   
+                    foreach (Object item in relevantObjects)
                     {
-                        if (field.Property.ReflectedType == item.GetType())
+                        if (isFieldType(tableInfo, field, item))
                         {
-                            Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + item.GetType());
+                            if (DEBUG_GENERIC) { Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + item.GetType()); }
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
                     }
+
                 }
+                currentField++;
             }
             if (data.Count > 0)
             {
@@ -4389,8 +4460,9 @@ namespace EstimatingUtilitiesLibrary
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
                 bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
                 bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
-                if (allTypesMatch || tableHasOnlyType || baseAndObjectMatch)
+                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }
@@ -4444,9 +4516,9 @@ namespace EstimatingUtilitiesLibrary
                     }
                     foreach (Object item in relevantObjects)
                     {
-                        if (field.Property.ReflectedType == item.GetType())
+                        if (isFieldType(tableInfo, field, item))
                         {
-                            Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType());
+                            if (DEBUG_GENERIC) { Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType()); }
                             var dataString = objectToDBString(field.Property.GetValue(item, null));
                             data.Add(field.Name, dataString);
                         }
@@ -4472,10 +4544,11 @@ namespace EstimatingUtilitiesLibrary
                 var tableInfo = new TableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool allTypesMatch = sharesAllTypesForEdit(objectTypes, tableInfo.Types);
                 bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
-                if (allTypesMatch || tableHasOnlyType)
+                if ((allTypesMatch || tableHasOnlyType) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }
@@ -4562,6 +4635,15 @@ namespace EstimatingUtilitiesLibrary
             var uniqueList1 = getUniqueTypes(list1);
             var uniqueList2 = getUniqueTypes(list2);
 
+            if((list1.Count == 2 && list2.Count == 2) && (uniqueList1.Count == uniqueList2.Count))
+            {
+                if (list1[0] == list2[0] && list1[1] == list2[1])
+                {
+                    return true;
+                }
+            }
+            
+
             foreach (Type type in uniqueList1)
             {
                 foreach (Type otherType in uniqueList2)
@@ -4573,6 +4655,26 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             return ((numMatch == list1.Count) && (numMatch == list2.Count));
+        }
+
+        private static bool sharesAllTypesForEdit(List<Type> list1, List<Type> list2)
+        {
+            var numMatch = 0;
+            var uniqueList1 = getUniqueTypes(list1);
+            var uniqueList2 = getUniqueTypes(list2);
+
+            foreach (Type type in uniqueList1)
+            {
+                foreach (Type otherType in uniqueList2)
+                {
+                    if (type == otherType)
+                    {
+                        numMatch++;
+                    }
+                }
+            }
+            return ((numMatch == list1.Count) && (numMatch == list2.Count));
+
         }
 
         private static bool hasOnlyType(Type primaryType, List<Type> list2)
@@ -4626,6 +4728,49 @@ namespace EstimatingUtilitiesLibrary
             {
                 return false;
             }
+        }
+
+        private static bool isCatalogEdit(List<Type> list1, bool isCatalogTable)
+        {
+            bool isEdit = false;
+            bool isBidOrTemplates = ((list1.Contains(typeof(TECBid)) || list1.Contains(typeof(TECTemplates))));
+            bool isEditingObject = (list1.Count == 2) && (list1[0] == list1[1]);
+            if ((isBidOrTemplates && (isCatalogTable)) || (!isCatalogTable) || isEditingObject)
+            {
+                isEdit = true;
+            }
+            return isEdit;
+        }
+
+        private static bool isFieldType(TableInfo table, TableField field, Object consideredObject)
+        {
+            var type = consideredObject.GetType();
+
+            if(field.Property.ReflectedType == type)
+            {
+                return true;
+            }else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+
+        }
+
+        private static bool fieldsIncludeQuantity(List<TableField> fields)
+        {
+            var includes = false;
+            foreach(TableField field in fields)
+            {
+                if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                {
+                    includes = true;
+                }
+            }
+
+            return includes;
         }
 
         private static object getChildCollection(object childObject, object parentObject)
