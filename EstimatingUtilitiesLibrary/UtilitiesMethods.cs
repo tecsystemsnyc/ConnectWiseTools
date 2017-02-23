@@ -49,9 +49,7 @@ namespace EstimatingUtilitiesLibrary
             //file is not locked
             return false;
         }
-
         
-
         public static string CommaSeparatedString(List<string> strings)
         {
             int i = 0;
@@ -108,6 +106,17 @@ namespace EstimatingUtilitiesLibrary
             destBitmap.Dispose();
 
             return bi;
+        }
+
+        public static double StringToDouble(string inputString, double defaultOutput)
+        {
+            double outDouble;
+            if (!double.TryParse(inputString, out outDouble))
+            {
+                outDouble = defaultOutput;
+                Console.WriteLine("Cannot convert multiplier to double, setting to 1");
+            }
+            return outDouble;
         }
 
         #region Cast Conversions

@@ -1172,21 +1172,13 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
 
-            DataTable manufacturersDT = SQLiteDB.getDataFromTable("TECManufacturer");
-
+            DataTable manufacturersDT = SQLiteDB.getDataFromTable(ManufacturerTable.TableName);
             foreach (DataRow row in manufacturersDT.Rows)
             {
-                Guid manufacturerID = new Guid(row["ManufacturerID"].ToString());
-                string name = row["Name"].ToString();
-                string multiplierString = row["Multiplier"].ToString();
-
-                double multiplier;
-                if (!double.TryParse(multiplierString, out multiplier))
-                {
-                    multiplier = 1;
-                    Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-                }
-
+                Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
+                string name = row[ManufacturerTable.Name.Name].ToString();
+                double multiplier = UtilitiesMethods.StringToDouble(row[ManufacturerTable.Multiplier.Name].ToString(), 1);
+                
                 manufacturers.Add(new TECManufacturer(name, multiplier, manufacturerID));
             }
 
@@ -1208,6 +1200,28 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return locations;
+        }
+
+        static private ObservableCollection<TECConduitType> getConduitTypes()
+        {
+            ObservableCollection<TECConduitType> conduitTypes = new ObservableCollection<TECConduitType>();
+            DataTable conduitTypesDT = SQLiteDB.getDataFromTable(ConduitTypeTable.TableName);
+            foreach(DataRow row in conduitTypesDT.Rows)
+            {
+                Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
+                string name = row[ManufacturerTable.Name.Name].ToString();
+                double cost = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Cost.Name].ToString(), 1);
+                double labor = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Labor.Name].ToString(), 1);
+
+                var conduitType = new TECConduitType(conduitGuid);
+                conduitType.Name = name;
+                conduitType.Cost = cost;
+                conduitType.Labor = labor;
+
+                conduitTypes.Add(conduitType);
+            }
+
+            return conduitTypes;
         }
 
         static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID)
@@ -1769,78 +1783,7 @@ namespace EstimatingUtilitiesLibrary
             return new TECProposalScope(scope, isProposed, notes);
         }
         #endregion //Loading from DB Methods
-
-        #region Generic Create Methods
-        static private void createTableFromDefinition(TableBase table)
-        {
-            var tableInfo = new TableInfo(table);
-            string tableName = tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
-
-            string createString = "CREATE TABLE '" + tableName + "' (";
-            foreach (TableField field in fields)
-            {
-                createString += "'" + field.Name + "' " + field.FieldType;
-                if (fields.IndexOf(field) < (fields.Count - 1))
-                { createString += ", "; }
-            }
-            if (primaryKey.Count != 0)
-            { createString += ", PRIMARY KEY("; }
-            foreach (TableField pk in primaryKey)
-            {
-                createString += "'" + pk.Name + "' ";
-                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
-                { createString += ", "; }
-                else
-                { createString += ")"; }
-            }
-            createString += ")";
-            SQLiteDB.nonQueryCommand(createString);
-        }
-        static private void createTempTableFromDefinition(TableBase table)
-        {
-            var tableInfo =  new TableInfo(table);
-            string tableName = "temp_" + tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
-
-            string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
-            foreach (TableField field in fields)
-            {
-                createString += "'" + field.Name + "' " + field.FieldType;
-                if (fields.IndexOf(field) < (fields.Count - 1))
-                { createString += ", "; }
-            }
-            if (primaryKey.Count != 0)
-            { createString += ", PRIMARY KEY("; }
-            foreach (TableField pk in primaryKey)
-            {
-                createString += "'" + pk.Name + "' ";
-                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
-                { createString += ", "; }
-                else
-                { createString += ")"; }
-            }
-            createString += ")";
-            SQLiteDB.nonQueryCommand(createString);
-        }
-        static private void createAllBidTables()
-        {
-            foreach (TableBase table in AllBidTables.Tables)
-            {
-                createTableFromDefinition(table);
-            }
-        }
-        static private void createAllTemplateTables()
-        {
-            foreach (TableBase table in AllTemplateTables.Tables)
-            {
-                createTableFromDefinition(table);
-            }
-        }
-        #endregion
-
+        
         #region Link Methods
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
@@ -2728,7 +2671,6 @@ namespace EstimatingUtilitiesLibrary
 
             return system;
         }
-
         private static TECEquipment getEquipmentFromRow(DataRow row)
         {
             Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
@@ -2760,7 +2702,6 @@ namespace EstimatingUtilitiesLibrary
 
             return equipmentToAdd;
         }
-
         private static TECSubScope getSubScopeFromRow(DataRow row)
         {
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
@@ -2794,7 +2735,6 @@ namespace EstimatingUtilitiesLibrary
 
             return subScopeToAdd;
         }
-
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
@@ -2823,6 +2763,77 @@ namespace EstimatingUtilitiesLibrary
             return outConnectionType;
         }
 
+        #endregion
+
+        #region Generic Create Methods
+        static private void createTableFromDefinition(TableBase table)
+        {
+            var tableInfo = new TableInfo(table);
+            string tableName = tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
+
+            string createString = "CREATE TABLE '" + tableName + "' (";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                { createString += ", "; }
+            }
+            if (primaryKey.Count != 0)
+            { createString += ", PRIMARY KEY("; }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                { createString += ", "; }
+                else
+                { createString += ")"; }
+            }
+            createString += ")";
+            SQLiteDB.nonQueryCommand(createString);
+        }
+        static private void createTempTableFromDefinition(TableBase table)
+        {
+            var tableInfo = new TableInfo(table);
+            string tableName = "temp_" + tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
+
+            string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                { createString += ", "; }
+            }
+            if (primaryKey.Count != 0)
+            { createString += ", PRIMARY KEY("; }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                { createString += ", "; }
+                else
+                { createString += ")"; }
+            }
+            createString += ")";
+            SQLiteDB.nonQueryCommand(createString);
+        }
+        static private void createAllBidTables()
+        {
+            foreach (TableBase table in AllBidTables.Tables)
+            {
+                createTableFromDefinition(table);
+            }
+        }
+        static private void createAllTemplateTables()
+        {
+            foreach (TableBase table in AllTemplateTables.Tables)
+            {
+                createTableFromDefinition(table);
+            }
+        }
         #endregion
 
         #region Generic Complete Save Methods
@@ -3115,7 +3126,6 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
-        
         #endregion
 
         #region Generic Remove Methods
@@ -3154,7 +3164,6 @@ namespace EstimatingUtilitiesLibrary
                 { Console.WriteLine("Error: Couldn't remove data from " + tableInfo.Name + " table."); }
             }
         }
-        
         #endregion
 
         #region Generic Edit Methods
@@ -3214,27 +3223,7 @@ namespace EstimatingUtilitiesLibrary
             return relevantTables;
         }
         #endregion
-
-        #region Generic Load Methods
-        //private static ObservableCollection<Object> loadObjects(Type typeToLoad)
-        //{
-        //    ObservableCollection<Object> loadedObjects = new ObservableCollection<Object>();
-        //    List<TableBase> relevantTables = getRelevantTables(new object() as typeToLoad);
-
-        //    DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
-
-        //    foreach (DataRow row in exclusionsDT.Rows)
-        //    {
-        //        Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-        //        string exclusionText = row["ExclusionText"].ToString();
-
-        //        exclusions.Add(new TECExclusion(exclusionText, exclusionId));
-        //    }
-
-        //    return loadedObjects;
-        //}
-        #endregion
-
+        
         #region Generic Helper Methods
         static private List<string> getAllTableNames()
         {
