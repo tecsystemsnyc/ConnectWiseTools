@@ -14,7 +14,9 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECBidInfo";
         public static Type ObjectType = typeof(TECBid);
 
-        public static TableField DBVersion = new TableField("DBVersion", "TEXT", null);
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField DBVersion = new TableField("DBVersion", "TEXT", HelperType.GetProperty("DBVersion"));
         public static TableField BidName = new TableField("BidName", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField BidNumber = new TableField("BidNumber", "TEXT", ObjectType.GetProperty("BidNumber"));
@@ -36,8 +38,10 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECTemplatesInfo";
         public static Type ObjectType = typeof(TECTemplates);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField TemplateID = new TableField("TemplateID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField DBVersion = new TableField("DBVersion", "TEXT", null);
+        public static TableField DBVersion = new TableField("DBVersion", "TEXT", HelperType.GetProperty("DBVersion"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -333,9 +337,8 @@ namespace EstimatingUtilitiesLibrary
         public static TableField TagID = new TableField("TagID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TagString = new TableField("TagString", "TEXT", ObjectType.GetProperty("Text"));
 
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            TagID
-            };
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        { TagID };
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType
@@ -1074,11 +1077,13 @@ namespace EstimatingUtilitiesLibrary
     {
         public bool Index { get; set; }
         public bool Quantity { get; set; }
+        public bool DBVersion { get; set; }
 
         public HelperProperties()
         {
             Index = true;
             Quantity = true;
+            DBVersion = true;
         }
 
     }
