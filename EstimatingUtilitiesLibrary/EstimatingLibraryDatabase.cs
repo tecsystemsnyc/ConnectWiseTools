@@ -1209,7 +1209,7 @@ namespace EstimatingUtilitiesLibrary
             foreach(DataRow row in conduitTypesDT.Rows)
             {
                 Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
-                string name = row[ManufacturerTable.Name.Name].ToString();
+                string name = row[ConduitTypeTable.Name.Name].ToString();
                 double cost = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Cost.Name].ToString(), 1);
                 double labor = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Labor.Name].ToString(), 1);
 
@@ -1222,6 +1222,18 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return conduitTypes;
+        }
+
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCosts()
+        {
+            ObservableCollection<TECAssociatedCost> associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            DataTable associatedCostsDT = SQLiteDB.getDataFromTable(AssociatedCostTable.TableName);
+            foreach (DataRow row in associatedCostsDT.Rows)
+            {
+                associatedCosts.Add(getAssociatedCostFromRow(row));
+            }
+
+            return associatedCosts;
         }
 
         static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID)
@@ -1392,23 +1404,14 @@ namespace EstimatingUtilitiesLibrary
 
             if (manTable.Rows.Count > 0)
             {
-                Guid manufacturerID = new Guid(manTable.Rows[0]["ManufacturerID"].ToString());
-                string name = manTable.Rows[0]["Name"].ToString();
-                string multiplierString = manTable.Rows[0]["Multiplier"].ToString();
-
-                double multiplier;
-                if (!double.TryParse(multiplierString, out multiplier))
-                {
-                    multiplier = 1;
-                    Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-                }
-
+                Guid manufacturerID = new Guid(manTable.Rows[0][ManufacturerTable.ManufacturerID.Name].ToString());
+                string name = manTable.Rows[0][ManufacturerTable.Name.Name].ToString();
+                double multiplier = UtilitiesMethods.StringToDouble(manTable.Rows[0][ManufacturerTable.Multiplier.Name].ToString(), 1);
+                
                 return new TECManufacturer(name, multiplier, manufacturerID);
             }
             else
-            {
-                return new TECManufacturer();
-            }
+            { return new TECManufacturer(); }
         }
 
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
@@ -1428,6 +1431,23 @@ namespace EstimatingUtilitiesLibrary
             {
                 return new TECConnectionType();
             }
+        }
+
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
+        {
+            string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
+            command += "(select " + AssociatedCostTable.AssociatedCostID.Name +" from " + ScopeAssociatedCostTable.TableName+  " where " +ScopeAssociatedCostTable.ScopeID.Name+ " = '";
+            command += scopeID;
+            command += "')";
+
+            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
+
+            foreach(DataRow row in DT.Rows)
+            {
+                associatedCosts.Add(getAssociatedCostFromRow(row);
+            }
+            return associatedCosts;
         }
 
         static private ObservableCollection<TECNote> getNotes()
@@ -2761,6 +2781,18 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.Labor = labor;
 
             return outConnectionType;
+        }
+        private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
+            string name = row[AssociatedCostTable.Name.Name].ToString();
+            double cost = UtilitiesMethods.StringToDouble(row[AssociatedCostTable.Cost.Name].ToString(), 1);
+
+            var associatedCost = new TECAssociatedCost(guid);
+            associatedCost.Name = name;
+            associatedCost.Cost = cost;
+
+            return associatedCost;
         }
 
         #endregion
