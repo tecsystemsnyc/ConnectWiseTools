@@ -3165,11 +3165,6 @@ namespace EstimatingUtilitiesLibrary
             }
             createString += ")";
             SQLiteDB.nonQueryCommand(createString);
-
-            if (table is TemplatesInfoTable)
-            {
-                populateTemplatesInfo();
-            }
         }
         static private void createTempTableFromDefinition(TableBase table)
         {
@@ -4040,9 +4035,10 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if(type == typeof(TECTemplates))
                 {
-                    var infoTemplates = getTemplatesInfo();
+                    var templateGuid = getTemplatesInfo().InfoGuid;
+                    
                     commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + TemplatesInfoTable.TemplateID.Name + " = '" + infoTemplates.InfoGuid.ToString() + "'";
+                    commandString += "where " + TemplatesInfoTable.TemplateID.Name + " = '" + templateGuid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
             }
