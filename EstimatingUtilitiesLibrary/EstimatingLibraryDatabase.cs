@@ -2496,14 +2496,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Database Version Update Methods
-        static private void populateTemplatesInfo()
-        {
-            Dictionary<string, string> Data = new Dictionary<string, string>();
-            Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            Data.Add(TemplatesInfoTable.TemplateID.Name, Guid.NewGuid().ToString());
-            SQLiteDB.Insert(TemplatesInfoTable.TableName, Data);
-        }
-
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
@@ -2595,29 +2587,6 @@ namespace EstimatingUtilitiesLibrary
                 { createTableFromDefinition(table); }
             }
         }
-        static private List<string> getAllTableNames()
-        {
-            string command = "select name from sqlite_master where type = 'table' order by 1";
-            DataTable tables = SQLiteDB.getDataFromCommand(command);
-            List<string> tableNames = new List<string>();
-            foreach (DataRow row in tables.Rows)
-            {
-                tableNames.Add(row["Name"].ToString());
-            }
-            return tableNames;
-        }
-        static private List<string> getAllTableFields(string tableName)
-        {
-            string command = "select * from " + tableName + " limit 1";
-            DataTable data = SQLiteDB.getDataFromCommand(command);
-            List<string> tableFields = new List<string>();
-            foreach (DataColumn col in data.Columns)
-            {
-                tableFields.Add(col.ColumnName);
-            }
-            return tableFields;
-        }
-
         static private void updateTableFromType(TableBase table)
         {
             var tableInfo = new TableInfo(table);
@@ -2657,7 +2626,6 @@ namespace EstimatingUtilitiesLibrary
             SQLiteDB.nonQueryCommand(commandString);
             
         }
-
         private static void updateVersionNumber(Type type)
         {
             string commandString;
@@ -2681,13 +2649,11 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private static void killTemplatesInfo()
         {
             string commandString = commandString = "drop table '" + TemplatesInfoTable.TableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
         }
-
         #endregion
 
         #region Backup Methods
@@ -2860,7 +2826,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Generic Complete Save Methods
-
         private static void saveCompleteBid(TECBid bid)
         {
             addObject(bid, bid);
@@ -3084,7 +3049,6 @@ namespace EstimatingUtilitiesLibrary
             addObject(device.Manufacturer, device);
             addObject(device.ConnectionType, device);
         }
-
         #endregion
 
         #region Generic Add Methods
@@ -3272,6 +3236,28 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Generic Helper Methods
+        static private List<string> getAllTableNames()
+        {
+            string command = "select name from sqlite_master where type = 'table' order by 1";
+            DataTable tables = SQLiteDB.getDataFromCommand(command);
+            List<string> tableNames = new List<string>();
+            foreach (DataRow row in tables.Rows)
+            {
+                tableNames.Add(row["Name"].ToString());
+            }
+            return tableNames;
+        }
+        static private List<string> getAllTableFields(string tableName)
+        {
+            string command = "select * from " + tableName + " limit 1";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> tableFields = new List<string>();
+            foreach (DataColumn col in data.Columns)
+            {
+                tableFields.Add(col.ColumnName);
+            }
+            return tableFields;
+        }
         private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, params Object[] inputObjects)
         {
             var tableInfo = new TableInfo(table);
@@ -3585,5 +3571,4 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
     }
-
 }
