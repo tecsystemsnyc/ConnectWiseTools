@@ -3886,6 +3886,7 @@ namespace EstimatingUtilitiesLibrary
                 if (!isUpToDate)
                 {
                     updateDatabase(type);
+                    updateVersionNumber(type);
                 }
             }
             catch (Exception e)
@@ -4016,18 +4017,23 @@ namespace EstimatingUtilitiesLibrary
             SQLiteDB.nonQueryCommand(commandString);
             commandString = "drop table '" + tempName + "'";
             SQLiteDB.nonQueryCommand(commandString);
+            
+        }
 
-            if ((table is BidInfoTable) || (table is TemplatesInfoTable))
+        private static void updateVersionNumber(Type type)
+        {
+            string commandString;
+            if (type == typeof(TECBid) || type == typeof(TECTemplates))
             {
                 Dictionary<string, string> Data = new Dictionary<string, string>();
-                if (table is BidInfoTable)
+                if (type == typeof(TECBid))
                 {
                     var infoBid = getBidInfo();
                     commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
                     commandString += "where " + BidInfoTable.BidID.Name + " = '" + infoBid.Guid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
-                else
+                else if(type == typeof(TECTemplates))
                 {
                     var infoTemplates = getTemplatesInfo();
                     commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";

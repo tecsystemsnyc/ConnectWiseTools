@@ -87,7 +87,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECSubcontractorConst";
         public static Type ObjectType = typeof(TECLabor);
-        public static  Type ReferenceType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECBid);
 
         public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
 
