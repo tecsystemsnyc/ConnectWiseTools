@@ -3914,6 +3914,10 @@ namespace EstimatingUtilitiesLibrary
                     {
                         MessageBox.Show("Bid info not found in database. Could not check verison.");
                         throw new Exception("Could not load from TECBidInfo");
+                    } else if(type == typeof(TECTemplates))
+                    {
+                        killTemplatesInfo();
+                        return false;
                     }
                     else
                     { return false; }
@@ -4031,6 +4035,12 @@ namespace EstimatingUtilitiesLibrary
                     SQLiteDB.nonQueryCommand(commandString);
                 }
             }
+        }
+
+        private static void killTemplatesInfo()
+        {
+            string commandString = commandString = "drop table '" + TemplatesInfoTable.TableName + "'";
+            SQLiteDB.nonQueryCommand(commandString);
         }
 
         #endregion
