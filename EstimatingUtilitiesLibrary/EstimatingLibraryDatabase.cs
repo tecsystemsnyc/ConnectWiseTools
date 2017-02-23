@@ -3875,19 +3875,19 @@ namespace EstimatingUtilitiesLibrary
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
-            try
-            {
+            //try
+            //{
                 isUpToDate = checkDatabaseVersion(type);
                 if (!isUpToDate)
                 {
                     updateDatabase(type);
                     updateVersionNumber(type);
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Could not check database version." + e);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Could not check database version." + e);
+            //}
         }
 
         static private bool checkDatabaseVersion(Type type)
@@ -4006,8 +4006,14 @@ namespace EstimatingUtilitiesLibrary
 
             createTempTableFromDefinition(table);
 
-            string commandString = "insert or ignore into '" + tempName + "' (" + commonString + ") select " + commonString + " from '" + tableName + "'";
-            SQLiteDB.nonQueryCommand(commandString);
+            string commandString;
+
+            if (commonFields.Count > 0)
+            {
+                commandString = "insert or ignore into '" + tempName + "' (" + commonString + ") select " + commonString + " from '" + tableName + "'";
+                SQLiteDB.nonQueryCommand(commandString);
+            }
+
             commandString = "drop table '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
 

@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.3.0.12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.3.0.13")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
