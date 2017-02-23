@@ -4443,7 +4443,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (!SQLiteDB.Delete(tableInfo.Name, data))
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
+                    Console.WriteLine("Error: Couldn't remove data from " + tableInfo.Item1 + " table.");
                 }
             }
         }
