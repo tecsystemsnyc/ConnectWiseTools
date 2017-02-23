@@ -2268,16 +2268,16 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECTemplates getTemplatesInfo()
         {
-            DataTable bidInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
+            DataTable templateInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
 
-            if (bidInfoDT.Rows.Count < 1)
+            if (templateInfoDT.Rows.Count < 1)
             {
-                MessageBox.Show("Bid info not found in database. Bid info and labor will be missing.");
+                Console.WriteLine("Template info not found in database.");
                 return new TECTemplates();
             }
-            DataRow bidInfoRow = bidInfoDT.Rows[0];
+            DataRow templateInfoRow = templateInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(bidInfoRow[TemplatesInfoTable.TemplateID.Name].ToString());
+            Guid infoGuid = new Guid(templateInfoRow[TemplatesInfoTable.TemplateID.Name].ToString());
 
             return new TECTemplates(infoGuid);
         }
@@ -3914,6 +3914,11 @@ namespace EstimatingUtilitiesLibrary
                     {
                         MessageBox.Show("Bid info not found in database. Could not check verison.");
                         throw new Exception("Could not load from TECBidInfo");
+                    }
+                    else if (type == typeof(TECTemplates))
+                    {
+                        MessageBox.Show("Templates info not found in database. Could not check verison.");
+                        throw new Exception("Could not load from TECTemplatesInfo");
                     }
                     else
                     { return false; }
