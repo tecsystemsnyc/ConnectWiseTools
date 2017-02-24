@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     public class TECTemplates : TECObject
     {
         #region Properties
-        private Guid _infoGuid;
+        private Guid _guid;
         private ObservableCollection<TECSystem> _systemTemplates;
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
@@ -21,10 +21,11 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllerTemplates;
         private ObservableCollection<TECConnectionType> _connectionTypeCatalog;
         private ObservableCollection<TECConduitType> _conduitTypeCatalog;
+        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog;
     
-        public Guid InfoGuid
+        public Guid Guid
         {
-            get { return _infoGuid; }
+            get { return _guid; }
         }
         public ObservableCollection<TECSystem> SystemTemplates
         {
@@ -134,6 +135,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConduitTypeCatalog", temp, this);
             }
         }
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsCatalog
+        {
+            get { return _associatedCostsCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                AssociatedCostsCatalog.CollectionChanged -= CollectionChanged;
+                _associatedCostsCatalog = value;
+                AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
+            }
+        }
 
         public override object Copy()
         {
@@ -148,7 +161,7 @@ namespace EstimatingLibrary
 
         public TECTemplates(Guid guid)
         {
-            _infoGuid = guid;
+            _guid = guid;
 
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
@@ -159,6 +172,7 @@ namespace EstimatingLibrary
             _controllerTemplates = new ObservableCollection<TECController>();
             _connectionTypeCatalog = new ObservableCollection<TECConnectionType>();
             _conduitTypeCatalog = new ObservableCollection<TECConduitType>();
+            _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -169,6 +183,7 @@ namespace EstimatingLibrary
             ControllerTemplates.CollectionChanged += CollectionChanged;
             ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
             ConduitTypeCatalog.CollectionChanged += CollectionChanged;
+            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
         }
 
         public TECTemplates(TECTemplates templatesSource) : this()

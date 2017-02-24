@@ -32,67 +32,56 @@ namespace EstimatingUtilitiesLibrary
             SQLiteDB = new SQLiteDatabase(path);
 
             checkAndUpdateDB(typeof(TECBid));
-
             TECBid bid = new TECBid();
-
-            //try
-            //{
-
-            //Update catalogs from templates.
-            if (templates.DeviceCatalog.Count > 0)
+            try
             {
-                foreach (TECDevice device in templates.DeviceCatalog)
+                //Update catalogs from templates.
+                if (templates.DeviceCatalog.Count > 0)
                 {
-                    editDevice(device);
+                    foreach (TECDevice device in templates.DeviceCatalog)
+                    { editObject(device, bid); }
                 }
-            }
 
-            if (templates.ManufacturerCatalog.Count > 0)
-            {
-                foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+                if (templates.ManufacturerCatalog.Count > 0)
                 {
-                    editManufacturer(manufacturer);
+                    foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+                    { editObject(manufacturer, bid); }
                 }
-            }
 
-            if (templates.Tags.Count > 0)
-            {
-                foreach (TECTag tag in templates.Tags)
+                if (templates.Tags.Count > 0)
                 {
-                    editTag(tag);
+                    foreach (TECTag tag in templates.Tags)
+                    { editObject(tag, bid); }
                 }
-            }
 
-            bid = getBidInfo();
-            bid.Labor = getLaborConsts();
-            bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
-            bid.ProposalScope = getAllProposalScope(bid.Systems);
-            bid.DeviceCatalog = getAllDevices();
-            bid.ManufacturerCatalog = getAllManufacturers();
-            bid.Locations = getAllLocations();
-            bid.Tags = getAllTags();
-            bid.Notes = getNotes();
-            bid.Exclusions = getExclusions();
-            bid.Drawings = getDrawings();
-            bid.Connections = getConnections();
-            bid.Controllers = getControllers();
-            bid.ConnectionTypes = getConnectionTypes();
-            linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
-            linkAllLocations(bid.Locations, bid.Systems);
-            linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-            linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
-            linkAllDevices(bid.Systems, bid.DeviceCatalog);
-            linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
-            linkTagsInBid(bid.Tags, bid);
-            getUserAdjustments(bid);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            //}
-            //catch (Exception e)
-            //{
-            //MessageBox.Show("Could not load bid from database. Error: " + e.Message);
-            //}
+                bid = getBidInfo();
+                bid.Labor = getLaborConsts();
+                bid.ScopeTree = getBidScopeBranches();
+                bid.Systems = getAllSystemsInBid(bid);
+                bid.ProposalScope = getAllProposalScope(bid.Systems);
+                bid.DeviceCatalog = getAllDevices();
+                bid.ManufacturerCatalog = getAllManufacturers();
+                bid.Locations = getAllLocations();
+                bid.Tags = getAllTags();
+                bid.Notes = getNotes();
+                bid.Exclusions = getExclusions();
+                bid.Drawings = getDrawings();
+                bid.Connections = getConnections();
+                bid.Controllers = getControllers();
+                bid.ConnectionTypes = getConnectionTypes();
+                linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
+                linkAllLocations(bid.Locations, bid.Systems);
+                linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+                linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
+                linkAllDevices(bid.Systems, bid.DeviceCatalog);
+                linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+                linkTagsInBid(bid.Tags, bid);
+                getUserAdjustments(bid);
+                //Breaks Visual Scope in a page
+                //populatePageVisualConnections(bid.Drawings, bid.Connections);
+            }
+            catch (Exception e)
+            { MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
 
             SQLiteDB.Connection.Close();
 
@@ -101,15 +90,12 @@ namespace EstimatingUtilitiesLibrary
 
             return bid;
         }
-
         static public TECTemplates LoadDBToTemplates(string path)
         {
             SQLiteDB = new SQLiteDatabase(path);
-
             checkAndUpdateDB(typeof(TECTemplates));
 
             TECTemplates templates = new TECTemplates();
-
             try
             {
                 templates = getTemplatesInfo();
@@ -129,181 +115,47 @@ namespace EstimatingUtilitiesLibrary
                 linkTagsInTemplates(templates.Tags, templates);
             }
             catch (Exception e)
-            {
-                MessageBox.Show("Could not load templates from database. Error: " + e.Message);
-            }
+            { MessageBox.Show("Could not load templates from database. Error: " + e.Message); }
 
             SQLiteDB.Connection.Close();
-
             return templates;
         }
-
         static public void SaveBidToNewDB(string path, TECBid bid)
         {
             SQLiteDB = new SQLiteDatabase(path);
 
             if (File.Exists(path))
-            {
-                SQLiteDB.overwriteFile();
-            }
-
+            { SQLiteDB.overwriteFile(); }
             createAllBidTables();
 
             try
-            {
-
-                foreach (TECDevice device in bid.DeviceCatalog)
-                {
-                    addDevice(device);
-                    addDeviceManufacturerRelation(device, device.Manufacturer);
-                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
-                    addTagsInScope(device.Tags, device.Guid);
-                }
-
-                foreach (TECManufacturer manufacturer in bid.ManufacturerCatalog)
-                {
-                    addManufacturer(manufacturer);
-                }
-
-                addTags(bid.Tags);
-
-                addBidInfo(bid);
-
-                addLabor(bid.Labor, bid);
-
-                addSubContractorConsts(bid.Labor, bid);
-
-                addFullBidSystems(bid);
-
-                foreach (TECScopeBranch branch in bid.ScopeTree)
-                {
-                    addScopeTree(branch);
-                    addScopeBranchBidRelation(branch, bid.Guid);
-                }
-
-                foreach (TECNote note in bid.Notes)
-                {
-                    //addNote(note);
-                    addNote(note);
-                }
-
-                foreach (TECExclusion exclusion in bid.Exclusions)
-                {
-                    //addExclusion(exclusion);
-                    addExclusion(exclusion);
-                }
-
-                foreach (TECDrawing drawing in bid.Drawings)
-                {
-                    addDrawing(drawing);
-                    foreach (TECPage page in drawing.Pages)
-                    {
-                        addPage(page);
-                        addDrawingPageRelation(drawing, page);
-                        foreach (TECVisualScope vs in page.PageScope)
-                        {
-                            addVisualScope(vs);
-                            addPageVisualScopeRelation(page, vs);
-                            addVisualScopeScopeRelation(vs);
-                        }
-                    }
-                }
-                foreach (TECLocation location in bid.Locations)
-                {
-                    addLocation(location);
-                }
-
-                foreach (TECConnection connection in bid.Connections)
-                {
-                    addConnection(connection);
-                    foreach (TECScope scope in connection.Scope)
-                    {
-                        addScopeConnectionRelation(scope, connection);
-                    }
-                    addControllerConnectionRelation(connection.Controller, connection);
-                }
-                foreach (TECController controller in bid.Controllers)
-                {
-                    addController(controller);
-                }
-
-                foreach (TECProposalScope propScope in bid.ProposalScope)
-                {
-                    addFullProposalScope(propScope);
-                }
-                foreach (TECConnectionType connectionType in bid.ConnectionTypes)
-                {
-                    addConnectionType(connectionType);
-                }
-
-                addUserAdjustments(bid);
-
-            }
+            { saveCompleteBid(bid); }
             catch (Exception e)
             {
                 string message = "Could not save bid to new database. Error: " + e.Message;
                 MessageBox.Show(message);
-            }
-
-
+            } 
             SQLiteDB.Connection.Close();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-
         static public void SaveTemplatesToNewDB(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
 
             if (File.Exists(path))
-            {
-                SQLiteDB.overwriteFile();
-            }
+            { SQLiteDB.overwriteFile(); }
 
             createAllTemplateTables();
 
             try
-            {
-                addTemplatesInfo(templates);
-                addTags(templates.Tags);
-                addFullTemplateSystems(templates);
-                foreach (TECEquipment equipment in templates.EquipmentTemplates)
-                {
-                    addFullEquipment(equipment);
-                }
-                foreach (TECSubScope subScope in templates.SubScopeTemplates)
-                {
-                    addFullSubScope(subScope);
-                }
-                foreach (TECDevice device in templates.DeviceCatalog)
-                {
-                    addDevice(device);
-                    addDeviceManufacturerRelation(device, device.Manufacturer);
-                    addDeviceConnectionTypeRelation(device, device.ConnectionType);
-                    addTagsInScope(device.Tags, device.Guid);
-                }
-                foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-                {
-                    addManufacturer(manufacturer);
-                }
-                foreach (TECController controller in templates.ControllerTemplates)
-                {
-                    addController(controller);
-                }
-                foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
-                {
-                    addConnectionType(connectionType);
-                }
-            }
+            { saveCompleteTemplate(templates); }
             catch (Exception e)
-            {
-                MessageBox.Show("Could not save templates to new database. Error: " + e.Message);
-            }
+            {  MessageBox.Show("Could not save templates to new database. Error: " + e.Message); }
 
             SQLiteDB.Connection.Close();
         }
-
         static public void UpdateBidToDB(string path, ChangeStack changeStack)
         {
             createBackup(path);
@@ -345,7 +197,6 @@ namespace EstimatingUtilitiesLibrary
 
             File.Delete(tempPath);
         }
-
         static public void UpdateTemplatesToDB(string path, ChangeStack changeStack)
         {
             string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
@@ -385,1765 +236,17 @@ namespace EstimatingUtilitiesLibrary
 
             File.Delete(tempPath);
         }
-
         #endregion Public Functions
 
         #region Update Functions
         static private void addUpdate(object tarObject, object refObject)
-        {
-
-            addObject(tarObject, refObject);
-
-        }
-
+        { addObject(tarObject, refObject); }
         static private void removeUpdate(object tarObject, object refObject)
-        {
-            removeObject(tarObject, refObject);
-        }
-
+        { removeObject(tarObject, refObject); }
         static private void editUpdate(object tarObject, object refObject)
-        {
-            editObject(tarObject, refObject);
-        }
-
-        #region Old Add Update
-
-        //static private void addUpdate(object tarObject, object refObject)
-        //{
-        //    if (tarObject is TECSystem)
-        //    {
-        //        if (refObject is TECBid)
-        //        {
-        //            //Console.WriteLine("Num systems to update: " + (refObject as TECBid).Systems.Count);
-        //            addSystem(tarObject as TECSystem);
-        //            updateSystemIndexes((refObject as TECBid).Systems);
-        //        }
-        //        else if (refObject is TECTemplates)
-        //        {
-        //            addSystem(tarObject as TECSystem);
-        //        }
-        //    }
-        //    else if (tarObject is TECEquipment)
-        //    {
-        //        addEquipment(tarObject as TECEquipment);
-        //        if (refObject is TECSystem)
-        //        {
-        //            updateSystemEquipmentRelation(refObject as TECSystem);
-        //        }
-        //    }
-        //    else if (tarObject is TECSubScope)
-        //    {
-        //        addSubScope(tarObject as TECSubScope);
-        //        if (refObject is TECEquipment)
-        //        {
-        //            updateEquipmentSubScopeRelation(refObject as TECEquipment);
-        //        }
-        //    }
-        //    else if (tarObject is TECDevice)
-        //    {
-        //        if (refObject is TECSubScope)
-        //        {
-        //            updateSubScopeDeviceRelation(refObject as TECSubScope);
-        //        }
-        //        else if (refObject is TECBid || refObject is TECTemplates)
-        //        {
-        //            addDevice(tarObject as TECDevice);
-        //        }
-        //    }
-        //    else if (tarObject is TECPoint)
-        //    {
-        //        addPoint(tarObject as TECPoint);
-        //        updateSubScopePointRelation(refObject as TECSubScope);
-        //    }
-        //    else if (tarObject is TECDrawing)
-        //    {
-        //        addDrawing(tarObject as TECDrawing);
-        //    }
-        //    else if (tarObject is TECPage)
-        //    {
-        //        addPage(tarObject as TECPage);
-        //        addDrawingPageRelation(refObject as TECDrawing, tarObject as TECPage);
-        //    }
-        //    else if (tarObject is TECVisualScope)
-        //    {
-        //        addVisualScope(tarObject as TECVisualScope);
-        //        addPageVisualScopeRelation(refObject as TECPage, tarObject as TECVisualScope);
-        //        addVisualScopeScopeRelation(tarObject as TECVisualScope);
-        //    }
-        //    else if (tarObject is TECNote)
-        //    {
-        //        addNote(tarObject as TECNote);
-        //    }
-        //    else if (tarObject is TECExclusion)
-        //    {
-        //        addExclusion(tarObject as TECExclusion);
-        //    }
-        //    else if (tarObject is TECScopeBranch)
-        //    {
-        //        addScopeBranch(tarObject as TECScopeBranch);
-        //        if (refObject is TECScopeBranch)
-        //        {
-        //            addScopeTreeRelation(refObject as TECScopeBranch, tarObject as TECScopeBranch);
-        //        }
-        //        else if (refObject is TECProposalScope)
-        //        {
-        //            addScopeBranchInProposalScope(tarObject as TECScopeBranch, refObject as TECProposalScope);
-        //        }
-        //        else if (refObject is TECBid)
-        //        {
-        //            addScopeBranchBidRelation(tarObject as TECScopeBranch, (refObject as TECBid).InfoGuid);
-        //        }
-        //    }
-        //    else if (tarObject is TECManufacturer)
-        //    {
-        //        if (refObject is TECDevice)
-        //        {
-        //            addDeviceManufacturerRelation(refObject as TECDevice, tarObject as TECManufacturer);
-        //        }
-        //        else if (refObject is TECBid)
-        //        {
-        //            addManufacturer(tarObject as TECManufacturer);
-        //        }
-        //        else if (refObject is TECTemplates)
-        //        {
-        //            addManufacturer(tarObject as TECManufacturer);
-        //        }
-        //    }
-        //    else if (tarObject is TECLocation)
-        //    {
-        //        if (refObject is TECBid)
-        //        {
-        //            addLocation(tarObject as TECLocation);
-        //        }
-        //        else
-        //        {
-        //            addLocationInScope(refObject as TECScope);
-        //        }
-        //    }
-        //    else if (tarObject is TECController)
-        //    {
-        //        addController(tarObject as TECController);
-        //    }
-        //    else if (tarObject is TECTag)
-        //    {
-        //        if (refObject is TECScope)
-        //        {
-        //            addTagInScope((tarObject as TECTag), (refObject as TECScope).Guid);
-        //        }
-        //        else if (refObject is TECTemplates)
-        //        {
-        //            addTag(tarObject as TECTag);
-        //        }
-        //    }
-        //    else if (tarObject is TECProposalScope)
-        //    {
-        //        addProposalScope(tarObject as TECProposalScope);
-        //    }
-        //    else if (tarObject is TECIO)
-        //    {
-        //        if (refObject is TECController)
-        //        {
-        //            addControllerIORelation(refObject as TECController, tarObject as TECIO);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-
-        //    }
-        //    else if (tarObject is TECConnectionType)
-        //    {
-        //        if (refObject is TECTemplates)
-        //        {
-        //            addConnectionType(tarObject as TECConnectionType);
-        //        }
-        //        else if(refObject is TECBid)
-        //        {
-        //            addConnectionType(tarObject as TECConnectionType);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECConduitType)
-        //    {
-        //        if (refObject is TECTemplates)
-        //        {
-        //            addConduitType(tarObject as TECConduitType);
-        //        }
-        //        else if (refObject is TECBid)
-        //        {
-        //            addConduitType(tarObject as TECConduitType);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Target object type not included in add branch. Target object type: " + tarObject.GetType());
-        //        throw new NotImplementedException();
-        //    }
-        //}
-        #endregion
-
-        #region Old Edit Update
-
-        //static private void editUpdate(object tarObject, object refObject)
-        //{
-        //    if (tarObject is TECBid)
-        //    {
-        //        editBidInfo(tarObject as TECBid);
-        //    }
-        //    else if (tarObject is TECLabor)
-        //    {
-        //        if (refObject is TECBid)
-        //        {
-        //            editBidInfo(refObject as TECBid);
-        //        }
-        //    }
-        //    else if (tarObject is TECSystem)
-        //    {
-        //        editSystem(tarObject as TECSystem);
-        //    }
-        //    else if (tarObject is TECEquipment)
-        //    {
-        //        editEquipment(tarObject as TECEquipment);
-        //    }
-        //    else if (tarObject is TECSubScope)
-        //    {
-        //        editSubScope(tarObject as TECSubScope);
-        //    }
-        //    else if (tarObject is TECDevice)
-        //    {
-        //        if (refObject is TECDevice)
-        //        {
-        //            editDevice(tarObject as TECDevice);
-        //        }
-        //        else if (refObject is TECSubScope)
-        //        {
-        //            editDeviceQuantity(refObject as TECSubScope, tarObject as TECDevice);
-        //        }
-        //    }
-        //    else if (tarObject is TECPoint)
-        //    {
-        //        editPoint(tarObject as TECPoint);
-        //    }
-        //    else if (tarObject is TECManufacturer)
-        //    {
-        //        if (refObject is TECDevice)
-        //        {
-        //            editManufacturerInDevice(refObject as TECDevice);
-        //        }
-        //        else
-        //        {
-        //            editManufacturer(tarObject as TECManufacturer);
-        //        }
-        //    }
-        //    else if (tarObject is TECDrawing)
-        //    {
-        //        editDrawing(tarObject as TECDrawing);
-        //    }
-        //    else if (tarObject is TECPage)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //    else if (tarObject is TECVisualScope)
-        //    {
-        //        editVisualScope(tarObject as TECVisualScope);
-        //    }
-        //    else if (tarObject is TECNote)
-        //    {
-        //        editNote(tarObject as TECNote);
-        //    }
-        //    else if (tarObject is TECExclusion)
-        //    {
-        //        editExclusion(tarObject as TECExclusion);
-        //    }
-        //    else if (tarObject is TECScopeBranch)
-        //    {
-        //        editScopeBranch(tarObject as TECScopeBranch);
-        //    }
-        //    else if (tarObject is TECLocation)
-        //    {
-        //        editLocation(tarObject as TECLocation);
-        //    }
-        //    else if (tarObject is TECController)
-        //    {
-        //        editController(tarObject as TECController);
-        //    }
-        //    else if (tarObject is ObservableCollection<TECSystem>)
-        //    {
-        //        updateSystemIndexes(tarObject as ObservableCollection<TECSystem>);
-        //    }
-        //    else if (tarObject is ObservableCollection<TECEquipment>)
-        //    {
-        //        updateSystemEquipmentRelation(refObject as TECSystem);
-        //    }
-        //    else if (tarObject is ObservableCollection<TECSubScope>)
-        //    {
-        //        updateEquipmentSubScopeRelation(refObject as TECEquipment);
-        //    }
-        //    else if (tarObject is ObservableCollection<TECDevice>)
-        //    {
-        //        updateSubScopeDeviceRelation(refObject as TECSubScope);
-        //    }
-        //    else if (tarObject is ObservableCollection<TECPoint>)
-        //    {
-        //        updateSubScopePointRelation(refObject as TECSubScope);
-        //    }
-        //    else if (tarObject is TECIO)
-        //    {
-        //        if (refObject is TECController)
-        //        {
-        //            editIOInController(tarObject as TECIO, refObject as TECController);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECProposalScope)
-        //    {
-        //        editProposalScope(tarObject as TECProposalScope);
-        //    }
-        //    else if(tarObject is TECConnectionType)
-        //    {
-        //        editConnectionType(tarObject as TECConnectionType);
-        //    }
-        //    else if (tarObject is TECConduitType)
-        //    {
-        //        editConduitType(tarObject as TECConduitType);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Target object type not included in edit branch. Target object type: " + tarObject.GetType());
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        #endregion
-
-        #region old remove update
-
-        //static private void removeUpdate(object tarObject, object refObject)
-        //{
-        //    if (tarObject is TECSystem)
-        //    {
-        //        removeSystem(tarObject as TECSystem);
-        //        removeLocationInScope(tarObject as TECSystem);
-        //    }
-        //    else if (tarObject is TECEquipment)
-        //    {
-        //        removeEquipment(tarObject as TECEquipment);
-        //        removeLocationInScope(tarObject as TECEquipment);
-        //        if (refObject is TECSystem)
-        //        {
-        //            removeSystemEquipmentRelation(tarObject as TECEquipment);
-        //        }
-        //    }
-        //    else if (tarObject is TECSubScope)
-        //    {
-        //        removeSubScope(tarObject as TECSubScope);
-        //        removeLocationInScope(tarObject as TECSubScope);
-        //        if (refObject is TECEquipment)
-        //        {
-        //            removeEquipmentSubScopeRelation(tarObject as TECSubScope);
-        //        }
-        //    }
-        //    else if (tarObject is TECDevice)
-        //    {
-        //        if (refObject is TECSubScope)
-        //        {
-        //            removeSubScopeDeviceRelation(refObject as TECSubScope, tarObject as TECDevice);
-        //        }
-        //        else if (refObject is TECTemplates)
-        //        {
-        //            removeDevice(tarObject as TECDevice);
-        //        }
-        //    }
-        //    else if (tarObject is TECPoint)
-        //    {
-        //        removePoint(tarObject as TECPoint);
-        //        if (refObject is TECSubScope)
-        //        {
-        //            removeSubScopePointRelation(tarObject as TECPoint);
-        //        }
-        //    }
-        //    else if (tarObject is TECDrawing)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //    else if (tarObject is TECPage)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //    else if (tarObject is TECVisualScope)
-        //    {
-        //        removeVisualScope(tarObject as TECVisualScope);
-        //        removePageVisualScopeRelation(tarObject as TECVisualScope);
-        //    }
-        //    else if (tarObject is TECNote)
-        //    {
-        //        removeNote(tarObject as TECNote);
-        //    }
-        //    else if (tarObject is TECExclusion)
-        //    {
-        //        removeExclusion(tarObject as TECExclusion);
-        //    }
-        //    else if (tarObject is TECScopeBranch)
-        //    {
-        //        removeScopeBranch(tarObject as TECScopeBranch);
-        //        if (refObject is TECScopeBranch)
-        //        {
-        //            removeScopeBranchHierarchyRelation(tarObject as TECScopeBranch);
-        //        }
-        //        else if (refObject is TECBid)
-        //        {
-        //            removeScopeBranchBidRelation(tarObject as TECScopeBranch);
-        //        }
-        //        else if (refObject is TECProposalScope)
-        //        {
-        //            removeScopeBranchProposalScopeRelation(tarObject as TECScopeBranch);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECLocation)
-        //    {
-        //        if (refObject is TECBid)
-        //        {
-        //            removeLocation(tarObject as TECLocation);
-        //        }
-        //        else
-        //        {
-        //            removeLocationInScope(refObject as TECScope);
-        //        }
-        //    }
-        //    else if (tarObject is TECController)
-        //    {
-        //        removeController(tarObject as TECController);
-        //    }
-        //    else if (tarObject is TECProposalScope)
-        //    {
-        //        removeProposalScope(tarObject as TECProposalScope);
-        //    }
-        //    else if (tarObject is TECIO)
-        //    {
-        //        if (refObject is TECController)
-        //        {
-        //            removeControllerIORelation(refObject as TECController, tarObject as TECIO);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECManufacturer)
-        //    {
-        //        if (refObject is TECTemplates)
-        //        {
-        //            removeManufacturer(tarObject as TECManufacturer);
-        //        }
-        //        else if (refObject is TECDevice)
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECTag)
-        //    {
-        //        if (refObject is TECTemplates)
-        //        {
-        //            removeTag(tarObject as TECTag);
-        //        }
-        //        else if (refObject is TECScope)
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECConnectionType)
-        //    {
-        //        if(refObject is TECTemplates)
-        //        {
-        //            removeConnectionType(tarObject as TECConnectionType);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else if (tarObject is TECConduitType)
-        //    {
-        //        if (refObject is TECTemplates)
-        //        {
-        //            removeConduitType(tarObject as TECConduitType);
-        //        }
-        //        else
-        //        {
-        //            throw new NotImplementedException();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Target object type not included in remove branch. Target object type: " + tarObject.GetType());
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        #endregion
-
-
+        { editObject(tarObject, refObject); }
         #endregion Update Functions
-
-        #region Saving to DB Methods
-
-        #region Add Methods
-        static private void addBidInfo(TECBid bid)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(BidInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            data.Add(BidInfoTable.BidID.Name, bid.Guid.ToString());
-            data.Add(BidInfoTable.BidName.Name, bid.Name);
-            data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
-            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
-            data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
-            data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
-
-            if (!SQLiteDB.Insert(BidInfoTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECBidInfo table.");
-            }
-        }
-
-        static private void addTemplatesInfo(TECTemplates templates)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(TemplatesInfoTable.TemplateID.Name, templates.InfoGuid.ToString());
-            data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-
-            if (!SQLiteDB.Insert(TemplatesInfoTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECTemplatesInfo table.");
-            }
-        }
-
-        static private void addFullBidSystems(TECBid bid)
-        {
-            updateBidSystemRelation(bid);
-            foreach (TECSystem system in bid.Systems)
-            {
-                addTagsInScope(system.Tags, system.Guid);
-                addLocationInScope(system);
-                addSystem(system);
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    addFullEquipment(equip);
-                }
-                updateSystemEquipmentRelation(system);
-            }
-        }
-
-        static private void addFullTemplateSystems(TECTemplates templates)
-        {
-            foreach (TECSystem system in templates.SystemTemplates)
-            {
-                addTagsInScope(system.Tags, system.Guid);
-                addLocationInScope(system);
-                addSystem(system);
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    addFullEquipment(equip);
-                }
-                updateSystemEquipmentRelation(system);
-            }
-        }
-
-        static private void addFullEquipment(TECEquipment equipment)
-        {
-            addEquipment(equipment);
-            addTagsInScope(equipment.Tags, equipment.Guid);
-            addLocationInScope(equipment);
-            foreach (TECSubScope ss in equipment.SubScope)
-            {
-                addFullSubScope(ss);
-            }
-            updateEquipmentSubScopeRelation(equipment);
-        }
-
-        static private void addFullSubScope(TECSubScope subScope)
-        {
-            addSubScope(subScope);
-            addTagsInScope(subScope.Tags, subScope.Guid);
-            addLocationInScope(subScope);
-            updateSubScopeDeviceRelation(subScope);
-            foreach (TECPoint point in subScope.Points)
-            {
-                addPoint(point);
-                addTagsInScope(point.Tags, point.Guid);
-            }
-            updateSubScopePointRelation(subScope);
-        }
-
-        static private void addScopeTree(TECScopeBranch trunk)
-        {
-            addScopeBranch(trunk);
-            foreach (TECScopeBranch branch in trunk.Branches)
-            {
-                addScopeTreeRelation(trunk, branch);
-                addScopeTree(branch);
-            }
-        }
-
-        static private void addFullProposalScope(TECProposalScope propScope)
-        {
-            addProposalScope(propScope);
-            foreach (TECScopeBranch branch in propScope.Notes)
-            {
-                addScopeTree(branch);
-                addScopeBranchInProposalScope(branch, propScope);
-            }
-            foreach (TECProposalScope child in propScope.Children)
-            {
-                addFullProposalScope(child);
-            }
-        }
-
-        static private void addUserAdjustments(TECBid bid)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(UserAdjustmentsTable.BidID.Name, bid.Guid.ToString());
-            data.Add(UserAdjustmentsTable.PMExtraHours.Name, bid.Labor.PMExtraHours.ToString());
-            data.Add(UserAdjustmentsTable.ENGExtraHours.Name, bid.Labor.ENGExtraHours.ToString());
-            data.Add(UserAdjustmentsTable.CommExtraHours.Name, bid.Labor.CommExtraHours.ToString());
-            data.Add(UserAdjustmentsTable.SoftExtraHours.Name, bid.Labor.SoftExtraHours.ToString());
-            data.Add(UserAdjustmentsTable.GraphExtraHours.Name, bid.Labor.GraphExtraHours.ToString());
-
-            if (!SQLiteDB.Insert(UserAdjustmentsTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add to TECUserAdjustments table.");
-            }
-        }
-
-        #region Add Object Functions
-
-        static private void addSystem(TECSystem system)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SystemTable.SystemID.Name, system.Guid.ToString());
-            data.Add(SystemTable.Name.Name, system.Name);
-            data.Add(SystemTable.Description.Name, system.Description);
-            data.Add(SystemTable.Quantity.Name, system.Quantity.ToString());
-            data.Add(SystemTable.BudgetPrice.Name, system.BudgetPrice.ToString());
-
-            if (!SQLiteDB.Insert(SystemTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add system to TECSystem table.");
-            }
-        }
-        static private void addEquipment(TECEquipment equipment)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-            data.Add(EquipmentTable.Name.Name, equipment.Name);
-            data.Add(EquipmentTable.Description.Name, equipment.Description);
-            data.Add(EquipmentTable.Quantity.Name, equipment.Quantity.ToString());
-            data.Add(EquipmentTable.BudgetPrice.Name, equipment.BudgetPrice.ToString());
-
-            if (!SQLiteDB.Insert(EquipmentTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add equipment to TECEquipment table.");
-            }
-        }
-        static private void addSubScope(TECSubScope subScope)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-            data.Add(SubScopeTable.Name.Name, subScope.Name);
-            data.Add(SubScopeTable.Description.Name, subScope.Description);
-            data.Add(SubScopeTable.Quantity.Name, subScope.Quantity.ToString());
-            data.Add(SubScopeTable.Length.Name, subScope.Length.ToString());
-
-            if (!SQLiteDB.Insert(SubScopeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add subScope to TECSubScope table.");
-            }
-        }
-        static private void addDevice(TECDevice device)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(DeviceTable.Name.Name, device.Name);
-            data.Add(DeviceTable.Description.Name, device.Description);
-            data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-
-            if (!SQLiteDB.Insert(DeviceTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add device to TECDevice table.");
-            }
-        }
-        static private void addManufacturer(TECManufacturer manufacturer)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
-            data.Add(ManufacturerTable.Name.Name, manufacturer.Name);
-            data.Add(ManufacturerTable.Multiplier.Name, manufacturer.Multiplier.ToString());
-
-            if (!SQLiteDB.Insert(ManufacturerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add manufacturer to TECManufacturer table.");
-            }
-        }
-        static private void addPoint(TECPoint point)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(PointTable.PointID.Name, point.Guid.ToString());
-            data.Add(PointTable.Name.Name, point.Name);
-            data.Add(PointTable.Description.Name, point.Description);
-            data.Add(PointTable.Type.Name, point.Type.ToString());
-            data.Add(PointTable.Quantity.Name, point.Quantity.ToString());
-
-            if (!SQLiteDB.Insert(PointTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add point to TECPoint table.");
-            }
-        }
-        static private void addScopeBranch(TECScopeBranch branch)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            data.Add(ScopeBranchTable.Name.Name, branch.Name);
-            data.Add(ScopeBranchTable.Description.Name, branch.Description);
-
-            if (!SQLiteDB.Insert(ScopeBranchTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECScopeBranch table");
-            }
-        }
-        static private void addTags(ObservableCollection<TECTag> tags)
-        {
-            foreach (TECTag tag in tags)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(TagTable.TagID.Name, tag.Guid.ToString());
-                data.Add(TagTable.TagString.Name, tag.Text);
-
-                if (!SQLiteDB.Insert(TagTable.TableName, data))
-                {
-                    Console.WriteLine("Error: Couldn't add tag to TECTag table.");
-                }
-            }
-        }
-        static private void addTag(TECTag tag)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(TagTable.TagID.Name, tag.Guid.ToString());
-            data.Add(TagTable.TagString.Name, tag.Text);
-
-            if (!SQLiteDB.Insert(TagTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECNote table");
-            }
-        }
-        static private void addNote(TECNote note)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(NoteTable.NoteID.Name, note.Guid.ToString());
-            data.Add(NoteTable.NoteText.Name, note.Text);
-
-            if (!SQLiteDB.Insert(NoteTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECNote table");
-            }
-        }
-        static private void addExclusion(TECExclusion exclusion)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
-            data.Add(ExclusionTable.ExclusionText.Name, exclusion.Text);
-
-            if (!SQLiteDB.Insert(ExclusionTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECExclusion table.");
-            }
-        }
-        static private void addDrawing(TECDrawing drawing)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DrawingTable.DrawingID.Name, drawing.Guid.ToString());
-            data.Add(DrawingTable.Name.Name, drawing.Name);
-            data.Add(DrawingTable.Description.Name, drawing.Description);
-            if (!SQLiteDB.Insert(DrawingTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECDrawing table.");
-            }
-        }
-        static private void addPage(TECPage page)
-        {
-            byte[] imageBytes = File.ReadAllBytes(page.Path);
-
-            Dictionary<string, string> stringData = new Dictionary<string, string>();
-            stringData.Add(PageTable.PageID.Name, page.Guid.ToString());
-            stringData.Add(PageTable.PageNum.Name, page.PageNum.ToString());
-
-            Dictionary<string, byte[]> byteData = new Dictionary<string, byte[]>();
-            byteData.Add(PageTable.Image.Name, imageBytes);
-
-            if (!SQLiteDB.Insert(PageTable.TableName, stringData, byteData))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECPageTable.");
-            }
-        }
-        static private void addVisualScope(TECVisualScope visualScope)
-        {
-            Dictionary<string, string> vsData = new Dictionary<string, string>();
-            vsData.Add(VisualScopeTable.VisualScopeID.Name, visualScope.Guid.ToString());
-            vsData.Add(VisualScopeTable.XPos.Name, visualScope.X.ToString());
-            vsData.Add(VisualScopeTable.YPos.Name, visualScope.Y.ToString());
-
-            if (!SQLiteDB.Insert(VisualScopeTable.TableName, vsData))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECVisualScopeTable.");
-            }
-        }
-        static private void addProposalScope(TECProposalScope proposalScope)
-        {
-            Dictionary<string, string> psData = new Dictionary<string, string>();
-            psData.Add(ProposalScopeTable.ProposalScopeID.Name, proposalScope.Scope.Guid.ToString());
-            psData.Add(ProposalScopeTable.IsProposed.Name, proposalScope.IsProposed.ToInt().ToString());
-
-            if (!SQLiteDB.Insert(ProposalScopeTable.TableName, psData))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECProposalScopeTable.");
-            }
-        }
-        static private void addLocation(TECLocation location)
-        {
-            Dictionary<string, string> locData = new Dictionary<string, string>();
-            locData.Add(LocationTable.LocationID.Name, location.Guid.ToString());
-            locData.Add(LocationTable.Name.Name, location.Name.ToString());
-
-            if (!SQLiteDB.Insert(LocationTable.TableName, locData))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECLocationTable.");
-            }
-        }
-        static private void addController(TECController controller)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerTable.Name.Name, controller.Name);
-            data.Add(ControllerTable.Description.Name, controller.Description);
-            data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
-
-            foreach (TECIO io in controller.IO)
-            {
-                addControllerIORelation(controller, io);
-            }
-
-
-            if (!SQLiteDB.Insert(ControllerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECController table.");
-            }
-
-
-        }
-
-        static private void addConnection(TECConnection connection)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ConnectionTable.ConnectionID.Name, connection.Guid.ToString());
-            data.Add(ConnectionTable.Length.Name, connection.Length.ToString());
-            //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
-
-            if (!SQLiteDB.Insert(ConnectionTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECConnection table.");
-            }
-        }
-        static private void addConnectionType(TECConnectionType connectionType)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
-            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
-            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
-            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
-            //data.Add(ConnectionTable.Type.Name, connection.Type.ToString());
-
-            if (!SQLiteDB.Insert(ConnectionTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
-            }
-        }
-        static private void addConduitType(TECConduitType conduitType)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ConduitTypeTable.ConduitTypeID.Name, conduitType.Guid.ToString());
-            data.Add(ConduitTypeTable.Name.Name, conduitType.Name);
-            data.Add(ConduitTypeTable.Cost.Name, conduitType.Cost.ToString());
-            data.Add(ConduitTypeTable.Labor.Name, conduitType.Labor.ToString());
-
-            if (!SQLiteDB.Insert(ConduitTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECConnectionType table.");
-            }
-        }
-        static private void addLabor(TECLabor labor, TECBid bid)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            data.Add(LaborConstantsTable.BidID.Name, bid.Guid.ToString());
-
-            data.Add(LaborConstantsTable.PMCoef.Name, labor.PMCoef.ToString());
-            data.Add(LaborConstantsTable.PMRate.Name, labor.PMRate.ToString());
-
-            data.Add(LaborConstantsTable.ENGCoef.Name, labor.ENGCoef.ToString());
-            data.Add(LaborConstantsTable.ENGRate.Name, labor.ENGRate.ToString());
-
-            data.Add(LaborConstantsTable.CommCoef.Name, labor.CommCoef.ToString());
-            data.Add(LaborConstantsTable.CommRate.Name, labor.CommRate.ToString());
-
-            data.Add(LaborConstantsTable.SoftCoef.Name, labor.SoftCoef.ToString());
-            data.Add(LaborConstantsTable.SoftRate.Name, labor.SoftRate.ToString());
-
-            data.Add(LaborConstantsTable.GraphCoef.Name, labor.GraphCoef.ToString());
-            data.Add(LaborConstantsTable.GraphRate.Name, labor.GraphRate.ToString());
-
-            if (!SQLiteDB.Insert(LaborConstantsTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECLaborConst table.");
-            }
-        }
-
-        static private void addSubContractorConsts(TECLabor labor, TECBid bid)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            data.Add(SubcontractorConstantsTable.BidID.Name, bid.Guid.ToString());
-
-            data.Add(SubcontractorConstantsTable.ElectricalRate.Name, labor.ElectricalRate.ToString());
-            data.Add(SubcontractorConstantsTable.ElectricalSuperRate.Name, labor.ElectricalSuperRate.ToString());
-
-            if (!SQLiteDB.Insert(SubcontractorConstantsTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add item to TECSubcontractorConst table.");
-            }
-        }
-
-        #endregion Add Object Functions
-
-        #region Add Relation Functions
-
-        static private void addDeviceManufacturerRelation(TECDevice device, TECManufacturer manufacturer)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(DeviceManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
-
-            if (!SQLiteDB.Insert(DeviceManufacturerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECDeviceTECManufacturer table.");
-            }
-        }
-        static private void addDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectiontype)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(DeviceConnectionTypeTable.TypeID.Name, connectiontype.Guid.ToString());
-
-            if (!SQLiteDB.Insert(DeviceConnectionTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECDeviceTECConnectionType table.");
-            }
-        }
-        static private void addScopeBranchBidRelation(TECScopeBranch branch, Guid bidID)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(BidScopeBranchTable.BidID.Name, bidID.ToString());
-            data.Add(BidScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-
-            if (!SQLiteDB.Insert(BidScopeBranchTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECBidTECScopeBranch table.");
-            }
-        }
-        static private void addScopeTreeRelation(TECScopeBranch parentBranch, TECScopeBranch childBranch)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ScopeBranchHierarchyTable.ParentID.Name, parentBranch.Guid.ToString());
-            data.Add(ScopeBranchHierarchyTable.ChildID.Name, childBranch.Guid.ToString());
-
-            if (!SQLiteDB.Insert("TECScopeBranchHierarchy", data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECScopeBranchHierarhy table.");
-            }
-        }
-        static private void addTagsInScope(ObservableCollection<TECTag> tags, Guid scopeID)
-        {
-            foreach (TECTag tag in tags)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(ScopeTagTable.ScopeID.Name, scopeID.ToString());
-                data.Add(ScopeTagTable.TagID.Name, tag.Guid.ToString());
-
-                if (!SQLiteDB.Insert(ScopeTagTable.TableName, data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
-                }
-            }
-        }
-        static private void addTagInScope(TECTag tag, Guid scopeID)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ScopeTagTable.ScopeID.Name, scopeID.ToString());
-            data.Add(ScopeTagTable.TagID.Name, tag.Guid.ToString());
-
-            if (!SQLiteDB.Insert(ScopeTagTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECScopeTECTag table.");
-            }
-        }
-        static private void addDrawingPageRelation(TECDrawing drawing, TECPage page)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DrawingPageTable.DrawingID.Name, drawing.Guid.ToString());
-            data.Add(DrawingPageTable.PageID.Name, page.Guid.ToString());
-
-            if (!SQLiteDB.Insert(DrawingPageTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECDrawingTECPage table.");
-            }
-        }
-        static private void addPageVisualScopeRelation(TECPage page, TECVisualScope vs)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(PageVisualScopeTable.PageID.Name, page.Guid.ToString());
-            data.Add(PageVisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
-
-            if (!SQLiteDB.Insert(PageVisualScopeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECPageTECScope table.");
-            }
-        }
-        static private void addVisualScopeScopeRelation(TECVisualScope vs)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(VisualScopeScopeTable.VisualScopeID.Name, vs.Guid.ToString());
-            data.Add(VisualScopeScopeTable.ScopeID.Name, vs.Scope.Guid.ToString());
-
-            if (!SQLiteDB.Insert(VisualScopeScopeTable.TableName, data))
-            {
-                Console.WriteLine("Could not add relation to TECVisualScopeTECScope table.");
-            }
-        }
-
-        static private void addLocationInScope(TECScope scope)
-        {
-            if (scope.Location != null)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(LocationScopeTable.ScopeID.Name, scope.Guid.ToString());
-                data.Add(LocationScopeTable.LocationID.Name, scope.Location.Guid.ToString());
-
-                if (!SQLiteDB.Insert(LocationScopeTable.TableName, data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECLocationTECScope table.");
-                }
-            }
-        }
-
-        static private void addControllerConnectionRelation(TECController controller, TECConnection connection)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerConnectionTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerConnectionTable.ConnectionID.Name, connection.Guid.ToString());
-
-            if (!SQLiteDB.Insert(ControllerConnectionTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECControllerTECConnection table.");
-            }
-        }
-
-        static private void addScopeConnectionRelation(TECScope scope, TECConnection connection)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ScopeConnectionTable.ScopeID.Name, scope.Guid.ToString());
-            data.Add(ScopeConnectionTable.ConnectionID.Name, connection.Guid.ToString());
-
-            if (!SQLiteDB.Insert(ScopeConnectionTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECScopeTECConnection table.");
-            }
-        }
-
-        static private void addControllerIORelation(TECController controller, TECIO io)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
-            data.Add(ControllerIOTypeTable.Quantity.Name, io.Quantity.ToString());
-
-            if (!SQLiteDB.Insert(ControllerIOTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECControllerTECConnectionType table.");
-            }
-        }
-
-        static private void addScopeBranchInProposalScope(TECScopeBranch branch, TECProposalScope propScope)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            data.Add(ProposalScopeScopeBranchTable.ProposalScopeID.Name, propScope.Scope.Guid.ToString());
-
-            if (!SQLiteDB.Insert(ProposalScopeScopeBranchTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't add relation to TECProposalScopeTECScopeBranch table.");
-            }
-        }
-
-        #endregion Add Relation Functions
-        #endregion Add Methods
-
-        #region Edit Methods
-        static private void editBidInfo(TECBid bid)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(BidInfoTable.BidID.Name, bid.Guid.ToString());
-            data.Add(BidInfoTable.BidName.Name, bid.Name);
-            data.Add(BidInfoTable.BidNumber.Name, bid.BidNumber);
-            data.Add(BidInfoTable.DueDate.Name, bid.DueDate.ToString(DB_FMT));
-            data.Add(BidInfoTable.Salesperson.Name, bid.Salesperson);
-            data.Add(BidInfoTable.Estimator.Name, bid.Estimator);
-
-            if (!SQLiteDB.Replace(BidInfoTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update bid info in TECBidInfo table.");
-            }
-        }
-
-        static private void editSystem(TECSystem system)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SystemTable.SystemID.Name, system.Guid.ToString());
-            data.Add(SystemTable.Name.Name, system.Name);
-            data.Add(SystemTable.Description.Name, system.Description);
-            data.Add(SystemTable.Quantity.Name, system.Quantity.ToString());
-            data.Add(SystemTable.BudgetPrice.Name, system.BudgetPrice.ToString());
-
-            if (!SQLiteDB.Replace(SystemTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update system in TECSystem table");
-            }
-        }
-
-        static private void editEquipment(TECEquipment equipment)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-            data.Add(EquipmentTable.Name.Name, equipment.Name);
-            data.Add(EquipmentTable.Description.Name, equipment.Description);
-            data.Add(EquipmentTable.Quantity.Name, equipment.Quantity.ToString());
-            data.Add(EquipmentTable.BudgetPrice.Name, equipment.BudgetPrice.ToString());
-
-            if (!SQLiteDB.Replace(EquipmentTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update equipment in TECEquipment table.");
-            }
-        }
-
-        static private void editSubScope(TECSubScope subScope)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-            data.Add(SubScopeTable.Name.Name, subScope.Name);
-            data.Add(SubScopeTable.Description.Name, subScope.Description);
-            data.Add(SubScopeTable.Quantity.Name, subScope.Quantity.ToString());
-
-            if (!SQLiteDB.Replace(SubScopeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update subScope in TECSubScope table.");
-            }
-        }
-
-        static private void editDevice(TECDevice device)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(DeviceTable.Name.Name, device.Name);
-            data.Add(DeviceTable.Description.Name, device.Description);
-            data.Add(DeviceTable.Cost.Name, device.Cost.ToString());
-
-            if (!SQLiteDB.Replace(DeviceTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update device in TECDevice table.");
-            }
-        }
-
-        static private void editDeviceQuantity(TECSubScope subScope, TECDevice device)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(SubScopeDeviceTable.SubScopeID.Name, subScope.Guid.ToString());
-            data.Add(SubScopeDeviceTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(SubScopeDeviceTable.Quantity.Name, device.Quantity.ToString());
-
-            if (!SQLiteDB.Replace(SubScopeDeviceTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update SubScopeDevice relation in TECSubScopeTECDevice.");
-            }
-        }
-
-        static private void editManufacturer(TECManufacturer manufacturer)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ManufacturerTable.ManufacturerID.Name, manufacturer.Guid.ToString());
-            data.Add(ManufacturerTable.Name.Name, manufacturer.Name);
-            data.Add(ManufacturerTable.Multiplier.Name, manufacturer.Multiplier.ToString());
-
-            if (!SQLiteDB.Replace(ManufacturerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update manufacturer in TECManufacturer table.");
-            }
-        }
-
-        static private void editManufacturerInDevice(TECDevice device)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
-            data.Add(DeviceManufacturerTable.ManufacturerID.Name, device.Manufacturer.Guid.ToString());
-
-            if (!SQLiteDB.Replace(DeviceManufacturerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update manufacturer in TECDeviceTECManufacturer table.");
-            }
-        }
-
-        static private void editPoint(TECPoint point)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(PointTable.PointID.Name, point.Guid.ToString());
-            data.Add(PointTable.Name.Name, point.Name);
-            data.Add(PointTable.Description.Name, point.Description);
-            data.Add(PointTable.Type.Name, point.Type.ToString());
-            data.Add(PointTable.Quantity.Name, point.Quantity.ToString());
-
-            if (!SQLiteDB.Replace(PointTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update point in TECPoint table.");
-            }
-        }
-
-        static private void editNote(TECNote note)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(NoteTable.NoteID.Name, note.Guid.ToString());
-            data.Add(NoteTable.NoteText.Name, note.Text);
-
-            if (!SQLiteDB.Replace(NoteTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECNote table");
-            }
-        }
-
-        static private void editExclusion(TECExclusion exclusion)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
-            data.Add(ExclusionTable.ExclusionText.Name, exclusion.Text);
-
-            if (!SQLiteDB.Replace(ExclusionTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECExclusion table.");
-            }
-        }
-
-        static private void editScopeBranch(TECScopeBranch branch)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            data.Add(ScopeBranchTable.Name.Name, branch.Name);
-            data.Add(ScopeBranchTable.Description.Name, branch.Description);
-
-            if (!SQLiteDB.Replace(ScopeBranchTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECScopeBranch table.");
-            }
-        }
-
-        static private void editDrawing(TECDrawing drawing)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(DrawingTable.DrawingID.Name, drawing.Guid.ToString());
-            data.Add(DrawingTable.Name.Name, drawing.Name);
-            data.Add(DrawingTable.Description.Name, drawing.Description);
-
-            if (!SQLiteDB.Replace(DrawingTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECDrawing table.");
-            }
-        }
-
-        static private void editVisualScope(TECVisualScope vs)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(VisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
-            data.Add(VisualScopeTable.XPos.Name, vs.X.ToString());
-            data.Add(VisualScopeTable.YPos.Name, vs.Y.ToString());
-
-            if (!SQLiteDB.Replace(VisualScopeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECVisualScope table.");
-            }
-        }
-
-        static private void editLocation(TECLocation location)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(LocationTable.LocationID.Name, location.Guid.ToString());
-            data.Add(LocationTable.Name.Name, location.Name);
-
-            if (!SQLiteDB.Replace(LocationTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECLocation table.");
-            }
-        }
-
-        static private void editTag(TECTag tag)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(TagTable.TagID.Name, tag.Guid.ToString());
-            data.Add(TagTable.TagString.Name, tag.Text);
-
-            if (!SQLiteDB.Replace(TagTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECTag table");
-            }
-        }
-
-        static private void editController(TECController controller)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerTable.Name.Name, controller.Name);
-            data.Add(ControllerTable.Cost.Name, controller.Cost.ToString());
-            data.Add(ControllerTable.Description.Name, controller.Description);
-
-            if (!SQLiteDB.Replace(ControllerTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECController table");
-            }
-        }
-
-        static private void editProposalScope(TECProposalScope propScope)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ProposalScopeTable.ProposalScopeID.Name, propScope.Scope.Guid.ToString());
-            data.Add(ProposalScopeTable.IsProposed.Name, propScope.IsProposed.ToInt().ToString());
-
-            if (!SQLiteDB.Replace(ProposalScopeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECProposalScope table");
-            }
-        }
-
-        static private void editConnectionType(TECConnectionType connectionType)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
-            data.Add(ConnectionTypeTable.Name.Name, connectionType.Name);
-            data.Add(ConnectionTypeTable.Cost.Name, connectionType.Cost.ToString());
-            data.Add(ConnectionTypeTable.Labor.Name, connectionType.Labor.ToString());
-
-            if (!SQLiteDB.Replace(ConnectionTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECConnectionType table");
-            }
-        }
-
-        static private void editConduitType(TECConduitType conduitType)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ConduitTypeTable.ConduitTypeID.Name, conduitType.Guid.ToString());
-            data.Add(ConduitTypeTable.Name.Name, conduitType.Name);
-            data.Add(ConduitTypeTable.Cost.Name, conduitType.Cost.ToString());
-            data.Add(ConduitTypeTable.Labor.Name, conduitType.Labor.ToString());
-
-            if (!SQLiteDB.Replace(ConduitTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in TECConduitType table");
-            }
-        }
-        #endregion Edit Methods
-
-        #region Remove Methods
-        #region Remove Objects
-        static private void removeSystem(TECSystem system)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(SystemTable.SystemID.Name, system.Guid.ToString());
-            SQLiteDB.Delete(SystemTable.TableName, pk);
-        }
-
-        static private void removeEquipment(TECEquipment equipment)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-            SQLiteDB.Delete(EquipmentTable.TableName, pk);
-        }
-
-        static private void removeSubScope(TECSubScope subScope)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-            SQLiteDB.Delete(SubScopeTable.TableName, pk);
-        }
-
-        static private void removeDevice(TECDevice device)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-            SQLiteDB.Delete(DeviceTable.TableName, pk);
-        }
-
-        static private void removePoint(TECPoint point)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(PointTable.PointID.Name, point.Guid.ToString());
-            SQLiteDB.Delete(PointTable.TableName, pk);
-        }
-
-        static private void removeScopeBranch(TECScopeBranch branch)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            SQLiteDB.Delete(ScopeBranchTable.TableName, pk);
-            foreach (TECScopeBranch childBranch in branch.Branches)
-            {
-                removeScopeBranch(childBranch);
-                removeScopeBranchHierarchyRelation(childBranch);
-            }
-        }
-
-        static private void removeNote(TECNote note)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(NoteTable.NoteID.Name, note.Guid.ToString());
-            SQLiteDB.Delete(NoteTable.TableName, pk);
-        }
-
-        static private void removeExclusion(TECExclusion exclusion)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ExclusionTable.ExclusionID.Name, exclusion.Guid.ToString());
-            SQLiteDB.Delete(ExclusionTable.TableName, pk);
-        }
-
-        static private void removeLocation(TECLocation location)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(LocationTable.LocationID.Name, location.Guid.ToString());
-            SQLiteDB.Delete(LocationTable.TableName, pk);
-        }
-
-        static private void removeVisualScope(TECVisualScope vs)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(VisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
-            SQLiteDB.Delete(VisualScopeTable.TableName, pk);
-        }
-
-        static private void removeController(TECController controller)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ControllerTable.ControllerID.Name, controller.Guid.ToString());
-            SQLiteDB.Delete(ControllerTable.TableName, pk);
-        }
-
-        static private void removeProposalScope(TECProposalScope scope)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ProposalScopeTable.ProposalScopeID.Name, scope.Scope.Guid.ToString());
-            SQLiteDB.Delete(ProposalScopeTable.TableName, pk);
-            foreach (TECScopeBranch branch in scope.Notes)
-            {
-                removeScopeBranch(branch);
-            }
-            foreach (TECProposalScope children in scope.Children)
-            {
-                removeProposalScope(children);
-            }
-        }
-
-        static private void removeManufacturer(TECManufacturer man)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ManufacturerTable.ManufacturerID.Name, man.Guid.ToString());
-            SQLiteDB.Delete(ManufacturerTable.TableName, pk);
-        }
-
-        static private void removeTag(TECTag tag)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(TagTable.TagID.Name, tag.Guid.ToString());
-            SQLiteDB.Delete(TagTable.TableName, pk);
-        }
-
-        static private void removeConnectionType(TECConnectionType connectionType)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, connectionType.Guid.ToString());
-            SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
-        }
-
-        static private void removeConduitType(TECConduitType conduitType)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ConnectionTypeTable.ConnectionTypeID.Name, conduitType.Guid.ToString());
-            SQLiteDB.Delete(ConnectionTypeTable.TableName, pk);
-        }
-        #endregion Remove Objects
-
-        #region Remove Relations
-        private static void removeSystemEquipmentRelation(TECEquipment equipment)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-            SQLiteDB.Delete(SystemEquipmentTable.TableName, pk);
-        }
-
-        private static void removeEquipmentSubScopeRelation(TECSubScope subScope)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-            SQLiteDB.Delete(EquipmentSubScopeTable.TableName, pk);
-        }
-
-        private static void removeSubScopeDeviceRelation(TECSubScope sub, TECDevice device)
-        {
-            bool devInSub = false;
-            foreach (TECDevice dev in sub.Devices)
-            {
-                if (dev == device)
-                {
-                    devInSub = true;
-                    break;
-                }
-            }
-
-            if (devInSub)
-            {
-                updateSubScopeDeviceRelation(sub);
-            }
-            else
-            {
-                Dictionary<string, string> pk = new Dictionary<string, string>();
-                pk.Add(DeviceTable.DeviceID.Name, device.Guid.ToString());
-                SQLiteDB.Delete(SubScopeDeviceTable.TableName, pk);
-            }
-
-        }
-
-        private static void removeSubScopePointRelation(TECPoint point)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(PointTable.PointID.Name, point.Guid.ToString());
-            SQLiteDB.Delete(SubScopePointTable.TableName, pk);
-        }
-
-        private static void removeDeviceManufacturerRelation(TECDevice device)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(DeviceManufacturerTable.DeviceID.Name, device.Guid.ToString());
-            SQLiteDB.Delete(DeviceManufacturerTable.TableName, pk);
-        }
-
-        private static void removeScopeBranchHierarchyRelation(TECScopeBranch branch)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ScopeBranchHierarchyTable.ChildID.Name, branch.Guid.ToString());
-            SQLiteDB.Delete(ScopeBranchHierarchyTable.TableName, pk);
-
-        }
-
-        private static void removeScopeBranchBidRelation(TECScopeBranch branch)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(BidScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            SQLiteDB.Delete(BidScopeBranchTable.TableName, pk);
-        }
-
-        private static void removeScopeBranchProposalScopeRelation(TECScopeBranch branch)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ProposalScopeScopeBranchTable.ScopeBranchID.Name, branch.Guid.ToString());
-            SQLiteDB.Delete(ProposalScopeScopeBranchTable.TableName, pk);
-        }
-
-        private static void removeLocationInScope(TECScope scope)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(LocationScopeTable.ScopeID.Name, scope.Guid.ToString());
-            SQLiteDB.Delete(LocationScopeTable.TableName, pk);
-        }
-
-        private static void removePageVisualScopeRelation(TECVisualScope vs)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(PageVisualScopeTable.VisualScopeID.Name, vs.Guid.ToString());
-            SQLiteDB.Delete(PageVisualScopeTable.TableName, pk);
-        }
-
-        private static void removeControllerIORelation(TECController controller, TECIO io)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
-            pk.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
-            SQLiteDB.Delete(ControllerIOTypeTable.TableName, pk);
-        }
-
-        private static void removeDeviceConnectionTypeRelation(TECDevice device, TECConnectionType connectionType)
-        {
-            Dictionary<string, string> pk = new Dictionary<string, string>();
-            pk.Add(DeviceConnectionTypeTable.DeviceID.Name, device.Guid.ToString());
-            pk.Add(DeviceConnectionTypeTable.TypeID.Name, connectionType.Guid.ToString());
-            SQLiteDB.Delete(DeviceConnectionTypeTable.TableName, pk);
-        }
-        #endregion
-        #endregion Remove Methods
-
-        #region Update Relations/Order
-
-        static private void updateBidSystemRelation(TECBid bid)
-        {
-            int i = 0;
-            foreach (TECSystem system in bid.Systems)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(BidSystemTable.BidID.Name, bid.Guid.ToString());
-                data.Add(BidSystemTable.SystemID.Name, system.Guid.ToString());
-                data.Add(BidSystemTable.Index.Name, i.ToString());
-
-                if (!SQLiteDB.Replace(BidSystemTable.TableName, data))
-                {
-                    Console.WriteLine("Error: Couldn't add system to TECBidTECSystem table");
-                }
-                i++;
-            }
-        }
-        static private void updateSystemEquipmentRelation(TECSystem system)
-        {
-            int i = 0;
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("SystemID", system.Guid.ToString());
-                data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-                data.Add("ScopeIndex", i.ToString());
-
-                if (!SQLiteDB.Replace("TECSystemTECEquipment", data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECSystemTECEquipment table.");
-                }
-                i++;
-            }
-        }
-        static private void updateEquipmentSubScopeRelation(TECEquipment equipment)
-        {
-            int i = 0;
-            foreach (TECSubScope subScope in equipment.SubScope)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(EquipmentTable.EquipmentID.Name, equipment.Guid.ToString());
-                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-                data.Add("ScopeIndex", i.ToString());
-
-                if (!SQLiteDB.Replace("TECEquipmentTECSubScope", data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECEquipmentTECSubScope table.");
-                }
-                i++;
-            }
-        }
-        static private void updateSubScopeDeviceRelation(TECSubScope subScope)
-        {
-            int i = 0;
-            Dictionary<Guid, int> quantityList = new Dictionary<Guid, int>();
-            //Console.WriteLine("Device QTY: " + subScope.Devices.Count);
-            foreach (TECDevice device in subScope.Devices)
-            {
-                if (quantityList.ContainsKey(device.Guid))
-                {
-                    //Console.WriteLine("Device Quantity updated");
-                    quantityList[device.Guid] += 1;
-                }
-                else
-                {
-                    //Console.WriteLine("Device and quantity added");
-                    quantityList.Add(device.Guid, 1);
-                }
-            }
-
-            foreach (TECDevice device in subScope.Devices)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(SubScopeDeviceTable.SubScopeID.Name, subScope.Guid.ToString());
-                data.Add(SubScopeDeviceTable.DeviceID.Name, device.Guid.ToString());
-                data.Add(SubScopeDeviceTable.Quantity.Name, quantityList[device.Guid].ToString());
-                data.Add(SubScopeDeviceTable.ScopeIndex.Name, i.ToString());
-
-                if (!SQLiteDB.Replace(SubScopeDeviceTable.TableName, data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECDevice table.");
-                }
-                i++;
-            }
-        }
-        static private void updateSubScopePointRelation(TECSubScope subScope)
-        {
-            int i = 0;
-            foreach (TECPoint point in subScope.Points)
-            {
-                Dictionary<string, string> data = new Dictionary<string, string>();
-                data.Add(SubScopeTable.SubScopeID.Name, subScope.Guid.ToString());
-                data.Add(PointTable.PointID.Name, point.Guid.ToString());
-                data.Add("ScopeIndex", i.ToString());
-
-                if (!SQLiteDB.Replace("TECSubScopeTECPoint", data))
-                {
-                    Console.WriteLine("Error: Couldn't add relation to TECSubScopeTECPoint table.");
-                }
-                i++;
-            }
-        }
-
-        static private void editIOInController(TECIO io, TECController controller)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add(ControllerIOTypeTable.ControllerID.Name, controller.Guid.ToString());
-            data.Add(ControllerIOTypeTable.IOType.Name, TECIO.convertTypeToString(io.Type));
-            data.Add(ControllerIOTypeTable.Quantity.Name, io.Quantity.ToString());
-
-            if (!SQLiteDB.Replace(ControllerIOTypeTable.TableName, data))
-            {
-                Console.WriteLine("Error: Couldn't update item in " + ControllerIOTypeTable.TableName);
-            }
-        }
-
-        #endregion Update Relations/Order
-
-        #endregion //Saving to DB Methods
-
+            
         #region Loading from DB Methods
 
         static private TECBid getBidInfo()
@@ -2169,7 +272,6 @@ namespace EstimatingUtilitiesLibrary
 
             return new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
         }
-
         static private void getUserAdjustments(TECBid bid)
         {
             DataTable adjDT = SQLiteDB.getDataFromTable(UserAdjustmentsTable.TableName);
@@ -2188,7 +290,6 @@ namespace EstimatingUtilitiesLibrary
             bid.Labor.SoftExtraHours = adjRow[UserAdjustmentsTable.SoftExtraHours.Name].ToString().ToDouble();
             bid.Labor.GraphExtraHours = adjRow[UserAdjustmentsTable.GraphExtraHours.Name].ToString().ToDouble();
         }
-
         static private TECLabor getLaborConsts()
         {
             TECLabor labor = new TECLabor();
@@ -2259,13 +360,8 @@ namespace EstimatingUtilitiesLibrary
                     return labor;
                 }
             }
-
-
-
-
-
+            
         }
-
         static private TECTemplates getTemplatesInfo()
         {
             DataTable templateInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
@@ -2281,58 +377,40 @@ namespace EstimatingUtilitiesLibrary
 
             return new TECTemplates(infoGuid);
         }
-
         static private ObservableCollection<TECScopeBranch> getBidScopeBranches()
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
 
-            string command = "select * from TECScopeBranch where ScopeBranchID in (select ScopeBranchID from TECBidTECScopeBranch where ScopeBranchID not in ";
-            command += "(select ChildID from TECScopeBranchHierarchy))";
+            string command = "select * from " + ScopeBranchTable.TableName;
+            command += " where " + ScopeBranchTable.ScopeBranchID.Name;
+            command += " in (select " + ScopeBranchTable.ScopeBranchID.Name;
+            command += " from "+BidScopeBranchTable.TableName+ " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
+            command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName + "))";
 
             DataTable mainBranchDT = SQLiteDB.getDataFromCommand(command);
 
             foreach (DataRow row in mainBranchDT.Rows)
             {
-                Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-
-                ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
-
-                TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
-
-                branch.Tags = getTagsInScope(scopeBranchID);
-
-                mainBranches.Add(branch);
+                mainBranches.Add(getScopeBranchFromRow(row));
             }
 
             return mainBranches;
         }
-
         static private ObservableCollection<TECScopeBranch> getProposalScopeBranches(Guid propScopeID)
         {
             ObservableCollection<TECScopeBranch> scopeBranches = new ObservableCollection<TECScopeBranch>();
-            string command = "select * from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in "
-                + "(select " + ProposalScopeScopeBranchTable.ScopeBranchID.Name + " from " + ProposalScopeScopeBranchTable.TableName + " where " + ProposalScopeScopeBranchTable.ProposalScopeID.Name + " = '"
-                + propScopeID + "')";
+            string command = "select * from " + ScopeBranchTable.TableName;
+            command += " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            command += "(select " + ProposalScopeScopeBranchTable.ScopeBranchID.Name;
+            command += " from " + ProposalScopeScopeBranchTable.TableName;
+            command += " where " + ProposalScopeScopeBranchTable.ProposalScopeID.Name + " = '" + propScopeID + "')";
 
             try
             {
                 DataTable scopeBranchDT = SQLiteDB.getDataFromCommand(command);
-
                 foreach (DataRow row in scopeBranchDT.Rows)
                 {
-                    Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-                    string name = row["Name"].ToString();
-                    string description = row["Description"].ToString();
-
-                    ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
-
-                    TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
-
-                    branch.Tags = getTagsInScope(scopeBranchID);
-
-                    scopeBranches.Add(branch);
+                    scopeBranches.Add(getScopeBranchFromRow(row));
                 }
             }
             catch (Exception e)
@@ -2343,53 +421,38 @@ namespace EstimatingUtilitiesLibrary
 
             return scopeBranches;
         }
-
         static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID)
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
 
-            string command = "select * from TECScopeBranch where ScopeBranchID in ";
-            command += "(select ChildID from TECScopeBranchHierarchy where ParentID = '";
+            string command = "select * from " + ScopeBranchTable.TableName;
+            command += " where "+ ScopeBranchTable.ScopeBranchID.Name + " in ";
+            command += "(select "+ ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName;
+            command += " where " + ScopeBranchHierarchyTable.ParentID.Name + " = '";
             command += parentID;
             command += "')";
 
             DataTable childBranchDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in childBranchDT.Rows)
             {
-                Guid childBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-                string name = row[ScopeBranchTable.Name.Name].ToString();
-                string description = row[ScopeBranchTable.Description.Name].ToString();
-
-                ObservableCollection<TECScopeBranch> grandChildBranches = getChildBranchesInBranch(childBranchID);
-
-                TECScopeBranch branch = new TECScopeBranch(name, description, grandChildBranches, childBranchID);
-
-                branch.Tags = getTagsInScope(childBranchID);
-
-                childBranches.Add(branch);
+                childBranches.Add(getScopeBranchFromRow(row));
             }
 
             return childBranches;
         }
-
         static private ObservableCollection<TECSystem> getAllSystems()
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
-
-            string command = "select * from TECSystem";
-
+            string command = "select * from ";
+            command += SystemTable.TableName;
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in systemsDT.Rows)
             {
                 var system = getSystemFromRow(row);
-
                 systems.Add(system);
             }
             return systems;
         }
-
         static private ObservableCollection<TECSystem> getAllSystemsInBid(TECBid bid)
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
@@ -2406,609 +469,308 @@ namespace EstimatingUtilitiesLibrary
                 + BidSystemTable.Index.Name;
 
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
-
             if (systemsDT.Rows.Count < 1)
             {
                 command = "select * from " + SystemTable.TableName;
                 systemsDT = SQLiteDB.getDataFromCommand(command);
             }
-
             foreach (DataRow row in systemsDT.Rows)
-            {
-                Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
-                string name = row[SystemTable.Name.Name].ToString();
-                string description = row[SystemTable.Description.Name].ToString();
-                string quantityString = row[SystemTable.Quantity.Name].ToString();
-                string budgetPriceString = row[SystemTable.BudgetPrice.Name].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
-                }
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
-                }
-
-                ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
-
-                TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
-
-                system.Quantity = quantity;
-                system.Tags = getTagsInScope(systemID);
-
-                systems.Add(system);
-            }
+            { systems.Add(getSystemFromRow(row)); }
             return systems;
         }
-
         static private ObservableCollection<TECEquipment> getOrphanEquipment()
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select * from TECEquipment where EquipmentID not in ";
-            command += "(select EquipmentID from TECSystemTECEquipment)";
+            string command = "select * from " + EquipmentTable.TableName;
+            command += " where "+EquipmentTable.EquipmentID.Name+" not in ";
+            command += "(select " + SystemEquipmentTable.EquipmentID.Name;
+            command += " from "+ SystemEquipmentTable.TableName+ ")";
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in equipmentDT.Rows)
-            {
-                var equipmentToAdd = getEquipmentFromRow(row);
-
-                equipment.Add(equipmentToAdd);
-            }
+            { equipment.Add(getEquipmentFromRow(row)); }
 
             return equipment;
         }
-
         static private ObservableCollection<TECSubScope> getOrphanSubScope()
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
-
-            string command = "select * from TECSubScope where SubScopeID not in ";
-            command += "(select SubScopeID from TECEquipmentTECSubScope)";
-
+            string command = "select * from " + SubScopeTable.TableName ;
+            command += " where "+ SubScopeTable.SubScopeID.Name+ " not in ";
+            command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in subScopeDT.Rows)
-            {
-                Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
-                string name = row["Name"].ToString();
-                string description = row["Description"].ToString();
-                string quantityString = row["Quantity"].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
-                }
-
-                ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
-                ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
-
-                TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
-
-                subScopeToAdd.Quantity = quantity;
-                subScopeToAdd.Tags = getTagsInScope(subScopeID);
-
-                subScope.Add(subScopeToAdd);
-            }
-
+            { subScope.Add(getSubScopeFromRow(row)); }
             return subScope;
         }
-
         static private ObservableCollection<TECDevice> getAllDevices()
         {
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
-
             DataTable devicesDT = SQLiteDB.getDataFromTable(DeviceTable.TableName);
 
             foreach (DataRow row in devicesDT.Rows)
-            {
-                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-                string name = row[DeviceTable.Name.Name].ToString();
-                string description = row[DeviceTable.Description.Name].ToString();
-                string costString = row[DeviceTable.Cost.Name].ToString();
-
-                double cost;
-                if (!double.TryParse(costString, out cost))
-                {
-                    cost = 0;
-                    Console.WriteLine("Cannot convert cost to double, setting to 0");
-                }
-
-                TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
-                TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
-
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
-                deviceToAdd.Tags = getTagsInScope(deviceID);
-                deviceToAdd.ConnectionType = connectionType;
-
-                devices.Add(deviceToAdd);
-            }
-
+            { devices.Add(getDeviceFromRow(row)); }
             return devices;
         }
-
         static private ObservableCollection<TECManufacturer> getAllManufacturers()
         {
             ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
-
-            DataTable manufacturersDT = SQLiteDB.getDataFromTable("TECManufacturer");
-
+            DataTable manufacturersDT = SQLiteDB.getDataFromTable(ManufacturerTable.TableName);
             foreach (DataRow row in manufacturersDT.Rows)
-            {
-                Guid manufacturerID = new Guid(row["ManufacturerID"].ToString());
-                string name = row["Name"].ToString();
-                string multiplierString = row["Multiplier"].ToString();
-
-                double multiplier;
-                if (!double.TryParse(multiplierString, out multiplier))
-                {
-                    multiplier = 1;
-                    Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-                }
-
-                manufacturers.Add(new TECManufacturer(name, multiplier, manufacturerID));
-            }
-
+            { manufacturers.Add(getManufacturerFromRow(row)); }
             return manufacturers;
         }
-
         static private ObservableCollection<TECLocation> getAllLocations()
         {
             ObservableCollection<TECLocation> locations = new ObservableCollection<TECLocation>();
-
-            DataTable locationsDT = SQLiteDB.getDataFromTable("TECLocation");
-
+            DataTable locationsDT = SQLiteDB.getDataFromTable(LocationTable.TableName);
             foreach (DataRow row in locationsDT.Rows)
-            {
-                Guid locationID = new Guid(row["LocationID"].ToString());
-                string name = row["Name"].ToString();
-
-                locations.Add(new TECLocation(name, locationID));
-            }
-
+            { locations.Add(getLocationFromRow(row)); }
             return locations;
         }
-
+        static private ObservableCollection<TECConduitType> getConduitTypes()
+        {
+            ObservableCollection<TECConduitType> conduitTypes = new ObservableCollection<TECConduitType>();
+            DataTable conduitTypesDT = SQLiteDB.getDataFromTable(ConduitTypeTable.TableName);
+            foreach(DataRow row in conduitTypesDT.Rows)
+            { conduitTypes.Add(getConduitTypeFromRow(row)); }
+            return conduitTypes;
+        }
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCosts()
+        {
+            ObservableCollection<TECAssociatedCost> associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            DataTable associatedCostsDT = SQLiteDB.getDataFromTable(AssociatedCostTable.TableName);
+            foreach (DataRow row in associatedCostsDT.Rows)
+            {  associatedCosts.Add(getAssociatedCostFromRow(row)); }
+            return associatedCosts;
+        }
         static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID)
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select * from (TECEquipment inner join TECSystemTECEquipment on (TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID and SystemID = '";
+            string command = "select * from ("+EquipmentTable.TableName+" inner join ";
+            command += ""+ SystemEquipmentTable.TableName + " on ";
+            command += "(TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID";
+            command += " and "+SystemEquipmentTable.SystemID.Name+" = '";
             command += systemID;
-            command += "')) order by ScopeIndex";
+            command += "')) order by " + SystemEquipmentTable.ScopeIndex.Name + "";
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in equipmentDT.Rows)
-            {
-                Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
-                string name = row[EquipmentTable.Name.Name].ToString();
-                string description = row[EquipmentTable.Description.Name].ToString();
-                string quantityString = row[EquipmentTable.Quantity.Name].ToString();
-                string budgetPriceString = row[EquipmentTable.BudgetPrice.Name].ToString();
-
-                double budgetPrice;
-                if (!double.TryParse(budgetPriceString, out budgetPrice))
-                {
-                    budgetPrice = -1;
-                    Console.WriteLine("Cannot convert budget price to double in equipment, setting to -1");
-                }
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in equipment, setting to 1");
-                }
-
-                ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
-
-                TECEquipment equipmentToAdd = new TECEquipment(name, description, budgetPrice, subScopeInEquipment, equipmentID);
-
-                equipmentToAdd.Quantity = quantity;
-                equipmentToAdd.Tags = getTagsInScope(equipmentID);
-
-                equipment.Add(equipmentToAdd);
-            }
-
+            { equipment.Add(getEquipmentFromRow(row)); }
             return equipment;
         }
-
         static private ObservableCollection<TECSubScope> getSubScopeInEquipment(Guid equipmentID)
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
-
-            string command = "select * from (TECSubScope inner join TECEquipmentTECSubScope on (TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and EquipmentID = '";
-            command += equipmentID;
-            command += "')) order by ScopeIndex";
+            string command = "select * from (TECSubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
+            command += "(TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and ";
+            command += EquipmentSubScopeTable.EquipmentID.Name + "= '" +equipmentID;
+            command += "')) order by "+EquipmentSubScopeTable.ScopeIndex.Name+"";
 
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in subScopeDT.Rows)
-            {
-                var subScopeToAdd = getSubScopeFromRow(row);
-                subScope.Add(subScopeToAdd);
-            }
-
+            { subScope.Add(getSubScopeFromRow(row)); }
             return subScope;
         }
-
         static private ObservableCollection<TECDevice> getDevicesInSubScope(Guid subScopeID)
         {
-            //Console.WriteLine("getDevicesInSubScope() called");
-
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
-
-            string command = "select * from (TECDevice inner join TECSubScopeTECDevice on (TECDevice.DeviceID = TECSubScopeTECDevice.DeviceID and SubScopeID = '";
-            command += subScopeID;
-            command += "')) order by ScopeIndex";
+            string command = "select * from (" + DeviceTable.TableName +" inner join "+ SubScopeDeviceTable.TableName + " on ";
+            command += "(TECDevice.DeviceID = TECSubScopeTECDevice.DeviceID and ";
+            command += SubScopeDeviceTable.SubScopeID.Name + " = '" + subScopeID;
+            command += "')) order by " + SubScopeDeviceTable.ScopeIndex.Name;
 
             DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in devicesDT.Rows)
             {
-                Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-                string name = row[DeviceTable.Name.Name].ToString();
-                string description = row[DeviceTable.Description.Name].ToString();
-                string costString = row[DeviceTable.Cost.Name].ToString();
-
-                double cost;
-                if (!double.TryParse(costString, out cost))
-                {
-                    cost = 0;
-                    Console.WriteLine("Cannot convert cost to double, setting to 0");
-                }
-
-                TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
-                TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
-
-                TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
-                deviceToAdd.ConnectionType = connectionType;
-
-                string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
-                quantityCommand += (subScopeID + "' and DeviceID = '" + deviceID + "'");
-
+                var deviceToAdd = getDeviceFromRow(row);
+                string quantityCommand = "select "+SubScopeDeviceTable.Quantity.Name+" from "+SubScopeDeviceTable.TableName+" where "+SubScopeDeviceTable.SubScopeID.Name+" = '";
+                quantityCommand += (subScopeID + "' and "+SubScopeDeviceTable.DeviceID.Name+" = '" + deviceToAdd.Guid + "'");
                 DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
-
-                string quantityString = quantityDT.Rows[0][0].ToString();
-                //Console.WriteLine("QuantityString: " + quantityString);
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in device, setting to 1");
-                }
-                deviceToAdd.Tags = getTagsInScope(deviceID);
-                //deviceToAdd.Quantity = quantity;
+                int quantity = quantityDT.Rows[0][0].ToString().ToInt();
                 for (int x = 0; x < quantity; x++)
-                {
-                    devices.Add(deviceToAdd);
-                }
-
+                { devices.Add(deviceToAdd); }
             }
 
             return devices;
         }
-
         static private ObservableCollection<TECPoint> getPointsInSubScope(Guid subScopeID)
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
-            string command = "select * from (TECPoint inner join TECSubScopeTECPoint on (TECPoint.PointID = TECSubScopeTECPoint.PointID and SubScopeID = '";
-            command += subScopeID;
-            command += "')) order by ScopeIndex";
+            string command = "select * from (" + PointTable.TableName + " inner join "+SubScopePointTable.TableName+" on ";
+            command += "(TECPoint.PointID = TECSubScopeTECPoint.PointID and ";
+            command += SubScopePointTable.SubScopeID.Name+" = '" +subScopeID;
+            command += "')) order by " + SubScopePointTable.ScopeIndex.Name;
 
-            DataTable pointsDT = SQLiteDB.getDataFromCommand(command);
-
+            DataTable pointsDT = SQLiteDB.getDataFromCommand(command); 
             foreach (DataRow row in pointsDT.Rows)
-            {
-                Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
-                string name = row[PointTable.Name.Name].ToString();
-                string description = row[PointTable.Description.Name].ToString();
-                string type = row[PointTable.Type.Name].ToString();
-                string quantityString = row[PointTable.Quantity.Name].ToString();
-
-                int quantity;
-                if (!int.TryParse(quantityString, out quantity))
-                {
-                    quantity = 1;
-                    Console.WriteLine("Cannot convert quantity to int in point, setting to 1");
-                }
-
-                TECPoint pointToAdd = new TECPoint(type, name, description, pointID);
-
-                pointToAdd.Quantity = quantity;
-                pointToAdd.Tags = getTagsInScope(pointID);
-
-                points.Add(pointToAdd);
-            }
+            { points.Add(getPointFromRow(row)); }
 
             return points;
         }
-
         static private TECManufacturer getManufacturerInDevice(Guid deviceID)
         {
-            string command = "select * from TECManufacturer where ManufacturerID in ";
-            command += "(select ManufacturerID from TECDeviceTECManufacturer where DeviceID = '";
+            string command = "select * from "+ManufacturerTable.TableName+ " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            command += "(select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
+            command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
             command += deviceID;
             command += "')";
 
-            DataTable manTable = SQLiteDB.getDataFromCommand(command);
-
+            DataTable manTable = SQLiteDB.getDataFromCommand(command); 
             if (manTable.Rows.Count > 0)
-            {
-                Guid manufacturerID = new Guid(manTable.Rows[0]["ManufacturerID"].ToString());
-                string name = manTable.Rows[0]["Name"].ToString();
-                string multiplierString = manTable.Rows[0]["Multiplier"].ToString();
-
-                double multiplier;
-                if (!double.TryParse(multiplierString, out multiplier))
-                {
-                    multiplier = 1;
-                    Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-                }
-
-                return new TECManufacturer(name, multiplier, manufacturerID);
-            }
+            { return getManufacturerFromRow(manTable.Rows[0]); }
             else
-            {
-                return new TECManufacturer();
-            }
+            { return new TECManufacturer(); }
         }
-
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
         {
-            string command = "select * from TECConnectionType where ConnectionTypeID in ";
-            command += "(select ConnectionTypeID from TECDeviceTECConnectionType where DeviceID = '";
-            command += deviceID;
+            string command = "select * from "+ConnectionTypeTable.TableName+" where "+ ConnectionTypeTable .ConnectionTypeID.Name+ " in ";
+            command += "(select "+DeviceConnectionTypeTable.TypeID.Name+" from "+ DeviceConnectionTypeTable.TableName+ " where ";
+            command += DeviceConnectionTypeTable.DeviceID.Name + " = '" + deviceID;
             command += "')";
 
             DataTable connectionTypeTable = SQLiteDB.getDataFromCommand(command);
-
             if (connectionTypeTable.Rows.Count > 0)
-            {
-                return (getConnectionTypeFromRow(connectionTypeTable.Rows[0]));
-            }
+            { return (getConnectionTypeFromRow(connectionTypeTable.Rows[0])); }
             else
-            {
-                return new TECConnectionType();
-            }
+            { return new TECConnectionType(); }
         }
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
+        {
+            string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
+            command += "(select " + AssociatedCostTable.AssociatedCostID.Name +" from " + ScopeAssociatedCostTable.TableName+  " where ";
+            command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
+            command += "')";
 
+            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            foreach(DataRow row in DT.Rows)
+            { associatedCosts.Add(getAssociatedCostFromRow(row)); }
+            return associatedCosts;
+        }
         static private ObservableCollection<TECNote> getNotes()
         {
             ObservableCollection<TECNote> notes = new ObservableCollection<TECNote>();
             DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
-
             foreach (DataRow row in notesDT.Rows)
-            {
-                Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
-                string noteText = row["NoteText"].ToString();
-
-                notes.Add(new TECNote(noteText, noteID));
-            }
-
+            { notes.Add(getNoteFromRow(row)); }
             return notes;
         }
-
         static private ObservableCollection<TECExclusion> getExclusions()
         {
             ObservableCollection<TECExclusion> exclusions = new ObservableCollection<TECExclusion>();
-            DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
-
+            DataTable exclusionsDT = SQLiteDB.getDataFromTable(ExclusionTable.TableName);
             foreach (DataRow row in exclusionsDT.Rows)
-            {
-                Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-                string exclusionText = row["ExclusionText"].ToString();
-
-                exclusions.Add(new TECExclusion(exclusionText, exclusionId));
-            }
-
+            { exclusions.Add(getExclusionFromRow(row)); }
             return exclusions;
         }
-
         static private ObservableCollection<TECTag> getAllTags()
         {
             ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
-
-            DataTable tagsDT = SQLiteDB.getDataFromTable("TECTag");
-
+            DataTable tagsDT = SQLiteDB.getDataFromTable(TagTable.TableName);
             foreach (DataRow row in tagsDT.Rows)
-            {
-                tags.Add(new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString())));
-            }
-
+            { tags.Add(getTagFromRow(row)); }
             return tags;
         }
-
         static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
         {
             ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
-
-            string command = "select * from TECTag where TagID in ";
-            command += "(select TagID from TECScopeTECTag where ScopeID = '";
-            command += scopeID;
+            string command = "select * from "+TagTable.TableName+" where "+TagTable.TagID.Name+" in ";
+            command += "(select "+ScopeTagTable.TagID.Name+" from "+ScopeTagTable.TableName+" where ";
+            command += ScopeTagTable.ScopeID.Name + " = '"+scopeID;
             command += "')";
-
             DataTable tagsDT = SQLiteDB.getDataFromCommand(command);
-
             foreach (DataRow row in tagsDT.Rows)
-            {
-                tags.Add(new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString())));
-            }
-
+            { tags.Add(getTagFromRow(row)); }
             return tags;
         }
-
         static private ObservableCollection<TECDrawing> getDrawings()
         {
             ObservableCollection<TECDrawing> drawings = new ObservableCollection<TECDrawing>();
-
             try
             {
                 DataTable ghostDrawingsDT = SQLiteDB.getDataFromTable(DrawingTable.TableName);
-
                 foreach (DataRow row in ghostDrawingsDT.Rows)
-                {
-                    string name = row["Name"].ToString();
-                    string description = row["Description"].ToString();
-                    Guid guid = new Guid(row["DrawingID"].ToString());
-
-                    ObservableCollection<TECPage> pages = getPagesInDrawing(guid);
-
-                    drawings.Add(new TECDrawing(name, description, guid, pages));
-                }
+                { drawings.Add(getDrawingFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: GetDrawings() failed. Code: " + e.Message);
                 throw e;
             }
-
             return drawings;
         }
-
         static private ObservableCollection<TECPage> getPagesInDrawing(Guid DrawingID)
         {
             ObservableCollection<TECPage> pages = new ObservableCollection<TECPage>();
-
-            string command = "select * from TECPage where PageID in ";
-            command += "(select PageID from TECDrawingTECPage where DrawingID = '";
-            command += DrawingID;
-            command += "') order by PageNum";
-
+            string command = "select * from "+PageTable.TableName+" where "+PageTable.PageID.Name+" in ";
+            command += "(select "+DrawingPageTable.PageID.Name+" from "+DrawingPageTable.TableName+" where ";
+            command += DrawingPageTable.DrawingID.Name + " = '"+DrawingID;
+            command += "') order by " + PageTable.PageNum.Name;
             try
             {
                 DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
-
                 foreach (DataRow row in pagesDT.Rows)
-                {
-                    Guid guid = new Guid(row["PageID"].ToString());
-                    int pageNum = row["PageNum"].ToString().ToInt();
-                    byte[] blob = row["Image"] as byte[];
-
-                    TECPage page = new TECPage(pageNum, guid);
-
-                    page.Path = Path.GetTempFileName();
-
-                    //path = path.Substring(0, path.Length - 3);
-                    //path += "png";
-
-                    File.WriteAllBytes(page.Path, blob);
-
-                    page.PageScope = getVisualScopeInPage(guid);
-
-                    pages.Add(page);
-                }
+                { pages.Add(getPageFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: GetPagesInDrawing() failed. Code: " + e.Message);
                 throw e;
             }
-
             return pages;
         }
-
         static private ObservableCollection<TECVisualScope> getVisualScopeInPage(Guid PageID)
         {
             ObservableCollection<TECVisualScope> vs = new ObservableCollection<TECVisualScope>();
-
-            string command = "select * from TECVisualScope where VisualScopeID in ";
-            command += "(select VisualScopeID from TECPageTECVisualScope where PageID = '";
-            command += PageID;
+            string command = "select * from "+VisualScopeTable.TableName+" where "+VisualScopeTable.VisualScopeID.Name+" in ";
+            command += "(select "+PageVisualScopeTable.VisualScopeID.Name+" from "+PageVisualScopeTable.TableName+" where ";
+            command += PageVisualScopeTable.PageID.Name + " = '"+PageID;
             command += "')";
-
             try
             {
-                DataTable vsDT = SQLiteDB.getDataFromCommand(command);
-
+                DataTable vsDT = SQLiteDB.getDataFromCommand(command); 
                 foreach (DataRow row in vsDT.Rows)
-                {
-                    Guid guid = new Guid(row["VisualScopeID"].ToString());
-                    double xPos = row["XPos"].ToString().ToDouble();
-                    double yPos = row["YPos"].ToString().ToDouble();
-
-                    vs.Add(new TECVisualScope(guid, xPos, yPos));
-                }
+                { vs.Add(getVisualScopeFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: GetVisualScopeInPage() failed. Code: " + e.Message);
                 throw e;
             }
-
             return vs;
         }
-
         static private TECLocation getLocationInScope(Guid ScopeID)
         {
-            string command = "select * from TECLocation where LocationID in ";
-            command += "(select LocationID from TECLocationTECScope where ScopeID = '";
-            command += ScopeID;
+            string command = "select * from "+LocationTable.TableName+" where "+LocationTable.LocationID.Name+" in ";
+            command += "(select "+LocationScopeTable.LocationID.Name+" from "+LocationScopeTable.TableName+" where ";
+            command += LocationScopeTable.ScopeID.Name + " = '"+ ScopeID;
             command += "')";
-
             DataTable locationDT = SQLiteDB.getDataFromCommand(command);
-
             if (locationDT.Rows.Count > 0)
-            {
-                TECLocation location = new TECLocation(locationDT.Rows[0]["Name"].ToString(), new Guid(locationDT.Rows[0]["LocationID"].ToString()));
-                return location;
-            }
+            { return getLocationFromRow(locationDT.Rows[0]); }
             else
-            {
-                return null;
-            }
+            {  return null; }
         }
-
         static private ObservableCollection<TECController> getControllers()
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-
             try
             {
                 DataTable controllersDT = SQLiteDB.getDataFromTable(ControllerTable.TableName);
-
                 foreach (DataRow row in controllersDT.Rows)
-                {
-                    Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-                    string name = row[ControllerTable.Name.Name].ToString();
-                    string description = row[ControllerTable.Description.Name].ToString();
-                    string costString = row[ControllerTable.Cost.Name].ToString();
-
-                    double cost;
-                    if (!double.TryParse(costString, out cost))
-                    {
-                        cost = 0;
-                        Console.WriteLine("Cannot convert cost to double, setting to 0");
-                    }
-
-                    TECController controller = new TECController(name, description, guid, cost);
-
-                    controller.IO = getIOInController(guid);
-                    controller.Tags = getTagsInScope(guid);
-
-                    controllers.Add(controller);
-                }
+                { controllers.Add(getControllerFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: getControllers() failed. Code: " + e.Message);
                 throw e;
             }
-
             return controllers;
         }
-
         static private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
@@ -3016,9 +778,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
                 foreach (DataRow row in connectionTypesDT.Rows)
-                {
-                    connectionTypes.Add(getConnectionTypeFromRow(row));
-                }
+                { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             }
             catch (Exception e)
             {
@@ -3026,67 +786,41 @@ namespace EstimatingUtilitiesLibrary
                 throw e;
             }
             return connectionTypes;
-
         }
-
         static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
         {
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
-
-            string command = "select * from " + ControllerIOTypeTable.TableName + " where " +
-                ControllerIOTypeTable.ControllerID.Name + " = '" + controllerID + "'";
-
+            string command = "select * from " + ControllerIOTypeTable.TableName + " where ";
+            command += ControllerIOTypeTable.ControllerID.Name + " = '" + controllerID + "'";
             try
             {
                 DataTable typeDT = SQLiteDB.getDataFromCommand(command);
-
                 foreach (DataRow row in typeDT.Rows)
-                {
-                    IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
-                    int qty = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
-
-                    var io = new TECIO(type);
-                    io.Quantity = qty;
-                    outIO.Add(io);
-
-                }
+                {  outIO.Add(getIOFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("getConnectionTypesInController() failed. Code: " + e.Message);
                 throw e;
             }
-
             return outIO;
         }
-
         static private ObservableCollection<TECConnection> getConnections()
         {
-            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
-
+            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>(); 
             try
             {
-                DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName);
-
+                DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName); 
                 foreach (DataRow row in connectionDT.Rows)
-                {
-                    Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
-                    string lengthString = row[ConnectionTable.Length.Name].ToString();
-
-                    double length = lengthString.ToDouble();
-
-                    connections.Add(new TECConnection(length, guid));
-                }
+                { connections.Add(getConnectionFromRow(row)); }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: getConnections() failed. Code: " + e.Message);
                 throw e;
-            }
-
+            } 
             return connections;
         }
-
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
         {
             ObservableCollection<TECProposalScope> propScope = new ObservableCollection<TECProposalScope>();
@@ -3106,109 +840,29 @@ namespace EstimatingUtilitiesLibrary
             }
             return propScope;
         }
-
         static private TECProposalScope getProposalScopeFromScope(TECScope scope)
         {
             bool isProposed;
             ObservableCollection<TECScopeBranch> notes = getProposalScopeBranches(scope.Guid);
-
-
-            string command = "select " + ProposalScopeTable.IsProposed.Name + " from " + ProposalScopeTable.TableName + " where " + ProposalScopeTable.ProposalScopeID.Name + " = '" + scope.Guid + "'";
-
+            string command = "select " + ProposalScopeTable.IsProposed.Name + " from " + ProposalScopeTable.TableName;
+            command += " where " + ProposalScopeTable.ProposalScopeID.Name + " = '" + scope.Guid + "'";
             try
             {
-                DataTable isProposedDT = SQLiteDB.getDataFromCommand(command);
-
+                DataTable isProposedDT = SQLiteDB.getDataFromCommand(command); 
                 if (isProposedDT.Rows.Count > 0)
-                {
-                    isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool();
-                }
+                { isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool(); }
                 else
-                {
-                    isProposed = false;
-                }
+                { isProposed = false; }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: getProposalScopeFromScope() failed. Code: " + e.Message);
                 throw e;
             }
-
             return new TECProposalScope(scope, isProposed, notes);
         }
         #endregion //Loading from DB Methods
-
-        #region Generic Create Methods
-        static private void createTableFromDefinition(TableBase table)
-        {
-            var tableInfo = new TableInfo(table);
-            string tableName = tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
-
-            string createString = "CREATE TABLE '" + tableName + "' (";
-            foreach (TableField field in fields)
-            {
-                createString += "'" + field.Name + "' " + field.FieldType;
-                if (fields.IndexOf(field) < (fields.Count - 1))
-                { createString += ", "; }
-            }
-            if (primaryKey.Count != 0)
-            { createString += ", PRIMARY KEY("; }
-            foreach (TableField pk in primaryKey)
-            {
-                createString += "'" + pk.Name + "' ";
-                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
-                { createString += ", "; }
-                else
-                { createString += ")"; }
-            }
-            createString += ")";
-            SQLiteDB.nonQueryCommand(createString);
-        }
-        static private void createTempTableFromDefinition(TableBase table)
-        {
-            var tableInfo =  new TableInfo(table);
-            string tableName = "temp_" + tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
-
-            string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
-            foreach (TableField field in fields)
-            {
-                createString += "'" + field.Name + "' " + field.FieldType;
-                if (fields.IndexOf(field) < (fields.Count - 1))
-                { createString += ", "; }
-            }
-            if (primaryKey.Count != 0)
-            { createString += ", PRIMARY KEY("; }
-            foreach (TableField pk in primaryKey)
-            {
-                createString += "'" + pk.Name + "' ";
-                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
-                { createString += ", "; }
-                else
-                { createString += ")"; }
-            }
-            createString += ")";
-            SQLiteDB.nonQueryCommand(createString);
-        }
-        static private void createAllBidTables()
-        {
-            foreach (TableBase table in AllBidTables.Tables)
-            {
-                createTableFromDefinition(table);
-            }
-        }
-        static private void createAllTemplateTables()
-        {
-            foreach (TableBase table in AllTemplateTables.Tables)
-            {
-                createTableFromDefinition(table);
-            }
-        }
-        #endregion
-
+        
         #region Link Methods
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
@@ -3223,13 +877,10 @@ namespace EstimatingUtilitiesLibrary
                     foreach (TECVisualScope vs in page.PageScope)
                     {
                         string command = "select ScopeID from TECVisualScopeTECScope where VisualScopeID = '" + vs.Guid + "'";
-
                         try
                         {
                             DataTable scopeID = SQLiteDB.getDataFromCommand(command);
-
                             Guid scopeGuid = new Guid(scopeID.Rows[0][0].ToString());
-
                             scopeToLink.Add(vs, scopeGuid);
                         }
                         catch (Exception e)
@@ -3253,13 +904,9 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
                 foreach (TECVisualScope scope in scopeToRemove)
-                {
-                    scopeToLink.Remove(scope);
-                }
+                { scopeToLink.Remove(scope);  }
                 if (scopeToLink.Count < 1)
-                {
-                    return;
-                }
+                { return; }
                 scopeToRemove.Clear();
             }
 
@@ -3276,16 +923,11 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
                 foreach (TECVisualScope scope in scopeToRemove)
-                {
-                    scopeToLink.Remove(scope);
-                }
+                { scopeToLink.Remove(scope); }
                 if (scopeToLink.Count < 1)
-                {
-                    return;
-                }
+                { return; }
                 scopeToRemove.Clear();
-
-
+                
                 foreach (TECEquipment equip in system.Equipment)
                 {
                     //Check scope in equipment.
@@ -3298,13 +940,9 @@ namespace EstimatingUtilitiesLibrary
                         }
                     }
                     foreach (TECVisualScope scope in scopeToRemove)
-                    {
-                        scopeToLink.Remove(scope);
-                    }
+                    { scopeToLink.Remove(scope); }
                     if (scopeToLink.Count < 1)
-                    {
-                        return;
-                    }
+                    { return; }
                     scopeToRemove.Clear();
 
                     foreach (TECSubScope ss in equip.SubScope)
@@ -3319,13 +957,9 @@ namespace EstimatingUtilitiesLibrary
                             }
                         }
                         foreach (TECVisualScope scope in scopeToRemove)
-                        {
-                            scopeToLink.Remove(scope);
-                        }
+                        {  scopeToLink.Remove(scope); }
                         if (scopeToLink.Count < 1)
-                        {
-                            return;
-                        }
+                        { return; }
                         scopeToRemove.Clear();
 
                         foreach (TECDevice dev in ss.Devices)
@@ -3340,47 +974,29 @@ namespace EstimatingUtilitiesLibrary
                                 }
                             }
                             foreach (TECVisualScope scope in scopeToRemove)
-                            {
-                                scopeToLink.Remove(scope);
-                            }
+                            { scopeToLink.Remove(scope); }
                             if (scopeToLink.Count < 1)
-                            {
-                                return;
-                            }
+                            { return; }
                             scopeToRemove.Clear();
                         }
                     }
                 }
             }
-
-            //if (scopeToLink.Count > 0)
-            //{
-            //    Exception e = new Exception("Error: " + scopeToLink.Count + " Visual Scope not found. Unable to link.");
-            //    throw e;
-            //}
         }
-
         static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
         {
             Dictionary<Guid, TECLocation> scopeToLink = new Dictionary<Guid, TECLocation>();
-
             foreach (TECLocation location in locations)
             {
                 string command = "select ScopeID from TECLocationTECScope where LocationID = '" + location.Guid + "'";
-
                 try
                 {
                     DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
-
                     foreach (DataRow row in scopeDT.Rows)
-                    {
-                        scopeToLink.Add(new Guid(row["ScopeID"].ToString()), location);
-                    }
+                    { scopeToLink.Add(new Guid(row["ScopeID"].ToString()), location); }
                 }
                 catch (Exception e)
-                {
-                    Console.WriteLine("Error: Finding scope in location failed in LinkAllLocations. Code: " + e.Message);
-                }
+                { Console.WriteLine("Error: Finding scope in location failed in LinkAllLocations. Code: " + e.Message); }
             }
 
             List<Guid> scopeToRemove = new List<Guid>();
@@ -3395,13 +1011,9 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
                 foreach (Guid guid in scopeToRemove)
-                {
-                    scopeToLink.Remove(guid);
-                }
+                { scopeToLink.Remove(guid); }
                 if (scopeToLink.Count < 1)
-                {
-                    return;
-                }
+                { return; }
                 scopeToRemove.Clear();
 
                 foreach (TECEquipment equip in sys.Equipment)
@@ -3415,13 +1027,9 @@ namespace EstimatingUtilitiesLibrary
                         }
                     }
                     foreach (Guid guid in scopeToRemove)
-                    {
-                        scopeToLink.Remove(guid);
-                    }
+                    { scopeToLink.Remove(guid); }
                     if (scopeToLink.Count < 1)
-                    {
-                        return;
-                    }
+                    { return; }
                     scopeToRemove.Clear();
 
                     foreach (TECSubScope ss in equip.SubScope)
@@ -3435,24 +1043,14 @@ namespace EstimatingUtilitiesLibrary
                             }
                         }
                         foreach (Guid guid in scopeToRemove)
-                        {
-                            scopeToLink.Remove(guid);
-                        }
+                        { scopeToLink.Remove(guid); }
                         if (scopeToLink.Count < 1)
-                        {
-                            return;
-                        }
+                        { return; }
                         scopeToRemove.Clear();
                     }
                 }
             }
-            //if (scopeToLink.Count > 0)
-            //{
-            //    Exception e = new Exception("Error: " + scopeToLink.Count + " scope not found in linkAllLocations(). Unable to link.");
-            //    throw e;
-            //}
         }
-
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
         {
             //Construct guid relations
@@ -3460,40 +1058,28 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECConnection conn in connections)
             {
                 string command = "select * from " + ControllerConnectionTable.TableName + " where " + ControllerConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
-
                 DataTable guidDT = SQLiteDB.getDataFromCommand(command);
-
                 Guid parentGuid = new Guid(guidDT.Rows[0][ControllerConnectionTable.ControllerID.Name].ToString());
 
                 command = "select * from " + ScopeConnectionTable.TableName + " where " + ScopeConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
-
                 guidDT = SQLiteDB.getDataFromCommand(command);
-
                 List<Guid> childGuids = new List<Guid>();
-
                 foreach (DataRow row in guidDT.Rows)
-                {
-                    childGuids.Add(new Guid(row[ScopeConnectionTable.ScopeID.Name].ToString()));
-                }
+                { childGuids.Add(new Guid(row[ScopeConnectionTable.ScopeID.Name].ToString())); }
 
                 toConnect.Add(new Tuple<TECConnection, Guid, List<Guid>>(conn, parentGuid, childGuids));
             }
 
             //Construct potential TECScope List
             List<TECScope> scopeToLink = new List<TECScope>();
-
             foreach (TECController controller in controllers)
-            {
-                scopeToLink.Add(controller);
-            }
+            { scopeToLink.Add(controller); }
             foreach (TECSystem system in bidSystems)
             {
                 foreach (TECEquipment equip in system.Equipment)
                 {
                     foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        scopeToLink.Add(ss);
-                    }
+                    { scopeToLink.Add(ss); }
                 }
             }
 
@@ -3524,26 +1110,19 @@ namespace EstimatingUtilitiesLibrary
                         if (scope.Guid == child)
                         {
                             if (scope is TECSubScope)
-                            {
-                                (scope as TECSubScope).Connection = connection;
-                            }
+                            { (scope as TECSubScope).Connection = connection; }
                             else if (scope is TECController)
-                            {
-                                (scope as TECController).Connections.Add(connection);
-                            }
+                            { (scope as TECController).Connections.Add(connection);  }
                             connection.Scope.Add(scope);
                             scopeToRemove = scope;
                             break;
                         }
                     }
                     if (scopeToRemove != null)
-                    {
-                        scopeToLink.Remove(scopeToRemove);
-                    }
+                    { scopeToLink.Remove(scopeToRemove); }
                 }
             }
         }
-
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
         {
             foreach (TECSystem system in bidSystems)
@@ -3558,9 +1137,7 @@ namespace EstimatingUtilitiesLibrary
                             foreach (TECDevice cDev in deviceCatalog)
                             {
                                 if (cDev.Guid == device.Guid)
-                                {
-                                    linkedDevices.Add(cDev);
-                                }
+                                { linkedDevices.Add(cDev); }
                             }
                         }
                         sub.Devices = linkedDevices;
@@ -3568,23 +1145,16 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         static private void linkAllDevicesFromSystems(ObservableCollection<TECSystem> systems, ObservableCollection<TECDevice> deviceCatalog)
         {
             foreach (TECSystem system in systems)
-            {
-                linkAllDevicesFromEquipment(system.Equipment, deviceCatalog);
-            }
+            { linkAllDevicesFromEquipment(system.Equipment, deviceCatalog); }
         }
-
         static private void linkAllDevicesFromEquipment(ObservableCollection<TECEquipment> equipment, ObservableCollection<TECDevice> deviceCatalog)
         {
             foreach (TECEquipment equip in equipment)
-            {
-                linkAllDevicesFromSubScope(equip.SubScope, deviceCatalog);
-            }
+            { linkAllDevicesFromSubScope(equip.SubScope, deviceCatalog); }
         }
-
         static private void linkAllDevicesFromSubScope(ObservableCollection<TECSubScope> subScope, ObservableCollection<TECDevice> deviceCatalog)
         {
             foreach (TECSubScope sub in subScope)
@@ -3595,15 +1165,12 @@ namespace EstimatingUtilitiesLibrary
                     foreach (TECDevice cDev in deviceCatalog)
                     {
                         if (cDev.Guid == device.Guid)
-                        {
-                            linkedDevices.Add(cDev);
-                        }
+                        { linkedDevices.Add(cDev); }
                     }
                 }
                 sub.Devices = linkedDevices;
             }
         }
-
         static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         {
             foreach (TECDevice device in devices)
@@ -3611,14 +1178,11 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECManufacturer man in mans)
                 {
                     if (device.Manufacturer.Guid == man.Guid)
-                    {
-                        device.Manufacturer = man;
-                    }
+                    { device.Manufacturer = man; }
                 }
 
             }
         }
-
         static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
         {
             foreach (TECSystem system in bid.Systems)
@@ -3631,26 +1195,17 @@ namespace EstimatingUtilitiesLibrary
                     {
                         linkTags(tags, subScope);
                         foreach (TECDevice device in subScope.Devices)
-                        {
-                            linkTags(tags, device);
-                        }
+                        { linkTags(tags, device); }
                         foreach (TECPoint point in subScope.Points)
-                        {
-                            linkTags(tags, point);
-                        }
+                        { linkTags(tags, point); }
                     }
                 }
             }
             foreach (TECController controller in bid.Controllers)
-            {
-                linkTags(tags, controller);
-            }
+            { linkTags(tags, controller);}
             foreach (TECDevice device in bid.DeviceCatalog)
-            {
-                linkTags(tags, device);
-            }
+            { linkTags(tags, device); }
         }
-
         static private void linkTagsInTemplates(ObservableCollection<TECTag> tags, TECTemplates templates)
         {
             foreach (TECSystem system in templates.SystemTemplates)
@@ -3663,13 +1218,9 @@ namespace EstimatingUtilitiesLibrary
                     {
                         linkTags(tags, subScope);
                         foreach (TECDevice device in subScope.Devices)
-                        {
-                            linkTags(tags, device);
-                        }
+                        { linkTags(tags, device); }
                         foreach (TECPoint point in subScope.Points)
-                        {
-                            linkTags(tags, point);
-                        }
+                        { linkTags(tags, point); }
                     }
                 }
             }
@@ -3680,37 +1231,24 @@ namespace EstimatingUtilitiesLibrary
                 {
                     linkTags(tags, subScope);
                     foreach (TECDevice device in subScope.Devices)
-                    {
-                        linkTags(tags, device);
-                    }
+                    { linkTags(tags, device); }
                     foreach (TECPoint point in subScope.Points)
-                    {
-                        linkTags(tags, point);
-                    }
+                    { linkTags(tags, point); }
                 }
             }
             foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
                 linkTags(tags, subScope);
                 foreach (TECDevice device in subScope.Devices)
-                {
-                    linkTags(tags, device);
-                }
+                { linkTags(tags, device); }
                 foreach (TECPoint point in subScope.Points)
-                {
-                    linkTags(tags, point);
-                }
+                { linkTags(tags, point); }
             }
             foreach (TECController controller in templates.ControllerTemplates)
-            {
-                linkTags(tags, controller);
-            }
+            { linkTags(tags, controller); }
             foreach (TECDevice device in templates.DeviceCatalog)
-            {
-                linkTags(tags, device);
-            }
+            { linkTags(tags, device); }
         }
-
         static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
         {
             ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
@@ -3719,14 +1257,11 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECTag referenceTag in tags)
                 {
                     if (tag.Guid == referenceTag.Guid)
-                    {
-                        linkedTags.Add(referenceTag);
-                    }
+                    { linkedTags.Add(referenceTag); }
                 }
             }
             scope.Tags = linkedTags;
         }
-
         static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
         {
             foreach (TECDevice device in devices)
@@ -3734,18 +1269,13 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECConnectionType connectionType in connectionTypes)
                 {
                     if (device.ConnectionType.Guid == connectionType.Guid)
-                    {
-                        device.ConnectionType = connectionType;
-                    }
+                    { device.ConnectionType = connectionType; }
                 }
             }
         }
-
-
         #endregion Link Methods
 
         #region Populate Derived
-
         static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {
             ObservableCollection<TECConnection> connectionsToAdd = connections;
@@ -3784,7 +1314,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private static List<Tuple<TECSubScope, TECVisualScope>> GetSubScopeVisual(ObservableCollection<TECVisualScope> allVScope)
         {
             List<Tuple<TECSubScope, TECVisualScope>> outList = new List<Tuple<TECSubScope, TECVisualScope>>();
@@ -3830,8 +1359,7 @@ namespace EstimatingUtilitiesLibrary
                 { vScopeToCheck.Remove(item); }
             }
             vScopeToRemove.Clear();
-
-
+            
             foreach (TECVisualScope vScope in vScopeToCheck)
             {
                 if (vScope.Scope is TECSystem)
@@ -3856,40 +1384,26 @@ namespace EstimatingUtilitiesLibrary
                 { vScopeToCheck.Remove(item); }
             }
             vScopeToRemove.Clear();
-
-
             return outList;
         }
-
         #endregion
 
         #region Database Version Update Methods
-        static private void populateTemplatesInfo()
-        {
-            Dictionary<string, string> Data = new Dictionary<string, string>();
-            Data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-            Data.Add(TemplatesInfoTable.TemplateID.Name, Guid.NewGuid().ToString());
-            SQLiteDB.Insert(TemplatesInfoTable.TableName, Data);
-        }
-
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
-            //try
-            //{
+            try
+            {
                 isUpToDate = checkDatabaseVersion(type);
                 if (!isUpToDate)
                 {
                     updateDatabase(type);
                     updateVersionNumber(type);
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Could not check database version." + e);
-            //}
+            }
+            catch (Exception e)
+            { MessageBox.Show("Could not check database version." + e); }
         }
-
         static private bool checkDatabaseVersion(Type type)
         {
             string currentVersion = Properties.Settings.Default.Version;
@@ -3944,7 +1458,6 @@ namespace EstimatingUtilitiesLibrary
         static private void updateDatabase(Type type)
         {
             List<string> tableNames = getAllTableNames();
-
             List<object> databaseTableList = new List<object>();
             if (type == typeof(TECBid))
             { databaseTableList = AllBidTables.Tables; }
@@ -3956,36 +1469,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
                 if (tableNames.Contains(tableInfo.Name))
-                {
-                    updateTableFromType(table);
-                }
+                { updateTableFromType(table); }
                 else
                 { createTableFromDefinition(table); }
             }
         }
-        static private List<string> getAllTableNames()
-        {
-            string command = "select name from sqlite_master where type = 'table' order by 1";
-            DataTable tables = SQLiteDB.getDataFromCommand(command);
-            List<string> tableNames = new List<string>();
-            foreach (DataRow row in tables.Rows)
-            {
-                tableNames.Add(row["Name"].ToString());
-            }
-            return tableNames;
-        }
-        static private List<string> getAllTableFields(string tableName)
-        {
-            string command = "select * from " + tableName + " limit 1";
-            DataTable data = SQLiteDB.getDataFromCommand(command);
-            List<string> tableFields = new List<string>();
-            foreach (DataColumn col in data.Columns)
-            {
-                tableFields.Add(col.ColumnName);
-            }
-            return tableFields;
-        }
-
         static private void updateTableFromType(TableBase table)
         {
             var tableInfo = new TableInfo(table);
@@ -4003,11 +1491,9 @@ namespace EstimatingUtilitiesLibrary
             }
 
             string commonString = UtilitiesMethods.CommaSeparatedString(commonFields);
-
             createTempTableFromDefinition(table);
 
             string commandString;
-
             if (commonFields.Count > 0)
             {
                 commandString = "insert or ignore into '" + tempName + "' (" + commonString + ") select " + commonString + " from '" + tableName + "'";
@@ -4016,7 +1502,6 @@ namespace EstimatingUtilitiesLibrary
 
             commandString = "drop table '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
-
             createTableFromDefinition(table);
 
             commandString = "insert into '" + tableName + "' select * from '" + tempName + "'";
@@ -4025,7 +1510,6 @@ namespace EstimatingUtilitiesLibrary
             SQLiteDB.nonQueryCommand(commandString);
             
         }
-
         private static void updateVersionNumber(Type type)
         {
             string commandString;
@@ -4041,21 +1525,18 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if(type == typeof(TECTemplates))
                 {
-                    var templateGuid = getTemplatesInfo().InfoGuid;
-                    
+                    var templateGuid = getTemplatesInfo().Guid;
                     commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
                     commandString += "where " + TemplatesInfoTable.TemplateID.Name + " = '" + templateGuid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
             }
         }
-
         private static void killTemplatesInfo()
         {
             string commandString = commandString = "drop table '" + TemplatesInfoTable.TableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
         }
-
         #endregion
 
         #region Backup Methods
@@ -4074,9 +1555,7 @@ namespace EstimatingUtilitiesLibrary
             backupFolder += date.ToString("d", dtfi);
 
             if (!Directory.Exists(backupFolder))
-            {
-                Directory.CreateDirectory(backupFolder);
-            }
+            { Directory.CreateDirectory(backupFolder); }
 
             string backupFileName = Path.GetFileNameWithoutExtension(originalPath);
             backupFileName += "-";
@@ -4087,14 +1566,9 @@ namespace EstimatingUtilitiesLibrary
             var backupPath = Path.Combine(backupFolder, backupFileName);
             Console.WriteLine("Backup path: " + backupPath);
             try
-            {
-                File.Copy(originalPath, backupPath);
-            }
+            { File.Copy(originalPath, backupPath); }
             catch (Exception e)
-            {
-                Console.WriteLine("Backup Failed: " + e);
-            }
-
+            { Console.WriteLine("Backup Failed: " + e); }
         }
         #endregion
 
@@ -4104,23 +1578,9 @@ namespace EstimatingUtilitiesLibrary
             Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
             string name = row[SystemTable.Name.Name].ToString();
             string description = row[SystemTable.Description.Name].ToString();
-            string quantityString = row[SystemTable.Quantity.Name].ToString();
-            string budgetPriceString = row[SystemTable.BudgetPrice.Name].ToString();
-
-            int quantity;
-            if (!int.TryParse(quantityString, out quantity))
-            {
-                quantity = 1;
-                Console.WriteLine("Cannot convert quantity to int in system, setting to 1");
-            }
-
-            double budgetPrice;
-            if (!double.TryParse(budgetPriceString, out budgetPrice))
-            {
-                budgetPrice = -1;
-                Console.WriteLine("Cannot convert budgetPrice to double, setting to -1");
-            }
-
+            int quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
+            double budgetPrice = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            
             ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
 
             TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
@@ -4130,28 +1590,13 @@ namespace EstimatingUtilitiesLibrary
 
             return system;
         }
-
         private static TECEquipment getEquipmentFromRow(DataRow row)
         {
             Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
             string name = row[EquipmentTable.Name.Name].ToString();
             string description = row[EquipmentTable.Description.Name].ToString();
-            string quantityString = row[EquipmentTable.Quantity.Name].ToString();
-            string budgetPriceString = row[EquipmentTable.BudgetPrice.Name].ToString();
-
-            double budgetPrice;
-            if (!double.TryParse(budgetPriceString, out budgetPrice))
-            {
-                budgetPrice = -1;
-                Console.WriteLine("Cannot convert budget price to double in equipment, setting to -1");
-            }
-
-            int quantity;
-            if (!int.TryParse(quantityString, out quantity))
-            {
-                quantity = 1;
-                Console.WriteLine("Cannot convert quantity to int in equipment, setting to 1");
-            }
+            int quantity = row[EquipmentTable.Quantity.Name].ToString().ToInt();
+            double budgetPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
 
             ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
 
@@ -4159,10 +1604,8 @@ namespace EstimatingUtilitiesLibrary
 
             equipmentToAdd.Quantity = quantity;
             equipmentToAdd.Tags = getTagsInScope(equipmentID);
-
             return equipmentToAdd;
         }
-
         private static TECSubScope getSubScopeFromRow(DataRow row)
         {
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
@@ -4196,7 +1639,6 @@ namespace EstimatingUtilitiesLibrary
 
             return subScopeToAdd;
         }
-
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
@@ -4224,91 +1666,473 @@ namespace EstimatingUtilitiesLibrary
 
             return outConnectionType;
         }
+        private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
+            string name = row[AssociatedCostTable.Name.Name].ToString();
+            double cost = UtilitiesMethods.StringToDouble(row[AssociatedCostTable.Cost.Name].ToString(), 1);
 
+            var associatedCost = new TECAssociatedCost(guid);
+            associatedCost.Name = name;
+            associatedCost.Cost = cost;
+
+            return associatedCost;
+        }
+        private static TECDevice getDeviceFromRow(DataRow row)
+        {
+            Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
+            string name = row[DeviceTable.Name.Name].ToString();
+            string description = row[DeviceTable.Description.Name].ToString();
+            double cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
+
+            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+            TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
+
+            TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
+            deviceToAdd.ConnectionType = connectionType;
+            deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
+
+            return deviceToAdd;
+        }
+        private static TECPoint getPointFromRow(DataRow row)
+        {
+            Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
+            string name = row[PointTable.Name.Name].ToString();
+            string description = row[PointTable.Description.Name].ToString();
+            string type = row[PointTable.Type.Name].ToString();
+            int quantity = row[PointTable.Quantity.Name].ToString().ToInt();
+
+            TECPoint pointToAdd = new TECPoint(type, name, description, pointID);
+
+            pointToAdd.Quantity = quantity;
+            pointToAdd.Tags = getTagsInScope(pointID);
+            return pointToAdd;
+        }
+        private static TECScopeBranch getScopeBranchFromRow(DataRow row)
+        {
+            Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
+            string name = row["Name"].ToString();
+            string description = row["Description"].ToString();
+            ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
+            TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
+            branch.Tags = getTagsInScope(scopeBranchID);
+            return branch;
+        }
+        private static TECManufacturer getManufacturerFromRow(DataRow row)
+        {
+            Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
+            string name = row[ManufacturerTable.Name.Name].ToString();
+            double multiplier = UtilitiesMethods.StringToDouble(row[ManufacturerTable.Multiplier.Name].ToString(), 1);
+
+            return new TECManufacturer(name, multiplier, manufacturerID);
+        }
+        private static TECLocation getLocationFromRow(DataRow row)
+        {
+            Guid locationID = new Guid(row[LocationTable.LocationID.Name].ToString());
+            string name = row[LocationTable.Name.Name].ToString();
+            return new TECLocation(name, locationID);
+        }
+        private static TECConduitType getConduitTypeFromRow(DataRow row)
+        {
+            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
+            string name = row[ConduitTypeTable.Name.Name].ToString();
+            double cost = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Cost.Name].ToString(), 1);
+            double labor = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Labor.Name].ToString(), 1);
+            var conduitType = new TECConduitType(conduitGuid);
+            conduitType.Name = name;
+            conduitType.Cost = cost;
+            conduitType.Labor = labor;
+            return conduitType;
+        }
+        private static TECNote getNoteFromRow(DataRow row)
+        {
+            Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
+            string noteText = row["NoteText"].ToString();
+            return new TECNote(noteText, noteID);
+        }
+        private static TECExclusion getExclusionFromRow(DataRow row)
+        {
+            Guid exclusionId = new Guid(row["ExclusionID"].ToString());
+            string exclusionText = row["ExclusionText"].ToString();
+            return new TECExclusion(exclusionText, exclusionId);
+        }
+        private static TECTag getTagFromRow(DataRow row)
+        {
+            return new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString()));
+        }
+        private static TECDrawing getDrawingFromRow(DataRow row)
+        {
+            string name = row[DrawingTable.Name.Name].ToString();
+            string description = row[DrawingTable.Description.Name].ToString();
+            Guid guid = new Guid(row[DrawingTable.DrawingID.Name].ToString());
+            ObservableCollection<TECPage> pages = getPagesInDrawing(guid);
+            return new TECDrawing(name, description, guid, pages);
+        }
+        private static TECPage getPageFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PageTable.PageID.Name].ToString());
+            int pageNum = row[PageTable.PageNum.Name].ToString().ToInt();
+            byte[] blob = row[PageTable.Image.Name] as byte[];
+            TECPage page = new TECPage(pageNum, guid);
+            page.Path = Path.GetTempFileName();
+            File.WriteAllBytes(page.Path, blob);
+            page.PageScope = getVisualScopeInPage(guid);
+            return page;
+        }
+        private static TECVisualScope getVisualScopeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[VisualScopeTable.VisualScopeID.Name].ToString());
+            double xPos = row[VisualScopeTable.XPos.Name].ToString().ToDouble();
+            double yPos = row[VisualScopeTable.YPos.Name].ToString().ToDouble();
+            return new TECVisualScope(guid, xPos, yPos);
+        }
+        private static TECController getControllerFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
+            string name = row[ControllerTable.Name.Name].ToString();
+            string description = row[ControllerTable.Description.Name].ToString();
+            double cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
+            TECController controller = new TECController(name, description, guid, cost);
+            controller.IO = getIOInController(guid);
+            controller.Tags = getTagsInScope(guid);
+            return controller;
+        }
+        private static TECIO getIOFromRow(DataRow row)
+        {
+            IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
+            int qty = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
+            var io = new TECIO(type);
+            io.Quantity = qty;
+            return io;
+        }
+        private static TECConnection getConnectionFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
+            double length = row[ConnectionTable.Length.Name].ToString().ToDouble();
+            return new TECConnection(length, guid);
+        }
+        #endregion
+
+        #region Generic Create Methods
+        static private void createTableFromDefinition(TableBase table)
+        {
+            var tableInfo = new TableInfo(table);
+            string tableName = tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
+
+            string createString = "CREATE TABLE '" + tableName + "' (";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                { createString += ", "; }
+            }
+            if (primaryKey.Count != 0)
+            { createString += ", PRIMARY KEY("; }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                { createString += ", "; }
+                else
+                { createString += ")"; }
+            }
+            createString += ")";
+            SQLiteDB.nonQueryCommand(createString);
+        }
+        static private void createTempTableFromDefinition(TableBase table)
+        {
+            var tableInfo = new TableInfo(table);
+            string tableName = "temp_" + tableInfo.Name;
+            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> fields = tableInfo.Fields;
+
+            string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
+            foreach (TableField field in fields)
+            {
+                createString += "'" + field.Name + "' " + field.FieldType;
+                if (fields.IndexOf(field) < (fields.Count - 1))
+                { createString += ", "; }
+            }
+            if (primaryKey.Count != 0)
+            { createString += ", PRIMARY KEY("; }
+            foreach (TableField pk in primaryKey)
+            {
+                createString += "'" + pk.Name + "' ";
+                if (primaryKey.IndexOf(pk) < (primaryKey.Count - 1))
+                { createString += ", "; }
+                else
+                { createString += ")"; }
+            }
+            createString += ")";
+            SQLiteDB.nonQueryCommand(createString);
+        }
+        static private void createAllBidTables()
+        {
+            foreach (TableBase table in AllBidTables.Tables)
+            {
+                createTableFromDefinition(table);
+            }
+        }
+        static private void createAllTemplateTables()
+        {
+            foreach (TableBase table in AllTemplateTables.Tables)
+            {
+                createTableFromDefinition(table);
+            }
+        }
+        #endregion
+
+        #region Generic Complete Save Methods
+        private static void saveCompleteBid(TECBid bid)
+        {
+            addObject(bid, bid);
+            addObject(bid.Labor, bid);
+            addObject(bid.Parameters, bid);
+            foreach(TECSystem system in bid.Systems)
+            {
+                addObject(system, bid);
+                saveScopeChildProperties(system);
+                saveCompleteEquipment(system);
+            }
+            foreach(TECManufacturer manufacturer in bid.ManufacturerCatalog)
+            { addObject(manufacturer, bid); }
+            foreach(TECController controller in bid.Controllers)
+            {
+                addObject(controller, bid);
+                saveScopeChildProperties(controller);
+                saveControllerChildProperties(controller);
+            }
+            foreach(TECConnection connection in bid.Connections)
+            { addObject(connection, bid); }
+            foreach(TECAssociatedCost associatedCost in bid.AssociatedCostCatalog)
+            { addObject(associatedCost, bid); }
+            foreach (TECNote note in bid.Notes)
+            { addObject(note, bid); }
+            foreach (TECExclusion exclusion in bid.Exclusions)
+            { addObject(exclusion, bid); }
+            foreach (TECLocation location in bid.Locations)
+            { addObject(location, bid); }
+            foreach (TECConduitType conduitType in bid.ConduitTypes)
+            { addObject(conduitType, bid); }
+            foreach (TECConnectionType connectionType in bid.ConnectionTypes)
+            { addObject(connectionType, bid); }
+            foreach (TECTag tag in bid.Tags)
+            { addObject(tag, bid); }
+            foreach (TECScopeBranch branch in bid.ScopeTree)
+            {
+                addObject(branch, bid);
+                saveCompleteScopeBranch(branch);
+            }
+            foreach(TECDrawing drawing in bid.Drawings)
+            {
+                addObject(drawing, bid);
+                saveCompletePage(drawing);
+            }
+            foreach(TECProposalScope proposalScope in bid.ProposalScope)
+            {
+                addObject(proposalScope, bid);
+                saveCompleteProposalScope(proposalScope);
+            }
+            foreach(TECDevice device in bid.DeviceCatalog)
+            {
+                addObject(device, bid);
+                saveScopeChildProperties(device);
+                saveDeviceChildProperties(device);
+            }
+        }
+        private static void saveCompleteTemplate(TECTemplates templates)
+        {
+            addObject(templates, templates);
+            foreach(TECTag tag in templates.Tags)
+            { addObject(tag, templates); }
+            foreach (TECSystem system in templates.SystemTemplates)
+            {
+                addObject(system, templates);
+                saveScopeChildProperties(system);
+                saveCompleteEquipment(system);
+            }
+            foreach (TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                addObject(equipment, templates);
+                saveScopeChildProperties(equipment);
+                saveCompleteSubScope(equipment);
+            }
+            foreach (TECSubScope subScope in templates.SubScopeTemplates)
+            {
+                addObject(subScope, templates);
+                saveScopeChildProperties(subScope);
+                saveCompleteDevices(subScope);
+                saveCompletePoints(subScope);
+            }
+            foreach (TECDevice device in templates.DeviceCatalog)
+            {
+                addObject(device, templates);
+                saveScopeChildProperties(device);
+                saveDeviceChildProperties(device);
+            }
+            foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+            { addObject(manufacturer, templates); }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                addObject(controller, templates);
+                saveScopeChildProperties(controller);
+                saveControllerChildProperties(controller);
+            }
+            foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
+            { addObject(conduitType, templates); }
+            foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
+            { addObject(connectionType, templates); }
+            foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
+            { addObject(associatedCost, templates); }
+        }
+
+        private static void saveCompleteDevices(TECSubScope subScope)
+        {
+            foreach(TECDevice device in subScope.Devices)
+            {
+                addObject(device, subScope);
+                saveScopeChildProperties(device);
+                saveDeviceChildProperties(device);
+            }
+        }
+        private static void saveCompletePoints(TECSubScope subScope)
+        {
+            foreach(TECPoint point in subScope.Points)
+            {
+                addObject(point, subScope);
+                saveScopeChildProperties(point);
+            }
+        }
+        private static void saveCompleteSubScope(TECEquipment equipment)
+        {
+            foreach(TECSubScope subScope in equipment.SubScope)
+            {
+                addObject(subScope, equipment);
+                saveScopeChildProperties(subScope);
+                saveCompleteDevices(subScope);
+                saveCompletePoints(subScope);
+            }
+        }
+        private static void saveCompleteEquipment(TECSystem system)
+        {
+            foreach(TECEquipment equipment in system.Equipment)
+            {
+                addObject(equipment, system);
+                saveScopeChildProperties(equipment);
+                saveCompleteSubScope(equipment);
+            }
+        }
+        private static void saveCompleteScopeBranch(TECScopeBranch branch)
+        {
+            foreach(TECScopeBranch subBranch in branch.Branches)
+            {
+                addObject(subBranch, branch);
+                saveCompleteScopeBranch(subBranch);
+            }
+        }
+        private static void saveCompleteVisualScope(TECPage page)
+        {
+            foreach(TECVisualScope visualScope in page.PageScope)
+            { addObject(visualScope, page); }
+        }
+        private static void saveCompleteVisualConnections(TECPage page)
+        {
+            foreach (TECVisualConnection visualConnection in page.Connections)
+            { addObject(visualConnection, page); }
+        }
+        private static void saveCompletePage(TECDrawing drawing)
+        {
+            foreach(TECPage page in drawing.Pages)
+            {
+                addObject(page, drawing);
+                saveCompleteVisualScope(page);
+                saveCompleteVisualConnections(page);
+            }
+        }
+        private static void saveCompleteProposalScope(TECProposalScope proposalScope)
+        {
+            
+            foreach(TECProposalScope subProposalScope in proposalScope.Children)
+            {
+                addObject(subProposalScope, proposalScope);
+                saveCompleteProposalScope(subProposalScope);
+            }
+            foreach(TECScopeBranch branch in proposalScope.Notes)
+            {
+                addObject(branch, proposalScope);
+                saveCompleteScopeBranch(branch);
+            }
+        }
+        private static void saveScopeChildProperties(TECScope scope)
+        {
+            saveLocation(scope);
+            saveTags(scope);
+            saveAssociatedCosts(scope);
+        }
+        private static void saveLocation(TECScope scope)
+        {
+            if(scope.Location != null)
+            {
+                addObject(scope.Location, scope);
+            }
+        }
+        private static void saveTags(TECScope scope)
+        {
+            foreach(TECTag tag in scope.Tags)
+            {
+                addObject(tag, scope);
+            }
+        }
+        private static void saveAssociatedCosts(TECScope scope)
+        {
+            foreach(TECAssociatedCost cost in scope.AssociatedCosts)
+            {
+                addObject(cost, scope);
+            }
+        }
+        private static void saveControllerChildProperties(TECController controller)
+        {
+            foreach(TECConnection connection in controller.Connections)
+            {
+                addObject(connection, controller);
+            }
+            foreach(TECIO IO in controller.IO)
+            {
+                addObject(IO, controller);
+            }
+        }
+        private static void saveDeviceChildProperties(TECDevice device)
+        {
+            addObject(device.Manufacturer, device);
+            addObject(device.ConnectionType, device);
+        }
         #endregion
 
         #region Generic Add Methods
         private static void addObject(params Object[] objectsToAdd)
         {
             //ObjectsToAdd = [targetObject, referenceObject];
-            var relevantTables = getRelevantTablesToAdd(objectsToAdd);
-            
+            var relevantTables = getRelevantTablesForAddRemove(objectsToAdd);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
-                    //Item5 = isIndexed relation table
-                {
-                    updateIndexedRelation(table, objectsToAdd);
-                }else
-                {
-                    addObjectToTable(table, objectsToAdd);
-                }
-                
-            }
-
+                { updateIndexedRelation(table, objectsToAdd); }
+                else
+                { addObjectToTable(table, objectsToAdd); } 
+            } 
         }
         private static void addObjectToTable(TableBase table, params Object[] objectsToAdd)
         {
             //ObjectsToAdd = [targetObject, referenceObject];
             var tableInfo = new TableInfo(table);
             var relevantObjects = objectsToAdd;
+            
+            Dictionary<string, string> data = assembleDataToAddRemove(table, objectsToAdd);
 
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            var isHierarchial = false;
-            if (tableInfo.Types.Count == 2 && tableInfo.Types[0] == tableInfo.Types[1])
-            {
-                isHierarchial = true;
-                relevantObjects = new object[]
-                {
-                    objectsToAdd[1],
-                    objectsToAdd[0]
-                };
-                
-            }
-            else if (tableInfo.Types.Count == 1)
-            {
-                relevantObjects = new object[]
-                {
-                    objectsToAdd[0]
-                };
-            }
-
-            int currentField = 0;
-            foreach (TableField field in tableInfo.Fields)
-                //tableInfo.Item2 = AllTableFields;
-            {
-                if (isHierarchial)
-                {
-                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
-                    {
-                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
-                        var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
-                        data.Add(field.Name, dataString);
-                    }
-                }
-                else
-                {
-                    if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
-                    {
-                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
-                        data.Add(field.Name, dataString);
-                    }
-                    foreach (Object item in relevantObjects)
-                    {
-                        if (isFieldType(tableInfo, field, item))
-                        {
-                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
-                            var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-                    }
-                }
-                currentField++;
-            }
-         
-            if(data.Count > 0)
+            if (data.Count > 0)
             {
                 if (!SQLiteDB.Insert(tableInfo.Name, data))
                 {
@@ -4316,7 +2140,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private static void updateIndexedRelation(TableBase table, params Object[] objectsToAdd)
         {
             var tableInfo = new TableInfo(table);
@@ -4339,16 +2162,7 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
                         data.Add(field.Name, dataString);
                     }
-                    foreach (Object item in objectsToAdd)
-                    {
-                        if(field.Property.ReflectedType == item.GetType())
-                        {
-                            if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + item.GetType()); }
-                            var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-
-                    }
+                    assembleDataWithObjects(data, objectsToAdd, tableInfo, field);
                 }
                 if (data.Count > 0)
                 {
@@ -4360,43 +2174,15 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
-        
-        private static List<TableBase> getRelevantTablesToAdd(params Object[] objectsToAdd)
-        {
-            var relevantTables = new List<TableBase>();
-            var objectTypes = getObjectTypes(objectsToAdd);
-            
-            foreach (TableBase table in AllTables.Tables)
-            {
-                var tableInfo = new TableInfo(table);
-
-                //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
-                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
-
-                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
-                {
-                    relevantTables.Add(table);
-                }
-            }
-
-            return relevantTables;
-
-        }
-        
         #endregion
 
         #region Generic Remove Methods
         private static void removeObject(params Object[] objectsToRemove)
         {
-            var relevantTables = getRelevantTablesForRemoval(objectsToRemove);
-
+            var relevantTables = getRelevantTablesForAddRemove(objectsToRemove);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
-                Console.WriteLine("Removing objects");
                 removeObjectFromTable(table, objectsToRemove);
             }
 
@@ -4404,110 +2190,39 @@ namespace EstimatingUtilitiesLibrary
         private static void removeObjectFromTable(TableBase table, params Object[] objectsToRemove)
         {
             var tableInfo = new TableInfo(table);
-            var relevantObjects = objectsToRemove;
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            var isHierarchial = false;
-            if(tableInfo.Types.Count == 2 && tableInfo.Types[0] == tableInfo.Types[1])
-            {
-                isHierarchial = true;
-                relevantObjects = new object[]
-                {
-                    objectsToRemove[1],
-                    objectsToRemove[0]
-                };
-            } else if(tableInfo.Types.Count == 1)
-            {
-                relevantObjects = new object[]
-                {
-                    objectsToRemove[0]
-                };
-            }
-
             if (fieldsIncludeQuantity(tableInfo.Fields))
             {
                 var qty = getQuantityInParentCollection(objectsToRemove[0], objectsToRemove[1]);
-                if(qty > 0)
+                if (qty > 1)
                 {
                     editObjectInTable(table, objectsToRemove);
                     return;
                 }
             }
 
-            int currentField = 0;
-            foreach (TableField field in tableInfo.Fields)
+            Dictionary<string, string> data = assembleDataToAddRemove(table, objectsToRemove);
+            if(data.ContainsKey("Quantity"))
             {
-                if (isHierarchial)
-                {
-                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
-                    {
-                        if (DEBUG_GENERIC) { Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
-                        var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
-                        data.Add(field.Name, dataString);
-                    }
-                }
-                else
-                {
-                   
-                    foreach (Object item in relevantObjects)
-                    {
-                        if (isFieldType(tableInfo, field, item))
-                        {
-                            if (DEBUG_GENERIC) { Console.WriteLine("Removing " + field.Name + " from table " + tableInfo.Name + " with type " + item.GetType()); }
-                            var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-                    }
-
-                }
-                currentField++;
+                data.Remove("Quantity");
             }
+
             if (data.Count > 0)
             {
                 if (!SQLiteDB.Delete(tableInfo.Name, data))
-                {
-                    Console.WriteLine("Error: Couldn't remove data from " + tableInfo.Name + " table.");
-                }
+                { Console.WriteLine("Error: Couldn't remove data from " + tableInfo.Name + " table."); }
             }
         }
-        private static List<TableBase> getRelevantTablesForRemoval(params Object[] objectsToRemove)
-        {
-            var relevantTables = new List<TableBase>();
-            var objectTypes = getObjectTypes(objectsToRemove);
-
-            foreach (TableBase table in AllTables.Tables)
-            {
-                var tableInfo = new TableInfo(table);
-
-                //TableInfo.Item4 = List<TableType>
-                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
-                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
-
-                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
-                {
-                    relevantTables.Add(table);
-                }
-            }
-
-            return relevantTables;
-
-        }
-
         #endregion
 
         #region Generic Edit Methods
         private static void editObject(params Object[] objectsToEdit)
         {
             var relevantTables = getRelevantTablesToEdit(objectsToEdit);
-
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
                 editObjectInTable(table, objectsToEdit);
             }
-
         }
         private static void editObjectInTable(TableBase table, params Object[] objectsToEdit)
         {
@@ -4518,43 +2233,24 @@ namespace EstimatingUtilitiesLibrary
             {
                 if(objectsToEdit[0].GetType() == objectsToEdit[1].GetType())
                 {
-                    relevantObjects = new Object[] {
-                        objectsToEdit[0]
-                    };
+                    relevantObjects = new Object[]
+                    { objectsToEdit[0] };
                 }
             }
-
             foreach (TableField field in tableInfo.Fields)
             {
-                if (field.Property == null)
+                if ((field.Property != null) && (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties)))
                 {
-                    //throw new NotImplementedException();
+                    var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
+                    data.Add(field.Name, dataString);
                 }
-                else
-                {
-                    if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
-                    {
-                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
-                        data.Add(field.Name, dataString);
-                    }
-                    foreach (Object item in relevantObjects)
-                    {
-                        if (isFieldType(tableInfo, field, item))
-                        {
-                            if (DEBUG_GENERIC) { Console.WriteLine("Editing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType()); }
-                            var dataString = objectToDBString(field.Property.GetValue(item, null));
-                            data.Add(field.Name, dataString);
-                        }
-                    }
-                }
+                assembleDataWithObjects(data, relevantObjects, tableInfo, field);
             }
 
             if (data.Count > 0)
             {
                 if (!SQLiteDB.Replace(tableInfo.Name, data))
-                {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
-                }
+                { Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table."); }
             }
         }
         private static List<TableBase> getRelevantTablesToEdit(params Object[] objectsToEdit)
@@ -4565,13 +2261,120 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in AllTables.Tables)
             {
                 var tableInfo = new TableInfo(table);
-
-                //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypesForEdit(objectTypes, tableInfo.Types);
                 bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
                 if ((allTypesMatch || tableHasOnlyType) && (shouldIncludeCatalog))
+                { relevantTables.Add(table);}
+            }
+            return relevantTables;
+        }
+        #endregion
+        
+        #region Generic Helper Methods
+        static private List<string> getAllTableNames()
+        {
+            string command = "select name from sqlite_master where type = 'table' order by 1";
+            DataTable tables = SQLiteDB.getDataFromCommand(command);
+            List<string> tableNames = new List<string>();
+            foreach (DataRow row in tables.Rows)
+            {
+                tableNames.Add(row["Name"].ToString());
+            }
+            return tableNames;
+        }
+        static private List<string> getAllTableFields(string tableName)
+        {
+            string command = "select * from " + tableName + " limit 1";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> tableFields = new List<string>();
+            foreach (DataColumn col in data.Columns)
+            {
+                tableFields.Add(col.ColumnName);
+            }
+            return tableFields;
+        }
+        private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, params Object[] inputObjects)
+        {
+            var tableInfo = new TableInfo(table);
+            var relevantObjects = inputObjects;
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            var isHierarchial = false;
+            if (tableInfo.Types.Count == 2 && tableInfo.Types[0] == tableInfo.Types[1])
+            {
+                isHierarchial = true;
+                relevantObjects = new object[]
+                { inputObjects[1],
+                    inputObjects[0] };
+            }
+            else if (tableInfo.Types.Count == 1)
+            {
+                relevantObjects = new object[]
+                { inputObjects[0] };
+            }
+
+            int currentField = 0;
+            foreach (TableField field in tableInfo.Fields)
+            //tableInfo.Item2 = AllTableFields;
+            {
+                if (isHierarchial)
+                {
+                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
+                    {
+                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
+                        var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
+                        data.Add(field.Name, dataString);
+                    }
+                }
+                else
+                {
+                    if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                    {
+                        var dataString = objectToDBString(getQuantityInParentCollection(inputObjects[0], inputObjects[1]));
+                        data.Add(field.Name, dataString);
+                    } else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                    {
+                        var dataString = objectToDBString(Properties.Settings.Default.Version);
+                        data.Add(field.Name, dataString);
+                    }
+                    assembleDataWithObjects(data, relevantObjects, tableInfo, field);
+                }
+                currentField++;
+            }
+
+            return data;
+        }
+        private static Dictionary<string, string> assembleDataWithObjects(Dictionary<string, string> data, Object[] relevantObjects, TableInfo tableInfo, TableField field)
+        {
+            foreach (Object item in relevantObjects)
+            {
+                if (isFieldType(tableInfo, field, item))
+                {
+                    if (DEBUG_GENERIC) { Console.WriteLine("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType()); }
+                    var dataString = objectToDBString(field.Property.GetValue(item, null));
+                    data.Add(field.Name, dataString);
+                }
+            }
+            return data;
+        }
+        private static List<TableBase> getRelevantTablesForAddRemove(params Object[] relevantObjects)
+        {
+            var relevantTables = new List<TableBase>();
+            var objectTypes = getObjectTypes(relevantObjects);
+
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = new TableInfo(table);
+
+                //TableInfo.Item4 = List<TableType>
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
+
+                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }
@@ -4580,35 +2383,6 @@ namespace EstimatingUtilitiesLibrary
             return relevantTables;
 
         }
-
-        #endregion
-
-        #region Generic Load Methods
-        //private static ObservableCollection<Object> loadObjects(Type typeToLoad)
-        //{
-        //    ObservableCollection<Object> loadedObjects = new ObservableCollection<Object>();
-        //    List<TableBase> relevantTables = getRelevantTables(new object() as typeToLoad);
-
-        //    DataTable exclusionsDT = SQLiteDB.getDataFromTable("TECExclusion");
-
-        //    foreach (DataRow row in exclusionsDT.Rows)
-        //    {
-        //        Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-        //        string exclusionText = row["ExclusionText"].ToString();
-
-        //        exclusions.Add(new TECExclusion(exclusionText, exclusionId));
-        //    }
-
-        //    return loadedObjects;
-        //}
-        #endregion
-
-        #region Generic Helper Methods
-            
-        //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>, isRelationTable>
- //       static private TableInfo getTableInfo(TableBase table)
-
-
         private static string objectToDBString(Object inObject)
         {
             string outstring = "";
@@ -4623,7 +2397,6 @@ namespace EstimatingUtilitiesLibrary
             
             return outstring;
         }
-
         private static List<Type> getObjectTypes(params Object[] objectsToAdd)
         {
             var outList = new List<Type>();
@@ -4635,7 +2408,6 @@ namespace EstimatingUtilitiesLibrary
 
             return outList;
         }
-
         private static bool sharesTypes(List<Type> list1, List<Type> list2)
         {
             bool doesShare = false;
@@ -4651,7 +2423,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return doesShare;
         }
-
         private static bool sharesAllTypes(List<Type> list1, List<Type> list2)
         {
             var numMatch = 0;
@@ -4679,7 +2450,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return ((numMatch == list1.Count) && (numMatch == list2.Count));
         }
-
         private static bool sharesAllTypesForEdit(List<Type> list1, List<Type> list2)
         {
             var numMatch = 0;
@@ -4699,7 +2469,6 @@ namespace EstimatingUtilitiesLibrary
             return ((numMatch == list1.Count) && (numMatch == list2.Count));
 
         }
-
         private static bool hasOnlyType(Type primaryType, List<Type> list2)
         {
             bool doesShare = false;
@@ -4712,7 +2481,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return doesShare;
         }
-
         private static bool hasBaseTypeAndType(List<Type> list1, List<Type> list2)
         {
             var uniqueList1 = getUniqueTypes(list1);
@@ -4752,7 +2520,6 @@ namespace EstimatingUtilitiesLibrary
                 return false;
             }
         }
-
         private static bool isCatalogEdit(List<Type> list1, bool isCatalogTable)
         {
             bool isEdit = false;
@@ -4764,24 +2531,18 @@ namespace EstimatingUtilitiesLibrary
             }
             return isEdit;
         }
-
         private static bool isFieldType(TableInfo table, TableField field, Object consideredObject)
         {
             var type = consideredObject.GetType();
-
-            if(field.Property.ReflectedType == type)
-            {
-                return true;
-            }else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
-            {
-                return true;
-            }else
-            {
+            if(field.Property == null)
                 return false;
-            }
-
+            else if(field.Property.ReflectedType == type)
+                return true;
+            else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
+                return true;
+            else
+                return false;
         }
-
         private static bool fieldsIncludeQuantity(List<TableField> fields)
         {
             var includes = false;
@@ -4795,7 +2556,6 @@ namespace EstimatingUtilitiesLibrary
 
             return includes;
         }
-
         private static object getChildCollection(object childObject, object parentObject)
         {
             Type childType = childObject.GetType();
@@ -4807,7 +2567,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return null;
         }
-        
         private static List<Type> getUniqueTypes(List<Type> types)
         {
             var outList = new List<Type>();
@@ -4820,7 +2579,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return outList;
         }
-
         private static int getQuantityInParentCollection(object childObject, object parentObject)
         {
             TECScope child;
@@ -4828,10 +2586,8 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-
                 child = (childObject as TECScope);
                 parent = (parentObject as TECScope);
-
             }
             catch (Exception e)
             {
@@ -4852,5 +2608,4 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
     }
-
 }
