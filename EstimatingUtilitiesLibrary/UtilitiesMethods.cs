@@ -119,6 +119,17 @@ namespace EstimatingUtilitiesLibrary
             return outDouble;
         }
 
+        public static int StringToInt(string inputString, int defaultOutput)
+        {
+            int outInt;
+            if (!int.TryParse(inputString, out outInt))
+            {
+                outInt = defaultOutput;
+                Console.WriteLine("Cannot convert multiplier to double, setting to 1");
+            }
+            return outInt;
+        }
+
         #region Cast Conversions
 
         #region String Extensions

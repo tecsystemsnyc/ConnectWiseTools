@@ -33,8 +33,8 @@ namespace EstimatingUtilitiesLibrary
 
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = new TECBid();
-            try
-            {
+            //try
+            //{
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
                 {
@@ -79,9 +79,9 @@ namespace EstimatingUtilitiesLibrary
                 getUserAdjustments(bid);
                 //Breaks Visual Scope in a page
                 //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            }
-            catch (Exception e)
-            { MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
+            //}
+            //catch (Exception e)
+            //{ MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
 
             SQLiteDB.Connection.Close();
 
@@ -745,15 +745,20 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECLocation getLocationInScope(Guid ScopeID)
         {
-            string command = "select * from "+LocationTable.TableName+" where "+LocationTable.LocationID.Name+" in ";
-            command += "(select "+LocationScopeTable.LocationID.Name+" from "+LocationScopeTable.TableName+" where ";
-            command += LocationScopeTable.ScopeID.Name + " = '"+ ScopeID;
-            command += "')";
-            DataTable locationDT = SQLiteDB.getDataFromCommand(command);
-            if (locationDT.Rows.Count > 0)
-            { return getLocationFromRow(locationDT.Rows[0]); }
-            else
-            {  return null; }
+            var tables = getAllTableNames();
+            if (tables.Contains(LocationTable.TableName))
+            {
+                string command = "select * from " + LocationTable.TableName + " where " + LocationTable.LocationID.Name + " in ";
+                command += "(select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
+                command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
+                command += "')";
+                DataTable locationDT = SQLiteDB.getDataFromCommand(command);
+                if (locationDT.Rows.Count > 0)
+                { return getLocationFromRow(locationDT.Rows[0]); }
+                else
+                { return null; }
+            } else
+            { return null; }
         }
         static private ObservableCollection<TECController> getControllers()
         {
@@ -985,69 +990,22 @@ namespace EstimatingUtilitiesLibrary
         }
         static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
         {
-            Dictionary<Guid, TECLocation> scopeToLink = new Dictionary<Guid, TECLocation>();
-            foreach (TECLocation location in locations)
+            foreach(TECLocation location in locations)
             {
-                string command = "select ScopeID from TECLocationTECScope where LocationID = '" + location.Guid + "'";
-                try
+                foreach (TECSystem system in bidSystems)
                 {
-                    DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
-                    foreach (DataRow row in scopeDT.Rows)
-                    { scopeToLink.Add(new Guid(row["ScopeID"].ToString()), location); }
-                }
-                catch (Exception e)
-                { Console.WriteLine("Error: Finding scope in location failed in LinkAllLocations. Code: " + e.Message); }
-            }
-
-            List<Guid> scopeToRemove = new List<Guid>();
-            foreach (TECSystem sys in bidSystems)
-            {
-                foreach (Guid guid in scopeToLink.Keys)
-                {
-                    if (sys.Guid == guid)
+                    if (system.Location != null && system.Location.Guid == location.Guid)
+                    { system.Location = location; }
+                    foreach(TECEquipment equipment in system.Equipment)
                     {
-                        sys.Location = scopeToLink[guid];
-                        scopeToRemove.Add(guid);
-                    }
-                }
-                foreach (Guid guid in scopeToRemove)
-                { scopeToLink.Remove(guid); }
-                if (scopeToLink.Count < 1)
-                { return; }
-                scopeToRemove.Clear();
-
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (Guid guid in scopeToLink.Keys)
-                    {
-                        if (equip.Guid == guid)
+                        if (equipment.Location != null && equipment.Location.Guid == location.Guid)
+                        { equipment.Location = location; }
+                        foreach(TECSubScope subScope in equipment.SubScope)
                         {
-                            equip.Location = scopeToLink[guid];
-                            scopeToRemove.Add(guid);
+                            if(subScope.Location != null && subScope.Location.Guid == location.Guid)
+                            { subScope.Location = location; }
                         }
-                    }
-                    foreach (Guid guid in scopeToRemove)
-                    { scopeToLink.Remove(guid); }
-                    if (scopeToLink.Count < 1)
-                    { return; }
-                    scopeToRemove.Clear();
-
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        foreach (Guid guid in scopeToLink.Keys)
-                        {
-                            if (ss.Guid == guid)
-                            {
-                                ss.Location = scopeToLink[guid];
-                                scopeToRemove.Add(guid);
-                            }
-                        }
-                        foreach (Guid guid in scopeToRemove)
-                        { scopeToLink.Remove(guid); }
-                        if (scopeToLink.Count < 1)
-                        { return; }
-                        scopeToRemove.Clear();
-                    }
+                   }
                 }
             }
         }
@@ -1587,6 +1545,7 @@ namespace EstimatingUtilitiesLibrary
 
             system.Quantity = quantity;
             system.Tags = getTagsInScope(systemID);
+            system.Location = getLocationInScope(systemID);
 
             return system;
         }
@@ -1604,6 +1563,7 @@ namespace EstimatingUtilitiesLibrary
 
             equipmentToAdd.Quantity = quantity;
             equipmentToAdd.Tags = getTagsInScope(equipmentID);
+            equipmentToAdd.Location = getLocationInScope(equipmentID);
             return equipmentToAdd;
         }
         private static TECSubScope getSubScopeFromRow(DataRow row)
@@ -1611,28 +1571,15 @@ namespace EstimatingUtilitiesLibrary
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
             string name = row[SubScopeTable.Name.Name].ToString();
             string description = row[SubScopeTable.Description.Name].ToString();
-            string quantityString = row[SubScopeTable.Quantity.Name].ToString();
-            string lengthString = row[SubScopeTable.Length.Name].ToString();
-
-            int quantity;
-            if (!int.TryParse(quantityString, out quantity))
-            {
-                quantity = 1;
-                Console.WriteLine("Cannot convert quantity to int in subscope, setting to 1");
-            }
-
-            double length;
-            if (!double.TryParse(lengthString, out length))
-            {
-                length = 1;
-                Console.WriteLine("Cannot convert length to double in subscope, setting to 1");
-            }
-
+            int quantity = UtilitiesMethods.StringToInt(row[SubScopeTable.Quantity.Name].ToString(), 1);
+            double length = UtilitiesMethods.StringToDouble(row[SubScopeTable.Length.Name].ToString(), 1);
+           
             ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
             ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
 
             TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
 
+            subScopeToAdd.Location = getLocationInScope(subScopeID);
             subScopeToAdd.Length = length;
             subScopeToAdd.Quantity = quantity;
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
@@ -2272,7 +2219,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
         
-        #region Generic Helper Methods
+        #region Helper Methods
         static private List<string> getAllTableNames()
         {
             string command = "select name from sqlite_master where type = 'table' order by 1";

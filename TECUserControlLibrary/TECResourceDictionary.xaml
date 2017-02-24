@@ -50,6 +50,7 @@
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="RowHeaderWidth" Value="15"/>
         <Setter Property="dd:DragDrop.IsDropTarget" Value="True"/>
         <Setter Property="dd:DragDrop.IsDragSource" Value="True"/>
         <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>

@@ -409,6 +409,7 @@ namespace Tests
         public void SaveAs_Bid_Location()
         {
             //Assert
+            Assert.AreEqual(expectedBid.Locations.Count, actualBid.Locations.Count);
             Assert.AreEqual(expectedSystem.Location.Guid, actualSystem.Location.Guid);
             Assert.AreEqual(expectedSystem1.Location.Guid, actualSystem1.Location.Guid);
             Assert.AreEqual(expectedEquipment.Location.Guid, actualEquipment.Location.Guid);
