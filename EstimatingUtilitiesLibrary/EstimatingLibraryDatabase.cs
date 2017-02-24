@@ -384,8 +384,8 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + ScopeBranchTable.TableName;
             command += " where " + ScopeBranchTable.ScopeBranchID.Name;
             command += " in (select " + ScopeBranchTable.ScopeBranchID.Name;
-            command += " from "+BidScopeBranchTable.TableName+ " where " + BidScopeBranchTable.ScopeBranchID + " not in ";
-            command += "(select " + ScopeBranchHierarchyTable.ChildID + " from " + ScopeBranchHierarchyTable.TableName + "))";
+            command += " from "+BidScopeBranchTable.TableName+ " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
+            command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName + "))";
 
             DataTable mainBranchDT = SQLiteDB.getDataFromCommand(command);
 
@@ -485,7 +485,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + EquipmentTable.TableName;
             command += " where "+EquipmentTable.EquipmentID.Name+" not in ";
             command += "(select " + SystemEquipmentTable.EquipmentID.Name;
-            command += "from "+ SystemEquipmentTable.TableName+ ")";
+            command += " from "+ SystemEquipmentTable.TableName+ ")";
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
@@ -497,8 +497,8 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             string command = "select * from " + SubScopeTable.TableName ;
-            command += "where "+ SubScopeTable.SubScopeID+ " not in ";
-            command += "(select " + EquipmentSubScopeTable.SubScopeID + " from " + EquipmentSubScopeTable.TableName + ")";
+            command += " where "+ SubScopeTable.SubScopeID.Name+ " not in ";
+            command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row)); }
@@ -524,7 +524,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECLocation> getAllLocations()
         {
             ObservableCollection<TECLocation> locations = new ObservableCollection<TECLocation>();
-            DataTable locationsDT = SQLiteDB.getDataFromTable("TECLocation");
+            DataTable locationsDT = SQLiteDB.getDataFromTable(LocationTable.TableName);
             foreach (DataRow row in locationsDT.Rows)
             { locations.Add(getLocationFromRow(row)); }
             return locations;
@@ -549,7 +549,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select * from (TECEquipment inner join ";
+            string command = "select * from ("+EquipmentTable.TableName+" inner join ";
             command += ""+ SystemEquipmentTable.TableName + " on ";
             command += "(TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID";
             command += " and "+SystemEquipmentTable.SystemID.Name+" = '";
@@ -565,7 +565,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             string command = "select * from (TECSubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
-            command += "(TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and";
+            command += "(TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and ";
             command += EquipmentSubScopeTable.EquipmentID.Name + "= '" +equipmentID;
             command += "')) order by "+EquipmentSubScopeTable.ScopeIndex.Name+"";
 
@@ -586,8 +586,8 @@ namespace EstimatingUtilitiesLibrary
             foreach (DataRow row in devicesDT.Rows)
             {
                 var deviceToAdd = getDeviceFromRow(row);
-                string quantityCommand = "select Quantity from TECSubScopeTECDevice where SubScopeID = '";
-                quantityCommand += (subScopeID + "' and DeviceID = '" + deviceToAdd.Guid + "'");
+                string quantityCommand = "select "+SubScopeDeviceTable.Quantity.Name+" from "+SubScopeDeviceTable.TableName+" where "+SubScopeDeviceTable.SubScopeID.Name+" = '";
+                quantityCommand += (subScopeID + "' and "+SubScopeDeviceTable.DeviceID.Name+" = '" + deviceToAdd.Guid + "'");
                 DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
                 int quantity = quantityDT.Rows[0][0].ToString().ToInt();
                 for (int x = 0; x < quantity; x++)
@@ -601,7 +601,7 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
             string command = "select * from (" + PointTable.TableName + " inner join "+SubScopePointTable.TableName+" on ";
-            command += "(TECPoint.PointID = TECSubScopeTECPoint.PointID and";
+            command += "(TECPoint.PointID = TECSubScopeTECPoint.PointID and ";
             command += SubScopePointTable.SubScopeID.Name+" = '" +subScopeID;
             command += "')) order by " + SubScopePointTable.ScopeIndex.Name;
 
@@ -614,7 +614,7 @@ namespace EstimatingUtilitiesLibrary
         static private TECManufacturer getManufacturerInDevice(Guid deviceID)
         {
             string command = "select * from "+ManufacturerTable.TableName+ " where " + ManufacturerTable.ManufacturerID.Name + " in ";
-            command += "(select " + DeviceManufacturerTable.ManufacturerID + " from " + DeviceManufacturerTable.TableName;
+            command += "(select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
             command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
             command += deviceID;
             command += "')";
@@ -678,7 +678,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
         {
             ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
-            string command = "select * from "+TagTable.TableName+" where "+TagTable.TableName+" in ";
+            string command = "select * from "+TagTable.TableName+" where "+TagTable.TagID.Name+" in ";
             command += "(select "+ScopeTagTable.TagID.Name+" from "+ScopeTagTable.TableName+" where ";
             command += ScopeTagTable.ScopeID.Name + " = '"+scopeID;
             command += "')";
@@ -778,9 +778,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
                 foreach (DataRow row in connectionTypesDT.Rows)
-                {
-                    connectionTypes.Add(getConnectionTypeFromRow(row));
-                }
+                { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             }
             catch (Exception e)
             {
@@ -1278,7 +1276,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion Link Methods
 
         #region Populate Derived
-
         static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {
             ObservableCollection<TECConnection> connectionsToAdd = connections;
@@ -1389,7 +1386,6 @@ namespace EstimatingUtilitiesLibrary
             vScopeToRemove.Clear();
             return outList;
         }
-
         #endregion
 
         #region Database Version Update Methods
@@ -1733,7 +1729,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECLocation getLocationFromRow(DataRow row)
         {
             Guid locationID = new Guid(row[LocationTable.LocationID.Name].ToString());
-            string name = row[LocationTable.LocationID.Name].ToString();
+            string name = row[LocationTable.Name.Name].ToString();
             return new TECLocation(name, locationID);
         }
         private static TECConduitType getConduitTypeFromRow(DataRow row)
