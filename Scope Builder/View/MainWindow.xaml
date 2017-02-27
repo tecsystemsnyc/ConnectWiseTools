@@ -204,6 +204,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </ItemsPanelTemplate>
@@ -212,6 +213,10 @@
                     <TextBlock Text="{Binding CurrentStatusText}"/>
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="1"
+                               HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding ContextText}"/>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2"
                                HorizontalAlignment="Right">
                     <TextBlock Text="{Binding Version}"/>
                 </StatusBarItem>

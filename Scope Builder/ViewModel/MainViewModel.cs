@@ -67,9 +67,7 @@ namespace Scope_Builder.ViewModel
         public Visibility TemplatesVisibility
         {
             get
-            {
-                return _templatesVisibility;
-            }
+            { return _templatesVisibility; }
             set
             {
                 _templatesVisibility = value;
@@ -88,10 +86,7 @@ namespace Scope_Builder.ViewModel
         {
             programName = "Scope Builder";
 
-            setupScopeDataGrid();
-            setupLocationDataGrid();
-            setupScopeCollection();
-            setupBudget();
+            setupAll();
             getVersion();
             DGTabIndex = 0;
 
@@ -102,8 +97,11 @@ namespace Scope_Builder.ViewModel
 
             startupFile = Properties.Settings.Default.StartupFile;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
-
             checkForOpenWith(Properties.Settings.Default.StartupFile);
+
+            BidSet += () =>
+            { refreshAll(); };
+            
         }
         #endregion 
 
@@ -139,7 +137,6 @@ namespace Scope_Builder.ViewModel
                     break;
             }
         }
-
         private void getVersion()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
@@ -147,14 +144,54 @@ namespace Scope_Builder.ViewModel
             else
             { Version = "Undeployed Version"; }
         }
+        private void setContextText(object selected)
+        {
+            if(selected is TECScope && selected != null)
+            {
+                ContextText = makeContextString(selected as TECScope);
+            }
+        }
+        private string makeContextString(TECScope scope)
+        {
+            var outString = "";
+
+            outString += scope.Name + ": ";
+            if(scope.Location != null)
+            {
+                outString += scope.Location;
+                outString += " is in bid: ";
+                outString += ScopeDataGrid.LocationSelections.Contains(scope.Location);
+            }
+            else
+            {
+                outString += "No location";
+            }
+            
+            return outString;
+        }
         #endregion //Helper Functions
 
         #region Setup Extensions
+
+        private void setupAll()
+        {
+            setupScopeDataGrid();
+            setupLocationDataGrid();
+            setupScopeCollection();
+            setupBudget();
+        }
+        private void refreshAll()
+        {
+            ScopeDataGrid.Bid = Bid;
+            LocationDataGrid.Bid = Bid;
+            BudgetVM.Bid = Bid;
+        }
         private void setupScopeDataGrid()
         {
             ScopeDataGrid = new ScopeDataGridExtension(Bid);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.SelectionChanged += setContextText;
         }
         private void setupLocationDataGrid()
         {
@@ -196,13 +233,9 @@ namespace Scope_Builder.ViewModel
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
                 else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
             }
             else
             {
@@ -210,21 +243,14 @@ namespace Scope_Builder.ViewModel
                 int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
                 int removeIndex = currentIndex;
                 if (dropInfo.InsertIndex < currentIndex)
-                {
-                    removeIndex += 1;
-                }
+                { removeIndex += 1; }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
                 else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
                 ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
             }
         }
         #endregion
-
     }
 }

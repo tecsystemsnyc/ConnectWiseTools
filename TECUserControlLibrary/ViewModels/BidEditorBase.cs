@@ -82,6 +82,16 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         private string _currentStatusText;
+        private string _contextText;
+        public string ContextText
+        {
+            get{  return _contextText; }
+            set
+            {
+                _contextText = value;
+                RaisePropertyChanged("ContextText");
+            }
+        }
 
         public string TitleString
         {
@@ -227,7 +237,6 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-
         private string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -260,7 +269,6 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-
         private string getDocumentSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -294,7 +302,6 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-
         private string getCSVSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -327,7 +334,6 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-
         private string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -360,7 +366,6 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-
         private string getLoadTemplatesPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -388,20 +393,10 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-
         private void buildTitleString()
         {
             TitleString = Bid.Name + " - " + programName;
         }
-
-        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Name")
-            {
-                buildTitleString();
-            }
-        }
-
         private void LoadFromPath(string path)
         {
             if (path != null)
@@ -411,9 +406,7 @@ namespace TECUserControlLibrary.ViewModels
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
-                }
+                { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
                 else
                 {
                     string message = "File is open elsewhere";
@@ -423,7 +416,6 @@ namespace TECUserControlLibrary.ViewModels
                 CurrentStatusText = "Done.";
             }
         }
-
         protected void SetBusyStatus(string statusText)
         {
             CurrentStatusText = statusText;
@@ -439,6 +431,16 @@ namespace TECUserControlLibrary.ViewModels
         {
             return isReady;
         }
+
+        #region Event Handlers
+        private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Name")
+            {
+                buildTitleString();
+            }
+        }
+        #endregion
 
         #endregion //Helper Functions
 

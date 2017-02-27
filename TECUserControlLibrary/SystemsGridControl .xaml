@@ -34,11 +34,16 @@
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
                                     Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding Path=Location, Converter={cnvt:SelectedLocationToLocationConverter}}"
+                                        Header="Location" Width="Auto"
+                                        DisplayMemberPath="Name"
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
+                <!--<DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
                                         Header="Location" Width="Auto"
-                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>-->
                 <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemQuantity,
