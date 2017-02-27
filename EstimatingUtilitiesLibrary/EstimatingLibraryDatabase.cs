@@ -2070,6 +2070,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveControllerChildProperties(TECController controller)
         {
+            addObject(controller.Manufacturer, controller);
             foreach(TECConnection connection in controller.Connections)
             {
                 addObject(connection, controller);

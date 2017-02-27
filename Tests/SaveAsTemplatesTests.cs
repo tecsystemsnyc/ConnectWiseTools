@@ -265,7 +265,6 @@ namespace Tests
         {
             //Arrange
             TECManufacturer actualChildMan = actualDevice.Manufacturer;
-
             TECManufacturer expectedChildMan = expectedDevice.Manufacturer;
 
             //Assert
@@ -302,7 +301,8 @@ namespace Tests
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
-            
+            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
+
             foreach (TECIO expectedIO in expectedController.IO)
             {
                 bool ioExists = false;

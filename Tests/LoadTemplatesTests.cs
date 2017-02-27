@@ -213,7 +213,6 @@ namespace Tests
         [TestMethod]
         public void Load_Templates_Controller()
         {
-
             //Assert
             Assert.AreEqual("Test Controller", actualController.Name);
             Assert.AreEqual("test description", actualController.Description);
@@ -221,7 +220,6 @@ namespace Tests
             Assert.AreEqual(2, actualController.IO.Count);
             Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
             Assert.AreEqual("Test Manufacturer", actualController.Manufacturer.Name);
-
         }
 
         [TestMethod]
