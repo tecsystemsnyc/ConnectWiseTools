@@ -23,6 +23,7 @@ namespace EstimatingUtilitiesLibrary
         //private const bool DEBUG = true;
 
         private const bool DEBUG_GENERIC = false;
+        private static bool doCatch = false;
 
         static private SQLiteDatabase SQLiteDB;
 
@@ -33,8 +34,8 @@ namespace EstimatingUtilitiesLibrary
 
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = new TECBid();
-            //try
-            //{
+            try
+            {
                 //Update catalogs from templates.
                 if (templates.DeviceCatalog.Count > 0)
                 {
@@ -76,12 +77,13 @@ namespace EstimatingUtilitiesLibrary
                 linkAllDevices(bid.Systems, bid.DeviceCatalog);
                 linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
                 linkTagsInBid(bid.Tags, bid);
+                linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
                 getUserAdjustments(bid);
                 //Breaks Visual Scope in a page
                 //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            //}
-            //catch (Exception e)
-            //{ MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
+            }
+            catch (Exception e) when (doCatch)
+            { MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
 
             SQLiteDB.Connection.Close();
 
@@ -113,6 +115,7 @@ namespace EstimatingUtilitiesLibrary
                 templates.ConnectionTypeCatalog = getConnectionTypes();
                 linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
                 linkTagsInTemplates(templates.Tags, templates);
+                linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
             }
             catch (Exception e)
             { MessageBox.Show("Could not load templates from database. Error: " + e.Message); }
@@ -199,7 +202,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static public void UpdateTemplatesToDB(string path, ChangeStack changeStack)
         {
-            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
+            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + String.Format("{0:ffff}", DateTime.Now) + ".tmp";
 
             File.Copy(path, tempPath);
 
@@ -866,8 +869,22 @@ namespace EstimatingUtilitiesLibrary
             }
             return new TECProposalScope(scope, isProposed, notes);
         }
+        static private TECManufacturer getManufacturerInController(Guid controllerID)
+        {
+            string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            command += "(select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
+            command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
+            command += controllerID;
+            command += "')";
+
+            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            if (manTable.Rows.Count > 0)
+            { return getManufacturerFromRow(manTable.Rows[0]); }
+            else
+            { return new TECManufacturer(); }
+        }
         #endregion //Loading from DB Methods
-        
+
         #region Link Methods
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
@@ -1228,6 +1245,17 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (device.ConnectionType.Guid == connectionType.Guid)
                     { device.ConnectionType = connectionType; }
+                }
+            }
+        }
+        static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
+        {
+            foreach(TECManufacturer manufacturer in mans)
+            {
+                foreach(TECController controller in controllers)
+                {
+                    if(controller.Manufacturer.Guid == manufacturer.Guid)
+                    { controller.Manufacturer = manufacturer; }
                 }
             }
         }
@@ -1742,6 +1770,7 @@ namespace EstimatingUtilitiesLibrary
             TECController controller = new TECController(name, description, guid, cost);
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
+            controller.Manufacturer = getManufacturerInController(guid);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
@@ -2041,6 +2070,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveControllerChildProperties(TECController controller)
         {
+            addObject(controller.Manufacturer, controller);
             foreach(TECConnection connection in controller.Connections)
             {
                 addObject(connection, controller);

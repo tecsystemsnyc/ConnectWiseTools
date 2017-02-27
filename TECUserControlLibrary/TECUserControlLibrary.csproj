@@ -103,6 +103,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssociatedCostsGridControl.xaml.cs">
+      <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AttachableForStyleBehavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="BubbleScrollEvent .cs" />
@@ -182,6 +185,10 @@
       <DependentUpon>BudgetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="VisibilityModel.cs" />
+    <Page Include="AssociatedCostsGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ByLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

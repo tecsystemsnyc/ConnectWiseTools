@@ -914,6 +914,24 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
+    public class ControllerManufacturerTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECManufacturer";
+        public static Type ObjectType = typeof(TECController);
+        public static Type ReferenceType = typeof(TECManufacturer);
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
 
     public static class AllBidTables
     {
@@ -960,7 +978,8 @@ namespace EstimatingUtilitiesLibrary
             new ProposalScopeScopeBranchTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
-            new ScopeAssociatedCostTable()
+            new ScopeAssociatedCostTable(),
+            new ControllerManufacturerTable()
             };
     }
 
@@ -991,7 +1010,8 @@ namespace EstimatingUtilitiesLibrary
             new ScopeConnectionTable(),
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
-            new ScopeAssociatedCostTable()
+            new ScopeAssociatedCostTable(),
+            new ControllerManufacturerTable()
         };
     }
 
@@ -1043,7 +1063,8 @@ namespace EstimatingUtilitiesLibrary
             new PageVisualScopeTable(),
             new VisualScopeScopeTable(),
             new LocationScopeTable(),
-            new ScopeAssociatedCostTable()
+            new ScopeAssociatedCostTable(),
+            new ControllerManufacturerTable()
         };
     }
 

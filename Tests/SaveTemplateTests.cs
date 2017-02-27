@@ -777,6 +777,30 @@ namespace Tests
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
 
+        [TestMethod]
+        public void Save_Templates_Controller_Manufacturer()
+        {
+            //Act
+            TECController expectedController = templates.ControllerTemplates[0];
+            expectedController.Manufacturer = new TECManufacturer();
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedController.Guid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
+        }
+
         #region Controller IO
         [TestMethod]
         public void Save_Templates_Controller_Add_IO()
