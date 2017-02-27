@@ -220,6 +220,7 @@ namespace Tests
             Assert.AreEqual(101, actualController.Cost);
             Assert.AreEqual(2, actualController.IO.Count);
             Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
+            Assert.AreEqual("Test Manufacturer", actualController.Manufacturer.Name);
 
         }
 

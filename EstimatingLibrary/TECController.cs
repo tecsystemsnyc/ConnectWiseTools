@@ -12,6 +12,7 @@ namespace EstimatingLibrary
         private double _cost;
         private ObservableCollection<TECConnection> _connections;
         private ObservableCollection<TECIO> _io;
+        private TECManufacturer _manufacturer;
 
         public double Cost
         {
@@ -43,6 +44,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("IO", temp, this);
             }
         }
+        public TECManufacturer Manufacturer
+        {
+            get { return _manufacturer; }
+            set
+            {
+                var temp = this.Copy();
+                _manufacturer = value;
+                NotifyPropertyChanged("Manufacturer", temp, this);
+            }
+        }
 
         public List<IOType> AvailableIO
         {
@@ -58,7 +69,7 @@ namespace EstimatingLibrary
             _cost = cost;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
-
+            _manufacturer = new TECManufacturer();
             IO.CollectionChanged += CollectionChanged;
         }
 

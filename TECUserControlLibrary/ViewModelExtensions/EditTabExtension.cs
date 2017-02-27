@@ -164,6 +164,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllerIOQTY");
             }
         }
+
+        private TECAssociatedCost _selectedAssociatedCost;
+        public TECAssociatedCost SelectedAssociatedCost
+        {
+            get { return _selectedAssociatedCost; }
+            set
+            {
+                _selectedAssociatedCost = value;
+                RaisePropertyChanged("SelectedAssociatedCost");
+            }
+        }
+        
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
@@ -178,6 +190,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand DeleteSelectedDeviceCommand { get; private set; }
         public ICommand DeleteSelectedPointCommand { get; private set; }
         public ICommand DeleteSelectedControllerCommand { get; private set; }
+        public ICommand AddAssociatedCostToSystemCommand { get; private set; }
+        public ICommand AddAssociatedCostToEquipmentCommand { get; private set; }
+        public ICommand AddAssociatedCostToSubScopeCommand { get; private set; }
+        public ICommand AddAssociatedCostToDeviceCommand { get; private set; }
+        public ICommand AddAssociatedCostToControllerCommand { get; private set; }
         #endregion
         #endregion
 
@@ -215,6 +232,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
+            AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute);
+            AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute);
+            AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
+            AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute);
+            AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute);
         }
         
         #region Commands
@@ -339,8 +361,45 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             SelectedController = null;
         }
+
+        private void AddAssociatedCostToSystemExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedSystem != null)
+            {
+                SelectedSystem.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToEquipmentExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedEquipment != null)
+            {
+                SelectedEquipment.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+
+        }
+        private void AddAssociatedCostToSubScopeExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedSubScope != null)
+            {
+                SelectedSubScope.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToDeviceExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedDevice != null)
+            {
+                SelectedDevice.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToControllerExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedController != null)
+            {
+                SelectedController.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
         #endregion
-        
+
         #region Events
         public void updateSelection(object selection)
         {

@@ -317,6 +317,7 @@ namespace Tests
             TECIO ioToAdd = new TECIO(IOType.AI);
             ioToAdd.Quantity = 5;
             controller.IO.Add(ioToAdd);
+            controller.Manufacturer = testMan;
 
             templates.ControllerTemplates.Add(controller);
 
