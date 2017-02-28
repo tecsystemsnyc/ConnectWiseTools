@@ -117,6 +117,7 @@ namespace EstimatingLibrary
             outController._name = Name;
             outController._description = Description;
             outController._cost = Cost;
+            outController._manufacturer = Manufacturer;
 
             foreach (TECIO io in this.IO)
             {

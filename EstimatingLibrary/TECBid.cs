@@ -417,6 +417,12 @@ namespace EstimatingLibrary
         //Copy Constructor
         public TECBid(TECBid bidSource) : this()
         {
+            _name = bidSource.Name;
+            _bidNumber = bidSource.BidNumber;
+            _dueDate = bidSource.DueDate;
+            _salesperson = bidSource.Salesperson;
+            _estimator = bidSource.Estimator;
+
             if(bidSource.Labor != null)
             {
                 _labor = new TECLabor(bidSource.Labor);

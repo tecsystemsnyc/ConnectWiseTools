@@ -165,7 +165,7 @@ namespace EstimatingLibrary
             }
 
             _name = sourceSystem.Name;
-            _description = sourceSystem.Name;
+            _description = sourceSystem.Description;
             _budgetPrice = sourceSystem.BudgetPrice;
             _location = sourceSystem.Location;
             _quantity = sourceSystem.Quantity;

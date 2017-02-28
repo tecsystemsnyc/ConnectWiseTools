@@ -2024,19 +2024,15 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveControllerChildProperties(TECController controller)
         {
-            addObject(controller.Manufacturer, controller);
+            if(controller.Manufacturer != null) { addObject(controller.Manufacturer, controller); }
             foreach(TECConnection connection in controller.Connections)
-            {
-                addObject(connection, controller);
-            }
+            {  addObject(connection, controller); }
             foreach(TECIO IO in controller.IO)
-            {
-                addObject(IO, controller);
-            }
+            { addObject(IO, controller); }
         }
         private static void saveDeviceChildProperties(TECDevice device)
         {
-            addObject(device.Manufacturer, device);
+            if(device.Manufacturer != null) { addObject(device.Manufacturer, device); }
             addObject(device.ConnectionType, device);
         }
         #endregion
