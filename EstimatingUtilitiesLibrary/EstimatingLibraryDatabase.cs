@@ -183,17 +183,14 @@ namespace EstimatingUtilitiesLibrary
 
                 if (changeType == Change.Add)
                 {
-                    //Console.WriteLine("Add change saving. Target type: " + targetObject.GetType());
                     addUpdate(targetObject, refObject);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    //Console.WriteLine("Edit change saving. Target type: " + targetObject.GetType());
                     editUpdate(targetObject, refObject);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    //Console.WriteLine("Remove change saving. Target type: " + targetObject.GetType());
                     removeUpdate(targetObject, refObject);
                 }
             }
@@ -227,12 +224,10 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if (changeType == Change.Edit)
                 {
-                    //Console.WriteLine("Edit change saving. Target type: " + targetObject.GetType());
                     editUpdate(targetObject, refObject);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    //Console.WriteLine("Remove change saving. Target type: " + targetObject.GetType());
                     removeUpdate(targetObject, refObject);
                 }
             }
@@ -288,7 +283,7 @@ namespace EstimatingUtilitiesLibrary
 
             if (adjDT.Rows.Count < 1)
             {
-                Console.WriteLine("getUserAdjustments() failed. No datarows exist.");
+                DebugHandler.LogError("UserAdjustments not found in database.");
                 return;
             }
 
@@ -316,29 +311,22 @@ namespace EstimatingUtilitiesLibrary
             {
                 DataRow laborRow = laborDT.Rows[0];
 
-                try
-                {
-                    labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble();
-                    labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble();
+                
+                labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble();
+                labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble();
 
-                    labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble();
-                    labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble();
+                labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble();
+                labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble();
 
-                    labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble();
-                    labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble();
+                labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble();
+                labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble();
 
-                    labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble();
-                    labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble();
+                labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble();
+                labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble();
 
-                    labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble();
-                    labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error: " + e.Message);
-                    Console.WriteLine("Reading labor values from database failed. Using default values.");
-                    return labor;
-                }
+                labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble();
+                labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble();
+                
 
                 if (subContractDT.Rows.Count < 1)
                 {
@@ -352,20 +340,9 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     DataRow subContractRow = subContractDT.Rows[0];
-
-                    try
-                    {
-                        labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble();
-                        labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Error: " + e.Message);
-                        Console.WriteLine("Reading subcontractor values from database failed. Using default values.");
-
-                        labor.ElectricalRate = 115;
-                        labor.ElectricalSuperRate = 125;
-                    }
+                    
+                    labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(115);
+                    labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(125);
 
                     return labor;
                 }
@@ -378,7 +355,7 @@ namespace EstimatingUtilitiesLibrary
 
             if (templateInfoDT.Rows.Count < 1)
             {
-                Console.WriteLine("Template info not found in database.");
+                DebugHandler.LogError("Template info not found in database.");
                 return new TECTemplates();
             }
             DataRow templateInfoRow = templateInfoDT.Rows[0];
@@ -414,19 +391,11 @@ namespace EstimatingUtilitiesLibrary
             command += "(select " + ProposalScopeScopeBranchTable.ScopeBranchID.Name;
             command += " from " + ProposalScopeScopeBranchTable.TableName;
             command += " where " + ProposalScopeScopeBranchTable.ProposalScopeID.Name + " = '" + propScopeID + "')";
-
-            try
+            
+            DataTable scopeBranchDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in scopeBranchDT.Rows)
             {
-                DataTable scopeBranchDT = SQLiteDB.getDataFromCommand(command);
-                foreach (DataRow row in scopeBranchDT.Rows)
-                {
-                    scopeBranches.Add(getScopeBranchFromRow(row));
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: getProposalScopeBranches() failed. Code: " + e.Message);
-                throw e;
+                scopeBranches.Add(getScopeBranchFromRow(row));
             }
 
             return scopeBranches;
@@ -700,17 +669,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECDrawing> getDrawings()
         {
             ObservableCollection<TECDrawing> drawings = new ObservableCollection<TECDrawing>();
-            try
-            {
-                DataTable ghostDrawingsDT = SQLiteDB.getDataFromTable(DrawingTable.TableName);
-                foreach (DataRow row in ghostDrawingsDT.Rows)
-                { drawings.Add(getDrawingFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: GetDrawings() failed. Code: " + e.Message);
-                throw e;
-            }
+            
+            DataTable ghostDrawingsDT = SQLiteDB.getDataFromTable(DrawingTable.TableName);
+            foreach (DataRow row in ghostDrawingsDT.Rows)
+            { drawings.Add(getDrawingFromRow(row)); }
+            
             return drawings;
         }
         static private ObservableCollection<TECPage> getPagesInDrawing(Guid DrawingID)
@@ -720,17 +683,11 @@ namespace EstimatingUtilitiesLibrary
             command += "(select "+DrawingPageTable.PageID.Name+" from "+DrawingPageTable.TableName+" where ";
             command += DrawingPageTable.DrawingID.Name + " = '"+DrawingID;
             command += "') order by " + PageTable.PageNum.Name;
-            try
-            {
-                DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
-                foreach (DataRow row in pagesDT.Rows)
-                { pages.Add(getPageFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: GetPagesInDrawing() failed. Code: " + e.Message);
-                throw e;
-            }
+            
+            DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in pagesDT.Rows)
+            { pages.Add(getPageFromRow(row)); }
+            
             return pages;
         }
         static private ObservableCollection<TECVisualScope> getVisualScopeInPage(Guid PageID)
@@ -740,17 +697,11 @@ namespace EstimatingUtilitiesLibrary
             command += "(select "+PageVisualScopeTable.VisualScopeID.Name+" from "+PageVisualScopeTable.TableName+" where ";
             command += PageVisualScopeTable.PageID.Name + " = '"+PageID;
             command += "')";
-            try
-            {
-                DataTable vsDT = SQLiteDB.getDataFromCommand(command); 
-                foreach (DataRow row in vsDT.Rows)
-                { vs.Add(getVisualScopeFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: GetVisualScopeInPage() failed. Code: " + e.Message);
-                throw e;
-            }
+            
+            DataTable vsDT = SQLiteDB.getDataFromCommand(command); 
+            foreach (DataRow row in vsDT.Rows)
+            { vs.Add(getVisualScopeFromRow(row)); }
+
             return vs;
         }
         static private TECLocation getLocationInScope(Guid ScopeID)
@@ -773,33 +724,20 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECController> getControllers()
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            try
-            {
-                DataTable controllersDT = SQLiteDB.getDataFromTable(ControllerTable.TableName);
-                foreach (DataRow row in controllersDT.Rows)
-                { controllers.Add(getControllerFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: getControllers() failed. Code: " + e.Message);
-                throw e;
-            }
+            
+            DataTable controllersDT = SQLiteDB.getDataFromTable(ControllerTable.TableName);
+            foreach (DataRow row in controllersDT.Rows)
+            { controllers.Add(getControllerFromRow(row)); }
+
             return controllers;
         }
         static private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
-            try
-            {
+            
                 DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
                 foreach (DataRow row in connectionTypesDT.Rows)
                 { connectionTypes.Add(getConnectionTypeFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: getConnectionTypes() failed. Code: " + e.Message);
-                throw e;
-            }
             return connectionTypes;
         }
         static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
@@ -807,33 +745,19 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
             string command = "select * from " + ControllerIOTypeTable.TableName + " where ";
             command += ControllerIOTypeTable.ControllerID.Name + " = '" + controllerID + "'";
-            try
-            {
+            
                 DataTable typeDT = SQLiteDB.getDataFromCommand(command);
                 foreach (DataRow row in typeDT.Rows)
                 {  outIO.Add(getIOFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("getConnectionTypesInController() failed. Code: " + e.Message);
-                throw e;
-            }
-            return outIO;
+            
         }
         static private ObservableCollection<TECConnection> getConnections()
         {
             ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>(); 
-            try
-            {
+            
                 DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName); 
                 foreach (DataRow row in connectionDT.Rows)
                 { connections.Add(getConnectionFromRow(row)); }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: getConnections() failed. Code: " + e.Message);
-                throw e;
-            } 
             return connections;
         }
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
@@ -861,19 +785,12 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECScopeBranch> notes = getProposalScopeBranches(scope.Guid);
             string command = "select " + ProposalScopeTable.IsProposed.Name + " from " + ProposalScopeTable.TableName;
             command += " where " + ProposalScopeTable.ProposalScopeID.Name + " = '" + scope.Guid + "'";
-            try
-            {
+           
                 DataTable isProposedDT = SQLiteDB.getDataFromCommand(command); 
                 if (isProposedDT.Rows.Count > 0)
                 { isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool(); }
                 else
                 { isProposed = false; }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: getProposalScopeFromScope() failed. Code: " + e.Message);
-                throw e;
-            }
             return new TECProposalScope(scope, isProposed, notes);
         }
         static private TECManufacturer getManufacturerInController(Guid controllerID)
@@ -906,16 +823,11 @@ namespace EstimatingUtilitiesLibrary
                     foreach (TECVisualScope vs in page.PageScope)
                     {
                         string command = "select ScopeID from TECVisualScopeTECScope where VisualScopeID = '" + vs.Guid + "'";
-                        try
-                        {
+                        
                             DataTable scopeID = SQLiteDB.getDataFromCommand(command);
                             Guid scopeGuid = new Guid(scopeID.Rows[0][0].ToString());
                             scopeToLink.Add(vs, scopeGuid);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Error: Finding TECScopeID from VisualScopeID failed in linkAllVisualScope(). Code: " + e.Message);
-                        }
+                        
                     }
                 }
             }
@@ -1595,9 +1507,10 @@ namespace EstimatingUtilitiesLibrary
         #region Backup Methods
         private static void createBackup(string originalPath)
         {
-            var date = DateTime.Now;
+            DebugHandler.LogDebugMessage("Backing up...");
 
-            Console.WriteLine("Backing up...");
+            var date = DateTime.Now;
+            
             string APPDATA_FOLDER = @"TECSystems\Backups\";
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string backupFolder = Path.Combine(appData, APPDATA_FOLDER);
@@ -1617,11 +1530,10 @@ namespace EstimatingUtilitiesLibrary
             dtfi.TimeSeparator = "-";
             backupFileName += date.ToString("T", dtfi);
             var backupPath = Path.Combine(backupFolder, backupFileName);
-            Console.WriteLine("Backup path: " + backupPath);
-            try
-            { File.Copy(originalPath, backupPath); }
-            catch (Exception e)
-            { Console.WriteLine("Backup Failed: " + e); }
+            
+            File.Copy(originalPath, backupPath);
+
+            DebugHandler.LogDebugMessage("Finished backup. Backup path: " + backupPath);
         }
         #endregion
 
@@ -1674,18 +1586,8 @@ namespace EstimatingUtilitiesLibrary
             string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
             string costString = row[ConnectionTypeTable.Cost.Name].ToString();
 
-            double cost;
-            if (!double.TryParse(costString, out cost))
-            {
-                cost = 0;
-                Console.WriteLine("Cannot convert cost to double, setting to 0");
-            }
-            double labor;
-            if (!double.TryParse(laborString, out labor))
-            {
-                labor = 0;
-                Console.WriteLine("Cannot convert labor to double, setting to 0");
-            }
+            double cost = costString.ToDouble(0);
+            double labor = laborString.ToDouble(0);
 
             var outConnectionType = new TECConnectionType(guid);
             outConnectionType.Name = name;
@@ -2164,7 +2066,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (!SQLiteDB.Insert(tableInfo.Name, data))
                 {
-                    Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
+                    DebugHandler.LogError("Error: Couldn't add data to " + tableInfo.Name + " table.");
                 }
             }
         }
@@ -2178,7 +2080,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 foreach (TableField field in tableInfo.Fields)
-                //tableInfo.Item2 = AllTableFields;
                 {
                     if (field.Property.Name == "Index" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
@@ -2196,7 +2097,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (!SQLiteDB.Replace(tableInfo.Name, data))
                     {
-                        Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table.");
+                        DebugHandler.LogError("Couldn't add data to " + tableInfo.Name + " table.");
                     }
                 }
             }

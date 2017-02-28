@@ -40,17 +40,7 @@ namespace TECUserControlLibrary
 
         public BudgetWindow()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Budget Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
-
+            InitializeComponent();
         }
     }
 }

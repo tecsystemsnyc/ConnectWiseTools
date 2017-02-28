@@ -28,17 +28,7 @@ namespace Scope_Builder.View
 
         public MainWindow()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Scope Builder Main Window Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
-           
+            InitializeComponent();
         }
     }
 }
