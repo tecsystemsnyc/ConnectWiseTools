@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows;
+using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -21,11 +22,13 @@ namespace EstimatingUtilitiesLibrary
         {
             DBPath = dbPath;
 
+            DebugHandler.LogDebugMessage("Connecting to file: " + DBPath);
+
             if (DBPath != null)
             {
                 if (!File.Exists(DBPath))
                 {
-                    Console.WriteLine("Database File Created");
+                    DebugHandler.LogDebugMessage("Database File Created");
                     SQLiteConnection.CreateFile(DBPath);
                 }
                 
@@ -47,7 +50,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch
             {
-                Console.WriteLine("Deconstructing SQLiteDatabase. Connection already closed.");
+                DebugHandler.LogDebugMessage("Deconstructing SQLiteDatabase. Connection already closed.");
             }
         }
 
@@ -58,16 +61,8 @@ namespace EstimatingUtilitiesLibrary
 
             if (DBPath != null)
             {
-                try
-                {
-                    Connection = buildConnection(DBPath);
-                    Connection.Open();
-                    //Console.WriteLine("Connection opened");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception thrown while trying to create SQLiteDatabase: " + e.Message);
-                }
+                Connection = buildConnection(DBPath);
+                Connection.Open();
             }
             else
             {
@@ -117,16 +112,8 @@ namespace EstimatingUtilitiesLibrary
             commandString += ")";
 
             command.CommandText = commandString;
-            try
-            {
-                return (command.ExecuteNonQuery() > 0);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Insert() failed. Error: " + e.Message);
-                Console.WriteLine("Failed command string: " + commandString);
-                return false;
-            }
+
+            return (command.ExecuteNonQuery() > 0);
         }
 
         public bool Replace(string tableName, Dictionary<string, string> data)
@@ -140,16 +127,17 @@ namespace EstimatingUtilitiesLibrary
             }
             columns = columns.Substring(0, columns.Length - 1);
             values = values.Substring(0, values.Length - 1);
+
+            string command = string.Format("replace into {0}({1}) values({2})", tableName, columns, values);
+
             try
             {
-                string command = string.Format("replace into {0}({1}) values({2})", tableName, columns, values);
-                //Console.WriteLine("Replace command: " + command);
                 nonQueryCommand(command);
                 return true;
             }
             catch (Exception fail)
             {
-                Console.WriteLine("Error: Replace failed. Code: " + fail.Message);
+                DebugHandler.LogError("Replace failed in SQLiteDB. Command: " + command + " Exception: " + fail.Message);
                 return false;
             }
         }
@@ -157,26 +145,27 @@ namespace EstimatingUtilitiesLibrary
         public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues) 
         {
             bool returnCode = true;
+            
+            string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
+            bool first = true;
+            foreach (KeyValuePair<string, string> pk in primaryKeyValues)
+            {
+                if (!first)
+                {
+                    commandString += " AND ";
+                }
+                commandString += pk.Key + " = '" + pk.Value + "'";
+                first = false;
+            }
+            commandString += ");";
+
             try
             {
-                string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
-                bool first = true;
-                foreach (KeyValuePair<string, string> pk in primaryKeyValues)
-                {
-                    if (!first)
-                    {
-                        commandString += " AND ";
-                    }
-                    commandString += pk.Key + " = '" + pk.Value + "'";
-                    first = false;
-                }
-                commandString += ");";
-                
                 nonQueryCommand(commandString);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Deletion failed. Error: " + e.Message);
+                DebugHandler.LogError("Deletion failed. Command: " + commandString + " Exception: " + e.Message);
                 returnCode = false;
             }
             return returnCode;
@@ -191,7 +180,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (Exception e)
             {
-                Console.WriteLine("NonQueryCommand() failed with CommandText: " + commandText + " Error: " + e.Message);
+                DebugHandler.LogError("NonQueryCommand failed in SQLiteDB. Command: " + commandText + " Exception: " + e.Message);
                 throw e;
             }
         }
@@ -217,15 +206,17 @@ namespace EstimatingUtilitiesLibrary
             else
                 fieldString = "* ";
 
+            string query = "select " + fieldString;
+            query += "from " + tableName;
+
             try
             {
-                string query = "select " + fieldString;
-                query += "from " + tableName;
                 data = getDataFromCommand(query);
             }
-            catch (Exception fail)
+            catch (Exception e)
             {
-                Console.WriteLine("Error: " + fail.Message);
+                DebugHandler.LogError("getDataFromTable failed in SQLiteDB. Command: " + query + " Exception: " + e.Message);
+                throw e;
             }
 
             return data;
@@ -234,17 +225,10 @@ namespace EstimatingUtilitiesLibrary
         public DataTable getDataFromCommand(string commandText)
         {
             DataTable data = new DataTable();
-            try
-            {
-                SQLiteCommand command = new SQLiteCommand(commandText, Connection);
-                SQLiteDataReader reader = command.ExecuteReader();
-                data.Load(reader);
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            SQLiteCommand command = new SQLiteCommand(commandText, Connection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            data.Load(reader);
+            reader.Close();
             return data;
         }
 

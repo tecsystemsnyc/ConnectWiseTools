@@ -609,35 +609,51 @@ namespace EstimatingUtilitiesLibrary
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "Remove")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Remove change: " + oldValue); }
+                    message = "Remove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "Edit")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Edit change: " + oldValue); }
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "ChildChanged")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Child change: " + oldValue); }
+                    message = "Child change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "LocationChanged")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Location change: " + oldValue); }
+                    message = "Location change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<Tuple<Change, object, object>>();
                     if (oldNew.Item1 != null)
@@ -652,38 +668,54 @@ namespace EstimatingUtilitiesLibrary
                     {
                         SaveStack.Add(save);
                     }
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if(e.PropertyName == "MetaAdd")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaAdd change: " + oldValue); }
+                    message = "MetaAdd change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "MetaRemove")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaRemove change: " + oldValue); }
+                    message = "MetaRemove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Edit change: " + oldValue); }
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 
             }
             else
             {
-                if(DEBUG_PROPERTIES) { Console.WriteLine("Property not compatible: " + e.PropertyName); }
-                if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+                message = "Property not compatible: " + e.PropertyName;
+                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
             }
         }
         
@@ -706,7 +738,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach (TECPage page in ((TECDrawing)newItem).Pages)
                 {
-                    //Console.WriteLine("Page added in handle children");
                     SaveStack.Add(new Tuple<Change, object, object>(Change.Add, newItem, page));
                     page.PropertyChanged += Object_PropertyChanged;
                 }
