@@ -211,7 +211,6 @@ namespace EstimatingLibrary
                     outList.Add(io.Type);
                 }
             }
-            Console.WriteLine("IO: " + outList.Count);
             return outList;
         }
 

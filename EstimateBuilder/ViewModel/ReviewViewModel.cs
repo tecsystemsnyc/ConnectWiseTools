@@ -26,26 +26,6 @@ namespace EstimateBuilder.ViewModel
         public ReviewViewModel()
         {
             Bid = new TECBid();
-
-            /*
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
-
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("ReviewViewModelLoaded"));
-            */
         }
-
-        #region Methods
-
-        #region Message Methods
-
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
-        {
-            Console.WriteLine("Review tab populated");
-            Bid = genericMessage.Content;
-        }
-
-        #endregion Message Methods
-
-        #endregion //Methods
     }
 }

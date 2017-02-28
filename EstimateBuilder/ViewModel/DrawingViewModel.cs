@@ -13,6 +13,7 @@ using TECUserControlLibrary;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using DebugLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -304,7 +305,6 @@ namespace EstimateBuilder.ViewModel
         {
             if (isConnecting)
             {
-                Console.WriteLine("Ending");
                 var newConnection = createConnection(connectionStart, arg, 1.0);
                 connectConnections(connectionStart.Item1, arg.Item1, newConnection);
                 Bid.Connections.Add(newConnection);
@@ -328,7 +328,6 @@ namespace EstimateBuilder.ViewModel
             }
             else
             {
-                Console.WriteLine("Starting");
                 connectionStart = arg;
                 isConnecting = true;
             }
@@ -459,7 +458,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void populateDisplayed()
         {
-            Console.WriteLine("populating");
+            DebugHandler.LogDebugMessage("Populating TECScope not on drawing.");
             foreach (TECSystem system in Bid.Systems)
             {
                 DisplaySystems.Add(system);

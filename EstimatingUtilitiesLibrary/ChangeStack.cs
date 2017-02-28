@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -202,10 +203,8 @@ namespace EstimatingUtilitiesLibrary
 
         private void registerScope(TECScopeBranch branch)
         {
-            if (DEBUG_REGISTER)
-            {
-                Console.WriteLine("Scope Branch Registered. Name: " + branch.Name);
-            }
+
+            DebugHandler.LogDebugMessage(("Scope Branch Registered. Name: " + branch.Name), DEBUG_REGISTER);
             branch.PropertyChanged += Object_PropertyChanged;
             foreach(TECScopeBranch scope in branch.Branches)
             {
@@ -239,7 +238,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = UndoStack.Last();
-            if (DEBUG_STACK) { Console.WriteLine("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+            DebugHandler.LogDebugMessage("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
             if (StackItem.Item1 == Change.Add)
             {
                 handleAdd(StackItem);
@@ -263,7 +262,10 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (DEBUG_STACK) { Console.WriteLine("After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+
+            string message = "After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
             isDoing = false;
         }
 
@@ -271,7 +273,11 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = RedoStack.Last();
-            if (DEBUG_STACK) { Console.WriteLine("Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+
+            string message = "Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
+
             if (StackItem.Item1 == Change.Add)
             {
                 handleRemove(StackItem);
@@ -297,7 +303,10 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (DEBUG_STACK) { Console.WriteLine("After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+
+            message = "After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
             isDoing = false;
         }
 
@@ -550,7 +559,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    string message = "Property could not be set: " + property.Name;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                 }
             }
         }
@@ -570,7 +580,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    string message = "Property could not be set: " + property.Name;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                 }
             }
             return outObj;
@@ -578,7 +589,9 @@ namespace EstimatingUtilitiesLibrary
 
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
-            if (DEBUG_PROPERTIES) { Console.WriteLine("Propertychanged: " + e.PropertyName); }
+            string message = "Propertychanged: " + e.PropertyName;
+            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            
             if (!isDoing){ RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -588,7 +601,9 @@ namespace EstimatingUtilitiesLibrary
                 object newValue = args.NewValue;
                 if (e.PropertyName == "Add")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Add change: " + oldValue); }
+                    message = "Add change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     handleChildren(item);
