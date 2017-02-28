@@ -169,6 +169,7 @@ namespace EstimatingLibrary
             _budgetPrice = sourceSystem.BudgetPrice;
             _location = sourceSystem.Location;
             _quantity = sourceSystem.Quantity;
+            _associatedCosts = sourceSystem.AssociatedCosts;
             _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);
 
         }

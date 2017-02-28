@@ -55,6 +55,22 @@ namespace EstimatingUtilitiesLibrary
                 { editObject(tag, bid); }
             }
 
+            if(templates.ConnectionTypeCatalog.Count > 0)
+            {
+                foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
+                { editObject(connectionType, bid); }
+            }
+            if (templates.ConduitTypeCatalog.Count > 0)
+            {
+                foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
+                { editObject(conduitType, bid); }
+            }
+            if(templates.AssociatedCostsCatalog.Count > 0)
+            {
+                foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
+                { editObject(cost, bid); }
+            }
+
             bid = getBidInfo();
             bid.Labor = getLaborConsts();
             bid.ScopeTree = getBidScopeBranches();
@@ -70,6 +86,8 @@ namespace EstimatingUtilitiesLibrary
             bid.Connections = getConnections();
             bid.Controllers = getControllers();
             bid.ConnectionTypes = getConnectionTypes();
+            bid.ConduitTypes = getConduitTypes();
+            bid.AssociatedCostsCatalog = getAssociatedCosts();
             linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
             linkAllLocations(bid.Locations, bid.Systems);
             linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
@@ -78,6 +96,7 @@ namespace EstimatingUtilitiesLibrary
             linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
             linkTagsInBid(bid.Tags, bid);
             linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
+            linkAssociatedCostsWithScope(bid);
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
@@ -110,9 +129,12 @@ namespace EstimatingUtilitiesLibrary
             linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
             linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
             templates.ConnectionTypeCatalog = getConnectionTypes();
+            templates.ConduitTypeCatalog = getConduitTypes();
+            templates.AssociatedCostsCatalog = getAssociatedCosts();
             linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
             linkTagsInTemplates(templates.Tags, templates);
             linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
+            linkAssociatedCostsWithScope(templates);
 
             SQLiteDB.Connection.Close();
             return templates;
@@ -1244,6 +1266,85 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+        static private void linkAssociatedCostsWithScope(Object bidOrTemp)
+        {
+            if(bidOrTemp is TECBid)
+            {
+                TECBid bid = bidOrTemp as TECBid;
+                foreach(TECSystem system in bid.Systems)
+                { linkAssociatedCostsInSystem(bid.AssociatedCostsCatalog, system); }
+            } else if (bidOrTemp is TECTemplates)
+            {
+                TECTemplates templates = bidOrTemp as TECTemplates;
+                foreach (TECSystem system in templates.SystemTemplates)
+                { linkAssociatedCostsInSystem(templates.AssociatedCostsCatalog, system); }
+                foreach (TECEquipment equipment in templates.EquipmentTemplates)
+                { linkAssociatedCostsInEquipment(templates.AssociatedCostsCatalog, equipment); }
+                foreach (TECSubScope subScope in templates.SubScopeTemplates)
+                { linkAssociatedCostsInSubScope(templates.AssociatedCostsCatalog, subScope); }
+                foreach (TECDevice device in templates.DeviceCatalog)
+                { linkAssociatedCostsInDevice(templates.AssociatedCostsCatalog, device); }
+            }
+
+        }
+        static private void linkAssociatedCostsInDevice(ObservableCollection<TECAssociatedCost> costs, TECDevice device)
+        {
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
+            {
+                foreach(TECAssociatedCost devCost in device.AssociatedCosts)
+                {
+                    if(devCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            device.AssociatedCosts = costsToAssign;
+        }
+        static private void linkAssociatedCostsInSubScope(ObservableCollection<TECAssociatedCost> costs, TECSubScope subScope)
+        {
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
+            {
+                foreach (TECAssociatedCost childCost in subScope.AssociatedCosts)
+                {
+                    if (childCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            subScope.AssociatedCosts = costsToAssign;
+            foreach(TECDevice device in subScope.Devices)
+            { linkAssociatedCostsInDevice(costs, device); }
+        }
+        static private void linkAssociatedCostsInEquipment(ObservableCollection<TECAssociatedCost> costs, TECEquipment equipment)
+        {
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
+            {
+                foreach (TECAssociatedCost childCost in equipment.AssociatedCosts)
+                {
+                    if (childCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            equipment.AssociatedCosts = costsToAssign;
+            foreach (TECSubScope subScope in equipment.SubScope)
+            { linkAssociatedCostsInSubScope(costs, subScope); }
+        }
+        static private void linkAssociatedCostsInSystem(ObservableCollection<TECAssociatedCost> costs, TECSystem system)
+        {
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
+            {
+                foreach (TECAssociatedCost childCost in system.AssociatedCosts)
+                {
+                    if (childCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            system.AssociatedCosts = costsToAssign;
+            foreach (TECEquipment equipment in system.Equipment)
+            { linkAssociatedCostsInEquipment(costs, equipment); }
+        }
         #endregion Link Methods
 
         #region Populate Derived
@@ -1836,7 +1937,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach(TECConnection connection in bid.Connections)
             { addObject(connection, bid); }
-            foreach(TECAssociatedCost associatedCost in bid.AssociatedCostCatalog)
+            foreach(TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
             { addObject(associatedCost, bid); }
             foreach (TECNote note in bid.Notes)
             { addObject(note, bid); }

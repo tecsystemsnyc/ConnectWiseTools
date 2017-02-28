@@ -125,7 +125,6 @@ namespace EstimatingUtilitiesLibrary
                 connectionType.PropertyChanged += Object_PropertyChanged;
             }
         }
-
         private void registerTemplatesChanges(TECTemplates Templates)
         {
             //Template Changed
@@ -163,8 +162,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 connectionType.PropertyChanged += Object_PropertyChanged;
             }
+            foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
+            {
+                conduitType.PropertyChanged += Object_PropertyChanged;
+            }
         }
-
         private void registerSubScope(TECSubScope subScope)
         {
             //Subscope Changed
@@ -180,7 +182,6 @@ namespace EstimatingUtilitiesLibrary
                 point.PropertyChanged += Object_PropertyChanged;
             }
         }
-
         private void registerEquipment(TECEquipment equipment)
         {
             //equipment Changed
@@ -190,7 +191,6 @@ namespace EstimatingUtilitiesLibrary
                 registerSubScope(subScope);
             }
         }
-
         private void registerSystems(TECSystem system)
         {
             //SystemChanged
@@ -200,7 +200,6 @@ namespace EstimatingUtilitiesLibrary
                 registerEquipment(equipment);
             }
         }
-
         private void registerScope(TECScopeBranch branch)
         {
 
@@ -211,7 +210,6 @@ namespace EstimatingUtilitiesLibrary
                 registerScope(scope);
             }
         }
-
         private void unregisterScope(TECScopeBranch branch)
         {
             foreach (TECScopeBranch scope in branch.Branches)
@@ -220,7 +218,6 @@ namespace EstimatingUtilitiesLibrary
                 unregisterScope(scope);
             }
         }
-
         private void registerPropScope(TECProposalScope pScope)
         {
             pScope.PropertyChanged += Object_PropertyChanged;
@@ -268,7 +265,6 @@ namespace EstimatingUtilitiesLibrary
 
             isDoing = false;
         }
-
         public void Redo()
         {
             isDoing = true;
@@ -309,14 +305,12 @@ namespace EstimatingUtilitiesLibrary
 
             isDoing = false;
         }
-
         public void ClearStacks()
         {
             UndoStack.Clear();
             RedoStack.Clear();
             SaveStack.Clear();
         }
-
         public ChangeStack Copy()
         {
             var outStack = new ChangeStack();
@@ -438,7 +432,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private void handleRemove(Tuple<Change, object, object> StackItem)
         {
             if (StackItem.Item2 is TECBid)
@@ -544,7 +537,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private void handleEdit(Tuple<Change, object, object> StackItem)
         {
             var newItem = StackItem.Item3;
