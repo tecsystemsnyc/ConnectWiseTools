@@ -124,6 +124,14 @@ namespace EstimatingUtilitiesLibrary
             {
                 connectionType.PropertyChanged += Object_PropertyChanged;
             }
+            foreach(TECConduitType conduitType in Bid.ConduitTypes)
+            {
+                conduitType.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
+            {
+                cost.PropertyChanged += Object_PropertyChanged;
+            }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
@@ -165,6 +173,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
             {
                 conduitType.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
+            {
+                cost.PropertyChanged += Object_PropertyChanged;
             }
         }
         private void registerSubScope(TECSubScope subScope)

@@ -123,13 +123,9 @@ namespace EstimatingLibrary
         public TECSubScope(TECSubScope sourceSubScope) : this()
         {
             foreach(TECDevice device in sourceSubScope.Devices)
-            {
-                Devices.Add(new TECDevice(device));
-            }
+            { Devices.Add(new TECDevice(device)); }
             foreach(TECPoint point in sourceSubScope.Points)
-            {
-                Points.Add(new TECPoint(point));
-            }
+            { Points.Add(new TECPoint(point)); }
 
             _name = sourceSubScope.Name;
             _description = sourceSubScope.Description;
@@ -155,7 +151,6 @@ namespace EstimatingLibrary
         #endregion //Num Point Types
 
         #region Event Handlers
-
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             _ai = 0;
@@ -197,8 +192,7 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("Edit", this, sender);
             }
-        }
-
+        } 
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -223,8 +217,7 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("Edit", this, sender);
             }
-        }
-
+        } 
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -233,7 +226,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
-        
         #endregion
 
         #region Methods
