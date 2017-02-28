@@ -1599,8 +1599,8 @@ namespace EstimatingUtilitiesLibrary
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
             string name = row[SubScopeTable.Name.Name].ToString();
             string description = row[SubScopeTable.Description.Name].ToString();
-            int quantity = UtilitiesMethods.StringToInt(row[SubScopeTable.Quantity.Name].ToString(), 1);
-            double length = UtilitiesMethods.StringToDouble(row[SubScopeTable.Length.Name].ToString(), 1);
+            int quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
+            double length = row[SubScopeTable.Length.Name].ToString().ToDouble(0);
            
             ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
             ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
@@ -1645,7 +1645,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
             string name = row[AssociatedCostTable.Name.Name].ToString();
-            double cost = UtilitiesMethods.StringToDouble(row[AssociatedCostTable.Cost.Name].ToString(), 1);
+            double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
 
             var associatedCost = new TECAssociatedCost(guid);
             associatedCost.Name = name;
@@ -1697,7 +1697,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
             string name = row[ManufacturerTable.Name.Name].ToString();
-            double multiplier = UtilitiesMethods.StringToDouble(row[ManufacturerTable.Multiplier.Name].ToString(), 1);
+            double multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
 
             return new TECManufacturer(name, multiplier, manufacturerID);
         }
@@ -1711,8 +1711,8 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
             string name = row[ConduitTypeTable.Name.Name].ToString();
-            double cost = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Cost.Name].ToString(), 1);
-            double labor = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Labor.Name].ToString(), 1);
+            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
+            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
             var conduitType = new TECConduitType(conduitGuid);
             conduitType.Name = name;
             conduitType.Cost = cost;
