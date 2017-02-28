@@ -13,6 +13,7 @@ using System.Windows;
 using System.Drawing;
 using System.Reflection;
 using System.Collections;
+using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -34,56 +35,52 @@ namespace EstimatingUtilitiesLibrary
 
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = new TECBid();
-            try
+
+            //Update catalogs from templates.
+            if (templates.DeviceCatalog.Count > 0)
             {
-                //Update catalogs from templates.
-                if (templates.DeviceCatalog.Count > 0)
-                {
-                    foreach (TECDevice device in templates.DeviceCatalog)
-                    { editObject(device, bid); }
-                }
-
-                if (templates.ManufacturerCatalog.Count > 0)
-                {
-                    foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-                    { editObject(manufacturer, bid); }
-                }
-
-                if (templates.Tags.Count > 0)
-                {
-                    foreach (TECTag tag in templates.Tags)
-                    { editObject(tag, bid); }
-                }
-
-                bid = getBidInfo();
-                bid.Labor = getLaborConsts();
-                bid.ScopeTree = getBidScopeBranches();
-                bid.Systems = getAllSystemsInBid(bid);
-                bid.ProposalScope = getAllProposalScope(bid.Systems);
-                bid.DeviceCatalog = getAllDevices();
-                bid.ManufacturerCatalog = getAllManufacturers();
-                bid.Locations = getAllLocations();
-                bid.Tags = getAllTags();
-                bid.Notes = getNotes();
-                bid.Exclusions = getExclusions();
-                bid.Drawings = getDrawings();
-                bid.Connections = getConnections();
-                bid.Controllers = getControllers();
-                bid.ConnectionTypes = getConnectionTypes();
-                linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
-                linkAllLocations(bid.Locations, bid.Systems);
-                linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-                linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
-                linkAllDevices(bid.Systems, bid.DeviceCatalog);
-                linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
-                linkTagsInBid(bid.Tags, bid);
-                linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
-                getUserAdjustments(bid);
-                //Breaks Visual Scope in a page
-                //populatePageVisualConnections(bid.Drawings, bid.Connections);
+                foreach (TECDevice device in templates.DeviceCatalog)
+                { editObject(device, bid); }
             }
-            catch (Exception e) when (doCatch)
-            { MessageBox.Show("Could not load bid from database. Error: " + e.Message); }
+
+            if (templates.ManufacturerCatalog.Count > 0)
+            {
+                foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+                { editObject(manufacturer, bid); }
+            }
+
+            if (templates.Tags.Count > 0)
+            {
+                foreach (TECTag tag in templates.Tags)
+                { editObject(tag, bid); }
+            }
+
+            bid = getBidInfo();
+            bid.Labor = getLaborConsts();
+            bid.ScopeTree = getBidScopeBranches();
+            bid.Systems = getAllSystemsInBid(bid);
+            bid.ProposalScope = getAllProposalScope(bid.Systems);
+            bid.DeviceCatalog = getAllDevices();
+            bid.ManufacturerCatalog = getAllManufacturers();
+            bid.Locations = getAllLocations();
+            bid.Tags = getAllTags();
+            bid.Notes = getNotes();
+            bid.Exclusions = getExclusions();
+            bid.Drawings = getDrawings();
+            bid.Connections = getConnections();
+            bid.Controllers = getControllers();
+            bid.ConnectionTypes = getConnectionTypes();
+            linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
+            linkAllLocations(bid.Locations, bid.Systems);
+            linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
+            linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
+            linkAllDevices(bid.Systems, bid.DeviceCatalog);
+            linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+            linkTagsInBid(bid.Tags, bid);
+            linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
+            getUserAdjustments(bid);
+            //Breaks Visual Scope in a page
+            //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
             SQLiteDB.Connection.Close();
 
@@ -98,27 +95,24 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECTemplates));
 
             TECTemplates templates = new TECTemplates();
-            try
-            {
-                templates = getTemplatesInfo();
-                templates.SystemTemplates = getAllSystems();
-                templates.EquipmentTemplates = getOrphanEquipment();
-                templates.SubScopeTemplates = getOrphanSubScope();
-                templates.DeviceCatalog = getAllDevices();
-                templates.Tags = getAllTags();
-                templates.ManufacturerCatalog = getAllManufacturers();
-                templates.ControllerTemplates = getControllers();
-                linkAllDevicesFromSystems(templates.SystemTemplates, templates.DeviceCatalog);
-                linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.DeviceCatalog);
-                linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
-                linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
-                templates.ConnectionTypeCatalog = getConnectionTypes();
-                linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
-                linkTagsInTemplates(templates.Tags, templates);
-                linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
-            }
-            catch (Exception e)
-            { MessageBox.Show("Could not load templates from database. Error: " + e.Message); }
+            
+
+            templates = getTemplatesInfo();
+            templates.SystemTemplates = getAllSystems();
+            templates.EquipmentTemplates = getOrphanEquipment();
+            templates.SubScopeTemplates = getOrphanSubScope();
+            templates.DeviceCatalog = getAllDevices();
+            templates.Tags = getAllTags();
+            templates.ManufacturerCatalog = getAllManufacturers();
+            templates.ControllerTemplates = getControllers();
+            linkAllDevicesFromSystems(templates.SystemTemplates, templates.DeviceCatalog);
+            linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.DeviceCatalog);
+            linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
+            linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
+            templates.ConnectionTypeCatalog = getConnectionTypes();
+            linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
+            linkTagsInTemplates(templates.Tags, templates);
+            linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
 
             SQLiteDB.Connection.Close();
             return templates;
@@ -131,13 +125,7 @@ namespace EstimatingUtilitiesLibrary
             { SQLiteDB.overwriteFile(); }
             createAllBidTables();
 
-            try
-            { saveCompleteBid(bid); }
-            catch (Exception e)
-            {
-                string message = "Could not save bid to new database. Error: " + e.Message;
-                MessageBox.Show(message);
-            } 
+            saveCompleteBid(bid);
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -152,10 +140,7 @@ namespace EstimatingUtilitiesLibrary
 
             createAllTemplateTables();
 
-            try
-            { saveCompleteTemplate(templates); }
-            catch (Exception e)
-            {  MessageBox.Show("Could not save templates to new database. Error: " + e.Message); }
+            saveCompleteTemplate(templates);
 
             SQLiteDB.Connection.Close();
         }
@@ -257,7 +242,7 @@ namespace EstimatingUtilitiesLibrary
             DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
             if (bidInfoDT.Rows.Count < 1)
             {
-                MessageBox.Show("Bid info not found in database. Bid info and labor will be missing.");
+                DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
                 return new TECBid();
             }
 
@@ -302,7 +287,7 @@ namespace EstimatingUtilitiesLibrary
 
             if (laborDT.Rows.Count < 1)
             {
-                MessageBox.Show("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
                 return labor;
             }
             else
@@ -335,7 +320,7 @@ namespace EstimatingUtilitiesLibrary
 
                 if (subContractDT.Rows.Count < 1)
                 {
-                    MessageBox.Show("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                    DebugHandler.LogError("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
 
                     labor.ElectricalRate = 115;
                     labor.ElectricalSuperRate = 125;
@@ -1378,67 +1363,48 @@ namespace EstimatingUtilitiesLibrary
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
-            try
+            isUpToDate = checkDatabaseVersion(type);
+            if (!isUpToDate)
             {
-                isUpToDate = checkDatabaseVersion(type);
-                if (!isUpToDate)
-                {
-                    updateDatabase(type);
-                    updateVersionNumber(type);
-                }
+                updateDatabase(type);
+                updateVersionNumber(type);
             }
-            catch (Exception e)
-            { MessageBox.Show("Could not check database version." + e); }
         }
         static private bool checkDatabaseVersion(Type type)
         {
             string currentVersion = Properties.Settings.Default.Version;
+            DataTable infoDT = new DataTable();
+            if (type == typeof(TECBid))
+            { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
+            else if (type == typeof(TECTemplates))
+            { infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName); }
+            else
+            { throw new ArgumentException("checkDatabaseVersion given invalid type"); }
 
-            try
+            if (infoDT.Rows.Count < 1)
             {
-                DataTable infoDT = new DataTable();
                 if (type == typeof(TECBid))
-                { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
-                else if (type == typeof(TECTemplates))
-                { infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName); }
-                else
-                { throw new ArgumentException("checkDatabaseVersion given invalid type"); }
-
-                if (infoDT.Rows.Count < 1)
                 {
-                    if (type == typeof(TECBid))
-                    {
-                        MessageBox.Show("Bid info not found in database. Could not check verison.");
-                        throw new Exception("Could not load from TECBidInfo");
-                    } else if(type == typeof(TECTemplates))
-                    {
-                        killTemplatesInfo();
-                        return false;
-                    }
-                    else if (type == typeof(TECTemplates))
-                    {
-                        MessageBox.Show("Templates info not found in database. Could not check verison.");
-                        throw new Exception("Could not load from TECTemplatesInfo");
-                    }
-                    else
-                    { return false; }
+                    throw new DataException("Could not load from TECBidInfo");
+                }
+                else if(type == typeof(TECTemplates))
+                {
+                    killTemplatesInfo();
+                    return false;
                 }
                 else
-                {
-                    DataRow infoRow = infoDT.Rows[0];
-                    if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
-                    {
-                        string version = infoRow["DBVersion"].ToString();
-                        return (version == currentVersion);
-                    }
-                    else
-                    { return false; }
-                }
+                { return false; }
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show("Could not load version number from database. Error: " + e.Message);
-                throw e;
+                DataRow infoRow = infoDT.Rows[0];
+                if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
+                {
+                    string version = infoRow["DBVersion"].ToString();
+                    return (version == currentVersion);
+                }
+                else
+                { return false; }
             }
         }
         static private void updateDatabase(Type type)
@@ -1591,8 +1557,8 @@ namespace EstimatingUtilitiesLibrary
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
             subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
             subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
-            subScopeToAdd.Quantity = UtilitiesMethods.StringToInt(row[SubScopeTable.Quantity.Name].ToString(), 1);
-            subScopeToAdd.Length = UtilitiesMethods.StringToDouble(row[SubScopeTable.Length.Name].ToString(), 1);
+            subScopeToAdd.Quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
+            subScopeToAdd.Length = row[SubScopeTable.Length.Name].ToString().ToDouble(0);
             subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             subScopeToAdd.Location = getLocationInScope(subScopeID);
@@ -1631,7 +1597,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
             string name = row[AssociatedCostTable.Name.Name].ToString();
-            double cost = UtilitiesMethods.StringToDouble(row[AssociatedCostTable.Cost.Name].ToString(), 1);
+            double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
 
             var associatedCost = new TECAssociatedCost(guid);
             associatedCost.Name = name;
@@ -1677,7 +1643,7 @@ namespace EstimatingUtilitiesLibrary
             Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
             var manufacturer = new TECManufacturer(manufacturerID);
             manufacturer.Name = row[ManufacturerTable.Name.Name].ToString();
-            manufacturer.Multiplier = UtilitiesMethods.StringToDouble(row[ManufacturerTable.Multiplier.Name].ToString(), 1);
+            manufacturer.Multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
             return manufacturer;
         }
         private static TECLocation getLocationFromRow(DataRow row)
@@ -1691,8 +1657,8 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
             string name = row[ConduitTypeTable.Name.Name].ToString();
-            double cost = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Cost.Name].ToString(), 1);
-            double labor = UtilitiesMethods.StringToDouble(row[ConduitTypeTable.Labor.Name].ToString(), 1);
+            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
+            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
             var conduitType = new TECConduitType(conduitGuid);
             conduitType.Name = name;
             conduitType.Cost = cost;

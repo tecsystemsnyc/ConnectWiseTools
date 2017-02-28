@@ -16,6 +16,7 @@ using System.Drawing.Imaging;
 using System.Deployment.Application;
 using System.ComponentModel;
 using TECUserControlLibrary.ViewModels;
+using DebugLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -141,8 +142,7 @@ namespace EstimateBuilder.ViewModel
                         {
                             Bid.Drawings.Add((TECDrawing)e.Result);
                             ResetStatus();
-                            string message = "Drawings have finished loading.";
-                            MessageBox.Show(message);
+                            MessageBox.Show("Drawings have finished loading.");
                         }
                         else
                         {
@@ -153,8 +153,7 @@ namespace EstimateBuilder.ViewModel
                 }
                 else
                 {
-                    string message = "File is open elsewhere.";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("File " + path + " could not be opened. File is open elsewhere.");
                 }
             }
         }
@@ -210,14 +209,7 @@ namespace EstimateBuilder.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
             }
 
             return path;

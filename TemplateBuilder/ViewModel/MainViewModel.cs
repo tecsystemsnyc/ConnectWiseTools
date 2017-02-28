@@ -19,6 +19,7 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
 using TECUserControlLibrary.ViewModelExtensions;
+using DebugLibrary;
 
 namespace TemplateBuilder.ViewModel
 {
@@ -154,8 +155,7 @@ namespace TemplateBuilder.ViewModel
                 { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                 }
             }
             else
@@ -175,8 +175,7 @@ namespace TemplateBuilder.ViewModel
                         }
                         else
                         {
-                            message = "File is open elsewhere";
-                            MessageBox.Show(message);
+                            DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
                         }
                         Console.WriteLine("Finished loading templates");
                     }
@@ -221,8 +220,7 @@ namespace TemplateBuilder.ViewModel
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
                 Console.WriteLine("Finished loading SQL Database.");
             }
@@ -243,8 +241,7 @@ namespace TemplateBuilder.ViewModel
             }
             else
             {
-                string message = "File is open elsewhere";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
             }
         }
         private void SaveToExecute()
@@ -265,8 +262,7 @@ namespace TemplateBuilder.ViewModel
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
         }
@@ -339,16 +335,9 @@ namespace TemplateBuilder.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplatesFilePath = path;
-                    Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
+                Properties.Settings.Default.TemplatesFilePath = path;
+                Properties.Settings.Default.Save();
             }
 
             return path;
@@ -372,14 +361,7 @@ namespace TemplateBuilder.ViewModel
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;

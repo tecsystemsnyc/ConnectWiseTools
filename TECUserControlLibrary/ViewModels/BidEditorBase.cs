@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -176,8 +177,7 @@ namespace TECUserControlLibrary.ViewModels
                 { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                 }
             }
             else
@@ -197,8 +197,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         else
                         {
-                            message = "File is open elsewhere";
-                            MessageBox.Show(message);
+                            DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                         }
                         Console.WriteLine("Finished loading templates");
                     }
@@ -257,14 +256,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
@@ -290,14 +282,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
@@ -322,14 +307,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
@@ -354,14 +332,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
             }
 
             return path;
@@ -379,16 +350,9 @@ namespace TECUserControlLibrary.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplatesFilePath = path;
-                    Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
+                Properties.Settings.Default.TemplatesFilePath = path;
+                Properties.Settings.Default.Save();
             }
 
             return path;
@@ -409,8 +373,7 @@ namespace TECUserControlLibrary.ViewModels
                 { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
                 Console.WriteLine("Finished loading SQL Database.");
                 CurrentStatusText = "Done.";
@@ -506,8 +469,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
                 Console.WriteLine("Finished loading SQL Database.");
                 ResetStatus();
@@ -548,8 +510,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
         }
@@ -569,8 +530,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
         }
@@ -602,8 +562,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
                 }
                 Console.WriteLine("Finished loading templates");
             }
@@ -692,8 +651,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
                     }
                 };
                 worker.RunWorkerCompleted += (s, e) =>
@@ -734,8 +692,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                     }
                 };
                 worker.RunWorkerCompleted += (s, e) =>
@@ -764,20 +721,19 @@ namespace TECUserControlLibrary.ViewModels
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
                 
-                    if (!UtilitiesMethods.IsFileLocked(path))
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
                     {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    saveSuccessful = true;
+                        File.Delete(path);
                     }
-                    else
-                    {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                    //Create new database
+                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                     saveSuccessful = false;
                 }
                
@@ -797,24 +753,23 @@ namespace TECUserControlLibrary.ViewModels
                 ChangeStack stackToSave = stack.Copy();
                 stack.ClearStacks();
                 
-                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                {
+                    try
                     {
-                        try
-                        {
-                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        saveSuccessful = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        }
+                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                    saveSuccessful = true;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
                     }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
+                }
                
             }
             else

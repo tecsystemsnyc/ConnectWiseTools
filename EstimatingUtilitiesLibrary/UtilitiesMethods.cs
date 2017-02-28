@@ -108,38 +108,23 @@ namespace EstimatingUtilitiesLibrary
             return bi;
         }
 
-        public static double StringToDouble(string inputString, double defaultOutput)
-        {
-            double outDouble;
-            if (!double.TryParse(inputString, out outDouble))
-            {
-                outDouble = defaultOutput;
-                Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-            }
-            return outDouble;
-        }
-
-        public static int StringToInt(string inputString, int defaultOutput)
-        {
-            int outInt;
-            if (!int.TryParse(inputString, out outInt))
-            {
-                outInt = defaultOutput;
-                Console.WriteLine("Cannot convert multiplier to double, setting to 1");
-            }
-            return outInt;
-        }
-
         #region Cast Conversions
 
         #region String Extensions
 
-        public static int ToInt(this string str)
+        public static int ToInt(this string str, int? def = null)
         {
             int i;
             if (!int.TryParse(str, out i))
             {
-                throw new InvalidCastException("StringToInt() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(int));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToInt() failed. String: " + str);
+                }
             }
             else
             {
@@ -147,12 +132,19 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public static double ToDouble(this string str)
+        public static double ToDouble(this string str, double? def = null)
         {
             double d;
             if (!double.TryParse(str, out d))
             {
-                throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(double));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                }
             }
             else
             {
