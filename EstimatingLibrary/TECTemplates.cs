@@ -220,6 +220,10 @@ namespace EstimatingLibrary
             {
                 ConduitTypeCatalog.Add(conduitType);
             }
+            foreach(TECAssociatedCost cost in templatesSource.AssociatedCostsCatalog)
+            {
+                AssociatedCostsCatalog.Add(cost);
+            }
         }
 
         #endregion //Constructors

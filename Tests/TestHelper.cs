@@ -28,6 +28,9 @@ namespace Tests
             bid.Salesperson = "Mrs. Test";
             bid.Estimator = "Mr. Test";
 
+            //Bid Parameters
+            bid.Parameters = new TECBidParameters();
+
             //Bid Labor
             bid.Labor = new TECLabor();
             bid.Labor.PMCoef = 0.1;
@@ -96,11 +99,10 @@ namespace Tests
             system2.Location = location2;
 
             var system3 = new TECSystem();
-            system2.Name = "System 3";
-            system2.Description = "No Location";
-            system2.BudgetPrice = 349;
-
-
+            system3.Name = "System 3";
+            system3.Description = "No Location";
+            system3.BudgetPrice = 349;
+            
             //Add to bid
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);

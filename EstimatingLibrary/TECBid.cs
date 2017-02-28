@@ -34,7 +34,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
         private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
         private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
-        private ObservableCollection<TECAssociatedCost> _associatedCostCatalog { get; set; }
+        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
 
         public string Name {
             get { return _name; }
@@ -333,16 +333,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConduitTypes", temp, this);
             }
         }
-        public ObservableCollection<TECAssociatedCost> AssociatedCostCatalog
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsCatalog
         {
-            get { return _associatedCostCatalog; }
+            get { return _associatedCostsCatalog; }
             set
             {
                 var temp = this.Copy();
-                AssociatedCostCatalog.CollectionChanged -= CollectionChanged;
-                _associatedCostCatalog = value;
-                AssociatedCostCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("AssociatedCostCatalog", temp, this);
+                AssociatedCostsCatalog.CollectionChanged -= CollectionChanged;
+                _associatedCostsCatalog = value;
+                AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
             }
         }
 
@@ -371,7 +371,7 @@ namespace EstimatingLibrary
             _proposalScope = new ObservableCollection<TECProposalScope>();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
-            _associatedCostCatalog = new ObservableCollection<TECAssociatedCost>();
+            _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
@@ -387,7 +387,7 @@ namespace EstimatingLibrary
             ProposalScope.CollectionChanged += CollectionChanged;
             ConnectionTypes.CollectionChanged += CollectionChanged;
             ConduitTypes.CollectionChanged += CollectionChanged;
-            AssociatedCostCatalog.CollectionChanged += CollectionChanged;
+            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
         }
@@ -417,6 +417,12 @@ namespace EstimatingLibrary
         //Copy Constructor
         public TECBid(TECBid bidSource) : this()
         {
+            _name = bidSource.Name;
+            _bidNumber = bidSource.BidNumber;
+            _dueDate = bidSource.DueDate;
+            _salesperson = bidSource.Salesperson;
+            _estimator = bidSource.Estimator;
+
             if(bidSource.Labor != null)
             {
                 _labor = new TECLabor(bidSource.Labor);
@@ -440,6 +446,10 @@ namespace EstimatingLibrary
             foreach (TECExclusion exclusion in bidSource.Exclusions)
             {
                 Exclusions.Add(new TECExclusion(exclusion));
+            }
+            foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
+            {
+                AssociatedCostsCatalog.Add(cost);
             }
         }
 
