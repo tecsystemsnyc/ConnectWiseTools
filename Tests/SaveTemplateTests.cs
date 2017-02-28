@@ -798,7 +798,9 @@ namespace Tests
         {
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
-            expectedController.Manufacturer = new TECManufacturer();
+            var testManufacturer = new TECManufacturer();
+            templates.ManufacturerCatalog.Add(testManufacturer);
+            expectedController.Manufacturer = testManufacturer;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
