@@ -84,7 +84,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupDrawingVM(TECBid bid)
         {
-            Console.WriteLine("Setting up drawing VM");
+            DebugHandler.LogDebugMessage("Setting up drawing VM");
             DrawingVM = new DrawingViewModel();
             DrawingVM.Bid = bid;
             DrawingVM.Templates = Templates;
@@ -146,7 +146,7 @@ namespace EstimateBuilder.ViewModel
                         }
                         else
                         {
-                            Console.WriteLine("Load Drawings Failed");
+                            DebugHandler.LogError("Load Drawings Failed");
                         }
                     };
                     worker.RunWorkerAsync();
@@ -214,39 +214,5 @@ namespace EstimateBuilder.ViewModel
 
             return path;
         }
-        #endregion Helper Methods
-
-        private void processNotification(NotificationMessage message)
-        {
-            if (message.Notification == "ScopeEditorViewModelLoaded")
-            {
-                Console.WriteLine("Scope Editor View Model Loaded");
-                MessengerInstance.Send<GenericMessage<TECTemplates>>(new GenericMessage<TECTemplates>(Templates));
-                MessengerInstance.Send<GenericMessage<TECBid>>(new GenericMessage<TECBid>(Bid));
-            }
-            else if(message.Notification == "LaborViewModelLoaded")
-            {
-                Console.WriteLine("Labor View Model Loaded");
-                MessengerInstance.Send<GenericMessage<TECBid>>(new GenericMessage<TECBid>(Bid));
-            }
-            else if (message.Notification == "DrawingViewModelLoaded")
-            {
-                Console.WriteLine("Drawing View Model Loaded");
-                MessengerInstance.Send<GenericMessage<TECBid>>(new GenericMessage<TECBid>(Bid));
-            }
-            else if (message.Notification == "ReviewViewModelLoaded")
-            {
-                Console.WriteLine("Review View Model Loaded");
-                MessengerInstance.Send<GenericMessage<TECBid>>(new GenericMessage<TECBid>(Bid));
-            }
-        }
-        private void processNotificationInformation(NotificationMessage<String> message)
-        {
-            if (message.Notification == "StatusUpdate")
-            {
-                SetBusyStatus(message.Content);
-            }
-        }
-        #endregion Methods
     }
 }

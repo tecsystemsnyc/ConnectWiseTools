@@ -28,42 +28,48 @@ namespace DebugLibrary
 
         private static string logPath;
 
-        public static void LogDebugMessage(string message)
+        public static void LogDebugMessage(string message, bool doLog = true)
         {
-            if (isReleased)
+            if (doLog)
             {
-                addToLog(message);
-            }
-            else
-            {
-                Console.WriteLine(message);
-                if (debugCreatesLog)
+                if (isReleased)
                 {
                     addToLog(message);
                 }
-            }
-        }
-
-        public static void LogError(string error)
-        {
-            if (isReleased)
-            {
-                addToLog(error);
-                MessageBox.Show(error);
-            }
-            else
-            {
-                Console.WriteLine(error);
-                if (debugCreatesLog)
+                else
                 {
-                    addToLog(error);
+                    Console.WriteLine(message);
+                    if (debugCreatesLog)
+                    {
+                        addToLog(message);
+                    }
                 }
             }
         }
 
-        public static void LogError(Exception e)
+        public static void LogError(string error, bool doLog = true)
         {
-            LogError(e.Message);
+            if (doLog)
+            {
+                if (isReleased)
+                {
+                    addToLog(error);
+                    MessageBox.Show(error);
+                }
+                else
+                {
+                    Console.WriteLine(error);
+                    if (debugCreatesLog)
+                    {
+                        addToLog(error);
+                    }
+                }
+            }
+        }
+
+        public static void LogError(Exception e, bool doLog = true)
+        {
+            LogError(e.Message, doLog);
         }
 
         private static void addToLog(string message)
