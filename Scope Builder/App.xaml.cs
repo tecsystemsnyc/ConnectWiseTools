@@ -47,7 +47,7 @@ namespace Scope_Builder
             }
             
             
-        base.OnStartup(e);
+        base.OnStartup(args);
 
      }
 

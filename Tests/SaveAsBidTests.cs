@@ -117,9 +117,7 @@ namespace Tests
 
             //Act
             EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
-
             actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-
             actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
