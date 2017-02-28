@@ -9,6 +9,7 @@ namespace EstimatingLibrary
 {
     public class TECController : TECScope
     {
+        #region Properties
         private double _cost;
         private ObservableCollection<TECConnection> _connections;
         private ObservableCollection<TECIO> _io;
@@ -65,15 +66,20 @@ namespace EstimatingLibrary
             get { return getNetworkIO(); }
         }
 
-        public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
+        #endregion
+        
+        #region Constructors
+        public TECController(Guid guid) : base(guid)
         {
-            _cost = cost;
+            _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
-            _manufacturer = new TECManufacturer();
             IO.CollectionChanged += CollectionChanged;
         }
+        public TECController() : this(Guid.NewGuid()) { }
+        #endregion
 
+        #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -93,7 +99,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -102,18 +107,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
-
-        public TECController() : this("", "", Guid.NewGuid(), 0)
-        {
-        }
+        #endregion
 
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Name,
-                this.Description,
-                this.Guid,
-                this.Cost);
+            TECController outController = new TECController(this.Guid);
+
+            outController._name = Name;
+            outController._description = Description;
+            outController._cost = Cost;
 
             foreach (TECIO io in this.IO)
             {
@@ -127,7 +130,6 @@ namespace EstimatingLibrary
             
             return outController;
         }
-
         public override Object DragDropCopy()
         {
             var outController = new TECController();
@@ -139,7 +141,6 @@ namespace EstimatingLibrary
 
             return outController;
         }
-
         private List<IOType> getAvailableIO()
         {
             var availableIO = new List<IOType>();
@@ -166,7 +167,6 @@ namespace EstimatingLibrary
             }
             return availableIO;
         }
-
         private List<IOType> getNetworkIO()
         {
             var outIO = new List<IOType>();
@@ -184,7 +184,6 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-
         public int NumberOfIOType(IOType ioType)
         {
             int outNum = 0;
@@ -199,7 +198,6 @@ namespace EstimatingLibrary
 
             return outNum;
         }
-
         public List<IOType> getUniqueIO()
         {
             var outList = new List<IOType>();
@@ -213,8 +211,6 @@ namespace EstimatingLibrary
             }
             return outList;
         }
-
-
         #endregion
     }
 }

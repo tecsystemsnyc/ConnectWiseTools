@@ -8,6 +8,7 @@ namespace EstimatingLibrary
 {
     public class TECCostAddition : TECObject
     {
+        #region Properties
         private Guid _guid;
         private string _name;
         private double _cost;
@@ -48,13 +49,16 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECCostAddition()
+        #endregion
+
+        public TECCostAddition(Guid guid)
         {
-            _guid = Guid.NewGuid();
+            _guid = guid;
             _name = "";
             _cost = 0;
             _quantity = 0;
         }
+        public TECCostAddition() : this(Guid.NewGuid()) { }
 
         public override object Copy()
         {

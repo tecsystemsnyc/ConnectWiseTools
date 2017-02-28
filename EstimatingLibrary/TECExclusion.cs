@@ -31,15 +31,16 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECExclusion(string text, Guid guid)
+        public TECExclusion(Guid guid)
         {
-            _text = text;
+            _text = "";
             _guid = guid;
         }
-        public TECExclusion(string text) : this(text, Guid.NewGuid()) { }
-        public TECExclusion() : this("") { }
+        public TECExclusion() : this( Guid.NewGuid()) { }
 
-        public TECExclusion(TECExclusion exclusionSource) : this(exclusionSource.Text) { }
+        public TECExclusion(TECExclusion exclusionSource) : this() {
+            _text = exclusionSource.Text;
+        }
 
         public override Object Copy()
         {

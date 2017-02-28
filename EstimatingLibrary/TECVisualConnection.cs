@@ -10,6 +10,7 @@ namespace EstimatingLibrary
 {
     public class TECVisualConnection : TECObject
     {
+        #region Properties
         private ObservableCollection<TECConnection> _connections;
         public ObservableCollection<TECConnection> Connections
         {
@@ -41,20 +42,22 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("Scope2");
             }
         }
-        
+        #endregion
+
+        #region Constructors
         public TECVisualConnection()
         {
 
         }
-
         public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2)
         {
             Scope1 = vs1;
             Scope2 = vs2;
-
             Scope1.PropertyChanged += scopeChanged;
         }
+        #endregion
 
+        #region Methods
         private void scopeChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if(e.PropertyName == "X" || e.PropertyName == "Y")
@@ -66,17 +69,17 @@ namespace EstimatingLibrary
                
             }
         }
-
         double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
         {
             var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
 
             return length;
         }
-
         public override object Copy()
         {
             throw new NotImplementedException();
         }
+        #endregion
+        
     }
 }

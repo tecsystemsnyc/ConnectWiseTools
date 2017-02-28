@@ -10,6 +10,7 @@ namespace EstimatingLibrary
 {
     public class TECVisualScope : TECObject
     {
+        #region Properties
         private TECScope _scope;
         private double _x;
         private double _y;
@@ -50,27 +51,16 @@ namespace EstimatingLibrary
                 return getConnectableScope();
             }
         }
-
         public Guid Guid;
+        #endregion
 
-        public TECVisualScope() : this(new TECSystem(), 0, 0)
-        {
-
-        }
-
-        public TECVisualScope(TECScope scope, double x, double y)
-        {
-            Guid = Guid.NewGuid();
-            _scope = scope;
-            _x = x;
-            _y = y;
-        }
-
-        public TECVisualScope(Guid guid, double x, double y)
+        #region COnstructors
+        public TECVisualScope() : this(Guid.NewGuid()) { }
+        public TECVisualScope(Guid guid)
         {
             Guid = guid;
-            _x = x;
-            _y = y;
+            _x = 0;
+            _y = 0;
         }
         public TECVisualScope(TECVisualScope vScope)
         {
@@ -79,13 +69,14 @@ namespace EstimatingLibrary
             _y = vScope.Y;
             Guid = vScope.Guid;
         }
+        #endregion
 
+        #region Methods
         public override object Copy()
         {
             TECVisualScope outScope = new TECVisualScope(this);
             return outScope;
         }
-
         private ObservableCollection<Tuple<TECObject, TECVisualScope, string>> getConnectableScope()
         {
             var outScope = new ObservableCollection<Tuple<TECObject, TECVisualScope, string>>();
@@ -128,6 +119,7 @@ namespace EstimatingLibrary
 
             return outScope;
         }
+        #endregion
 
     }
 }

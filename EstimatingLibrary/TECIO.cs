@@ -22,6 +22,7 @@ namespace EstimatingLibrary
     }
     public class TECIO : TECObject
     {
+        #region Properties
         private IOType _type;
         public IOType Type
         {
@@ -46,15 +47,10 @@ namespace EstimatingLibrary
             }
         }
 
-
+        #endregion
+        
         public TECIO()
         {
-
-        }
-
-        public TECIO(IOType type)
-        {
-            _type = type;
             _quantity = 1;
         }
 

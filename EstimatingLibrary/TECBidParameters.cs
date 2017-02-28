@@ -8,6 +8,7 @@ namespace EstimatingLibrary
 {
     public class TECBidParameters : TECObject
     {
+        #region Properties
         private double _escalation;
         private double _overhead;
         private double _profit;
@@ -99,6 +100,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("RequiresWrapUp", temp, this);
             }
         }
+        #endregion
 
         public TECBidParameters()
         {

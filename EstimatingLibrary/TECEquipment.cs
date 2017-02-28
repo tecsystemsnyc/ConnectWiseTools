@@ -85,24 +85,25 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(string name, string description, double budgetPrice, ObservableCollection<TECSubScope> subScope, Guid guid) : base(name, description, guid)
+        public TECEquipment(Guid guid) : base(guid)
         {
-            _budgetPrice = budgetPrice;
-            _subScope = subScope;
+            _budgetPrice = -1;
+            _subScope = new ObservableCollection<TECSubScope>(); ;
 
             SubScope.CollectionChanged += SubScope_CollectionChanged;
         }
-        
-        public TECEquipment(string name, string description, double budgetPrice, ObservableCollection<TECSubScope> subScope) : this(name, description, budgetPrice, subScope, Guid.NewGuid()) { }
-        public TECEquipment() : this("", "", -1, new ObservableCollection<TECSubScope>()) { }
+        public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource) : this(equipmentSource.Name, equipmentSource.Description, equipmentSource.BudgetPrice, new ObservableCollection<TECSubScope>())
+        public TECEquipment(TECEquipment equipmentSource) : this()
         {
             foreach(TECSubScope subScope in equipmentSource.SubScope)
             {
                 SubScope.Add(new TECSubScope(subScope));
             }
+            _budgetPrice = equipmentSource.BudgetPrice;
+            _name = equipmentSource.Name;
+            _description = equipmentSource.Description;
 
             _location = equipmentSource.Location;
             _quantity = equipmentSource.Quantity;

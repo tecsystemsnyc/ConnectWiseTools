@@ -160,7 +160,9 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return new TECLocation("None");
+                var location = new TECLocation();
+                location.Name = "None";
+                return location;
             }
             else
             {

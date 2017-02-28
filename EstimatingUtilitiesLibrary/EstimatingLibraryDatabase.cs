@@ -240,25 +240,25 @@ namespace EstimatingUtilitiesLibrary
         static private TECBid getBidInfo()
         {
             DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
-
             if (bidInfoDT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
                 return new TECBid();
             }
+
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString());
-            string name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
-            string bidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
+            TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString()));
+            outBid.Name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
+            outBid.BidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
 
             string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
-            DateTime dueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
+            outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
 
-            string salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
-            string estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
+            outBid.Salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
+            outBid.Estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
 
-            return new TECBid(name, bidNumber, dueDate, salesperson, estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>(), infoGuid);
+            return outBid;
         }
         static private void getUserAdjustments(TECBid bid)
         {
@@ -1528,34 +1528,25 @@ namespace EstimatingUtilitiesLibrary
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
-            string name = row[SystemTable.Name.Name].ToString();
-            string description = row[SystemTable.Description.Name].ToString();
-            int quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
-            double budgetPrice = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
-            
-            ObservableCollection<TECEquipment> equipmentInSystem = getEquipmentInSystem(systemID);
-
-            TECSystem system = new TECSystem(name, description, budgetPrice, equipmentInSystem, systemID);
-
-            system.Quantity = quantity;
+            TECSystem system = new TECSystem(systemID);
+            system.Name = row[SystemTable.Name.Name].ToString();
+            system.Description = row[SystemTable.Description.Name].ToString();
+            system.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
+            system.BudgetPrice = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            system.Equipment = getEquipmentInSystem(systemID);
             system.Tags = getTagsInScope(systemID);
             system.Location = getLocationInScope(systemID);
-
             return system;
         }
         private static TECEquipment getEquipmentFromRow(DataRow row)
         {
             Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
-            string name = row[EquipmentTable.Name.Name].ToString();
-            string description = row[EquipmentTable.Description.Name].ToString();
-            int quantity = row[EquipmentTable.Quantity.Name].ToString().ToInt();
-            double budgetPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
-
-            ObservableCollection<TECSubScope> subScopeInEquipment = getSubScopeInEquipment(equipmentID);
-
-            TECEquipment equipmentToAdd = new TECEquipment(name, description, budgetPrice, subScopeInEquipment, equipmentID);
-
-            equipmentToAdd.Quantity = quantity;
+            TECEquipment equipmentToAdd = new TECEquipment(equipmentID);
+            equipmentToAdd.Name = row[EquipmentTable.Name.Name].ToString();
+            equipmentToAdd.Description = row[EquipmentTable.Description.Name].ToString();
+            equipmentToAdd.Quantity = row[EquipmentTable.Quantity.Name].ToString().ToInt();
+            equipmentToAdd.BudgetPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
+            equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
             equipmentToAdd.Tags = getTagsInScope(equipmentID);
             equipmentToAdd.Location = getLocationInScope(equipmentID);
             return equipmentToAdd;
@@ -1563,19 +1554,14 @@ namespace EstimatingUtilitiesLibrary
         private static TECSubScope getSubScopeFromRow(DataRow row)
         {
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
-            string name = row[SubScopeTable.Name.Name].ToString();
-            string description = row[SubScopeTable.Description.Name].ToString();
-            int quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
-            double length = row[SubScopeTable.Length.Name].ToString().ToDouble(0);
-           
-            ObservableCollection<TECDevice> devicesInSubScope = getDevicesInSubScope(subScopeID);
-            ObservableCollection<TECPoint> pointsInSubScope = getPointsInSubScope(subScopeID);
-
-            TECSubScope subScopeToAdd = new TECSubScope(name, description, devicesInSubScope, pointsInSubScope, subScopeID);
-
+            TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
+            subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
+            subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
+            subScopeToAdd.Quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
+            subScopeToAdd.Length = row[SubScopeTable.Length.Name].ToString().ToDouble(0);
+            subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
+            subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             subScopeToAdd.Location = getLocationInScope(subScopeID);
-            subScopeToAdd.Length = length;
-            subScopeToAdd.Quantity = quantity;
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
 
             return subScopeToAdd;
@@ -1622,56 +1608,50 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getDeviceFromRow(DataRow row)
         {
             Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-            string name = row[DeviceTable.Name.Name].ToString();
-            string description = row[DeviceTable.Description.Name].ToString();
-            double cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
-
-            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
-            TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
-
-            TECDevice deviceToAdd = new TECDevice(name, description, cost, manufacturer, deviceID);
-            deviceToAdd.ConnectionType = connectionType;
+            TECDevice deviceToAdd = new TECDevice(deviceID);
+            deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
+            deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
+            deviceToAdd.Cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
+            deviceToAdd.Manufacturer = getManufacturerInDevice(deviceID);
+            deviceToAdd.ConnectionType = getConnectionTypeInDevice(deviceID);
             deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
-
             return deviceToAdd;
         }
         private static TECPoint getPointFromRow(DataRow row)
         {
             Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
-            string name = row[PointTable.Name.Name].ToString();
-            string description = row[PointTable.Description.Name].ToString();
-            string type = row[PointTable.Type.Name].ToString();
-            int quantity = row[PointTable.Quantity.Name].ToString().ToInt();
-
-            TECPoint pointToAdd = new TECPoint(type, name, description, pointID);
-
-            pointToAdd.Quantity = quantity;
+            TECPoint pointToAdd = new TECPoint(pointID);
+            pointToAdd.Name = row[PointTable.Name.Name].ToString();
+            pointToAdd.Description = row[PointTable.Description.Name].ToString();
+            pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
+            pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
             pointToAdd.Tags = getTagsInScope(pointID);
             return pointToAdd;
         }
         private static TECScopeBranch getScopeBranchFromRow(DataRow row)
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-            string name = row["Name"].ToString();
-            string description = row["Description"].ToString();
-            ObservableCollection<TECScopeBranch> childBranches = getChildBranchesInBranch(scopeBranchID);
-            TECScopeBranch branch = new TECScopeBranch(name, description, childBranches, scopeBranchID);
+            TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
+            branch.Name = row[ScopeBranchTable.Name.Name].ToString();
+            branch.Description = row[ScopeBranchTable.Description.Name].ToString();
+            branch.Branches = getChildBranchesInBranch(scopeBranchID);
             branch.Tags = getTagsInScope(scopeBranchID);
             return branch;
         }
         private static TECManufacturer getManufacturerFromRow(DataRow row)
         {
             Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
-            string name = row[ManufacturerTable.Name.Name].ToString();
-            double multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
-
-            return new TECManufacturer(name, multiplier, manufacturerID);
+            var manufacturer = new TECManufacturer(manufacturerID);
+            manufacturer.Name = row[ManufacturerTable.Name.Name].ToString();
+            manufacturer.Multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
+            return manufacturer;
         }
         private static TECLocation getLocationFromRow(DataRow row)
         {
             Guid locationID = new Guid(row[LocationTable.LocationID.Name].ToString());
-            string name = row[LocationTable.Name.Name].ToString();
-            return new TECLocation(name, locationID);
+            var location = new TECLocation(locationID);
+            location.Name = row[LocationTable.Name.Name].ToString();
+            return location;
         }
         private static TECConduitType getConduitTypeFromRow(DataRow row)
         {
@@ -1688,18 +1668,22 @@ namespace EstimatingUtilitiesLibrary
         private static TECNote getNoteFromRow(DataRow row)
         {
             Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
-            string noteText = row["NoteText"].ToString();
-            return new TECNote(noteText, noteID);
+            var note = new TECNote(noteID);
+            note.Text = row["NoteText"].ToString();
+            return note;
         }
         private static TECExclusion getExclusionFromRow(DataRow row)
         {
             Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-            string exclusionText = row["ExclusionText"].ToString();
-            return new TECExclusion(exclusionText, exclusionId);
+            TECExclusion exclusion = new TECExclusion(exclusionId);
+            exclusion.Text = row["ExclusionText"].ToString();
+            return exclusion; 
         }
         private static TECTag getTagFromRow(DataRow row)
         {
-            return new TECTag(row["TagString"].ToString(), new Guid(row["TagID"].ToString()));
+            var tag = new TECTag(new Guid(row["TagID"].ToString()));
+            tag.Text = row["TagString"].ToString();
+            return tag;
         }
         private static TECDrawing getDrawingFromRow(DataRow row)
         {
@@ -1712,9 +1696,9 @@ namespace EstimatingUtilitiesLibrary
         private static TECPage getPageFromRow(DataRow row)
         {
             Guid guid = new Guid(row[PageTable.PageID.Name].ToString());
-            int pageNum = row[PageTable.PageNum.Name].ToString().ToInt();
+            TECPage page = new TECPage(guid);
+            page.PageNum = row[PageTable.PageNum.Name].ToString().ToInt();
             byte[] blob = row[PageTable.Image.Name] as byte[];
-            TECPage page = new TECPage(pageNum, guid);
             page.Path = Path.GetTempFileName();
             File.WriteAllBytes(page.Path, blob);
             page.PageScope = getVisualScopeInPage(guid);
@@ -1723,17 +1707,19 @@ namespace EstimatingUtilitiesLibrary
         private static TECVisualScope getVisualScopeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[VisualScopeTable.VisualScopeID.Name].ToString());
-            double xPos = row[VisualScopeTable.XPos.Name].ToString().ToDouble();
-            double yPos = row[VisualScopeTable.YPos.Name].ToString().ToDouble();
-            return new TECVisualScope(guid, xPos, yPos);
+            var visualScope = new TECVisualScope(guid);
+            visualScope.X = row[VisualScopeTable.XPos.Name].ToString().ToDouble();
+            visualScope.Y = row[VisualScopeTable.YPos.Name].ToString().ToDouble();
+            return visualScope;
         }
         private static TECController getControllerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-            string name = row[ControllerTable.Name.Name].ToString();
-            string description = row[ControllerTable.Description.Name].ToString();
-            double cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
-            TECController controller = new TECController(name, description, guid, cost);
+            TECController controller = new TECController(guid);
+
+            controller.Name = row[ControllerTable.Name.Name].ToString();
+            controller.Description = row[ControllerTable.Description.Name].ToString();
+            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
@@ -1742,16 +1728,18 @@ namespace EstimatingUtilitiesLibrary
         private static TECIO getIOFromRow(DataRow row)
         {
             IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
-            int qty = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
-            var io = new TECIO(type);
-            io.Quantity = qty;
+            var io = new TECIO();
+            io.Type = type;
+            io.Quantity = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
             return io;
         }
         private static TECConnection getConnectionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
-            double length = row[ConnectionTable.Length.Name].ToString().ToDouble();
-            return new TECConnection(length, guid);
+            TECConnection connection = new TECConnection(guid);
+
+            connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
+            return connection;
         }
         #endregion
 

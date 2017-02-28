@@ -146,25 +146,27 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECSystem(string name, string description, double budgetPrice, ObservableCollection<TECEquipment> equipment, Guid guid) : base(name, description, guid)
+        public TECSystem(Guid guid) : base(guid)
         {
-            _budgetPrice = budgetPrice;
-            _equipment = equipment;
+            _budgetPrice = -1;
+            _equipment = new ObservableCollection<TECEquipment>();
 
             Equipment.CollectionChanged += Equipment_CollectionChanged;
         }
         
-        public TECSystem(string name, string description, double budgetPrice, ObservableCollection<TECEquipment> equipment) : this(name, description, budgetPrice, equipment, Guid.NewGuid()) { }
-        public TECSystem() : this("", "", -1, new ObservableCollection<TECEquipment>()) { }
+        public TECSystem() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSystem(TECSystem sourceSystem) : this(sourceSystem.Name, sourceSystem.Description, sourceSystem.BudgetPrice, new ObservableCollection<TECEquipment>())
+        public TECSystem(TECSystem sourceSystem) : this()
         {
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             {
                 Equipment.Add(new TECEquipment(equipment));
             }
 
+            _name = sourceSystem.Name;
+            _description = sourceSystem.Name;
+            _budgetPrice = sourceSystem.BudgetPrice;
             _location = sourceSystem.Location;
             _quantity = sourceSystem.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);

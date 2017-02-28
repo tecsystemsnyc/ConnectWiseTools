@@ -56,7 +56,10 @@ namespace Tests
         public void Save_Templates_Add_System()
         {
             //Act
-            TECSystem expectedSystem = new TECSystem("New system", "New system desc", 123.5, new ObservableCollection<TECEquipment>());
+            TECSystem expectedSystem = new TECSystem();
+            expectedSystem.Name = "New system";
+            expectedSystem.Description = "New system desc";
+            expectedSystem.BudgetPrice = 123.5;
             expectedSystem.Quantity = 1235;
 
             templates.SystemTemplates.Add(expectedSystem);
@@ -208,7 +211,10 @@ namespace Tests
         public void Save_Templates_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment("New Equipment", "New Equipment desc", 123.5, new ObservableCollection<TECSubScope>());
+            TECEquipment expectedEquipment = new TECEquipment();
+            expectedEquipment.Name = "New Equipment";
+            expectedEquipment.Description = "New Equipment desc";
+            expectedEquipment.BudgetPrice = 123.5;
             expectedEquipment.Quantity = 1235;
 
             templates.EquipmentTemplates.Add(expectedEquipment);
@@ -358,7 +364,9 @@ namespace Tests
         public void Save_Templates_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope("New SubScope", "New SubScope desc", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            TECSubScope expectedSubScope = new TECSubScope();
+            expectedSubScope.Name = "New SubScope";
+            expectedSubScope.Description = "New SubScope desc";
             expectedSubScope.Quantity = 1235;
 
             templates.SubScopeTemplates.Add(expectedSubScope);
@@ -484,7 +492,10 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = new TECDevice("New Device", "New Device desc", 11.54, new TECManufacturer(), Guid.NewGuid());
+            TECDevice expectedDevice = new TECDevice(Guid.NewGuid());
+            expectedDevice.Name = "New Device";
+            expectedDevice.Description = "New Device desc";
+            expectedDevice.Cost = 11.54;
 
             templates.DeviceCatalog.Add(expectedDevice);
 
@@ -630,7 +641,9 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
-            TECManufacturer manToAdd = new TECManufacturer("Test", 1.0);
+            TECManufacturer manToAdd = new TECManufacturer();
+            manToAdd.Name = "Test";
+            manToAdd.Multiplier = 1;
             templates.ManufacturerCatalog.Add(manToAdd);
             expectedDevice.Manufacturer = manToAdd;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
@@ -656,7 +669,10 @@ namespace Tests
         public void Save_Templates_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+            TECController expectedController = new TECController(Guid.NewGuid());
+            expectedController.Name = "Test Controller";
+            expectedController.Description = "Test description";
+            expectedController.Cost = 100;
 
             templates.ControllerTemplates.Add(expectedController);
 
@@ -807,7 +823,9 @@ namespace Tests
         {
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
-            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            var testio = new TECIO();
+            testio.Type = IOType.BACnetIP;
+            expectedController.IO.Add(testio);
             bool hasBACnetIP = false;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
@@ -910,7 +928,9 @@ namespace Tests
         {
             //Act
             int oldNumManufacturers = templates.ManufacturerCatalog.Count;
-            TECManufacturer expectedManufacturer = new TECManufacturer("Test Add Manufacturer", 21.34);
+            TECManufacturer expectedManufacturer = new TECManufacturer();
+            expectedManufacturer.Name = "Test Add Manufacturer";
+            expectedManufacturer.Multiplier = 21.34;
 
             templates.ManufacturerCatalog.Add(expectedManufacturer);
 
@@ -1014,7 +1034,8 @@ namespace Tests
         {
             //Act
             int oldNumTags = templates.Tags.Count;
-            TECTag expectedTag = new TECTag("Test add tag");
+            TECTag expectedTag = new TECTag();
+            expectedTag.Text = "Test add tag";
 
             templates.Tags.Add(expectedTag);
 

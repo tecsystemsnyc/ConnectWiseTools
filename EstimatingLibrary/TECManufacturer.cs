@@ -24,20 +24,23 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECManufacturer(string name, double multiplier, Guid guid) : base (name, "", guid)
+        public TECManufacturer(Guid guid) : base (guid)
         {
-            _multiplier = multiplier;
+            _multiplier = 1;
         }
-        public TECManufacturer(string name, double multiplier) : this(name, multiplier, Guid.NewGuid()) { }
-        public TECManufacturer() : this("", 1) { }
+        public TECManufacturer() : this(Guid.NewGuid()) { }
 
-        public TECManufacturer(TECManufacturer manSource) : this(manSource.Name, manSource.Multiplier, manSource.Guid) { }
+        public TECManufacturer(TECManufacturer manSource) : this(manSource.Guid)
+        {
+            _name = manSource.Name;
+            _multiplier = manSource.Multiplier;
+        }
         #endregion //Constructors
 
         #region methods
         public override Object Copy()
         {
-            TECManufacturer outMan = new TECManufacturer(this.Name, this.Multiplier);
+            TECManufacturer outMan = new TECManufacturer(this);
             outMan._guid = this.Guid;
             return outMan;
         }
