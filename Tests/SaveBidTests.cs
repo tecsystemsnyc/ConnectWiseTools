@@ -922,6 +922,7 @@ namespace Tests
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
             //Makes a copy, as devices can only be added via drag drop.
+            subScopeToModify.Devices = new ObservableCollection<TECDevice>();
             int expectedQuantity = 5;
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
             subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
@@ -946,9 +947,7 @@ namespace Tests
                             foreach (TECDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
-                                {
-                                    actualQuantity++;
-                                }
+                                { actualQuantity++; }
                             }
                             foreach (TECDevice dev in ss.Devices)
                             {
