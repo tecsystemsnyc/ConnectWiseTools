@@ -72,24 +72,22 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors 
-        public TECConnection(double length, Guid guid)
+        public TECConnection(Guid guid)
         {
-            this._guid = guid;
-            this._length = length;
-            this._scope = new ObservableCollection<TECScope>();
-        }
-        public TECConnection()
-        {
-            _guid = Guid.NewGuid();
+            _guid = guid;
             _length = 0;
+            _scope = new ObservableCollection<TECScope>();
             _ioTypes = new ObservableCollection<IOType>();
             _controller = new TECController();
-            _scope = new ObservableCollection<TECScope>();
         }
+        public TECConnection() : this(Guid.NewGuid()) { }
 
-        public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.Guid)
+        public TECConnection(TECConnection connectionSource) : this(connectionSource.Guid)
         {
+            _length = connectionSource.Length;
             _scope = connectionSource.Scope;
+            _ioTypes = connectionSource.IOTypes;
+            _controller = connectionSource.Controller;
         }
         #endregion //Constructors
 

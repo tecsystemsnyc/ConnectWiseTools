@@ -356,7 +356,8 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECLocation edit = new TECLocation("Edit");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -611,7 +612,8 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             Guid expected = new Guid(Bid.Systems[0].Location.Guid.ToString());
-            TECLocation edit = new TECLocation("Floor 42");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1247,7 +1249,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation("This");
+            TECLocation edit = new TECLocation();
+            edit.Name = "This";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1485,7 +1488,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation("Floor 42");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);

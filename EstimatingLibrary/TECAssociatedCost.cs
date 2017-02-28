@@ -50,8 +50,7 @@ namespace EstimatingLibrary
 
         public TECAssociatedCost() : this(Guid.NewGuid()) { }
         #endregion
-
-
+        
         public override object Copy()
         {
             var outCost = new TECAssociatedCost(this.Guid);

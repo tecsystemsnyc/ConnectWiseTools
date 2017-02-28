@@ -363,7 +363,10 @@ namespace EstimateBuilder.ViewModel
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             System.Windows.Point dropPoint = dropInfo.DropPosition;
-            TECVisualScope newScope = new TECVisualScope(sourceItem, dropPoint.X, dropPoint.Y);
+            TECVisualScope newScope = new TECVisualScope();
+            newScope.Scope = sourceItem;
+            newScope.X = dropPoint.X;
+            newScope.Y = dropPoint.Y;
             CurrentPage.PageScope.Add(newScope);
             /*
             if(sourceItem is TECSystem)

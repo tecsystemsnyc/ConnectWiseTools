@@ -548,12 +548,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddManufacturerExecute()
         {
-            TECManufacturer newMan = new TECManufacturer(ManufacturerName, ManufacturerMultiplier);
+            TECManufacturer newMan = new TECManufacturer();
+            newMan.Name = ManufacturerName;
+            newMan.Multiplier = ManufacturerMultiplier;
             Templates.ManufacturerCatalog.Add(newMan);
         }
         private void AddDeviceExecute()
         {
-            var newDevice = new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer);
+            var newDevice = new TECDevice();
+            newDevice.Name = DeviceName;
+            newDevice.Description = DeviceDescription;
+            newDevice.Cost = DeviceCost;
+            newDevice.ConnectionType = DeviceConnectionType;
+            newDevice.Manufacturer = DeviceManufacturer;
             newDevice.Tags = DeviceTags;
             Templates.DeviceCatalog.Add(newDevice);
             DeviceName = "";

@@ -350,47 +350,28 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECBid(
-            string name,
-            string bidNumber,
-            DateTime dueDate,
-            string salesperson,
-            string estimator,
-            ObservableCollection<TECScopeBranch> scopeTree,
-            ObservableCollection<TECSystem> systems, 
-            ObservableCollection<TECDevice> deviceCatalog,
-            ObservableCollection<TECManufacturer> manufacturerCatalog,
-            ObservableCollection<TECNote> notes, 
-            ObservableCollection<TECExclusion> exclusions,
-            ObservableCollection<TECTag> tags, 
-            Guid guid)
+        public TECBid(Guid guid)
         {
-            _name = name;
-            _bidNumber = bidNumber;
-            _dueDate = dueDate;
-            _salesperson = salesperson;
-            _estimator = estimator;
-            _scopeTree = scopeTree;
-            _systems = systems;
-            _deviceCatalog = deviceCatalog;
-            _manufacturerCatalog = manufacturerCatalog;
-            _notes = notes;
-            _exclusions = exclusions;
-            _tags = tags;
             _guid = guid;
-            _labor = new TECLabor();
+            _name = "";
+            _bidNumber = "";
+            _salesperson = "";
+            _estimator = "";
+            _scopeTree = new ObservableCollection<TECScopeBranch>();
+            _systems = new ObservableCollection<TECSystem>();
+            _deviceCatalog = new ObservableCollection<TECDevice>();
+            _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
+            _notes = new ObservableCollection<TECNote>();
+            _exclusions = new ObservableCollection<TECExclusion>();
+            _tags = new ObservableCollection<TECTag>();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _connections = new ObservableCollection<TECConnection>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
-            _parameters = new TECBidParameters();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
             _associatedCostCatalog = new ObservableCollection<TECAssociatedCost>();
-
-            Parameters.PropertyChanged += objectPropertyChanged;
-            Labor.PropertyChanged += objectPropertyChanged;
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
@@ -409,40 +390,41 @@ namespace EstimatingLibrary
             AssociatedCostCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            
         }
 
-        public TECBid(
-            string name, 
-            string bidNumber,
-            DateTime dueDate,
-            string salesperson,
-            string estimator,
-            ObservableCollection<TECScopeBranch> scopeTree,
-            ObservableCollection<TECSystem> systems,
-            ObservableCollection<TECDevice> deviceCatalog,
-            ObservableCollection<TECManufacturer> manufacturerCatalog,
-            ObservableCollection<TECNote> notes,
-            ObservableCollection<TECExclusion> exclusions,
-            ObservableCollection<TECTag> tags)
-            : this(name, bidNumber, dueDate, salesperson, estimator, scopeTree, systems, deviceCatalog, manufacturerCatalog, notes, exclusions, tags, Guid.NewGuid()) { }
-        public TECBid() : 
-            this("", "", new DateTime(), "", "", new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>())
+        public TECBid() : this(Guid.NewGuid())
         {
             foreach(string item in Defaults.Scope)
-            { ScopeTree.Add(new TECScopeBranch(item, "", new ObservableCollection<TECScopeBranch>())); }
+            {
+                var branchToAdd = new TECScopeBranch();
+                branchToAdd.Name = item;
+                ScopeTree.Add(new TECScopeBranch(branchToAdd));
+            }
             foreach (string item in Defaults.Exclusions)
-            { Exclusions.Add(new TECExclusion(item)); }
+            {
+                var exclusionToAdd = new TECExclusion();
+                exclusionToAdd.Text = item;
+                Exclusions.Add(new TECExclusion(exclusionToAdd));
+            }
             foreach (string item in Defaults.Notes)
-            { Notes.Add(new TECNote(item)); }
-
-            
+            {
+                var noteToAdd = new TECNote();
+                noteToAdd.Text = item;
+                Notes.Add(new TECNote(noteToAdd));
+            }
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this(bidSource.Name, bidSource.BidNumber, bidSource.DueDate, bidSource.Salesperson, bidSource.Estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), bidSource.DeviceCatalog, bidSource.ManufacturerCatalog, new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), bidSource.Tags)
+        public TECBid(TECBid bidSource) : this()
         {
-            _labor = new TECLabor(bidSource.Labor);
+            if(bidSource.Labor != null)
+            {
+                _labor = new TECLabor(bidSource.Labor);
+            }
+            if(bidSource.Parameters != null)
+            {
+                _parameters = bidSource.Parameters.Copy() as TECBidParameters;
+            }
             foreach (TECScopeBranch branch in bidSource.ScopeTree)
             {
                 ScopeTree.Add(new TECScopeBranch(branch));

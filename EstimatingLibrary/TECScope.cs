@@ -98,10 +98,10 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECScope(string name, string description, Guid guid)
+        public TECScope(Guid guid)
         {
-            _name = name;
-            _description = description;
+            _name = "";
+            _description = "";
             _guid = guid;
 
             _quantity = 1;

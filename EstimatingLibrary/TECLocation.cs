@@ -33,15 +33,17 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECLocation(string name, Guid guid)
+        public TECLocation( Guid guid)
         {
-            _name = name;
+            _name = "";
             _guid = guid;
         }
-        public TECLocation(string name) : this(name, Guid.NewGuid()) { }
-        public TECLocation() : this("") { }
+        public TECLocation() : this(Guid.NewGuid()) { }
 
-        public TECLocation(TECLocation sourceLocation) : this(sourceLocation.Name, sourceLocation.Guid) { }
+        public TECLocation(TECLocation sourceLocation) : this(sourceLocation.Guid)
+        {
+            _name = sourceLocation.Name;
+        }
 
         public override object Copy()
         {

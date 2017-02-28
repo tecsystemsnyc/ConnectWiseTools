@@ -41,7 +41,7 @@ namespace EstimatingLibrary
         {
 
         }
-        public TECElectricalMaterial(Guid guid) : base("","",guid)
+        public TECElectricalMaterial(Guid guid) : base(guid)
         {
             _cost = 0;
             _labor = 0;

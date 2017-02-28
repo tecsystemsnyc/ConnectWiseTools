@@ -29,9 +29,7 @@ namespace EstimatingUtilitiesLibrary
             MagickImageCollection pdf = new MagickImageCollection();
 
             try
-            {
-                pdf.Read(pdfPath);
-            }
+            { pdf.Read(pdfPath); }
             catch (Exception e)
             {
                 Console.WriteLine("pdf.Read() failed in convertPDFToDrawing(). Error: " + e.Message);
@@ -44,16 +42,16 @@ namespace EstimatingUtilitiesLibrary
             foreach(MagickImage page in pdf)
             {
                 string pngPath = name + "_" + pageNum + ".png";
-
                 pngPath = Path.Combine(directory, pngPath);
-
                 page.Quality = 100;
                 page.Write(pngPath);
 
-                drawing.Pages.Add(new TECPage(pngPath, pageNum));
+                var pageToAdd = new TECPage();
+                pageToAdd.Path = pngPath;
+                pageToAdd.PageNum = pageNum;
+                drawing.Pages.Add(pageToAdd);
 
                 Console.WriteLine("Loaded page " + pageNum + " of PDF.");
-
                 pageNum++;
             }
 

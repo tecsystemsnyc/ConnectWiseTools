@@ -389,7 +389,10 @@ namespace Tests
         public void Save_Bid_Add_System()
         {
             //Act
-            TECSystem expectedSystem = new TECSystem("New system", "New system desc", 123.5, new ObservableCollection<TECEquipment>());
+            TECSystem expectedSystem = new TECSystem();
+            expectedSystem.Name = "New system";
+            expectedSystem.Description = "New system desc";
+            expectedSystem.BudgetPrice = 123.5;
             expectedSystem.Quantity = 1235;
 
             bid.Systems.Add(expectedSystem);
@@ -541,7 +544,10 @@ namespace Tests
         public void Save_Bid_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment("New Equipment", "New Description", 465543.54, new ObservableCollection<TECSubScope>());
+            TECEquipment expectedEquipment = new TECEquipment();
+            expectedEquipment.Name = "New Equipment";
+            expectedEquipment.Description = "New Description";
+            expectedEquipment.BudgetPrice = 465543.54;
             expectedEquipment.Quantity = 46554354;
 
             bid.Systems[0].Equipment.Add(expectedEquipment);
@@ -725,7 +731,9 @@ namespace Tests
         public void Save_Bid_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope("New SubScope", "New Description", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>());
+            TECSubScope expectedSubScope = new TECSubScope();
+            expectedSubScope.Name = "New SubScope";
+            expectedSubScope.Description = "New Description";
             expectedSubScope.Quantity = 235746543;
 
             bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
@@ -1150,7 +1158,10 @@ namespace Tests
         public void Save_Bid_Add_Point()
         {
             //Act
-            TECPoint expectedPoint = new TECPoint(PointTypes.Serial, "New Point", "Point Description");
+            TECPoint expectedPoint = new TECPoint();
+            expectedPoint.Type = PointTypes.Serial;
+            expectedPoint.Name = "New Point";
+            expectedPoint.Description = "Point Description";
             expectedPoint.Quantity = 84300;
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
@@ -1580,7 +1591,9 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch expectedBranch = new TECScopeBranch("New Branch", "Branch description", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch expectedBranch = new TECScopeBranch();
+            expectedBranch.Name = "New Branch";
+            expectedBranch.Description = "Branch description";
             bid.ScopeTree.Add(expectedBranch);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -1607,7 +1620,9 @@ namespace Tests
         public void Save_Bid_Add_Branch_InBranch()
         {
             //Act
-            TECScopeBranch expectedBranch = new TECScopeBranch("New Child", "Child Branch Description", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch expectedBranch = new TECScopeBranch();
+            expectedBranch.Name = "New Child";
+            expectedBranch.Description = "Child Branch Description";
             TECScopeBranch branchToModify = bid.ScopeTree[0];
             branchToModify.Branches.Add(expectedBranch);
 
@@ -1756,7 +1771,8 @@ namespace Tests
         public void Save_Bid_Add_Location()
         {
             //Act
-            TECLocation expectedLocation = new TECLocation("New Location");
+            TECLocation expectedLocation = new TECLocation();
+            expectedLocation.Name = "New Location";
             bid.Locations.Add(expectedLocation);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -1996,7 +2012,8 @@ namespace Tests
         public void Save_Bid_Add_Note()
         {
             //Act
-            TECNote expectedNote = new TECNote("New Note");
+            TECNote expectedNote = new TECNote();
+            expectedNote.Text = "New Note";
             bid.Notes.Add(expectedNote);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -2070,7 +2087,8 @@ namespace Tests
         public void Save_Bid_Add_Exclusion()
         {
             //Act
-            TECExclusion expectedExclusion = new TECExclusion("New Exclusion");
+            TECExclusion expectedExclusion = new TECExclusion();
+            expectedExclusion.Text = "New Exclusion";
             bid.Exclusions.Add(expectedExclusion);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
@@ -2263,7 +2281,10 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController("Test Controller", "Test description", Guid.NewGuid(), 100);
+            TECController expectedController = new TECController(Guid.NewGuid());
+            expectedController.Name = "Test Controller";
+            expectedController.Description = "Test description";
+            expectedController.Cost = 100;
 
             bid.Controllers.Add(expectedController);
 
@@ -2391,7 +2412,9 @@ namespace Tests
         {
             //Act
             TECController expectedController = bid.Controllers[0];
-            expectedController.IO.Add(new TECIO(IOType.BACnetIP));
+            var testio = new TECIO();
+            testio.Type = IOType.BACnetIP;
+            expectedController.IO.Add(testio);
             bool hasBACnetIP = false;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
@@ -2549,7 +2572,8 @@ namespace Tests
             //Act
             TECProposalScope expectedPropScope = bid.ProposalScope[0];
             int oldNumNotes = expectedPropScope.Notes.Count;
-            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note", "", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch expectedNote = new TECScopeBranch();
+            expectedNote.Name = "Added Prop Note";
             expectedPropScope.Notes.Add(expectedNote);
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 
@@ -2596,7 +2620,8 @@ namespace Tests
             }
             int oldNumNotes = noteToModify.Branches.Count;
             //Console.WriteLine("OldNumNotes: " + oldNumNotes);
-            TECScopeBranch expectedNote = new TECScopeBranch("Added Prop Note Note", "", new ObservableCollection<TECScopeBranch>());
+            TECScopeBranch expectedNote = new TECScopeBranch();
+            expectedNote.Name = "Added Prop Note Note";
             noteToModify.Branches.Add(expectedNote);
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack);
 

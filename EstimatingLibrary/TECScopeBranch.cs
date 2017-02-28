@@ -15,22 +15,23 @@ namespace EstimatingLibrary
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(string name, string description, ObservableCollection<TECScopeBranch> branches, Guid guid) : base(name, description, guid)
+        public TECScopeBranch(Guid guid) : base(guid)
         {
-            Branches = branches;
+            Branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
         
-        public TECScopeBranch(string name, string description, ObservableCollection<TECScopeBranch> branches) : this(name, description, branches, Guid.NewGuid()) { }
-        public TECScopeBranch() : this("", "", new ObservableCollection<TECScopeBranch>()) { }
+        public TECScopeBranch() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this(scopeBranchSource.Name, scopeBranchSource.Description, new ObservableCollection<TECScopeBranch>())
+        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
                 Branches.Add(new TECScopeBranch(branch));
             }
+            _name = scopeBranchSource.Name;
+            _description = scopeBranchSource.Description;
             _tags = scopeBranchSource.Tags;
         }
         #endregion //Constructors

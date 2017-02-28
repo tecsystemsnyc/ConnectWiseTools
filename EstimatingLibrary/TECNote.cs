@@ -33,15 +33,17 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECNote(string text, Guid guid)
+        public TECNote(Guid guid)
         {
-            _text = text;
+            _text = "";
             _guid = guid;
         }
-        public TECNote(string text) : this(text, Guid.NewGuid()) { }
-        public TECNote() : this("") { }
+        public TECNote() : this( Guid.NewGuid()) { }
 
-        public TECNote(TECNote sourceNote) : this(sourceNote.Text) { }
+        public TECNote(TECNote sourceNote) : this()
+        {
+            _text = sourceNote.Text;
+        }
 
         public override object Copy()
         {

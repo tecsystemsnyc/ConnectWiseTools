@@ -272,7 +272,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Bid.Locations.CollectionChanged += Locations_CollectionChanged;
             LocationSelections = new ObservableCollection<TECLocation>();
-            LocationSelections.Add(new TECLocation("None"));
+            var noneLocation = new TECLocation();
+            noneLocation.Name = "None";
+            LocationSelections.Add(noneLocation);
             foreach(TECLocation location in Bid.Locations)
             {
                 LocationSelections.Add(location);

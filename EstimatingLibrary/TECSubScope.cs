@@ -107,21 +107,20 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points, Guid guid) : base(name, description, guid)
+        public TECSubScope(Guid guid) : base(guid)
         {
-            _devices = devices;
-            _points = points;
+            _devices = new ObservableCollection<TECDevice>();
+            _points = new ObservableCollection<TECPoint>();
             _length = 0;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
         
-        public TECSubScope(string name, string description, ObservableCollection<TECDevice> devices, ObservableCollection<TECPoint> points) : this(name, description, devices, points, Guid.NewGuid()) { }
-        public TECSubScope() : this("", "", new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>()) { }
+        public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope) : this(sourceSubScope.Name, sourceSubScope.Description, new ObservableCollection<TECDevice>(), new ObservableCollection<TECPoint>())
+        public TECSubScope(TECSubScope sourceSubScope) : this()
         {
             foreach(TECDevice device in sourceSubScope.Devices)
             {
@@ -132,6 +131,8 @@ namespace EstimatingLibrary
                 Points.Add(new TECPoint(point));
             }
 
+            _name = sourceSubScope.Name;
+            _description = sourceSubScope.Description;
             _location = sourceSubScope.Location;
             _quantity = sourceSubScope.Quantity;
             _tags = new ObservableCollection<TECTag>(sourceSubScope.Tags);
