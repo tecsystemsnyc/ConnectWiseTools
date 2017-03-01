@@ -932,6 +932,25 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
+    public class SubScopeConduitTypeTable : TableBase
+    {
+        public static new string TableName = "TECSubScopeTECConduitType";
+        public static Type ObjectType = typeof(TECDevice);
+        public static Type ReferenceType = typeof(TECConduitType);
+
+        public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConduitTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+
+        };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
 
     public static class AllBidTables
     {
@@ -979,7 +998,8 @@ namespace EstimatingUtilitiesLibrary
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerManufacturerTable()
+            new ControllerManufacturerTable(),
+            new SubScopeConduitTypeTable()
             };
     }
 
@@ -1011,7 +1031,8 @@ namespace EstimatingUtilitiesLibrary
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerManufacturerTable()
+            new ControllerManufacturerTable(),
+            new SubScopeConduitTypeTable()
         };
     }
 
@@ -1064,7 +1085,8 @@ namespace EstimatingUtilitiesLibrary
             new VisualScopeScopeTable(),
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerManufacturerTable()
+            new ControllerManufacturerTable(),
+            new SubScopeConduitTypeTable()
         };
     }
 

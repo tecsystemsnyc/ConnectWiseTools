@@ -1911,9 +1911,15 @@ namespace EstimatingUtilitiesLibrary
                 saveControllerChildProperties(controller);
             }
             foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
-            { addObject(conduitType, templates); }
+            {
+                addObject(conduitType, templates);
+                saveAssociatedCosts(conduitType);
+            }
             foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
-            { addObject(connectionType, templates); }
+            {
+                addObject(connectionType, templates);
+                saveAssociatedCosts(connectionType);
+            }
             foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
             { addObject(associatedCost, templates); }
         }
