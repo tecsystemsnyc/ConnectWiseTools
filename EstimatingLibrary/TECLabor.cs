@@ -11,6 +11,12 @@ namespace EstimatingLibrary
     {
         #region Properties
 
+        private Guid _guid;
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+
         private int _numPoints;
         public int NumPoints
         {
@@ -421,35 +427,41 @@ namespace EstimatingLibrary
         #endregion
 
         #region Initializers
-        public TECLabor()
+        public TECLabor() : this(Guid.NewGuid()) { }
+
+        public TECLabor(Guid guid)
         {
+            _guid = guid;
+
             _pmCoef = 1.0;
             _pmExtraHours = 0;
-            _pmRate = 60;
+            _pmRate = 0;
 
             _engCoef = 1.0;
             _engExtraHours = 0;
-            _engRate = 60;
+            _engRate = 0;
 
             _commCoef = 1.0;
             _commExtraHours = 0;
-            _commRate = 60;
+            _commRate = 0;
 
             _softCoef = 1.0;
             _softExtraHours = 0;
-            _softRate = 60;
+            _softRate = 0;
 
             _graphCoef = 1.0;
             _graphExtraHours = 0;
-            _graphRate = 60;
+            _graphRate = 0;
 
             _electricalHours = 0;
-            _electricalRate = 115;
-            _electricalSuperRate = 125;
+            _electricalRate = 0;
+            _electricalSuperRate = 0;
         }
 
         public TECLabor(TECLabor labor)
         {
+            _guid = labor._guid;
+
             _pmCoef = labor.PMCoef;
             _pmExtraHours = labor.PMExtraHours;
             _pmRate = labor.PMRate;
