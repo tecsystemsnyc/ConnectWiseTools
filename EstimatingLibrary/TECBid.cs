@@ -479,7 +479,6 @@ namespace EstimatingLibrary
                             checkForTotalsInSystem(sys);
                         }
                     }
-
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
