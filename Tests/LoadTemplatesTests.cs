@@ -176,6 +176,8 @@ namespace Tests
             Assert.AreEqual("SubScope Tag", actualSubScope.Tags[0].Text);
             Assert.AreEqual("Test SubScope", actualSubScope.Name);
 
+            Assert.AreEqual("Test ConduitType", actualSubScope.ConduitType.Name);
+
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);

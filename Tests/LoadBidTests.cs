@@ -20,17 +20,16 @@ namespace Tests
         static TECDevice actualDevice;
         static ObservableCollection<TECDevice> actualDevices;
         static TECPoint actualPoint;
-
         static TECManufacturer actualManufacturer;
-
         static TECTag actualTag;
-
         static TECDrawing actualDrawing;
         static TECPage actualPage;
         static TECVisualScope actualVisScope;
-
         static TECController actualController;
         static TECConnection actualConnection;
+        static TECAssociatedCost actualAssociatedCost;
+        static TECConduitType actualConduitType;
+        static TECConnectionType actualConnectionType;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -56,10 +55,11 @@ namespace Tests
             actualDevice = actualSubScope.Devices[0];
             actualDevices = actualSubScope.Devices;
             actualPoint = actualSubScope.Points[0];
-
             actualManufacturer = actualBid.ManufacturerCatalog[0];
-
             actualTag = actualBid.Tags[0];
+            actualAssociatedCost = actualBid.AssociatedCostsCatalog[0];
+            actualConnectionType = actualBid.ConnectionTypes[0];
+            actualConduitType = actualBid.ConduitTypes[0];
 
             actualDrawing = actualBid.Drawings[0];
             actualPage = actualDrawing.Pages[0];
@@ -186,14 +186,16 @@ namespace Tests
             //Assert
             string expectedName = "Test SubScope";
             Assert.AreEqual(expectedName, actualSubScope.Name);
+            Assert.AreEqual("Test ConduitType", actualSubScope.ConduitType.Name);
             
             string expectedDescription = "Test SubScope Description";
             Assert.AreEqual(expectedDescription, actualSubScope.Description);
             
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
-
+            Assert.AreEqual(12, actualSubScope.Length);
             Assert.AreEqual(actualConnection, actualSubScope.Connection);
+            Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
         }
 
         [TestMethod]
@@ -457,6 +459,30 @@ namespace Tests
             Assert.AreEqual(expectedScope, actualPropScope.Scope);
             Assert.AreEqual(expectedIsProposed, actualPropScope.IsProposed);
             Assert.AreEqual(expectedPropScopeBranchName, actualPropScope.Notes[0].Name);
+        }
+
+        [TestMethod]
+        public void Load_Bid_AssociatedCosts()
+        {
+            //Assert
+            string expectedName = "Test Cost";
+            Assert.AreEqual(expectedName, actualAssociatedCost.Name);
+        }
+
+        [TestMethod]
+        public void Load_Bid_ConnectionType()
+        {
+            //Assert
+            string expectedName = "ThreeC18";
+            Assert.AreEqual(expectedName, actualConnectionType.Name);
+        }
+
+        [TestMethod]
+        public void Load_Bid_ConduitType()
+        {
+            //Assert
+            string expectedName = "Test ConduitType";
+            Assert.AreEqual(expectedName, actualConduitType.Name);
         }
     }
 }
