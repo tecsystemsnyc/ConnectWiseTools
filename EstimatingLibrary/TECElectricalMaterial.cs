@@ -37,10 +37,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Initializers
-        public TECElectricalMaterial() : this(Guid.NewGuid())
-        {
-
-        }
+        public TECElectricalMaterial() : this(Guid.NewGuid()) { }
         public TECElectricalMaterial(Guid guid) : base(guid)
         {
             _cost = 0;

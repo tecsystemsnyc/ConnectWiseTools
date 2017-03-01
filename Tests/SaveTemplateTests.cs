@@ -1195,7 +1195,63 @@ namespace Tests
                 if (conduitType.Guid == conduitTypeToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConnectionTypeCatalog.Count);
+            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConduitTypeCatalog.Count);
+        }
+        #endregion
+
+        #region Save Associated Costs
+        [TestMethod]
+        public void Save_Templates_Add_AssociatedCost()
+        {
+            //Act
+            int oldNumAssociatedCosts = templates.AssociatedCostsCatalog.Count;
+            TECAssociatedCost expectedAssociatedCost = new TECAssociatedCost();
+            expectedAssociatedCost.Name = "Test Associated Cost";
+            expectedAssociatedCost.Cost = 21.34;
+
+            templates.AssociatedCostsCatalog.Add(expectedAssociatedCost);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECAssociatedCost actualCost = null;
+            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            {
+                if (cost.Guid == expectedAssociatedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedAssociatedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedAssociatedCost.Cost, actualCost.Cost);
+            Assert.AreEqual((oldNumAssociatedCosts + 1), actualTemplates.AssociatedCostsCatalog.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_AssociatedCost()
+        {
+            //Act
+            int oldNumAssociatedCosts = templates.AssociatedCostsCatalog.Count;
+            TECAssociatedCost costToRemove = templates.AssociatedCostsCatalog[0];
+
+            templates.AssociatedCostsCatalog.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumAssociatedCosts - 1), actualTemplates.AssociatedCostsCatalog.Count);
         }
         #endregion
     }

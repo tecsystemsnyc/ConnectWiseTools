@@ -20,6 +20,8 @@ namespace Tests
         static TECTag actualTag;
         static TECConnectionType actualConnectionType;
         static TECController actualController;
+        static TECConduitType actualConduitType;
+        static TECAssociatedCost actualAssociatedCost;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -70,6 +72,16 @@ namespace Tests
             foreach(TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
             {
                 if (connectionType.Name == "Test ConnectionType") actualConnectionType = connectionType;
+            }
+            actualConduitType = null;
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                if (conduitType.Name == "Test ConduitType") actualConduitType = conduitType;
+            }
+            actualAssociatedCost = null;
+            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            {
+                if (cost.Name == "Test Cost") actualAssociatedCost = cost;
             }
         }
 
@@ -226,6 +238,22 @@ namespace Tests
         public void Load_Templates_ConnectionType()
         {
             Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
+            Assert.AreEqual(10, actualConnectionType.Cost);
+            Assert.AreEqual(12, actualConnectionType.Labor);
+        }
+
+        [TestMethod]
+        public void Load_Templates_ConduitType()
+        {
+            Assert.AreEqual("Test ConduitType", actualConduitType.Name);
+            Assert.AreEqual(10, actualConnectionType.Cost);
+            Assert.AreEqual(12, actualConnectionType.Labor);
+        }
+
+        [TestMethod]
+        public void Load_Templates_AssociatedCost()
+        {
+            Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
             Assert.AreEqual(10, actualConnectionType.Cost);
             Assert.AreEqual(12, actualConnectionType.Labor);
         }

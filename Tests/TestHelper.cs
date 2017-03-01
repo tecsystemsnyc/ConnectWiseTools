@@ -420,6 +420,7 @@ namespace Tests
             subScope.Points.Add(ssPoint);
             subScope.Devices.Add(childDev);
             subScope.Tags.Add(ssTag);
+            subScope.ConduitType = testConduitType;
 
             templates.SubScopeTemplates.Add(subScope);
 
