@@ -251,8 +251,8 @@ namespace Tests
         public void Load_Templates_ConduitType()
         {
             Assert.AreEqual("Test ConduitType", actualConduitType.Name);
-            Assert.AreEqual(10, actualConduitType.Cost);
-            Assert.AreEqual(12, actualConduitType.Labor);
+            Assert.AreEqual(12, actualConduitType.Cost);
+            Assert.AreEqual(13, actualConduitType.Labor);
             Assert.AreEqual("Test Cost", actualConduitType.AssociatedCosts[0].Name);
 
         }

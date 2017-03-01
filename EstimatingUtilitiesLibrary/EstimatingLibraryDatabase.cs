@@ -616,6 +616,19 @@ namespace EstimatingUtilitiesLibrary
             else
             { return new TECConnectionType(); }
         }
+        static private TECConduitType getConduitTypeInSubScope(Guid subScopeID)
+        {
+            string command = "select * from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ConduitTypeID.Name + " in ";
+            command += "(select " + SubScopeConduitTypeTable.TypeID.Name + " from " + SubScopeConduitTypeTable.TableName + " where ";
+            command += SubScopeConduitTypeTable.SubScopeID.Name + " = '" + subScopeID;
+            command += "')";
+
+            DataTable conduitTypeTable = SQLiteDB.getDataFromCommand(command);
+            if (conduitTypeTable.Rows.Count > 0)
+            { return (getConduitTypeFromRow(conduitTypeTable.Rows[0])); }
+            else
+            { return new TECConduitType(); }
+        }
         static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
         {
             string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
@@ -1548,6 +1561,7 @@ namespace EstimatingUtilitiesLibrary
             system.Equipment = getEquipmentInSystem(systemID);
             system.Tags = getTagsInScope(systemID);
             system.Location = getLocationInScope(systemID);
+            system.AssociatedCosts = getAssociatedCostsInScope(systemID);
             return system;
         }
         private static TECEquipment getEquipmentFromRow(DataRow row)
@@ -1561,6 +1575,7 @@ namespace EstimatingUtilitiesLibrary
             equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
             equipmentToAdd.Tags = getTagsInScope(equipmentID);
             equipmentToAdd.Location = getLocationInScope(equipmentID);
+            equipmentToAdd.AssociatedCosts = getAssociatedCostsInScope(equipmentID);
             return equipmentToAdd;
         }
         private static TECSubScope getSubScopeFromRow(DataRow row)
@@ -1575,7 +1590,8 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             subScopeToAdd.Location = getLocationInScope(subScopeID);
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
-
+            subScopeToAdd.ConduitType = getConduitTypeInSubScope(subScopeID);
+            subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
             return subScopeToAdd;
         }
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
@@ -1592,7 +1608,8 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.Name = name;
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
-
+            outConnectionType.Tags = getTagsInScope(guid);
+            outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
             return outConnectionType;
         }
         private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
@@ -1617,6 +1634,7 @@ namespace EstimatingUtilitiesLibrary
             deviceToAdd.Manufacturer = getManufacturerInDevice(deviceID);
             deviceToAdd.ConnectionType = getConnectionTypeInDevice(deviceID);
             deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
+            deviceToAdd.AssociatedCosts = getAssociatedCostsInScope(deviceToAdd.Guid);
             return deviceToAdd;
         }
         private static TECPoint getPointFromRow(DataRow row)
@@ -1628,6 +1646,7 @@ namespace EstimatingUtilitiesLibrary
             pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
             pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
             pointToAdd.Tags = getTagsInScope(pointID);
+            pointToAdd.AssociatedCosts = getAssociatedCostsInScope(pointID);
             return pointToAdd;
         }
         private static TECScopeBranch getScopeBranchFromRow(DataRow row)
@@ -1665,6 +1684,8 @@ namespace EstimatingUtilitiesLibrary
             conduitType.Name = name;
             conduitType.Cost = cost;
             conduitType.Labor = labor;
+            conduitType.Tags = getTagsInScope(conduitGuid);
+            conduitType.AssociatedCosts = getAssociatedCostsInScope(conduitGuid);
             return conduitType;
         }
         private static TECNote getNoteFromRow(DataRow row)
@@ -1725,6 +1746,7 @@ namespace EstimatingUtilitiesLibrary
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
+            controller.AssociatedCosts = getAssociatedCostsInScope(guid);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
