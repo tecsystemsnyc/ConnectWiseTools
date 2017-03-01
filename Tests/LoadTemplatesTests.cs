@@ -253,7 +253,7 @@ namespace Tests
         [TestMethod]
         public void Load_Templates_AssociatedCost()
         {
-            Assert.AreEqual("Test ConnectionType", actualAssociatedCost.Name);
+            Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
             Assert.AreEqual(10, actualConnectionType.Cost);
             Assert.AreEqual(12, actualConnectionType.Labor);
         }

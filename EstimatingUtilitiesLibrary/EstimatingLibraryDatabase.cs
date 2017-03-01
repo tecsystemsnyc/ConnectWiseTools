@@ -24,7 +24,6 @@ namespace EstimatingUtilitiesLibrary
         //private const bool DEBUG = true;
 
         private const bool DEBUG_GENERIC = false;
-        private static bool doCatch = false;
 
         static private SQLiteDatabase SQLiteDB;
 
@@ -1896,14 +1895,12 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(subScope, templates);
                 saveScopeChildProperties(subScope);
-                saveCompleteDevices(subScope);
+                saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
             }
             foreach (TECDevice device in templates.DeviceCatalog)
             {
-                addObject(device, templates);
-                saveScopeChildProperties(device);
-                saveDeviceChildProperties(device);
+                saveDeviceInCatalog(device, templates);
             }
             foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
             { addObject(manufacturer, templates); }
@@ -1921,13 +1918,19 @@ namespace EstimatingUtilitiesLibrary
             { addObject(associatedCost, templates); }
         }
 
-        private static void saveCompleteDevices(TECSubScope subScope)
+        private static void saveDevicesInSubScope(TECSubScope subscope)
         {
-            foreach(TECDevice device in subScope.Devices)
+            foreach(TECDevice device in subscope.Devices)
+            { addObject(device, subscope); }
+        }
+        private static void saveDeviceInCatalog(TECDevice device, object bidOrTemplates)
+        {
+            if(bidOrTemplates is TECBid || bidOrTemplates is TECTemplates)
             {
-                addObject(device, subScope);
+                addObject(device, bidOrTemplates);
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
+
             }
         }
         private static void saveCompletePoints(TECSubScope subScope)
@@ -1944,7 +1947,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(subScope, equipment);
                 saveScopeChildProperties(subScope);
-                saveCompleteDevices(subScope);
+                saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
             }
         }

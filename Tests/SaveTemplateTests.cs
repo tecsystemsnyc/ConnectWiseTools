@@ -1195,7 +1195,7 @@ namespace Tests
                 if (conduitType.Guid == conduitTypeToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConnectionTypeCatalog.Count);
+            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConduitTypeCatalog.Count);
         }
         #endregion
 

@@ -21,7 +21,7 @@ namespace DebugLibrary
             }
         }
 
-        private const bool debugCreatesLog = true;
+        private const bool debugCreatesLog = false;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
