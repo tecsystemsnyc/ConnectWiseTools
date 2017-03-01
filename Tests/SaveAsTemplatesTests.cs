@@ -23,6 +23,9 @@ namespace Tests
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
         static TECController expectedController;
+        static TECAssociatedCost expectedAssociatedCost;
+        static TECConnectionType expectedConnectionType;
+        static TECConduitType expectedConduitType;
 
         static string path;
 
@@ -34,6 +37,9 @@ namespace Tests
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
         static TECController actualController;
+        static TECAssociatedCost actualAssociatedCost;
+        static TECConnectionType actualConnectionType;
+        static TECConduitType actualConduitType;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -60,6 +66,9 @@ namespace Tests
             expectedManufacturer = expectedTemplates.ManufacturerCatalog[0];
             expectedTag = expectedTemplates.Tags[0];
             expectedController = expectedTemplates.ControllerTemplates[0];
+            expectedAssociatedCost = expectedTemplates.AssociatedCostsCatalog[0];
+            expectedConnectionType = expectedTemplates.ConnectionTypeCatalog[0];
+            expectedConduitType = expectedTemplates.ConduitTypeCatalog[0];
 
             path = Path.GetTempFileName();
 
@@ -127,6 +136,33 @@ namespace Tests
                 if (controller.Guid == expectedController.Guid)
                 {
                     actualController = controller;
+                    break;
+                }
+            }
+
+            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            {
+                if (cost.Guid == expectedController.Guid)
+                {
+                    actualAssociatedCost = cost;
+                    break;
+                }
+            }
+
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                if (connectionType.Guid == expectedConnectionType.Guid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                if (conduitType.Guid == expectedConduitType.Guid)
+                {
+                    actualConduitType = conduitType;
                     break;
                 }
             }
@@ -254,6 +290,9 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
             Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSubScope.Length, actualSubScope.Length);
+            Assert.AreEqual(expectedSubScope.ConduitType.Name, actualSubScope.ConduitType.Name);
+            Assert.AreEqual(expectedSubScope.AssociatedCosts[0].Name, actualSubScope.AssociatedCosts[0].Name);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
@@ -326,6 +365,32 @@ namespace Tests
                 }
                 Assert.IsTrue(ioExists);
             }
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_AssociatedCost()
+        {
+            //Assert
+            Assert.AreEqual(expectedAssociatedCost.Name, actualAssociatedCost.Name);
+            Assert.AreEqual(expectedAssociatedCost.Cost, actualAssociatedCost.Cost);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_ConnectionType()
+        {
+            //Assert
+            Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
+            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_ConduitType()
+        {
+            //Assert
+            Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
+            Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
+            Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
         }
     }
 }
