@@ -56,57 +56,53 @@ namespace EstimatingUtilitiesLibrary
     public class LaborConstantsTable : TableBase
     {
         public static new string TableName = "TECLaborConst";
-        public static Type ObjectType = typeof(TECLabor);
-        public static  Type ReferenceType = typeof(TECBid);
+        public static Type LaborType = typeof(TECLabor);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.GetProperty("Guid"));
 
-        public static TableField PMCoef = new TableField("PMCoef", "REAL", ObjectType.GetProperty("PMCoef"));
-        public static TableField PMRate = new TableField("PMRate", "REAL", ObjectType.GetProperty("PMRate"));
+        public static TableField PMCoef = new TableField("PMCoef", "REAL", LaborType.GetProperty("PMCoef"));
+        public static TableField PMRate = new TableField("PMRate", "REAL", LaborType.GetProperty("PMRate"));
 
-        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ObjectType.GetProperty("ENGCoef"));
-        public static TableField ENGRate = new TableField("ENGRate", "REAL", ObjectType.GetProperty("ENGRate"));
+        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", LaborType.GetProperty("ENGCoef"));
+        public static TableField ENGRate = new TableField("ENGRate", "REAL", LaborType.GetProperty("ENGRate"));
 
-        public static TableField CommCoef = new TableField("CommCoef", "REAL", ObjectType.GetProperty("CommCoef"));
-        public static TableField CommRate = new TableField("CommRate", "REAL", ObjectType.GetProperty("CommRate"));
+        public static TableField CommCoef = new TableField("CommCoef", "REAL", LaborType.GetProperty("CommCoef"));
+        public static TableField CommRate = new TableField("CommRate", "REAL", LaborType.GetProperty("CommRate"));
 
-        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ObjectType.GetProperty("SoftCoef"));
-        public static TableField SoftRate = new TableField("SoftRate", "REAL", ObjectType.GetProperty("SoftRate"));
+        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", LaborType.GetProperty("SoftCoef"));
+        public static TableField SoftRate = new TableField("SoftRate", "REAL", LaborType.GetProperty("SoftRate"));
 
-        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ObjectType.GetProperty("GraphCoef"));
-        public static TableField GraphRate = new TableField("GraphRate", "REAL", ObjectType.GetProperty("GraphRate"));
+        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", LaborType.GetProperty("GraphCoef"));
+        public static TableField GraphRate = new TableField("GraphRate", "REAL", LaborType.GetProperty("GraphRate"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            BidID
+            LaborID
         };
 
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            LaborType
         };
     }
     public class SubcontractorConstantsTable : TableBase
     {
         public static new string TableName = "TECSubcontractorConst";
-        public static Type ObjectType = typeof(TECLabor);
-        public static Type ReferenceType = typeof(TECBid);
+        public static Type LaborType = typeof(TECLabor);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.GetProperty("Guid"));
 
-        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", ObjectType.GetProperty("ElectricalRate"));
-        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", ObjectType.GetProperty("ElectricalSuperRate"));
+        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", LaborType.GetProperty("ElectricalRate"));
+        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", LaborType.GetProperty("ElectricalSuperRate"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            BidID
+            LaborID
         };
 
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            LaborType
         };
     }
     public class UserAdjustmentsTable : TableBase
@@ -560,6 +556,50 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
+
+    public class BidLaborTable : TableBase
+    {
+        public static new string TableName = "TECBidTECLabor";
+        public static Type BidType = typeof(TECBid);
+        public static Type LaborType = typeof(TECLabor);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            LaborID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            BidType,
+            LaborType
+        };
+    }
+    public class TemplatesLaborTable : TableBase
+    {
+        public static new string TableName = "TECTemplatesTECLabor";
+        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type LaborType = typeof(TECLabor);
+
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            TemplatesID,
+            LaborID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            TemplatesType,
+            LaborType
+        };
+    }
+
     public class ControllerIOTypeTable : TableBase
     {
         public static new string TableName = "TECControllerTECIO";
@@ -973,6 +1013,8 @@ namespace EstimatingUtilitiesLibrary
             new PageTable(),
             new LocationTable(),
             new VisualScopeTable(),
+
+            new BidLaborTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
@@ -1017,6 +1059,8 @@ namespace EstimatingUtilitiesLibrary
             new PointTable(),
             new TagTable(),
             new ManufacturerTable(),
+
+            new TemplatesLaborTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),

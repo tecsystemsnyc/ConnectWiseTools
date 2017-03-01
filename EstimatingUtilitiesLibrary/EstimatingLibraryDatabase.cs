@@ -71,7 +71,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             bid = getBidInfo();
-            bid.Labor = getLaborConsts();
+            bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid);
             bid.ProposalScope = getAllProposalScope(bid.Systems);
@@ -294,60 +294,143 @@ namespace EstimatingUtilitiesLibrary
             bid.Labor.SoftExtraHours = adjRow[UserAdjustmentsTable.SoftExtraHours.Name].ToString().ToDouble();
             bid.Labor.GraphExtraHours = adjRow[UserAdjustmentsTable.GraphExtraHours.Name].ToString().ToDouble();
         }
-        static private TECLabor getLaborConsts()
+        static private TECLabor getLaborConstsInBid(TECBid bid)
         {
             TECLabor labor = new TECLabor();
 
-            DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
-            DataTable subContractDT = SQLiteDB.getDataFromTable(SubcontractorConstantsTable.TableName);
+            string constsCommand = "select * from (" + LaborConstantsTable.TableName + " inner join ";
+            constsCommand += BidLaborTable.TableName + " on ";
+            constsCommand += "(TECLaborConst.LaborID = TECBidTECLabor.LaborID";
+            constsCommand += " and " + BidLaborTable.BidID.Name + " = '";
+            constsCommand += bid.Guid;
+            constsCommand += "'))";
 
-            if (laborDT.Rows.Count < 1)
+            DataTable laborDT = SQLiteDB.getDataFromCommand(constsCommand);
+
+            if (laborDT.Rows.Count > 1)
+            {
+                DebugHandler.LogError("Multiple rows found in labor constants table. Using first found.");
+            }
+            else if (laborDT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
                 return labor;
             }
-            else
+
+            DataRow laborRow = laborDT.Rows[0];
+
+            labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble(0);
+            labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble(0);
+
+            labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble(0);
+            labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble(0);
+
+            labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble(0);
+            labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble(0);
+
+            labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble(0);
+            labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble(0);
+
+            labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble(0);
+            labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble(0);
+
+
+            string subConstsCommand = "select * from (" + SubcontractorConstantsTable.TableName + " inner join ";
+            subConstsCommand += BidLaborTable.TableName + " on ";
+            subConstsCommand += "(TECSubcontractorConst.LaborID = TECBidTECLabor.LaborID";
+            subConstsCommand += " and " + BidLaborTable.BidID.Name + " = '";
+            subConstsCommand += bid.Guid;
+            constsCommand += "'))";
+
+            DataTable subConstsDT = SQLiteDB.getDataFromCommand(constsCommand);
+
+            if (subConstsDT.Rows.Count > 1)
             {
-                DataRow laborRow = laborDT.Rows[0];
-
-                
-                labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble();
-                labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble();
-
-                labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble();
-                labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble();
-
-                labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble();
-                labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble();
-
-                labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble();
-                labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble();
-
-                labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble();
-                labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble();
-                
-
-                if (subContractDT.Rows.Count < 1)
-                {
-                    DebugHandler.LogError("Subcontracter constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-
-                    labor.ElectricalRate = 115;
-                    labor.ElectricalSuperRate = 125;
-
-                    return labor;
-                }
-                else
-                {
-                    DataRow subContractRow = subContractDT.Rows[0];
-                    
-                    labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(115);
-                    labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(125);
-
-                    return labor;
-                }
+                DebugHandler.LogError("Multiple rows found in subcontractor constants table. Using first found.");
             }
-            
+            else if (subConstsDT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Subcontractor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return labor;
+            }
+
+            DataRow subContractRow = subConstsDT.Rows[0];
+
+            labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(0);
+            labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(0);
+
+            return labor;
         }
+
+        static private TECLabor getLaborConstsInTemplates(TECTemplates templates)
+        {
+            TECLabor labor = new TECLabor();
+
+            string constsCommand = "select * from (" + LaborConstantsTable.TableName + " inner join ";
+            constsCommand += TemplatesLaborTable.TableName + " on ";
+            constsCommand += "(TECLaborConst.LaborID = TECTemplatesTECLabor.LaborID";
+            constsCommand += " and " + TemplatesLaborTable.TemplatesID.Name + " = '";
+            constsCommand += templates.Guid;
+            constsCommand += "'))";
+
+            DataTable laborDT = SQLiteDB.getDataFromCommand(constsCommand);
+
+            if (laborDT.Rows.Count > 1)
+            {
+                DebugHandler.LogError("Multiple rows found in labor constants table. Using first found.");
+            }
+            else if (laborDT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return labor;
+            }
+
+            DataRow laborRow = laborDT.Rows[0];
+
+            labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble(0);
+            labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble(0);
+
+            labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble(0);
+            labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble(0);
+
+            labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble(0);
+            labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble(0);
+
+            labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble(0);
+            labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble(0);
+
+            labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble(0);
+            labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble(0);
+
+
+            string subConstsCommand = "select * from (" + SubcontractorConstantsTable.TableName + " inner join ";
+            subConstsCommand += TemplatesLaborTable.TableName + " on ";
+            subConstsCommand += "(TECSubcontractorConst.LaborID = TECTemplatesTECLabor.LaborID";
+            subConstsCommand += " and " + TemplatesLaborTable.TemplatesID.Name + " = '";
+            subConstsCommand += templates.Guid;
+            constsCommand += "'))";
+
+            DataTable subConstsDT = SQLiteDB.getDataFromCommand(constsCommand);
+
+            if (subConstsDT.Rows.Count > 1)
+            {
+                DebugHandler.LogError("Multiple rows found in subcontractor constants table. Using first found.");
+            }
+            else if (subConstsDT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Subcontractor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return labor;
+            }
+
+            DataRow subContractRow = subConstsDT.Rows[0];
+
+            labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(0);
+            labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(0);
+
+            return labor;
+        }
+
+
         static private TECTemplates getTemplatesInfo()
         {
             DataTable templateInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
@@ -528,11 +611,11 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
             string command = "select * from ("+EquipmentTable.TableName+" inner join ";
-            command += ""+ SystemEquipmentTable.TableName + " on ";
+            command += SystemEquipmentTable.TableName + " on ";
             command += "(TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID";
             command += " and "+SystemEquipmentTable.SystemID.Name+" = '";
             command += systemID;
-            command += "')) order by " + SystemEquipmentTable.ScopeIndex.Name + "";
+            command += "')) order by " + SystemEquipmentTable.ScopeIndex.Name;
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
