@@ -319,6 +319,21 @@ namespace Tests
             templates.ConnectionTypeCatalog.Add(testDevConnType);
             templates.ConnectionTypeCatalog.Add(childDevConnType);
 
+            //Conduit Types
+            TECConduitType testConduitType = new TECConduitType();
+            testConduitType.Name = "EMT";
+            testConduitType.Cost = 12;
+            testConduitType.Labor = 2;
+
+            templates.ConduitTypeCatalog.Add(testConduitType);
+
+            //Associated Costs
+            TECAssociatedCost testAssociatedCost = new TECAssociatedCost();
+            testAssociatedCost.Name = "Flex";
+            testAssociatedCost.Cost = 42;
+
+            templates.AssociatedCostsCatalog.Add(testAssociatedCost);
+
             //Devices
             TECDevice testDev = new TECDevice(Guid.NewGuid());
             testDev.Name = "Test Device";

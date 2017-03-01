@@ -1085,5 +1085,118 @@ namespace Tests
             Assert.AreEqual((oldNumTags - 1), actualTemplates.Tags.Count);
         }
         #endregion Save Tag
+
+        #region Save Connection Type
+        [TestMethod]
+        public void Save_Templates_Add_ConnectionType()
+        {
+            //Act
+            int oldNumConnectionTypes = templates.ConnectionTypeCatalog.Count;
+            TECConnectionType expectedConnectionType = new TECConnectionType();
+            expectedConnectionType.Name = "Test Add Connection Type";
+            expectedConnectionType.Cost = 21.34;
+
+            templates.ConnectionTypeCatalog.Add(expectedConnectionType);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                if (connectionType.Guid == expectedConnectionType.Guid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
+            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.ConnectionTypeCatalog.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_ConnectionType()
+        {
+            //Act
+            int oldNumConnectionTypes = templates.ConnectionTypeCatalog.Count;
+            TECConnectionType connectionTypeToRemove = templates.ConnectionTypeCatalog[0];
+
+            templates.ConnectionTypeCatalog.Remove(connectionTypeToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                if (connectionType.Guid == connectionTypeToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumConnectionTypes - 1), actualTemplates.ConnectionTypeCatalog.Count);
+        }
+
+        #endregion
+
+        #region Save Conduit Type
+        [TestMethod]
+        public void Save_Templates_Add_ConduitType()
+        {
+            //Act
+            int oldNumConduitTypes = templates.ConduitTypeCatalog.Count;
+            TECConduitType expectedConduitType = new TECConduitType();
+            expectedConduitType.Name = "Test Add Conduit Type";
+            expectedConduitType.Cost = 21.34;
+
+            templates.ConduitTypeCatalog.Add(expectedConduitType);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECConduitType actualConnectionType = null;
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                if (conduitType.Guid == expectedConduitType.Guid)
+                {
+                    actualConnectionType = conduitType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedConduitType.Name, actualConnectionType.Name);
+            Assert.AreEqual(expectedConduitType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual((oldNumConduitTypes + 1), actualTemplates.ConduitTypeCatalog.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_ConduitType()
+        {
+            //Act
+            int oldNumConduitTypes = templates.ConduitTypeCatalog.Count;
+            TECConduitType conduitTypeToRemove = templates.ConduitTypeCatalog[0];
+
+            templates.ConduitTypeCatalog.Remove(conduitTypeToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                if (conduitType.Guid == conduitTypeToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConnectionTypeCatalog.Count);
+        }
+        #endregion
     }
 }
