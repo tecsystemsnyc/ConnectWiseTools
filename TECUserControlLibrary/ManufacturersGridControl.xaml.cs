@@ -45,16 +45,7 @@ namespace TECUserControlLibrary
 
         public ManufacturersGridControl()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Manufacturers Grid Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
+            InitializeComponent();
         }
     }
 }

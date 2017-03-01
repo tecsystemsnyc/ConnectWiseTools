@@ -481,7 +481,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SystemItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -499,7 +498,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 EquipmentItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -517,7 +515,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SubScopeItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)

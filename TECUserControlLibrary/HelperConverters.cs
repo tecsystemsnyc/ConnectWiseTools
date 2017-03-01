@@ -104,19 +104,10 @@ namespace TECUserControlLibrary.HelperConverters
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            double returnValue;
-
             string inString = (string)value;
             inString = inString.Trim(new Char[] { ' ','$', ',', '.' });
 
-            bool parsed = double.TryParse(inString, out returnValue);
-            Console.WriteLine("ConvertBack value passed: " + value);
-            if (!parsed)
-            {
-                Console.WriteLine("Cast to double failed in budgetPrice ConvertBack()");
-                returnValue = -1;
-            }
-            return returnValue;
+            return inString.ToDouble(-1);
         }
 
         #endregion

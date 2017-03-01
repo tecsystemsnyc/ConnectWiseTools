@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                         }
-                        Console.WriteLine("Finished loading templates");
+                        DebugHandler.LogDebugMessage("Finished loading templates.");
                     }
                 }
             }
@@ -375,7 +375,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished loading SQL Database.");
                 CurrentStatusText = "Done.";
             }
         }
@@ -434,14 +433,14 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    Console.WriteLine("Creating new bid.");
+                    DebugHandler.LogDebugMessage("Creating new bid.");
                     bidDBFilePath = null;
                     Bid = new TECBid();
                 }
             }
             else
             {
-                Console.WriteLine("Creating new bid.");
+                DebugHandler.LogDebugMessage("Creating new bid.");
                 bidDBFilePath = null;
                 Bid = new TECBid();
             }
@@ -471,7 +470,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished loading SQL Database.");
                 ResetStatus();
             }
         }
@@ -505,8 +503,8 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    EstimatingUtilitiesLibrary.ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
-                    Console.WriteLine("Scope saved to document.");
+                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
+                    DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
                 {
@@ -526,7 +524,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     CSVWriter writer = new CSVWriter(path);
                     writer.BidPointsToCSV(Bid);
-                    Console.WriteLine("Finished exporting points to a csv.");
+                    DebugHandler.LogDebugMessage("Points saved to csv.");
                 }
                 else
                 {
@@ -564,7 +562,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished loading templates");
+                DebugHandler.LogDebugMessage("Finished loading templates");
             }
             ResetStatus();
         }
@@ -616,7 +614,6 @@ namespace TECUserControlLibrary.ViewModels
                 else if (result == MessageBoxResult.Cancel)
                 {
                     e.Cancel = true;
-                    Console.WriteLine("Closing");
                 }
             }
             if (!e.Cancel)

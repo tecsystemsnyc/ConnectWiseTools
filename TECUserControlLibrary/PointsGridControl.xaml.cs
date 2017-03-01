@@ -59,16 +59,7 @@ namespace TECUserControlLibrary
         #endregion
         public PointsGridControl()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Points Grid Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
+            InitializeComponent();
         }
     }
 }

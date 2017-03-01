@@ -78,16 +78,7 @@ namespace TECUserControlLibrary
 
         public SystemsGridControl()
         {
-            try
-            {
                 InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "Systems Grid Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
         }
     }
 }

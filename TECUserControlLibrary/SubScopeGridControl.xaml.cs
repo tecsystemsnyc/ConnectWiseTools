@@ -77,16 +77,7 @@ namespace TECUserControlLibrary
 
         public SubScopeGridControl()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "SubScope Grid Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
+            InitializeComponent();
         }
     }
 }
