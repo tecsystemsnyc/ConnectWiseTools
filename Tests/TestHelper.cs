@@ -369,6 +369,7 @@ namespace Tests
             TECSubScope sysSS = new TECSubScope();
             sysSS.Name = "System SubScope";
             sysSS.Description = "Child SubScope";
+            sysSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint sysPoint = new TECPoint();
             sysPoint.Type = PointTypes.Serial;
             sysPoint.Name = "System Point";

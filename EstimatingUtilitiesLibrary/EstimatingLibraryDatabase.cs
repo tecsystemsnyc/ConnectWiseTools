@@ -2047,7 +2047,6 @@ namespace EstimatingUtilitiesLibrary
                 addObject(device, bidOrTemplates);
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
-
             }
         }
         private static void saveCompletePoints(TECSubScope subScope)
@@ -2063,6 +2062,7 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECSubScope subScope in equipment.SubScope)
             {
                 addObject(subScope, equipment);
+                if(subScope.ConduitType != null) { addObject(subScope.ConduitType, subScope); }
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
@@ -2156,7 +2156,7 @@ namespace EstimatingUtilitiesLibrary
         private static void saveDeviceChildProperties(TECDevice device)
         {
             if(device.Manufacturer != null) { addObject(device.Manufacturer, device); }
-            addObject(device.ConnectionType, device);
+            if(device.ConnectionType != null) { addObject(device.ConnectionType, device); }
         }
         #endregion
 
