@@ -242,22 +242,24 @@ namespace Tests
             Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
             Assert.AreEqual(10, actualConnectionType.Cost);
             Assert.AreEqual(12, actualConnectionType.Labor);
+            Assert.AreEqual("Test Cost", actualConnectionType.AssociatedCosts[0].Name);
         }
 
         [TestMethod]
         public void Load_Templates_ConduitType()
         {
             Assert.AreEqual("Test ConduitType", actualConduitType.Name);
-            Assert.AreEqual(10, actualConnectionType.Cost);
-            Assert.AreEqual(12, actualConnectionType.Labor);
+            Assert.AreEqual(10, actualConduitType.Cost);
+            Assert.AreEqual(12, actualConduitType.Labor);
+            Assert.AreEqual("Test Cost", actualConduitType.AssociatedCosts[0].Name);
+
         }
 
         [TestMethod]
         public void Load_Templates_AssociatedCost()
         {
             Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
-            Assert.AreEqual(10, actualConnectionType.Cost);
-            Assert.AreEqual(12, actualConnectionType.Labor);
+            Assert.AreEqual(42, actualAssociatedCost.Cost);
         }
     }
 }
