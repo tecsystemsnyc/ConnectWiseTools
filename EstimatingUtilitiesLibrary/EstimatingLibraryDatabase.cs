@@ -749,7 +749,7 @@ namespace EstimatingUtilitiesLibrary
                 DataTable typeDT = SQLiteDB.getDataFromCommand(command);
                 foreach (DataRow row in typeDT.Rows)
                 {  outIO.Add(getIOFromRow(row)); }
-            
+            return outIO;
         }
         static private ObservableCollection<TECConnection> getConnections()
         {
@@ -2138,7 +2138,7 @@ namespace EstimatingUtilitiesLibrary
             if (data.Count > 0)
             {
                 if (!SQLiteDB.Delete(tableInfo.Name, data))
-                { Console.WriteLine("Error: Couldn't remove data from " + tableInfo.Name + " table."); }
+                { DebugHandler.LogError("Couldn't remove data from " + tableInfo.Name + " table."); }
             }
         }
         #endregion
@@ -2179,7 +2179,7 @@ namespace EstimatingUtilitiesLibrary
             if (data.Count > 0)
             {
                 if (!SQLiteDB.Replace(tableInfo.Name, data))
-                { Console.WriteLine("Error: Couldn't add data to " + tableInfo.Name + " table."); }
+                { DebugHandler.LogError("Couldn't edit data in " + tableInfo.Name + " table."); }
             }
         }
         private static List<TableBase> getRelevantTablesToEdit(params Object[] objectsToEdit)
@@ -2252,7 +2252,8 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (isFieldType(tableInfo, field, relevantObjects[currentField]))
                     {
-                        if (DEBUG_GENERIC) { Console.WriteLine("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType()); }
+                        DebugHandler.LogDebugMessage("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType(), DEBUG_GENERIC);
+                        
                         var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
                         data.Add(field.Name, dataString);
                     }
@@ -2281,7 +2282,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (isFieldType(tableInfo, field, item))
                 {
-                    if (DEBUG_GENERIC) { Console.WriteLine("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType()); }
+                    DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType(), DEBUG_GENERIC);
+                    
                     var dataString = objectToDBString(field.Property.GetValue(item, null));
                     data.Add(field.Name, dataString);
                 }
