@@ -839,7 +839,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_SubScope_ConduitType()
+        public void Undo_Bid_SubScope_ConduitType()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -858,7 +858,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_SubScope_AssociatedCost()
+        public void Undo_Bid_SubScope_AssociatedCost()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
