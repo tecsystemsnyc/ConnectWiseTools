@@ -1847,9 +1847,15 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECLocation location in bid.Locations)
             { addObject(location, bid); }
             foreach (TECConduitType conduitType in bid.ConduitTypes)
-            { addObject(conduitType, bid); }
+            {
+                addObject(conduitType, bid);
+                saveScopeChildProperties(conduitType);
+            }
             foreach (TECConnectionType connectionType in bid.ConnectionTypes)
-            { addObject(connectionType, bid); }
+            {
+                addObject(connectionType, bid);
+                saveScopeChildProperties(connectionType);
+            }
             foreach (TECTag tag in bid.Tags)
             { addObject(tag, bid); }
             foreach (TECScopeBranch branch in bid.ScopeTree)
