@@ -144,8 +144,6 @@ namespace EstimatingUtilitiesLibrary
 
         public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues) 
         {
-            bool returnCode = true;
-            
             string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
             bool first = true;
             foreach (KeyValuePair<string, string> pk in primaryKeyValues)
@@ -162,27 +160,19 @@ namespace EstimatingUtilitiesLibrary
             try
             {
                 nonQueryCommand(commandString);
+                return true;
             }
             catch (Exception e)
             {
                 DebugHandler.LogError("Deletion failed. Command: " + commandString + " Exception: " + e.Message);
-                returnCode = false;
+                return false;
             }
-            return returnCode;
         }
 
         public void nonQueryCommand(string commandText)
         {
-            try
-            {
-                SQLiteCommand command = new SQLiteCommand(commandText, Connection);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                DebugHandler.LogError("NonQueryCommand failed in SQLiteDB. Command: " + commandText + " Exception: " + e.Message);
-                throw e;
-            }
+            SQLiteCommand command = new SQLiteCommand(commandText, Connection);
+            command.ExecuteNonQuery();
         }
 
         public DataTable getDataFromTable(string tableName, params string[] fields)
@@ -208,16 +198,8 @@ namespace EstimatingUtilitiesLibrary
 
             string query = "select " + fieldString;
             query += "from " + tableName;
-
-            try
-            {
-                data = getDataFromCommand(query);
-            }
-            catch (Exception e)
-            {
-                DebugHandler.LogError("getDataFromTable failed in SQLiteDB. Command: " + query + " Exception: " + e.Message);
-                throw e;
-            }
+            
+            data = getDataFromCommand(query);
 
             return data;
         }

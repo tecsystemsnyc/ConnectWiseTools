@@ -188,7 +188,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished saving budget CSV.");
+                DebugHandler.LogDebugMessage("Saving budget to csv.");
             }
         }
 

@@ -21,7 +21,7 @@ namespace DebugLibrary
             }
         }
 
-        private const bool debugCreatesLog = true;
+        private const bool DEBUG_CREATES_LOG = true;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -39,7 +39,7 @@ namespace DebugLibrary
                 else
                 {
                     Console.WriteLine(message);
-                    if (debugCreatesLog)
+                    if (DEBUG_CREATES_LOG)
                     {
                         addToLog(message);
                     }
@@ -59,7 +59,7 @@ namespace DebugLibrary
                 else
                 {
                     Console.WriteLine(error);
-                    if (debugCreatesLog)
+                    if (DEBUG_CREATES_LOG)
                     {
                         addToLog(error);
                     }
@@ -79,7 +79,7 @@ namespace DebugLibrary
                 //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
                 logPath = createLogPath();
-                File.Create(logPath);
+                File.Create(logPath).Close();
             }
 
             using (StreamWriter writer = new StreamWriter(logPath, true))

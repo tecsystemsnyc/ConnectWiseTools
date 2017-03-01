@@ -642,7 +642,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         catch (Exception ex)
                         {
-                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
                             EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
                         }
                     }
@@ -694,7 +694,6 @@ namespace TECUserControlLibrary.ViewModels
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
-                    Console.WriteLine("Finished saving SQL Database.");
                     ResetStatus();
                 };
 
@@ -759,7 +758,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
                         EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
                     }
                 }

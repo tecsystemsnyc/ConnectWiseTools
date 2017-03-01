@@ -177,7 +177,7 @@ namespace TemplateBuilder.ViewModel
                         {
                             DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
                         }
-                        Console.WriteLine("Finished loading templates");
+                        DebugHandler.LogDebugMessage("Finished loading templates");
                     }
                 }
             }
@@ -222,7 +222,6 @@ namespace TemplateBuilder.ViewModel
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished loading SQL Database.");
             }
         }
         private void SaveExecute()
@@ -236,8 +235,6 @@ namespace TemplateBuilder.ViewModel
                 //EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
 
                 Stack.ClearStacks();
-
-                Console.WriteLine("Finished saving SQL Database.");
             }
             else
             {
@@ -257,8 +254,6 @@ namespace TemplateBuilder.ViewModel
                     EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
 
                     Stack.ClearStacks();
-
-                    Console.WriteLine("Finished saving SQL Database.");
                 }
                 else
                 {
@@ -280,7 +275,6 @@ namespace TemplateBuilder.ViewModel
                 else if (result == MessageBoxResult.Cancel)
                 {
                     e.Cancel = true;
-                    Console.WriteLine("Closing");
                 }
             }
             if (!e.Cancel)

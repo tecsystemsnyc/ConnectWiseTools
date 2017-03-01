@@ -1394,7 +1394,6 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSystem()
         {
             TECTag tagToAdd = bid.Tags[1];
-            Console.WriteLine(tagToAdd.Text);
             TECSystem systemToEdit = bid.Systems[0];
 
             systemToEdit.Tags.Add(tagToAdd);
@@ -1416,7 +1415,6 @@ namespace Tests
             bool tagExists = false;
             foreach (TECTag tag in finalSystem.Tags)
             {
-                Console.WriteLine(tag.Text);
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
 
@@ -1427,7 +1425,6 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToEquipment()
         {
             TECTag tagToAdd = bid.Tags[1];
-            Console.WriteLine(tagToAdd.Text);
             TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
 
             equipmentToEdit.Tags.Add(tagToAdd);
@@ -1456,7 +1453,6 @@ namespace Tests
             bool tagExists = false;
             foreach (TECTag tag in finalEquipment.Tags)
             {
-                Console.WriteLine(tag.Text);
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
 
@@ -1467,7 +1463,6 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSubScope()
         {
             TECTag tagToAdd = bid.Tags[1];
-            Console.WriteLine(tagToAdd.Text);
             TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
 
             subScopeToEdit.Tags.Add(tagToAdd);
@@ -1497,7 +1492,6 @@ namespace Tests
             bool tagExists = false;
             foreach (TECTag tag in finalSubScope.Tags)
             {
-                Console.WriteLine(tag.Text);
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
 
@@ -1508,7 +1502,6 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToPoint()
         {
             TECTag tagToAdd = bid.Tags[1];
-            Console.WriteLine(tagToAdd.Text);
             TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
 
             PointToEdit.Tags.Add(tagToAdd);
@@ -1541,7 +1534,6 @@ namespace Tests
             bool tagExists = false;
             foreach (TECTag tag in finalPoint.Tags)
             {
-                Console.WriteLine(tag.Text);
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
 
@@ -1552,7 +1544,6 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToController()
         {
             TECTag tagToAdd = bid.Tags[1];
-            Console.WriteLine(tagToAdd.Text);
             TECController ControllerToEdit = bid.Controllers[0];
 
             ControllerToEdit.Tags.Add(tagToAdd);
@@ -1574,7 +1565,6 @@ namespace Tests
             bool tagExists = false;
             foreach (TECTag tag in finalController.Tags)
             {
-                Console.WriteLine(tag.Text);
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
 
@@ -2613,12 +2603,10 @@ namespace Tests
                 if (propScope.Notes.Count > 0)
                 {
                     noteToModify = propScope.Notes[0];
-                    //Console.WriteLine("Setting noteToModify as: " + noteToModify.Name);
                     break;
                 }
             }
             int oldNumNotes = noteToModify.Branches.Count;
-            //Console.WriteLine("OldNumNotes: " + oldNumNotes);
             TECScopeBranch expectedNote = new TECScopeBranch();
             expectedNote.Name = "Added Prop Note Note";
             noteToModify.Branches.Add(expectedNote);
@@ -2633,8 +2621,6 @@ namespace Tests
                 {
                     if (note.Guid == noteToModify.Guid)
                     {
-                        //Console.WriteLine("noteToModify Guid found in actual bid. Note name: " + note.Name);
-                        //Console.WriteLine("NewNumNotes: " + note.Branches.Count);
                         Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
                         foreach (TECScopeBranch noteNote in note.Branches)
                         {
