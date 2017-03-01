@@ -21,7 +21,7 @@ namespace DebugLibrary
             }
         }
 
-        private const bool debugCreatesLog = false;
+        private const bool DEBUG_CREATES_LOG = false;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -39,7 +39,7 @@ namespace DebugLibrary
                 else
                 {
                     Console.WriteLine(message);
-                    if (debugCreatesLog)
+                    if (DEBUG_CREATES_LOG)
                     {
                         addToLog(message);
                     }
@@ -51,6 +51,7 @@ namespace DebugLibrary
         {
             if (doLog)
             {
+                error = "ERROR: " + error;
                 if (isReleased)
                 {
                     addToLog(error);
@@ -59,7 +60,7 @@ namespace DebugLibrary
                 else
                 {
                     Console.WriteLine(error);
-                    if (debugCreatesLog)
+                    if (DEBUG_CREATES_LOG)
                     {
                         addToLog(error);
                     }
@@ -79,12 +80,18 @@ namespace DebugLibrary
                 //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
                 logPath = createLogPath();
-                File.Create(logPath);
+                File.Create(logPath).Close();
             }
 
             using (StreamWriter writer = new StreamWriter(logPath, true))
             {
-                writer.WriteLine(message);
+                DateTime date = DateTime.Now;
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
+                DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+                dtfi = culture.DateTimeFormat;
+                dtfi.TimeSeparator = "-";
+
+                writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
             }
         }
 

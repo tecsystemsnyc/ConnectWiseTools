@@ -168,7 +168,7 @@ namespace EstimatingLibrary
                 else
                 {
                     string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
-                    throw new Exception(message);
+                    throw new InvalidCastException(message);
                 }
             }
 

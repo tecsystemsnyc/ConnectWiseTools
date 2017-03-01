@@ -2524,15 +2524,9 @@ namespace EstimatingUtilitiesLibrary
             TECScope child;
             TECScope parent;
 
-            try
-            {
-                child = (childObject as TECScope);
-                parent = (parentObject as TECScope);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidCastException(e.Message);
-            }
+            
+            child = (childObject as TECScope);
+            parent = (parentObject as TECScope);
 
             int quantity = 0;
             var childCollection = getChildCollection(childObject, parentObject);

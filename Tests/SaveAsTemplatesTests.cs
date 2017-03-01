@@ -13,6 +13,8 @@ namespace Tests
     [TestClass]
     public class SaveAsTemplatesTests
     {
+        private const bool DEBUG = false;
+
         static TECTemplates expectedTemplates;
         static TECSystem expectedSystem;
         static TECEquipment expectedEquipment;
@@ -136,8 +138,16 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveAs test templates saved to: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveAs test templates saved to: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
+
+
         }
 
         [TestMethod]

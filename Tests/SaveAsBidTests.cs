@@ -14,6 +14,9 @@ namespace Tests
     [TestClass]
     public class SaveAsBidTests
     {
+        private const bool DEBUG = false;
+
+
         static TECBid expectedBid;
         static TECLabor expectedLabor;
         static TECSystem expectedSystem;
@@ -269,8 +272,16 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveAs test bid saved to: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveAs test bid saved to: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
+
+
         }
 
         [TestMethod]
