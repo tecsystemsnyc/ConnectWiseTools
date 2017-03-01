@@ -2529,7 +2529,6 @@ namespace EstimatingUtilitiesLibrary
         {
             TECScope child;
             TECScope parent;
-
             
             child = (childObject as TECScope);
             parent = (parentObject as TECScope);
