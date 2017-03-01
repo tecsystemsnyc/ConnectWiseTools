@@ -372,6 +372,8 @@ namespace EstimatingLibrary
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
             _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
+            _labor = new TECLabor();
+            _parameters = new TECBidParameters();
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
