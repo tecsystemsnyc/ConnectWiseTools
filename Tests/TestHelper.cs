@@ -421,6 +421,7 @@ namespace Tests
             subScope.Devices.Add(childDev);
             subScope.Tags.Add(ssTag);
             subScope.ConduitType = testConduitType;
+            subScope.AssociatedCosts.Add(testAssociatedCost);
 
             templates.SubScopeTemplates.Add(subScope);
 

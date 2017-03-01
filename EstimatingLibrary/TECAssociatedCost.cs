@@ -6,26 +6,9 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECAssociatedCost : TECObject
+    public class TECAssociatedCost : TECScope
     {
         #region Properties
-        private Guid _guid;
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
-
-        private string _name;
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                var temp = this.Copy();
-                _name = value;
-                NotifyPropertyChanged("Name", temp, this);
-            }
-        }
 
         private double _cost;
         public double Cost
@@ -41,12 +24,8 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECAssociatedCost(Guid guid)
-        {
-            _guid = guid;
-            _name = "";
-            _cost = 0;
-        }
+        public TECAssociatedCost(Guid guid) : base(guid)
+        { _cost = 0; }
 
         public TECAssociatedCost() : this(Guid.NewGuid()) { }
         #endregion
@@ -57,6 +36,11 @@ namespace EstimatingLibrary
             outCost._name = this.Name;
             outCost._cost = this.Cost;
             return outCost;
+        }
+
+        public override object DragDropCopy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

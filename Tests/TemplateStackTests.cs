@@ -183,7 +183,79 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-        
+
+        [TestMethod]
+        public void Undo_Template_AssociatedCostsCatalog()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECAssociatedCost> expected = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost item in Template.AssociatedCostsCatalog)
+            {
+                expected.Add(item);
+            }
+            TECAssociatedCost edit = new TECAssociatedCost();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.AssociatedCostsCatalog.Add(edit);
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECAssociatedCost> actual = Template.AssociatedCostsCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_ConnectionTypeCatalog()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECConnectionType> expected = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType item in Template.ConnectionTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            TECConnectionType edit = new TECConnectionType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.ConnectionTypeCatalog.Add(edit);
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECConnectionType> actual = Template.ConnectionTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_ConduitTypeCatalog()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECConduitType> expected = new ObservableCollection<TECConduitType>();
+            foreach (TECConduitType item in Template.ConduitTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            TECConduitType edit = new TECConduitType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.ConduitTypeCatalog.Add(edit);
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECConduitType> actual = Template.ConduitTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
         [TestMethod]
         public void Undo_Template_Tags()
         {
@@ -486,6 +558,44 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Undo_Template_SubScope_ConduitType()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECConduitType expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType;
+            TECConduitType edit = new TECConduitType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType = edit;
+            testStack.Undo();
+
+            //assert
+            TECConduitType actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_SubScope_AssociatedCost()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECAssociatedCost expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            TECAssociatedCost edit = new TECAssociatedCost();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0] = edit;
+            testStack.Undo();
+
+            //assert
+            TECAssociatedCost actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
         public void Undo_Template_Device_Name()
         {
             //Arrange
@@ -561,6 +671,26 @@ namespace Tests
 
             //assert
             Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_Device_ConnectionType()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            Guid expected = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType.Guid.ToString());
+            TECConnectionType edit = new TECConnectionType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType = edit;
+            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType.Guid.ToString());
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }

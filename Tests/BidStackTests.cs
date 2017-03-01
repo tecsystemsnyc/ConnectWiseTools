@@ -838,6 +838,44 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Undo_Template_SubScope_ConduitType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECConduitType expected = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
+            TECConduitType edit = new TECConduitType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].ConduitType = edit;
+            testStack.Undo();
+
+            //assert
+            TECConduitType actual = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_SubScope_AssociatedCost()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECAssociatedCost expected = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            TECAssociatedCost edit = new TECAssociatedCost();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0] = edit;
+            testStack.Undo();
+
+            //assert
+            TECAssociatedCost actual = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+
         #endregion
 
         #region Point Properties
