@@ -581,17 +581,17 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECAssociatedCost expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            int expectedCount = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
             TECAssociatedCost edit = new TECAssociatedCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0] = edit;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Add(edit);
             testStack.Undo();
 
             //assert
-            TECAssociatedCost actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts[0];
-            Assert.AreEqual(expected, actual, "Not Undone");
+            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
+            Assert.AreEqual(expectedCount, actual, "Not Undone");
 
         }
 

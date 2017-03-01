@@ -12,10 +12,7 @@ namespace EstimatingLibrary
         #region Properties
 
         private Guid _guid;
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
+        public Guid Guid { get { return _guid; } }
 
         private int _numPoints;
         public int NumPoints

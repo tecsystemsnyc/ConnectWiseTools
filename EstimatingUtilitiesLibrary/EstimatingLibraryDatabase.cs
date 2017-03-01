@@ -296,8 +296,6 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECLabor getLaborConstsInBid(TECBid bid)
         {
-            TECLabor labor = new TECLabor();
-
             string constsCommand = "select * from (" + LaborConstantsTable.TableName + " inner join ";
             constsCommand += BidLaborTable.TableName + " on ";
             constsCommand += "(TECLaborConst.LaborID = TECBidTECLabor.LaborID";
@@ -314,10 +312,12 @@ namespace EstimatingUtilitiesLibrary
             else if (laborDT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-                return labor;
+                return new TECLabor();
             }
 
             DataRow laborRow = laborDT.Rows[0];
+            Guid laborID = new Guid(laborRow[LaborConstantsTable.LaborID.Name].ToString());
+            TECLabor labor = new TECLabor(laborID);
 
             labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble(0);
             labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble(0);
@@ -340,9 +340,9 @@ namespace EstimatingUtilitiesLibrary
             subConstsCommand += "(TECSubcontractorConst.LaborID = TECBidTECLabor.LaborID";
             subConstsCommand += " and " + BidLaborTable.BidID.Name + " = '";
             subConstsCommand += bid.Guid;
-            constsCommand += "'))";
+            subConstsCommand += "'))";
 
-            DataTable subConstsDT = SQLiteDB.getDataFromCommand(constsCommand);
+            DataTable subConstsDT = SQLiteDB.getDataFromCommand(subConstsCommand);
 
             if (subConstsDT.Rows.Count > 1)
             {
@@ -408,9 +408,9 @@ namespace EstimatingUtilitiesLibrary
             subConstsCommand += "(TECSubcontractorConst.LaborID = TECTemplatesTECLabor.LaborID";
             subConstsCommand += " and " + TemplatesLaborTable.TemplatesID.Name + " = '";
             subConstsCommand += templates.Guid;
-            constsCommand += "'))";
+            subConstsCommand += "'))";
 
-            DataTable subConstsDT = SQLiteDB.getDataFromCommand(constsCommand);
+            DataTable subConstsDT = SQLiteDB.getDataFromCommand(subConstsCommand);
 
             if (subConstsDT.Rows.Count > 1)
             {
@@ -429,8 +429,7 @@ namespace EstimatingUtilitiesLibrary
 
             return labor;
         }
-
-
+        
         static private TECTemplates getTemplatesInfo()
         {
             DataTable templateInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
@@ -2384,7 +2383,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         var dataString = objectToDBString(getQuantityInParentCollection(inputObjects[0], inputObjects[1]));
                         data.Add(field.Name, dataString);
-                    } else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
+                    } else if (field.Property.Name == "Version" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(Properties.Settings.Default.Version);
                         data.Add(field.Name, dataString);

@@ -65,6 +65,12 @@ namespace Tests
             bid.Tags.Add(tag1);
             bid.Tags.Add(tag2);
 
+
+            //Associated Costs
+            var testCost = new TECAssociatedCost();
+            testCost.Name = "Test Cost";
+            bid.AssociatedCostsCatalog.Add(testCost);
+
             //Locations
             var cellar = new TECLocation();
             cellar.Name = "Cellar";
@@ -74,8 +80,7 @@ namespace Tests
             location2.Name = "2nd Floor";
             var location3 = new TECLocation();
             location3.Name = "3rd Floor";
-
-
+            
             bid.Locations.Add(cellar);
             bid.Locations.Add(location1);
             bid.Locations.Add(location2);
@@ -132,12 +137,13 @@ namespace Tests
             subScope1.Description = "Description 1";
             subScope1.Quantity = 654;
             subScope1.Location = location3;
-            
+            subScope1.AssociatedCosts.Add(testCost);
             subScope1.Tags.Add(tag1);
 
             var subScope2 = new TECSubScope();
             subScope2.Name = "Empty SubScope";
             subScope2.Description = "Description 2";
+            subScope2.AssociatedCosts.Add(testCost);
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
 
@@ -395,6 +401,7 @@ namespace Tests
             TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";
+            equipSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint equipPoint = new TECPoint();
             equipPoint.Type = PointTypes.AI;
             equipPoint.Name = "Equipment Point";

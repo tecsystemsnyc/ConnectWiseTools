@@ -383,7 +383,21 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Controllers.Remove((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECBid)StackItem.Item2).ConnectionTypes.Remove((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECBid)StackItem.Item2).ConduitTypes.Remove((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
+                }
             }
+            else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
+            { ((TECScope)StackItem.Item2).AssociatedCosts.Remove((TECAssociatedCost)StackItem.Item3); }
             else if (StackItem.Item2 is TECSystem)
             {
                 ((TECSystem)StackItem.Item2).Equipment.Remove((TECEquipment)StackItem.Item3);
@@ -407,11 +421,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 ((TECPage)StackItem.Item2).PageScope.Remove((TECVisualScope)StackItem.Item3);
             }
-            else if (StackItem.Item3 is TECDrawing)
+            else if (StackItem.Item2 is TECDrawing)
             {
                 ((TECDrawing)StackItem.Item2).Pages.Remove((TECPage)StackItem.Item3);
             }
-
+            
             else if(StackItem.Item2 is TECTemplates)
             {
                 if(StackItem.Item3 is TECSystem)
@@ -441,6 +455,18 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECController)
                 {
                     ((TECTemplates)StackItem.Item2).ControllerTemplates.Remove((TECController)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConnectionTypeCatalog.Remove((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConduitTypeCatalog.Remove((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
             }
         }
@@ -488,7 +514,21 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Controllers.Add((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECBid)StackItem.Item2).ConnectionTypes.Add((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECBid)StackItem.Item2).ConduitTypes.Add((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
+                }
             }
+            else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
+            { ((TECScope)StackItem.Item2).AssociatedCosts.Add((TECAssociatedCost)StackItem.Item3); }
             else if (StackItem.Item2 is TECSystem)
             {
                 ((TECSystem)StackItem.Item2).Equipment.Add((TECEquipment)StackItem.Item3);
@@ -516,7 +556,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 ((TECDrawing)StackItem.Item2).Pages.Add((TECPage)StackItem.Item3);
             }
-
+           
             else if (StackItem.Item2 is TECTemplates)
             {
                 if (StackItem.Item3 is TECSystem)
@@ -546,6 +586,18 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECController)
                 {
                     ((TECTemplates)StackItem.Item2).ControllerTemplates.Add((TECController)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConnectionTypeCatalog.Add((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConduitTypeCatalog.Add((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
                 }
             }
         }
