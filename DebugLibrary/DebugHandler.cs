@@ -21,7 +21,7 @@ namespace DebugLibrary
             }
         }
 
-        private const bool DEBUG_CREATES_LOG = true;
+        private const bool DEBUG_CREATES_LOG = false;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -51,6 +51,7 @@ namespace DebugLibrary
         {
             if (doLog)
             {
+                error = "ERROR: " + error;
                 if (isReleased)
                 {
                     addToLog(error);
@@ -84,7 +85,13 @@ namespace DebugLibrary
 
             using (StreamWriter writer = new StreamWriter(logPath, true))
             {
-                writer.WriteLine(message);
+                DateTime date = DateTime.Now;
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
+                DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+                dtfi = culture.DateTimeFormat;
+                dtfi.TimeSeparator = "-";
+
+                writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
             }
         }
 
