@@ -519,9 +519,9 @@ namespace Tests
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
             TECAssociatedCost expectedCost = new TECAssociatedCost();
-            int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             templates.AssociatedCostsCatalog.Add(expectedCost);
             expectedSubScope.AssociatedCosts.Add(expectedCost);
+            int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
@@ -532,12 +532,6 @@ namespace Tests
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
                     actualSubScope = SubScope;
-                    foreach(TECAssociatedCost cost in actualSubScope.AssociatedCosts)
-                    {
-                        if (cost.Guid != expectedCost.Guid){
-                            Assert.Fail();
-                        }
-                    }
                 }
             }
 

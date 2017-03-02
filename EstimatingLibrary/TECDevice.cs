@@ -33,6 +33,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _connectionType = value;
                 NotifyPropertyChanged("ConnectionType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -43,6 +44,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _ioType = value;
                 NotifyPropertyChanged("IOType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public TECManufacturer Manufacturer

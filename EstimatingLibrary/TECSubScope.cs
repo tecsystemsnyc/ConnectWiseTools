@@ -101,6 +101,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         
