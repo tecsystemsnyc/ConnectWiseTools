@@ -2004,6 +2004,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
                 addObject(subScope, templates);
+                if (subScope.ConduitType != null) { addObject(subScope.ConduitType, subScope); }
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);

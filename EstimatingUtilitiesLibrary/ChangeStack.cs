@@ -26,7 +26,7 @@ namespace EstimatingUtilitiesLibrary
         public TECTemplates Templates;
 
         private const bool DEBUG_PROPERTIES = false;
-        private const bool DEBUG_STACK = false;
+        private const bool DEBUG_STACK = true;
         private const bool DEBUG_REGISTER = false;
         
         private bool isDoing = false;
@@ -469,6 +469,11 @@ namespace EstimatingUtilitiesLibrary
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
             }
+            else
+            {
+                string message = "Target object: " + StackItem.Item2 + " and reference object " + StackItem.Item3 + " not handled in add";
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            }
         }
         private void handleRemove(Tuple<Change, object, object> StackItem)
         {
@@ -600,6 +605,11 @@ namespace EstimatingUtilitiesLibrary
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
                 }
             }
+            else{
+                string message = "Target object: " + StackItem.Item2 + " and reference object " + StackItem.Item3 + " not handled in remove";
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            }
+
         }
         private void handleEdit(Tuple<Change, object, object> StackItem)
         {

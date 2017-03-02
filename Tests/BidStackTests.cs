@@ -862,16 +862,16 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECAssociatedCost expected = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            int expected = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
             TECAssociatedCost edit = new TECAssociatedCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0] = edit;
+            Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Add(edit);
             testStack.Undo();
 
             //assert
-            TECAssociatedCost actual = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts[0];
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }

@@ -131,7 +131,8 @@ namespace EstimatingLibrary
             _description = sourceSubScope.Description;
             _location = sourceSubScope.Location;
             _quantity = sourceSubScope.Quantity;
-            _associatedCosts = sourceSubScope.AssociatedCosts;
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>(sourceSubScope.AssociatedCosts);
+            _conduitType = sourceSubScope.ConduitType;
             _tags = new ObservableCollection<TECTag>(sourceSubScope.Tags);
         }
         #endregion //Constructors

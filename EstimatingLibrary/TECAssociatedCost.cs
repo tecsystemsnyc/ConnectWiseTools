@@ -33,6 +33,7 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             var outCost = new TECAssociatedCost(this.Guid);
+            outCost._guid = this.Guid;
             outCost._name = this.Name;
             outCost._cost = this.Cost;
             return outCost;

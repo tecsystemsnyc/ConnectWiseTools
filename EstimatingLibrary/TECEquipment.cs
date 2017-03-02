@@ -107,7 +107,7 @@ namespace EstimatingLibrary
 
             _location = equipmentSource.Location;
             _quantity = equipmentSource.Quantity;
-            _associatedCosts = equipmentSource.AssociatedCosts;
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>(equipmentSource.AssociatedCosts);
             _tags = new ObservableCollection<TECTag>(equipmentSource.Tags);
         }
         #endregion //Constructors

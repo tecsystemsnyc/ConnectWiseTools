@@ -975,7 +975,7 @@ namespace EstimatingUtilitiesLibrary
     public class SubScopeConduitTypeTable : TableBase
     {
         public static new string TableName = "TECSubScopeTECConduitType";
-        public static Type ObjectType = typeof(TECDevice);
+        public static Type ObjectType = typeof(TECSubScope);
         public static Type ReferenceType = typeof(TECConduitType);
 
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));

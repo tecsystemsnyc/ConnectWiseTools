@@ -118,7 +118,7 @@ namespace EstimatingLibrary
             outController._description = Description;
             outController._cost = Cost;
             outController._manufacturer = Manufacturer;
-            outController._associatedCosts = AssociatedCosts;
+            outController._associatedCosts = new ObservableCollection<TECAssociatedCost>( AssociatedCosts);
 
             foreach (TECIO io in this.IO)
             {

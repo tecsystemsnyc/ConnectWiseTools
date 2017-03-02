@@ -77,7 +77,7 @@ namespace EstimatingLibrary
             _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
             _quantity = deviceSource.Quantity;
-            _associatedCosts = deviceSource.AssociatedCosts;
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>(deviceSource.AssociatedCosts);
             _tags = new ObservableCollection<TECTag>(deviceSource.Tags);
         }
         #endregion //Constructors

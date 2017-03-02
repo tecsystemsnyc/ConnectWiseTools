@@ -55,6 +55,7 @@ namespace EstimatingLibrary
             _type = pointSource.Type;
             _quantity = pointSource.Quantity;
             _tags = pointSource.Tags;
+            _associatedCosts = pointSource.AssociatedCosts;
         }
         #endregion //Constructors
 

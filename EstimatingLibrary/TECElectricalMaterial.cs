@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,8 @@ namespace EstimatingLibrary
             outType._name = this._name;
             outType._cost = this._cost;
             outType._labor = this._labor;
+            outType._associatedCosts = new ObservableCollection<TECAssociatedCost>(AssociatedCosts);
+
             return outType;
         }
 
