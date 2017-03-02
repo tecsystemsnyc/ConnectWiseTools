@@ -26,7 +26,7 @@ namespace EstimatingUtilitiesLibrary
         public TECTemplates Templates;
 
         private const bool DEBUG_PROPERTIES = false;
-        private const bool DEBUG_STACK = true;
+        private const bool DEBUG_STACK = false;
         private const bool DEBUG_REGISTER = false;
         
         private bool isDoing = false;
