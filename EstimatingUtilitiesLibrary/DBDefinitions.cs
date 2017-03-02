@@ -1105,6 +1105,9 @@ namespace EstimatingUtilitiesLibrary
             new PageTable(),
             new LocationTable(),
             new VisualScopeTable(),
+
+            new BidLaborTable(),
+            new TemplatesLaborTable(),
             new ProposalScopeTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
