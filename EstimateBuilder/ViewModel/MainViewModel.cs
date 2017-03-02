@@ -33,13 +33,9 @@ namespace EstimateBuilder.ViewModel
             programName = "Estimate Builder";
 
             if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            }
+            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
-            {
-                Version = "Undeployed Version";
-            }
+            { Version = "Undeployed Version"; }
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             
