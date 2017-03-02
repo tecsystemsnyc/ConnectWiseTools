@@ -116,6 +116,7 @@ namespace EstimatingUtilitiesLibrary
             
 
             templates = getTemplatesInfo();
+            templates.Labor = getLaborConstsInTemplates(templates);
             templates.SystemTemplates = getAllSystems();
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();

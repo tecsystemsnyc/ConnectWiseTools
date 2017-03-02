@@ -12,6 +12,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         private Guid _guid;
+        private TECLabor _labor;
         private ObservableCollection<TECSystem> _systemTemplates;
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
@@ -26,6 +27,17 @@ namespace EstimatingLibrary
         public Guid Guid
         {
             get { return _guid; }
+        }
+        public TECLabor Labor
+        {
+            get { return _labor; }
+            set
+            {
+                var temp = Copy();
+                _labor = value;
+                NotifyPropertyChanged("Labor", temp, this);
+                Labor.PropertyChanged += objectPropertyChanged;
+            }
         }
         public ObservableCollection<TECSystem> SystemTemplates
         {
@@ -249,6 +261,11 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("Edit", this, sender);
             }
+        }
+
+        private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged("ChildChanged", this, sender);
         }
         #endregion
     }

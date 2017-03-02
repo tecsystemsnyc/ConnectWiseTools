@@ -86,6 +86,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_LaborConsts()
+        {
+            //Arrange
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(10.0, actualLabor.PMCoef);
+            Assert.AreEqual(10.1, actualLabor.PMRate);
+            Assert.AreEqual(11.0, actualLabor.ENGCoef);
+            Assert.AreEqual(11.2, actualLabor.ENGRate);
+            Assert.AreEqual(12.0, actualLabor.CommCoef);
+            Assert.AreEqual(12.3, actualLabor.CommRate);
+            Assert.AreEqual(13.0, actualLabor.SoftCoef);
+            Assert.AreEqual(13.4, actualLabor.SoftRate);
+            Assert.AreEqual(14.0, actualLabor.GraphCoef);
+            Assert.AreEqual(14.5, actualLabor.GraphRate);
+        }
+
+        [TestMethod]
         public void Load_Templates_System()
         {
             //Arrange
