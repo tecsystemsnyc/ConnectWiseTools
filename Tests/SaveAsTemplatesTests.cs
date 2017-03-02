@@ -142,7 +142,7 @@ namespace Tests
 
             foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
             {
-                if (cost.Guid == expectedController.Guid)
+                if (cost.Guid == expectedAssociatedCost.Guid)
                 {
                     actualAssociatedCost = cost;
                     break;

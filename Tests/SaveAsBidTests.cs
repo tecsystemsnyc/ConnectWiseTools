@@ -14,7 +14,7 @@ namespace Tests
     [TestClass]
     public class SaveAsBidTests
     {
-        private const bool DEBUG = true;
+        private const bool DEBUG = false;
 
 
         static TECBid expectedBid;
