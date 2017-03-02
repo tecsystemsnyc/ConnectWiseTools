@@ -94,6 +94,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EstimateBuilderTests.cs" />
     <Compile Include="LoadBidTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

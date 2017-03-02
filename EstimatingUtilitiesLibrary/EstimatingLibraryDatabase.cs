@@ -166,9 +166,10 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB.Connection.Close();
         }
-        static public void UpdateBidToDB(string path, ChangeStack changeStack)
+        static public void UpdateBidToDB(string path, ChangeStack changeStack, bool doBackup = true)
         {
-            createBackup(path);
+            if (doBackup) { createBackup(path); }
+            
             string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
 
             File.Copy(path, tempPath);
