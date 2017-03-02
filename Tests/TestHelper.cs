@@ -320,7 +320,7 @@ namespace Tests
             testDevConnType.Name = "FourC18";
 
             TECConnectionType childDevConnType = new TECConnectionType();
-            childDevConnType.Name = "FourC18";
+            childDevConnType.Name = "ThreeC18";
 
             templates.ConnectionTypeCatalog.Add(testDevConnType);
             templates.ConnectionTypeCatalog.Add(childDevConnType);

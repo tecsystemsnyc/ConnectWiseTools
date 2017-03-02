@@ -678,7 +678,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.DeviceCatalog[0];
             var testConnectionType = new TECConnectionType();
-            testConnectionType.Name = "WireTHHN12";
+            testConnectionType.Name = "Test Add Connection Type Device";
             templates.ConnectionTypeCatalog.Add(testConnectionType);
             expectedDevice.ConnectionType = testConnectionType;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
