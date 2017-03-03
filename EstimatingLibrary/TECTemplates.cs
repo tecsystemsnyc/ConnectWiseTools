@@ -202,8 +202,12 @@ namespace EstimatingLibrary
             Labor.PropertyChanged += objectPropertyChanged;
         }
 
-        public TECTemplates(TECTemplates templatesSource) : this()
+        public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
+            if (_labor != null)
+            {
+                _labor = templatesSource.Labor;
+            }
             foreach(TECSystem system in templatesSource.SystemTemplates)
             {
                 SystemTemplates.Add(system);
@@ -239,6 +243,10 @@ namespace EstimatingLibrary
             foreach(TECAssociatedCost cost in templatesSource.AssociatedCostsCatalog)
             {
                 AssociatedCostsCatalog.Add(cost);
+            }
+            foreach(TECController controller in templatesSource.ControllerTemplates)
+            {
+                ControllerTemplates.Add(controller);
             }
         }
 
