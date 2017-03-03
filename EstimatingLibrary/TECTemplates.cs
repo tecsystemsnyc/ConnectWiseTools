@@ -198,6 +198,8 @@ namespace EstimatingLibrary
             ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
             ConduitTypeCatalog.CollectionChanged += CollectionChanged;
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+
+            Labor.PropertyChanged += objectPropertyChanged;
         }
 
         public TECTemplates(TECTemplates templatesSource) : this()
