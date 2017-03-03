@@ -2051,6 +2051,7 @@ namespace EstimatingUtilitiesLibrary
         private static void saveCompleteTemplate(TECTemplates templates)
         {
             addObject(templates, templates);
+            addObject(templates.Labor, templates);
             foreach(TECTag tag in templates.Tags)
             { addObject(tag, templates); }
             foreach (TECSystem system in templates.SystemTemplates)
