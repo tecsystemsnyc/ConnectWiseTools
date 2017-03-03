@@ -1025,29 +1025,7 @@ namespace Tests
             Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.ManufacturerCatalog.Count);
 
         }
-
-        [TestMethod]
-        public void Save_Templates_Remove_Manufacturer()
-        {
-            //Act
-            int oldNumManufacturers = templates.ManufacturerCatalog.Count;
-            TECManufacturer manToRemove = templates.ManufacturerCatalog[0];
-
-            templates.ManufacturerCatalog.Remove(manToRemove);
-
-            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
-
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
-
-            //Assert
-            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
-            {
-                if (man.Guid == manToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual((oldNumManufacturers - 1), actualTemplates.ManufacturerCatalog.Count);
-        }
-
+        
         [TestMethod]
         public void Save_Templates_Manufacturer_Name()
         {
@@ -1183,28 +1161,6 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.ConnectionTypeCatalog.Count);
 
-        }
-
-        [TestMethod]
-        public void Save_Templates_Remove_ConnectionType()
-        {
-            //Act
-            int oldNumConnectionTypes = templates.ConnectionTypeCatalog.Count;
-            TECConnectionType connectionTypeToRemove = templates.ConnectionTypeCatalog[0];
-
-            templates.ConnectionTypeCatalog.Remove(connectionTypeToRemove);
-
-            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
-
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
-
-            //Assert
-            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
-            {
-                if (connectionType.Guid == connectionTypeToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual((oldNumConnectionTypes - 1), actualTemplates.ConnectionTypeCatalog.Count);
         }
 
         #endregion
