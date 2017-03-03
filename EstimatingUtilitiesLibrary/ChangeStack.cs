@@ -747,6 +747,14 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleSubScopeChildren(newItem as TECSubScope, stackItem.Item1);
             }
+            else if (newItem is TECController)
+            {
+                handleControllerChildren(newItem as TECController, stackItem.Item1);
+            }
+            else if (newItem is TECScope)
+            {
+                handleScopeChildren(newItem as TECScope, stackItem.Item1);
+            }
 
             else if (newItem is TECDrawing)
             {
@@ -760,6 +768,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleSystemChildren(TECSystem item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
             foreach (TECEquipment newEquipment in item.Equipment)
             {
@@ -784,6 +793,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleEquipmentChildren(TECEquipment item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
             foreach (TECSubScope newSubScope in item.SubScope)
             {
@@ -809,9 +819,13 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleSubScopeChildren(TECSubScope item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
+            stackItem = Tuple.Create(change, (object)item, (object)item.ConduitType);
+            SaveStack.Add(stackItem);
             foreach (TECPoint newPoint in item.Points)
             {
+                handleScopeChildren(newPoint as TECScope, change);
                 stackItem = Tuple.Create(change, (object)item, (object)newPoint);
                 SaveStack.Add(stackItem);
                 if (change == Change.Add)
@@ -830,6 +844,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECDevice newDevice in item.Devices)
             {
+                handleDeviceChildren(newDevice, change);
                 stackItem = Tuple.Create(change, (object)item, (object)newDevice);
                 SaveStack.Add(stackItem);
                 if (change == Change.Add)
@@ -845,6 +860,34 @@ namespace EstimatingUtilitiesLibrary
                 {
                     throw new ArgumentException("Change type not valid.");
                 }
+            }
+        }
+
+        private void handleDeviceChildren(TECDevice item, Change change)
+        {
+            handleScopeChildren(item as TECScope, change);
+            Tuple<Change, object, object> stackItem;
+            stackItem = Tuple.Create(change, (object)item, (object)item.Manufacturer);
+            stackItem = Tuple.Create(change, (object)item, (object)item.ConnectionType);
+        }
+
+        private void handleControllerChildren(TECController item, Change change)
+        {
+            handleScopeChildren(item as TECScope, change);
+            Tuple<Change, object, object> stackItem;
+            stackItem = Tuple.Create(change, (object)item, (object)item.Manufacturer);
+        }
+
+        private void handleScopeChildren(TECScope item, Change change)
+        {
+            Tuple<Change, object, object> stackItem;
+            foreach(TECAssociatedCost cost in item.AssociatedCosts)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)cost);
+            }
+            foreach(TECTag tag in item.Tags)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)tag);
             }
         }
 
