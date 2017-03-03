@@ -210,6 +210,17 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SaveAs_Templates_SubcontractLaborConstants()
+        {
+            TECLabor expectedLabor = expectedTemplates.Labor;
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
+        }
+
+        [TestMethod]
         public void SaveAs_Templates_System()
         {
             //Arrange
