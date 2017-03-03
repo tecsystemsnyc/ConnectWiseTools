@@ -188,8 +188,8 @@ namespace EstimatingUtilitiesLibrary
         static public void UpdateBidToDB(string path, ChangeStack changeStack, bool doBackup = true)
         {
             if (doBackup) { createBackup(path); }
-            
-            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tmp";
+
+            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + String.Format("{0:ffff}", DateTime.Now) + ".tmp";
 
             File.Copy(path, tempPath);
 
