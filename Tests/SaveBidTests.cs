@@ -17,6 +17,7 @@ namespace Tests
     {
         const bool DEBUG = true;
 
+        static TECBid OGBid;
         TECBid bid;
         ChangeStack testStack;
         static string OGPath;
@@ -39,6 +40,7 @@ namespace Tests
         public static void ClassInitialize(TestContext TestContext)
         {
             OGPath = Path.GetTempFileName();
+            OGBid = TestHelper.CreateTestBid();
             EstimatingLibraryDatabase.SaveBidToNewDB(OGPath, TestHelper.CreateTestBid());
         }
 
@@ -62,11 +64,10 @@ namespace Tests
             //watch.Stop();
             //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
 
-            bid = TestHelper.CreateTestBid();
+            bid = (OGBid.Copy() as TECBid);
             testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
-            File.Delete(path);
-            File.Copy(OGPath, path);
+            File.Copy(OGPath, path, true);
         }
 
         [TestCleanup]
