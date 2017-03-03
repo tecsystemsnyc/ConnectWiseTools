@@ -73,7 +73,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
                 TabIndex = EditIndex.Equipment;
-
             }
         }
         private TECEquipment _selectedEquipment;

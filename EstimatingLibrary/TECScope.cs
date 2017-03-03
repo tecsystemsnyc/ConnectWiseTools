@@ -30,7 +30,6 @@ namespace EstimatingLibrary
                 _name = value;
                 // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("Name", temp, this);
-                
             }
         }
         public string Description {
@@ -65,10 +64,10 @@ namespace EstimatingLibrary
             get { return _tags; }
             set
             {
-                    var temp = this.Copy();
-                    _tags = value;
-                    NotifyPropertyChanged("Tags", temp, this);
-                
+                var temp = this.Copy();
+                _tags = value;
+                NotifyPropertyChanged("Tags", temp, this);
+                Tags.CollectionChanged += collectionChanged;
             }
         }
         public ObservableCollection<TECAssociatedCost> AssociatedCosts
@@ -79,6 +78,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _associatedCosts = value;
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
+                AssociatedCosts.CollectionChanged += collectionChanged;
             }
         }
 
