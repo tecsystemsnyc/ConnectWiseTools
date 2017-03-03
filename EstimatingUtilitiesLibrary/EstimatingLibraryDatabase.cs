@@ -31,10 +31,13 @@ namespace EstimatingUtilitiesLibrary
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
-
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECBid));
+            watch.Stop();
+            Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
             TECBid bid = new TECBid();
 
+            watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
             if (templates.DeviceCatalog.Count > 0)
             {
@@ -69,7 +72,10 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
                 { editObject(cost, bid); }
             }
+            watch.Stop();
+            Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
+            watch = System.Diagnostics.Stopwatch.StartNew();
             bid = getBidInfo();
             bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
@@ -98,6 +104,8 @@ namespace EstimatingUtilitiesLibrary
             linkAssociatedCostsWithScope(bid);
             linkConduitTypesInBid(bid);
             getUserAdjustments(bid);
+            watch.Stop();
+            Console.WriteLine("loading data: " + watch.ElapsedMilliseconds);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
@@ -142,15 +150,24 @@ namespace EstimatingUtilitiesLibrary
         }
         static public void SaveBidToNewDB(string path, TECBid bid)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             SQLiteDB = new SQLiteDatabase(path);
-
+            watch.Stop();
+            Console.WriteLine("New connection: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             if (File.Exists(path))
             { SQLiteDB.overwriteFile(); }
             createAllBidTables();
-
+            watch.Stop();
+            Console.WriteLine("CreateAllBidTales: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             saveCompleteBid(bid);
+            watch.Stop();
+            Console.WriteLine("SaveCompleteBid: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             SQLiteDB.Connection.Close();
-
+            watch.Stop();
+            Console.WriteLine("Close connection: " + watch.ElapsedMilliseconds);
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -1534,7 +1551,10 @@ namespace EstimatingUtilitiesLibrary
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             isUpToDate = checkDatabaseVersion(type);
+            watch.Stop();
+            Console.WriteLine("checkDatabaseVersion: " + watch.ElapsedMilliseconds);
             if (!isUpToDate)
             {
                 updateDatabase(type);
@@ -1571,7 +1591,7 @@ namespace EstimatingUtilitiesLibrary
                 DataRow infoRow = infoDT.Rows[0];
                 if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
                 {
-                    string version = infoRow["DBVersion"].ToString();
+                    string version = infoRow[BidInfoTable.DBVersion.Name].ToString();
                     return (version == currentVersion);
                 }
                 else
@@ -2448,7 +2468,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         var dataString = objectToDBString(getQuantityInParentCollection(inputObjects[0], inputObjects[1]));
                         data.Add(field.Name, dataString);
-                    } else if (field.Property.Name == "Version" && field.Property.ReflectedType == typeof(HelperProperties))
+                    } else if (field.Property.Name == "DBVersion" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
                         var dataString = objectToDBString(Properties.Settings.Default.Version);
                         data.Add(field.Name, dataString);

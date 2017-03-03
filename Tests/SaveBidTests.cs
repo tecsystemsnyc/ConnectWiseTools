@@ -25,12 +25,21 @@ namespace Tests
         public void TestInitialize()
         {
             //Arrange
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             bid = TestHelper.CreateTestBid();
+            watch.Stop();
+            Console.WriteLine("CreateTestBid: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             testStack = new ChangeStack(bid);
+            watch.Stop();
+            Console.WriteLine("Creating Stack: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             path = Path.GetTempFileName();
             File.Delete(path);
             path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
             EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+            watch.Stop();
+            Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
         }
 
         [TestCleanup]
@@ -2319,9 +2328,7 @@ namespace Tests
             Assert.AreEqual((oldNumControllers - 1), actualBid.Controllers.Count);
 
         }
-
-
-
+        
         [TestMethod]
         public void Save_Bid_Controller_Name()
         {
@@ -2399,15 +2406,21 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Controller_Add_IO()
         {
+            var watchTotal = System.Diagnostics.Stopwatch.StartNew();
             //Act
             TECController expectedController = bid.Controllers[0];
             var testio = new TECIO();
             testio.Type = IOType.BACnetIP;
             expectedController.IO.Add(testio);
             bool hasBACnetIP = false;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
-
+            watch.Stop();
+            Console.WriteLine(" UpdateBidToDD: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            watch.Stop();
+            Console.WriteLine(" LoadDBToBid: " + watch.ElapsedMilliseconds);
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
             {
@@ -2426,9 +2439,10 @@ namespace Tests
                     hasBACnetIP = true;
                 }
             }
+            watchTotal.Stop();
+            Console.WriteLine(" Test Total: " + watchTotal.ElapsedMilliseconds);
 
             Assert.IsTrue(hasBACnetIP);
-
         }
 
         [TestMethod]
