@@ -926,6 +926,7 @@ namespace Tests
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 100;
+            expectedController.Manufacturer = templates.ManufacturerCatalog[0];
 
             templates.ControllerTemplates.Add(expectedController);
 
