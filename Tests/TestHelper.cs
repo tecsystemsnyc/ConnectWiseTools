@@ -12,8 +12,8 @@ namespace Tests
 {
     public static class TestHelper
     {
-        static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.bdb";
-        static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.tdb";
+        static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.tbdb";
+        static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.ttdb";
         static public string TestPDF1 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales Office Update.pdf";
         static public string TestPDF2 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\pdf-sample.pdf";
 
@@ -152,17 +152,6 @@ namespace Tests
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
 
-            //Devices
-            TECDevice device1 = new TECDevice(Guid.NewGuid());
-            device1.Name = "Device 1";
-            device1.Description = "Description 1";
-            device1.Cost = 987.6;
-            device1.Tags.Add(tag1);
-            
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
@@ -172,9 +161,22 @@ namespace Tests
             var connectionType2 = new TECConnectionType();
             connectionType2.Name = "FourC18";
 
-            device1.ConnectionType = connectionType1;
             bid.ConnectionTypes.Add(connectionType1);
             bid.ConnectionTypes.Add(connectionType2);
+
+            //Devices
+            TECDevice device1 = new TECDevice(Guid.NewGuid());
+            device1.Name = "Device 1";
+            device1.Description = "Description 1";
+            device1.Cost = 987.6;
+            device1.Tags.Add(tag1);
+            device1.ConnectionType = connectionType1;
+
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+
+            
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";

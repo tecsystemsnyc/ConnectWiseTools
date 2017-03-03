@@ -577,6 +577,10 @@ namespace Tests
         {
             foreach (TECDevice device in actualBid.DeviceCatalog)
             {
+                if (device.Manufacturer == null)
+                {
+                    Assert.Fail("Device doesn't have manufacturer.");
+                }
                 if (!actualBid.ManufacturerCatalog.Contains(device.Manufacturer))
                 {
                     Assert.Fail("Manufacturers not linked in device catalog");
@@ -584,6 +588,10 @@ namespace Tests
             }
             foreach (TECController controller in actualBid.Controllers)
             {
+                if (controller.Manufacturer == null)
+                {
+                    Assert.Fail("Controller doesn't have manufacturer.");
+                }
                 if (!actualBid.ManufacturerCatalog.Contains(controller.Manufacturer))
                 {
                     Assert.Fail("Manufacturers not linked in controllers");
@@ -679,13 +687,16 @@ namespace Tests
         {
             foreach (TECDevice device in actualBid.DeviceCatalog)
             {
+                if (device.ConnectionType == null)
+                {
+                    Assert.Fail("Device doesn't have connectionType");
+                }
+
                 if (!actualBid.ConnectionTypes.Contains(device.ConnectionType))
                 {
                     Assert.Fail("ConnectionTypes not linked in device catalog");
                 }
             }
-
-            Assert.IsTrue(true, "All Connection types linked");
         }
     }
 }

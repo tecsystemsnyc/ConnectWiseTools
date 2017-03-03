@@ -1183,10 +1183,20 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach (TECDevice device in devices)
             {
+                bool manFound = false;
                 foreach (TECManufacturer man in mans)
                 {
                     if (device.Manufacturer.Guid == man.Guid)
-                    { device.Manufacturer = man; }
+                    {
+                        device.Manufacturer = man;
+                        manFound = true;
+                    }
+                }
+                if (!manFound)
+                {
+                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for device.");
+                    DebugHandler.LogError(e);
+                    throw e;
                 }
             }
         }
@@ -1273,21 +1283,42 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach (TECDevice device in devices)
             {
+                bool connectionFound = false;
                 foreach (TECConnectionType connectionType in connectionTypes)
                 {
                     if (device.ConnectionType.Guid == connectionType.Guid)
-                    { device.ConnectionType = connectionType; }
+                    {
+                        device.ConnectionType = connectionType;
+                        connectionFound = true;
+                    }
                 }
+                if (!connectionFound)
+                {
+                    DataMisalignedException e = new DataMisalignedException("No connection found for device.");
+                    DebugHandler.LogError(e);
+                    throw e;
+                }
+
             }
         }
         static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
         {
             foreach(TECController controller in controllers)
             {
+                bool manFound = false;
                 foreach (TECManufacturer manufacturer in mans)
                 {
                     if (controller.Manufacturer.Guid == manufacturer.Guid)
-                    { controller.Manufacturer = manufacturer; }
+                    {
+                        controller.Manufacturer = manufacturer;
+                        manFound = true;
+                    }
+                }
+                if (!manFound)
+                {
+                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for controller.");
+                    DebugHandler.LogError(e);
+                    throw e;
                 }
             }
         }
