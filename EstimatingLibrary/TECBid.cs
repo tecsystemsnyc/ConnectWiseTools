@@ -419,7 +419,7 @@ namespace EstimatingLibrary
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this()
+        public TECBid(TECBid bidSource) : this(bidSource.Guid)
         {
             _name = bidSource.Name;
             _bidNumber = bidSource.BidNumber;
@@ -454,6 +454,46 @@ namespace EstimatingLibrary
             foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
             {
                 AssociatedCostsCatalog.Add(cost);
+            }
+            foreach(TECConduitType conduitType in bidSource.ConduitTypes)
+            {
+                ConduitTypes.Add(conduitType);
+            }
+            foreach(TECConnectionType connectionType in bidSource.ConnectionTypes)
+            {
+                ConnectionTypes.Add(connectionType);
+            }
+            foreach(TECTag tag in bidSource.Tags)
+            {
+                Tags.Add(tag);
+            }
+            foreach (TECLocation location in bidSource.Locations)
+            {
+                Locations.Add(location);
+            }
+            foreach (TECDrawing drawing in bidSource.Drawings)
+            {
+                Drawings.Add(drawing);
+            }
+            foreach(TECManufacturer manufacturer in bidSource.ManufacturerCatalog)
+            {
+                ManufacturerCatalog.Add(manufacturer);
+            }
+            foreach(TECController controller in bidSource.Controllers)
+            {
+                Controllers.Add(controller);
+            }
+            foreach(TECDevice device in bidSource.DeviceCatalog)
+            {
+                DeviceCatalog.Add(device);
+            }
+            foreach(TECConnection connection in bidSource.Connections)
+            {
+                Connections.Add(connection);
+            }
+            foreach(TECProposalScope propScope in bidSource.ProposalScope)
+            {
+                ProposalScope.Add(propScope);
             }
         }
 

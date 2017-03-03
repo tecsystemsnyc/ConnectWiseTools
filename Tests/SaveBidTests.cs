@@ -38,35 +38,25 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
-            OGPath = Path.GetTempFileName();
-            EstimatingLibraryDatabase.SaveBidToNewDB(OGPath, TestHelper.CreateTestBid());
+            //OGPath = Path.GetTempFileName();
+            //EstimatingLibraryDatabase.SaveBidToNewDB(OGPath, TestHelper.CreateTestBid());
         }
 
         [TestInitialize]
         public void TestInitialize()
         {
             //Arrange
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //bid = TestHelper.CreateTestBid();
-            //watch.Stop();
-            //Console.WriteLine("CreateTestBid: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            //testStack = new ChangeStack(bid);
-            //watch.Stop();
-            //Console.WriteLine("Creating Stack: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            //path = Path.GetTempFileName();
-            //File.Delete(path);
-            //path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            //EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-            //watch.Stop();
-            //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
-
             bid = TestHelper.CreateTestBid();
             testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
             File.Delete(path);
-            File.Copy(OGPath, path);
+            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
+            EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
+
+            //bid = TestHelper.CreateTestBid();
+            //testStack = new ChangeStack(bid);
+            //path = Path.GetTempFileName();
+            //File.Copy(OGPath, path, true);
         }
 
         [TestCleanup]
