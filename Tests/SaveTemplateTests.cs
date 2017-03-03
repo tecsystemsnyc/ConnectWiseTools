@@ -526,16 +526,29 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECSubScope actualSubScope = null;
+            TECAssociatedCost actualCost = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
                     actualSubScope = SubScope;
+                    foreach (TECAssociatedCost cost in actualSubScope.AssociatedCosts)
+                    {
+                        if (cost.Guid == expectedCost.Guid)
+                        {
+                            actualCost = cost;
+                            break;
+                        }
+                    }
+                    break;
                 }
             }
 
             //Assert
             Assert.AreEqual(expectedNumCosts, actualSubScope.AssociatedCosts.Count);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            
         }
         #endregion Save SubScope
 
