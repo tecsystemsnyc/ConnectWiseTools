@@ -209,10 +209,11 @@ namespace Tests
 
             //Devices Catalog
             TECDevice deviceC1 = new TECDevice(Guid.NewGuid());
-            device1.Name = "Device C1";
-            device1.Description = "Description C1";
-            device1.Cost = 987.6;
+            deviceC1.Name = "Device C1";
+            deviceC1.Description = "Description C1";
+            deviceC1.Cost = 987.6;
 
+            deviceC1.Manufacturer = manufacturer1;
             deviceC1.ConnectionType = connectionType2;
             bid.DeviceCatalog.Add(deviceC1);
             bid.DeviceCatalog.Add(device1);
@@ -249,6 +250,7 @@ namespace Tests
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
+            expectedController.Manufacturer = manufacturer1;
 
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;

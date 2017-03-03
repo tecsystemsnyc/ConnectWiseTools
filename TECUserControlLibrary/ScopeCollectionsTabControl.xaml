@@ -294,6 +294,9 @@
                      Visibility="{Binding Path=ViewModel.ControllerVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
             </TabItem>
+            <TabItem Header="Asociated Costs">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
