@@ -64,7 +64,7 @@ namespace Tests
             //watch.Stop();
             //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
 
-            bid = (OGBid.Copy() as TECBid);
+            bid = new TECBid(OGBid);
             testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
             File.Copy(OGPath, path, true);
