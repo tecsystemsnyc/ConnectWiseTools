@@ -471,7 +471,7 @@ namespace Tests
                 {
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                        if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
                         { Assert.Fail("Conduit types in system templates not linked"); }
                     }
                 }
@@ -480,13 +480,13 @@ namespace Tests
             {
                 foreach (TECSubScope subScope in equipment.SubScope)
                 {
-                    if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                    if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
                     { Assert.Fail("Conduit types in equipment templates not linked"); }
                 }
             }
             foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
             {
-                if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
                 { Assert.Fail("Conduit types in subscope templates not linked"); }
             }
         }

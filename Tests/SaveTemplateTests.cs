@@ -561,6 +561,7 @@ namespace Tests
             expectedDevice.Name = "New Device";
             expectedDevice.Description = "New Device desc";
             expectedDevice.Cost = 11.54;
+            expectedDevice.Manufacturer = templates.ManufacturerCatalog[0];
 
             templates.DeviceCatalog.Add(expectedDevice);
 

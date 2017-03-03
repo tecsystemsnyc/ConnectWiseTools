@@ -730,7 +730,7 @@ namespace EstimatingUtilitiesLibrary
             if (conduitTypeTable.Rows.Count > 0)
             { return (getConduitTypeFromRow(conduitTypeTable.Rows[0])); }
             else
-            { return new TECConduitType(); }
+            { return null; }
         }
         static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
         {
@@ -1479,11 +1479,25 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECSubScope sub in subScope)
             {
-                foreach(TECConduitType conduitType in conduitTypes)
+                if (sub.ConduitType != null)
                 {
-                    if(sub.ConduitType.Guid == conduitType.Guid)
-                    { sub.ConduitType = conduitType; }
+                    bool conduitFound = false;
+                    foreach (TECConduitType conduitType in conduitTypes)
+                    {
+                        if (sub.ConduitType.Guid == conduitType.Guid)
+                        {
+                            sub.ConduitType = conduitType;
+                            conduitFound = true;
+                        }
+                    }
+                    if (!conduitFound)
+                    {
+                        DataMisalignedException e = new DataMisalignedException("No conduit found for subscope.");
+                        DebugHandler.LogError(e);
+                        throw e;
+                    }
                 }
+                
             }
         }
         #endregion Link Methods

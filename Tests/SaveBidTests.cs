@@ -15,7 +15,7 @@ namespace Tests
     [TestClass]
     public class SaveBidTests
     {
-        const bool DEBUG = false;
+        const bool DEBUG = true;
 
         TECBid bid;
         ChangeStack testStack;
@@ -2280,9 +2280,10 @@ namespace Tests
         {
             //Act
             TECController expectedController = new TECController(Guid.NewGuid());
-            expectedController.Name = "Test Controller";
+            expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 100;
+            expectedController.Manufacturer = bid.ManufacturerCatalog[0];
 
             bid.Controllers.Add(expectedController);
 
