@@ -402,6 +402,7 @@ namespace Tests
             sysSS.Name = "System SubScope";
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
+            sysSS.ConduitType = testConduitType;
             TECPoint sysPoint = new TECPoint();
             sysPoint.Type = PointTypes.Serial;
             sysPoint.Name = "System Point";
@@ -427,6 +428,7 @@ namespace Tests
             TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";
+            equipSS.ConduitType = testConduitType;
             equipSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint equipPoint = new TECPoint();
             equipPoint.Type = PointTypes.AI;
