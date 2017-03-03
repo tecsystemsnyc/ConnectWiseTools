@@ -24,6 +24,13 @@
                 <DataGridTextColumn Binding="{Binding Labor}" Header="Labor" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
     </Grid>
 </UserControl>

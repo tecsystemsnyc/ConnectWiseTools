@@ -426,6 +426,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllersItemsCollection");
             }
         }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostsItemsCollection;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsItemsCollection
+        {
+            get { return _associatedCostsItemsCollection; }
+            set
+            {
+                _associatedCostsItemsCollection = value;
+                RaisePropertyChanged("AssociatedCostsItemsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -609,6 +620,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SubScopeItemsCollection = Templates.SubScopeTemplates;
             DevicesItemsCollection = Templates.DeviceCatalog;
             ControllersItemsCollection = Templates.ControllerTemplates;
+            AssociatedCostsItemsCollection = Templates.AssociatedCostsCatalog;
         }
 
         public void DragOver(IDropInfo dropInfo)

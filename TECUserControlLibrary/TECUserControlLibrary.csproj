@@ -175,6 +175,7 @@
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\MaterialsCostsExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
     <Compile Include="ViewModels\BidEditorBase.cs" />
