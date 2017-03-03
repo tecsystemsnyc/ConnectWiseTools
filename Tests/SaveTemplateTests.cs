@@ -746,6 +746,7 @@ namespace Tests
             expectedDevice.Description = "New Device desc";
             expectedDevice.Cost = 11.54;
             expectedDevice.Manufacturer = templates.ManufacturerCatalog[0];
+            expectedDevice.ConnectionType = templates.ConnectionTypeCatalog[0];
 
             templates.DeviceCatalog.Add(expectedDevice);
 
@@ -972,9 +973,7 @@ namespace Tests
             Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
 
         }
-
-
-
+        
         [TestMethod]
         public void Save_Templates_Controller_Name()
         {

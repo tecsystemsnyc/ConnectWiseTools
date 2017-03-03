@@ -751,7 +751,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleControllerChildren(newItem as TECController, stackItem.Item1);
             }
-            else if (newItem is TECScope)
+            else if (newItem is TECDevice && (stackItem.Item2 is TECBid || stackItem.Item2 is TECTemplates))
+            {
+                handleDeviceChildren(newItem as TECDevice, stackItem.Item1);
+            }
+            else if (newItem is TECConduitType || newItem is TECConnectionType)
             {
                 handleScopeChildren(newItem as TECScope, stackItem.Item1);
             }

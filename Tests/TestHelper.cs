@@ -373,7 +373,6 @@ namespace Tests
             testDev.Cost = 20.3;
             testDev.Manufacturer = testDevMan;
             testDev.ConnectionType = testDevConnType;
-
             
             TECDevice childDev = new TECDevice(Guid.NewGuid());
             childDev.Name = "Child Device";
