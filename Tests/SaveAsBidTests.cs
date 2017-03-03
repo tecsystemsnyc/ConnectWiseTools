@@ -335,6 +335,12 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SaveAs_Bid_Parameters()
+        {
+            Assert.AreEqual(expectedBid.Parameters.IsTaxExempt, actualBid.Parameters.IsTaxExempt);
+        }
+
+        [TestMethod]
         public void SaveAs_Bid_System()
         {
             //Assert

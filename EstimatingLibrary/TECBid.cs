@@ -374,6 +374,8 @@ namespace EstimatingLibrary
             _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
+            Parameters.PropertyChanged += objectPropertyChanged;
+            Labor.PropertyChanged += objectPropertyChanged;
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;

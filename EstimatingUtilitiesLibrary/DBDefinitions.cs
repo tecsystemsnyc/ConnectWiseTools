@@ -53,6 +53,33 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
+    public class BidParametersTable : TableBase
+    {
+        public static new string TableName = "TECBidParameters";
+        public static Type ParameterType = typeof(TECBidParameters);
+
+        public static TableField ParamtersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
+
+        public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
+        public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
+        public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"));
+        public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"));
+        public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"));
+
+        public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"));
+        public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"));
+        public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.GetProperty("RequiresWrapUp"));
+        
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ParamtersID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            ParameterType
+        };
+    }
     public class LaborConstantsTable : TableBase
     {
         public static new string TableName = "TECLaborConst";
@@ -599,6 +626,27 @@ namespace EstimatingUtilitiesLibrary
             LaborType
         };
     }
+    public class BidBidParametersTable : TableBase
+    {
+        public static new string TableName = "TECBidTECParameters";
+        public static Type BidType = typeof(TECBid);
+        public static Type ParameterType = typeof(TECBidParameters);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            ParametersID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            BidType,
+            ParameterType
+        };
+    }
 
     public class ControllerIOTypeTable : TableBase
     {
@@ -1013,6 +1061,7 @@ namespace EstimatingUtilitiesLibrary
             new PageTable(),
             new LocationTable(),
             new VisualScopeTable(),
+            new BidParametersTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1041,7 +1090,8 @@ namespace EstimatingUtilitiesLibrary
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
-            new SubScopeConduitTypeTable()
+            new SubScopeConduitTypeTable(),
+            new BidBidParametersTable()
             };
     }
 
@@ -1105,6 +1155,7 @@ namespace EstimatingUtilitiesLibrary
             new PageTable(),
             new LocationTable(),
             new VisualScopeTable(),
+            new BidParametersTable(),
 
             new BidLaborTable(),
             new TemplatesLaborTable(),
@@ -1133,7 +1184,8 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
-            new SubScopeConduitTypeTable()
+            new SubScopeConduitTypeTable(),
+            new BidBidParametersTable()
         };
     }
 
