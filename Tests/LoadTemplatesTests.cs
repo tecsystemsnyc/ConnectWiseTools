@@ -205,6 +205,7 @@ namespace Tests
             Assert.AreEqual("SubScope Description", actualSubScope.Description);
             Assert.AreEqual("SubScope Tag", actualSubScope.Tags[0].Text);
             Assert.AreEqual("Test SubScope", actualSubScope.Name);
+            Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
 
             Assert.AreEqual("Test ConduitType", actualSubScope.ConduitType.Name);
 
@@ -221,7 +222,6 @@ namespace Tests
 
             Assert.AreEqual("Child Manufacturer (Child Device)", childMan.Name);
             Assert.AreEqual(0.3, childMan.Multiplier);
-            
         }
 
         [TestMethod]

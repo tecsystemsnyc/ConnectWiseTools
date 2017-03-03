@@ -71,6 +71,11 @@ namespace Tests
             testCost.Name = "Test Cost";
             bid.AssociatedCostsCatalog.Add(testCost);
 
+            var testCost2 = new TECAssociatedCost();
+            testCost2.Name = "Other Cost";
+            bid.AssociatedCostsCatalog.Add(testCost2);
+
+
             //Locations
             var cellar = new TECLocation();
             cellar.Name = "Cellar";
@@ -353,6 +358,10 @@ namespace Tests
             testAssociatedCost.Cost = 42;
 
             templates.AssociatedCostsCatalog.Add(testAssociatedCost);
+
+            var testCost2 = new TECAssociatedCost();
+            testCost2.Name = "Other Cost";
+            templates.AssociatedCostsCatalog.Add(testCost2);
 
             //Devices
             TECDevice testDev = new TECDevice(Guid.NewGuid());
