@@ -484,5 +484,208 @@ namespace Tests
             string expectedName = "Test ConduitType";
             Assert.AreEqual(expectedName, actualConduitType.Name);
         }
+
+        [TestMethod]
+        public void Load_Bid_Linked_Devices()
+        {
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            if (!actualBid.DeviceCatalog.Contains(device))
+                            {
+                                Assert.Fail("Devices in systems not linked");
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Assert.IsTrue(true, "All Devices Linked");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Linked_AssociatedCosts()
+        {
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECAssociatedCost cost in system.AssociatedCosts)
+                {
+                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in system not linked"); }
+                }
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
+                    {
+                        if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                        { Assert.Fail("Associated costs in equipment not linked"); }
+                    }
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                        {
+                            if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                            { Assert.Fail("Associated costs in subscope not linked"); }
+                        }
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                            {
+                                if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                                { Assert.Fail("Associated costs in subscope not linked"); }
+                            }
+                        }
+                    }
+                }
+            }
+           
+            foreach (TECDevice device in actualBid.DeviceCatalog)
+            {
+                foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                {
+                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in device catalog not linked"); }
+                }
+            }
+            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            {
+                foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
+                {
+                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in conduit type catalog not linked"); }
+                }
+            }
+            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            {
+                foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
+                {
+                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in connection type catalog not linked"); }
+                }
+            }
+
+            Assert.IsTrue(true, "All Associated costs Linked");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Linked_Manufacturers()
+        {
+            foreach (TECDevice device in actualBid.DeviceCatalog)
+            {
+                if (!actualBid.ManufacturerCatalog.Contains(device.Manufacturer))
+                {
+                    Assert.Fail("Manufacturers not linked in device catalog");
+                }
+            }
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (!actualBid.ManufacturerCatalog.Contains(controller.Manufacturer))
+                {
+                    Assert.Fail("Manufacturers not linked in controllers");
+                }
+            }
+            Assert.IsTrue(true, "All Manufacturers linked");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Linked_ConduitTypes()
+        {
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (!actualBid.ConduitTypes.Contains(subScope.ConduitType))
+                        { Assert.Fail("Conduit types in subscope not linked"); }
+                    }
+                }
+            }
+            
+            Assert.IsTrue(true, "All conduit types Linked");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Linked_Tags()
+        {
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECTag tag in system.Tags)
+                {
+                    if (!actualBid.Tags.Contains(tag))
+                    { Assert.Fail("Tags in system templates not linked"); }
+                }
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECTag tag in equipment.Tags)
+                    {
+                        if (!actualBid.Tags.Contains(tag))
+                        { Assert.Fail("Tags in system templates not linked"); }
+                    }
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECTag tag in subScope.Tags)
+                        {
+                            if (!actualBid.Tags.Contains(tag))
+                            { Assert.Fail("Tags in system templates not linked"); }
+                        }
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            foreach (TECTag tag in device.Tags)
+                            {
+                                if (!actualBid.Tags.Contains(tag))
+                                { Assert.Fail("Tags in system templates not linked"); }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            foreach (TECDevice device in actualBid.DeviceCatalog)
+            {
+                foreach (TECTag tag in device.Tags)
+                {
+                    if (!actualBid.Tags.Contains(tag))
+                    { Assert.Fail("Tags in device catalog not linked"); }
+                }
+            }
+            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            {
+                foreach (TECTag tag in conduitType.Tags)
+                {
+                    if (!actualBid.Tags.Contains(tag))
+                    { Assert.Fail("Tags in conduit type catalog not linked"); }
+                }
+            }
+            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            {
+                foreach (TECTag tag in connectionType.Tags)
+                {
+                    if (!actualBid.Tags.Contains(tag))
+                    { Assert.Fail("Tags in connection type catalog not linked"); }
+                }
+            }
+
+            Assert.IsTrue(true, "All Tags Linked");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Linked_ConnectionTypes()
+        {
+            foreach (TECDevice device in actualBid.DeviceCatalog)
+            {
+                if (!actualBid.ConnectionTypes.Contains(device.ConnectionType))
+                {
+                    Assert.Fail("ConnectionTypes not linked in device catalog");
+                }
+            }
+
+            Assert.IsTrue(true, "All Connection types linked");
+        }
     }
 }

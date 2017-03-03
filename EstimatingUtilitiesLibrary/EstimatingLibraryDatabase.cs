@@ -96,6 +96,7 @@ namespace EstimatingUtilitiesLibrary
             linkTagsInBid(bid.Tags, bid);
             linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
             linkAssociatedCostsWithScope(bid);
+            linkConduitTypesInBid(bid);
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
@@ -114,7 +115,6 @@ namespace EstimatingUtilitiesLibrary
 
             TECTemplates templates = new TECTemplates();
             
-
             templates = getTemplatesInfo();
             templates.Labor = getLaborConstsInTemplates(templates);
             templates.SystemTemplates = getAllSystems();
@@ -135,6 +135,7 @@ namespace EstimatingUtilitiesLibrary
             linkTagsInTemplates(templates.Tags, templates);
             linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
             linkAssociatedCostsWithScope(templates);
+            linkConduitTypesInTemplates(templates);
 
             SQLiteDB.Connection.Close();
             return templates;
@@ -1170,7 +1171,6 @@ namespace EstimatingUtilitiesLibrary
                     if (device.Manufacturer.Guid == man.Guid)
                     { device.Manufacturer = man; }
                 }
-
             }
         }
         static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
@@ -1265,11 +1265,11 @@ namespace EstimatingUtilitiesLibrary
         }
         static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
         {
-            foreach(TECManufacturer manufacturer in mans)
+            foreach(TECController controller in controllers)
             {
-                foreach(TECController controller in controllers)
+                foreach (TECManufacturer manufacturer in mans)
                 {
-                    if(controller.Manufacturer.Guid == manufacturer.Guid)
+                    if (controller.Manufacturer.Guid == manufacturer.Guid)
                     { controller.Manufacturer = manufacturer; }
                 }
             }
@@ -1281,6 +1281,13 @@ namespace EstimatingUtilitiesLibrary
                 TECBid bid = bidOrTemp as TECBid;
                 foreach(TECSystem system in bid.Systems)
                 { linkAssociatedCostsInSystem(bid.AssociatedCostsCatalog, system); }
+                foreach (TECConnectionType scope in bid.ConnectionTypes)
+                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                foreach (TECConduitType scope in bid.ConduitTypes)
+                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                foreach (TECController scope in bid.Controllers)
+                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+
             } else if (bidOrTemp is TECTemplates)
             {
                 TECTemplates templates = bidOrTemp as TECTemplates;
@@ -1292,8 +1299,13 @@ namespace EstimatingUtilitiesLibrary
                 { linkAssociatedCostsInSubScope(templates.AssociatedCostsCatalog, subScope); }
                 foreach (TECDevice device in templates.DeviceCatalog)
                 { linkAssociatedCostsInDevice(templates.AssociatedCostsCatalog, device); }
+                foreach(TECConnectionType scope in templates.ConnectionTypeCatalog)
+                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                foreach (TECConduitType scope in templates.ConduitTypeCatalog)
+                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                foreach (TECController scope in templates.ControllerTemplates)
+                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
             }
-
         }
         static private void linkAssociatedCostsInDevice(ObservableCollection<TECAssociatedCost> costs, TECDevice device)
         {
@@ -1353,8 +1365,58 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECEquipment equipment in system.Equipment)
             { linkAssociatedCostsInEquipment(costs, equipment); }
         }
+        static private void linkAssociatedCostsInScope(ObservableCollection<TECAssociatedCost> costs, TECScope scope)
+        {
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
+            {
+                foreach (TECAssociatedCost scopeCost in scope.AssociatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            scope.AssociatedCosts = costsToAssign;
+        }
+        static private void linkConduitTypesInBid(TECBid bid)
+        {
+            foreach(TECSystem system in bid.Systems)
+            { linkConduitTypeInSystem(bid.ConduitTypes, system); }
+        }
+        static private void linkConduitTypesInTemplates(TECTemplates templates)
+        {
+            foreach(TECSystem system in templates.SystemTemplates)
+            {
+                linkConduitTypeInSystem(templates.ConduitTypeCatalog, system);
+            }
+            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                linkConduitTypeInEquipment(templates.ConduitTypeCatalog, equipment);
+            }
+            linkConduitTypeWithSubScope(templates.ConduitTypeCatalog, templates.SubScopeTemplates);
+        }
+        static private void linkConduitTypeInSystem(ObservableCollection<TECConduitType> conduitTypes, TECSystem system)
+        {
+            foreach(TECEquipment equipment in system.Equipment)
+            { linkConduitTypeInEquipment(conduitTypes, equipment); }
+        }
+        static private void linkConduitTypeInEquipment(ObservableCollection<TECConduitType> conduitTypes, TECEquipment equipment)
+        {
+            linkConduitTypeWithSubScope(conduitTypes, equipment.SubScope);
+        }
+        static private void linkConduitTypeWithSubScope(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECSubScope> subScope)
+        {
+            foreach(TECSubScope sub in subScope)
+            {
+                foreach(TECConduitType conduitType in conduitTypes)
+                {
+                    if(sub.ConduitType.Guid == conduitType.Guid)
+                    { sub.ConduitType = conduitType; }
+                }
+            }
+        }
         #endregion Link Methods
-
+         
         #region Populate Derived
         static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {

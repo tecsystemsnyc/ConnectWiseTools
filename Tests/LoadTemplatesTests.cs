@@ -293,5 +293,321 @@ namespace Tests
             Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
             Assert.AreEqual(42, actualAssociatedCost.Cost);
         }
+
+        [TestMethod]
+        public void Load_Templates_Linked_Devices()
+        {
+            foreach(TECSystem system in actualTemplates.SystemTemplates)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach(TECDevice device in subScope.Devices)
+                        {
+                            if (!actualTemplates.DeviceCatalog.Contains(device))
+                            {
+                                Assert.Fail("Devices in system templates not linked");
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    foreach (TECDevice device in subScope.Devices)
+                    {
+                        if (!actualTemplates.DeviceCatalog.Contains(device))
+                        {
+                            Assert.Fail("Devices in equipment templates not linked");
+                        }
+                    }
+                }
+            }
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            {
+                foreach (TECDevice device in subScope.Devices)
+                {
+                    if (!actualTemplates.DeviceCatalog.Contains(device))
+                    {
+                        Assert.Fail("Devices in subscope templates not linked");
+                    }
+                }
+            }
+            Assert.IsTrue(true, "All Devices Linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_AssociatedCosts()
+        {
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                foreach (TECAssociatedCost cost in system.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in system templates not linked"); }
+                }
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
+                    {
+                        if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                        { Assert.Fail("Associated costs in system templates not linked"); }
+                    }
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                        {
+                            if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                            { Assert.Fail("Associated costs in system templates not linked"); }
+                        }
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                            {
+                                if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                                { Assert.Fail("Associated costs in system templates not linked"); }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in equipment templates not linked"); }
+                }
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                    {
+                        if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                        { Assert.Fail("Associated costs in equipment templates not linked"); }
+                    }
+                    foreach (TECDevice device in subScope.Devices)
+                    {
+                        foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                        {
+                            if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                            { Assert.Fail("Associated costs in equipment templates not linked"); }
+                        }
+                    }
+                }
+            }
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            {
+                foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in subscope templates not linked"); }
+                }
+                foreach (TECDevice device in subScope.Devices)
+                {
+                    foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                    {
+                        if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                        { Assert.Fail("Associated costs in subscope templates not linked"); }
+                    }
+                }
+            }
+            foreach(TECDevice device in actualTemplates.DeviceCatalog)
+            {
+                foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in device catalog not linked"); }
+                }
+            }
+            foreach(TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in conduit type catalog not linked"); }
+                }
+            }
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
+                {
+                    if (!actualTemplates.AssociatedCostsCatalog.Contains(cost))
+                    { Assert.Fail("Associated costs in connection type catalog not linked"); }
+                }
+            }
+           
+            Assert.IsTrue(true, "All Associated costs Linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_Manufacturers()
+        {
+            foreach(TECDevice device in actualTemplates.DeviceCatalog)
+            {
+                if (!actualTemplates.ManufacturerCatalog.Contains(device.Manufacturer))
+                {
+                    Assert.Fail("Manufacturers not linked in device catalog");
+                }
+            }
+            foreach(TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (!actualTemplates.ManufacturerCatalog.Contains(controller.Manufacturer))
+                {
+                    Assert.Fail("Manufacturers not linked in controller templates");
+                }
+            }
+            Assert.IsTrue(true, "All Manufacturers linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_ConduitTypes()
+        {
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                        { Assert.Fail("Conduit types in system templates not linked"); }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                    { Assert.Fail("Conduit types in equipment templates not linked"); }
+                }
+            }
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            {
+                if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
+                { Assert.Fail("Conduit types in subscope templates not linked"); }
+            }
+            
+            Assert.IsTrue(true, "All conduit types Linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_Tags()
+        {
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                foreach (TECTag tag in system.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in system templates not linked"); }
+                }
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECTag tag in equipment.Tags)
+                    {
+                        if (!actualTemplates.Tags.Contains(tag))
+                        { Assert.Fail("Tags in system templates not linked"); }
+                    }
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECTag tag in subScope.Tags)
+                        {
+                            if (!actualTemplates.Tags.Contains(tag))
+                            { Assert.Fail("Tags in system templates not linked"); }
+                        }
+                        foreach (TECDevice device in subScope.Devices)
+                        {
+                            foreach (TECTag tag in device.Tags)
+                            {
+                                if (!actualTemplates.Tags.Contains(tag))
+                                { Assert.Fail("Tags in system templates not linked"); }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                foreach (TECTag tag in equipment.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in equipment templates not linked"); }
+                }
+                foreach (TECSubScope subScope in equipment.SubScope)
+                {
+                    foreach (TECTag tag in subScope.Tags)
+                    {
+                        if (!actualTemplates.Tags.Contains(tag))
+                        { Assert.Fail("Tags in equipment templates not linked"); }
+                    }
+                    foreach (TECDevice device in subScope.Devices)
+                    {
+                        foreach (TECTag tag in device.Tags)
+                        {
+                            if (!actualTemplates.Tags.Contains(tag))
+                            { Assert.Fail("Tags in equipment templates not linked"); }
+                        }
+                    }
+                }
+            }
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            {
+                foreach (TECTag tag in subScope.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in subscope templates not linked"); }
+                }
+                foreach (TECDevice device in subScope.Devices)
+                {
+                    foreach (TECTag tag in device.Tags)
+                    {
+                        if (!actualTemplates.Tags.Contains(tag))
+                        { Assert.Fail("Tags in subscope templates not linked"); }
+                    }
+                }
+            }
+            foreach (TECDevice device in actualTemplates.DeviceCatalog)
+            {
+                foreach (TECTag tag in device.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in device catalog not linked"); }
+                }
+            }
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                foreach (TECTag tag in conduitType.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in conduit type catalog not linked"); }
+                }
+            }
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                foreach (TECTag tag in connectionType.Tags)
+                {
+                    if (!actualTemplates.Tags.Contains(tag))
+                    { Assert.Fail("Tags in connection type catalog not linked"); }
+                }
+            }
+
+            Assert.IsTrue(true, "All Tags Linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_ConnectionTypes()
+        {
+            foreach (TECDevice device in actualTemplates.DeviceCatalog)
+            {
+                if (!actualTemplates.ConnectionTypeCatalog.Contains(device.ConnectionType))
+                {
+                    Assert.Fail("ConnectionTypes not linked in device catalog");
+                }
+            }
+            
+            Assert.IsTrue(true, "All Connection types linked");
+        }
     }
 }
