@@ -29,10 +29,9 @@ namespace Tests
             bid.Estimator = "Mr. Test";
 
             //Bid Parameters
-            bid.Parameters = new TECBidParameters();
+            bid.Parameters.IsTaxExempt = true;
 
             //Bid Labor
-            bid.Labor = new TECLabor();
             bid.Labor.PMCoef = 0.1;
             bid.Labor.PMRate = 0.11;
             bid.Labor.PMExtraHours = 1.1;

@@ -18,7 +18,15 @@ namespace EstimatingLibrary
         private bool _isTaxExempt;
         private bool _requiresBond;
         private bool _requiresWrapUp;
+
+        private Guid _guid;
         
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+
+
         public double Escalation
         {
             get { return _escalation; }
@@ -101,9 +109,10 @@ namespace EstimatingLibrary
             }
         }
         #endregion
-
-        public TECBidParameters()
+        
+        public TECBidParameters(Guid guid)
         {
+            _guid = guid;
             _isTaxExempt = false;
             _requiresBond = false;
             _requiresWrapUp = false;
@@ -114,6 +123,8 @@ namespace EstimatingLibrary
             _subcontractorMarkup = 0;
             _subcontractorEscalation = 0;
         }
+
+        public TECBidParameters() : this(Guid.NewGuid()) { }
 
         public override object Copy()
         {

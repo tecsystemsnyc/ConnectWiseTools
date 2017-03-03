@@ -67,13 +67,9 @@ namespace EstimatingLibrary
                     }
                 }
                 if (priceExists)
-                {
-                    return price;
-                }
+                { return price; }
                 else
-                {
-                    return -1;
-                }
+                { return -1; }
             }
         }
 
@@ -95,9 +91,7 @@ namespace EstimatingLibrary
             {
                 int equipQuantity = 0;
                 foreach (TECEquipment equip in Equipment)
-                {
-                    equipQuantity += equip.Quantity;
-                }
+                { equipQuantity += equip.Quantity; }
                 return equipQuantity;
             }
         }
@@ -108,9 +102,7 @@ namespace EstimatingLibrary
             {
                 int ssQuantity = 0;
                 foreach (TECEquipment equip in Equipment)
-                {
-                    ssQuantity += (equip.SubScopeQuantity * equip.Quantity);
-                }
+                { ssQuantity += (equip.SubScopeQuantity * equip.Quantity); }
                 return ssQuantity;
             }
         }

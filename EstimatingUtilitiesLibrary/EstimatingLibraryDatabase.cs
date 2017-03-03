@@ -77,6 +77,7 @@ namespace EstimatingUtilitiesLibrary
 
             watch = System.Diagnostics.Stopwatch.StartNew();
             bid = getBidInfo();
+            bid.Parameters = getBidParameters(bid);
             bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid);
@@ -920,6 +921,28 @@ namespace EstimatingUtilitiesLibrary
             { return getManufacturerFromRow(manTable.Rows[0]); }
             else
             { return new TECManufacturer(); }
+        }
+        static private TECBidParameters getBidParameters(TECBid bid)
+        {
+            string constsCommand = "select * from (" + BidParametersTable.TableName + " inner join ";
+            constsCommand += BidBidParametersTable.TableName + " on ";
+            constsCommand += "(TECBidTECParameters.ParametersID = TECBidTECParameters.ParametersID";
+            constsCommand += " and " + BidBidParametersTable.BidID.Name + " = '";
+            constsCommand += bid.Guid;
+            constsCommand += "'))";
+
+            DataTable DT = SQLiteDB.getDataFromCommand(constsCommand);
+
+            if (DT.Rows.Count > 1)
+            {
+                DebugHandler.LogError("Multiple rows found in bid paramters table. Using first found.");
+            }
+            else if (DT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Bid paramters not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return new TECBidParameters();
+            }
+            return getBidParametersFromRow(DT.Rows[0]);
         }
         #endregion //Loading from DB Methods
 
@@ -1961,6 +1984,23 @@ namespace EstimatingUtilitiesLibrary
 
             connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
             return connection;
+        }
+        private static TECBidParameters getBidParametersFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[BidParametersTable.ParamtersID.Name].ToString());
+            TECBidParameters paramters = new TECBidParameters(guid);
+
+            paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
+            paramters.Overhead = row[BidParametersTable.Overhead.Name].ToString().ToDouble(0);
+            paramters.Profit = row[BidParametersTable.Profit.Name].ToString().ToDouble(0);
+            paramters.SubcontractorMarkup = row[BidParametersTable.SubcontractorMarkup.Name].ToString().ToDouble(0);
+            paramters.SubcontractorEscalation = row[BidParametersTable.SubcontractorEscalation.Name].ToString().ToDouble(0);
+
+            paramters.IsTaxExempt = row[BidParametersTable.IsTaxExempt.Name].ToString().ToInt(0).ToBool();
+            paramters.RequiresBond = row[BidParametersTable.RequiresBond.Name].ToString().ToInt(0).ToBool();
+            paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
+
+            return paramters;
         }
         #endregion
 

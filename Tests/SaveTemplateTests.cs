@@ -518,7 +518,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
-            TECAssociatedCost expectedCost = new TECAssociatedCost();
+            TECAssociatedCost expectedCost = templates.AssociatedCostsCatalog[1];
             expectedSubScope.AssociatedCosts.Add(templates.AssociatedCostsCatalog[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
