@@ -105,6 +105,17 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_SubconstractorConsts()
+        {
+            //Arrange
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(954.9, actualLabor.ElectricalRate);
+            Assert.AreEqual(614.15, actualLabor.ElectricalSuperRate);
+        }
+
+        [TestMethod]
         public void Load_Templates_System()
         {
             //Arrange

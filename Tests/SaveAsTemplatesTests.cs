@@ -187,6 +187,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SaveAs_Templates_LaborConstants()
+        {
+            TECLabor expectedLabor = expectedTemplates.Labor;
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+
+            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+
+            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+
+            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+
+            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+        }
+
+        [TestMethod]
         public void SaveAs_Templates_System()
         {
             //Arrange

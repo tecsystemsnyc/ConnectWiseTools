@@ -281,6 +281,20 @@ namespace Tests
         {
             TECTemplates templates = new TECTemplates();
 
+            //Labor
+            templates.Labor.PMCoef = 1.1;
+            templates.Labor.PMRate = 2.2;
+            templates.Labor.ENGCoef = 3.3;
+            templates.Labor.ENGRate = 4.4;
+            templates.Labor.CommCoef = 5.5;
+            templates.Labor.CommRate = 6.6;
+            templates.Labor.SoftCoef = 7.7;
+            templates.Labor.SoftRate = 8.8;
+            templates.Labor.GraphCoef = 9.9;
+            templates.Labor.GraphRate = 10.10;
+            templates.Labor.ElectricalRate = 11.11;
+            templates.Labor.ElectricalSuperRate = 12.12;
+
             //Tags
             TECTag testTag = new TECTag();
             testTag.Text = "Test Tag";

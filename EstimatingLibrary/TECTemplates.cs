@@ -175,6 +175,8 @@ namespace EstimatingLibrary
         {
             _guid = guid;
 
+            _labor = new TECLabor();
+
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
