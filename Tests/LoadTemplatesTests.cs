@@ -489,8 +489,6 @@ namespace Tests
                 if (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType))
                 { Assert.Fail("Conduit types in subscope templates not linked"); }
             }
-            
-            Assert.IsTrue(true, "All conduit types Linked");
         }
 
         [TestMethod]
