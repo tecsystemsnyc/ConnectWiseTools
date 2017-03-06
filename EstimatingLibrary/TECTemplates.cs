@@ -205,49 +205,27 @@ namespace EstimatingLibrary
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
             if (_labor != null)
-            {
-                _labor = templatesSource.Labor;
-            }
+            { _labor = templatesSource.Labor; }
             foreach(TECSystem system in templatesSource.SystemTemplates)
-            {
-                SystemTemplates.Add(system);
-            }
+            { SystemTemplates.Add(system.Copy() as TECSystem); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
-            {
-                EquipmentTemplates.Add(equip);
-            }
+            { EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
-            {
-                SubScopeTemplates.Add(subScope);
-            }
+            { SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
             foreach (TECDevice device in templatesSource.DeviceCatalog)
-            {
-                DeviceCatalog.Add(device);
-            }
+            { DeviceCatalog.Add(device.Copy() as TECDevice); }
             foreach (TECTag tag in templatesSource.Tags)
-            {
-                Tags.Add(tag);
-            }
+            { Tags.Add(tag.Copy() as TECTag); }
             foreach (TECManufacturer man in templatesSource.ManufacturerCatalog)
-            {
-                ManufacturerCatalog.Add(man);
-            }
+            { ManufacturerCatalog.Add(man.Copy() as TECManufacturer); }
             foreach(TECConnectionType connectionType in templatesSource.ConnectionTypeCatalog)
-            {
-                ConnectionTypeCatalog.Add(connectionType);
-            }
+            { ConnectionTypeCatalog.Add(connectionType.Copy() as TECConnectionType); }
             foreach (TECConduitType conduitType in templatesSource.ConduitTypeCatalog)
-            {
-                ConduitTypeCatalog.Add(conduitType);
-            }
+            { ConduitTypeCatalog.Add(conduitType.Copy() as TECConduitType); }
             foreach(TECAssociatedCost cost in templatesSource.AssociatedCostsCatalog)
-            {
-                AssociatedCostsCatalog.Add(cost);
-            }
+            { AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
             foreach(TECController controller in templatesSource.ControllerTemplates)
-            {
-                ControllerTemplates.Add(controller);
-            }
+            { ControllerTemplates.Add(controller.Copy() as TECController); }
         }
 
         #endregion //Constructors
