@@ -1066,7 +1066,7 @@ namespace Tests
             //Assert
             foreach (TECDevice dev in modifiedSubScope.Devices)
             {
-                if (deviceToRemove.Guid == dev.Guid) Assert.Fail();
+                if (deviceToRemove.Guid == dev.Guid) Assert.Fail("Device not removed properly.");
             }
             bool devFound = false;
             foreach (TECDevice dev in actualBid.DeviceCatalog)
