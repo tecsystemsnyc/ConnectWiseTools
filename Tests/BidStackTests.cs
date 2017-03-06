@@ -844,7 +844,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECConduitType expected = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
-            TECConduitType edit = new TECConduitType();
+            TECConduitType edit = Bid.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -853,7 +853,7 @@ namespace Tests
 
             //assert
             TECConduitType actual = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
 
         }
 
