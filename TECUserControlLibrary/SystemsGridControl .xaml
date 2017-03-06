@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="parent"
-             xmlns:dd="urn:gong-wpf-dragdrop">
+             x:Name="parent">
     <UserControl.Resources>
         <ResourceDictionary>
             <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>

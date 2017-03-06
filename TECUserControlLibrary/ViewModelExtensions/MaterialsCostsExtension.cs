@@ -1,6 +1,8 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModelExtensions
@@ -112,7 +114,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
-        public ICommand AddAssociatedCostTypeCommand { get; private set; }
+        public ICommand AddAssociatedCostCommand { get; private set; }
+        #endregion
+
+        #region Delegates
+        public Action<IDropInfo> DragHandler;
+        public Action<IDropInfo> DropHandler;
         #endregion
 
         #endregion
@@ -131,7 +138,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
             AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
-            AddAssociatedCostTypeCommand = new RelayCommand(addAsociatedCostExecute);
+            AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute);
         }
 
         private void addConnectionTypeExecute()
@@ -164,6 +171,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.AssociatedCostsCatalog.Add(associatedCost);
             AssociatedCostName = "";
             AssociatedCostCost = 0;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DragHandler(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            DropHandler(dropInfo);
         }
         #endregion
     }

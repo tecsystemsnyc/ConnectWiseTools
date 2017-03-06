@@ -205,6 +205,8 @@ namespace TemplateBuilder.ViewModel
         private void setupMaterialsTab()
         {
             MaterialsTab = new MaterialsCostsExtension(Templates);
+            MaterialsTab.DragHandler += DragOver;
+            MaterialsTab.DropHandler += Drop;
         }
         #endregion
 
