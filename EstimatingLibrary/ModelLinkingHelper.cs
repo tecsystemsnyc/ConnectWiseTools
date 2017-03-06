@@ -314,7 +314,6 @@ namespace EstimatingLibrary
                     DebugHandler.LogError(e);
                     throw e;
                 }
-
             }
         }
         static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
