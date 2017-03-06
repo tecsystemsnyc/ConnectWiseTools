@@ -151,6 +151,24 @@ namespace Tests
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
 
+            //Conduit Types
+            var conduitType1 = new TECConduitType();
+            conduitType1.Name = "Test Conduit 1";
+            conduitType1.Cost = 13;
+            conduitType1.Labor = 14;
+
+            bid.ConduitTypes.Add(conduitType1);
+
+            var conduitType2 = new TECConduitType();
+            conduitType2.Name = "Test Conduit 2";
+            conduitType2.Cost = 13;
+            conduitType2.Labor = 14;
+
+            bid.ConduitTypes.Add(conduitType2);
+
+            subScope1.ConduitType = conduitType1;
+            subScope2.ConduitType = conduitType2;
+
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
@@ -354,6 +372,13 @@ namespace Tests
             testConduitType.Labor = 2;
 
             templates.ConduitTypeCatalog.Add(testConduitType);
+
+            TECConduitType otherConduitType = new TECConduitType();
+            otherConduitType.Name = "RGS";
+            otherConduitType.Cost = 18;
+            otherConduitType.Labor = 4;
+
+            templates.ConduitTypeCatalog.Add(otherConduitType);
 
             //Associated Costs
             TECAssociatedCost testAssociatedCost = new TECAssociatedCost();

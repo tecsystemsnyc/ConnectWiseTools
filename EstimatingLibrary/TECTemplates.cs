@@ -207,8 +207,10 @@ namespace EstimatingLibrary
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
             if (_labor != null)
-            { _labor = templatesSource.Labor; }
-            foreach(TECSystem system in templatesSource.SystemTemplates)
+            { _labor = templatesSource.Labor;
+              Labor.PropertyChanged += objectPropertyChanged;
+            }
+            foreach (TECSystem system in templatesSource.SystemTemplates)
             { SystemTemplates.Add(system.Copy() as TECSystem); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
             { EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
