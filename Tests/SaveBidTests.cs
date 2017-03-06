@@ -87,7 +87,7 @@ namespace Tests
         }
 
         [ClassCleanup]
-        public void ClassCleanup()
+        public static void ClassCleanup()
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
