@@ -859,25 +859,37 @@ namespace EstimatingUtilitiesLibrary
         }
         static private ObservableCollection<TECConnection> getConnectionsInController(Guid controllerID)
         {
-            var outConnections = new ObservableCollection<TECConnection>();
-            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
-            command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
-            command += ControllerConnectionTable.ControllerID.Name + " = '" + controllerID;
-            command += "')";
-            DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
-            foreach (DataRow row in connectionDT.Rows)
-            { outConnections.Add(getConnectionFromRow(row)); }
-            return outConnections;
+            var tables = getAllTableNames();
+            if (tables.Contains(ConnectionTable.TableName))
+            {
+                var outConnections = new ObservableCollection<TECConnection>();
+                string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+                command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+                command += ControllerConnectionTable.ControllerID.Name + " = '" + controllerID;
+                command += "')";
+                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+                foreach (DataRow row in connectionDT.Rows)
+                { outConnections.Add(getConnectionFromRow(row)); }
+                return outConnections;
+            }
+            else
+            { return new ObservableCollection<TECConnection>(); }
         }
         static private TECConnection getConnectionInScope(Guid ScopeID)
         {
-            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
-            command += "(select " + ScopeConnectionTable.ConnectionID.Name + " from " + ScopeConnectionTable.TableName + " where ";
-            command += ScopeConnectionTable.ScopeID.Name + " = '" + ScopeID;
-            command += "')";
-            DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
-            if (connectionDT.Rows.Count > 0)
-            { return getConnectionFromRow(connectionDT.Rows[0]); }
+            var tables = getAllTableNames();
+            if (tables.Contains(ConnectionTable.TableName))
+            {
+                string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+                command += "(select " + ScopeConnectionTable.ConnectionID.Name + " from " + ScopeConnectionTable.TableName + " where ";
+                command += ScopeConnectionTable.ScopeID.Name + " = '" + ScopeID;
+                command += "')";
+                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+                if (connectionDT.Rows.Count > 0)
+                { return getConnectionFromRow(connectionDT.Rows[0]); }
+                else
+                { return null; }
+            }
             else
             { return null; }
         }
