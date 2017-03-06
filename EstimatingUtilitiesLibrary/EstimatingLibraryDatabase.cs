@@ -127,7 +127,7 @@ namespace EstimatingUtilitiesLibrary
             templates.ConnectionTypeCatalog = getConnectionTypes();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
-            
+            ModelLinkingHelper.LinkTemplates(templates);
             SQLiteDB.Connection.Close();
             return templates;
         }
