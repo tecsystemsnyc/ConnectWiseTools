@@ -230,6 +230,7 @@ namespace EstimatingLibrary
             { AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
             foreach(TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(controller.Copy() as TECController); }
+            ModelLinkingHelper.LinkTemplates(this);
         }
 
         #endregion //Constructors

@@ -109,10 +109,7 @@ namespace EstimatingLibrary
 
         public TECBidParameters Parameters
         {
-            get
-            {
-                return _parameters;
-            }
+            get { return _parameters; }
             set
             {
                 var temp = Copy();
@@ -462,6 +459,7 @@ namespace EstimatingLibrary
             { Connections.Add(connection.Copy() as TECConnection); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
+            ModelLinkingHelper.LinkBid(this);
         }
 
         #endregion //Constructors

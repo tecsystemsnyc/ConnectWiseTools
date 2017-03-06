@@ -94,16 +94,7 @@ namespace EstimatingUtilitiesLibrary
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
             bid.AssociatedCostsCatalog = getAssociatedCosts();
-            linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
-            linkAllLocations(bid.Locations, bid.Systems);
-            linkAllConnections(bid.Connections, bid.Controllers, bid.Systems);
-            linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
-            linkAllDevices(bid.Systems, bid.DeviceCatalog);
-            linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
-            linkTagsInBid(bid.Tags, bid);
-            linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
-            linkAssociatedCostsWithScope(bid);
-            linkConduitTypesInBid(bid);
+            ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
             watch.Stop();
             Console.WriteLine("loading data: " + watch.ElapsedMilliseconds);
@@ -133,19 +124,10 @@ namespace EstimatingUtilitiesLibrary
             templates.Tags = getAllTags();
             templates.ManufacturerCatalog = getAllManufacturers();
             templates.ControllerTemplates = getControllers();
-            linkAllDevicesFromSystems(templates.SystemTemplates, templates.DeviceCatalog);
-            linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.DeviceCatalog);
-            linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
-            linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
             templates.ConnectionTypeCatalog = getConnectionTypes();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
-            linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
-            linkTagsInTemplates(templates.Tags, templates);
-            linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
-            linkAssociatedCostsWithScope(templates);
-            linkConduitTypesInTemplates(templates);
-
+            
             SQLiteDB.Connection.Close();
             return templates;
         }
@@ -875,6 +857,30 @@ namespace EstimatingUtilitiesLibrary
                 { connections.Add(getConnectionFromRow(row)); }
             return connections;
         }
+        static private ObservableCollection<TECConnection> getConnectionsInController(Guid controllerID)
+        {
+            var outConnections = new ObservableCollection<TECConnection>();
+            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+            command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+            command += ControllerConnectionTable.ControllerID.Name + " = '" + controllerID;
+            command += "')";
+            DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in connectionDT.Rows)
+            { outConnections.Add(getConnectionFromRow(row)); }
+            return outConnections;
+        }
+        static private TECConnection getConnectionInScope(Guid ScopeID)
+        {
+            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+            command += "(select " + ScopeConnectionTable.ConnectionID.Name + " from " + ScopeConnectionTable.TableName + " where ";
+            command += ScopeConnectionTable.ScopeID.Name + " = '" + ScopeID;
+            command += "')";
+            DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+            if (connectionDT.Rows.Count > 0)
+            { return getConnectionFromRow(connectionDT.Rows[0]); }
+            else
+            { return null; }
+        }
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
         {
             ObservableCollection<TECProposalScope> propScope = new ObservableCollection<TECProposalScope>();
@@ -945,563 +951,7 @@ namespace EstimatingUtilitiesLibrary
             return getBidParametersFromRow(DT.Rows[0]);
         }
         #endregion //Loading from DB Methods
-
-        #region Link Methods
-        static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
-        {
-            //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
-
-            Dictionary<TECVisualScope, Guid> scopeToLink = new Dictionary<TECVisualScope, Guid>();
-
-            foreach (TECDrawing drawing in bidDrawings)
-            {
-                foreach (TECPage page in drawing.Pages)
-                {
-                    foreach (TECVisualScope vs in page.PageScope)
-                    {
-                        string command = "select ScopeID from TECVisualScopeTECScope where VisualScopeID = '" + vs.Guid + "'";
-                        
-                            DataTable scopeID = SQLiteDB.getDataFromCommand(command);
-                            Guid scopeGuid = new Guid(scopeID.Rows[0][0].ToString());
-                            scopeToLink.Add(vs, scopeGuid);
-                        
-                    }
-                }
-            }
-
-            foreach (TECController controller in bidControllers)
-            {
-                //Check scope in systems.
-                List<TECVisualScope> scopeToRemove = new List<TECVisualScope>();
-                foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
-                {
-                    if (vs.Value == controller.Guid)
-                    {
-                        vs.Key.Scope = controller;
-                        scopeToRemove.Add(vs.Key);
-                    }
-                }
-                foreach (TECVisualScope scope in scopeToRemove)
-                { scopeToLink.Remove(scope);  }
-                if (scopeToLink.Count < 1)
-                { return; }
-                scopeToRemove.Clear();
-            }
-
-            foreach (TECSystem system in bidSystems)
-            {
-                //Check scope in systems.
-                List<TECVisualScope> scopeToRemove = new List<TECVisualScope>();
-                foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
-                {
-                    if (vs.Value == system.Guid)
-                    {
-                        vs.Key.Scope = system;
-                        scopeToRemove.Add(vs.Key);
-                    }
-                }
-                foreach (TECVisualScope scope in scopeToRemove)
-                { scopeToLink.Remove(scope); }
-                if (scopeToLink.Count < 1)
-                { return; }
-                scopeToRemove.Clear();
-                
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    //Check scope in equipment.
-                    foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
-                    {
-                        if (vs.Value == equip.Guid)
-                        {
-                            vs.Key.Scope = equip;
-                            scopeToRemove.Add(vs.Key);
-                        }
-                    }
-                    foreach (TECVisualScope scope in scopeToRemove)
-                    { scopeToLink.Remove(scope); }
-                    if (scopeToLink.Count < 1)
-                    { return; }
-                    scopeToRemove.Clear();
-
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        //Check scope in subScope.
-                        foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
-                        {
-                            if (vs.Value == ss.Guid)
-                            {
-                                vs.Key.Scope = ss;
-                                scopeToRemove.Add(vs.Key);
-                            }
-                        }
-                        foreach (TECVisualScope scope in scopeToRemove)
-                        {  scopeToLink.Remove(scope); }
-                        if (scopeToLink.Count < 1)
-                        { return; }
-                        scopeToRemove.Clear();
-
-                        foreach (TECDevice dev in ss.Devices)
-                        {
-                            //Check scope in devices.
-                            foreach (KeyValuePair<TECVisualScope, Guid> vs in scopeToLink)
-                            {
-                                if (vs.Value == dev.Guid)
-                                {
-                                    vs.Key.Scope = dev;
-                                    scopeToRemove.Add(vs.Key);
-                                }
-                            }
-                            foreach (TECVisualScope scope in scopeToRemove)
-                            { scopeToLink.Remove(scope); }
-                            if (scopeToLink.Count < 1)
-                            { return; }
-                            scopeToRemove.Clear();
-                        }
-                    }
-                }
-            }
-        }
-        static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
-        {
-            foreach(TECLocation location in locations)
-            {
-                foreach (TECSystem system in bidSystems)
-                {
-                    if (system.Location != null && system.Location.Guid == location.Guid)
-                    { system.Location = location; }
-                    foreach(TECEquipment equipment in system.Equipment)
-                    {
-                        if (equipment.Location != null && equipment.Location.Guid == location.Guid)
-                        { equipment.Location = location; }
-                        foreach(TECSubScope subScope in equipment.SubScope)
-                        {
-                            if(subScope.Location != null && subScope.Location.Guid == location.Guid)
-                            { subScope.Location = location; }
-                        }
-                   }
-                }
-            }
-        }
-        static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
-        {
-            //Construct guid relations
-            List<Tuple<TECConnection, Guid, List<Guid>>> toConnect = new List<Tuple<TECConnection, Guid, List<Guid>>>();
-            foreach (TECConnection conn in connections)
-            {
-                string command = "select * from " + ControllerConnectionTable.TableName + " where " + ControllerConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
-                DataTable guidDT = SQLiteDB.getDataFromCommand(command);
-                Guid parentGuid = new Guid(guidDT.Rows[0][ControllerConnectionTable.ControllerID.Name].ToString());
-
-                command = "select * from " + ScopeConnectionTable.TableName + " where " + ScopeConnectionTable.ConnectionID.Name + " = '" + conn.Guid.ToString() + "'";
-                guidDT = SQLiteDB.getDataFromCommand(command);
-                List<Guid> childGuids = new List<Guid>();
-                foreach (DataRow row in guidDT.Rows)
-                { childGuids.Add(new Guid(row[ScopeConnectionTable.ScopeID.Name].ToString())); }
-
-                toConnect.Add(new Tuple<TECConnection, Guid, List<Guid>>(conn, parentGuid, childGuids));
-            }
-
-            //Construct potential TECScope List
-            List<TECScope> scopeToLink = new List<TECScope>();
-            foreach (TECController controller in controllers)
-            { scopeToLink.Add(controller); }
-            foreach (TECSystem system in bidSystems)
-            {
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    { scopeToLink.Add(ss); }
-                }
-            }
-
-            //Link
-            foreach (Tuple<TECConnection, Guid, List<Guid>> item in toConnect)
-            {
-                TECConnection connection = item.Item1;
-                Guid parentGuid = item.Item2;
-                List<Guid> childGuids = item.Item3;
-
-                //Link Parent Controller
-                foreach (TECController controller in controllers)
-                {
-                    if (controller.Guid == parentGuid)
-                    {
-                        connection.Controller = controller;
-                        controller.Connections.Add(connection);
-                        break;
-                    }
-                }
-
-                //Link Children Scope
-                foreach (Guid child in childGuids)
-                {
-                    TECScope scopeToRemove = null;
-                    foreach (TECScope scope in scopeToLink)
-                    {
-                        if (scope.Guid == child)
-                        {
-                            if (scope is TECSubScope)
-                            { (scope as TECSubScope).Connection = connection; }
-                            else if (scope is TECController)
-                            { (scope as TECController).Connections.Add(connection);  }
-                            connection.Scope.Add(scope);
-                            scopeToRemove = scope;
-                            break;
-                        }
-                    }
-                    if (scopeToRemove != null)
-                    { scopeToLink.Remove(scopeToRemove); }
-                }
-            }
-        }
-        static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
-        {
-            foreach (TECSystem system in bidSystems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope sub in equipment.SubScope)
-                    {
-                        var linkedDevices = new ObservableCollection<TECDevice>();
-                        foreach (TECDevice device in sub.Devices)
-                        {
-                            foreach (TECDevice cDev in deviceCatalog)
-                            {
-                                if (cDev.Guid == device.Guid)
-                                { linkedDevices.Add(cDev); }
-                            }
-                        }
-                        sub.Devices = linkedDevices;
-                    }
-                }
-            }
-        }
-        static private void linkAllDevicesFromSystems(ObservableCollection<TECSystem> systems, ObservableCollection<TECDevice> deviceCatalog)
-        {
-            foreach (TECSystem system in systems)
-            { linkAllDevicesFromEquipment(system.Equipment, deviceCatalog); }
-        }
-        static private void linkAllDevicesFromEquipment(ObservableCollection<TECEquipment> equipment, ObservableCollection<TECDevice> deviceCatalog)
-        {
-            foreach (TECEquipment equip in equipment)
-            { linkAllDevicesFromSubScope(equip.SubScope, deviceCatalog); }
-        }
-        static private void linkAllDevicesFromSubScope(ObservableCollection<TECSubScope> subScope, ObservableCollection<TECDevice> deviceCatalog)
-        {
-            foreach (TECSubScope sub in subScope)
-            {
-                var linkedDevices = new ObservableCollection<TECDevice>();
-                foreach (TECDevice device in sub.Devices)
-                {
-                    foreach (TECDevice cDev in deviceCatalog)
-                    {
-                        if (cDev.Guid == device.Guid)
-                        { linkedDevices.Add(cDev); }
-                    }
-                }
-                sub.Devices = linkedDevices;
-            }
-        }
-        static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
-        {
-            foreach (TECDevice device in devices)
-            {
-                bool manFound = false;
-                foreach (TECManufacturer man in mans)
-                {
-                    if (device.Manufacturer.Guid == man.Guid)
-                    {
-                        device.Manufacturer = man;
-                        manFound = true;
-                    }
-                }
-                if (!manFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for device.");
-                    DebugHandler.LogError(e);
-                    throw e;
-                }
-            }
-        }
-        static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
-        {
-            foreach (TECSystem system in bid.Systems)
-            {
-                linkTags(tags, system);
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    linkTags(tags, equipment);
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        linkTags(tags, subScope);
-                        foreach (TECDevice device in subScope.Devices)
-                        { linkTags(tags, device); }
-                        foreach (TECPoint point in subScope.Points)
-                        { linkTags(tags, point); }
-                    }
-                }
-            }
-            foreach (TECController controller in bid.Controllers)
-            { linkTags(tags, controller);}
-            foreach (TECDevice device in bid.DeviceCatalog)
-            { linkTags(tags, device); }
-        }
-        static private void linkTagsInTemplates(ObservableCollection<TECTag> tags, TECTemplates templates)
-        {
-            foreach (TECSystem system in templates.SystemTemplates)
-            {
-                linkTags(tags, system);
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    linkTags(tags, equipment);
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        linkTags(tags, subScope);
-                        foreach (TECDevice device in subScope.Devices)
-                        { linkTags(tags, device); }
-                        foreach (TECPoint point in subScope.Points)
-                        { linkTags(tags, point); }
-                    }
-                }
-            }
-            foreach (TECEquipment equipment in templates.EquipmentTemplates)
-            {
-                linkTags(tags, equipment);
-                foreach (TECSubScope subScope in equipment.SubScope)
-                {
-                    linkTags(tags, subScope);
-                    foreach (TECDevice device in subScope.Devices)
-                    { linkTags(tags, device); }
-                    foreach (TECPoint point in subScope.Points)
-                    { linkTags(tags, point); }
-                }
-            }
-            foreach (TECSubScope subScope in templates.SubScopeTemplates)
-            {
-                linkTags(tags, subScope);
-                foreach (TECDevice device in subScope.Devices)
-                { linkTags(tags, device); }
-                foreach (TECPoint point in subScope.Points)
-                { linkTags(tags, point); }
-            }
-            foreach (TECController controller in templates.ControllerTemplates)
-            { linkTags(tags, controller); }
-            foreach (TECDevice device in templates.DeviceCatalog)
-            { linkTags(tags, device); }
-        }
-        static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
-        {
-            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
-            foreach (TECTag tag in scope.Tags)
-            {
-                foreach (TECTag referenceTag in tags)
-                {
-                    if (tag.Guid == referenceTag.Guid)
-                    { linkedTags.Add(referenceTag); }
-                }
-            }
-            scope.Tags = linkedTags;
-        }
-        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
-        {
-            foreach (TECDevice device in devices)
-            {
-                bool connectionFound = false;
-                foreach (TECConnectionType connectionType in connectionTypes)
-                {
-                    if (device.ConnectionType.Guid == connectionType.Guid)
-                    {
-                        device.ConnectionType = connectionType;
-                        connectionFound = true;
-                    }
-                }
-                if (!connectionFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No connection found for device.");
-                    DebugHandler.LogError(e);
-                    throw e;
-                }
-
-            }
-        }
-        static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
-        {
-            foreach(TECController controller in controllers)
-            {
-                bool manFound = false;
-                foreach (TECManufacturer manufacturer in mans)
-                {
-                    if (controller.Manufacturer.Guid == manufacturer.Guid)
-                    {
-                        controller.Manufacturer = manufacturer;
-                        manFound = true;
-                    }
-                }
-                if (!manFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for controller.");
-                    DebugHandler.LogError(e);
-                    throw e;
-                }
-            }
-        }
-        static private void linkAssociatedCostsWithScope(Object bidOrTemp)
-        {
-            if(bidOrTemp is TECBid)
-            {
-                TECBid bid = bidOrTemp as TECBid;
-                foreach(TECSystem system in bid.Systems)
-                { linkAssociatedCostsInSystem(bid.AssociatedCostsCatalog, system); }
-                foreach (TECConnectionType scope in bid.ConnectionTypes)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
-                foreach (TECConduitType scope in bid.ConduitTypes)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
-                foreach (TECController scope in bid.Controllers)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
-
-            } else if (bidOrTemp is TECTemplates)
-            {
-                TECTemplates templates = bidOrTemp as TECTemplates;
-                foreach (TECSystem system in templates.SystemTemplates)
-                { linkAssociatedCostsInSystem(templates.AssociatedCostsCatalog, system); }
-                foreach (TECEquipment equipment in templates.EquipmentTemplates)
-                { linkAssociatedCostsInEquipment(templates.AssociatedCostsCatalog, equipment); }
-                foreach (TECSubScope subScope in templates.SubScopeTemplates)
-                { linkAssociatedCostsInSubScope(templates.AssociatedCostsCatalog, subScope); }
-                foreach (TECDevice device in templates.DeviceCatalog)
-                { linkAssociatedCostsInDevice(templates.AssociatedCostsCatalog, device); }
-                foreach(TECConnectionType scope in templates.ConnectionTypeCatalog)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
-                foreach (TECConduitType scope in templates.ConduitTypeCatalog)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
-                foreach (TECController scope in templates.ControllerTemplates)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
-            }
-        }
-        static private void linkAssociatedCostsInDevice(ObservableCollection<TECAssociatedCost> costs, TECDevice device)
-        {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
-            {
-                foreach(TECAssociatedCost devCost in device.AssociatedCosts)
-                {
-                    if(devCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            device.AssociatedCosts = costsToAssign;
-        }
-        static private void linkAssociatedCostsInSubScope(ObservableCollection<TECAssociatedCost> costs, TECSubScope subScope)
-        {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
-            {
-                foreach (TECAssociatedCost childCost in subScope.AssociatedCosts)
-                {
-                    if (childCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            subScope.AssociatedCosts = costsToAssign;
-            foreach(TECDevice device in subScope.Devices)
-            { linkAssociatedCostsInDevice(costs, device); }
-        }
-        static private void linkAssociatedCostsInEquipment(ObservableCollection<TECAssociatedCost> costs, TECEquipment equipment)
-        {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
-            {
-                foreach (TECAssociatedCost childCost in equipment.AssociatedCosts)
-                {
-                    if (childCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            equipment.AssociatedCosts = costsToAssign;
-            foreach (TECSubScope subScope in equipment.SubScope)
-            { linkAssociatedCostsInSubScope(costs, subScope); }
-        }
-        static private void linkAssociatedCostsInSystem(ObservableCollection<TECAssociatedCost> costs, TECSystem system)
-        {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
-            {
-                foreach (TECAssociatedCost childCost in system.AssociatedCosts)
-                {
-                    if (childCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            system.AssociatedCosts = costsToAssign;
-            foreach (TECEquipment equipment in system.Equipment)
-            { linkAssociatedCostsInEquipment(costs, equipment); }
-        }
-        static private void linkAssociatedCostsInScope(ObservableCollection<TECAssociatedCost> costs, TECScope scope)
-        {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
-            {
-                foreach (TECAssociatedCost scopeCost in scope.AssociatedCosts)
-                {
-                    if (scopeCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            scope.AssociatedCosts = costsToAssign;
-        }
-        static private void linkConduitTypesInBid(TECBid bid)
-        {
-            foreach(TECSystem system in bid.Systems)
-            { linkConduitTypeInSystem(bid.ConduitTypes, system); }
-        }
-        static private void linkConduitTypesInTemplates(TECTemplates templates)
-        {
-            foreach(TECSystem system in templates.SystemTemplates)
-            {
-                linkConduitTypeInSystem(templates.ConduitTypeCatalog, system);
-            }
-            foreach(TECEquipment equipment in templates.EquipmentTemplates)
-            {
-                linkConduitTypeInEquipment(templates.ConduitTypeCatalog, equipment);
-            }
-            linkConduitTypeWithSubScope(templates.ConduitTypeCatalog, templates.SubScopeTemplates);
-        }
-        static private void linkConduitTypeInSystem(ObservableCollection<TECConduitType> conduitTypes, TECSystem system)
-        {
-            foreach(TECEquipment equipment in system.Equipment)
-            { linkConduitTypeInEquipment(conduitTypes, equipment); }
-        }
-        static private void linkConduitTypeInEquipment(ObservableCollection<TECConduitType> conduitTypes, TECEquipment equipment)
-        {
-            linkConduitTypeWithSubScope(conduitTypes, equipment.SubScope);
-        }
-        static private void linkConduitTypeWithSubScope(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECSubScope> subScope)
-        {
-            foreach(TECSubScope sub in subScope)
-            {
-                if (sub.ConduitType != null)
-                {
-                    bool conduitFound = false;
-                    foreach (TECConduitType conduitType in conduitTypes)
-                    {
-                        if (sub.ConduitType.Guid == conduitType.Guid)
-                        {
-                            sub.ConduitType = conduitType;
-                            conduitFound = true;
-                        }
-                    }
-                    if (!conduitFound)
-                    {
-                        DataMisalignedException e = new DataMisalignedException("No conduit found for subscope.");
-                        DebugHandler.LogError(e);
-                        throw e;
-                    }
-                }
-                
-            }
-        }
-        #endregion Link Methods
-         
+        
         #region Populate Derived
         static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {
@@ -1826,6 +1276,7 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
             subScopeToAdd.ConduitType = getConduitTypeInSubScope(subScopeID);
             subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
+            subScopeToAdd.Connection = getConnectionInScope(subScopeID);
             return subScopeToAdd;
         }
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
@@ -1981,6 +1432,7 @@ namespace EstimatingUtilitiesLibrary
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
             controller.AssociatedCosts = getAssociatedCostsInScope(guid);
+            controller.Connections = getConnectionsInController(guid);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
