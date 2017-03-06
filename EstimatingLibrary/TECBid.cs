@@ -419,7 +419,7 @@ namespace EstimatingLibrary
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this()
+        public TECBid(TECBid bidSource) : this(Guid.NewGuid())
         {
             _name = bidSource.Name;
             _bidNumber = bidSource.BidNumber;
