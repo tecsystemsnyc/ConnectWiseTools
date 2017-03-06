@@ -162,7 +162,9 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            return new TECTemplates(this);
+            var outTemplate = new TECTemplates(this);
+            outTemplate._guid = _guid;
+            return outTemplate; 
         }
 
         #endregion //Properties
