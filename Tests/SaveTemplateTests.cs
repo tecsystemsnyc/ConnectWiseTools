@@ -16,20 +16,48 @@ namespace Tests
     {
         static bool DEBUG = false;
 
+        static TECTemplates OGTemplates;
         TECTemplates templates;
         ChangeStack testStack;
+        static string OGPath;
         string path;
+
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext TestContext)
+        {
+            OGPath = Path.GetTempFileName();
+            OGTemplates = TestHelper.CreateTestTemplates();
+            EstimatingLibraryDatabase.SaveTemplatesToNewDB(OGPath, OGTemplates);
+        }
 
         [TestInitialize]
         public void TestInitialize()
         {
-            //Arrange
-            templates = TestHelper.CreateTestTemplates();
+            ////Arrange
+            //templates = TestHelper.CreateTestTemplates();
+            //testStack = new ChangeStack(templates);
+            //path = Path.GetTempFileName();
+            //File.Delete(path);
+            //path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tdb";
+            //EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, templates);
+
+            templates = OGTemplates.Copy() as TECTemplates;
             testStack = new ChangeStack(templates);
             path = Path.GetTempFileName();
-            File.Delete(path);
-            path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tdb";
-            EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, templates);
+            File.Copy(OGPath, path, true);
         }
 
         [TestCleanup]
@@ -46,8 +74,15 @@ namespace Tests
             {
                 File.Delete(path);
             }
+        }
 
+        [ClassCleanup]
+        public void ClassCleanup()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
+            File.Delete(OGPath);
         }
 
         #region Save Labor

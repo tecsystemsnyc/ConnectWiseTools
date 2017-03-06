@@ -86,6 +86,15 @@ namespace Tests
             }
         }
 
+        [ClassCleanup]
+        public void ClassCleanup()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            File.Delete(OGPath);
+        }
+
         #region Save BidInfo
         [TestMethod]
         public void Save_BidInfo_Name()
