@@ -121,7 +121,10 @@ namespace EstimatingLibrary
                     foreach (TECConnection connection in connections)
                     {
                         if(controllerConnection.Guid == connection.Guid)
-                        {  linkedConnections.Add(connection); }
+                        {
+                            linkedConnections.Add(connection);
+                            connection.Scope.Add(controller);
+                        }
                     }
                 }
                 controller.Connections = linkedConnections;
@@ -135,7 +138,10 @@ namespace EstimatingLibrary
                         foreach(TECConnection connection in connections)
                         {
                             if(subScope.Connection.Guid == connection.Guid)
-                            { subScope.Connection = connection; }
+                            {
+                                subScope.Connection = connection;
+                                connection.Scope.Add(subScope);
+                            }
                         }
                     }
                 }

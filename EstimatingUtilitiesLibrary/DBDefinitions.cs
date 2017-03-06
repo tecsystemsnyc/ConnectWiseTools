@@ -891,7 +891,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-
+            DeviceID
         };
         public static new List<Type> Types = new List<Type>()
         {
