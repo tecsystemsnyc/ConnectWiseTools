@@ -14,22 +14,6 @@ namespace Tests
     public class LoadBidTests
     {
         static TECBid actualBid;
-        static TECSystem actualSystem;
-        static TECEquipment actualEquipment;
-        static TECSubScope actualSubScope;
-        static TECDevice actualDevice;
-        static ObservableCollection<TECDevice> actualDevices;
-        static TECPoint actualPoint;
-        static TECManufacturer actualManufacturer;
-        static TECTag actualTag;
-        static TECDrawing actualDrawing;
-        static TECPage actualPage;
-        static TECVisualScope actualVisScope;
-        static TECController actualController;
-        static TECConnection actualConnection;
-        static TECAssociatedCost actualAssociatedCost;
-        static TECConduitType actualConduitType;
-        static TECConnectionType actualConnectionType;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -49,24 +33,6 @@ namespace Tests
         {
             //Arrange
             actualBid = TestHelper.LoadTestBid(TestHelper.StaticTestBidPath);
-            actualSystem = actualBid.Systems[0];
-            actualEquipment = actualSystem.Equipment[0];
-            actualSubScope = actualEquipment.SubScope[0];
-            actualDevice = actualSubScope.Devices[0];
-            actualDevices = actualSubScope.Devices;
-            actualPoint = actualSubScope.Points[0];
-            actualManufacturer = actualBid.ManufacturerCatalog[0];
-            actualTag = actualBid.Tags[0];
-            actualAssociatedCost = actualBid.AssociatedCostsCatalog[0];
-            actualConnectionType = actualBid.ConnectionTypes[0];
-            actualConduitType = actualBid.ConduitTypes[0];
-
-            actualDrawing = actualBid.Drawings[0];
-            actualPage = actualDrawing.Pages[0];
-            actualVisScope = actualPage.PageScope[0];
-
-            actualController = actualBid.Controllers[0];
-            actualConnection = actualBid.Connections[0];
         }
 
         [TestMethod]
@@ -149,6 +115,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_System()
         {
+            //Arrange
+            TECSystem actualSystem = actualBid.Systems[0];
+
             //Assert
             string expectedName = "Test System";
             Assert.AreEqual(expectedName, actualSystem.Name);
@@ -166,6 +135,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Equipment()
         {
+            //Arrange
+            TECEquipment actualEquipment = actualBid.Systems[0].Equipment[0];
+
             //Assert
             string expectedName = "Test Equipment";
             Assert.AreEqual(expectedName, actualEquipment.Name);
@@ -183,6 +155,10 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_SubScope()
         {
+            //Arrange
+            TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
+            TECConnection actualConnection = actualBid.Connections[0];
+
             //Assert
             string expectedName = "Test SubScope";
             Assert.AreEqual(expectedName, actualSubScope.Name);
@@ -201,6 +177,11 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Device()
         {
+            //Arrange
+            ObservableCollection<TECDevice> actualDevices = actualBid.Systems[0].Equipment[0].SubScope[0].Devices;
+            TECDevice actualDevice = actualDevices[0];
+            TECManufacturer actualManufacturer = actualBid.ManufacturerCatalog[0];
+
             //Assert
             string expectedName = "Test Device";
             Assert.AreEqual(expectedName, actualDevice.Name);
@@ -230,6 +211,10 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Manufacturer()
         {
+            //Arrange
+            TECManufacturer actualManufacturer = actualBid.ManufacturerCatalog[0];
+            TECDevice actualDevice = actualBid.Systems[0].Equipment[0].SubScope[0].Devices[0];
+
             //Assert
             string expectedName = "Test Manufacturer";
             double expectedMultiplier = 0.17;
@@ -244,6 +229,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Point()
         {
+            //Arrange
+            TECPoint actualPoint = actualBid.Systems[0].Equipment[0].SubScope[0].Points[0];
+
             //Assert
             string expectedName = "Test Point";
             Assert.AreEqual(expectedName, actualPoint.Name);
@@ -261,6 +249,11 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Location()
         {
+            //Arrange
+            TECSystem actualSystem = actualBid.Systems[0];
+            TECEquipment actualEquipment = actualSystem.Equipment[0];
+            TECSubScope actualSubScope = actualEquipment.SubScope[0];
+
             //Assert
             string expectedLocationName = "Test Location";
             Assert.AreEqual(expectedLocationName, actualBid.Locations[0].Name);
@@ -313,6 +306,15 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Tag()
         {
+            //Arrange
+            TECTag actualTag = actualBid.Tags[0];
+            TECSystem actualSystem = actualBid.Systems[0];
+            TECEquipment actualEquipment = actualSystem.Equipment[0];
+            TECSubScope actualSubScope = actualEquipment.SubScope[0];
+            TECDevice actualDevice = actualSubScope.Devices[0];
+            TECPoint actualPoint = actualSubScope.Points[0];
+            TECController actualController = actualBid.Controllers[0];
+
             //Assert
             string expectedText = "Test Tag";
             Assert.AreEqual(expectedText, actualTag.Text);
@@ -341,6 +343,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Drawing()
         {
+            //Arrange
+            TECDrawing actualDrawing = actualBid.Drawings[0];
+
             //Assert
             string expectedName = "Test Drawing";
             string expectedDescription = "Test Drawing Description";
@@ -352,16 +357,22 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Page()
         {
+            //Arrange
+            TECPage actualPage = actualBid.Drawings[0].Pages[0];
+
             //Assert
             int expectedPageNum = 1;
 
             Assert.AreEqual(expectedPageNum, actualPage.PageNum);
-            Assert.AreEqual(actualVisScope, actualPage.PageScope[0]);
         }
 
         [TestMethod]
         public void Load_Bid_VisualScope()
         {
+            //Arrange
+            TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
+            TECSystem actualSystem = actualBid.Systems[0];
+
             //Assert
             double expectedXPos = 119;
             double expectedYPos = 69.08;
@@ -375,6 +386,9 @@ namespace Tests
         public void Load_Bid_Controller()
         {
             //Arrange
+            TECController actualController = actualBid.Controllers[0];
+            TECConnection actualConnection = actualBid.Connections[0];
+
             string expectedName = "Test Controller";
             string expectedDescription = "Test Controller Description";
             double expectedCost = 64.94;
@@ -417,6 +431,9 @@ namespace Tests
         public void Load_Bid_Connection()
         {
             //Arrange
+            TECConnection actualConnection = actualBid.Connections[0];
+            TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
+
             double expectedLength = 493.45;
 
             bool hasThreeC18 = false;
@@ -439,13 +456,15 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.IsTrue(hasThreeC18);
-            Assert.IsTrue(hasSubScope);
+            Assert.IsTrue(hasThreeC18, "Connection type failed to load.");
+            Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
         }
 
         [TestMethod]
         public void Load_Bid_ProposalScope()
         {
+            TECSystem actualSystem = actualBid.Systems[0];
+
             //Arrange
             TECProposalScope actualPropScope = actualBid.ProposalScope[0];
 
@@ -464,6 +483,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_AssociatedCosts()
         {
+            //Arrange
+            TECAssociatedCost actualAssociatedCost = actualBid.AssociatedCostsCatalog[0];
+
             //Assert
             string expectedName = "Test Cost";
             Assert.AreEqual(expectedName, actualAssociatedCost.Name);
@@ -472,6 +494,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_ConnectionType()
         {
+            //Arrange
+            TECConnectionType actualConnectionType = actualBid.ConnectionTypes[0];
+
             //Assert
             string expectedName = "ThreeC18";
             Assert.AreEqual(expectedName, actualConnectionType.Name);
@@ -480,6 +505,9 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_ConduitType()
         {
+            //Arrange
+            TECConduitType actualConduitType = actualBid.ConduitTypes[0];
+
             //Assert
             string expectedName = "Test ConduitType";
             Assert.AreEqual(expectedName, actualConduitType.Name);
