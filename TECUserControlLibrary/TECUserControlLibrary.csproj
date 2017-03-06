@@ -142,6 +142,9 @@
     <Compile Include="LocationGridControl.xaml.cs">
       <DependentUpon>LocationGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MaterialView.xaml.cs">
+      <DependentUpon>MaterialView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
@@ -247,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ManufacturersGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MaterialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

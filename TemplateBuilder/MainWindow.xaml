@@ -109,33 +109,7 @@
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Materials">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Wiring" Grid.Column="0" Grid.Row="0"
-                                   FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
-                        <TextBlock Text="Conduit" Grid.Column="1" Grid.Row="0"
-                                   FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
-                        <cLib:ConnectionTypeGridControl Grid.Row="1" Margin="5"
-                                                        ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"/>
-                        <cLib:ConduitTypeGridControl Grid.Row="1" Grid.Column="1" Margin="5"
-                                                     ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"/>
-                        <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="2"
-                                   FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
-                        <cLib:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
-                                                          Grid.Row="3"/>
-                    </Grid>
+                    <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
                 </TabItem>
             </TabControl>
 

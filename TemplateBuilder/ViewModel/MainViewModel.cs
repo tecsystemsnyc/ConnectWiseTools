@@ -46,6 +46,7 @@ namespace TemplateBuilder.ViewModel
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
+            setupMaterialsTab();
 
             setVisibility(0);
         }
@@ -60,6 +61,7 @@ namespace TemplateBuilder.ViewModel
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public EditTabExtension EditTab { get; set; }
+        public MaterialsCostsExtension MaterialsTab { get; set; }
         #endregion
         public TECTemplates Templates
         {
@@ -199,6 +201,10 @@ namespace TemplateBuilder.ViewModel
         private void setupEditTab()
         {
             EditTab = new EditTabExtension(Templates);
+        }
+        private void setupMaterialsTab()
+        {
+            MaterialsTab = new MaterialsCostsExtension(Templates);
         }
         #endregion
 
