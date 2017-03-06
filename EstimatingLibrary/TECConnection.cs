@@ -95,7 +95,7 @@ namespace EstimatingLibrary
         public override Object Copy()
         {
             TECConnection connection = new TECConnection(this);
-
+            connection._guid = this._guid;
             return connection;
         }
 

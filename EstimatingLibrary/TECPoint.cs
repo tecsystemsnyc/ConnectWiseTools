@@ -50,12 +50,8 @@ namespace EstimatingLibrary
         
         public TECPoint(TECPoint pointSource) : this()
         {
-            _name = pointSource.Name;
-            _description = pointSource.Description;
             _type = pointSource.Type;
-            _quantity = pointSource.Quantity;
-            _tags = pointSource.Tags;
-            _associatedCosts = pointSource.AssociatedCosts;
+            this.copyPropertiesFromScope(pointSource);
         }
         #endregion //Constructors
 

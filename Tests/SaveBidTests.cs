@@ -41,7 +41,7 @@ namespace Tests
         {
             OGPath = Path.GetTempFileName();
             OGBid = TestHelper.CreateTestBid();
-            EstimatingLibraryDatabase.SaveBidToNewDB(OGPath, TestHelper.CreateTestBid());
+            EstimatingLibraryDatabase.SaveBidToNewDB(OGPath, OGBid);
         }
 
         [TestInitialize]
@@ -64,7 +64,7 @@ namespace Tests
             //watch.Stop();
             //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
 
-            bid = new TECBid(OGBid);
+            bid = OGBid.Copy() as TECBid;
             testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
             File.Copy(OGPath, path, true);

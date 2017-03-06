@@ -124,17 +124,14 @@ namespace EstimatingLibrary
         public TECSubScope(TECSubScope sourceSubScope) : this()
         {
             foreach(TECDevice device in sourceSubScope.Devices)
-            { Devices.Add(new TECDevice(device)); }
+            { Devices.Add(device.Copy() as TECDevice); }
             foreach(TECPoint point in sourceSubScope.Points)
-            { Points.Add(new TECPoint(point)); }
+            { Points.Add(point.Copy() as TECPoint); }
+            _length = sourceSubScope.Length;
+            if (sourceSubScope.ConduitType != null)
+            { _conduitType = sourceSubScope.ConduitType.Copy() as TECConduitType; }
 
-            _name = sourceSubScope.Name;
-            _description = sourceSubScope.Description;
-            _location = sourceSubScope.Location;
-            _quantity = sourceSubScope.Quantity;
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>(sourceSubScope.AssociatedCosts);
-            _conduitType = sourceSubScope.ConduitType;
-            _tags = new ObservableCollection<TECTag>(sourceSubScope.Tags);
+            this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
 

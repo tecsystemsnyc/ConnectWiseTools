@@ -10,14 +10,25 @@ namespace EstimatingLibrary
     public class TECScopeBranch : TECScope
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
-        public ObservableCollection<TECScopeBranch> Branches { get; set; }
+        private ObservableCollection<TECScopeBranch> _branches;
+        public ObservableCollection<TECScopeBranch> Branches
+        {
+            get { return _branches; }
+            set
+            {
+                var temp = this.Copy();
+                _branches = value;
+                NotifyPropertyChanged("Branches", temp, this);
+                Branches.CollectionChanged += Branches_CollectionChanged;
+            }
+        }
 
         #endregion //Properites
 
         #region Constructors
         public TECScopeBranch(Guid guid) : base(guid)
         {
-            Branches = new ObservableCollection<TECScopeBranch>();
+            _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
         
@@ -28,18 +39,16 @@ namespace EstimatingLibrary
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(new TECScopeBranch(branch));
+                Branches.Add(branch.Copy() as TECScopeBranch);
             }
-            _name = scopeBranchSource.Name;
-            _description = scopeBranchSource.Description;
-            _tags = scopeBranchSource.Tags;
+            this.copyPropertiesFromScope(scopeBranchSource);
         }
         #endregion //Constructors
 
         public override Object Copy()
         {
             TECScopeBranch outScope = new TECScopeBranch(this);
-            outScope._guid = Guid;
+            outScope._guid = _guid;
             return outScope;
         }
 

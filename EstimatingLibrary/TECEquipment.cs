@@ -98,17 +98,10 @@ namespace EstimatingLibrary
         public TECEquipment(TECEquipment equipmentSource) : this()
         {
             foreach(TECSubScope subScope in equipmentSource.SubScope)
-            {
-                SubScope.Add(new TECSubScope(subScope));
-            }
+            { SubScope.Add(subScope.Copy() as TECSubScope); }
             _budgetPrice = equipmentSource.BudgetPrice;
-            _name = equipmentSource.Name;
-            _description = equipmentSource.Description;
 
-            _location = equipmentSource.Location;
-            _quantity = equipmentSource.Quantity;
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>(equipmentSource.AssociatedCosts);
-            _tags = new ObservableCollection<TECTag>(equipmentSource.Tags);
+            this.copyPropertiesFromScope(equipmentSource);
         }
         #endregion //Constructors
 

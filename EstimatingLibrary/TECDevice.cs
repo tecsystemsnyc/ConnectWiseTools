@@ -72,15 +72,12 @@ namespace EstimatingLibrary
         public TECDevice(TECDevice deviceSource) 
             : this(deviceSource.Guid)
         {
-            _name = deviceSource.Name;
-            _description = deviceSource.Description;
+            this.copyPropertiesFromScope(deviceSource);
             _cost = deviceSource.Cost;
             _manufacturer = deviceSource.Manufacturer;
             _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
-            _quantity = deviceSource.Quantity;
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>(deviceSource.AssociatedCosts);
-            _tags = new ObservableCollection<TECTag>(deviceSource.Tags);
+            
         }
         #endregion //Constructors
 

@@ -455,10 +455,8 @@ namespace EstimatingLibrary
             _electricalSuperRate = 0;
         }
 
-        public TECLabor(TECLabor labor)
+        public TECLabor(TECLabor labor) : this()
         {
-            _guid = labor._guid;
-
             _pmCoef = labor.PMCoef;
             _pmExtraHours = labor.PMExtraHours;
             _pmRate = labor.PMRate;
@@ -535,9 +533,10 @@ namespace EstimatingLibrary
             RaisePropertyChanged("TotalCost");
         }
 
-        public override object Copy()
+        public override Object Copy()
         {
             TECLabor outLabor = new TECLabor(this);
+            outLabor._guid = this.Guid;
             return outLabor;
         }
 

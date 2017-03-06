@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         #region Properties
 
-        private double _cost;
+        protected double _cost;
         public double Cost
         {
             get { return _cost; }
@@ -23,7 +23,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _labor;
+        protected double _labor;
         public double Labor
         {
             get { return _labor; }
@@ -45,20 +45,13 @@ namespace EstimatingLibrary
             _labor = 0;
         }
         #endregion
-
-        public override object Copy()
+        
+        public override object DragDropCopy()
         {
-            var outType = new TECElectricalMaterial();
-            outType._guid = this._guid;
-            outType._name = this._name;
-            outType._cost = this._cost;
-            outType._labor = this._labor;
-            outType._associatedCosts = new ObservableCollection<TECAssociatedCost>(AssociatedCosts);
-
-            return outType;
+            throw new NotImplementedException();
         }
 
-        public override object DragDropCopy()
+        public override object Copy()
         {
             throw new NotImplementedException();
         }

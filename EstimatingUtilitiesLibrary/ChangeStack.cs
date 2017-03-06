@@ -57,7 +57,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Methods
-
         private void registerBidChanges(TECBid Bid)
         {
             //Bid Changed

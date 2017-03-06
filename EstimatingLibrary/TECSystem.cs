@@ -152,18 +152,9 @@ namespace EstimatingLibrary
         public TECSystem(TECSystem sourceSystem) : this()
         {
             foreach (TECEquipment equipment in sourceSystem.Equipment)
-            {
-                Equipment.Add(new TECEquipment(equipment));
-            }
-
-            _name = sourceSystem.Name;
-            _description = sourceSystem.Description;
+            { Equipment.Add(equipment.Copy() as TECEquipment); }
             _budgetPrice = sourceSystem.BudgetPrice;
-            _location = sourceSystem.Location;
-            _quantity = sourceSystem.Quantity;
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>(sourceSystem.AssociatedCosts);
-            _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);
-
+            this.copyPropertiesFromScope(sourceSystem);
         }
         #endregion //Constructors
 

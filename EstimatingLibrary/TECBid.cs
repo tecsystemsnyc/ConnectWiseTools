@@ -419,7 +419,7 @@ namespace EstimatingLibrary
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this(bidSource.Guid)
+        public TECBid(TECBid bidSource) : this()
         {
             _name = bidSource.Name;
             _bidNumber = bidSource.BidNumber;
@@ -427,74 +427,41 @@ namespace EstimatingLibrary
             _salesperson = bidSource.Salesperson;
             _estimator = bidSource.Estimator;
 
-            if(bidSource.Labor != null)
-            {
-                _labor = new TECLabor(bidSource.Labor);
-            }
-            if(bidSource.Parameters != null)
-            {
-                _parameters = bidSource.Parameters.Copy() as TECBidParameters;
-            }
+            _labor = bidSource.Labor.Copy() as TECLabor;
+            _parameters = bidSource.Parameters.Copy() as TECBidParameters;
+            Parameters.PropertyChanged += objectPropertyChanged;
+            Labor.PropertyChanged += objectPropertyChanged;
+
             foreach (TECScopeBranch branch in bidSource.ScopeTree)
-            {
-                ScopeTree.Add(new TECScopeBranch(branch));
-            }
+            { ScopeTree.Add(branch.Copy() as TECScopeBranch); }
             foreach (TECSystem system in bidSource.Systems)
-            {
-                Systems.Add(new TECSystem(system));
-            }
+            { Systems.Add(system.Copy() as TECSystem); }
             foreach (TECNote note in bidSource.Notes)
-            {
-                Notes.Add(new TECNote(note));
-            }
+            { Notes.Add(note.Copy() as TECNote); }
             foreach (TECExclusion exclusion in bidSource.Exclusions)
-            {
-                Exclusions.Add(new TECExclusion(exclusion));
-            }
+            { Exclusions.Add(exclusion.Copy() as TECExclusion); }
             foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
-            {
-                AssociatedCostsCatalog.Add(cost);
-            }
+            {  AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
             foreach(TECConduitType conduitType in bidSource.ConduitTypes)
-            {
-                ConduitTypes.Add(conduitType);
-            }
+            { ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
             foreach(TECConnectionType connectionType in bidSource.ConnectionTypes)
-            {
-                ConnectionTypes.Add(connectionType);
-            }
+            { ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
             foreach(TECTag tag in bidSource.Tags)
-            {
-                Tags.Add(tag);
-            }
+            { Tags.Add(tag.Copy() as TECTag); }
             foreach (TECLocation location in bidSource.Locations)
-            {
-                Locations.Add(location);
-            }
+            { Locations.Add(location.Copy() as TECLocation); }
             foreach (TECDrawing drawing in bidSource.Drawings)
-            {
-                Drawings.Add(drawing);
-            }
+            { Drawings.Add(drawing.Copy() as TECDrawing); }
             foreach(TECManufacturer manufacturer in bidSource.ManufacturerCatalog)
-            {
-                ManufacturerCatalog.Add(manufacturer);
-            }
+            { ManufacturerCatalog.Add(manufacturer.Copy() as TECManufacturer); }
             foreach(TECController controller in bidSource.Controllers)
-            {
-                Controllers.Add(controller);
-            }
+            { Controllers.Add(controller.Copy() as TECController); }
             foreach(TECDevice device in bidSource.DeviceCatalog)
-            {
-                DeviceCatalog.Add(device);
-            }
+            { DeviceCatalog.Add(device.Copy() as TECDevice); }
             foreach(TECConnection connection in bidSource.Connections)
-            {
-                Connections.Add(connection);
-            }
+            { Connections.Add(connection.Copy() as TECConnection); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
-            {
-                ProposalScope.Add(propScope);
-            }
+            { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
         }
 
         #endregion //Constructors

@@ -25,8 +25,7 @@ namespace EstimatingLibrary
         {
             get { return _guid; }
         }
-
-
+        
         public double Escalation
         {
             get { return _escalation; }
@@ -129,6 +128,7 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             var outParameters = new TECBidParameters();
+            outParameters._guid = _guid;
             outParameters._escalation = _escalation;
             outParameters._overhead = _overhead;
             outParameters._profit = _profit;

@@ -35,7 +35,7 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECBid));
             watch.Stop();
             Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
-            TECBid bid = new TECBid();
+            TECBid bid = getBidInfo();
 
             watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
@@ -76,7 +76,7 @@ namespace EstimatingUtilitiesLibrary
             Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
             watch = System.Diagnostics.Stopwatch.StartNew();
-            bid = getBidInfo();
+            
             bid.Parameters = getBidParameters(bid);
             bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
