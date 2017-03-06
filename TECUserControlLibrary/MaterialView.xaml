@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="TECUserControlLibrary.MaterialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+            <TextBlock Text="Wiring" Grid.Column="0" Grid.Row="0"
+                                   FontWeight="Bold" Foreground="Black"
+                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Name"/>
+            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ConnectionTypeName}"/>
+            <TextBlock Text="Cost"
+                       Grid.Column="2"/>
+            <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding ConnectionTypeCost}"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Labor Rate"/>
+            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ConnectionTypeLabor}"/>
+            <Button Grid.Column="2" Grid.ColumnSpan="2"
+                    Content="Add" Margin="2"
+                    Command="{Binding AddConnectionTypeCommand}"/>
+        </Grid>
+            <TextBlock Text="Conduit" Grid.Column="1" Grid.Row="0"
+                       FontWeight="Bold" Foreground="Black"
+                       VerticalAlignment="Center" Margin="5,0,0,0"/>
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Name"/>
+            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ConduitTypeName}"/>
+            <TextBlock Text="Cost"
+                       Grid.Column="2"/>
+            <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding ConduitTypeCost}"/>
+        </Grid>
+        <Grid Grid.Row="2"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Labor Rate"/>
+            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ConduitTypeLabor}"/>
+            <Button Grid.Column="2" Grid.ColumnSpan="2"
+                    Content="Add" Margin="2"
+                    Command="{Binding AddConduitTypeCommand}"/>
+        </Grid>
+        <local:ConnectionTypeGridControl Grid.Row="3" Margin="5"
+                                                        ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"/>
+            <local:ConduitTypeGridControl Grid.Row="3" Grid.Column="1" Margin="5"
+                                                     ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"/>
+            <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="4"
+                                   FontWeight="Bold" Foreground="Black"
+                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Name"/>
+            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding AssociatedCostName}"/>
+            <TextBlock Text="Cost" Grid.Column="2"/>
+            <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding AssociatedCostCost}"/>
+            <Button Grid.Column="4" Grid.ColumnSpan="1"
+                    Content="Add" Margin="2"
+                    Command="{Binding AddAssociatedCostCommand}"/>
+        </Grid>
+            <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
+                                                          Grid.Row="6"/>
+        </Grid>
+</UserControl>
