@@ -851,10 +851,9 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECConnection> getConnections()
         {
             ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>(); 
-            
-                DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName); 
-                foreach (DataRow row in connectionDT.Rows)
-                { connections.Add(getConnectionFromRow(row)); }
+            DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName); 
+            foreach (DataRow row in connectionDT.Rows)
+            { connections.Add(getConnectionFromRow(row)); }
             return connections;
         }
         static private ObservableCollection<TECConnection> getConnectionsInController(Guid controllerID)
@@ -1476,7 +1475,6 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
             TECConnection connection = new TECConnection(guid);
-
             connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
             return connection;
         }
