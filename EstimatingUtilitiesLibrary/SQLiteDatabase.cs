@@ -209,7 +209,16 @@ namespace EstimatingUtilitiesLibrary
             DataTable data = new DataTable();
             SQLiteCommand command = new SQLiteCommand(commandText, Connection);
             SQLiteDataReader reader = command.ExecuteReader();
-            data.Load(reader);
+            try
+            {
+                data.Load(reader);
+            }
+            catch (Exception e)
+            {
+                //Log SQL error and throw again
+                DebugHandler.LogError(e);
+                throw e;
+            }
             reader.Close();
             return data;
         }
