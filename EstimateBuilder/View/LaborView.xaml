@@ -62,7 +62,6 @@
 
 
         <!--Project Management Values-->
-        
         <TextBlock Text="Project Management: "
                Grid.Row="1"/>
         <TextBlock Text="{Binding Labor.NumPoints}"
