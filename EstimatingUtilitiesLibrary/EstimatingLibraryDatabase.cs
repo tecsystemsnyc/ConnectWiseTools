@@ -914,6 +914,22 @@ namespace EstimatingUtilitiesLibrary
                 { isProposed = false; }
             return new TECProposalScope(scope, isProposed, notes);
         }
+        static private TECScope getScopeGuidInVisualScope(Guid guid)
+        {
+            string command = "select " + VisualScopeScopeTable.ScopeID.Name + " from " + VisualScopeScopeTable.TableName;
+            command += " where " + VisualScopeScopeTable.VisualScopeID.Name + " = '";
+            command += guid + "'";
+            
+            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            if (manTable.Rows.Count > 0)
+            {
+                var row = manTable.Rows[0];
+                return new TECSystem(new Guid(row[VisualScopeScopeTable.ScopeID.Name].ToString()));
+            }
+            else
+            { return new TECSystem(); }
+        }
+
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
             string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
@@ -1418,6 +1434,7 @@ namespace EstimatingUtilitiesLibrary
             var visualScope = new TECVisualScope(guid);
             visualScope.X = row[VisualScopeTable.XPos.Name].ToString().ToDouble();
             visualScope.Y = row[VisualScopeTable.YPos.Name].ToString().ToDouble();
+            visualScope.Scope = getScopeGuidInVisualScope(guid);
             return visualScope;
         }
         private static TECController getControllerFromRow(DataRow row)

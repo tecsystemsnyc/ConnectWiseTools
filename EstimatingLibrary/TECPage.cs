@@ -72,7 +72,7 @@ namespace EstimatingLibrary
             _connections = new ObservableCollection<TECVisualConnection>();
             foreach (TECVisualScope vs in page.PageScope)
             {
-                _pageScope.Add(new TECVisualScope(vs));
+                _pageScope.Add(vs.Copy() as TECVisualScope);
             }
             PageScope.CollectionChanged += collectionChanged;
             Connections.CollectionChanged += collectionChanged;

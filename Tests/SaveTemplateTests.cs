@@ -55,6 +55,7 @@ namespace Tests
             //EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, templates);
 
             templates = OGTemplates.Copy() as TECTemplates;
+            ModelLinkingHelper.LinkTemplates(templates);
             testStack = new ChangeStack(templates);
             path = Path.GetTempFileName();
             File.Copy(OGPath, path, true);
