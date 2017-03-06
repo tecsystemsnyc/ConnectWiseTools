@@ -113,8 +113,7 @@
                     <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <view:ConstantsView
-                        ViewModel
+                    <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
                 </TabItem>
             </TabControl>
 
