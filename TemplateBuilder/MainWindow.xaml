@@ -13,6 +13,7 @@
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:view="clr-namespace:TemplateBuilder.View"
         
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
@@ -110,6 +111,10 @@
                 </TabItem>
                 <TabItem Header="Materials">
                     <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
+                </TabItem>
+                <TabItem Header="Constants">
+                    <view:ConstantsView
+                        ViewModel
                 </TabItem>
             </TabControl>
 

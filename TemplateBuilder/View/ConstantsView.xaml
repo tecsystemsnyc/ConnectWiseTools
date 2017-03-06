@@ -13,10 +13,11 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid  DataContext="{Binding ElementName=parent, Path=ViewModel}"
+    <Grid  DataContext="{Binding ElementName=parent, Path=ViewModel.Templates}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -65,5 +66,57 @@
                  Grid.Row="2" Grid.Column="2"
                  Margin="2"
                  />
+
+        <!--Software Values-->
+        <TextBlock Text="Software: "
+               Grid.Row="3"/>
+        <TextBox Text="{Binding Labor.SoftCoef}"
+                 Grid.Row="3" Grid.Column="1"
+                 Margin="2"
+                 />
+        <TextBox Text="{Binding Labor.SoftRate}"
+                 Grid.Row="3" Grid.Column="2"
+                 Margin="2"
+                   />
+
+        <!--Graphics Values-->
+        <TextBlock Text="Graphics: "
+               Grid.Row="4"/>
+        <TextBox Text="{Binding Labor.GraphCoef}"
+                 Grid.Row="4" Grid.Column="1"
+                 Margin="2"
+                 />
+        <TextBox Text="{Binding Labor.GraphRate}"
+                 Grid.Row="4" Grid.Column="2"
+                 Margin="2"
+                 />
+
+        <!--Commisioning Values-->
+        <TextBlock Text="Commisioning: "
+               Grid.Row="5"/>
+        <TextBox Text="{Binding Labor.CommCoef}"
+                 Grid.Row="5" Grid.Column="1"
+                 Margin="2"
+                 />
+        <TextBox Text="{Binding Labor.CommRate}"
+                 Grid.Row="5" Grid.Column="2"
+                 Margin="2"
+                 />
+
+        <!--Subcontractor Labor Headers-->
+        <TextBlock Text="Subcontractor Labor"
+               FontWeight="Bold"
+               Grid.Row="7"/>
+        <TextBlock Text="Rate ($/Hour)"
+               Grid.Row="7" Grid.Column="2"/>
+
+        <!--Electrical Values-->
+        <TextBlock Text="Electrical: "
+               Grid.Row="8"/>
+        <TextBox Text="{Binding Labor.ElectricalRate, StringFormat= {} {0:C}}"
+                 Grid.Row="8" Grid.Column="2"
+                 Margin="2"
+                 />
+
     </Grid>
 </UserControl>
