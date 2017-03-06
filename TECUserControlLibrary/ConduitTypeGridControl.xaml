@@ -29,9 +29,9 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="20" MinHeight="60">
+                    <Grid Margin="20,10,0,0" MinHeight="60">
                         <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"/>
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
