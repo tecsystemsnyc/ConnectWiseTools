@@ -566,7 +566,11 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
             //User choose path
-            Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
+            string path = getLoadTemplatesPath();
+            if (path != "")
+            {
+                Properties.Settings.Default.TemplatesFilePath = path;
+            }
 
             if (Properties.Settings.Default.TemplatesFilePath != null)
             {
