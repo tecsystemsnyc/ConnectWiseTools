@@ -199,20 +199,12 @@ namespace EstimatingLibrary
         {
             foreach (TECDevice device in devices)
             {
-                bool manFound = false;
                 foreach (TECManufacturer man in mans)
                 {
                     if (device.Manufacturer.Guid == man.Guid)
                     {
                         device.Manufacturer = man;
-                        manFound = true;
                     }
-                }
-                if (!manFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for device.");
-                    DebugHandler.LogError(e);
-                    throw e;
                 }
             }
         }
@@ -299,20 +291,12 @@ namespace EstimatingLibrary
         {
             foreach (TECDevice device in devices)
             {
-                bool connectionFound = false;
                 foreach (TECConnectionType connectionType in connectionTypes)
                 {
                     if (device.ConnectionType.Guid == connectionType.Guid)
                     {
                         device.ConnectionType = connectionType;
-                        connectionFound = true;
                     }
-                }
-                if (!connectionFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No connection found for device.");
-                    DebugHandler.LogError(e);
-                    throw e;
                 }
             }
         }
@@ -320,20 +304,12 @@ namespace EstimatingLibrary
         {
             foreach (TECController controller in controllers)
             {
-                bool manFound = false;
                 foreach (TECManufacturer manufacturer in mans)
                 {
                     if (controller.Manufacturer.Guid == manufacturer.Guid)
                     {
                         controller.Manufacturer = manufacturer;
-                        manFound = true;
                     }
-                }
-                if (!manFound)
-                {
-                    DataMisalignedException e = new DataMisalignedException("No manufacturer found for controller.");
-                    DebugHandler.LogError(e);
-                    throw e;
                 }
             }
         }
@@ -474,20 +450,12 @@ namespace EstimatingLibrary
             {
                 if (sub.ConduitType != null)
                 {
-                    bool conduitFound = false;
                     foreach (TECConduitType conduitType in conduitTypes)
                     {
                         if (sub.ConduitType.Guid == conduitType.Guid)
                         {
                             sub.ConduitType = conduitType;
-                            conduitFound = true;
                         }
-                    }
-                    if (!conduitFound)
-                    {
-                        DataMisalignedException e = new DataMisalignedException("No conduit found for subscope.");
-                        DebugHandler.LogError(e);
-                        throw e;
                     }
                 }
 

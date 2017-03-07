@@ -26,6 +26,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -116,6 +117,14 @@
                Grid.Row="8"/>
         <TextBox Text="{Binding Labor.ElectricalRate, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="2"
+                 Margin="2"
+                 />
+
+        <!--Electrical Super Values-->
+        <TextBlock Text="Electrical Supervision: "
+               Grid.Row="9"/>
+        <TextBox Text="{Binding Labor.ElectricalSuperRate, StringFormat= {} {0:C}}"
+                 Grid.Row="9" Grid.Column="2"
                  Margin="2"
                  />
 
