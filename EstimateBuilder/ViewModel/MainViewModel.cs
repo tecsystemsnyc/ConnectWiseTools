@@ -47,6 +47,7 @@ namespace EstimateBuilder.ViewModel
             };
 
             setupAll();
+
         }
 
         #region Properties
@@ -88,7 +89,10 @@ namespace EstimateBuilder.ViewModel
             LaborVM.Bid = bid;
             LaborVM.Templates = templates;
             LaborVM.LoadTemplates += LoadTemplatesExecute;
-            TemplatesLoadedSet += () => { LaborVM.TemplatesLoaded = templatesLoaded; };
+            LaborVM.TemplatesLoaded = templatesLoaded;
+            TemplatesLoadedSet += () => {
+                LaborVM.TemplatesLoaded = templatesLoaded;
+            };
         }
         private void setupSettingsVM(TECBid bid)
         {
