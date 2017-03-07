@@ -17,7 +17,14 @@ namespace DebugLibrary
         {
             get
             {
-                return ApplicationDeployment.IsNetworkDeployed;
+                try
+                {
+                    return ApplicationDeployment.IsNetworkDeployed;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 

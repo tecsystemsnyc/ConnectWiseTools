@@ -51,7 +51,7 @@
                  Grid.Row="1" Grid.Column="1"
                  Margin="2"
                  />
-        <TextBox Text="{Binding Labor.PMRate}"
+        <TextBox Text="{Binding Labor.PMRate, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="2"
                  Margin="2"
                  />
@@ -63,7 +63,7 @@
                  Grid.Row="2" Grid.Column="1"
                  Margin="2"
                  />
-        <TextBox Text="{Binding Labor.ENGRate}"
+        <TextBox Text="{Binding Labor.ENGRate, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="2"
                  Margin="2"
                  />
@@ -75,7 +75,7 @@
                  Grid.Row="3" Grid.Column="1"
                  Margin="2"
                  />
-        <TextBox Text="{Binding Labor.SoftRate}"
+        <TextBox Text="{Binding Labor.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="2"
                  Margin="2"
                    />
@@ -87,7 +87,7 @@
                  Grid.Row="4" Grid.Column="1"
                  Margin="2"
                  />
-        <TextBox Text="{Binding Labor.GraphRate}"
+        <TextBox Text="{Binding Labor.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="2"
                  Margin="2"
                  />
@@ -99,7 +99,7 @@
                  Grid.Row="5" Grid.Column="1"
                  Margin="2"
                  />
-        <TextBox Text="{Binding Labor.CommRate}"
+        <TextBox Text="{Binding Labor.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="2"
                  Margin="2"
                  />
