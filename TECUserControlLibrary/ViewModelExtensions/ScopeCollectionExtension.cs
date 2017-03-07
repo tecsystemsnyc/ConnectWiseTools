@@ -199,6 +199,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controllerVisibility;
+
+        public Visibility AssociatedCostsVisibility
+        {
+            get { return _associatedCostsVisibility; }
+            set
+            {
+                _associatedCostsVisibility = value;
+                RaisePropertyChanged("AssociatedCostsVisibility");
+            }
+        }
+        private Visibility _associatedCostsVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties

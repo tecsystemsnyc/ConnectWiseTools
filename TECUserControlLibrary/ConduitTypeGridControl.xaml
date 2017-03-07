@@ -30,8 +30,14 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <Grid Margin="20,10,0,0" MinHeight="60">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Associated Costs"/>
                         <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
-                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                          Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>

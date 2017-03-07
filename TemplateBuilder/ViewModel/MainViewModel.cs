@@ -436,6 +436,9 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -455,6 +458,9 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
 
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
@@ -470,8 +476,10 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-
-
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
                     break;
                 case 3:
@@ -484,6 +492,9 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Visible;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
 
                     break;
                 case 4:
@@ -492,10 +503,41 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
                     ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.DevicesVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
-                    
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+
+                    break;
+                case 5:
+                    ScopeCollection.TabIndex = 9;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+
+                    break;
+                case 6:
+                    ScopeCollection.TabIndex = 10;
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+
                     break;
                 default:
                     ScopeCollection.TabIndex = 0;
@@ -505,7 +547,9 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
                     break;
 
             }
