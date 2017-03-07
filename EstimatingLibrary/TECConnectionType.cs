@@ -7,10 +7,42 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECElectricalMaterial
+    public class TECConnectionType : TECScope
     {
-        public TECConnectionType(Guid guid) : base(guid) { }
-        public TECConnectionType() : base() { }
+        #region Properties
+
+        protected double _cost;
+        public double Cost
+        {
+            get { return _cost; }
+            set
+            {
+                var temp = Copy();
+                _cost = value;
+                NotifyPropertyChanged("Cost", temp, this);
+            }
+        }
+
+        protected double _labor;
+        public double Labor
+        {
+            get { return _labor; }
+            set
+            {
+                var temp = Copy();
+                _labor = value;
+                NotifyPropertyChanged("Labor", temp, this);
+            }
+        }
+
+        #endregion
+
+        public TECConnectionType(Guid guid) : base(guid)
+        {
+            _cost = 0;
+            _labor = 0;
+        }
+        public TECConnectionType() : this(Guid.NewGuid()) { }
 
         public override object Copy()
         {
@@ -21,6 +53,11 @@ namespace EstimatingLibrary
             outType._labor = this._labor;
 
             return outType;
+        }
+
+        public override object DragDropCopy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -113,7 +113,6 @@
     <Compile Include="TECCostAddition.cs" />
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECDrawing.cs" />
-    <Compile Include="TECElectricalMaterial.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECExclusion.cs" />
     <Compile Include="TECIO.cs" />
