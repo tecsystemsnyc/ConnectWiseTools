@@ -123,7 +123,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getMaterialCost();
+                return EstimateCalculator.GetMaterialCost(this);
             }
         }
 
@@ -131,14 +131,14 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getTECSubtotal();
+                return EstimateCalculator.GetTECSubtotal(this);
             }
         }
         public double SubcontractorSubtotal
         {
             get
             {
-                return getSubcontractorSubtotal();
+                return EstimateCalculator.GetSubcontractorSubtotal(this);
             }
         }
 
@@ -146,13 +146,13 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getTotalPrice();
+                return EstimateCalculator.GetTotalPrice(this);
             }
         }
 
         public double BudgetPrice
         {
-            get { return getBudgetPrice(); }
+            get { return EstimateCalculator.GetBudgetPrice(this); }
         }
         public int TotalPointNumber
         {
@@ -173,7 +173,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getTax();
+                return EstimateCalculator.GetTax(this);
             }
         }
 
@@ -551,89 +551,6 @@ namespace EstimatingLibrary
 
         #endregion
 
-        private double getMaterialCost()
-        {
-            double cost = 0;
-            foreach(TECSystem system in this.Systems)
-            {
-                cost += system.MaterialCost;
-            }
-            return cost;
-        }
-
-        private double getTECCost()
-        {
-            double outCost = 0;
-            outCost += Labor.TECSubTotal;
-            outCost += MaterialCost;
-            outCost += outCost*Parameters.Escalation/100;
-            outCost += outCost*Parameters.Overhead/100;
-            outCost += Tax;
-
-            return outCost;
-        }
-        private double getTECSubtotal()
-        {
-            double outCost = 0;
-            outCost += getTECCost();
-
-            outCost += outCost*Parameters.Profit/100;
-
-            return outCost;
-        }
-
-        private double getSubcontractorCost()
-        {
-            double outCost = 0;
-            outCost += Labor.SubcontractorSubTotal;
-            outCost += ElectricalMaterialCost;
-            outCost += outCost*Parameters.SubcontractorEscalation/100;
-
-            return outCost;
-        }
-        private double getSubcontractorSubtotal()
-        {
-            double outCost = 0;
-            outCost += getSubcontractorCost();
-            outCost += outCost*Parameters.SubcontractorMarkup/100;
-
-            return outCost;
-        }
-
-        private double getTax()
-        {
-            double outTax = 0;
-
-            if (!Parameters.IsTaxExempt)
-            {
-                outTax += .0875 * MaterialCost;
-            }
-
-            return outTax;
-        }
-
-        private double getTotalPrice()
-        {
-            double outPrice = 0;
-
-            outPrice += TECSubtotal;
-            outPrice += SubcontractorSubtotal;
-
-            return outPrice;
-        }
-        
-        private double getBudgetPrice()
-        {
-            double price = 0;
-            foreach (TECSystem system in this.Systems)
-            {
-                if (system.TotalBudgetPrice >= 0)
-                {
-                    price += system.TotalBudgetPrice;
-                }
-            }
-            return price;
-        }
 
         private int getPointNumber()
         {
