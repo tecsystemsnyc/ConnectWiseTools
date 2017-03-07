@@ -13,7 +13,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MaterialsCostsExtension : ViewModelBase
+    public class MaterialsCostsExtension : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECTemplates _templates;
@@ -127,12 +127,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public MaterialsCostsExtension(TECTemplates templates)
         {
             Templates = templates;
-
             setupCommands();
-
         }
-
-
+        
         #region Methods
         private void setupCommands()
         {

@@ -96,12 +96,14 @@
                     Command="{Binding AddConduitTypeCommand}"/>
         </Grid>
         <local:ConnectionTypeGridControl Grid.Row="3" Margin="5"
-                                                        ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"/>
-            <local:ConduitTypeGridControl Grid.Row="3" Grid.Column="1" Margin="5"
-                                                     ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"/>
-            <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="4"
-                                   FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                         ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"
+                                         ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+        <local:ConduitTypeGridControl Grid.Row="3" Grid.Column="1" Margin="5"
+                                      ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"
+                                      ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+        <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="4"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center" Margin="5,0,0,0"/>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

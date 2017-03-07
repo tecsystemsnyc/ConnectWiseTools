@@ -19,10 +19,10 @@
         <DataGrid ItemsSource="{Binding Path=CostsSource}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid> 
     </Grid>

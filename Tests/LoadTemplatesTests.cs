@@ -275,6 +275,7 @@ namespace Tests
             Assert.AreEqual(10, actualConnectionType.Cost);
             Assert.AreEqual(12, actualConnectionType.Labor);
             Assert.AreEqual("Test Cost", actualConnectionType.AssociatedCosts[0].Name);
+            Assert.AreEqual(2, actualConnectionType.AssociatedCosts.Count);
         }
 
         [TestMethod]

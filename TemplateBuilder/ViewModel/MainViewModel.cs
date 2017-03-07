@@ -386,6 +386,7 @@ namespace TemplateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
+            Console.WriteLine("Main Drop");
             Object sourceItem;
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
