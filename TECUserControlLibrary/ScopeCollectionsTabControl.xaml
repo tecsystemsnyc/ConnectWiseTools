@@ -238,7 +238,7 @@
                     <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding Path=ViewModel.SelectedController.Manufacturer, Converter={cnvt:ManufacturerConverter}}"/>
+                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={cnvt:ManufacturerConverter}}"/>
                     <Grid Grid.Row="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

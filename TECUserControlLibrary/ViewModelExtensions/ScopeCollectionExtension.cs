@@ -378,6 +378,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private ObservableCollection<TECTag> _controllerTags;
+
+        public TECManufacturer ControllerManufacturer
+        {
+            get { return _controllerManufacturer; }
+            set
+            {
+                _controllerManufacturer = value;
+                RaisePropertyChanged("ControllerManufacturer");
+            }
+        }
+        private TECManufacturer _controllerManufacturer;
         
         #endregion //Device Interface Properties
 
@@ -472,8 +483,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             AddTagCommand = new RelayCommand(AddTagExecute);
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
-            AddDeviceCommand = new RelayCommand(AddDeviceExecute);
-            AddControllerCommand = new RelayCommand(AddControllerExecute);
+            AddDeviceCommand = new RelayCommand(AddDeviceExecute, CanAddDevice);
+            AddControllerCommand = new RelayCommand(AddControllerExecute, CanAddController);
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
@@ -559,12 +570,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             populateItemsCollections();
             SearchString = "";
         }
+
         private void AddTagExecute()
         {
             TECTag newTag = new TECTag();
             newTag.Text = TagName;
             Templates.Tags.Add(newTag);
         }
+        private bool canAddTag()
+        {
+            if(TagName != "") { return true; }
+            else { return false; }
+        }
+
         private void AddManufacturerExecute()
         {
             TECManufacturer newMan = new TECManufacturer();
@@ -572,6 +590,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newMan.Multiplier = ManufacturerMultiplier;
             Templates.ManufacturerCatalog.Add(newMan);
         }
+        private bool CanAddManufacturer()
+        {
+            if(ManufacturerName != "")
+            { return true; }
+            else { return false; }
+        }
+
         private void AddDeviceExecute()
         {
             var newDevice = new TECDevice();
@@ -589,6 +614,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceManufacturer = null;
             DeviceTags = new ObservableCollection<TECTag>();
         }
+        private bool CanAddDevice()
+        {
+            if (DeviceManufacturer != null
+                && DeviceConnectionType != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddControllerExecute()
         {
             var newController = new TECController();
@@ -597,13 +635,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newController.Cost = ControllerCost;
             newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
+            newController.Manufacturer = ControllerManufacturer;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
             ControllerCost = 0;
             ControllerIO = new ObservableCollection<TECIO>();
             ControllerTags = new ObservableCollection<TECTag>();
+            ControllerManufacturer = null;
         }
+        private bool CanAddController()
+        {
+            if(ControllerManufacturer != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddIOToControllerExecute()
         {
             var newIO = new TECIO();
