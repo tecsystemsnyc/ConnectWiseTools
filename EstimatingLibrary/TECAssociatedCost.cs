@@ -41,7 +41,7 @@ namespace EstimatingLibrary
 
         public override object DragDropCopy()
         {
-            throw new NotImplementedException();
+            return this;
         }
     }
 }

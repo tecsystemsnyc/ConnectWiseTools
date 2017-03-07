@@ -1096,10 +1096,7 @@ namespace EstimatingUtilitiesLibrary
         static private void checkAndUpdateDB(Type type)
         {
             bool isUpToDate;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
             isUpToDate = checkDatabaseVersion(type);
-            watch.Stop();
-            Console.WriteLine("checkDatabaseVersion: " + watch.ElapsedMilliseconds);
             if (!isUpToDate)
             {
                 updateDatabase(type);

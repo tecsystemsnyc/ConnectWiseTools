@@ -29,7 +29,8 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <Grid Margin="20,10,0,0" MinHeight="60">
-                        <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"/>
+                        <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
+                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
