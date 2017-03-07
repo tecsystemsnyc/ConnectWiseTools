@@ -1377,7 +1377,7 @@ namespace Tests
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
                     actualConnectionType = connectionType;
-                    //actualCost = actualConnectionType.AssociatedCosts[0];
+                    actualCost = actualConnectionType.AssociatedCosts[0];
                     break;
                 }
             }

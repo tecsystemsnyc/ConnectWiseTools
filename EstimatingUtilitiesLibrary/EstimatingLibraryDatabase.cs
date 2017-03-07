@@ -1128,7 +1128,7 @@ namespace EstimatingUtilitiesLibrary
                 else
                 { return false; }
             }
-            else
+            else if ((infoDT.Rows.Count == 1) || (type == typeof(TECBid)))
             {
                 DataRow infoRow = infoDT.Rows[0];
                 if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
@@ -1138,6 +1138,15 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 { return false; }
+            }
+            else if ((infoDT.Rows.Count > 1) && (type == typeof(TECTemplates)))
+            {
+                killTemplatesInfo();
+                return false;
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
         static private void updateDatabase(Type type)
