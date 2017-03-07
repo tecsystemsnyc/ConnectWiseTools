@@ -214,6 +214,7 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
             ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
+            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
         }
         
         #endregion //Helper Methods
