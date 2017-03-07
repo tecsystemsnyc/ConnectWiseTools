@@ -109,7 +109,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("AssociatedCostCost");
             }
         }
-       
+        private double _associatedCostLabor;
+        public double AssociatedCostLabor
+        {
+            get { return _associatedCostLabor; }
+            set
+            {
+                _associatedCostLabor = value;
+                RaisePropertyChanged("AssociatedCostLabor");
+            }
+        }
+
 
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
@@ -165,9 +175,22 @@ namespace TECUserControlLibrary.ViewModelExtensions
             var associatedCost = new TECAssociatedCost();
             associatedCost.Name = AssociatedCostName;
             associatedCost.Cost = AssociatedCostCost;
+            associatedCost.Labor = AssociatedCostLabor;
             Templates.AssociatedCostsCatalog.Add(associatedCost);
             AssociatedCostName = "";
             AssociatedCostCost = 0;
+            AssociatedCostLabor = 0;
+        }
+        private bool canAddAssociatedCost()
+        {
+            if(AssociatedCostName == "")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void DragOver(IDropInfo dropInfo)

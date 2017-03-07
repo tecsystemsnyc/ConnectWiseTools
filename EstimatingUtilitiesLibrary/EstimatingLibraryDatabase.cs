@@ -1335,10 +1335,12 @@ namespace EstimatingUtilitiesLibrary
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
             string name = row[AssociatedCostTable.Name.Name].ToString();
             double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
+            double labor = row[AssociatedCostTable.Labor.Name].ToString().ToDouble(0);
 
             var associatedCost = new TECAssociatedCost(guid);
             associatedCost.Name = name;
             associatedCost.Cost = cost;
+            associatedCost.Labor = labor;
 
             return associatedCost;
         }
