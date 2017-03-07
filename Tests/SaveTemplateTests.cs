@@ -1359,21 +1359,25 @@ namespace Tests
             TECConnectionType expectedConnectionType = new TECConnectionType();
             expectedConnectionType.Name = "Test Add Connection Type";
             expectedConnectionType.Cost = 21.34;
-            expectedConnectionType.AssociatedCosts.Add(templates.AssociatedCostsCatalog[0]);
-            int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
             templates.ConnectionTypeCatalog.Add(expectedConnectionType);
+
+            TECAssociatedCost expectedCost = templates.AssociatedCostsCatalog[0];
+            expectedConnectionType.AssociatedCosts.Add(expectedCost);
+            int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECConnectionType actualConnectionType = null;
+            TECAssociatedCost actualCost = null;
             foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
                     actualConnectionType = connectionType;
+                    //actualCost = actualConnectionType.AssociatedCosts[0];
                     break;
                 }
             }
@@ -1383,6 +1387,8 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.ConnectionTypeCatalog.Count);
             Assert.AreEqual(expectedCostCount, actualConnectionType.AssociatedCosts.Count);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
 
         }
 
