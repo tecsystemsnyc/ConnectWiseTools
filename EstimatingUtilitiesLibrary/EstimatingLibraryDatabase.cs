@@ -1206,23 +1206,26 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void updateVersionNumber(Type type)
         {
-            string commandString;
             if (type == typeof(TECBid) || type == typeof(TECTemplates))
             {
                 Dictionary<string, string> Data = new Dictionary<string, string>();
                 if (type == typeof(TECBid))
                 {
                     var infoBid = getBidInfo();
-                    commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
+                    string commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
                     commandString += "where " + BidInfoTable.BidID.Name + " = '" + infoBid.Guid.ToString() + "'";
                     SQLiteDB.nonQueryCommand(commandString);
                 }
                 else if(type == typeof(TECTemplates))
                 {
                     var templateGuid = getTemplatesInfo().Guid;
-                    commandString = "update " + TemplatesInfoTable.TableName + " set " + TemplatesInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + TemplatesInfoTable.TemplateID.Name + " = '" + templateGuid.ToString() + "'";
-                    SQLiteDB.nonQueryCommand(commandString);
+
+                    Dictionary<string, string> data = new Dictionary<string, string>();
+
+                    data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
+                    data.Add(TemplatesInfoTable.TemplateID.Name, templateGuid.ToString());
+
+                    SQLiteDB.Replace(TemplatesInfoTable.TableName, data);
                 }
             }
         }
