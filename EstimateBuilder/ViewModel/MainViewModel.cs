@@ -82,10 +82,13 @@ namespace EstimateBuilder.ViewModel
             DrawingVM.Bid = bid;
             DrawingVM.Templates = Templates;
         }
-        private void setupLaborVM(TECBid bid)
+        private void setupLaborVM(TECBid bid, TECTemplates templates)
         {
             LaborVM = new LaborViewModel();
             LaborVM.Bid = bid;
+            LaborVM.Templates = templates;
+            LaborVM.LoadTemplates += LoadTemplatesExecute;
+            TemplatesLoadedSet += () => { LaborVM.TemplatesLoaded = templatesLoaded; };
         }
         private void setupSettingsVM(TECBid bid)
         {
@@ -157,7 +160,7 @@ namespace EstimateBuilder.ViewModel
         {
             setupScopeEditorVM(Bid, Templates);
             setupDrawingVM(Bid);
-            setupLaborVM(Bid);
+            setupLaborVM(Bid, Templates);
             setupReviewVM(Bid);
             setupSettingsVM(Bid);
             setupProposalVM(Bid);

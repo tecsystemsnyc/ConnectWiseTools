@@ -384,6 +384,22 @@ namespace EstimatingLibrary
             }
         }
 
+        public double ElectricalSubTotal
+        {
+            get
+            {
+                return (ElectricalHours * ElectricalRate);
+            }
+        }
+
+        public double ElectricalSuperHours
+        {
+            get
+            {
+                return (ElectricalHours / 7);
+            }
+        }
+
         private double _electricalSuperRate;
         public double ElectricalSuperRate
         {
@@ -396,11 +412,11 @@ namespace EstimatingLibrary
             }
         }
 
-        public double ElectricalSubTotal
+        public double ElectricalSuperSubTotal
         {
             get
             {
-                return (ElectricalHours * ElectricalRate);
+                return (ElectricalSuperHours * ElectricalSuperRate);
             }
         }
         #endregion Electrical
@@ -409,7 +425,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return (ElectricalSubTotal);
+                return (ElectricalSubTotal + ElectricalSuperSubTotal);
             }
         }
 
@@ -483,6 +499,27 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public void UpdateConstants(TECLabor labor)
+        {
+            PMCoef = labor.PMCoef;
+            PMRate = labor.PMRate;
+
+            ENGCoef = labor.ENGCoef;
+            ENGRate = labor.ENGRate;
+
+            SoftCoef = labor.SoftCoef;
+            SoftRate = labor.SoftRate;
+
+            GraphCoef = labor.GraphCoef;
+            GraphRate = labor.GraphRate;
+
+            CommCoef = labor.CommCoef;
+            CommRate = labor.CommRate;
+
+            ElectricalRate = labor.ElectricalRate;
+            ElectricalSuperRate = labor.ElectricalSuperRate;
+        }
+
         private void raiseLaborChanged()
         {
             RaisePropertyChanged("NumPoints");
@@ -527,6 +564,10 @@ namespace EstimatingLibrary
             RaisePropertyChanged("ElectricalHours");
             RaisePropertyChanged("ElectricalRate");
             RaisePropertyChanged("ElectricalSubTotal");
+
+            RaisePropertyChanged("ElecricalSuperHours");
+            RaisePropertyChanged("ElecricalSuperRate");
+            RaisePropertyChanged("ElecricalSuperSubTotal");
 
             RaisePropertyChanged("SubcontractorSubTotal");
 

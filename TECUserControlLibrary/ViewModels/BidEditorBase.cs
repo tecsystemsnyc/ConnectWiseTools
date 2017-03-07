@@ -36,6 +36,17 @@ namespace TECUserControlLibrary.ViewModels
             get;
             private set;
         }
+
+        private bool _templatesLoaded;
+        protected bool templatesLoaded
+        {
+            get { return _templatesLoaded; }
+            set
+            {
+                _templatesLoaded = value;
+                TemplatesLoadedSet?.Invoke();
+            }
+        }
         private string _programName;
         protected string programName
         {
@@ -132,6 +143,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Delgates
         public Action BidSet;
+        public Action TemplatesLoadedSet;
         #endregion
 
         #endregion
@@ -142,7 +154,6 @@ namespace TECUserControlLibrary.ViewModels
             setupCommands();
             setupTemplates();
             getLogo();
-            setupTemplates();
             setupBid();
             setupStack();
 
@@ -174,10 +185,14 @@ namespace TECUserControlLibrary.ViewModels
             if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
+                {
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                    templatesLoaded = true;
+                }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
+                    templatesLoaded = false;
                 }
             }
             else
@@ -194,13 +209,19 @@ namespace TECUserControlLibrary.ViewModels
                         if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                         {
                             Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                            templatesLoaded = true;
+                            DebugHandler.LogDebugMessage("Finished loading templates.");
                         }
                         else
                         {
                             DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
+                            templatesLoaded = false;
                         }
-                        DebugHandler.LogDebugMessage("Finished loading templates.");
                     }
+                }
+                else
+                {
+                    templatesLoaded = false;
                 }
             }
         }
@@ -537,7 +558,7 @@ namespace TECUserControlLibrary.ViewModels
             //new View.BudgetWindow();
             //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
         }
-        private void LoadTemplatesExecute()
+        protected void LoadTemplatesExecute()
         {
             if (!isReady)
             {
@@ -557,6 +578,10 @@ namespace TECUserControlLibrary.ViewModels
                     Bid.DeviceCatalog = Templates.DeviceCatalog;
                     Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
                     Bid.Tags = Templates.Tags;
+                    Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                    Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                    Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                    templatesLoaded = true;
                 }
                 else
                 {
