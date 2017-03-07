@@ -11,7 +11,7 @@
         
         mc:Ignorable="d ignore"
         Height="720"
-        Width="1024"
+        Width="1200"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>

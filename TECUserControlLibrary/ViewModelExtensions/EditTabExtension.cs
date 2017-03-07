@@ -15,6 +15,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
     public class EditTabExtension : ViewModelBase
     {
         #region Properties
+        private bool isBid;
+
         public EditIndex TabIndex
         {
             get { return _TabIndex; }
@@ -204,6 +206,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates = templates;
             setupCommands();
+            isBid = false;
             TabIndex = EditIndex.Nothing;
         }
 
@@ -211,6 +214,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Bid = bid;
             setupCommands();
+            isBid = true;
             TabIndex = EditIndex.Nothing;
         }
 
@@ -416,7 +420,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             else if (selection is TECDevice)
             {
-                SelectedDevice = selection as TECDevice;
+                if (isBid)
+                { TabIndex = EditIndex.Nothing; }
+                else
+                { SelectedDevice = selection as TECDevice; }
+                
             }
             else if (selection is TECPoint)
             {

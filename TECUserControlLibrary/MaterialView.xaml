@@ -15,22 +15,33 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="0*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-            <TextBlock Text="Wiring" Grid.Column="0" Grid.Row="0"
+        <TextBlock Text="Wiring" Grid.Column="0" Grid.Row="0"
                                    FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                   VerticalAlignment="Center" Margin="5,7,0,7"/>
+        <Border Grid.Row="0" Grid.Column="0"
+                Grid.RowSpan="4" Grid.ColumnSpan="1"
+                BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="4" Grid.Column="0"
+                Grid.RowSpan="4" Grid.ColumnSpan="1"
+                BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="0" Grid.Column="1"
+                Grid.RowSpan="4" Grid.ColumnSpan="1"
+                BorderBrush="Black" BorderThickness="1"/>
+        
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -39,11 +50,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Name"/>
+            <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ConnectionTypeName}"/>
-            <TextBlock Text="Cost"
-                       Grid.Column="2"/>
+            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding ConnectionTypeCost}"/>
         </Grid>
@@ -54,16 +66,17 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Labor Rate"/>
+            <TextBlock Text="Labor Rate:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ConnectionTypeLabor}"/>
             <Button Grid.Column="2" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddConnectionTypeCommand}"/>
         </Grid>
-            <TextBlock Text="Conduit" Grid.Column="1" Grid.Row="0"
+        <TextBlock Text="Conduit" Grid.Column="1" Grid.Row="0"
                        FontWeight="Bold" Foreground="Black"
-                       VerticalAlignment="Center" Margin="5,0,0,0"/>
+                       VerticalAlignment="Center" Margin="5,7,0,7"/>
         <Grid Grid.Row="1"
               Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -72,10 +85,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Name"/>
+            <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ConduitTypeName}"/>
-            <TextBlock Text="Cost"
+            <TextBlock Text="Cost:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"
                        Grid.Column="2"/>
             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding ConduitTypeCost}"/>
@@ -88,7 +103,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Labor Rate"/>
+            <TextBlock Text="Labor Rate:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ConduitTypeLabor}"/>
             <Button Grid.Column="2" Grid.ColumnSpan="2"
@@ -103,7 +119,7 @@
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="4"
                                 FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                VerticalAlignment="Center" Margin="5,7,0,7"/>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -112,17 +128,20 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Name"/>
+            <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding AssociatedCostName}"/>
-            <TextBlock Text="Cost" Grid.Column="2"/>
+            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding AssociatedCostCost}"/>
             <Button Grid.Column="4" Grid.ColumnSpan="1"
                     Content="Add" Margin="2"
                     Command="{Binding AddAssociatedCostCommand}"/>
         </Grid>
-            <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
-                                                          Grid.Row="6"/>
-        </Grid>
+        <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
+                                          Grid.Row="6" Grid.RowSpan="2"
+                                          Margin="5"/>
+    </Grid>
 </UserControl>

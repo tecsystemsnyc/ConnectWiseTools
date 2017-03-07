@@ -127,6 +127,7 @@ namespace Scope_Builder.ViewModel
             ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
             ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
 
             switch (tIndex)
             {
