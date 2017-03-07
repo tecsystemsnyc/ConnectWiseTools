@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Windows.Input;
@@ -46,6 +47,8 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = new TECBid();
             Templates = new TECTemplates();
+
+            ReloadCommand = new RelayCommand(ReloadExecute);
         }
 
         public ICommand ReloadCommand { get; private set; }
