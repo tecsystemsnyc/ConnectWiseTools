@@ -370,14 +370,7 @@ namespace EstimatingUtilitiesLibrary
         {
             TECLabor labor = new TECLabor();
 
-            string constsCommand = "select * from (" + LaborConstantsTable.TableName + " inner join ";
-            constsCommand += TemplatesLaborTable.TableName + " on ";
-            constsCommand += "(TECLaborConst.LaborID = TECTemplatesTECLabor.LaborID";
-            constsCommand += " and " + TemplatesLaborTable.TemplatesID.Name + " = '";
-            constsCommand += templates.Guid;
-            constsCommand += "'))";
-
-            DataTable laborDT = SQLiteDB.getDataFromCommand(constsCommand);
+            DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
 
             if (laborDT.Rows.Count > 1)
             {
@@ -406,15 +399,7 @@ namespace EstimatingUtilitiesLibrary
             labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble(0);
             labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble(0);
 
-
-            string subConstsCommand = "select * from (" + SubcontractorConstantsTable.TableName + " inner join ";
-            subConstsCommand += TemplatesLaborTable.TableName + " on ";
-            subConstsCommand += "(TECSubcontractorConst.LaborID = TECTemplatesTECLabor.LaborID";
-            subConstsCommand += " and " + TemplatesLaborTable.TemplatesID.Name + " = '";
-            subConstsCommand += templates.Guid;
-            subConstsCommand += "'))";
-
-            DataTable subConstsDT = SQLiteDB.getDataFromCommand(subConstsCommand);
+            DataTable subConstsDT = SQLiteDB.getDataFromTable(SubcontractorConstantsTable.TableName);
 
             if (subConstsDT.Rows.Count > 1)
             {
