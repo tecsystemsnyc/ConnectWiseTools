@@ -391,6 +391,7 @@ namespace EstimatingLibrary
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
             _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
+            _costAdditions = new ObservableCollection<TECCostAddition>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             Parameters.PropertyChanged += objectPropertyChanged;
