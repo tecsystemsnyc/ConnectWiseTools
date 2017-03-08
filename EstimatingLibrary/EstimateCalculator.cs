@@ -9,7 +9,10 @@ namespace EstimatingLibrary
 {
     public static class EstimateCalculator
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// 
         public static double GetMaterialCost(TECBid bid)
         {
             double cost = 0;
@@ -19,7 +22,18 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+        public static double GetTax(TECBid bid)
+        {
+            double outTax = 0;
 
+            if (!bid.Parameters.IsTaxExempt)
+            {
+                outTax += .0875 * bid.MaterialCost;
+            }
+
+            return outTax;
+        }
+        
         public static double GetTECCost(TECBid bid)
         {
             double outCost = 0;
@@ -35,63 +49,9 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetTECCost(bid);
-
             outCost += outCost * bid.Parameters.Profit / 100;
 
             return outCost;
-        }
-
-        public static double GetSubcontractorCost(TECBid bid)
-        {
-            double outCost = 0;
-            outCost += bid.Labor.SubcontractorSubTotal;
-            outCost += bid.ElectricalMaterialCost;
-            outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
-
-            return outCost;
-        }
-        public static double GetSubcontractorSubtotal(TECBid bid)
-        {
-            double outCost = 0;
-            outCost += GetSubcontractorCost(bid);
-            outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
-
-            return outCost;
-        }
-
-        public static double GetTax(TECBid bid)
-        {
-            double outTax = 0;
-
-            if (!bid.Parameters.IsTaxExempt)
-            {
-                outTax += .0875 * bid.MaterialCost;
-            }
-
-            return outTax;
-        }
-
-        public static double GetTotalPrice(TECBid bid)
-        {
-            double outPrice = 0;
-
-            outPrice += GetTECSubtotal(bid);
-            outPrice += GetSubcontractorSubtotal(bid);
-
-            return outPrice;
-        }
-
-        public static double GetBudgetPrice(TECBid bid)
-        {
-            double price = 0;
-            foreach (TECSystem system in bid.Systems)
-            {
-                if (system.TotalBudgetPrice >= 0)
-                {
-                    price += system.TotalBudgetPrice;
-                }
-            }
-            return price;
         }
 
         public static double GetElectricalMaterialCost(TECBid bid)
@@ -101,10 +61,10 @@ namespace EstimatingLibrary
             foreach (TECConnection conn in bid.Connections)
             {
                 var length = conn.Length;
-                foreach(TECConnectionType type in conn.ConnectionTypes)
+                foreach (TECConnectionType type in conn.ConnectionTypes)
                 {
                     cost += length * type.Cost;
-                    foreach(TECAssociatedCost associatedCost in type.AssociatedCosts)
+                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                     { cost += associatedCost.Cost; }
                 }
             }
@@ -117,15 +77,14 @@ namespace EstimatingLibrary
                     {
                         if (sub.Connection == null)
                         {
-                            foreach(TECConnectionType type in sub.ConnectionTypes)
+                            foreach (TECConnectionType type in sub.ConnectionTypes)
                             { cost += sub.Length * type.Cost; }
                         }
                     }
                 }
-            } 
-            return cost; 
+            }
+            return cost;
         }
-
         public static double GetElectricalLaborCost(TECBid bid)
         {
             double labor = 0;
@@ -159,5 +118,47 @@ namespace EstimatingLibrary
             labor += bid.Labor.SubcontractorSubTotal;
             return labor;
         }
+        public static double GetSubcontractorCost(TECBid bid)
+        {
+            double outCost = 0;
+            outCost += bid.SubcontractorLaborCost;
+            outCost += bid.ElectricalMaterialCost;
+            outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
+
+            return outCost;
+        }
+        public static double GetSubcontractorSubtotal(TECBid bid)
+        {
+            double outCost = 0;
+            outCost += GetSubcontractorCost(bid);
+            outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
+            return outCost;
+        }
+        
+        public static double GetTotalPrice(TECBid bid)
+        {
+            double outPrice = 0;
+
+            outPrice += GetTECSubtotal(bid);
+            outPrice += GetSubcontractorSubtotal(bid);
+
+            return outPrice;
+        }
+        #region Budgeting
+        public static double GetBudgetPrice(TECBid bid)
+        {
+            double price = 0;
+            foreach (TECSystem system in bid.Systems)
+            {
+                if (system.TotalBudgetPrice >= 0)
+                {
+                    price += system.TotalBudgetPrice;
+                }
+            }
+            return price;
+        }
+        #endregion
+
+        
     }
 }
