@@ -10,9 +10,8 @@ namespace EstimatingLibrary
     public static class EstimateCalculator
     {
         /// <summary>
-        /// 
+        /// Returns TEC material costs of devices and their associated costs
         /// </summary>
-        /// 
         public static double GetMaterialCost(TECBid bid)
         {
             double cost = 0;
@@ -22,6 +21,9 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+        /// <summary>
+        /// Returns tax from the TEC materials cost at 8.75% if tax is not exempt
+        /// </summary>
         public static double GetTax(TECBid bid)
         {
             double outTax = 0;
@@ -33,7 +35,10 @@ namespace EstimatingLibrary
 
             return outTax;
         }
-        
+
+        /// <summary>
+        /// Returns cost of all TEC material and labor with escalation, overhead, and tax
+        /// </summary>
         public static double GetTECCost(TECBid bid)
         {
             double outCost = 0;
@@ -45,6 +50,9 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        /// <summary>
+        /// Returns TEC Cost plus profit
+        /// </summary>
         public static double GetTECSubtotal(TECBid bid)
         {
             double outCost = 0;
@@ -54,6 +62,9 @@ namespace EstimatingLibrary
             return outCost;
         }
 
+        /// <summary>
+        /// Returns the electrical material cost of all wire, conduit, and their associated costs 
+        /// </summary>
         public static double GetElectricalMaterialCost(TECBid bid)
         {
             double cost = 0;
@@ -75,6 +86,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope sub in equipment.SubScope)
                     {
+                        cost += sub.Length * sub.ConduitType.Cost;
                         if (sub.Connection == null)
                         {
                             foreach (TECConnectionType type in sub.ConnectionTypes)
@@ -85,6 +97,9 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+        /// <summary>
+        /// Returns the electrical labor cost of all wire, conduit, and their associated costs 
+        /// </summary>
         public static double GetElectricalLaborCost(TECBid bid)
         {
             double labor = 0;
@@ -106,6 +121,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope sub in equipment.SubScope)
                     {
+                        labor += sub.Length * sub.ConduitType.Labor;
                         if (sub.Connection == null)
                         {
                             foreach (TECConnectionType type in sub.ConnectionTypes)
@@ -118,6 +134,9 @@ namespace EstimatingLibrary
             labor += bid.Labor.SubcontractorSubTotal;
             return labor;
         }
+        /// <summary>
+        /// Returns the electrical material and labor costs with escalation 
+        /// </summary>
         public static double GetSubcontractorCost(TECBid bid)
         {
             double outCost = 0;
@@ -127,6 +146,9 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        /// <summary>
+        /// Returns the electrical total with markup 
+        /// </summary>
         public static double GetSubcontractorSubtotal(TECBid bid)
         {
             double outCost = 0;
@@ -134,7 +156,10 @@ namespace EstimatingLibrary
             outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
             return outCost;
         }
-        
+
+        /// <summary>
+        /// Returns the final sell price 
+        /// </summary>
         public static double GetTotalPrice(TECBid bid)
         {
             double outPrice = 0;
@@ -145,6 +170,9 @@ namespace EstimatingLibrary
             return outPrice;
         }
         #region Budgeting
+        /// <summary>
+        /// Returns the budget price based on the user-assigned values in systems
+        /// </summary>
         public static double GetBudgetPrice(TECBid bid)
         {
             double price = 0;
@@ -158,7 +186,16 @@ namespace EstimatingLibrary
             return price;
         }
         #endregion
+        #region Metrics
+        /// <summary>
+        /// Returns the final price per point 
+        /// </summary>
+        public static double GetPricePerPoint(TECBid bid)
+        {
+            return (GetTotalPrice(bid) / bid.TotalPointNumber);
+        }
+        #endregion
 
-        
+
     }
 }
