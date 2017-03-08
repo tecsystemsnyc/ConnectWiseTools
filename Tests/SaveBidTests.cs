@@ -2817,7 +2817,96 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Remove_CostAddition()
         {
+            //Act
+            TECCostAddition costToRemove = bid.CostAdditions[0];
+            bid.CostAdditions.Remove(costToRemove);
 
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(bid.CostAdditions.Count, actualBid.CostAdditions.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_CostAddition_Name()
+        {
+            //Act
+            TECCostAddition expectedCost = bid.CostAdditions[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECCostAddition actualCost = null;
+            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_CostAddition_Cost()
+        {
+            //Act
+            TECCostAddition expectedCost = bid.CostAdditions[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECCostAddition actualCost = null;
+            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Bid_CostAddition_Quantity()
+        {
+            //Act
+            TECCostAddition expectedCost = bid.CostAdditions[0];
+            expectedCost.Quantity = 492;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECCostAddition actualCost = null;
+            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
         #endregion
     }
