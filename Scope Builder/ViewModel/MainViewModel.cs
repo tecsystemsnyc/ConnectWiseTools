@@ -76,10 +76,7 @@ namespace Scope_Builder.ViewModel
         }
         #endregion Visibility Properties
         #endregion
-
-        #region Fields
-
-        #endregion
+        
 
         #region Intitializer
         public MainViewModel()
