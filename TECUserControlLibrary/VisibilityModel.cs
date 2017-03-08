@@ -245,6 +245,17 @@ namespace TECUserControlLibrary
                 RaisePropertyChanged("ExpandSubScope");
             }
         }
+
+        private Visibility _subScopeLength;
+        public Visibility SubScopeLength
+        {
+            get { return _subScopeLength; }
+            set
+            {
+                _subScopeLength = value;
+                RaisePropertyChanged("SubScopeLength");
+            }
+        }
         #endregion
 
         public VisibilityModel()
@@ -272,6 +283,7 @@ namespace TECUserControlLibrary
             SubScopeDescription = Visibility.Visible;
             SubScopeLocation = Visibility.Visible;
             SubScopeQuantity = Visibility.Visible;
+            SubScopeLength = Visibility.Visible;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

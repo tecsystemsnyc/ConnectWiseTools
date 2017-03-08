@@ -21,11 +21,26 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
+
+        private double _labor;
+        public double Labor
+        {
+            get { return _labor; }
+            set
+            {
+                var temp = this.Copy();
+                _labor = value;
+                NotifyPropertyChanged("Labor", temp, this);
+            }
+        }
         #endregion
 
         #region Constructors
         public TECAssociatedCost(Guid guid) : base(guid)
-        { _cost = 0; }
+        {
+            _cost = 0;
+            _labor = 0;
+        }
 
         public TECAssociatedCost() : this(Guid.NewGuid()) { }
         #endregion
@@ -36,6 +51,7 @@ namespace EstimatingLibrary
             outCost.copyPropertiesFromScope(this);
             outCost._guid = this.Guid;
             outCost._cost = this.Cost;
+            outCost._labor = this.Labor;
             return outCost;
         }
 
