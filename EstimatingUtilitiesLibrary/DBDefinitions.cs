@@ -158,7 +158,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class CostAdditionsTable : TableBase
+    public class CostAdditionTable : TableBase
     {
         public static new string TableName = "TECCostAdditions";
         public static Type ObjectType = typeof(TECCostAddition);
@@ -648,7 +648,27 @@ namespace EstimatingUtilitiesLibrary
             ParameterType
         };
     }
+    public class BidCostAdditionsTable : TableBase
+    {
+        public static new string TableName = "TECBidTECCostAdditions";
+        public static Type BidType = typeof(TECBid);
+        public static Type CostType = typeof(TECCostAddition);
 
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        public static TableField CostID = new TableField("CostAdditionID", "TEXT", CostType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            CostID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            BidType,
+            CostType
+        };
+    }
     public class ControllerIOTypeTable : TableBase
     {
         public static new string TableName = "TECControllerTECIO";
@@ -1140,7 +1160,7 @@ namespace EstimatingUtilitiesLibrary
             new LaborConstantsTable(),
             new SubcontractorConstantsTable(),
             new UserAdjustmentsTable(),
-            new CostAdditionsTable(),
+            new CostAdditionTable(),
             new NoteTable(),
             new ExclusionTable(),
             new BidScopeBranchTable(),

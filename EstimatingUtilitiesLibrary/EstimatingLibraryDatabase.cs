@@ -94,6 +94,7 @@ namespace EstimatingUtilitiesLibrary
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
             bid.AssociatedCostsCatalog = getAssociatedCosts();
+            bid.CostAdditions = getCostAdditions();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
             //watch.Stop();
@@ -977,6 +978,18 @@ namespace EstimatingUtilitiesLibrary
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
+        static private ObservableCollection<TECCostAddition> getCostAdditions()
+        {
+            ObservableCollection<TECCostAddition> costs = new ObservableCollection<TECCostAddition>();
+
+            DataTable costsDT = SQLiteDB.getDataFromTable(CostAdditionTable.TableName);
+            foreach (DataRow row in costsDT.Rows)
+            {
+                costs.Add(getCostAdditionFromRow(row));
+            }
+
+            return costs;
+        }
         #endregion //Loading from DB Methods
         
         #region Populate Derived
@@ -1505,6 +1518,18 @@ namespace EstimatingUtilitiesLibrary
             paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
 
             return paramters;
+        }
+
+        private static TECCostAddition getCostAdditionFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[CostAdditionTable.CostAdditionID.Name].ToString());
+            TECCostAddition cost = new TECCostAddition(guid);
+
+            cost.Name = row[CostAdditionTable.Name.Name].ToString();
+            cost.Cost = row[CostAdditionTable.Cost.Name].ToString().ToDouble(0);
+            cost.Quantity = row[CostAdditionTable.Quantity.Name].ToString().ToInt(1);
+
+            return cost;
         }
         #endregion
 
