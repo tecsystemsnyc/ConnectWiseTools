@@ -2786,6 +2786,37 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_CostAddition()
         {
+            //Act
+            TECCostAddition expectedCost = new TECCostAddition();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+            expectedCost.Quantity = 21;
+
+            bid.CostAdditions.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECCostAddition actualCost = null;
+            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_CostAddition()
+        {
 
         }
         #endregion
