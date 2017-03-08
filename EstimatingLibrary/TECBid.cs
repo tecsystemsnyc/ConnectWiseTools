@@ -412,6 +412,7 @@ namespace EstimatingLibrary
             ConnectionTypes.CollectionChanged += CollectionChanged;
             ConduitTypes.CollectionChanged += CollectionChanged;
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+            CostAdditions.CollectionChanged += CollectionChanged;
 
             registerSystems();
 
@@ -504,6 +505,11 @@ namespace EstimatingLibrary
                     else
                     {
                         NotifyPropertyChanged("Add", this, item);
+                        if (item is TECCostAddition)
+                        {
+                            updateElectricalMaterial();
+                            (item as TECCostAddition).PropertyChanged += objectPropertyChanged;
+                        }
                         if (item is TECSystem)
                         {
                             var sys = item as TECSystem;
@@ -524,6 +530,11 @@ namespace EstimatingLibrary
                     }
                     else
                     {
+                        if (item is TECCostAddition)
+                        {
+                            updateElectricalMaterial();
+                            (item as TECCostAddition).PropertyChanged -= objectPropertyChanged;
+                        }
                         NotifyPropertyChanged("Remove", this, item);
                         if (item is TECScope)
                         {
@@ -564,13 +575,11 @@ namespace EstimatingLibrary
         {
             NotifyPropertyChanged("ChildChanged", this, sender);
             if (sender is TECLabor)
-            {
-                updateFromLabor();
-            }
+            { updateFromLabor(); }
             else if (sender is TECBidParameters)
-            {
-                updateFromParameters();
-            }
+            { updateFromParameters(); }
+            else if (sender is TECCostAddition)
+            { updateElectricalMaterial(); }
         }
 
         #endregion

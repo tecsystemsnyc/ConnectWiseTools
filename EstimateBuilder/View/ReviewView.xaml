@@ -172,7 +172,7 @@
                TextAlignment="Right"/>
 
         <Label Content="Margin:" Grid.Row="15" Grid.Column="3"/>
-        <TextBlock Text="{Binding Bid.Margin, StringFormat= {} {0:C}}" 
+        <TextBlock Text="{Binding Bid.Margin, StringFormat={}{0}%}" 
                Grid.Row="15" Grid.Column="4"
                TextAlignment="Right"/>
 
