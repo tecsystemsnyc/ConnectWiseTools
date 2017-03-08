@@ -104,6 +104,7 @@ namespace EstimatingLibrary
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
                 Labor.PropertyChanged += objectPropertyChanged;
+                Labor.NumPoints = getPointNumber();
             }
         }
 
@@ -202,6 +203,7 @@ namespace EstimatingLibrary
                 _systems = value;
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
+                updatePoints();
             }
         }
         public ObservableCollection<TECDevice> DeviceCatalog {
@@ -396,6 +398,8 @@ namespace EstimatingLibrary
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
+
+            Labor.NumPoints = getPointNumber();
         }
 
         public TECBid() : this(Guid.NewGuid())

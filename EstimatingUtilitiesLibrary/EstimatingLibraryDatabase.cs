@@ -31,13 +31,13 @@ namespace EstimatingUtilitiesLibrary
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECBid));
-            watch.Stop();
-            Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
             TECBid bid = getBidInfo();
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
             if (templates.DeviceCatalog.Count > 0)
             {
@@ -72,10 +72,10 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
                 { editObject(cost, bid); }
             }
-            watch.Stop();
-            Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             
             bid.Parameters = getBidParameters(bid);
             bid.Labor = getLaborConstsInBid(bid);
@@ -96,8 +96,8 @@ namespace EstimatingUtilitiesLibrary
             bid.AssociatedCostsCatalog = getAssociatedCosts();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
-            watch.Stop();
-            Console.WriteLine("loading data: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("loading data: " + watch.ElapsedMilliseconds);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
