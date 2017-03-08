@@ -193,6 +193,8 @@ namespace Scope_Builder.ViewModel
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.SelectionChanged += setContextText;
+            ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
+
         }
         private void setupLocationDataGrid()
         {

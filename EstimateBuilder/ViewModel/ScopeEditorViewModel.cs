@@ -119,6 +119,7 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid = new ScopeDataGridExtension(Bid);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
             ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupLocationDataGrid()

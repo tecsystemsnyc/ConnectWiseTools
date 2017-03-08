@@ -93,5 +93,71 @@ namespace EstimatingLibrary
             }
             return price;
         }
+
+        public static double GetElectricalMaterialCost(TECBid bid)
+        {
+            double cost = 0;
+
+            foreach (TECConnection conn in bid.Connections)
+            {
+                var length = conn.Length;
+                foreach(TECConnectionType type in conn.ConnectionTypes)
+                {
+                    cost += length * type.Cost;
+                    foreach(TECAssociatedCost associatedCost in type.AssociatedCosts)
+                    { cost += associatedCost.Cost; }
+                }
+            }
+
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope sub in equipment.SubScope)
+                    {
+                        if (sub.Connection == null)
+                        {
+                            foreach(TECConnectionType type in sub.ConnectionTypes)
+                            { cost += sub.Length * type.Cost; }
+                        }
+                    }
+                }
+            } 
+            return cost; 
+        }
+
+        public static double GetElectricalLaborCost(TECBid bid)
+        {
+            double labor = 0;
+
+            foreach (TECConnection conn in bid.Connections)
+            {
+                var length = conn.Length;
+                foreach (TECConnectionType type in conn.ConnectionTypes)
+                {
+                    labor += length * type.Labor;
+                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                    { labor += associatedCost.Cost; }
+                }
+            }
+
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope sub in equipment.SubScope)
+                    {
+                        if (sub.Connection == null)
+                        {
+                            foreach (TECConnectionType type in sub.ConnectionTypes)
+                            { labor += sub.Length * type.Labor; }
+                        }
+                    }
+                }
+            }
+            labor *= bid.Labor.ElectricalRate;
+            labor += bid.Labor.SubcontractorSubTotal;
+            return labor;
+        }
     }
 }

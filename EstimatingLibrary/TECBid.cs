@@ -134,6 +134,11 @@ namespace EstimatingLibrary
                 return EstimateCalculator.GetTECSubtotal(this);
             }
         }
+
+        public double SubcontractorLaborCost
+        {
+            get { return EstimateCalculator.GetElectricalLaborCost(this); }
+        }
         public double SubcontractorSubtotal
         {
             get
@@ -166,7 +171,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getElectricalMaterialCost();
+                return EstimateCalculator.GetElectricalMaterialCost(this);
             }
         }
         public double Tax
@@ -540,8 +545,7 @@ namespace EstimatingLibrary
             NotifyPropertyChanged("ChildChanged", this, sender);
             if (sender is TECLabor)
             {
-                RaisePropertyChanged("TECSubtotal");
-                RaisePropertyChanged("SubcontractorSubtotal");
+                updateFromLabor();
             }
             else if (sender is TECBidParameters)
             {
@@ -569,35 +573,6 @@ namespace EstimatingLibrary
                 }
             }
             return totalPoints;
-        }
-
-        //ONLY RETURNS TOTAL LENGTH AT THE MOMENT
-        private double getElectricalMaterialCost()
-        {
-            
-            double cost = 0;
-
-            foreach(TECConnection conn in Connections)
-            {
-                cost += conn.Length;
-            }
-
-            foreach(TECSystem system in Systems)
-            {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    foreach(TECSubScope sub in equipment.SubScope)
-                    {
-                        if(sub.Connection == null)
-                        {
-                            cost += sub.Length;
-                        }
-                    }
-                }
-            }
-
-            return cost;
-
         }
         
         public override object Copy()
@@ -680,6 +655,7 @@ namespace EstimatingLibrary
         private void updateDevices()
         {
             RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("Tax");
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("TotalPrice");
@@ -688,6 +664,7 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("ElectricalMaterialCost");
             RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("TotalPrice");
         }
         private void updateFromParameters()
@@ -695,7 +672,25 @@ namespace EstimatingLibrary
             RaisePropertyChanged("Tax");
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("TotalPrice");
+        }
+        private void updateFromLabor()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("TotalPrice");
+        }
+        private void updateAll()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("TotalPrice");
+            RaisePropertyChanged("ElectricalMaterialCost");
         }
 
         private void checkForTotalsInSystem(TECSystem system)
@@ -704,7 +699,8 @@ namespace EstimatingLibrary
             {
                 foreach(TECSubScope sub in equip.SubScope)
                 {
-                    if(sub.Points.Count > 0)
+                    updateElectricalMaterial();
+                    if (sub.Points.Count > 0)
                     {
                         updatePoints();
                     }
