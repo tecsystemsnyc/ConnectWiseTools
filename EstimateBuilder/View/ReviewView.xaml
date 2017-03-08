@@ -12,12 +12,15 @@
         <ResourceDictionary>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -168,16 +171,28 @@
                  Grid.Column="1"
                TextAlignment="Right"/>
 
+        <Label Content="Margin:" Grid.Row="15" Grid.Column="3"/>
+        <TextBlock Text="{Binding Bid.Margin, StringFormat= {} {0:C}}" 
+               Grid.Row="15" Grid.Column="4"
+               TextAlignment="Right"/>
+
         <Label Content="Total" 
-               Grid.Row="15"  Grid.Column="3"
+               Grid.Row="16"  Grid.Column="3"
                FontWeight="Bold"
                FontStyle="Italic"/>
-        <Border Grid.Row="15"
+        <Border Grid.Row="16"
                  Grid.Column="4"
                 BorderThickness="2"
                 BorderBrush="Black">
             <TextBlock Text="{Binding Bid.TotalPrice, StringFormat= {} {0:C}}" TextAlignment="Right"/>
         </Border>
+        
+        <Label Content="Price per Point:" Grid.Row="17" Grid.Column="3"/>
+        <TextBlock Text="{Binding Bid.PricePerPoint, StringFormat= {} {0:C}}" 
+               Grid.Row="17" Grid.Column="4"
+               TextAlignment="Right"/>
+        
+        
 
     </Grid>
 </UserControl>
