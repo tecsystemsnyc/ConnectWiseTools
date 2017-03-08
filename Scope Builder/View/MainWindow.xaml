@@ -44,21 +44,21 @@
             <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
+    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"
                           Command="{Binding NewCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
                 <MenuItem Header="_Open"
                           Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
                 <MenuItem Header="_Save"
                           Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
                 <MenuItem Header="_Save As"
                           Command="{Binding SaveAsCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Undo"
@@ -78,10 +78,10 @@
             <MenuItem Header="_Export">
                 <MenuItem Header="_To Document"
                           Command="{Binding DocumentCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
                 <MenuItem Header="_To CSV"
                           Command="{Binding CSVExportCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
             </MenuItem>
 
             
@@ -89,7 +89,7 @@
             <MenuItem Header="_Templates">
                 <MenuItem Header="_Reload"
                           Command="{Binding LoadTemplatesCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
             </MenuItem>
            
         </Menu>
@@ -121,7 +121,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Name:" Grid.Column="0" 
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Name}"
@@ -132,7 +132,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Bid Number:" Grid.Column="2"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
@@ -143,7 +143,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Estimator:" Grid.Column="4"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
@@ -154,7 +154,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Salesperson:" Grid.Column="6"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
