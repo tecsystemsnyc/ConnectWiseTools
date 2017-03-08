@@ -28,10 +28,10 @@
                   AutoGenerateColumns="False"
                   Margin="5">
             <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
-            <DataGridTextColumn Binding="{Binding Cost}" Header="Cost"/>
-            <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
-                </DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
