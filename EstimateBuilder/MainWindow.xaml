@@ -8,6 +8,7 @@
         xmlns:view="clr-namespace:EstimateBuilder.View"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Height="720"
@@ -142,8 +143,8 @@
                     <view:ReviewView
                         ViewModel="{Binding ReviewVM}"/>
                 </TabItem>
-                <TabItem Header="Settings">
-                    <view:SettingsView
+                <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
+                    <cLibView:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>

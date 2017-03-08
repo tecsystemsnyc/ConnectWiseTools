@@ -39,13 +39,40 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
+            
             BidSet += () =>
-            { refreshAll(); };
+            {
+                refreshAllBids();
+            };
+
             setupAll();
+
+            base.PropertyChanged += BidEditorBase_PropertyChanged;
+
         }
 
+        
+
         #region Properties
-        //Potentially needed in bid setter: 
+
+        #region SettingsProperties
+        public bool TemplatesHidden
+        {
+            get
+            {
+                return Properties.Settings.Default.TemplatesHidden;
+            }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesHidden != value)
+                {
+                    Properties.Settings.Default.TemplatesHidden = value;
+                    RaisePropertyChanged("TemplatesHidden");
+                    TemplatesHiddenChanged();
+                }
+            }
+        }
+        #endregion
 
         #region ViewModels
         public ScopeEditorViewModel ScopeEditorVM { get; set; }
@@ -68,7 +95,7 @@ namespace EstimateBuilder.ViewModel
         private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
         {
             ScopeEditorVM = new ScopeEditorViewModel(bid, templates);
-
+            ScopeEditorVM.PropertyChanged += ScopeEditorVM_PropertyChanged;
         }
         private void setupDrawingVM(TECBid bid)
         {
@@ -88,9 +115,12 @@ namespace EstimateBuilder.ViewModel
                 LaborVM.TemplatesLoaded = templatesLoaded;
             };
         }
-        private void setupSettingsVM(TECBid bid)
+        private void setupSettingsVM()
         {
             SettingsVM = new SettingsViewModel();
+            SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
+            SettingsVM.TemplatesLoadPath = TemplatesFilePath;
+            SettingsVM.ReloadTemplates += LoadTemplatesExecute;
         }
         private void setupReviewVM(TECBid bid)
         {
@@ -160,12 +190,12 @@ namespace EstimateBuilder.ViewModel
             setupDrawingVM(Bid);
             setupLaborVM(Bid, Templates);
             setupReviewVM(Bid);
-            setupSettingsVM(Bid);
+            setupSettingsVM();
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
         }
 
-        private void refreshAll()
+        private void refreshAllBids()
         {
             ScopeEditorVM.Bid = Bid;
             DrawingVM.Bid = Bid;
@@ -174,6 +204,12 @@ namespace EstimateBuilder.ViewModel
             //SettingsVM.Bid = Bid;
             ProposalVM.Bid = Bid;
             ElectricalVM.refresh(Bid);
+        }
+
+        private void refreshAllTemplates()
+        {
+            ScopeEditorVM.Templates = Templates;
+            LaborVM.Templates = Templates;
         }
 
         private void getVersion()
@@ -212,5 +248,60 @@ namespace EstimateBuilder.ViewModel
 
         #endregion
 
+        #region Event Handlers
+        private void TemplatesHiddenChanged()
+        {
+            SettingsVM.TemplatesHidden = TemplatesHidden;
+            if (TemplatesHidden)
+            {
+                ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
+            }
+        }
+        private void BidEditorBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TemplatesFilePath")
+            {
+                SettingsVM.TemplatesLoadPath = TemplatesFilePath;
+            }
+            else if (e.PropertyName == "Templates")
+            {
+                refreshAllTemplates();
+            }
+        }
+        private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TemplatesHidden")
+            {
+                TemplatesHidden = SettingsVM.TemplatesHidden;
+            }
+            else if (e.PropertyName == "TemplatesLoadPath")
+            {
+                TemplatesFilePath = SettingsVM.TemplatesLoadPath;
+            }
+        }
+
+        private void ScopeEditorVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TemplatesVisibility")
+            {
+                if (ScopeEditorVM.TemplatesVisibility == Visibility.Visible)
+                {
+                    TemplatesHidden = false;
+                }
+                else if (ScopeEditorVM.TemplatesVisibility == Visibility.Hidden)
+                {
+                    TemplatesHidden = true;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+        #endregion
     }
 }

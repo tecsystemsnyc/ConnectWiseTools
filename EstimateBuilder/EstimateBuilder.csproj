@@ -160,7 +160,6 @@
     <Compile Include="ViewModel\ReviewViewModel.cs" />
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
@@ -179,9 +178,6 @@
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
       <DependentUpon>ScopeEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -220,10 +216,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ScopeEditorView.xaml">
-      <SubType>Form</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\SettingsView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

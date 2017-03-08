@@ -118,6 +118,23 @@ namespace TECUserControlLibrary.ViewModels
 
         public string TECLogo { get; set; }
         public string Version { get; set; }
+
+        #region Settings Properties
+        public string TemplatesFilePath
+        {
+            get { return Properties.Settings.Default.TemplatesFilePath; }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesFilePath != value)
+                {
+                    Properties.Settings.Default.TemplatesFilePath = value;
+                    RaisePropertyChanged("TemplatesFilePath");
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+        #endregion
+
         #region Command Properties
         public ICommand NewCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
@@ -182,11 +199,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates = new TECTemplates();
             
-            if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
+            if ((TemplatesFilePath != "") && (File.Exists(TemplatesFilePath)))
             {
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                 {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                     templatesLoaded = true;
                 }
                 else
@@ -202,13 +219,13 @@ namespace TECUserControlLibrary.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
+                    TemplatesFilePath = getLoadTemplatesPath();
 
-                    if (Properties.Settings.Default.TemplatesFilePath != null)
+                    if (TemplatesFilePath != null)
                     {
-                        if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                        if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                             templatesLoaded = true;
                             DebugHandler.LogDebugMessage("Finished loading templates.");
                         }
@@ -372,7 +389,7 @@ namespace TECUserControlLibrary.ViewModels
             if (openFileDialog.ShowDialog() == true)
             {
                 path = openFileDialog.FileName;
-                Properties.Settings.Default.TemplatesFilePath = path;
+                TemplatesFilePath = path;
                 Properties.Settings.Default.Save();
             }
 
@@ -569,16 +586,16 @@ namespace TECUserControlLibrary.ViewModels
             string path = getLoadTemplatesPath();
             if (path != "")
             {
-                Properties.Settings.Default.TemplatesFilePath = path;
+                TemplatesFilePath = path;
             }
 
-            if (Properties.Settings.Default.TemplatesFilePath != null)
+            if (TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + Properties.Settings.Default.TemplatesFilePath);
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath);
+                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                 {
                     
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                     Bid.DeviceCatalog = Templates.DeviceCatalog;
                     Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
                     Bid.Tags = Templates.Tags;
@@ -589,7 +606,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
+                    DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
                 }
                 DebugHandler.LogDebugMessage("Finished loading templates");
             }
@@ -644,10 +661,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     e.Cancel = true;
                 }
-            }
-            if (!e.Cancel)
-            {
-                Properties.Settings.Default.Save();
             }
         }
 

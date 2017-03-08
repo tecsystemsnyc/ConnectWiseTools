@@ -105,8 +105,11 @@ namespace EstimateBuilder.ViewModel
             get { return _templatesVisibility; }
             set
             {
-                _templatesVisibility = value;
-                RaisePropertyChanged("TemplatesVisibility");
+                if (value != _templatesVisibility)
+                {
+                    _templatesVisibility = value;
+                    RaisePropertyChanged("TemplatesVisibility");
+                }
             }
         }
         #endregion Visibility Properties
