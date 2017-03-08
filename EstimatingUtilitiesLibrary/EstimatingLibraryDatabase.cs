@@ -1120,7 +1120,6 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if(type == typeof(TECTemplates))
                 {
-                    killTemplatesInfo();
                     return false;
                 }
                 else

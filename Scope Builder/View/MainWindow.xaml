@@ -45,7 +45,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource SBWindowBackgroundBrush}">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"
                           Command="{Binding NewCommand}"
