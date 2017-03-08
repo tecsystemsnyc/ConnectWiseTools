@@ -262,7 +262,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetPrice"));
+        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetPriceModifier"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID
@@ -282,7 +282,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetPrice"));
+        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetUnitPrice"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             EquipmentID

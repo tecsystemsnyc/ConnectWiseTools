@@ -239,13 +239,13 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
             Assert.AreEqual(expectedSystem.Tags[0].Text, actualSystem.Tags[0].Text);
 
             Assert.AreEqual(expectedSysEquipment.Name, actualSysEquipment.Name);
             Assert.AreEqual(expectedSysEquipment.Description, actualSysEquipment.Description);
             Assert.AreEqual(expectedSysEquipment.Quantity, actualSysEquipment.Quantity);
-            Assert.AreEqual(expectedSysEquipment.BudgetPrice, actualSysEquipment.BudgetPrice);
+            Assert.AreEqual(expectedSysEquipment.BudgetUnitPrice, actualSysEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedSysEquipment.Tags[0].Text, actualSysEquipment.Tags[0].Text);
 
             Assert.AreEqual(expectedSysSubScope.Name, actualSysSubScope.Name);
@@ -285,7 +285,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedEquipment.Tags[0].Text, actualEquipment.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipSubScope.Name, actualEquipSubScope.Name);

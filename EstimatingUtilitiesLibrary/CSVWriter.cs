@@ -148,9 +148,9 @@ namespace EstimatingUtilitiesLibrary
                 systemRow.Add("");
                 systemRow.Add("");
                 systemRow.Add(system.Quantity.ToString());
-                if (system.PriceWithEquipment >= 0)
+                if (system.BudgetUnitPrice >= 0)
                 {
-                    systemRow.Add("$" + system.PriceWithEquipment.ToString());
+                    systemRow.Add("$" + system.BudgetUnitPrice.ToString());
                     systemRow.Add("");
                     systemRow.Add("$" + system.TotalBudgetPrice.ToString());
                     budgetedRows.Add(systemRow);
@@ -162,9 +162,9 @@ namespace EstimatingUtilitiesLibrary
                         equipmentRow.Add(equip.Name);
                         equipmentRow.Add("");
                         equipmentRow.Add(equip.Quantity.ToString());
-                        if (equip.BudgetPrice >= 0)
+                        if (equip.BudgetUnitPrice >= 0)
                         {
-                            equipmentRow.Add("$" + equip.BudgetPrice.ToString());
+                            equipmentRow.Add("$" + equip.BudgetUnitPrice.ToString());
                             equipmentRow.Add("$" + equip.TotalBudgetPrice.ToString());
                         }
                         else

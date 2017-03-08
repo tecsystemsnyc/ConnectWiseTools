@@ -128,13 +128,13 @@ namespace Tests
             //Assert
             Assert.AreEqual("Test System", actualSystem.Name);
             Assert.AreEqual("System Description", actualSystem.Description);
-            Assert.AreEqual(12.3, actualSystem.BudgetPrice);
+            Assert.AreEqual(12.3, actualSystem.BudgetPriceModifier);
             Assert.AreEqual("System Tag", actualSystem.Tags[0].Text);
 
             Assert.AreEqual("System Equipment", sysEquipment.Name);
             Assert.AreEqual("Child Equipment", sysEquipment.Description);
             Assert.AreEqual(654, sysEquipment.Quantity);
-            Assert.AreEqual(65.4, sysEquipment.BudgetPrice);
+            Assert.AreEqual(65.4, sysEquipment.BudgetUnitPrice);
             Assert.AreEqual("Equipment Tag", sysEquipment.Tags[0].Text);
 
             Assert.AreEqual("System SubScope", sysSubScope.Name);
@@ -169,7 +169,7 @@ namespace Tests
             //Assert
             Assert.AreEqual("Test Equipment", actualEquipment.Name);
             Assert.AreEqual("Equipment Description", actualEquipment.Description);
-            Assert.AreEqual(64.1, actualEquipment.BudgetPrice);
+            Assert.AreEqual(64.1, actualEquipment.BudgetUnitPrice);
             Assert.AreEqual("Equipment Tag", actualEquipment.Tags[0].Text);
 
             Assert.AreEqual("Equipment SubScope", equipSubScope.Name);

@@ -1275,7 +1275,7 @@ namespace EstimatingUtilitiesLibrary
             system.Name = row[SystemTable.Name.Name].ToString();
             system.Description = row[SystemTable.Description.Name].ToString();
             system.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
-            system.BudgetPrice = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            system.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
             system.Equipment = getEquipmentInSystem(systemID);
             system.Tags = getTagsInScope(systemID);
             system.Location = getLocationInScope(systemID);
@@ -1289,7 +1289,7 @@ namespace EstimatingUtilitiesLibrary
             equipmentToAdd.Name = row[EquipmentTable.Name.Name].ToString();
             equipmentToAdd.Description = row[EquipmentTable.Description.Name].ToString();
             equipmentToAdd.Quantity = row[EquipmentTable.Quantity.Name].ToString().ToInt();
-            equipmentToAdd.BudgetPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
+            equipmentToAdd.BudgetUnitPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
             equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
             equipmentToAdd.Tags = getTagsInScope(equipmentID);
             equipmentToAdd.Location = getLocationInScope(equipmentID);

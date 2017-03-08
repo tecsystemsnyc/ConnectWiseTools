@@ -24,25 +24,25 @@ namespace EstimatingLibrary
             }
         }
 
-        public double BudgetPrice
+        public double BudgetUnitPrice
         {
-            get { return _budgetPrice; }
+            get { return _budgetUnitPrice; }
             set
             {
                 var temp = this.Copy();
                 if (value < 0)
                 {
-                    _budgetPrice = -1;
+                    _budgetUnitPrice = -1;
                 }
                 else
                 {
-                    _budgetPrice = value;
+                    _budgetUnitPrice = value;
                 }
-                NotifyPropertyChanged("BudgetPrice", temp, this);
+                NotifyPropertyChanged("BudgetUnitPrice", temp, this);
                 RaisePropertyChanged("TotalBudgetPrice");
             }
         }
-        private double _budgetPrice;
+        private double _budgetUnitPrice;
 
         new public int Quantity
         {
@@ -70,7 +70,7 @@ namespace EstimatingLibrary
 
         public double TotalBudgetPrice
         {
-            get { return (Quantity * BudgetPrice); }
+            get { return (Quantity * BudgetUnitPrice); }
         }
 
         public double MaterialCost
@@ -87,7 +87,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECEquipment(Guid guid) : base(guid)
         {
-            _budgetPrice = -1;
+            _budgetUnitPrice = -1;
             _subScope = new ObservableCollection<TECSubScope>(); ;
 
             SubScope.CollectionChanged += SubScope_CollectionChanged;
@@ -99,7 +99,7 @@ namespace EstimatingLibrary
         {
             foreach(TECSubScope subScope in equipmentSource.SubScope)
             { SubScope.Add(subScope.Copy() as TECSubScope); }
-            _budgetPrice = equipmentSource.BudgetPrice;
+            _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
 
             this.copyPropertiesFromScope(equipmentSource);
         }

@@ -100,6 +100,8 @@ namespace EstimatingUtilitiesLibrary
             { conduitType.PropertyChanged += Object_PropertyChanged; }
             foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
             { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECCostAddition addition in Bid.CostAdditions)
+            { addition.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {

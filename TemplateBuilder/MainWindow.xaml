@@ -44,18 +44,18 @@
         <KeyBinding Command="{Binding RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
-    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
+    <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Load"
                           Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
                 <MenuItem Header="_Save"
                           Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
                 <MenuItem Header="_Save As"
                           Command="{Binding SaveToCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
+                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Undo"

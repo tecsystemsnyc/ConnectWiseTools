@@ -40,7 +40,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment >= 0)
+                    if (system.BudgetUnitPrice >= 0)
                     {
                         budgetedSystems.Add(system);
                     }
@@ -56,7 +56,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment < 0)
+                    if (system.BudgetUnitPrice < 0)
                     {
                         budgetedSystems.Add(system);
                     }

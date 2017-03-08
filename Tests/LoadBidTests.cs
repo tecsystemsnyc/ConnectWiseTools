@@ -129,7 +129,7 @@ namespace Tests
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
             
             double expectedBP = 123;
-            Assert.AreEqual(expectedBP, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -149,7 +149,7 @@ namespace Tests
             Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
             
             double expectedBP = 456;
-            Assert.AreEqual(expectedBP, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]

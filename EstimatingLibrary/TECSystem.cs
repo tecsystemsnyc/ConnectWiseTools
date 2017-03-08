@@ -23,39 +23,38 @@ namespace EstimatingLibrary
             }
         }
 
-        public double BudgetPrice
+        public double BudgetPriceModifier
         {
-            get { return _budgetPrice; }
+            get { return _budgetPriceModifier; }
             set
             {
                 var temp = this.Copy();
-                if(_budgetPrice != value)
+                if(_budgetPriceModifier != value)
                 {
                     if (value < 0)
                     {
-                        _budgetPrice = -1;
+                        _budgetPriceModifier = -1;
                     }
                     else
                     {
-                        _budgetPrice = value;
+                        _budgetPriceModifier = value;
                     }
-                    NotifyPropertyChanged("BudgetPrice", temp, this);
+                    NotifyPropertyChanged("BudgetPriceModifier", temp, this);
                     RaisePropertyChanged("TotalBudgetPrice");
-                    RaisePropertyChanged("PriceWithEquipment");
+                    RaisePropertyChanged("BudgetUnitPrice");
                 }
             }
         }
-        private double _budgetPrice;
-
-        public double PriceWithEquipment
+        private double _budgetPriceModifier;
+        public double BudgetUnitPrice
         {
             get
             {
                 double price = 0;
                 bool priceExists = false;
-                if (BudgetPrice >= 0 )
+                if (BudgetPriceModifier >= 0 )
                 {
-                    price += BudgetPrice;
+                    price += BudgetPriceModifier;
                     priceExists = true;
                 }
                 foreach (TECEquipment equip in Equipment)
@@ -72,7 +71,6 @@ namespace EstimatingLibrary
                 { return -1; }
             }
         }
-
         new public int Quantity
         {
             get { return _quantity; }
@@ -84,7 +82,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalBudgetPrice");             
             }
         }
-
         public int EquipmentQuantity
         {
             get
@@ -95,7 +92,6 @@ namespace EstimatingLibrary
                 return equipQuantity;
             }
         }
-
         public int SubScopeQuantity
         {
             get
@@ -109,7 +105,7 @@ namespace EstimatingLibrary
 
         public double TotalBudgetPrice
         {
-            get { return (Quantity * PriceWithEquipment); }
+            get { return (Quantity * BudgetUnitPrice); }
         }
         public double MaterialCost
         {
@@ -140,7 +136,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECSystem(Guid guid) : base(guid)
         {
-            _budgetPrice = -1;
+            _budgetPriceModifier = -1;
             _equipment = new ObservableCollection<TECEquipment>();
 
             Equipment.CollectionChanged += Equipment_CollectionChanged;
@@ -153,7 +149,7 @@ namespace EstimatingLibrary
         {
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             { Equipment.Add(equipment.Copy() as TECEquipment); }
-            _budgetPrice = sourceSystem.BudgetPrice;
+            _budgetPriceModifier = sourceSystem.BudgetPriceModifier;
             this.copyPropertiesFromScope(sourceSystem);
         }
         #endregion //Constructors

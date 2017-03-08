@@ -94,7 +94,7 @@ namespace Tests
             var system1 = new TECSystem();
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
-            system1.BudgetPrice = 234.5;
+            system1.BudgetPriceModifier = 234.5;
             system1.Quantity = 2345;
             system1.Location = location1;
             
@@ -103,14 +103,14 @@ namespace Tests
             var system2 = new TECSystem();
             system2.Name = "System 2";
             system2.Description = "Description 2";
-            system2.BudgetPrice = 234.52;
+            system2.BudgetPriceModifier = 234.52;
             system2.Quantity = 23452;
             system2.Location = location2;
 
             var system3 = new TECSystem();
             system3.Name = "System 3";
             system3.Description = "No Location";
-            system3.BudgetPrice = 349;
+            system3.BudgetPriceModifier = 349;
             
             //Add to bid
             bid.Systems.Add(system1);
@@ -121,7 +121,7 @@ namespace Tests
             var equipment1 = new TECEquipment();
             equipment1.Name = "Equipment 1";
             equipment1.Description = "Description 1";
-            equipment1.BudgetPrice = 123.4;
+            equipment1.BudgetUnitPrice = 123.4;
             equipment1.Quantity = 1234;
             equipment1.Location = location1;
            
@@ -130,7 +130,7 @@ namespace Tests
             var equipment2 = new TECEquipment();
             equipment1.Name = "Equipment 2";
             equipment1.Description = "Description 2";
-            equipment1.BudgetPrice = 0;
+            equipment1.BudgetUnitPrice = 0;
 
             system1.Equipment.Add(equipment1);
             system3.Equipment.Add(equipment2);
@@ -424,12 +424,12 @@ namespace Tests
             TECSystem system = new TECSystem();
             system.Name = "Test System";
             system.Description = "System Description";
-            system.BudgetPrice = 587.3;
+            system.BudgetPriceModifier = 587.3;
 
             TECEquipment sysEquip = new TECEquipment();
             sysEquip.Name = "System Equipment";
             sysEquip.Description = "Child Equipment";
-            sysEquip.BudgetPrice = 489.5;
+            sysEquip.BudgetUnitPrice = 489.5;
             TECSubScope sysSS = new TECSubScope();
             sysSS.Name = "System SubScope";
             sysSS.Description = "Child SubScope";
@@ -456,7 +456,7 @@ namespace Tests
             TECEquipment equipment = new TECEquipment();
             equipment.Name = "Test Equipment";
             equipment.Description = "Equipment Description";
-            equipment.BudgetPrice = 193.2;
+            equipment.BudgetUnitPrice = 193.2;
             TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";

@@ -279,7 +279,7 @@ namespace Tests
             TECSystem expectedSystem = new TECSystem();
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
-            expectedSystem.BudgetPrice = 123.5;
+            expectedSystem.BudgetPriceModifier = 123.5;
             expectedSystem.Quantity = 1235;
 
             templates.SystemTemplates.Add(expectedSystem);
@@ -302,7 +302,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -406,7 +406,7 @@ namespace Tests
         {
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
-            expectedSystem.BudgetPrice = 9876543.21;
+            expectedSystem.BudgetPriceModifier = 9876543.21;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
@@ -421,7 +421,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
         #endregion Edit System
         #endregion Save System
@@ -434,7 +434,7 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Equipment desc";
-            expectedEquipment.BudgetPrice = 123.5;
+            expectedEquipment.BudgetUnitPrice = 123.5;
             expectedEquipment.Quantity = 1235;
 
             templates.EquipmentTemplates.Add(expectedEquipment);
@@ -457,7 +457,7 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -560,7 +560,7 @@ namespace Tests
         {
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
-            expectedEquipment.BudgetPrice = 9876543.21;
+            expectedEquipment.BudgetUnitPrice = 9876543.21;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
@@ -575,7 +575,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
         #endregion Save Equipment
 
