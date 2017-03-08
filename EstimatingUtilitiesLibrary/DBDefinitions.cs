@@ -1083,8 +1083,10 @@ namespace EstimatingUtilitiesLibrary
             new LocationTable(),
             new VisualScopeTable(),
             new BidParametersTable(),
+            new CostAdditionTable(),
 
             new BidLaborTable(),
+            new BidCostAdditionsTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
