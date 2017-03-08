@@ -570,9 +570,7 @@ namespace EstimatingLibrary
                     foreach(TECSubScope sub in equip.SubScope)
                     {
                         foreach(TECPoint point in sub.Points)
-                        {
-                            totalPoints += point.Quantity;
-                        }
+                        { totalPoints += point.Quantity; }
                     }
                 }
             }

@@ -38,9 +38,8 @@ namespace EstimateBuilder.ViewModel
             { Version = "Undeployed Version"; }
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
-            
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
-
+            
             BidSet += () =>
             {
                 refreshAllBids();

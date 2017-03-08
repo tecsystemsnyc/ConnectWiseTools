@@ -264,8 +264,8 @@
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
         <Border Grid.Column="1" 
-                  Grid.Row="5"
-                  Grid.ColumnSpan="7"
+                Grid.Row="5"
+                Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
         <Border Grid.Column="1" 
