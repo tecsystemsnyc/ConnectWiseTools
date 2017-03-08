@@ -69,6 +69,11 @@ namespace EstimatingLibrary
         {
             double cost = 0;
 
+            foreach(TECCostAddition costAddition in bid.CostAdditions)
+            {
+                cost += costAddition.Cost * costAddition.Quantity;
+            }
+
             foreach (TECConnection conn in bid.Connections)
             {
                 var length = conn.Length;
