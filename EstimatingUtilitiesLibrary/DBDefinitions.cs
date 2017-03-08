@@ -606,27 +606,6 @@ namespace EstimatingUtilitiesLibrary
             LaborType
         };
     }
-    public class TemplatesLaborTable : TableBase
-    {
-        public static new string TableName = "TECTemplatesTECLabor";
-        public static Type TemplatesType = typeof(TECTemplates);
-        public static Type LaborType = typeof(TECLabor);
-
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
-        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            TemplatesID,
-            LaborID
-        };
-
-        public static new List<Type> Types = new List<Type>()
-        {
-            TemplatesType,
-            LaborType
-        };
-    }
     public class BidBidParametersTable : TableBase
     {
         public static new string TableName = "TECBidTECParameters";
@@ -1132,8 +1111,7 @@ namespace EstimatingUtilitiesLibrary
             new PointTable(),
             new TagTable(),
             new ManufacturerTable(),
-
-            new TemplatesLaborTable(),
+            
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),
@@ -1181,7 +1159,6 @@ namespace EstimatingUtilitiesLibrary
             new BidParametersTable(),
 
             new BidLaborTable(),
-            new TemplatesLaborTable(),
             new ProposalScopeTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
