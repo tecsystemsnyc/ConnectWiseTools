@@ -439,7 +439,7 @@ namespace Tests
             TECSystem expectedSystem = new TECSystem();
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
-            expectedSystem.BudgetPrice = 123.5;
+            expectedSystem.BudgetPriceModifier = 123.5;
             expectedSystem.Quantity = 1235;
 
             bid.Systems.Add(expectedSystem);
@@ -462,7 +462,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -566,7 +566,7 @@ namespace Tests
         {
             //Act
             TECSystem expectedSystem = bid.Systems[0];
-            expectedSystem.BudgetPrice = 9876543.21;
+            expectedSystem.BudgetPriceModifier = 9876543.21;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
@@ -581,7 +581,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
         #endregion Edit System
         #endregion Save System
@@ -594,7 +594,7 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
-            expectedEquipment.BudgetPrice = 465543.54;
+            expectedEquipment.BudgetUnitPrice = 465543.54;
             expectedEquipment.Quantity = 46554354;
 
             bid.Systems[0].Equipment.Add(expectedEquipment);
@@ -617,7 +617,7 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -746,7 +746,7 @@ namespace Tests
         {
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
-            expectedEquip.BudgetPrice = 9876543.21;
+            expectedEquip.BudgetUnitPrice = 9876543.21;
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
@@ -766,7 +766,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedEquip.BudgetPrice, actualEquip.BudgetPrice);
+            Assert.AreEqual(expectedEquip.BudgetUnitPrice, actualEquip.BudgetUnitPrice);
         }
 
         #endregion Edit Equipment
