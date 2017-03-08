@@ -91,8 +91,10 @@ namespace Tests
             //Assert
             double expectedElectricalRate = 7;
             double expectedElectricalSuperRate = 7.1;
+            bool expectedOT = true;
             Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
             Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate);
+            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime);
         }
 
         [TestMethod]
