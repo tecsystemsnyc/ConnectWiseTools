@@ -69,6 +69,7 @@ namespace EstimateBuilder.ViewModel
                     Properties.Settings.Default.TemplatesHidden = value;
                     RaisePropertyChanged("TemplatesHidden");
                     TemplatesHiddenChanged();
+                    Properties.Settings.Default.Save();
                 }
             }
         }
@@ -96,6 +97,14 @@ namespace EstimateBuilder.ViewModel
         {
             ScopeEditorVM = new ScopeEditorViewModel(bid, templates);
             ScopeEditorVM.PropertyChanged += ScopeEditorVM_PropertyChanged;
+            if (TemplatesHidden)
+            {
+                ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
+            }
         }
         private void setupDrawingVM(TECBid bid)
         {
