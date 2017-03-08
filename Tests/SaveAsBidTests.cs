@@ -546,5 +546,17 @@ namespace Tests
                 Assert.IsTrue(ioExists);
             }
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_CostAddition()
+        {
+            //Arrange
+            TECCostAddition expectedCost = expectedBid.CostAdditions[0];
+            TECCostAddition actualCost = actualBid.CostAdditions[0];
+
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
     }
 }

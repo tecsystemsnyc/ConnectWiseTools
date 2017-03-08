@@ -2781,5 +2781,13 @@ namespace Tests
         }
 
         #endregion Save Proposal Scope
+
+        #region Save Cost Addition
+        [TestMethod]
+        public void Save_Bid_Add_CostAddition()
+        {
+
+        }
+        #endregion
     }
 }

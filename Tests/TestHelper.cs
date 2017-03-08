@@ -299,6 +299,14 @@ namespace Tests
             propScope.IsProposed = true;
             propScope.Notes.Add(propNote);
 
+            //CostAddition
+            TECCostAddition cost = new TECCostAddition();
+            cost.Name = "Test Cost";
+            cost.Cost = 69.69;
+            cost.Quantity = 69;
+
+            bid.CostAdditions.Add(cost);
+
             //Bid
             return bid;
         }

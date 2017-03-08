@@ -134,24 +134,24 @@ namespace EstimatingUtilitiesLibrary
         }
         static public void SaveBidToNewDB(string path, TECBid bid)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
             SQLiteDB = new SQLiteDatabase(path);
-            watch.Stop();
-            Console.WriteLine("New connection: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch.Stop();
+            //Console.WriteLine("New connection: " + watch.ElapsedMilliseconds);
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             if (File.Exists(path))
             { SQLiteDB.overwriteFile(); }
             createAllBidTables();
-            watch.Stop();
-            Console.WriteLine("CreateAllBidTales: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch.Stop();
+            //Console.WriteLine("CreateAllBidTales: " + watch.ElapsedMilliseconds);
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             saveCompleteBid(bid);
-            watch.Stop();
-            Console.WriteLine("SaveCompleteBid: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch.Stop();
+            //Console.WriteLine("SaveCompleteBid: " + watch.ElapsedMilliseconds);
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             SQLiteDB.Connection.Close();
-            watch.Stop();
-            Console.WriteLine("Close connection: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Close connection: " + watch.ElapsedMilliseconds);
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -1651,6 +1651,10 @@ namespace EstimatingUtilitiesLibrary
                 addObject(device, bid);
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
+            }
+            foreach(TECCostAddition cost in bid.CostAdditions)
+            {
+                addObject(cost, bid);
             }
         }
         private static void saveCompleteTemplate(TECTemplates templates)
