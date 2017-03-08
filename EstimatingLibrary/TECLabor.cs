@@ -381,6 +381,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalRate = value;
                 NotifyPropertyChanged("ElectricalRate", temp, this);
+                raiseLaborChanged();
             }
         }
 
@@ -409,6 +410,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalSuperRate = value;
                 NotifyPropertyChanged("ElectricalSuperRate", temp, this);
+                raiseLaborChanged();
             }
         }
 
@@ -417,6 +419,19 @@ namespace EstimatingLibrary
             get
             {
                 return (ElectricalSuperHours * ElectricalSuperRate);
+            }
+        }
+
+        private bool _electricalIsOnOvertime;
+        public bool ElectricalIsOnOvertime
+        {
+            get { return _electricalIsOnOvertime; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalIsOnOvertime = value;
+                NotifyPropertyChanged("ElectricalIsOnOvertime", temp, this);
+                raiseLaborChanged();
             }
         }
         #endregion Electrical

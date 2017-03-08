@@ -11,7 +11,7 @@
              MinHeight="350"
              MinWidth="500"
              x:Name="parent"
-             Background="{DynamicResource WindowBackgroundBrush}">
+             Background="{DynamicResource SBWindowBackgroundBrush}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -46,23 +46,23 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Subtotal: " FontSize="12" Grid.ColumnSpan="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
                     <TextBlock Text="{Binding BudgetSubTotal, StringFormat={}{0:C}}" FontSize="12"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                            Grid.Column="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"/>
                     <Label Content="Adjustment %:" FontSize="12"
                            Grid.Row="1" Grid.ColumnSpan="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
                     <Label Content="Adjustment Amount:" FontSize="12"
                            Grid.Row="2" Grid.ColumnSpan="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
                     <TextBox Text="{Binding ManualAdjustmentPercentage}"
@@ -89,7 +89,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Budgeted Systems" FontSize="12"
-                   Background="{DynamicResource WindowBackgroundBrush}"
+                   Background="{DynamicResource SBWindowBackgroundBrush}"
                    Foreground="{DynamicResource LightTextBrush}"/>
             <DataGrid x:Name="BudgetDataGrid"
                   Style="{DynamicResource BudgetDataGridStyle}"
@@ -101,7 +101,7 @@
                     <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="*" IsReadOnly="True"
                                         ElementStyle="{StaticResource RightCell}"/>
-                    <DataGridTextColumn Binding="{Binding PriceWithEquipment, StringFormat={}{0:C}}" Header="Unit Price" Width="*" IsReadOnly="True"
+                    <DataGridTextColumn Binding="{Binding BudgetUnitPrice, StringFormat={}{0:C}}" Header="Unit Price" Width="*" IsReadOnly="True"
                                         ElementStyle="{StaticResource RightCell}"/>
                     <DataGridTextColumn Binding="{Binding TotalBudgetPrice, StringFormat={}{0:C}}" Header="Subtotal" Width="*" IsReadOnly="True"
                                         ElementStyle="{StaticResource RightCell}"/>
@@ -114,7 +114,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Unbudgeted Systems" FontSize="12"
-                   Background="{DynamicResource WindowBackgroundBrush}"
+                   Background="{DynamicResource SBWindowBackgroundBrush}"
                     Foreground="{DynamicResource LightTextBrush}"
                    VerticalAlignment="Center"/>
             <DataGrid x:Name="UnbudgetedDataGrid"
@@ -135,12 +135,12 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Total Price:" FontSize="12"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
                            VerticalAlignment="Center"/>
             <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:C}}" FontSize="12"
                            Grid.Column="2"
-                           Background="{DynamicResource WindowBackgroundBrush}"
+                           Background="{DynamicResource SBWindowBackgroundBrush}"
                            Foreground="{DynamicResource LightTextBrush}"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"/>

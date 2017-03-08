@@ -56,7 +56,7 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentSubScopeCount,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetPrice, UpdateSourceTrigger=LostFocus, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
+                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, UpdateSourceTrigger=LostFocus, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     Header="Unit Price" 
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"

@@ -56,13 +56,13 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemSubScopeCount,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
+                <DataGridTextColumn Binding="{Binding BudgetPriceModifier, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
                                     Header="Modifier"
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemModifierPrice,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding PriceWithEquipment, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
+                <DataGridTextColumn Binding="{Binding BudgetUnitEquipment, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
                                     Header="Unit Price"
                                     Width="Auto"
                                     IsReadOnly="True"
