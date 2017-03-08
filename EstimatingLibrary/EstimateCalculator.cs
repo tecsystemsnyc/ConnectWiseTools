@@ -86,7 +86,8 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope sub in equipment.SubScope)
                     {
-                        cost += sub.Length * sub.ConduitType.Cost;
+                        if(sub.ConduitType != null)
+                        { cost += sub.Length * sub.ConduitType.Cost; }
                         if (sub.Connection == null)
                         {
                             foreach (TECConnectionType type in sub.ConnectionTypes)
@@ -121,7 +122,8 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope sub in equipment.SubScope)
                     {
-                        labor += sub.Length * sub.ConduitType.Labor;
+                        if (sub.ConduitType != null)
+                        { labor += sub.Length * sub.ConduitType.Labor; }
                         if (sub.Connection == null)
                         {
                             foreach (TECConnectionType type in sub.ConnectionTypes)
@@ -193,6 +195,18 @@ namespace EstimatingLibrary
         public static double GetPricePerPoint(TECBid bid)
         {
             return (GetTotalPrice(bid) / bid.TotalPointNumber);
+        }
+        /// <summary>
+        /// Returns the Margin based on sell price and cost 
+        /// </summary>
+        public static double GetMargin(TECBid bid)
+        {
+            double margin;
+            double totalPrice = GetTotalPrice(bid);
+            double tecCost = GetTECCost(bid);
+            double subCost = GetSubcontractorCost(bid);
+            margin = (totalPrice - tecCost - subCost) / totalPrice;
+            return margin;
         }
         #endregion
 

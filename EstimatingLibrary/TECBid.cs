@@ -180,6 +180,10 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetPricePerPoint(this); }
         }
+        public double Margin
+        {
+            get { return EstimateCalculator.GetMargin(this); }
+        }
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
@@ -650,8 +654,7 @@ namespace EstimatingLibrary
             Labor.NumPoints = getPointNumber();
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("TotalPrice");
+            updateTotal();
         }
         private void updateDevices()
         {
@@ -659,8 +662,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("Tax");
             RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("TotalPrice");
+            updateTotal();
         }
         private void updateElectricalMaterial()
         {
@@ -676,8 +678,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("TotalPrice");
+            updateTotal();
         }
         private void updateFromLabor()
         {
@@ -686,7 +687,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("TotalPrice");
+            updateTotal();
         }
         private void updateAll()
         {
@@ -694,9 +695,14 @@ namespace EstimatingLibrary
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("TotalPrice");
             RaisePropertyChanged("ElectricalMaterialCost");
+        }
+
+        private void updateTotal()
+        {
+            RaisePropertyChanged("TotalPrice");
             RaisePropertyChanged("PricePerPoint");
+            RaisePropertyChanged("Margin");
         }
 
         private void checkForTotalsInSystem(TECSystem system)

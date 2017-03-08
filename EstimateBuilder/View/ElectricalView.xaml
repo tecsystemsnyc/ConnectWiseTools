@@ -10,6 +10,28 @@
              d:DesignWidth="960" d:DesignHeight="660">
 
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
-        <cLib:SubScopeWiringGridControl SubScopeSource="{Binding AllSubScope}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="240"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Wiring"/>
+        <Label Grid.Column="1"
+               Content="Misc. Wiring"/>
+        <cLib:SubScopeWiringGridControl SubScopeSource="{Binding AllSubScope}"
+                                        Grid.Row="1" Margin="5"/>
+        <DataGrid ItemsSource="{Binding Bid.CostAdditions}"
+                  Grid.Row="1" Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  Margin="5">
+            <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
+            <DataGridTextColumn Binding="{Binding Cost}" Header="Cost"/>
+            <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+                </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
