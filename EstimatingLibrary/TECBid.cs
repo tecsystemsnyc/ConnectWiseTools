@@ -35,6 +35,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
         private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
         private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
+        private ObservableCollection<TECCostAddition> _costAdditions { get; set; }
 
         public string Name {
             get { return _name; }
@@ -349,6 +350,18 @@ namespace EstimatingLibrary
                 _associatedCostsCatalog = value;
                 AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECCostAddition> CostAdditions
+        {
+            get { return _costAdditions; }
+            set
+            {
+                var temp = this.Copy();
+                CostAdditions.CollectionChanged -= CollectionChanged;
+                _costAdditions = value;
+                CostAdditions.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("CostAdditions", temp, this);
             }
         }
 
