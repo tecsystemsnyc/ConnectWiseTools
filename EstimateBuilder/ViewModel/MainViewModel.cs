@@ -129,6 +129,7 @@ namespace EstimateBuilder.ViewModel
             SettingsVM = new SettingsViewModel();
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
             SettingsVM.TemplatesLoadPath = TemplatesFilePath;
+            SettingsVM.TemplatesHidden = TemplatesHidden;
             SettingsVM.ReloadTemplates += LoadTemplatesExecute;
         }
         private void setupReviewVM(TECBid bid)

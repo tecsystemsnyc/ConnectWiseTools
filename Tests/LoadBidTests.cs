@@ -514,6 +514,18 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_CostAdditions()
+        {
+            //Arrange
+            TECCostAddition actualCost = actualBid.CostAdditions[0];
+
+            //Assert
+            Assert.AreEqual("Test Cost", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(19, actualCost.Quantity);
+        }
+
+        [TestMethod]
         public void Load_Bid_Linked_Devices()
         {
             foreach (TECSystem system in actualBid.Systems)
@@ -726,5 +738,7 @@ namespace Tests
                 }
             }
         }
+
+        
     }
 }
