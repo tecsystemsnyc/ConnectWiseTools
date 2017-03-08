@@ -45,7 +45,7 @@
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
     <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource TBWindowBackgroundBrush}">
             <MenuItem Header="_File">
                 <MenuItem Header="_Load"
                           Command="{Binding LoadCommand}"

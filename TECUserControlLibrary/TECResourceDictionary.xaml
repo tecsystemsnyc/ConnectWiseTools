@@ -31,6 +31,7 @@
     <SolidColorBrush x:Key="EBWindowBackgroundBrush" Color="{StaticResource TECFlatDarkBlue}"/>
     <SolidColorBrush x:Key="TBWindowBackgroundBrush" Color="{StaticResource TECFlatGreen}"/>
     <SolidColorBrush x:Key="SBWindowBackgroundBrush" Color="{StaticResource TECFlatMagenta}"/>
+    
     <SolidColorBrush x:Key="SectionBackgroundBrush" Color="{StaticResource TECFlatWhite}"/>
     <SolidColorBrush x:Key="ActionBackgroundBrush" Color="{StaticResource TECFlatBlue}"/>
     <SolidColorBrush x:Key="LightTextBrush" Color="{StaticResource TECFlatWhite}"/>

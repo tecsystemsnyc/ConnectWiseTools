@@ -76,8 +76,11 @@
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
             <MenuItem Header="_Templates">
-                <MenuItem Header="_Reload"
+                <MenuItem Header="_Load"
                           Command="{Binding LoadTemplatesCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+                <MenuItem Header="_Refresh"
+                          Command="{Binding RefreshTemplatesCommand}"
                           Foreground="{DynamicResource DarkTextBrush}"/>
             </MenuItem>
             <MenuItem Header="_Drawing" Visibility="Collapsed">
