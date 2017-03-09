@@ -48,7 +48,7 @@
                              Margin="5"/>
             <Label Content="Conduit:" Grid.Row="2"/>
             <ComboBox ItemsSource="{Binding ConduitTypeSelections}" Grid.Column="1" Grid.Row="2" 
-                      SelectedItem="{Binding SelectedSubScope.Conduit}"
+                      SelectedItem="{Binding SelectedSubScope.ConduitType}"
                       DisplayMemberPath="Name"
                                  VerticalAlignment="Top"
                              Margin="5"/>
