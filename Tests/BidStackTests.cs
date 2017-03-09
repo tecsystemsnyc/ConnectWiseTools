@@ -372,8 +372,33 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Undo_Bid_CostaAdditions()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECCostAddition> expected = new ObservableCollection<TECCostAddition>();
+            foreach (TECCostAddition item in Bid.CostAdditions)
+            {
+                expected.Add(item);
+            }
+            TECCostAddition edit = new TECCostAddition();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.CostAdditions.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECCostAddition> actual = Bid.CostAdditions;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
         #endregion
-        
+
         #region Labor Properties
         [TestMethod]
         public void Undo_Labor_Soft()
@@ -991,6 +1016,29 @@ namespace Tests
 
         #endregion
 
+        #region Cost Addition Properties
+        [TestMethod]
+        public void Undo_CostAddition_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.CostAdditions[0].Name;
+            string edit = "changedName";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.CostAdditions[0].Name = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.CostAdditions[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+        #endregion
+
         #endregion
 
         #region Redo
@@ -1230,6 +1278,30 @@ namespace Tests
 
             //assert
             ObservableCollection<TECExclusion> actual = Bid.Exclusions;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_CostAdditions()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECExclusion edit = new TECExclusion();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Exclusions.Add(edit);
+            var expected = new ObservableCollection<TECCostAddition>();
+            foreach (TECCostAddition item in Bid.CostAdditions)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECCostAddition> actual = Bid.CostAdditions;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

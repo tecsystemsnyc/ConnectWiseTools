@@ -344,6 +344,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECBid)
+                {
+                    ((TECBid)StackItem.Item2).CostAdditions.Remove((TECCostAddition)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
             { ((TECScope)StackItem.Item2).AssociatedCosts.Remove((TECAssociatedCost)StackItem.Item3); }
@@ -480,6 +484,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECBid)
+                {
+                    ((TECBid)StackItem.Item2).CostAdditions.Add((TECCostAddition)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
             { ((TECScope)StackItem.Item2).AssociatedCosts.Add((TECAssociatedCost)StackItem.Item3); }
@@ -569,9 +577,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (var property in properties)
             {
                 if(property.GetSetMethod() != null)
-                {
-                    property.SetValue(newItem, property.GetValue(oldItem));
-                }
+                { property.SetValue(newItem, property.GetValue(oldItem)); }
                 else
                 {
                     string message = "Property could not be set: " + property.Name;
@@ -888,7 +894,6 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(stackItem);
             }
         }
-
         #endregion
 
         #region Event Handlers
