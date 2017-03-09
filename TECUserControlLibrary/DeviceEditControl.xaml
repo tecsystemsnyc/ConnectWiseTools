@@ -81,9 +81,9 @@
                            Content="Wire Type:"/>
                 <ComboBox Grid.Column="1"
                                 Grid.Row="3"
-                                ItemsSource="{Binding Templates.ConnectionTypeCatalog}"
+                                ItemsSource="{Binding ConnectionTypeSelections}"
                           DisplayMemberPath="Name"
-                              SelectedValue="{Binding SelectedDevice.ConnectionType}"
+                              SelectedValue="{Binding ManufacturerSelections}"
                              Margin="5"/>
                 <Label Grid.Column="0"
                            Grid.Row="4"
@@ -94,7 +94,7 @@
                          SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"/>
             </Grid>
         </Grid>
-        <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding Templates.Tags}"
+        <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding TagSelections}"
                               SelectedItem="{Binding SelectedTag}"
                   DisplayMemberPath="Text"/>
         <Button Grid.Row="1" Grid.Column="1" Content="Add Tag"
@@ -102,7 +102,7 @@
                             Margin="5"/>
         <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
                                            TagsSource="{Binding SelectedDevice.Tags}"/>
-        <ComboBox Grid.Row="3" Margin="5" ItemsSource="{Binding Templates.AssociatedCostsCatalog}"
+        <ComboBox Grid.Row="3" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
                                SelectedItem="{Binding SelectedAssociatedCost}"
                                DisplayMemberPath="Name"/>
         <Button Grid.Row="3" Grid.Column="1" Content="Associate Cost"

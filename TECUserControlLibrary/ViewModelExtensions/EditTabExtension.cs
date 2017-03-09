@@ -2,6 +2,7 @@
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModelExtensions
@@ -34,6 +35,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _templates = value;
+                setCatalogs(value);
                 RaisePropertyChanged("Templates");
             }
         }
@@ -45,6 +47,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _bid = value;
+                setCatalogs(value);
+                RaisePropertyChanged("Bid");
             }
         }
         private TECBid _bid;
@@ -176,7 +180,61 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("SelectedAssociatedCost");
             }
         }
-        
+
+        private ObservableCollection<TECTag> _tagSelections;
+        public ObservableCollection<TECTag> TagSelections
+        {
+            get { return _tagSelections; }
+            set {
+                _tagSelections = value;
+                RaisePropertyChanged("TagSelections");
+            }
+        }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        {
+            get { return _associatedCostSelections; }
+            set
+            {
+                _associatedCostSelections = value;
+                RaisePropertyChanged("AssociatedCostSelections");
+            }
+        }
+
+        private ObservableCollection<TECConduitType> _conduitTypeSelections;
+        public ObservableCollection<TECConduitType> ConduitTypeSelections
+        {
+            get { return _conduitTypeSelections; }
+            set
+            {
+                _conduitTypeSelections = value;
+                RaisePropertyChanged("ConduitTypeSelections");
+            }
+        }
+
+        private ObservableCollection<TECManufacturer> _manufacturerSelections;
+        public ObservableCollection<TECManufacturer> ManufacturerSelections
+        {
+            get { return _manufacturerSelections; }
+            set
+            {
+                _manufacturerSelections = value;
+                RaisePropertyChanged("ManufacturerSelections");
+            }
+        }
+
+        private ObservableCollection<TECConnectionType> _connectionTypeSelections;
+        public ObservableCollection<TECConnectionType> ConnectionTypeSelections
+        {
+            get { return _connectionTypeSelections; }
+            set
+            {
+                _connectionTypeSelections = value;
+                RaisePropertyChanged("ConnectionTypeSelections");
+            }
+        }
+
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
@@ -205,6 +263,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public EditTabExtension(TECTemplates templates)
         {
             Templates = templates;
+            setCatalogs(Templates);
             setupCommands();
             isBid = false;
             TabIndex = EditIndex.Nothing;
@@ -213,6 +272,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public EditTabExtension(TECBid bid)
         {
             Bid = bid;
+            setCatalogs(Bid);
             setupCommands();
             isBid = true;
             TabIndex = EditIndex.Nothing;
@@ -240,6 +300,25 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
             AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute);
             AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute);
+        }
+        private void setCatalogs(object type)
+        {
+            if(type is TECBid)
+            {
+                TagSelections = Bid.Tags;
+                ConduitTypeSelections = Bid.ConduitTypes;
+                AssociatedCostSelections = Bid.AssociatedCostsCatalog;
+                ManufacturerSelections = Bid.ManufacturerCatalog;
+                ConnectionTypeSelections = Bid.ConnectionTypes;
+            } else if (type is TECTemplates)
+            {
+                TagSelections = Templates.Tags;
+                AssociatedCostSelections = Templates.AssociatedCostsCatalog;
+                ConduitTypeSelections = Templates.ConduitTypeCatalog;
+                ManufacturerSelections = Templates.ManufacturerCatalog;
+                ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
+            }
+
         }
         
         #region Commands

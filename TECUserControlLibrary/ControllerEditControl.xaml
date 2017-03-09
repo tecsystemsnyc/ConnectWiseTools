@@ -57,7 +57,7 @@
             <Label Grid.Column="0"
                            Grid.Row="3"
                            Content="Manufacturer:"/>
-            <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}"
+            <ComboBox ItemsSource="{Binding ManufacturerSelections}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
                          SelectedItem="{Binding SelectedController.Manufacturer, Converter={cnvt:ManufacturerConverter}}"/>
@@ -94,7 +94,7 @@
                       CanUserAddRows="False">
             
         </DataGrid>
-        <ComboBox Grid.Row="2" Margin="5" ItemsSource="{Binding Templates.Tags}"
+        <ComboBox Grid.Row="2" Margin="5" ItemsSource="{Binding TagSelections}"
                               SelectedItem="{Binding SelectedTag}"
                   DisplayMemberPath="Text"/>
         <Button Grid.Row="2" Grid.Column="1" Content="Add Tag"
@@ -102,7 +102,7 @@
                             Margin="5"/>
         <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="3"
                                            TagsSource="{Binding SelectedController.Tags}"/>
-        <ComboBox Grid.Row="4" Margin="5" ItemsSource="{Binding Templates.AssociatedCostsCatalog}"
+        <ComboBox Grid.Row="4" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
                                SelectedItem="{Binding SelectedAssociatedCost}"
                                DisplayMemberPath="Name"/>
         <Button Grid.Row="4" Grid.Column="1" Content="Associate Cost"
