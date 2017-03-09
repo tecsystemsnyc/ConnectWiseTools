@@ -373,7 +373,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Bid_CostaAdditions()
+        public void Undo_Bid_CostAdditions()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();

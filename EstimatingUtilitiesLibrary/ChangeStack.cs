@@ -344,7 +344,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
-                else if (StackItem.Item3 is TECBid)
+                else if (StackItem.Item3 is TECCostAddition)
                 {
                     ((TECBid)StackItem.Item2).CostAdditions.Remove((TECCostAddition)StackItem.Item3);
                 }
@@ -484,7 +484,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
                 }
-                else if (StackItem.Item3 is TECBid)
+                else if (StackItem.Item3 is TECCostAddition)
                 {
                     ((TECBid)StackItem.Item2).CostAdditions.Add((TECCostAddition)StackItem.Item3);
                 }
