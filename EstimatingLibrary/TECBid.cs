@@ -485,6 +485,10 @@ namespace EstimatingLibrary
             { Connections.Add(connection.Copy() as TECConnection); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
+            foreach(TECCostAddition cost in bidSource.CostAdditions)
+            {
+                CostAdditions.Add(cost.Copy() as TECCostAddition);
+            }
         }
 
         #endregion //Constructors
