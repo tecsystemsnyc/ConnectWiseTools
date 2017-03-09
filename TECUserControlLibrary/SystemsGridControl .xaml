@@ -62,7 +62,7 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemModifierPrice,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetUnitEquipment, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
+                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
                                     Header="Unit Price"
                                     Width="Auto"
                                     IsReadOnly="True"

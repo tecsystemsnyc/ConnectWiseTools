@@ -234,40 +234,11 @@ namespace TemplateBuilder.ViewModel
         }
         private void SaveExecute()
         {
-
-            string path = Properties.Settings.Default.TemplatesFilePath;
-
-            if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
-            {
-                EstimatingLibraryDatabase.UpdateTemplatesToDB(path, Stack);
-                //EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
-
-                Stack.ClearStacks();
-            }
-            else
-            {
-                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-            }
+            saveTemplates();
         }
         private void SaveToExecute()
         {
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                Properties.Settings.Default.TemplatesFilePath = path;
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
-
-                    Stack.ClearStacks();
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                }
-            }
+            saveTemplatesAs();
         }
         
         private void ClosingExecute(CancelEventArgs e)
@@ -561,6 +532,77 @@ namespace TemplateBuilder.ViewModel
             ScopeDataGrid.SelectedSubScope = null;
             ScopeDataGrid.SelectedEquipment = null;
             ScopeDataGrid.SelectedSystem = null;
+        }
+        private void saveTemplates()
+        {
+            string path = Properties.Settings.Default.TemplatesFilePath;
+            if (path != null)
+            {
+                //SetBusyStatus("Saving to path: " + path);
+                ChangeStack stackToSave = Stack.Copy();
+                Stack.ClearStacks();
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
+                    {
+                        EstimatingLibraryDatabase.UpdateTemplatesToDB(path, stackToSave);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    //ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                saveTemplatesAs();
+            }
+        }
+        private void saveTemplatesAs()
+        {
+            //User choose path
+            string path = getSavePath();
+
+            if (path != null)
+            {
+                Properties.Settings.Default.TemplatesFilePath = path;
+                
+                Stack.ClearStacks();
+                //SetBusyStatus("Saving file: " + path);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    //ResetStatus();
+                };
+
+                worker.RunWorkerAsync();
+
+            }
         }
 
         #endregion //Helper Methods
