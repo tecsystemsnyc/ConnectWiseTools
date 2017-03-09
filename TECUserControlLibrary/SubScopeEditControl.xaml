@@ -40,8 +40,8 @@
             </Grid.RowDefinitions>
             <Label Content="Name:"/>
             <TextBox Text="{Binding SelectedSubScope.Name}" Grid.Column="1" 
-                                 VerticalAlignment="Top"
-                             Margin="5"/>
+                     VerticalAlignment="Top"
+                     Margin="5"/>
             <Label Content="Description:" Grid.Row="1"/>
             <TextBox Text="{Binding SelectedSubScope.Description}" Grid.Column="1" Grid.Row="1" 
                                  VerticalAlignment="Top"
@@ -49,6 +49,7 @@
             <Label Content="Conduit:" Grid.Row="2"/>
             <ComboBox ItemsSource="{Binding ConduitTypeSelections}" Grid.Column="1" Grid.Row="2" 
                       SelectedItem="{Binding SelectedSubScope.Conduit}"
+                      DisplayMemberPath="Name"
                                  VerticalAlignment="Top"
                              Margin="5"/>
         </Grid>
