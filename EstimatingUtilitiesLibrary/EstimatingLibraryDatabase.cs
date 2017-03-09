@@ -1172,27 +1172,43 @@ namespace EstimatingUtilitiesLibrary
             var tableInfo = new TableInfo(table);
             string tableName = tableInfo.Name;
             string tempName = "temp_" + tableName;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
+            List<TableField> primaryKeys = tableInfo.PrimaryFields;
             List<TableField> fields = tableInfo.Fields;
 
             List<string> currentFields = getAllTableFields(tableName);
+            List<string> currentPrimaryKeys = getPrimaryKeys(tableName);
             List<string> commonFields = new List<string>();
             foreach (TableField field in fields)
             {
                 if (currentFields.Contains(field.Name))
                 { commonFields.Add(field.Name); }
             }
+            List<string> currentFieldNames = new List<string>();
+            List<string> newFieldNames = new List<string>();
+            foreach (string field in commonFields)
+            {
+                currentFieldNames.Add(field);
+                newFieldNames.Add(field);
+            }
+           
+            if (currentPrimaryKeys.Count == 1 && !commonFields.Contains(currentPrimaryKeys[0]) && (primaryKeys.Count == 1))
+            {
+                currentFieldNames.Add(currentPrimaryKeys[0]);
+                newFieldNames.Add(primaryKeys[0].Name);
+            }
 
-            string commonString = UtilitiesMethods.CommaSeparatedString(commonFields);
+            string currentCommonString = UtilitiesMethods.CommaSeparatedString(currentFieldNames);
+            string newCommonString = UtilitiesMethods.CommaSeparatedString(newFieldNames);
+
             createTempTableFromDefinition(table);
 
             string commandString;
             if (commonFields.Count > 0)
             {
-                commandString = "insert or ignore into '" + tempName + "' (" + commonString + ") select " + commonString + " from '" + tableName + "'";
+                commandString = "insert or ignore into '" + tempName + "' (" + newCommonString + ") select " + currentCommonString + " from '" + tableName + "'";
                 SQLiteDB.nonQueryCommand(commandString);
             }
-
+            
             commandString = "drop table '" + tableName + "'";
             SQLiteDB.nonQueryCommand(commandString);
             createTableFromDefinition(table);
@@ -2018,6 +2034,21 @@ namespace EstimatingUtilitiesLibrary
                 tableFields.Add(col.ColumnName);
             }
             return tableFields;
+        }
+        static private List<string> getPrimaryKeys(string tableName)
+        {
+            string command = "PRAGMA table_info(" + tableName + ")";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> primaryKeys = new List<string>();
+            foreach (DataRow row in data.Rows)
+            {
+                if(row["pk"].ToString() != "0")
+                {
+                    primaryKeys.Add(row["name"].ToString());
+                }
+                
+            }
+            return primaryKeys;
         }
         private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, params Object[] inputObjects)
         {
