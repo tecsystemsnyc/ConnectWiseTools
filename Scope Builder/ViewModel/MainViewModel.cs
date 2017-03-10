@@ -88,6 +88,11 @@ namespace Scope_Builder.ViewModel
         {
             programName = "Scope Builder";
 
+            startupFile = Properties.Settings.Default.StartupFile;
+            scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
+
+            checkForOpenWith(Properties.Settings.Default.StartupFile);
+
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();
@@ -99,11 +104,6 @@ namespace Scope_Builder.ViewModel
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
-
-            startupFile = Properties.Settings.Default.StartupFile;
-            scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
-
-            checkForOpenWith(Properties.Settings.Default.StartupFile);
 
             BidSet += () =>
             {
