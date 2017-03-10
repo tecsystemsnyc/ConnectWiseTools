@@ -29,6 +29,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _bid = value;
                 RaisePropertyChanged("Bid");
+                RaisePropertyChanged("BudgetedSystems");
+                RaisePropertyChanged("UnbudgetedSystems");
+                setupBid(value);
             }
         }
 
@@ -128,16 +131,20 @@ namespace TECUserControlLibrary.ViewModels
         public BudgetViewModel(TECBid bid)
         {
             Bid = bid;
+            setupBid(Bid);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
+            
+            ManualAdjustmentPercentage = 0;
+        }
 
+        private void setupBid(TECBid bid)
+        {
             bid.Systems.CollectionChanged += Systems_CollectionChanged;
 
             foreach (TECSystem system in bid.Systems)
             {
                 registerSystem(system);
             }
-
-            ManualAdjustmentPercentage = 0;
         }
 
         private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

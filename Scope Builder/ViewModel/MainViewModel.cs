@@ -104,6 +104,11 @@ namespace Scope_Builder.ViewModel
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
 
             checkForOpenWith(Properties.Settings.Default.StartupFile);
+
+            BidSet += () =>
+            {
+                refreshVMs();
+            };
         }
         #endregion 
 
@@ -123,6 +128,11 @@ namespace Scope_Builder.ViewModel
         #endregion //Commands Methods
 
         #region Helper Functions
+
+        private void refreshVMs()
+        {
+            BudgetVM.Bid = Bid;
+        }
         private void setVisibility(int tIndex)
         {
             ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
