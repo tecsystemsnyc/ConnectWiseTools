@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.MenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="parent">
+    
+    <Menu Background="{Binding ElementName=parent, Path=BackgroundColor}"
+          DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <MenuItem Header="_File">
+            <MenuItem Header="_New"
+                      Visibility="{Binding NewFileVisibility}"
+                          Command="{Binding NewCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Open"
+                          Command="{Binding LoadCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Save"
+                          Command="{Binding SaveCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Save As"
+                          Command="{Binding SaveAsCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Export"
+                      Visibility="{Binding ExportMenuVisibility}">
+                <MenuItem Header="_Proposal"
+                          Command="{Binding ExportProposalCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+                <MenuItem Header="_Points List"
+                          Command="{Binding ExportPointsListCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="_Edit">
+            <MenuItem Header="_Undo"
+                          Command="{Binding UndoCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Redo"
+                          Command="{Binding RedoCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+        </MenuItem>
+        <MenuItem Header="_View"
+                  Visibility="{Binding ViewMenuVisibility}">
+            <MenuItem Header="{Binding ToggleTemplatesHeader}"
+                          Command="{Binding ToggleTemplatesCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+        </MenuItem>
+        <MenuItem Header="_Templates">
+            <MenuItem Header="_Load"
+                      Visibility="{Binding LoadTemplatesVisibility}"
+                          Command="{Binding LoadTemplatesCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+            <MenuItem Header="_Refresh"
+                          Command="{Binding RefreshTemplatesCommand}"
+                          Foreground="{DynamicResource DarkTextBrush}"/>
+        </MenuItem>
+        <MenuItem Header="_Drawing" Visibility="Collapsed">
+            <MenuItem Header="_Load"/>
+        </MenuItem>
+        
+    </Menu>
+</UserControl>
