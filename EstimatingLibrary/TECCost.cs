@@ -6,45 +6,50 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECAssociatedCost : TECCost
+    public class TECCost : TECScope
     {
         #region Properties
-        
-        private double _labor;
-        public double Labor
+
+        protected double _cost;
+        public double Cost
         {
-            get { return _labor; }
+            get { return _cost; }
             set
             {
                 var temp = this.Copy();
-                _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
+                _cost = value;
+                NotifyPropertyChanged("Cost", temp, this);
             }
         }
+
         #endregion
 
         #region Constructors
-        public TECAssociatedCost(Guid guid) : base(guid)
+        public TECCost(Guid guid) : base(guid)
         {
-            _labor = 0;
+            _cost = 0;
         }
 
-        public TECAssociatedCost() : this(Guid.NewGuid()) { }
+        public TECCost() : this(Guid.NewGuid()) { }
         #endregion
+
+        protected void copyPropertiesFromCost(TECCost cost)
+        {
+            copyPropertiesFromScope(cost);
+            _cost = cost.Cost;
+        }
         
         public override object Copy()
         {
             var outCost = new TECAssociatedCost();
-            outCost.copyPropertiesFromScope(this);
+            outCost.copyPropertiesFromCost(this);
             outCost._guid = this.Guid;
-            outCost._cost = this.Cost;
-            outCost._labor = this.Labor;
             return outCost;
         }
 
         public override object DragDropCopy()
         {
-            return this;
+            throw new NotImplementedException();
         }
     }
 }

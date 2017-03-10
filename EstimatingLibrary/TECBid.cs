@@ -35,7 +35,10 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
         private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
         private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
-        private ObservableCollection<TECCostAddition> _costAdditions { get; set; }
+        private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
+        private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
+        private ObservableCollection<TECPanel> _panels { get; set; }
+        private ObservableCollection<TECPanelType> _panelTypeCatalog { get; set; }
 
         public string Name {
             get { return _name; }
@@ -352,16 +355,52 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
             }
         }
-        public ObservableCollection<TECCostAddition> CostAdditions
+        public ObservableCollection<TECMiscCost> MiscCosts
         {
-            get { return _costAdditions; }
+            get { return _miscCosts; }
             set
             {
                 var temp = this.Copy();
-                CostAdditions.CollectionChanged -= CollectionChanged;
-                _costAdditions = value;
-                CostAdditions.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("CostAdditions", temp, this);
+                MiscCosts.CollectionChanged -= CollectionChanged;
+                _miscCosts = value;
+                MiscCosts.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCosts", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscWiring> MiscWiring
+        {
+            get { return _miscWiring; }
+            set
+            {
+                var temp = this.Copy();
+                MiscWiring.CollectionChanged -= CollectionChanged;
+                _miscWiring = value;
+                MiscWiring.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscWiring", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanelType> PanelTypeCatalog
+        {
+            get { return _panelTypeCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
+                _panelTypeCatalog = value;
+                PanelTypeCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanel> Panels
+        {
+            get { return _panels; }
+            set
+            {
+                var temp = this.Copy();
+                Panels.CollectionChanged -= CollectionChanged;
+                _panels = value;
+                Panels.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Panels", temp, this);
             }
         }
 
@@ -391,7 +430,10 @@ namespace EstimatingLibrary
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
             _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
-            _costAdditions = new ObservableCollection<TECCostAddition>();
+            _miscWiring = new ObservableCollection<TECMiscWiring>();
+            _miscCosts = new ObservableCollection<TECMiscCost>();
+            _panels = new ObservableCollection<TECPanel>();
+            _panelTypeCatalog = new ObservableCollection<TECPanelType>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             Parameters.PropertyChanged += objectPropertyChanged;
@@ -412,7 +454,10 @@ namespace EstimatingLibrary
             ConnectionTypes.CollectionChanged += CollectionChanged;
             ConduitTypes.CollectionChanged += CollectionChanged;
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
-            CostAdditions.CollectionChanged += CollectionChanged;
+            MiscCosts.CollectionChanged += CollectionChanged;
+            MiscWiring.CollectionChanged += CollectionChanged;
+            Panels.CollectionChanged += CollectionChanged;
+            PanelTypeCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
 
@@ -485,10 +530,14 @@ namespace EstimatingLibrary
             { Connections.Add(connection.Copy() as TECConnection); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
-            foreach(TECCostAddition cost in bidSource.CostAdditions)
-            {
-                CostAdditions.Add(cost.Copy() as TECCostAddition);
-            }
+            foreach(TECMiscCost cost in bidSource.MiscCosts)
+            { MiscCosts.Add(cost.Copy() as TECMiscCost); }
+            foreach (TECMiscWiring wiring in bidSource.MiscWiring)
+            { MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECPanel panel in bidSource.Panels)
+            { Panels.Add(panel.Copy() as TECPanel); }
+            foreach (TECPanelType panelType in bidSource.PanelTypeCatalog)
+            { PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
         }
 
         #endregion //Constructors
@@ -509,10 +558,10 @@ namespace EstimatingLibrary
                     else
                     {
                         NotifyPropertyChanged("Add", this, item);
-                        if (item is TECCostAddition)
+                        if (item is TECCost)
                         {
                             updateElectricalMaterial();
-                            (item as TECCostAddition).PropertyChanged += objectPropertyChanged;
+                            (item as TECObject).PropertyChanged += objectPropertyChanged;
                         }
                         if (item is TECSystem)
                         {
