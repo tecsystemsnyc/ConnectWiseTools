@@ -583,10 +583,10 @@ namespace EstimatingLibrary
                     }
                     else
                     {
-                        if (item is TECCostAddition)
+                        if (item is TECCost)
                         {
                             updateElectricalMaterial();
-                            (item as TECCostAddition).PropertyChanged -= objectPropertyChanged;
+                            (item as TECCost).PropertyChanged -= objectPropertyChanged;
                         }
                         NotifyPropertyChanged("Remove", this, item);
                         if (item is TECScope)
@@ -631,7 +631,7 @@ namespace EstimatingLibrary
             { updateFromLabor(); }
             else if (sender is TECBidParameters)
             { updateFromParameters(); }
-            else if (sender is TECCostAddition)
+            else if (sender is TECCost)
             { updateElectricalMaterial(); }
         }
 

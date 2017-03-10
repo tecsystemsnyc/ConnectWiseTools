@@ -94,7 +94,10 @@ namespace EstimatingUtilitiesLibrary
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
             bid.AssociatedCostsCatalog = getAssociatedCosts();
-            bid.CostAdditions = getCostAdditions();
+            bid.MiscWiring = getMiscWiring();
+            bid.MiscCosts = getMiscCosts();
+            bid.Panels = getPanels();
+            bid.PanelTypeCatalog = getPanelTypes();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
             //watch.Stop();
@@ -128,6 +131,11 @@ namespace EstimatingUtilitiesLibrary
             templates.ConnectionTypeCatalog = getConnectionTypes();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
+            templates.MiscWiringTemplates = getMiscWiring();
+            templates.MiscCostTemplaes = getMiscCosts();
+            templates.PanelTemplates = getPanels();
+            templates.PanelTypeCatalog = getPanelTypes();
+            templates.ControlledScopeTemplates = getControlledScope();
             ModelLinkingHelper.LinkTemplates(templates);
             SQLiteDB.Connection.Close();
             return templates;
@@ -965,20 +973,154 @@ namespace EstimatingUtilitiesLibrary
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
-        static private ObservableCollection<TECCostAddition> getCostAdditions()
+        static private ObservableCollection<TECMiscCost> getMiscCosts()
         {
-            ObservableCollection<TECCostAddition> costs = new ObservableCollection<TECCostAddition>();
+            ObservableCollection<TECMiscCost> costs = new ObservableCollection<TECMiscCost>();
 
-            DataTable costsDT = SQLiteDB.getDataFromTable(CostAdditionTable.TableName);
+            DataTable costsDT = SQLiteDB.getDataFromTable(MiscCostTable.TableName);
             foreach (DataRow row in costsDT.Rows)
             {
-                costs.Add(getCostAdditionFromRow(row));
+                costs.Add(getMiscCostFromRow(row));
             }
 
             return costs;
         }
+        static private ObservableCollection<TECMiscWiring> getMiscWiring()
+        {
+            ObservableCollection<TECMiscWiring> wiring = new ObservableCollection<TECMiscWiring>();
+
+            DataTable wiringDT = SQLiteDB.getDataFromTable(MiscWiringTable.TableName);
+            foreach (DataRow row in wiringDT.Rows)
+            {
+                wiring.Add(getMiscWiringFromRow(row));
+            }
+
+            return wiring;
+        }
+        static private ObservableCollection<TECPanelType> getPanelTypes()
+        {
+            ObservableCollection<TECPanelType> panelTypes = new ObservableCollection<TECPanelType>();
+
+            DataTable panelTypesDT = SQLiteDB.getDataFromTable(PanelTypeTable.TableName);
+            foreach (DataRow row in panelTypesDT.Rows)
+            {
+                panelTypes.Add(getPanelTypeFromRow(row));
+            }
+
+            return panelTypes;
+        }
+        static private ObservableCollection<TECPanel> getPanels()
+        {
+            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
+
+            DataTable panelTypesDT = SQLiteDB.getDataFromTable(PanelTable.TableName);
+            foreach (DataRow row in panelTypesDT.Rows)
+            {
+                panels.Add(getPanelFromRow(row));
+            }
+
+            return panels;
+        }
+        static private ObservableCollection<TECControlledScope> getControlledScope()
+        {
+            ObservableCollection<TECControlledScope> controlledScope = new ObservableCollection<TECControlledScope>();
+
+            DataTable panelTypesDT = SQLiteDB.getDataFromTable(ControlledScopeTable.TableName);
+            foreach (DataRow row in panelTypesDT.Rows)
+            {
+                controlledScope.Add(getControlledScopeFromRow(row));
+            }
+
+            return controlledScope;
+        }
+
+
+        static private TECPanelType getPanelTypeInPanel(Guid guid)
+        {
+            string command = "select * from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
+            command += "(select " + PanelPanelTypeTable.PanelTypeID.Name + " from " + PanelPanelTypeTable.TableName;
+            command += " where " + PanelPanelTypeTable.PanelID.Name + " = '";
+            command += guid;
+            command += "')";
+
+            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            if (manTable.Rows.Count > 0)
+            { return getPanelTypeFromRow(manTable.Rows[0]); }
+            else
+            { return new TECPanelType(); }
+        }
+        static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
+        {
+            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
+            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            command += "(select " + PanelControllerTable.ControllerID.Name + " from " + PanelControllerTable.TableName + " where ";
+            command += PanelControllerTable.PanelID.Name + " = '" + guid;
+            command += "'";
+
+            DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in controllerDT.Rows)
+            { controllers.Add(getControllerFromRow(row)); }
+
+            return controllers;
+        }
+        static private ObservableCollection<TECController> getControllersInControlledScope(Guid guid)
+        {
+            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
+            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            command += "(select " + ControlledScopeControllerTable.ControllerID.Name + " from " + ControlledScopeControllerTable.TableName + " where ";
+            command += ControlledScopeControllerTable.ControlledScopeID.Name + " = '" + guid;
+            command += "'";
+
+            DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in controllerDT.Rows)
+            { controllers.Add(getControllerFromRow(row)); }
+
+            return controllers;
+        }
+        static private ObservableCollection<TECSystem> getSystemsInControlledScope(Guid guid)
+        {
+            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+            string command = "select * from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " in ";
+            command += "(select " + ControlledScopeSystemTable.SystemID.Name + " from " + ControlledScopeSystemTable.TableName + " where ";
+            command += ControlledScopeSystemTable.ControlledScopeID.Name + " = '" + guid;
+            command += "'";
+
+            DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in pagesDT.Rows)
+            { systems.Add(getSystemFromRow(row)); }
+
+            return systems;
+        }
+        static private ObservableCollection<TECConnection> getConnectionsInControlledScope(Guid guid)
+        {
+            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
+            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+            command += "(select " + ControlledScopeConnectionTable.ConnectionID.Name + " from " + ControlledScopeConnectionTable.TableName + " where ";
+            command += ControlledScopeConnectionTable.ControlledScopeID.Name + " = '" + guid;
+            command += "'";
+
+            DataTable dt = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in dt.Rows)
+            { connections.Add(getConnectionFromRow(row)); }
+
+            return connections;
+        }
+        static private ObservableCollection<TECPanel> getPanelsInControlledScope(Guid guid)
+        {
+            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
+            string command = "select * from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
+            command += "(select " + ControlledScopePanelTable.PanelID.Name + " from " + ControlledScopePanelTable.TableName + " where ";
+            command += ControlledScopePanelTable.ControlledScopeID.Name + " = '" + guid;
+            command += "'";
+
+            DataTable dt = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in dt.Rows)
+            { panels.Add(getPanelFromRow(row)); }
+
+            return panels;
+        }
         #endregion //Loading from DB Methods
-        
+
         #region Populate Derived
         static private void populatePageVisualConnections(ObservableCollection<TECDrawing> drawings, ObservableCollection<TECConnection> connections)
         {
@@ -1522,16 +1664,64 @@ namespace EstimatingUtilitiesLibrary
             return paramters;
         }
 
-        private static TECCostAddition getCostAdditionFromRow(DataRow row)
+        private static TECMiscCost getMiscCostFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[CostAdditionTable.CostAdditionID.Name].ToString());
-            TECCostAddition cost = new TECCostAddition(guid);
+            Guid guid = new Guid(row[MiscCostTable.MiscCostID.Name].ToString());
+            TECMiscCost cost = new TECMiscCost(guid);
 
-            cost.Name = row[CostAdditionTable.Name.Name].ToString();
-            cost.Cost = row[CostAdditionTable.Cost.Name].ToString().ToDouble(0);
-            cost.Quantity = row[CostAdditionTable.Quantity.Name].ToString().ToInt(1);
+            cost.Name = row[MiscCostTable.Name.Name].ToString();
+            cost.Cost = row[MiscCostTable.Cost.Name].ToString().ToDouble(0);
+            cost.Quantity = row[MiscCostTable.Quantity.Name].ToString().ToInt(1);
 
             return cost;
+        }
+        private static TECMiscWiring getMiscWiringFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[MiscWiringTable.MiscWiringID.Name].ToString());
+            TECMiscWiring wiring = new TECMiscWiring(guid);
+
+            wiring.Name = row[MiscWiringTable.Name.Name].ToString();
+            wiring.Cost = row[MiscWiringTable.Cost.Name].ToString().ToDouble(0);
+            wiring.Quantity = row[MiscWiringTable.Quantity.Name].ToString().ToInt(1);
+
+            return wiring;
+        }
+        private static TECPanelType getPanelTypeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PanelTypeTable.PanelTypeID.Name].ToString());
+            TECPanelType panelType = new TECPanelType(guid);
+
+            panelType.Name = row[PanelTypeTable.Name.Name].ToString();
+            panelType.Cost = row[PanelTypeTable.Cost.Name].ToString().ToDouble(0);
+
+            return panelType;
+        }
+        private static TECPanel getPanelFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
+            TECPanel panel = new TECPanel(guid);
+
+            panel.Name = row[PanelTable.Name.Name].ToString();
+            panel.Description = row[PanelTable.Desciption.Name].ToString();
+            panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
+            panel.Type = getPanelTypeInPanel(guid);
+            panel.Controllers = getControllersInPanel(guid);
+
+            return panel;
+        }
+        private static TECControlledScope getControlledScopeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
+            TECControlledScope controlledScope = new TECControlledScope(guid);
+
+            controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
+            controlledScope.Description = row[ControlledScopeTable.Desciption.Name].ToString();
+            controlledScope.Controllers = getControllersInControlledScope(guid);
+            controlledScope.Systems = getSystemsInControlledScope(guid);
+            controlledScope.Connections = getConnectionsInControlledScope(guid);
+            controlledScope.Panels = getPanelsInControlledScope(guid);
+
+            return controlledScope;
         }
         #endregion
 
@@ -1669,9 +1859,21 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
             }
-            foreach(TECCostAddition cost in bid.CostAdditions)
+            foreach(TECMiscCost cost in bid.MiscCosts)
             {
                 addObject(cost, bid);
+            }
+            foreach (TECMiscWiring wiring in bid.MiscWiring)
+            {
+                addObject(wiring, bid);
+            }
+            foreach (TECPanelType panelType in bid.PanelTypeCatalog)
+            {
+                addObject(panelType, bid);
+            }
+            foreach (TECPanel panel in bid.Panels)
+            {
+                addObject(panel, bid);
             }
         }
         private static void saveCompleteTemplate(TECTemplates templates)
@@ -1724,6 +1926,22 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
             { addObject(associatedCost, templates); }
+            foreach (TECMiscCost cost in templates.MiscCostTemplaes)
+            {
+                addObject(cost, templates);
+            }
+            foreach (TECMiscWiring wiring in templates.MiscWiringTemplates)
+            {
+                addObject(wiring, templates);
+            }
+            foreach (TECPanelType panelType in templates.PanelTypeCatalog)
+            {
+                addObject(panelType, templates);
+            }
+            foreach (TECPanel panel in templates.PanelTemplates)
+            {
+                addObject(panel, templates);
+            }
         }
 
         private static void saveDevicesInSubScope(TECSubScope subscope)

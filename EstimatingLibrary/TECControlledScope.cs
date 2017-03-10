@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    class TECControlledScope : TECScope
+    public class TECControlledScope : TECScope
     {
         private ObservableCollection<TECConnection> _connections { get; set; }
         public ObservableCollection<TECConnection> Connections
