@@ -95,6 +95,7 @@ namespace Scope_Builder.ViewModel
             startupFile = Properties.Settings.Default.StartupFile;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             checkForOpenWith(Properties.Settings.Default.StartupFile);
+            MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             BidSet += () =>
             { refreshAll(); };

@@ -148,6 +148,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
 
+        public ICommand RefreshTemplatesCommand { get; private set; }
+
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion
 
@@ -163,6 +165,10 @@ namespace TECUserControlLibrary.ViewModels
         public Action TemplatesLoadedSet;
         #endregion
 
+        #region View Models
+        public MenuViewModel MenuVM { get; set; }
+        #endregion
+
         #endregion
         public BidEditorBase()
         {
@@ -173,6 +179,7 @@ namespace TECUserControlLibrary.ViewModels
             getLogo();
             setupBid();
             setupStack();
+            setupMenu();
 
             ResetStatus();
         }
@@ -192,6 +199,8 @@ namespace TECUserControlLibrary.ViewModels
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+
+            RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
 
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
@@ -254,6 +263,25 @@ namespace TECUserControlLibrary.ViewModels
         private void setupStack()
         {
             stack = new ChangeStack(Bid);
+        }
+
+        private void setupMenu()
+        {
+            MenuVM = new MenuViewModel(MenuType.SB);
+
+            MenuVM.NewCommand = NewCommand;
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveAsCommand;
+            MenuVM.ExportProposalCommand = DocumentCommand;
+            MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
+            MenuVM.ExportPointsListCommand = CSVExportCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+
+            MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
+
+            //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
         #endregion
 
@@ -638,6 +666,37 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
         }
 
+        private void RefreshTemplatesExecute()
+        {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            if (TemplatesFilePath != null)
+            {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath);
+                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                {
+
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                    Bid.DeviceCatalog = Templates.DeviceCatalog;
+                    Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
+                    Bid.Tags = Templates.Tags;
+                    Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                    Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                    Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                    templatesLoaded = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                }
+                DebugHandler.LogDebugMessage("Finished loading templates");
+            }
+            ResetStatus();
+        }
+
         private void ClosingExecute(CancelEventArgs e)
         {
             if (!isReady)
@@ -825,7 +884,7 @@ namespace TECUserControlLibrary.ViewModels
             return saveSuccessful;
         }
         #endregion
-        
+
         #endregion
     }
 }

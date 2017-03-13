@@ -19,7 +19,7 @@
                     </Trigger>
                 </Style.Triggers>
                 <Setter Property="Command" Value="{Binding Command}"/>
-                <Setter Property="Foreground" Value="{DynamicResource DarkTextBrush}"/>
+                <Setter Property="Foreground" Value="{Binding TextBrush}"/>
             </Style>
         </Menu.ItemContainerStyle>
         <Menu.ItemTemplate>

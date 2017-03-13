@@ -11,6 +11,10 @@ using EstimatingUtilitiesLibrary;
 using System.Globalization;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Windows.Controls;
+using System.Drawing;
+using System.Windows.Media;
+using TECUserControlLibrary.UserControls;
 
 namespace TECUserControlLibrary.HelperConverters
 {
