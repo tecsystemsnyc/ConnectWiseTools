@@ -23,7 +23,7 @@
                Content="Misc. Wiring"/>
         <cLib:SubScopeWiringGridControl SubScopeSource="{Binding AllSubScope}"
                                         Grid.Row="1" Margin="5"/>
-        <DataGrid ItemsSource="{Binding Bid.CostAdditions}"
+        <DataGrid ItemsSource="{Binding Bid.MiscCosts}"
                   Grid.Row="1" Grid.Column="1"
                   AutoGenerateColumns="False"
                   Margin="5">

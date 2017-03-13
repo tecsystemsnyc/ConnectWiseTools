@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using TECUserControlLibrary.ViewModelExtensions;
 using DebugLibrary;
+using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.ViewModel
 {
@@ -47,6 +48,7 @@ namespace TemplateBuilder.ViewModel
             setupEditTab();
             setupScopeDataGrid();
             setupMaterialsTab();
+            setupVMs();
 
             setVisibility(0);
         }
@@ -63,6 +65,11 @@ namespace TemplateBuilder.ViewModel
         public EditTabExtension EditTab { get; set; }
         public MaterialsCostsExtension MaterialsTab { get; set; }
         #endregion
+
+        #region ViewModels
+        public MenuViewModel MenuVM { get; set; }
+        #endregion
+
         public TECTemplates Templates
         {
             get { return _templates; }
@@ -127,11 +134,10 @@ namespace TemplateBuilder.ViewModel
         public ICommand SaveToCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion //Commands Properties
-
-        string defaultTemplatesPath;
         #endregion //Properties
 
         #region Methods
@@ -145,6 +151,8 @@ namespace TemplateBuilder.ViewModel
 
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+
+            RefreshCommand = new RelayCommand(RefreshTemplatesExecute);
         }
 
         private void getTemplates()
@@ -207,6 +215,17 @@ namespace TemplateBuilder.ViewModel
             MaterialsTab = new MaterialsCostsExtension(Templates);
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
+        }
+        private void setupVMs()
+        {
+            MenuVM = new MenuViewModel(MenuType.TB);
+
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveToCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+            MenuVM.RefreshTemplatesCommand = RefreshCommand;
         }
         #endregion
 
@@ -284,6 +303,22 @@ namespace TemplateBuilder.ViewModel
                 return true;
             else
                 return false;
+        }
+
+        private void RefreshTemplatesExecute()
+        {
+            string path = Properties.Settings.Default.TemplatesFilePath;
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         #endregion //Commands Methods
 
@@ -546,7 +581,7 @@ namespace TemplateBuilder.ViewModel
 
                 worker.DoWork += (s, e) =>
                 {
-                    if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
+                    if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                     {
                         EstimatingLibraryDatabase.UpdateTemplatesToDB(path, stackToSave);
                     }
