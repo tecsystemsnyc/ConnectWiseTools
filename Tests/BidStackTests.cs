@@ -373,26 +373,26 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Bid_CostAdditions()
+        public void Undo_Bid_MiscCosts()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECCostAddition> expected = new ObservableCollection<TECCostAddition>();
-            foreach (TECCostAddition item in Bid.CostAdditions)
+            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Bid.MiscCosts)
             {
                 expected.Add(item);
             }
-            TECCostAddition edit = new TECCostAddition();
+            TECMiscCost edit = new TECMiscCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.CostAdditions.Add(edit);
+            Bid.MiscCosts.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECCostAddition> actual = Bid.CostAdditions;
+            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1022,18 +1022,18 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.CostAdditions[0].Name;
+            string expected = Bid.MiscCosts[0].Name;
             string edit = "changedName";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.CostAdditions[0].Name = edit;
+            Bid.MiscCosts[0].Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Bid.CostAdditions[0].Name;
+            string actual = Bid.MiscCosts[0].Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -1283,7 +1283,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Bid_CostAdditions()
+        public void Redo_Bid_MiscCosts()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -1292,8 +1292,8 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Exclusions.Add(edit);
-            var expected = new ObservableCollection<TECCostAddition>();
-            foreach (TECCostAddition item in Bid.CostAdditions)
+            var expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Bid.MiscCosts)
             {
                 expected.Add(item);
             }
@@ -1301,7 +1301,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECCostAddition> actual = Bid.CostAdditions;
+            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

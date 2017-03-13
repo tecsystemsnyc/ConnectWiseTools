@@ -10,6 +10,7 @@
         xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
@@ -45,27 +46,8 @@
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
     <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top" Background="{DynamicResource TBWindowBackgroundBrush}">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Load"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveToCommand}"
-                          Foreground="{DynamicResource TBWindowBackgroundBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-        </Menu>
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>

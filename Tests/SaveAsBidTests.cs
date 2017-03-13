@@ -551,8 +551,8 @@ namespace Tests
         public void SaveAs_Bid_CostAddition()
         {
             //Arrange
-            TECCostAddition expectedCost = expectedBid.CostAdditions[0];
-            TECCostAddition actualCost = actualBid.CostAdditions[0];
+            TECMiscCost expectedCost = expectedBid.MiscCosts[0];
+            TECMiscCost actualCost = actualBid.MiscCosts[0];
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);

@@ -94,7 +94,7 @@ namespace EstimatingUtilitiesLibrary
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
             bid.AssociatedCostsCatalog = getAssociatedCosts();
-            bid.CostAdditions = getCostAdditions();
+            bid.MiscCosts = getMiscCosts();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
             //watch.Stop();
@@ -965,9 +965,9 @@ namespace EstimatingUtilitiesLibrary
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
-        static private ObservableCollection<TECCostAddition> getCostAdditions()
+        static private ObservableCollection<TECMiscCost> getMiscCosts()
         {
-            ObservableCollection<TECCostAddition> costs = new ObservableCollection<TECCostAddition>();
+            ObservableCollection<TECMiscCost> costs = new ObservableCollection<TECMiscCost>();
 
             DataTable costsDT = SQLiteDB.getDataFromTable(CostAdditionTable.TableName);
             foreach (DataRow row in costsDT.Rows)
@@ -1522,10 +1522,10 @@ namespace EstimatingUtilitiesLibrary
             return paramters;
         }
 
-        private static TECCostAddition getCostAdditionFromRow(DataRow row)
+        private static TECMiscCost getCostAdditionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[CostAdditionTable.CostAdditionID.Name].ToString());
-            TECCostAddition cost = new TECCostAddition(guid);
+            TECMiscCost cost = new TECMiscCost(guid);
 
             cost.Name = row[CostAdditionTable.Name.Name].ToString();
             cost.Cost = row[CostAdditionTable.Cost.Name].ToString().ToDouble(0);
@@ -1669,7 +1669,7 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
             }
-            foreach(TECCostAddition cost in bid.CostAdditions)
+            foreach(TECMiscCost cost in bid.MiscCosts)
             {
                 addObject(cost, bid);
             }

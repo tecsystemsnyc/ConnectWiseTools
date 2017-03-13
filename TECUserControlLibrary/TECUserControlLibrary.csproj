@@ -145,6 +145,7 @@
     <Compile Include="MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>

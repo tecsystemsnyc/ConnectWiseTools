@@ -300,12 +300,12 @@ namespace Tests
             propScope.Notes.Add(propNote);
 
             //CostAddition
-            TECCostAddition cost = new TECCostAddition();
+            TECMiscCost cost = new TECMiscCost();
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
 
-            bid.CostAdditions.Add(cost);
+            bid.MiscCosts.Add(cost);
 
             //Bid
             return bid;

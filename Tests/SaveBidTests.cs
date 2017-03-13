@@ -2787,19 +2787,19 @@ namespace Tests
         public void Save_Bid_Add_CostAddition()
         {
             //Act
-            TECCostAddition expectedCost = new TECCostAddition();
+            TECMiscCost expectedCost = new TECMiscCost();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
 
-            bid.CostAdditions.Add(expectedCost);
+            bid.MiscCosts.Add(expectedCost);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECCostAddition actualCost = null;
-            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2818,35 +2818,35 @@ namespace Tests
         public void Save_Bid_Remove_CostAddition()
         {
             //Act
-            TECCostAddition costToRemove = bid.CostAdditions[0];
-            bid.CostAdditions.Remove(costToRemove);
+            TECMiscCost costToRemove = bid.MiscCosts[0];
+            bid.MiscCosts.Remove(costToRemove);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             //Assert
-            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            foreach (TECMiscCost cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual(bid.CostAdditions.Count, actualBid.CostAdditions.Count);
+            Assert.AreEqual(bid.MiscCosts.Count, actualBid.MiscCosts.Count);
         }
 
         [TestMethod]
         public void Save_Bid_CostAddition_Name()
         {
             //Act
-            TECCostAddition expectedCost = bid.CostAdditions[0];
+            TECMiscCost expectedCost = bid.MiscCosts[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECCostAddition actualCost = null;
-            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2863,15 +2863,15 @@ namespace Tests
         public void Save_Bid_CostAddition_Cost()
         {
             //Act
-            TECCostAddition expectedCost = bid.CostAdditions[0];
+            TECMiscCost expectedCost = bid.MiscCosts[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECCostAddition actualCost = null;
-            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2888,15 +2888,15 @@ namespace Tests
         public void Save_Bid_CostAddition_Quantity()
         {
             //Act
-            TECCostAddition expectedCost = bid.CostAdditions[0];
+            TECMiscCost expectedCost = bid.MiscCosts[0];
             expectedCost.Quantity = 492;
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
-            TECCostAddition actualCost = null;
-            foreach (TECCostAddition cost in actualBid.CostAdditions)
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {

@@ -162,8 +162,8 @@ namespace EstimatingUtilitiesLibrary
     }
     public class CostAdditionTable : TableBase
     {
-        public static new string TableName = "TECCostAdditions";
-        public static Type ObjectType = typeof(TECCostAddition);
+        public static new string TableName = "TECMiscCosts";
+        public static Type ObjectType = typeof(TECMiscCost);
 
         public static TableField CostAdditionID = new TableField("CostAdditionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -629,11 +629,11 @@ namespace EstimatingUtilitiesLibrary
             ParameterType
         };
     }
-    public class BidCostAdditionsTable : TableBase
+    public class BidMiscCostsTable : TableBase
     {
-        public static new string TableName = "TECBidTECCostAdditions";
+        public static new string TableName = "TECBidTECMiscCosts";
         public static Type BidType = typeof(TECBid);
-        public static Type CostType = typeof(TECCostAddition);
+        public static Type CostType = typeof(TECMiscCost);
 
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField CostID = new TableField("CostAdditionID", "TEXT", CostType.GetProperty("Guid"));
@@ -1067,7 +1067,7 @@ namespace EstimatingUtilitiesLibrary
             new CostAdditionTable(),
 
             new BidLaborTable(),
-            new BidCostAdditionsTable(),
+            new BidMiscCostsTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),

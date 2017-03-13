@@ -69,7 +69,7 @@ namespace EstimatingLibrary
         {
             double cost = 0;
 
-            foreach(TECCostAddition costAddition in bid.CostAdditions)
+            foreach(TECMiscWiring costAddition in bid.MiscWiring)
             {
                 cost += costAddition.Cost * costAddition.Quantity;
             }

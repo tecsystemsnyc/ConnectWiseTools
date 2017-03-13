@@ -516,10 +516,10 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_CostAdditions()
+        public void Load_Bid_MiscCosts()
         {
             //Arrange
-            TECCostAddition actualCost = actualBid.CostAdditions[0];
+            TECMiscCost actualCost = actualBid.MiscCosts[0];
 
             //Assert
             Assert.AreEqual("Test Cost", actualCost.Name);
