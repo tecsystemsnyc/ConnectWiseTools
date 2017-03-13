@@ -38,6 +38,8 @@ namespace EstimateBuilder.ViewModel
             { Version = "Undeployed Version"; }
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
+            ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
+
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             
             BidSet += () =>
@@ -87,6 +89,7 @@ namespace EstimateBuilder.ViewModel
 
         #region Command Properties
         public ICommand LoadDrawingCommand { get; private set; }
+        public ICommand ToggleTemplatesCommand { get; private set; }
         #endregion Command Properties
         #endregion Properties
 
@@ -145,6 +148,11 @@ namespace EstimateBuilder.ViewModel
         {
             ElectricalVM = new ElectricalViewModel(bid);
         }
+        private void setupMenuVM()
+        {
+            MenuVM.TemplatesHidden = TemplatesHidden;
+            MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
+        }
         #endregion
 
         #region Commands Methods
@@ -191,6 +199,18 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
+
+        private void ToggleTemplatesExecute()
+        {
+            if (TemplatesHidden)
+            {
+                TemplatesHidden = false;
+            }
+            else
+            {
+                TemplatesHidden = true;
+            }
+        }
         #endregion Commands Methods
 
         #region Helper Methods
@@ -203,6 +223,7 @@ namespace EstimateBuilder.ViewModel
             setupSettingsVM();
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
+            setupMenuVM();
         }
 
         private void refreshAllBids()
@@ -265,10 +286,12 @@ namespace EstimateBuilder.ViewModel
             if (TemplatesHidden)
             {
                 ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
+                MenuVM.TemplatesHidden = true;
             }
             else
             {
                 ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
+                MenuVM.TemplatesHidden = false;
             }
         }
         private void BidEditorBase_PropertyChanged(object sender, PropertyChangedEventArgs e)

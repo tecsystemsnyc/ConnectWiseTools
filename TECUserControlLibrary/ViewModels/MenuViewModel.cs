@@ -92,7 +92,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             set
             {
-                exportProposalMenuItem.Command = value;
+                exportPointsListMenuItem.Command = value;
             }
         }
 

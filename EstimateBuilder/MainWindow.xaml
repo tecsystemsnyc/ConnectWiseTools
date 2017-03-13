@@ -9,12 +9,14 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Height="720"
         Width="1200"
         Title="{Binding TitleString}"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        x:Name="parent">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -46,57 +48,9 @@
     </Window.InputBindings>
 
     <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New"
-                          Command="{Binding NewCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Open"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveAsCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Show/Hide Templates"
-                          Command="{Binding ScopeEditorVM.ToggleTemplatesVisibilityCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Templates">
-                <MenuItem Header="_Load"
-                          Command="{Binding LoadTemplatesCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Refresh"
-                          Command="{Binding RefreshTemplatesCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Drawing" Visibility="Collapsed">
-                <MenuItem Header="_Load"
-                          Command="{Binding LoadDrawingCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Export">
-                <MenuItem Header="_To Document"
-                          Command="{Binding DocumentCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_To CSV"
-                          Command="{Binding CSVExportCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-        </Menu>
+
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
 
 
         <Grid x:Name="LayoutRoot">

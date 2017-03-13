@@ -39,8 +39,7 @@ namespace EstimateBuilder.ViewModel
             setupLocationDataGrid();
 
             setVisibility();
-
-            ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
+            
             TemplatesVisibility = Visibility.Visible;
 
         }
@@ -94,10 +93,6 @@ namespace EstimateBuilder.ViewModel
 
         #endregion //Interface Properties
 
-        #region Commands Properties
-        public ICommand ToggleTemplatesVisibilityCommand { get; private set; }
-        #endregion //Commands Properties
-
         #region Visibility Properties
         private Visibility _templatesVisibility;
         public Visibility TemplatesVisibility
@@ -142,21 +137,6 @@ namespace EstimateBuilder.ViewModel
             EditTab = new EditTabExtension(Bid);
         }
         #endregion
-        
-        #region Commands Methods
-        private void ToggleTemplatesVisibilityExecute()
-        {
-            if (TemplatesVisibility == Visibility.Visible)
-            {
-                TemplatesVisibility = Visibility.Hidden;
-            }
-            else if (TemplatesVisibility == Visibility.Hidden)
-            {
-                TemplatesVisibility = Visibility.Visible;
-            }
-        }
-
-        #endregion //Commands Methods
         
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
