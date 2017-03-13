@@ -109,10 +109,12 @@ namespace Scope_Builder.ViewModel
             if (TemplatesVisibility == Visibility.Visible)
             {
                 TemplatesVisibility = Visibility.Hidden;
+                MenuVM.TemplatesHidden = true;
             }
             else if (TemplatesVisibility == Visibility.Hidden)
             {
                 TemplatesVisibility = Visibility.Visible;
+                MenuVM.TemplatesHidden = false;
             }
         }
 
