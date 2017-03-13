@@ -548,15 +548,39 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_CostAddition()
+        public void SaveAs_Bid_MiscCost()
         {
             //Arrange
-            TECCostAddition expectedCost = expectedBid.CostAdditions[0];
-            TECCostAddition actualCost = actualBid.CostAdditions[0];
+            TECMiscCost expectedCost = expectedBid.MiscCosts[0];
+            TECMiscCost actualCost = actualBid.MiscCosts[0];
 
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+            Assert.AreEqual(expectedCost.Name, actualBid.MiscCosts[0].Name);
+            Assert.AreEqual(expectedCost.Cost, actualBid.MiscCosts[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscCosts[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_MiscWiring()
+        {
+            //Arrange
+            TECMiscWiring expectedCost = expectedBid.MiscWiring[0];
+            TECMiscWiring actualCost = actualBid.MiscWiring[0];
+
+            Assert.AreEqual(expectedCost.Name, actualBid.MiscWiring[0].Name);
+            Assert.AreEqual(expectedCost.Cost, actualBid.MiscWiring[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscWiring[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Panel()
+        {
+            //Arrange
+            TECPanel expectedCost = expectedBid.Panels[0];
+            TECPanel actualCost = actualBid.Panels[0];
+
+            Assert.AreEqual(expectedCost.Name, actualBid.Panels[0].Name);
+            Assert.AreEqual(expectedCost.Type.Guid, actualBid.Panels[0].Type.Guid);
+            Assert.AreEqual(expectedCost.Quantity, actualBid.Panels[0].Quantity);
         }
     }
 }

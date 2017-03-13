@@ -177,16 +177,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ControlledScopeTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECMiscCost> MiscCostTemplaes
+        public ObservableCollection<TECMiscCost> MiscCostTemplates
         {
             get { return _miscCostTemplates; }
             set
             {
                 var temp = this.Copy();
-                MiscCostTemplaes.CollectionChanged -= CollectionChanged;
+                MiscCostTemplates.CollectionChanged -= CollectionChanged;
                 _miscCostTemplates = value;
-                MiscCostTemplaes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscCostTemplaes", temp, this);
+                MiscCostTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCostTemplates", temp, this);
             }
         }
         public ObservableCollection<TECMiscWiring> MiscWiringTemplates
@@ -285,7 +285,7 @@ namespace EstimatingLibrary
             ConduitTypeCatalog.CollectionChanged += CollectionChanged;
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
             MiscWiringTemplates.CollectionChanged += CollectionChanged;
-            MiscCostTemplaes.CollectionChanged += CollectionChanged;
+            MiscCostTemplates.CollectionChanged += CollectionChanged;
             PanelTemplates.CollectionChanged += CollectionChanged;
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
             ControlledScopeTemplates.CollectionChanged += CollectionChanged;
@@ -320,9 +320,9 @@ namespace EstimatingLibrary
             { AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
             foreach(TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(controller.Copy() as TECController); }
-            foreach(TECMiscCost cost in templatesSource.MiscCostTemplaes)
+            foreach(TECMiscCost cost in templatesSource.MiscCostTemplates)
             {
-                MiscCostTemplaes.Add(cost);
+                MiscCostTemplates.Add(cost);
             }
             foreach(TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
             {

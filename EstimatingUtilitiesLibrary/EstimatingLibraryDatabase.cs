@@ -132,7 +132,7 @@ namespace EstimatingUtilitiesLibrary
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
             templates.MiscWiringTemplates = getMiscWiring();
-            templates.MiscCostTemplaes = getMiscCosts();
+            templates.MiscCostTemplates = getMiscCosts();
             templates.PanelTemplates = getPanels();
             templates.PanelTypeCatalog = getPanelTypes();
             templates.ControlledScopeTemplates = getControlledScope();
@@ -1926,7 +1926,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
             { addObject(associatedCost, templates); }
-            foreach (TECMiscCost cost in templates.MiscCostTemplaes)
+            foreach (TECMiscCost cost in templates.MiscCostTemplates)
             {
                 addObject(cost, templates);
             }

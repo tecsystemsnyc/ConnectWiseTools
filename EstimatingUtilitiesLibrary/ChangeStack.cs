@@ -100,8 +100,18 @@ namespace EstimatingUtilitiesLibrary
             { conduitType.PropertyChanged += Object_PropertyChanged; }
             foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
             { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECCostAddition addition in Bid.CostAdditions)
+            foreach(TECMiscCost addition in Bid.MiscCosts)
             { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscWiring addition in Bid.MiscWiring)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanelType addition in Bid.PanelTypeCatalog)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanel panel in Bid.Panels)
+            { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECConnection connection in Bid.Connections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+            }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
@@ -127,6 +137,18 @@ namespace EstimatingUtilitiesLibrary
             { conduitType.PropertyChanged += Object_PropertyChanged; }
             foreach(TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
             { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscCost addition in Templates.MiscCostTemplates)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscWiring addition in Templates.MiscWiringTemplates)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanelType addition in Templates.PanelTypeCatalog)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanel panel in Templates.PanelTemplates)
+            { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECConnection connection in Templates.ConnectionTemplates)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+            }
         }
         private void registerSubScope(TECSubScope subScope)
         {
@@ -344,9 +366,17 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
-                else if (StackItem.Item3 is TECCostAddition)
+                else if (StackItem.Item3 is TECMiscCost)
                 {
-                    ((TECBid)StackItem.Item2).CostAdditions.Remove((TECCostAddition)StackItem.Item3);
+                    ((TECBid)StackItem.Item2).MiscCosts.Remove((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECBid)StackItem.Item2).MiscWiring.Remove((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECBid)StackItem.Item2).Panels.Remove((TECPanel)StackItem.Item3);
                 }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
@@ -421,6 +451,18 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECMiscCost)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscCostTemplates.Remove((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscWiringTemplates.Remove((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECTemplates)StackItem.Item2).PanelTemplates.Remove((TECPanel)StackItem.Item3);
+                }
             }
             else
             {
@@ -482,11 +524,19 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else if (StackItem.Item3 is TECAssociatedCost)
                 {
-                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
+                    ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
                 }
-                else if (StackItem.Item3 is TECCostAddition)
+                else if (StackItem.Item3 is TECMiscCost)
                 {
-                    ((TECBid)StackItem.Item2).CostAdditions.Add((TECCostAddition)StackItem.Item3);
+                    ((TECBid)StackItem.Item2).MiscCosts.Add((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECBid)StackItem.Item2).MiscWiring.Add((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECBid)StackItem.Item2).Panels.Add((TECPanel)StackItem.Item3);
                 }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)

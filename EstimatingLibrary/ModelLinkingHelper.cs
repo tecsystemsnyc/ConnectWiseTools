@@ -24,6 +24,8 @@ namespace EstimatingLibrary
             linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
             linkAssociatedCostsWithScope(bid);
             linkConduitTypesInBid(bid);
+            linkPanelTypesInPanel(bid.PanelTypeCatalog, bid.Panels);
+            linkControllersInPanels(bid.Controllers, bid.Panels);
         }
 
         public static void LinkTemplates(TECTemplates templates)
@@ -36,7 +38,11 @@ namespace EstimatingLibrary
             linkTagsInTemplates(templates.Tags, templates);
             linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
             linkAssociatedCostsWithScope(templates);
+            linkPanelTypesInPanel(templates.PanelTypeCatalog, templates.PanelTemplates);
             linkConduitTypesInTemplates(templates);
+            linkConnectionsInTemplates(templates);
+            linkControllersInPanels(templates.ControllerTemplates, templates.PanelTemplates);
+            linkControlledScope(templates.ControlledScopeTemplates, templates);
         }
 
         #region Link Methods
@@ -484,6 +490,60 @@ namespace EstimatingLibrary
                 linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
                 linkScopeObjects(scope.Panels, templates.PanelTemplates);
                 linkScopeObjects(scope.Connections, templates.ConnectionTemplates);
+            }
+        }
+        static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
+        {
+            foreach(TECPanel panel in panels)
+            {
+                linkScopeObjects(panel.Controllers, controllers);
+            }
+        }
+        static private void linkConnectionsInController(ObservableCollection<TECConnection> connections, TECController controller)
+        {
+            linkScopeObjects(controller.Connections, connections);
+        }
+        static private void linkConnectionsInSubScope(ObservableCollection<TECConnection> connections, TECSubScope subScope)
+        {
+            foreach(TECConnection connection in connections)
+            {
+                if(connection.Guid == subScope.Connection.Guid)
+                {
+                    subScope.Connection = connection;
+                }
+            }
+        }
+        static private void linkConnectionsInEquipment(ObservableCollection<TECConnection> connections, TECEquipment equipment)
+        {
+            foreach(TECSubScope subscope in equipment.SubScope)
+            {
+                linkConnectionsInSubScope(connections, subscope);
+            }
+        }
+        static private void linkConnectionsInSystem(ObservableCollection<TECConnection> connections, TECSystem system)
+        {
+            foreach(TECEquipment equipment in system.Equipment)
+            {
+                linkConnectionsInEquipment(connections, equipment);
+            }
+        }
+        static private void linkConnectionsInTemplates(TECTemplates templates)
+        {
+            foreach(TECSystem system in templates.SystemTemplates)
+            {
+                linkConnectionsInSystem(templates.ConnectionTemplates, system);
+            }
+            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                linkConnectionsInEquipment(templates.ConnectionTemplates, equipment);
+            }
+            foreach(TECSubScope subScope in templates.SubScopeTemplates)
+            {
+                linkConnectionsInSubScope(templates.ConnectionTemplates, subScope);
+            }
+            foreach(TECController controller in templates.ControllerTemplates)
+            {
+                linkConnectionsInController(templates.ConnectionTemplates, controller);
             }
         }
         static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)

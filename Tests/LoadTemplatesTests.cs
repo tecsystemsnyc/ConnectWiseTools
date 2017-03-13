@@ -296,6 +296,55 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_MiscCost()
+        {
+            //Arrange
+            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
+
+            //Assert
+            Assert.AreEqual("Test Misc Cost", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(19, actualCost.Quantity);
+        }
+
+
+        [TestMethod]
+        public void Load_Templates_MiscWiring()
+        {
+            //Arrange
+            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
+
+            //Assert
+            Assert.AreEqual("Test Misc Wiring", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(19, actualCost.Quantity);
+        }
+
+
+        [TestMethod]
+        public void Load_Templates_PanelType()
+        {
+            //Arrange
+            TECPanelType actualCost = actualTemplates.PanelTypeCatalog[0];
+
+            //Assert
+            Assert.AreEqual("Test Panel Type", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Load_Templates_Panel()
+        {
+            //Arrange
+            TECPanel actualPanel = actualTemplates.PanelTemplates[0];
+            TECPanelType actualPanelType = actualPanel.Type;
+
+            //Assert
+            Assert.AreEqual("Test Panel", actualPanel.Name);
+            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
+        }
+
+        [TestMethod]
         public void Load_Templates_Linked_Devices()
         {
             foreach(TECSystem system in actualTemplates.SystemTemplates)
