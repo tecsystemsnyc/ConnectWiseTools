@@ -100,18 +100,16 @@ namespace EstimatingUtilitiesLibrary
             { conduitType.PropertyChanged += Object_PropertyChanged; }
             foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
             { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECMiscCost addition in Bid.MiscCosts)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscWiring addition in Bid.MiscWiring)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType addition in Bid.PanelTypeCatalog)
-            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECMiscCost cost in Bid.MiscCosts)
+            { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscWiring wiring in Bid.MiscWiring)
+            { wiring.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanelType panelType in Bid.PanelTypeCatalog)
+            { panelType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
             foreach(TECConnection connection in Bid.Connections)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
-            }
+            { connection.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {

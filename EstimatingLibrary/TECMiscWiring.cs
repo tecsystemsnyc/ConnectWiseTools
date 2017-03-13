@@ -10,5 +10,13 @@ namespace EstimatingLibrary
     {
         public TECMiscWiring(Guid guid) : base(guid) { }
         public TECMiscWiring() : this(Guid.NewGuid()) { }
+
+        public override object Copy()
+        {
+            var outCost = new TECMiscWiring();
+            outCost.copyPropertiesFromCost(this);
+            outCost._guid = this.Guid;
+            return outCost;
+        }
     }
 }

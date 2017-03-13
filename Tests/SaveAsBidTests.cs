@@ -575,12 +575,12 @@ namespace Tests
         public void SaveAs_Bid_Panel()
         {
             //Arrange
-            TECPanel expectedCost = expectedBid.Panels[0];
-            TECPanel actualCost = actualBid.Panels[0];
+            TECPanel expectedPanel = expectedBid.Panels[0];
+            TECPanel actualPanel = actualBid.Panels[0];
 
-            Assert.AreEqual(expectedCost.Name, actualBid.Panels[0].Name);
-            Assert.AreEqual(expectedCost.Type.Guid, actualBid.Panels[0].Type.Guid);
-            Assert.AreEqual(expectedCost.Quantity, actualBid.Panels[0].Quantity);
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
+            Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
+            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
         }
     }
 }

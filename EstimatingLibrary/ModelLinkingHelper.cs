@@ -474,10 +474,13 @@ namespace EstimatingLibrary
             {
                 foreach(TECPanelType type in panelTypes)
                 {
-                    if (panel.Type.Guid == type.Guid)
+                    if(type != null)
                     {
-                        panel.Type = type;
-                        break;
+                        if (panel.Type.Guid == type.Guid)
+                        {
+                            panel.Type = type;
+                            break;
+                        }
                     }
                 }
             }
