@@ -514,17 +514,54 @@ namespace Tests
             string expectedName = "Test ConduitType";
             Assert.AreEqual(expectedName, actualConduitType.Name);
         }
-
+        
         [TestMethod]
-        public void Load_Bid_MiscCosts()
+        public void Load_Bid_MiscCost()
         {
             //Arrange
             TECMiscCost actualCost = actualBid.MiscCosts[0];
 
             //Assert
-            Assert.AreEqual("Test Cost", actualCost.Name);
+            Assert.AreEqual("Test Misc Cost", actualCost.Name);
             Assert.AreEqual(654.9648, actualCost.Cost);
             Assert.AreEqual(19, actualCost.Quantity);
+        }
+
+
+        [TestMethod]
+        public void Load_Bid_MiscWiring()
+        {
+            //Arrange
+            TECMiscWiring actualCost = actualBid.MiscWiring[0];
+
+            //Assert
+            Assert.AreEqual("Test Misc Wiring", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(19, actualCost.Quantity);
+        }
+
+
+        [TestMethod]
+        public void Load_Bid_PanelType()
+        {
+            //Arrange
+            TECPanelType actualCost = actualBid.PanelTypeCatalog[0];
+
+            //Assert
+            Assert.AreEqual("Test Panel Type", actualCost.Name);
+            Assert.AreEqual(654.9648, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Panel()
+        {
+            //Arrange
+            TECPanel actualPanel = actualBid.Panels[0];
+            TECPanelType actualPanelType = actualBid.Panels[0].Type;
+
+            //Assert
+            Assert.AreEqual("Test Panel", actualPanel.Name);
+            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
         }
 
         [TestMethod]
@@ -740,7 +777,6 @@ namespace Tests
                 }
             }
         }
-
         
     }
 }

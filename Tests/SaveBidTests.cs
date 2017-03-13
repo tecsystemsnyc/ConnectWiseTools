@@ -2439,8 +2439,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
-
-
         #region Controller IO
         [TestMethod]
         public void Save_Bid_Controller_Add_IO()
@@ -2550,8 +2548,7 @@ namespace Tests
             }
         }
         #endregion Controller IO
-
-
+        
         #endregion
 
         #region Save Proposal Scope
@@ -2782,9 +2779,9 @@ namespace Tests
 
         #endregion Save Proposal Scope
 
-        #region Save Cost Addition
+        #region Save Misc Cost
         [TestMethod]
-        public void Save_Bid_Add_CostAddition()
+        public void Save_Bid_Add_MiscCost()
         {
             //Act
             TECMiscCost expectedCost = new TECMiscCost();
@@ -2815,7 +2812,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_Remove_CostAddition()
+        public void Save_Bid_Remove_MiscCost()
         {
             //Act
             TECMiscCost costToRemove = bid.MiscCosts[0];
@@ -2835,7 +2832,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_CostAddition_Name()
+        public void Save_Bid_MiscCost_Name()
         {
             //Act
             TECMiscCost expectedCost = bid.MiscCosts[0];
@@ -2860,7 +2857,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_CostAddition_Cost()
+        public void Save_Bid_MiscCost_Cost()
         {
             //Act
             TECMiscCost expectedCost = bid.MiscCosts[0];
@@ -2885,7 +2882,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Save_Bid_CostAddition_Quantity()
+        public void Save_Bid_MiscCost_Quantity()
         {
             //Act
             TECMiscCost expectedCost = bid.MiscCosts[0];
@@ -2907,6 +2904,212 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+        #endregion
+
+        #region Save Cost Addition
+        [TestMethod]
+        public void Save_Bid_Add_MiscWiring()
+        {
+            //Act
+            TECMiscWiring expectedCost = new TECMiscWiring();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+            expectedCost.Quantity = 21;
+
+            bid.MiscWiring.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_MiscWiring()
+        {
+            //Act
+            TECMiscWiring costToRemove = bid.MiscWiring[0];
+            bid.MiscWiring.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_MiscWiring_Name()
+        {
+            //Act
+            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_MiscWiring_Cost()
+        {
+            //Act
+            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Bid_MiscWiring_Quantity()
+        {
+            //Act
+            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            expectedCost.Quantity = 492;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+        #endregion
+
+        #region Save Panel
+        [TestMethod]
+        public void Save_Bid_Add_Panel()
+        {
+            //Act
+            TECPanel expectedPanel = new TECPanel();
+            expectedPanel.Name = "Test Add Controller";
+            expectedPanel.Description = "Test description";
+
+            bid.Panels.Add(expectedPanel);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanel actualpanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == expectedPanel.Guid)
+                {
+                    actualpanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
+            Assert.AreEqual(expectedPanel.Description, actualpanel.Description);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Panel()
+        {
+            //Act
+            int oldNumPanels = bid.Panels.Count;
+            TECPanel panelToRemove = bid.Panels[0];
+
+            bid.Panels.Remove(panelToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == panelToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumPanels - 1), actualBid.Panels.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Bid_Panel_Name()
+        {
+            //Act
+            TECPanel expectedPanel = bid.Panels[0];
+            expectedPanel.Name = "Test save panel name";
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == expectedPanel.Guid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
         }
         #endregion
     }

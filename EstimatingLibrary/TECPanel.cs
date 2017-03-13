@@ -41,7 +41,7 @@ namespace EstimatingLibrary
         {
             _guid = guid;
 
-            Controllers = new ObservableCollection<TECController>();
+            _controllers = new ObservableCollection<TECController>();
         }
         public TECPanel() : this(Guid.NewGuid()) { }
         public TECPanel(TECPanel panel) : this()

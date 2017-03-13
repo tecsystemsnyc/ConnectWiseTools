@@ -132,7 +132,7 @@ namespace EstimatingUtilitiesLibrary
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
             templates.MiscWiringTemplates = getMiscWiring();
-            templates.MiscCostTemplaes = getMiscCosts();
+            templates.MiscCostTemplates = getMiscCosts();
             templates.PanelTemplates = getPanels();
             templates.PanelTypeCatalog = getPanelTypes();
             templates.ControlledScopeTemplates = getControlledScope();
@@ -1033,8 +1033,7 @@ namespace EstimatingUtilitiesLibrary
 
             return controlledScope;
         }
-
-
+        
         static private TECPanelType getPanelTypeInPanel(Guid guid)
         {
             string command = "select * from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
@@ -1055,7 +1054,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + PanelControllerTable.ControllerID.Name + " from " + PanelControllerTable.TableName + " where ";
             command += PanelControllerTable.PanelID.Name + " = '" + guid;
-            command += "'";
+            command += "')";
 
             DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
@@ -1883,7 +1882,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECPanel panel in bid.Panels)
             {
-                addObject(panel, bid);
+                savePanel(panel, bid);
             }
         }
         private static void saveCompleteTemplate(TECTemplates templates)
@@ -1936,7 +1935,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
             { addObject(associatedCost, templates); }
-            foreach (TECMiscCost cost in templates.MiscCostTemplaes)
+            foreach (TECMiscCost cost in templates.MiscCostTemplates)
             {
                 addObject(cost, templates);
             }
@@ -1950,7 +1949,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECPanel panel in templates.PanelTemplates)
             {
-                addObject(panel, templates);
+                savePanel(panel, templates);
             }
         }
 
@@ -2076,6 +2075,13 @@ namespace EstimatingUtilitiesLibrary
         {
             if(device.Manufacturer != null) { addObject(device.Manufacturer, device); }
             if(device.ConnectionType != null) { addObject(device.ConnectionType, device); }
+        }
+        private static void savePanel(TECPanel panel, object bidOrTemplates)
+        {
+            addObject(panel, bidOrTemplates);
+            addObject(panel.Type, panel);
+            saveScopeChildProperties(panel);
+
         }
         #endregion
 

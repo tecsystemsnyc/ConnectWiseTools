@@ -41,7 +41,7 @@ namespace EstimatingLibrary
         
         public override object Copy()
         {
-            var outCost = new TECAssociatedCost();
+            var outCost = new TECCost();
             outCost.copyPropertiesFromCost(this);
             outCost._guid = this.Guid;
             return outCost;

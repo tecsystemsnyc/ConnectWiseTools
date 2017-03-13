@@ -1505,5 +1505,304 @@ namespace Tests
             Assert.AreEqual((oldNumAssociatedCosts - 1), actualTemplates.AssociatedCostsCatalog.Count);
         }
         #endregion
+
+        #region Save Misc Cost
+        [TestMethod]
+        public void Save_Templates_Add_MiscCost()
+        {
+            //Act
+            TECMiscCost expectedCost = new TECMiscCost();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+            expectedCost.Quantity = 21;
+
+            templates.MiscCostTemplates.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_MiscCost()
+        {
+            //Act
+            TECMiscCost costToRemove = templates.MiscCostTemplates[0];
+            templates.MiscCostTemplates.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(templates.MiscCostTemplates.Count, actualTemplates.MiscCostTemplates.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_MiscCost_Name()
+        {
+            //Act
+            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_MiscCost_Cost()
+        {
+            //Act
+            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscCost actualCost = null;
+            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+        
+        #endregion
+
+        #region Save Cost Addition
+        [TestMethod]
+        public void Save_Templates_Add_MiscWiring()
+        {
+            //Act
+            TECMiscWiring expectedCost = new TECMiscWiring();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+            expectedCost.Quantity = 21;
+
+            templates.MiscWiringTemplates.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_MiscWiring()
+        {
+            //Act
+            TECMiscWiring costToRemove = templates.MiscWiringTemplates[0];
+            templates.MiscWiringTemplates.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(templates.MiscWiringTemplates.Count, templates.MiscWiringTemplates.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_MiscWiring_Name()
+        {
+            //Act
+            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_MiscWiring_Cost()
+        {
+            //Act
+            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Templates_MiscWiring_Quantity()
+        {
+            //Act
+            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            expectedCost.Quantity = 492;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECMiscWiring actualCost = null;
+            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+        #endregion
+
+        #region Save Panel
+        [TestMethod]
+        public void Save_Templates_Add_Panel()
+        {
+            //Act
+            TECPanel expectedPanel = new TECPanel();
+            expectedPanel.Name = "Test Add Controller";
+            expectedPanel.Description = "Test description";
+
+            templates.PanelTemplates.Add(expectedPanel);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECPanel actualpanel = null;
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Guid == expectedPanel.Guid)
+                {
+                    actualpanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
+            Assert.AreEqual(expectedPanel.Description, actualpanel.Description);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Panel()
+        {
+            //Act
+            int oldNumPanels = templates.PanelTemplates.Count;
+            TECPanel panelToRemove = templates.PanelTemplates[0];
+
+            templates.PanelTemplates.Remove(panelToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Guid == panelToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumPanels - 1), actualTemplates.PanelTemplates.Count);
+
+        }
+
+        [TestMethod]
+        public void Save_Templates_Panel_Name()
+        {
+            //Act
+            TECPanel expectedPanel = templates.PanelTemplates[0];
+            expectedPanel.Name = "Test save panel name";
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Guid == expectedPanel.Guid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
+        }
+        #endregion
     }
 }

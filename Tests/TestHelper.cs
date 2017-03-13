@@ -299,13 +299,36 @@ namespace Tests
             propScope.IsProposed = true;
             propScope.Notes.Add(propNote);
 
-            //CostAddition
+            //Misc Cost
             TECMiscCost cost = new TECMiscCost();
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
 
             bid.MiscCosts.Add(cost);
+
+            //Misc wiring
+            TECMiscWiring wiring = new TECMiscWiring();
+            wiring.Name = "Test Wiring";
+            wiring.Cost = 69.69;
+            wiring.Quantity = 69;
+
+            bid.MiscWiring.Add(wiring);
+
+            //Panel Types
+            TECPanelType panelType = new TECPanelType();
+            panelType.Cost = 123.4;
+            panelType.Name = "Test Panel Type";
+
+            bid.PanelTypeCatalog.Add(panelType);
+
+            //Panels
+            TECPanel panel = new TECPanel();
+            panel.Type = panelType;
+            panel.Name = "Test Panel";
+            panel.Controllers.Add(expectedController);
+
+            bid.Panels.Add(panel);
 
             //Bid
             return bid;
@@ -506,6 +529,38 @@ namespace Tests
             expectedController.Manufacturer = testMan;
 
             templates.ControllerTemplates.Add(expectedController);
+
+
+            //Misc Cost
+            TECMiscCost cost = new TECMiscCost();
+            cost.Name = "Test Cost";
+            cost.Cost = 69.69;
+            cost.Quantity = 69;
+
+            templates.MiscCostTemplates.Add(cost);
+
+            //Misc wiring
+            TECMiscWiring wiring = new TECMiscWiring();
+            wiring.Name = "Test Wiring";
+            wiring.Cost = 69.69;
+            wiring.Quantity = 69;
+
+            templates.MiscWiringTemplates.Add(wiring);
+
+            //Panel Types
+            TECPanelType panelType = new TECPanelType();
+            panelType.Cost = 123.4;
+            panelType.Name = "Test Panel Type";
+
+            templates.PanelTypeCatalog.Add(panelType);
+
+            //Panels
+            TECPanel panel = new TECPanel();
+            panel.Type = panelType;
+            panel.Name = "Test Panel";
+            panel.Controllers.Add(expectedController);
+
+            templates.PanelTemplates.Add(panel);
 
             return templates;
         }
