@@ -19,6 +19,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _type = value;
                 NotifyPropertyChanged("Type", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
 
