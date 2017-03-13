@@ -385,11 +385,49 @@ namespace EstimatingLibrary
             }
         }
 
+        private double _electricalNonUnionRate;
+        public double ElectricalNonUnionRate
+        {
+            get { return _electricalNonUnionRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalNonUnionRate = value;
+                NotifyPropertyChanged("ElectricalNonUnionRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        public double ElectricalEffectiveRate
+        {
+            get
+            {
+                double rate;
+                if (ElectricalIsUnion)
+                {
+                    rate = ElectricalRate;
+                }
+                else
+                {
+                    rate = ElectricalNonUnionRate;
+                }
+
+                if (ElectricalIsOnOvertime)
+                {
+                    return (rate * 1.5);
+                }
+                else
+                {
+                    return rate;
+                }
+            }
+        }
+
         public double ElectricalSubTotal
         {
             get
             {
-                return (ElectricalHours * ElectricalRate);
+                return (ElectricalHours * ElectricalEffectiveRate);
             }
         }
 
@@ -414,11 +452,49 @@ namespace EstimatingLibrary
             }
         }
 
+        private double _electricalSuperNonUnionRate;
+        public double ElectricalSuperNonUnionRate
+        {
+            get { return _electricalSuperNonUnionRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalSuperNonUnionRate = value;
+                NotifyPropertyChanged("ElectricalSuperNonUnionRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        public double ElectricalSuperEffectiveRate
+        {
+            get
+            {
+                double rate;
+                if (ElectricalIsUnion)
+                {
+                    rate = ElectricalSuperRate;
+                }
+                else
+                {
+                    rate = ElectricalSuperNonUnionRate;
+                }
+                
+                if (ElectricalIsOnOvertime)
+                {
+                    return (rate * 1.5);
+                }
+                else
+                {
+                    return rate;
+                }
+            }
+        }
+
         public double ElectricalSuperSubTotal
         {
             get
             {
-                return (ElectricalSuperHours * ElectricalSuperRate);
+                return (ElectricalSuperHours * ElectricalSuperEffectiveRate);
             }
         }
 
@@ -431,6 +507,19 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalIsOnOvertime = value;
                 NotifyPropertyChanged("ElectricalIsOnOvertime", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        private bool _electricalIsUnion;
+        public bool ElectricalIsUnion
+        {
+            get { return _electricalIsUnion; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalIsUnion = value;
+                NotifyPropertyChanged("ElectricalIsUnion", temp, this);
                 raiseLaborChanged();
             }
         }
@@ -578,11 +667,15 @@ namespace EstimatingLibrary
 
             RaisePropertyChanged("ElectricalHours");
             RaisePropertyChanged("ElectricalRate");
+            RaisePropertyChanged("ElectricalNonUnionRate");
+            RaisePropertyChanged("ElectricalEffectiveRate");
             RaisePropertyChanged("ElectricalSubTotal");
 
-            RaisePropertyChanged("ElecricalSuperHours");
-            RaisePropertyChanged("ElecricalSuperRate");
-            RaisePropertyChanged("ElecricalSuperSubTotal");
+            RaisePropertyChanged("ElectricalSuperHours");
+            RaisePropertyChanged("ElectricalSuperRate");
+            RaisePropertyChanged("ElectricalSuperNonUnionRate");
+            RaisePropertyChanged("ElectricalSuperEffectiveRate");
+            RaisePropertyChanged("ElectricalSuperSubTotal");
 
             RaisePropertyChanged("SubcontractorSubTotal");
 

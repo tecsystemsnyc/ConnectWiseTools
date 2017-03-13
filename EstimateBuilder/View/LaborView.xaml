@@ -41,6 +41,7 @@
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
@@ -234,6 +235,8 @@
         <TextBlock Text="{Binding Bid.Labor.TotalCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="11" Grid.Column="7"
                  />
+        
+        <!--Boolean Modifiers-->
         <Grid Grid.Column="8" Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -241,6 +244,16 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Overtime:"/>
             <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsOnOvertime}"
+                      HorizontalAlignment="Center" Margin="2"/>
+        </Grid>
+
+        <Grid Grid.Column="9" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Union:"/>
+            <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsUnion}"
                       HorizontalAlignment="Center" Margin="2"/>
         </Grid>
         
