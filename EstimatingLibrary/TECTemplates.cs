@@ -23,7 +23,13 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnectionType> _connectionTypeCatalog;
         private ObservableCollection<TECConduitType> _conduitTypeCatalog;
         private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog;
-    
+        private ObservableCollection<TECControlledScope> _controlledScopeTemplates;
+        private ObservableCollection<TECMiscCost> _miscCostTemplates;
+        private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
+        private ObservableCollection<TECPanelType> _panelTypeCatalog;
+        private ObservableCollection<TECPanel> _panelTemplates;
+        private ObservableCollection<TECConnection> _connectionTemplates;
+
         public Guid Guid
         {
             get { return _guid; }
@@ -159,6 +165,78 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
             }
         }
+        public ObservableCollection<TECControlledScope> ControlledScopeTemplates
+        {
+            get { return _controlledScopeTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                ControlledScopeTemplates.CollectionChanged -= CollectionChanged;
+                _controlledScopeTemplates = value;
+                ControlledScopeTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ControlledScopeTemplates", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscCost> MiscCostTemplaes
+        {
+            get { return _miscCostTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                MiscCostTemplaes.CollectionChanged -= CollectionChanged;
+                _miscCostTemplates = value;
+                MiscCostTemplaes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCostTemplaes", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscWiring> MiscWiringTemplates
+        {
+            get { return _miscWiringTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                MiscWiringTemplates.CollectionChanged -= CollectionChanged;
+                _miscWiringTemplates = value;
+                MiscWiringTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscWiringTemplates", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanelType> PanelTypeCatalog
+        {
+            get { return _panelTypeCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
+                _panelTypeCatalog = value;
+                PanelTypeCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanel> PanelTemplates
+        {
+            get { return _panelTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTemplates.CollectionChanged -= CollectionChanged;
+                _panelTemplates = value;
+                PanelTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("PanelTemplates", temp, this);
+            }
+        }
+        public ObservableCollection<TECConnection> ConnectionTemplates
+        {
+            get { return _connectionTemplates; }
+            set
+            {
+                var temp = this.Copy();
+                ConnectionTemplates.CollectionChanged -= CollectionChanged;
+                _connectionTemplates = value;
+                ConnectionTemplates.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConnectionTemplates", temp, this);
+            }
+        }
 
         public override object Copy()
         {
@@ -189,6 +267,12 @@ namespace EstimatingLibrary
             _connectionTypeCatalog = new ObservableCollection<TECConnectionType>();
             _conduitTypeCatalog = new ObservableCollection<TECConduitType>();
             _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
+            _miscWiringTemplates = new ObservableCollection<TECMiscWiring>();
+            _miscCostTemplates = new ObservableCollection<TECMiscCost>();
+            _panelTypeCatalog = new ObservableCollection<TECPanelType>();
+            _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
+            _panelTemplates = new ObservableCollection<TECPanel>();
+            _connectionTemplates = new ObservableCollection<TECConnection>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -200,6 +284,12 @@ namespace EstimatingLibrary
             ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
             ConduitTypeCatalog.CollectionChanged += CollectionChanged;
             AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+            MiscWiringTemplates.CollectionChanged += CollectionChanged;
+            MiscCostTemplaes.CollectionChanged += CollectionChanged;
+            PanelTemplates.CollectionChanged += CollectionChanged;
+            PanelTypeCatalog.CollectionChanged += CollectionChanged;
+            ControlledScopeTemplates.CollectionChanged += CollectionChanged;
+            ConnectionTemplates.CollectionChanged += CollectionChanged;
 
             Labor.PropertyChanged += objectPropertyChanged;
         }
@@ -230,6 +320,30 @@ namespace EstimatingLibrary
             { AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
             foreach(TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(controller.Copy() as TECController); }
+            foreach(TECMiscCost cost in templatesSource.MiscCostTemplaes)
+            {
+                MiscCostTemplaes.Add(cost);
+            }
+            foreach(TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
+            {
+                MiscWiringTemplates.Add(wiring);
+            }
+            foreach(TECPanel panel in templatesSource.PanelTemplates)
+            {
+                PanelTemplates.Add(panel);
+            }
+            foreach (TECPanelType panelType in templatesSource.PanelTypeCatalog)
+            {
+                PanelTypeCatalog.Add(panelType);
+            }
+            foreach(TECControlledScope scope in templatesSource.ControlledScopeTemplates)
+            {
+                ControlledScopeTemplates.Add(scope);
+            }
+            foreach(TECConnection connection in templatesSource.ConnectionTemplates)
+            {
+                ConnectionTemplates.Add(connection);
+            }
         }
 
         #endregion //Constructors

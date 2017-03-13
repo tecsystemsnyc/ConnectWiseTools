@@ -1,5 +1,6 @@
 ﻿using DebugLibrary;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -460,6 +461,45 @@ namespace EstimatingLibrary
                 }
 
             }
+        }
+        static private void linkPanelTypesInPanel(ObservableCollection<TECPanelType> panelTypes, ObservableCollection<TECPanel> panels)
+        {
+            foreach(TECPanel panel in panels)
+            {
+                foreach(TECPanelType type in panelTypes)
+                {
+                    if (panel.Type.Guid == type.Guid)
+                    {
+                        panel.Type = type;
+                        break;
+                    }
+                }
+            }
+        }
+        static private void linkControlledScope(ObservableCollection<TECControlledScope> controlledScope, TECTemplates templates)
+        {
+            foreach(TECControlledScope scope in controlledScope)
+            {
+                linkScopeObjects(scope.Systems, templates.SystemTemplates);
+                linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
+                linkScopeObjects(scope.Panels, templates.PanelTemplates);
+                linkScopeObjects(scope.Connections, templates.ConnectionTemplates);
+            }
+        }
+        static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
+        {
+            var linkedList = new ObservableCollection<TECScope>();
+            foreach(TECScope refScope in (IList)scopeReferenceList)
+            {
+                foreach(TECScope objectScope in (IList)scopeObjectList)
+                {
+                    if(refScope.Guid == objectScope.Guid)
+                    {
+                        linkedList.Add(objectScope as TECScope);
+                    }
+                }
+            }
+            scopeReferenceList = linkedList;
         }
         #endregion Link Methods
 
