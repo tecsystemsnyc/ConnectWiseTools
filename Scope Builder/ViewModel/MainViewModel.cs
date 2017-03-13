@@ -95,6 +95,7 @@ namespace Scope_Builder.ViewModel
             startupFile = Properties.Settings.Default.StartupFile;
             scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             checkForOpenWith(Properties.Settings.Default.StartupFile);
+            MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             BidSet += () =>
             { refreshAll(); };
@@ -108,10 +109,12 @@ namespace Scope_Builder.ViewModel
             if (TemplatesVisibility == Visibility.Visible)
             {
                 TemplatesVisibility = Visibility.Hidden;
+                MenuVM.TemplatesHidden = true;
             }
             else if (TemplatesVisibility == Visibility.Hidden)
             {
                 TemplatesVisibility = Visibility.Visible;
+                MenuVM.TemplatesHidden = false;
             }
         }
 

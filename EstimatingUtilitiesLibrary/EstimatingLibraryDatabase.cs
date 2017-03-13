@@ -1251,7 +1251,17 @@ namespace EstimatingUtilitiesLibrary
             if (type == typeof(TECBid))
             { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
             else if (type == typeof(TECTemplates))
-            { infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName); }
+            {
+                try
+                {
+                    infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
+                }
+                catch
+                {
+                    killTemplatesInfo();
+                    return false;
+                }
+            }
             else
             { throw new ArgumentException("checkDatabaseVersion given invalid type"); }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
@@ -91,7 +92,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             set
             {
-                exportProposalMenuItem.Command = value;
+                exportPointsListMenuItem.Command = value;
             }
         }
 
@@ -120,7 +121,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         private TECMenuItem loadTemplatesMenuItem;
-        public ICommand LoadTemplatesAction
+        public ICommand LoadTemplatesCommand
         {
             set
             {
@@ -143,30 +144,33 @@ namespace TECUserControlLibrary.ViewModels
         {
             Menu = new ObservableCollection<TECMenuItem>();
 
-            //File
-            TECMenuItem FileMenu = new TECMenuItem("File");
+            SolidColorBrush lightTextBrush = (SolidColorBrush)Application.Current.Resources["LightTextBrush"];
+            SolidColorBrush darkTextBrush = (SolidColorBrush)Application.Current.Resources["DarkTextBrush"];
 
-            newMenuItem = new TECMenuItem("New");
+            //File
+            TECMenuItem FileMenu = new TECMenuItem("File", lightTextBrush);
+
+            newMenuItem = new TECMenuItem("New", darkTextBrush);
             FileMenu.Items.Add(newMenuItem);
 
-            loadMenuItem = new TECMenuItem("Load");
+            loadMenuItem = new TECMenuItem("Load", darkTextBrush);
             FileMenu.Items.Add(loadMenuItem);
 
-            saveMenuItem = new TECMenuItem("Save");
+            saveMenuItem = new TECMenuItem("Save", darkTextBrush);
             FileMenu.Items.Add(saveMenuItem);
 
-            saveAsMenuItem = new TECMenuItem("Save As");
+            saveAsMenuItem = new TECMenuItem("Save As", darkTextBrush);
             FileMenu.Items.Add(saveAsMenuItem);
 
             if (type != MenuType.TB)
             {
                 //Export
-                TECMenuItem ExportMenu = new TECMenuItem("Export");
+                TECMenuItem ExportMenu = new TECMenuItem("Export", darkTextBrush);
 
-                exportProposalMenuItem = new TECMenuItem("Proposal");
+                exportProposalMenuItem = new TECMenuItem("Proposal", darkTextBrush);
                 ExportMenu.Items.Add(exportProposalMenuItem);
 
-                exportPointsListMenuItem = new TECMenuItem("Points List");
+                exportPointsListMenuItem = new TECMenuItem("Points List", darkTextBrush);
                 ExportMenu.Items.Add(exportPointsListMenuItem);
 
                 FileMenu.Items.Add(ExportMenu);
@@ -175,12 +179,12 @@ namespace TECUserControlLibrary.ViewModels
             Menu.Add(FileMenu);
 
             //Edit
-            TECMenuItem EditMenu = new TECMenuItem("Edit");
+            TECMenuItem EditMenu = new TECMenuItem("Edit", lightTextBrush);
 
-            undoMenuItem = new TECMenuItem("Undo");
+            undoMenuItem = new TECMenuItem("Undo", darkTextBrush);
             EditMenu.Items.Add(undoMenuItem);
 
-            redoMenuItem = new TECMenuItem("Redo");
+            redoMenuItem = new TECMenuItem("Redo", darkTextBrush);
             EditMenu.Items.Add(redoMenuItem);
 
             Menu.Add(EditMenu);
@@ -188,24 +192,24 @@ namespace TECUserControlLibrary.ViewModels
             //View
             if (type != MenuType.TB)
             {
-                TECMenuItem ViewMenu = new TECMenuItem("View");
+                TECMenuItem ViewMenu = new TECMenuItem("View", lightTextBrush);
 
-                toggleTemplatesMenuItem = new TECMenuItem("Show/Hide");
+                toggleTemplatesMenuItem = new TECMenuItem("Show/Hide", darkTextBrush);
                 ViewMenu.Items.Add(toggleTemplatesMenuItem);
 
                 Menu.Add(ViewMenu);
             }
 
             //Templates
-            TECMenuItem TemplatesMenu = new TECMenuItem("Templates");
+            TECMenuItem TemplatesMenu = new TECMenuItem("Templates", lightTextBrush);
 
             if (type != MenuType.TB)
             {
-                loadTemplatesMenuItem = new TECMenuItem("Load");
+                loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
                 TemplatesMenu.Items.Add(loadTemplatesMenuItem);
             }
 
-            refreshTemplatesMenuItem = new TECMenuItem("Refresh");
+            refreshTemplatesMenuItem = new TECMenuItem("Refresh", darkTextBrush);
             TemplatesMenu.Items.Add(refreshTemplatesMenuItem);
 
             Menu.Add(TemplatesMenu);

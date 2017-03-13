@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Scope_Builder"
         xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
@@ -45,54 +46,8 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top" Background="{DynamicResource SBWindowBackgroundBrush}">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New"
-                          Command="{Binding NewCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-                <MenuItem Header="_Open"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveAsCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-
-            <MenuItem Header="_View">
-                <MenuItem Header="_Show/Hide Templates"
-                          Command="{Binding ToggleTemplatesVisibilityCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-
-            <MenuItem Header="_Export">
-                <MenuItem Header="_To Document"
-                          Command="{Binding DocumentCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-                <MenuItem Header="_To CSV"
-                          Command="{Binding CSVExportCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-            </MenuItem>
-
-            
-            
-            <MenuItem Header="_Templates">
-                <MenuItem Header="_Reload"
-                          Command="{Binding LoadTemplatesCommand}"
-                          Foreground="{DynamicResource SBWindowBackgroundBrush}"/>
-            </MenuItem>
-           
-        </Menu>
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
