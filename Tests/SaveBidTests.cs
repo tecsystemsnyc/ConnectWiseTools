@@ -2963,7 +2963,7 @@ namespace Tests
         }
         #endregion
 
-        #region Save Cost Addition
+        #region Save Misc Wiring
         [TestMethod]
         public void Save_Bid_Add_MiscWiring()
         {
@@ -3089,6 +3089,108 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
+        #endregion
+
+        #region Save Misc Wiring
+        [TestMethod]
+        public void Save_Bid_Add_PanelType()
+        {
+            //Act
+            TECPanelType expectedCost = new TECPanelType();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+
+            bid.PanelTypeCatalog.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_PanelType()
+        {
+            //Act
+            TECPanelType costToRemove = bid.PanelTypeCatalog[0];
+            bid.PanelTypeCatalog.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_PanelType_Name()
+        {
+            //Act
+            TECPanelType expectedCost = bid.PanelTypeCatalog[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Bid_PanelType_Cost()
+        {
+            //Act
+            TECPanelType expectedCost = bid.PanelTypeCatalog[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
         #endregion
 
         #region Save Panel

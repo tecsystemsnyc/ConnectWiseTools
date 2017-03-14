@@ -376,6 +376,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Panels.Remove((TECPanel)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECPanelType)
+                {
+                    ((TECBid)StackItem.Item2).PanelTypeCatalog.Remove((TECPanelType)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
             { ((TECScope)StackItem.Item2).AssociatedCosts.Remove((TECAssociatedCost)StackItem.Item3); }
@@ -461,6 +465,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).PanelTemplates.Remove((TECPanel)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECPanelType)
+                {
+                    ((TECTemplates)StackItem.Item2).PanelTypeCatalog.Remove((TECPanelType)StackItem.Item3);
+                }
             }
             else
             {
@@ -536,6 +544,10 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Panels.Add((TECPanel)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECPanelType)
+                {
+                    ((TECBid)StackItem.Item2).PanelTypeCatalog.Add((TECPanelType)StackItem.Item3);
+                }
             }
             else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
             { ((TECScope)StackItem.Item2).AssociatedCosts.Add((TECAssociatedCost)StackItem.Item3); }
@@ -608,6 +620,22 @@ namespace EstimatingUtilitiesLibrary
                 else if (StackItem.Item3 is TECAssociatedCost)
                 {
                     ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscCost)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscCostTemplates.Add((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscWiringTemplates.Add((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECTemplates)StackItem.Item2).PanelTemplates.Add((TECPanel)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanelType)
+                {
+                    ((TECTemplates)StackItem.Item2).PanelTypeCatalog.Add((TECPanelType)StackItem.Item3);
                 }
             }
             else{

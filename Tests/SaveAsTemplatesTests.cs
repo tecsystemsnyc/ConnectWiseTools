@@ -426,5 +426,52 @@ namespace Tests
             Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
             Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
         }
+
+        [TestMethod]
+        public void SaveAs_Templates_Panel()
+        {
+            //Arrange
+            TECPanel expectedPanel = expectedTemplates.PanelTemplates[0];
+            TECPanel actualPanel = expectedTemplates.PanelTemplates[0];
+
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
+            Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
+            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_MiscCost()
+        {
+            //Arrange
+            TECMiscCost expectedCost = expectedTemplates.MiscCostTemplates[0];
+            TECMiscCost actualCost = expectedTemplates.MiscCostTemplates[0];
+
+            Assert.AreEqual(expectedCost.Name, expectedTemplates.MiscCostTemplates[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedTemplates.MiscCostTemplates[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, expectedTemplates.MiscCostTemplates[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_MiscWiring()
+        {
+            //Arrange
+            TECMiscWiring expectedCost = expectedTemplates.MiscWiringTemplates[0];
+            TECMiscWiring actualCost = expectedTemplates.MiscWiringTemplates[0];
+
+            Assert.AreEqual(expectedCost.Name, expectedTemplates.MiscWiringTemplates[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedTemplates.MiscWiringTemplates[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, expectedTemplates.MiscWiringTemplates[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_PanelType()
+        {
+            //Arrange
+            TECPanelType expectedCost = expectedTemplates.PanelTypeCatalog[0];
+            TECPanelType actualCost = expectedTemplates.PanelTypeCatalog[0];
+
+            Assert.AreEqual(expectedCost.Name, expectedTemplates.PanelTypeCatalog[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedTemplates.PanelTypeCatalog[0].Cost);
+        }
     }
 }
