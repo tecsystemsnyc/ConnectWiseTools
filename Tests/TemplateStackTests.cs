@@ -842,7 +842,80 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Undo_Template_MiscCost()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            {
+                expected.Add(item);
+            }
+            TECMiscCost edit = new TECMiscCost();
 
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.MiscCostTemplates.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_MiscWiring()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECMiscWiring> expected = new ObservableCollection<TECMiscWiring>();
+            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
+            {
+                expected.Add(item);
+            }
+            TECMiscWiring edit = new TECMiscWiring();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.MiscWiringTemplates.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_PanelType()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Template.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.PanelTypeCatalog.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Template.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
 
         #endregion
 
@@ -1478,6 +1551,79 @@ namespace Tests
             TECPanel actual = Template.PanelTemplates[0];
             Assert.AreEqual(edit, actual.Name, "Not Undone");
         }
+
+        [TestMethod]
+        public void Redo_Template_MiscCost()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECMiscCost edit = new TECMiscCost();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.MiscCostTemplates.Add(edit);
+            var expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Template_MiscWiring()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECMiscWiring edit = new TECMiscWiring();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.MiscWiringTemplates.Add(edit);
+            var expected = new ObservableCollection<TECMiscWiring>();
+            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Template_PanelType()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.PanelTypeCatalog.Add(edit);
+            var expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Template.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Template.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
         #endregion
     }
 }

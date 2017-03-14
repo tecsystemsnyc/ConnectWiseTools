@@ -582,5 +582,16 @@ namespace Tests
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
             Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_PanelType()
+        {
+            //Arrange
+            TECPanelType expectedCost = expectedBid.PanelTypeCatalog[0];
+            TECPanelType actualCost = expectedBid.PanelTypeCatalog[0];
+
+            Assert.AreEqual(expectedCost.Name, expectedBid.PanelTypeCatalog[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedBid.PanelTypeCatalog[0].Cost);
+        }
     }
 }

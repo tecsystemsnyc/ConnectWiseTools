@@ -1607,7 +1607,7 @@ namespace Tests
         
         #endregion
 
-        #region Save Cost Addition
+        #region Save Misc Wiring
         [TestMethod]
         public void Save_Templates_Add_MiscWiring()
         {
@@ -1728,6 +1728,107 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
+        #endregion
+
+        #region Save Panel Type
+        [TestMethod]
+        public void Save_Templates_Add_PanelType()
+        {
+            //Act
+            TECPanelType expectedCost = new TECPanelType();
+            expectedCost.Name = "Add cost addition";
+            expectedCost.Cost = 978.3;
+            expectedCost.Quantity = 21;
+
+            templates.PanelTypeCatalog.Add(expectedCost);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualTemplates.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_PanelType()
+        {
+            //Act
+            TECPanelType costToRemove = templates.PanelTypeCatalog[0];
+            templates.PanelTypeCatalog.Remove(costToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECPanelType cost in actualTemplates.PanelTypeCatalog)
+            {
+                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual(templates.MiscCostTemplates.Count, actualTemplates.MiscCostTemplates.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_PanelType_Name()
+        {
+            //Act
+            TECPanelType expectedCost = templates.PanelTypeCatalog[0];
+            expectedCost.Name = "Test Save Cost Name";
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualTemplates.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+        }
+
+        [TestMethod]
+        public void Save_Templates_PanelType_Cost()
+        {
+            //Act
+            TECPanelType expectedCost = templates.PanelTypeCatalog[0];
+            expectedCost.Cost = 489.1238;
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECPanelType actualCost = null;
+            foreach (TECPanelType cost in actualTemplates.PanelTypeCatalog)
+            {
+                if (cost.Guid == expectedCost.Guid)
+                {
+                    actualCost = cost;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+        }
+
         #endregion
 
         #region Save Panel

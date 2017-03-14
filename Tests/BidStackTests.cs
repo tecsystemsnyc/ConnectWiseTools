@@ -421,7 +421,32 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-        
+
+        [TestMethod]
+        public void Undo_Bid_PanelType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.PanelTypeCatalog.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
         [TestMethod]
         public void Undo_Bid_Panel()
         {
@@ -1399,7 +1424,30 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-        
+
+        [TestMethod]
+        public void Redo_Bid_PanelType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.PanelTypeCatalog.Add(edit);
+            var expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
 
         [TestMethod]
         public void Redo_Bid_Tags()
@@ -2103,7 +2151,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Panel_Type()
+        public void Redo_Panel_PanelType()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
