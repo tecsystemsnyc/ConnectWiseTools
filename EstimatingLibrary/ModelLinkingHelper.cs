@@ -478,7 +478,7 @@ namespace EstimatingLibrary
                 linkScopeObjects(scope.Systems, templates.SystemTemplates);
                 linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
                 linkScopeObjects(scope.Panels, templates.PanelTemplates);
-                linkScopeObjects(scope.Connections, templates.ConnectionTemplates);
+                linkConnectionsInControlledScope(templates.ConnectionTemplates, scope);
             }
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
@@ -537,6 +537,22 @@ namespace EstimatingLibrary
             {
                 linkConnectionsInController(templates.ConnectionTemplates, controller);
             }
+        }
+        static private void linkConnectionsInControlledScope(ObservableCollection<TECConnection> connections, TECControlledScope conScope)
+        {
+            ObservableCollection<TECConnection> connectionsToLink = new ObservableCollection<TECConnection>();
+            foreach(TECConnection conScopeConnection in conScope.Connections)
+            {
+                foreach(TECConnection templateConnection in connections)
+                {
+                    if (conScopeConnection.Guid == templateConnection.Guid)
+                    {
+                        connectionsToLink.Add(templateConnection);
+                        break;
+                    }
+                }
+            }
+            conScope.Connections = connectionsToLink;
         }
         static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
         {
