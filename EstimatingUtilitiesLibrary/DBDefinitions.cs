@@ -1201,7 +1201,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ControlledScopeConnectionTable : TableBase
     {
-        public static new string TableName = "TECCOntrolledScopeTECConnection";
+        public static new string TableName = "TECControlledScopeTECConnection";
         public static Type ObjectType = typeof(TECControlledScope);
         public static Type ReferenceType = typeof(TECConnection);
 
@@ -1210,7 +1210,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,
-            ConnectionID
+            ConnectionID 
             };
         public static new List<Type> Types = new List<Type>()
         {

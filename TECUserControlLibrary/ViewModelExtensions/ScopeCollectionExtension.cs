@@ -210,6 +210,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _associatedCostsVisibility;
+
+        public Visibility ControlledScopeVisibility
+        {
+            get { return _controlledScopeVisibility; }
+            set
+            {
+                _controlledScopeVisibility = value;
+                RaisePropertyChanged("ControlledScopeVisibility");
+            }
+        }
+        private Visibility _controlledScopeVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -459,6 +470,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("AssociatedCostsItemsCollection");
             }
         }
+
+        private ObservableCollection<TECControlledScope> _controlledScopeItemsCollection;
+        public ObservableCollection<TECControlledScope> ControlledScopeItemsCollection
+        {
+            get { return _controlledScopeItemsCollection; }
+            set
+            {
+                _controlledScopeItemsCollection = value;
+                RaisePropertyChanged("ControlledScopeItemsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -684,6 +706,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DevicesItemsCollection = Templates.DeviceCatalog;
             ControllersItemsCollection = Templates.ControllerTemplates;
             AssociatedCostsItemsCollection = Templates.AssociatedCostsCatalog;
+            ControlledScopeItemsCollection = Templates.ControlledScopeTemplates;
         }
 
         public void DragOver(IDropInfo dropInfo)
