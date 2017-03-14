@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:EstimateBuilder.ViewModel"
         xmlns:eLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd ="urn:gong-wpf-dragdrop"
         mc:Ignorable="d ignore"

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
@@ -81,7 +82,7 @@
                             Grid.Row="1"
                             Command="{Binding Path=ViewModel.AddTagCommand}"
                                 Margin="5"/>
-                    <local:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <grids:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
                                            Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
@@ -116,7 +117,7 @@
                             Margin="5"
                         Command="{Binding Path=ViewModel.AddManufacturerCommand}"/>
 
-                    <local:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                    <grids:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
                                         Grid.Row="3" Grid.ColumnSpan="2"/>
 
                 </Grid>
@@ -186,7 +187,7 @@
                     <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
                             Margin="5"/>
-                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
                                            TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
                         Grid.Row="7"
@@ -281,7 +282,7 @@
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
                             Margin="5"/>
-                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
+                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
                                            TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
                     <Button Content="Add Controller"
                             Command="{Binding Path=ViewModel.AddControllerCommand}"

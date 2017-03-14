@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:local="clr-namespace:Scope_Builder"
+        xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
@@ -132,7 +133,7 @@
                     SelectedIndex="{Binding DGTabIndex}">
                 
                 <TabItem Header="Systems">
-                    <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
+                    <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="By Location">

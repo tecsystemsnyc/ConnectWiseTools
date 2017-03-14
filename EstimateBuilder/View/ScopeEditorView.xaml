@@ -7,6 +7,7 @@
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         xmlns:helpers="clr-namespace:EstimateBuilder.Helpers"
         xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         mc:Ignorable="d ignore"
@@ -37,13 +38,13 @@
                     SelectedIndex="{Binding DGTabIndex}">
 
             <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
-                <cLib:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
+                <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>
 
             </TabItem>
             
             <TabItem Header="Controllers">
-                <cLib:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
+                <grids:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
                                             ViewModel="{Binding ScopeDataGrid}"/>
             </TabItem>
 

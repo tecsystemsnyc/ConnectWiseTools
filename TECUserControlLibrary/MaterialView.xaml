@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="400" d:DesignWidth="600">
@@ -114,10 +115,10 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConduitTypeCommand}"/>
         </Grid>
-        <local:ConnectionTypeGridControl Grid.Row="3" Margin="5"
+        <grids:ConnectionTypeGridControl Grid.Row="3" Margin="5"
                                          ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"
                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
-        <local:ConduitTypeGridControl Grid.Row="3" Grid.Column="1" Margin="5"
+        <grids:ConduitTypeGridControl Grid.Row="3" Grid.Column="1" Margin="5"
                                       ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="4"
