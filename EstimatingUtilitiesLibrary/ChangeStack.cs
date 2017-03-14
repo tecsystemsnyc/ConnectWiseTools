@@ -842,6 +842,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleScopeChildren(newItem as TECScope, stackItem.Item1);
             }
+            else if (newItem is TECConnection)
+            {
+                handleConnectionChildren(newItem as TECConnection, stackItem.Item1);
+            }
 
             else if (newItem is TECDrawing)
             {
@@ -907,11 +911,6 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
-            if(item.ConduitType != null)
-            {
-                stackItem = Tuple.Create(change, (object)item, (object)item.ConduitType);
-                SaveStack.Add(stackItem);
-            }
             foreach (TECPoint newPoint in item.Points)
             {
                 handleScopeChildren(newPoint as TECScope, change);
@@ -934,6 +933,16 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECDevice newDevice in item.Devices)
             {
                 stackItem = Tuple.Create(change, (object)item, (object)newDevice);
+                SaveStack.Add(stackItem);
+            }
+        }
+
+        private void handleConnectionChildren(TECConnection item, Change change)
+        {
+            Tuple<Change, object, object> stackItem;
+            if (item.ConduitType != null)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)item.ConduitType);
                 SaveStack.Add(stackItem);
             }
         }

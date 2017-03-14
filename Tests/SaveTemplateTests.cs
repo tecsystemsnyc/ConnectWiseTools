@@ -705,33 +705,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
         }
-
-        [TestMethod]
-        public void Save_Templates_SubScope_ConduitType()
-        {
-            //Act
-            TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
-
-            TECConduitType expectedType = new TECConduitType();
-            templates.ConduitTypeCatalog.Add(expectedType);
-            expectedSubScope.ConduitType = expectedType;
-            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
-
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
-
-            TECSubScope actualSubScope = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
-            {
-                if (SubScope.Guid == expectedSubScope.Guid)
-                {
-                    actualSubScope = SubScope;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSubScope.ConduitType.Guid, actualSubScope.ConduitType.Guid);
-        }
-
+        
         [TestMethod]
         public void Save_Templates_SubScope_AssociatedCosts()
         {

@@ -939,20 +939,20 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Bid_SubScope_ConduitType()
+        public void Undo_Bid_Connection_ConduitType()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECConduitType expected = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
+            TECConduitType expected = Bid.Connections[0].ConduitType;
             TECConduitType edit = Bid.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].ConduitType = edit;
+            Bid.Connections[0].ConduitType = edit;
             testStack.Undo();
 
             //assert
-            TECConduitType actual = Bid.Systems[0].Equipment[0].SubScope[0].ConduitType;
+            TECConduitType actual = Bid.Connections[0].ConduitType;
             Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
 
         }

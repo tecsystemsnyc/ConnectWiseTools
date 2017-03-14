@@ -287,7 +287,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-        public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID
@@ -1124,18 +1123,18 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class SubScopeConduitTypeTable : TableBase
+    public class ConnectionConduitTypeTable : TableBase
     {
-        public static new string TableName = "TECSubScopeTECConduitType";
-        public static Type ObjectType = typeof(TECSubScope);
+        public static new string TableName = "TECConnectionTECConduitType";
+        public static Type ObjectType = typeof(TECConnection);
         public static Type ReferenceType = typeof(TECConduitType);
 
-        public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConduitTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            SubScopeID
+            ConnectionID
         };
         public static new List<Type> Types = new List<Type>()
         {
@@ -1312,7 +1311,7 @@ namespace EstimatingUtilitiesLibrary
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
-            new SubScopeConduitTypeTable(),
+            new ConnectionConduitTypeTable(),
             new BidBidParametersTable(),
             new BidMiscCostTable(),
             new BidMiscWiringTable(),
@@ -1340,11 +1339,13 @@ namespace EstimatingUtilitiesLibrary
             new MiscCostTable(),
             new MiscWiringTable(),
             new ControlledScopeTable(),
+            new ConnectionTable(),
             
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),
             new SystemEquipmentTable(),
+            new ControllerConnectionTable(),
             new EquipmentSubScopeTable(),
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
@@ -1356,7 +1357,7 @@ namespace EstimatingUtilitiesLibrary
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
-            new SubScopeConduitTypeTable(),
+            new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
             new ControlledScopeConnectionTable(),
             new ControlledScopeControllerTable(),
@@ -1423,7 +1424,7 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
-            new SubScopeConduitTypeTable(),
+            new ConnectionConduitTypeTable(),
             new BidBidParametersTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),

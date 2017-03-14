@@ -324,8 +324,6 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
             Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
-            Assert.AreEqual(expectedSubScope.Length, actualSubScope.Length);
-            Assert.AreEqual(expectedSubScope.ConduitType.Name, actualSubScope.ConduitType.Name);
             Assert.AreEqual(expectedSubScope.AssociatedCosts[0].Name, actualSubScope.AssociatedCosts[0].Name);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);

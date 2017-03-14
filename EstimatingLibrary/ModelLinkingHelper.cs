@@ -142,12 +142,15 @@ namespace EstimatingLibrary
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        foreach(TECConnection connection in connections)
+                        if(subScope.Connection != null)
                         {
-                            if(subScope.Connection.Guid == connection.Guid)
+                            foreach (TECConnection connection in connections)
                             {
-                                subScope.Connection = connection;
-                                connection.Scope.Add(subScope);
+                                if (subScope.Connection.Guid == connection.Guid)
+                                {
+                                    subScope.Connection = connection;
+                                    connection.Scope.Add(subScope);
+                                }
                             }
                         }
                     }
@@ -427,41 +430,24 @@ namespace EstimatingLibrary
         }
         static private void linkConduitTypesInBid(TECBid bid)
         {
-            foreach (TECSystem system in bid.Systems)
-            { linkConduitTypeInSystem(bid.ConduitTypes, system); }
+            linkConduitTypeWithConnections(bid.ConduitTypes, bid.Connections);
         }
         static private void linkConduitTypesInTemplates(TECTemplates templates)
         {
-            foreach (TECSystem system in templates.SystemTemplates)
-            {
-                linkConduitTypeInSystem(templates.ConduitTypeCatalog, system);
-            }
-            foreach (TECEquipment equipment in templates.EquipmentTemplates)
-            {
-                linkConduitTypeInEquipment(templates.ConduitTypeCatalog, equipment);
-            }
-            linkConduitTypeWithSubScope(templates.ConduitTypeCatalog, templates.SubScopeTemplates);
+            linkConduitTypeWithConnections(templates.ConduitTypeCatalog, templates.ConnectionTemplates);
         }
-        static private void linkConduitTypeInSystem(ObservableCollection<TECConduitType> conduitTypes, TECSystem system)
+      
+        static private void linkConduitTypeWithConnections(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECConnection> connections)
         {
-            foreach (TECEquipment equipment in system.Equipment)
-            { linkConduitTypeInEquipment(conduitTypes, equipment); }
-        }
-        static private void linkConduitTypeInEquipment(ObservableCollection<TECConduitType> conduitTypes, TECEquipment equipment)
-        {
-            linkConduitTypeWithSubScope(conduitTypes, equipment.SubScope);
-        }
-        static private void linkConduitTypeWithSubScope(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECSubScope> subScope)
-        {
-            foreach (TECSubScope sub in subScope)
+            foreach (TECConnection connection in connections)
             {
-                if (sub.ConduitType != null)
+                if (connection.ConduitType != null)
                 {
                     foreach (TECConduitType conduitType in conduitTypes)
                     {
-                        if (sub.ConduitType.Guid == conduitType.Guid)
+                        if (connection.ConduitType.Guid == conduitType.Guid)
                         {
-                            sub.ConduitType = conduitType;
+                            connection.ConduitType = conduitType;
                         }
                     }
                 }
@@ -508,11 +494,14 @@ namespace EstimatingLibrary
         }
         static private void linkConnectionsInSubScope(ObservableCollection<TECConnection> connections, TECSubScope subScope)
         {
-            foreach(TECConnection connection in connections)
+            if(subScope.Connection != null)
             {
-                if(connection.Guid == subScope.Connection.Guid)
+                foreach (TECConnection connection in connections)
                 {
-                    subScope.Connection = connection;
+                    if (connection.Guid == subScope.Connection.Guid)
+                    {
+                        subScope.Connection = connection;
+                    }
                 }
             }
         }

@@ -76,34 +76,6 @@ namespace EstimatingLibrary
         {
             get { return getAllIOTypes(); }
         }
-
-        private double _length;
-        public double Length
-        {
-            get
-            {
-                return _length;
-            }
-            set
-            {
-                var temp = this.Copy();
-                _length = value;
-                NotifyPropertyChanged("Length", temp, this);
-            }
-        }
-
-        private TECConduitType _conduitType;
-        public TECConduitType ConduitType
-        {
-            get { return _conduitType; }
-            set
-            {
-                var temp = this.Copy();
-                _conduitType = value;
-                NotifyPropertyChanged("ConduitType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
         
         #endregion //Properties
 
@@ -112,7 +84,6 @@ namespace EstimatingLibrary
         {
             _devices = new ObservableCollection<TECDevice>();
             _points = new ObservableCollection<TECPoint>();
-            _length = 0;
             Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
@@ -127,10 +98,7 @@ namespace EstimatingLibrary
             { Devices.Add(device.Copy() as TECDevice); }
             foreach(TECPoint point in sourceSubScope.Points)
             { Points.Add(point.Copy() as TECPoint); }
-            _length = sourceSubScope.Length;
-            if (sourceSubScope.ConduitType != null)
-            { _conduitType = sourceSubScope.ConduitType.Copy() as TECConduitType; }
-
+            
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors

@@ -68,7 +68,19 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("IOTypes", temp, this);
             }
         }
-
+        
+        private TECConduitType _conduitType;
+        public TECConduitType ConduitType
+        {
+            get { return _conduitType; }
+            set
+            {
+                var temp = this.Copy();
+                _conduitType = value;
+                NotifyPropertyChanged("ConduitType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+            }
+        }
         #endregion //Properties
 
         #region Constructors 
@@ -82,12 +94,14 @@ namespace EstimatingLibrary
         }
         public TECConnection() : this(Guid.NewGuid()) { }
 
-        public TECConnection(TECConnection connectionSource) : this(connectionSource.Guid)
+        public TECConnection(TECConnection connectionSource) : this()
         {
             _length = connectionSource.Length;
             _scope = connectionSource.Scope;
             _ioTypes = connectionSource.IOTypes;
             _controller = connectionSource.Controller;
+            if (connectionSource.ConduitType != null)
+            { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
         #endregion //Constructors
 
