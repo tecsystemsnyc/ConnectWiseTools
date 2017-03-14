@@ -115,8 +115,14 @@
     <Compile Include="ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConnectionGrid.xaml.cs">
+      <DependentUpon>ConnectionGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConnectionTypeGridControl.xaml.cs">
       <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlledScopeDataGrid.xaml.cs">
+      <DependentUpon>ControlledScopeDataGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
@@ -187,6 +193,7 @@
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
     <Compile Include="ViewModels\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetViewModel.cs" />
+    <Compile Include="ViewModels\ControlledScopeViewModel.cs" />
     <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="BudgetWindow.xaml.cs">
@@ -213,7 +220,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ConnectionGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConnectionTypeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlledScopeDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

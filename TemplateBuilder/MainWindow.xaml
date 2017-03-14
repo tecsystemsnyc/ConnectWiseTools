@@ -12,6 +12,7 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:view="clr-namespace:TemplateBuilder.View"
@@ -71,6 +72,9 @@
                         Grid.RowSpan="2"
                         SelectedIndex="{Binding DGTabIndex}"
                         Background="{DynamicResource SectionBackgroundBrush}">
+                <TabItem Header="Controlled Scope">
+                    <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
+                </TabItem>
                 <TabItem Header="Systems">
                     <cLib:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
