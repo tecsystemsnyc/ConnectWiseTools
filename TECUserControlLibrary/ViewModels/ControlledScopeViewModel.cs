@@ -2,6 +2,11 @@
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Windows;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
@@ -24,6 +29,28 @@ namespace TECUserControlLibrary.ViewModels
         public Action<IDropInfo> DropHandler;
         #endregion
 
+        private ObservableCollection<ControllerInPanel> _controllerSelections;
+        public ObservableCollection<ControllerInPanel> ControllerSelections
+        {
+            get { return _controllerSelections; }
+            set {
+                _controllerSelections = value;
+                RaisePropertyChanged("ControllerSelections");
+            }
+        }
+
+        private TECControlledScope _selectedControlledScope;
+        public TECControlledScope SelectedControlledScope
+        {
+            get { return _selectedControlledScope; }
+            set
+            {
+                _selectedControlledScope = value;
+                updateControllerSelections();
+                RaisePropertyChanged("SelectedControlledScope");
+            }
+        }
+
         private TECTemplates _templates;
         public TECTemplates Templates
         {
@@ -38,6 +65,7 @@ namespace TECUserControlLibrary.ViewModels
         public ControlledScopeViewModel(TECTemplates templates)
         {
             Templates = templates;
+            ControllerSelections = new ObservableCollection<ControllerInPanel>();
         }
 
         private void setupVMs()
@@ -49,13 +77,65 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            DragHandler(dropInfo);
-        }
+            var sourceItem = dropInfo.Data;
+            var targetCollection = dropInfo.TargetCollection;
+            Type sourceType = sourceItem.GetType();
+            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
+            if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
         public void Drop(IDropInfo dropInfo)
         {
-            DropHandler(dropInfo);
+            Object sourceItem;
+            sourceItem = dropInfo.Data;
+            
+            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+            {
+                ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
+            }
+            else
+            {
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                {
+                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                }
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                {
+                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                }
+                else
+                {
+                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                }
+            }
         }
 
+        private void updateControllerSelections()
+        {
+            foreach(TECController controller in SelectedControlledScope.Controllers)
+            {
+                TECPanel panelToAdd = null;
+                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel();
+                foreach(TECPanel panel in SelectedControlledScope.Panels)
+                {
+                    if (panel.Controllers.Contains(controller))
+                    {
+                        panelToAdd = panel;
+                    }
+                }
+                controllerInPanelToAdd.Controller = controller;
+                controllerInPanelToAdd.Panel = panelToAdd;
+                ControllerSelections.Add(controllerInPanelToAdd);
+
+            }
+        }
     }
 }

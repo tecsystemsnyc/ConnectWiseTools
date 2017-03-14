@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -21,14 +22,36 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Templates.ControlledScopeTemplates}"
+                                       SelectedControlledScope="{Binding SelectedControlledScope}"
                                       Grid.Row="1" Grid.RowSpan="2"
                                       x:Name="CSGrid"/>
         <grids:SystemsGridControl SystemsSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Systems}"
                                  ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                  Grid.Row="1" Grid.Column="1"/>
-        <grids:ControllerGridControl ControllersSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Controllers}"
-                                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                    Grid.Row="1" Grid.Column="2"/>
+        <Grid Grid.Row="1" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <grids:PanelsGrid PanelsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Panels}"
+                              ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                              Grid.Row="0"/>
+            <DataGrid ItemsSource="{Binding  ElementName=parent, Path=ViewModel.ControllerSelections}"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedController}"
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                  IsReadOnly="True"
+                      Grid.Row="1">
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn ItemsSource="{Binding  ElementName=parent, Path=ViewModel.SelectedControlledScope.Panels}"
+                                            SelectedItemBinding="{Binding Panel}"/>
+                    <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto"/>
+                    <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </Grid>
+        
         <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
     </Grid>
