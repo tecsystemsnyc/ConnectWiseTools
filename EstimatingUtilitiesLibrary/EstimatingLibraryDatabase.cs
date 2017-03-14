@@ -381,8 +381,6 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECLabor getLaborConstsInTemplates(TECTemplates templates)
         {
-            TECLabor labor = new TECLabor();
-
             DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
 
             if (laborDT.Rows.Count > 1)
@@ -392,10 +390,12 @@ namespace EstimatingUtilitiesLibrary
             else if (laborDT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-                return labor;
+                return new TECLabor();
             }
 
             DataRow laborRow = laborDT.Rows[0];
+            Guid laborID = new Guid(laborRow[LaborConstantsTable.LaborID.Name].ToString());
+            TECLabor labor = new TECLabor(laborID);
 
             labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble(0);
             labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble(0);
@@ -427,8 +427,12 @@ namespace EstimatingUtilitiesLibrary
             DataRow subContractRow = subConstsDT.Rows[0];
 
             labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(0);
+            labor.ElectricalNonUnionRate = subContractRow[SubcontractorConstantsTable.ElectricalNonUnionRate.Name].ToString().ToDouble(0);
             labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(0);
+            labor.ElectricalSuperNonUnionRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperNonUnionRate.Name].ToString().ToDouble(0);
+
             labor.ElectricalIsOnOvertime = subContractRow[SubcontractorConstantsTable.ElectricalIsOnOvertime.Name].ToString().ToInt(0).ToBool();
+            labor.ElectricalIsUnion = subContractRow[SubcontractorConstantsTable.ElectricalIsUnion.Name].ToString().ToInt(0).ToBool();
 
             return labor;
         }

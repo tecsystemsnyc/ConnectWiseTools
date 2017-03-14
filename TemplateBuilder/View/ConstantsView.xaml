@@ -105,28 +105,43 @@
                  Margin="2"
                  />
 
+        <!--Border-->
+        <Border Grid.Row="6" Grid.ColumnSpan="3"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+
         <!--Subcontractor Labor Headers-->
         <TextBlock Text="Subcontractor Labor"
                FontWeight="Bold"
                Grid.Row="7"/>
-        <TextBlock Text="Rate ($/Hour)"
-               Grid.Row="7" Grid.Column="2"/>
+        <TextBlock
+            Grid.Row="7" Grid.Column="1">
+            Union Rate<LineBreak/>($/Hour)
+        </TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="2">
+            Non-Union Rate<LineBreak/>($/Hour)
+        </TextBlock>
 
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
                Grid.Row="8"/>
         <TextBox Text="{Binding Labor.ElectricalRate, StringFormat= {} {0:C}}"
-                 Grid.Row="8" Grid.Column="2"
+                 Grid.Row="8" Grid.Column="1"
                  Margin="2"
                  />
+        <TextBox Text="{Binding Labor.ElectricalNonUnionRate, StringFormat= {} {0:C}}"
+                 Grid.Row="8" Grid.Column="2"
+                 Margin="2"/>
 
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
                Grid.Row="9"/>
         <TextBox Text="{Binding Labor.ElectricalSuperRate, StringFormat= {} {0:C}}"
-                 Grid.Row="9" Grid.Column="2"
+                 Grid.Row="9" Grid.Column="1"
                  Margin="2"
                  />
-
+        <TextBox Text="{Binding Labor.ElectricalSuperNonUnionRate, StringFormat= {} {0:C}}"
+                 Grid.Row="9" Grid.Column="2"
+                 Margin="2"/>
     </Grid>
 </UserControl>
