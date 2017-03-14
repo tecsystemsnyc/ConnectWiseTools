@@ -589,6 +589,25 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
+        [TestMethod]
+        public void Undo_Labor_ElectricalModifier()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            bool actual = Bid.Labor.ElectricalIsOnOvertime;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
         #endregion
 
         #region Location Properties
