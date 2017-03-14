@@ -165,10 +165,7 @@ namespace Tests
             conduitType2.Labor = 14;
 
             bid.ConduitTypes.Add(conduitType2);
-
-            subScope1.ConduitType = conduitType1;
-            subScope2.ConduitType = conduitType2;
-
+           
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
@@ -330,6 +327,16 @@ namespace Tests
 
             bid.Panels.Add(panel);
 
+            //Connections
+            TECConnection testConnection = new TECConnection();
+            testConnection.ConduitType = conduitType1;
+            testConnection.Length = 42;
+            testConnection.Controller = expectedController;
+            testConnection.Scope.Add(subScope1);
+
+            bid.Connections.Add(testConnection);
+            
+
             //Bid
             return bid;
         }
@@ -457,7 +464,6 @@ namespace Tests
             sysSS.Name = "System SubScope";
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
-            sysSS.ConduitType = testConduitType;
             TECPoint sysPoint = new TECPoint();
             sysPoint.Type = PointTypes.Serial;
             sysPoint.Name = "System Point";
@@ -483,7 +489,6 @@ namespace Tests
             TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";
-            equipSS.ConduitType = testConduitType;
             equipSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint equipPoint = new TECPoint();
             equipPoint.Type = PointTypes.AI;
@@ -511,7 +516,6 @@ namespace Tests
             subScope.Points.Add(ssPoint);
             subScope.Devices.Add(childDev);
             subScope.Tags.Add(ssTag);
-            subScope.ConduitType = testConduitType;
             subScope.AssociatedCosts.Add(testAssociatedCost);
 
             templates.SubScopeTemplates.Add(subScope);
@@ -561,6 +565,15 @@ namespace Tests
             panel.Controllers.Add(expectedController);
 
             templates.PanelTemplates.Add(panel);
+
+            //Connections
+            TECConnection testConnection = new TECConnection();
+            testConnection.ConduitType = testConduitType;
+            testConnection.Length = 42;
+            testConnection.Controller = expectedController;
+            testConnection.Scope.Add(subScope);
+
+            templates.ConnectionTemplates.Add(testConnection);
 
             return templates;
         }

@@ -558,24 +558,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_SubScope_ConduitType()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECConduitType expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType = Template.ConduitTypeCatalog[1];
-            testStack.Undo();
-
-            //assert
-            TECConduitType actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].ConduitType;
-            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
-
-        }
-
-        [TestMethod]
         public void Undo_Template_SubScope_AssociatedCost()
         {
             //Arrange

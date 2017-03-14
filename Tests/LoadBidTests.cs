@@ -164,14 +164,12 @@ namespace Tests
             //Assert
             string expectedName = "Test SubScope";
             Assert.AreEqual(expectedName, actualSubScope.Name);
-            Assert.AreEqual("Test ConduitType", actualSubScope.ConduitType.Name);
             
             string expectedDescription = "Test SubScope Description";
             Assert.AreEqual(expectedDescription, actualSubScope.Description);
             
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
-            Assert.AreEqual(12, actualSubScope.Length);
             Assert.AreEqual(actualConnection, actualSubScope.Connection);
             Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
         }
@@ -682,18 +680,12 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Linked_ConduitTypes()
         {
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECConnection connection in actualBid.Connections)
             {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        if (!actualBid.ConduitTypes.Contains(subScope.ConduitType))
-                        { Assert.Fail("Conduit types in subscope not linked"); }
-                    }
-                }
+                if (!actualBid.ConduitTypes.Contains(connection.ConduitType))
+                { Assert.Fail("Conduit types in connection not linked"); }
             }
-            
+               
             Assert.IsTrue(true, "All conduit types Linked");
         }
 

@@ -84,23 +84,6 @@ namespace EstimatingLibrary
                     { cost += associatedCost.Cost; }
                 }
             }
-
-            foreach (TECSystem system in bid.Systems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope sub in equipment.SubScope)
-                    {
-                        if(sub.ConduitType != null)
-                        { cost += sub.Length * sub.ConduitType.Cost; }
-                        if (sub.Connection == null)
-                        {
-                            foreach (TECConnectionType type in sub.ConnectionTypes)
-                            { cost += sub.Length * type.Cost; }
-                        }
-                    }
-                }
-            }
             return cost;
         }
         /// <summary>
@@ -119,24 +102,10 @@ namespace EstimatingLibrary
                     foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                     { labor += associatedCost.Cost; }
                 }
+                if (conn.ConduitType != null)
+                { labor += conn.Length * conn.ConduitType.Labor; }
             }
-
-            foreach (TECSystem system in bid.Systems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope sub in equipment.SubScope)
-                    {
-                        if (sub.ConduitType != null)
-                        { labor += sub.Length * sub.ConduitType.Labor; }
-                        if (sub.Connection == null)
-                        {
-                            foreach (TECConnectionType type in sub.ConnectionTypes)
-                            { labor += sub.Length * type.Labor; }
-                        }
-                    }
-                }
-            }
+            
             labor *= bid.Labor.ElectricalRate;
             labor += bid.Labor.SubcontractorSubTotal;
             return labor;

@@ -697,11 +697,11 @@ namespace EstimatingUtilitiesLibrary
             else
             { return new TECConnectionType(); }
         }
-        static private TECConduitType getConduitTypeInSubScope(Guid subScopeID)
+        static private TECConduitType getConduitTypeInConnection(Guid connectionID)
         {
             string command = "select * from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ConduitTypeID.Name + " in ";
-            command += "(select " + SubScopeConduitTypeTable.TypeID.Name + " from " + SubScopeConduitTypeTable.TableName + " where ";
-            command += SubScopeConduitTypeTable.SubScopeID.Name + " = '" + subScopeID;
+            command += "(select " + ConnectionConduitTypeTable.TypeID.Name + " from " + ConnectionConduitTypeTable.TableName + " where ";
+            command += ConnectionConduitTypeTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
             DataTable conduitTypeTable = SQLiteDB.getDataFromCommand(command);
@@ -1471,12 +1471,10 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
             subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
             subScopeToAdd.Quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
-            subScopeToAdd.Length = row[SubScopeTable.Length.Name].ToString().ToDouble(0);
             subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             subScopeToAdd.Location = getLocationInScope(subScopeID);
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
-            subScopeToAdd.ConduitType = getConduitTypeInSubScope(subScopeID);
             subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
             subScopeToAdd.Connection = getConnectionInScope(subScopeID);
             return subScopeToAdd;
@@ -1653,6 +1651,7 @@ namespace EstimatingUtilitiesLibrary
             Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
             TECConnection connection = new TECConnection(guid);
             connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
+            connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             return connection;
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
@@ -1826,8 +1825,11 @@ namespace EstimatingUtilitiesLibrary
                 saveControllerChildProperties(controller);
             }
             foreach(TECConnection connection in bid.Connections)
-            { addObject(connection, bid); }
-            foreach(TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
+            {
+                addObject(connection, bid);
+                if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
+            }
+            foreach (TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
             { addObject(associatedCost, bid); }
             foreach (TECNote note in bid.Notes)
             { addObject(note, bid); }
@@ -1906,7 +1908,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
                 addObject(subScope, templates);
-                if (subScope.ConduitType != null) { addObject(subScope.ConduitType, subScope); }
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
@@ -1951,6 +1952,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, templates);
             }
+            foreach(TECConnection connection in templates.ConnectionTemplates)
+            {
+                addObject(connection, templates);
+                if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
+            }
         }
 
         private static void saveDevicesInSubScope(TECSubScope subscope)
@@ -1980,7 +1986,6 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECSubScope subScope in equipment.SubScope)
             {
                 addObject(subScope, equipment);
-                if(subScope.ConduitType != null) { addObject(subScope.ConduitType, subScope); }
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);

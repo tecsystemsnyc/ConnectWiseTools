@@ -207,8 +207,6 @@ namespace Tests
             Assert.AreEqual("Test SubScope", actualSubScope.Name);
             Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
 
-            Assert.AreEqual("Test ConduitType", actualSubScope.ConduitType.Name);
-
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
@@ -515,29 +513,10 @@ namespace Tests
         [TestMethod]
         public void Load_Templates_Linked_ConduitTypes()
         {
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECConnection connection in actualTemplates.ConnectionTemplates)
             {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
-                        { Assert.Fail("Conduit types in system templates not linked"); }
-                    }
-                }
-            }
-            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-            {
-                foreach (TECSubScope subScope in equipment.SubScope)
-                {
-                    if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
-                    { Assert.Fail("Conduit types in equipment templates not linked"); }
-                }
-            }
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-            {
-                if ((subScope.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(subScope.ConduitType)))
-                { Assert.Fail("Conduit types in subscope templates not linked"); }
+                if ((connection.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(connection.ConduitType)))
+                { Assert.Fail("Conduit types in connection templates not linked"); }
             }
         }
 
