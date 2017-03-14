@@ -1674,6 +1674,24 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Redo_Labor_ElectricalModifier()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
+            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            bool actual = Bid.Labor.ElectricalIsOnOvertime;
+            Assert.AreEqual(expected, actual, "Not Redone");
+        }
+
         #region System
         [TestMethod]
         public void Redo_System_Name()
