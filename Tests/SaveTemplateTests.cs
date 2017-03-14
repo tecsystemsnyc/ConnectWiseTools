@@ -1738,7 +1738,6 @@ namespace Tests
             TECPanelType expectedCost = new TECPanelType();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
-            expectedCost.Quantity = 21;
 
             templates.PanelTypeCatalog.Add(expectedCost);
 
@@ -1759,7 +1758,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
 
         [TestMethod]

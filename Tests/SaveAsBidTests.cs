@@ -590,6 +590,7 @@ namespace Tests
             TECPanelType expectedCost = expectedBid.PanelTypeCatalog[0];
             TECPanelType actualCost = expectedBid.PanelTypeCatalog[0];
 
+            Assert.AreEqual(expectedCost.Guid, expectedBid.PanelTypeCatalog[0].Guid);
             Assert.AreEqual(expectedCost.Name, expectedBid.PanelTypeCatalog[0].Name);
             Assert.AreEqual(expectedCost.Cost, expectedBid.PanelTypeCatalog[0].Cost);
         }

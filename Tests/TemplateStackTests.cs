@@ -1546,10 +1546,11 @@ namespace Tests
             Template.PanelTemplates[0].Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
+            testStack.Redo();
 
             //assert
             TECPanel actual = Template.PanelTemplates[0];
-            Assert.AreEqual(edit, actual.Name, "Not Undone");
+            Assert.AreEqual(edit, actual.Name, "Not Redone");
         }
 
         [TestMethod]
