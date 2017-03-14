@@ -72,52 +72,5 @@ namespace Tests
             var testVM = new EstimateBuilder.ViewModel.MainViewModel();
             Assert.IsTrue(true);
         }
-
-
-        [TestMethod]
-        public void TimeTest()
-        {
-            TECBid bid = TestHelper.CreateTestBid();
-            TECTemplates templates = TestHelper.CreateTestTemplates();
-
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            string bidPath = Path.GetTempFileName();
-            EstimatingLibraryDatabase.SaveBidToNewDB(bidPath, bid);
-
-            watch.Stop();
-
-            Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
-
-            watch = System.Diagnostics.Stopwatch.StartNew();
-
-            string copyBidPath = Path.GetTempFileName();
-
-            File.Copy(bidPath, copyBidPath, true);
-
-            watch.Stop();
-
-            Console.WriteLine("Copy bid file: " + watch.ElapsedMilliseconds);
-
-            watch = System.Diagnostics.Stopwatch.StartNew();
-
-            string templatesPath = Path.GetTempFileName();
-            EstimatingLibraryDatabase.SaveTemplatesToNewDB(templatesPath, templates);
-
-            watch.Stop();
-
-            Console.WriteLine("SaveTemplatesToNewDB: " + watch.ElapsedMilliseconds);
-
-            watch = System.Diagnostics.Stopwatch.StartNew();
-
-            string copyTemplatesPath = Path.GetTempFileName();
-
-            File.Copy(templatesPath, copyTemplatesPath, true);
-
-            watch.Stop();
-
-            Console.WriteLine("Copy templates file: " + watch.ElapsedMilliseconds);
-
-        }
     }
 }

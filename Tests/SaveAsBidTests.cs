@@ -320,7 +320,12 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
             Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
+
+            Assert.AreEqual(expectedLabor.ElectricalIsOnOvertime, actualLabor.ElectricalIsOnOvertime);
+            Assert.AreEqual(expectedLabor.ElectricalIsUnion, actualLabor.ElectricalIsUnion);
         }
 
         [TestMethod]

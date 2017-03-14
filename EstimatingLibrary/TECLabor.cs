@@ -572,7 +572,12 @@ namespace EstimatingLibrary
 
             _electricalHours = 0;
             _electricalRate = 0;
+            _electricalNonUnionRate = 0;
             _electricalSuperRate = 0;
+            _electricalSuperNonUnionRate = 0;
+
+            _electricalIsOnOvertime = false;
+            _electricalIsUnion = true;
         }
 
         public TECLabor(TECLabor labor) : this()
@@ -599,6 +604,12 @@ namespace EstimatingLibrary
 
             _electricalHours = labor.ElectricalHours;
             _electricalRate = labor.ElectricalRate;
+            _electricalNonUnionRate = labor.ElectricalNonUnionRate;
+            _electricalSuperRate = labor.ElectricalSuperRate;
+            _electricalSuperNonUnionRate = labor.ElectricalSuperNonUnionRate;
+
+            _electricalIsOnOvertime = labor.ElectricalIsOnOvertime;
+            _electricalIsUnion = labor.ElectricalIsUnion;
         }
         #endregion
 
