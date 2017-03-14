@@ -130,6 +130,9 @@
     <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\PanelsGrid.xaml.cs">
+      <DependentUpon>PanelsGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,7 @@
     <Compile Include="MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="DataGrids\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
@@ -237,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ControllerGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\PanelsGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

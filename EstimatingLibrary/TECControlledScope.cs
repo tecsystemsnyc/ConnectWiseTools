@@ -77,6 +77,26 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += CollectionChanged;
         }
         public TECControlledScope() : this(Guid.NewGuid()) { }
+        public TECControlledScope(TECControlledScope source) : this()
+        {
+            copyPropertiesFromScope(source);
+            foreach(TECConnection connection in source._connections)
+            {
+                _connections.Add(connection);
+            }
+            foreach (TECSystem system in source._systems)
+            {
+                _systems.Add(system);
+            }
+            foreach (TECController controller in source._controllers)
+            {
+                _controllers.Add(controller);
+            }
+            foreach (TECPanel panel in source._panels)
+            {
+                _panels.Add(panel);
+            }
+        }
         
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -98,7 +118,9 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            throw new NotImplementedException();
+            var outScope = new TECControlledScope(this);
+            outScope._guid = this._guid;
+            return outScope;
         }
 
         public override object DragDropCopy()

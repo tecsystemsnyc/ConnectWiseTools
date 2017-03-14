@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TECUserControlLibrary.DataGrids.PanelsGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:cLib="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent}">
+        <DataGrid ItemsSource="{Binding Path=PanelsSource}"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding Path=ViewModel.SelectedPanel, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
+                                    Visibility="{Binding Data.DataGridVisibilty.SystemName, 
+                                    Source={StaticResource proxy}}"/>
+                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
+                                    Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
+                                    Source={StaticResource proxy}}"/>
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding Path=Location, Converter={cnvt:SelectedLocationToLocationConverter}}"
+                                        Header="Location" Width="Auto"
+                                        DisplayMemberPath="Name"
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
+                
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
