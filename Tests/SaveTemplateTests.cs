@@ -254,6 +254,21 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Templates_Labor_ElecNonUnionRate()
+        {
+            //Act
+            double expectedRate = 0.456;
+            templates.Labor.ElectricalNonUnionRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            double actualRate = actualTemplates.Labor.ElectricalNonUnionRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
         public void Save_Templates_Labor_ElecSuperRate()
         {
             //Act
@@ -267,6 +282,22 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
         }
+
+        [TestMethod]
+        public void Save_Templates_Labor_ElecSuperNonUnionRate()
+        {
+            //Act
+            double expectedRate = 23.94;
+            templates.Labor.ElectricalSuperNonUnionRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            double actualRate = actualTemplates.Labor.ElectricalSuperNonUnionRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+        
 
         #endregion Save Labor
 

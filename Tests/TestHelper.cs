@@ -55,6 +55,12 @@ namespace Tests
             bid.Labor.ElectricalRate = 0.6;
             bid.Labor.ElectricalSuperRate = 0.66;
 
+            bid.Labor.ElectricalNonUnionRate = 0.7;
+            bid.Labor.ElectricalSuperNonUnionRate = 0.77;
+
+            bid.Labor.ElectricalIsOnOvertime = true;
+            bid.Labor.ElectricalIsUnion = true;
+
             //Tags
             var tag1 = new TECTag();
             tag1.Text = "Tag 1";
@@ -358,6 +364,8 @@ namespace Tests
             templates.Labor.GraphRate = 10.10;
             templates.Labor.ElectricalRate = 11.11;
             templates.Labor.ElectricalSuperRate = 12.12;
+            templates.Labor.ElectricalNonUnionRate = 13.13;
+            templates.Labor.ElectricalSuperNonUnionRate = 14.14;
 
             //Tags
             TECTag testTag = new TECTag();

@@ -632,7 +632,9 @@ namespace EstimatingLibrary
             CommRate = labor.CommRate;
 
             ElectricalRate = labor.ElectricalRate;
+            ElectricalNonUnionRate = labor.ElectricalNonUnionRate;
             ElectricalSuperRate = labor.ElectricalSuperRate;
+            ElectricalSuperNonUnionRate = labor.ElectricalSuperNonUnionRate;
         }
 
         private void raiseLaborChanged()
