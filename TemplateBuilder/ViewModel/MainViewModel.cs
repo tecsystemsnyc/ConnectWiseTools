@@ -550,6 +550,29 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.TagsVisibility = Visibility.Collapsed;
 
                     break;
+                case 7:
+                    ScopeCollection.TabIndex = 11;
+
+                    ScopeCollection.SystemsVisibility = Visibility.Visible;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+
+                    ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+                    break;
                 default:
                     ScopeCollection.TabIndex = 0;
 
@@ -562,6 +585,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     break;
+                
 
             }
         }

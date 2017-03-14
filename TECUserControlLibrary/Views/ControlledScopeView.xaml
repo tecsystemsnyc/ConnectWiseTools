@@ -37,10 +37,9 @@
                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                               Grid.Row="0"/>
             <DataGrid ItemsSource="{Binding  ElementName=parent, Path=ViewModel.ControllerSelections}"
-                  AutoGenerateColumns="False"
-                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedController}"
-                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                  IsReadOnly="True"
+                      AutoGenerateColumns="False"
+                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                      IsReadOnly="True"
                       Grid.Row="1">
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn ItemsSource="{Binding  ElementName=parent, Path=ViewModel.SelectedControlledScope.Panels}"

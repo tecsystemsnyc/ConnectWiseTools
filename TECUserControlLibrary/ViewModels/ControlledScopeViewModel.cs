@@ -120,6 +120,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void updateControllerSelections()
         {
+            ControllerSelections = new ObservableCollection<ControllerInPanel>();
             foreach(TECController controller in SelectedControlledScope.Controllers)
             {
                 TECPanel panelToAdd = null;

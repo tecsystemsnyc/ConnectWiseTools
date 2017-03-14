@@ -73,9 +73,7 @@
                         Grid.RowSpan="2"
                         SelectedIndex="{Binding DGTabIndex}"
                         Background="{DynamicResource SectionBackgroundBrush}">
-                <TabItem Header="Controlled Scope">
-                    <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
-                </TabItem>
+                
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
@@ -101,6 +99,9 @@
                 </TabItem>
                 <TabItem Header="Constants">
                     <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+                <TabItem Header="Controlled Scope">
+                    <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
                 </TabItem>
             </TabControl>
 
