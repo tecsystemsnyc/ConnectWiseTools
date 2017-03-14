@@ -345,6 +345,57 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_ControlledScope()
+        {
+            //Arrange
+            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
+            TECConnection expectedConn = null;
+            foreach (TECConnection conn in actualTemplates.ConnectionTemplates)
+            {
+                if (conn.Guid.ToString() == "7a99c54b-4a2c-4685-b305-683b8edf2fb7")
+                {
+                    expectedConn = conn;
+                    break;
+                }
+            }
+            TECSystem expectedSys = null;
+            foreach(TECSystem sys in actualTemplates.SystemTemplates)
+            {
+                if (sys.Guid.ToString() == "5b1fac5d-6026-4dfc-98c6-20a8ae357dfd")
+                {
+                    expectedSys = sys;
+                    break;
+                }
+            }
+            TECController expectedController = null;
+            foreach(TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid.ToString() == "721ecc05-915c-4d9a-9a78-68b11609ec52")
+                {
+                    expectedController = controller;
+                    break;
+                }
+            }
+            TECPanel expectedPanel = null;
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Guid.ToString() == "510c76f3-3722-4ec6-b6fc-7d8c6cfbe44e")
+                {
+                    expectedPanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
+            Assert.AreEqual("Test Controlled Description", actualConScope.Description);
+            Assert.IsTrue(actualConScope.Connections.Contains(expectedConn));
+            Assert.IsTrue(actualConScope.Systems.Contains(expectedSys));
+            Assert.IsTrue(actualConScope.Controllers.Contains(expectedController));
+            Assert.IsTrue(actualConScope.Panels.Contains(expectedPanel));
+        }
+
+        [TestMethod]
         public void Load_Templates_Linked_Devices()
         {
             foreach(TECSystem system in actualTemplates.SystemTemplates)
@@ -635,8 +686,47 @@ namespace Tests
                     Assert.Fail("ConnectionTypes not linked in device catalog");
                 }
             }
-            
+
             Assert.IsTrue(true, "All Connection types linked");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Linked_ControlledScope()
+        {
+            foreach (TECControlledScope conScope in actualTemplates.ControlledScopeTemplates)
+            {
+                foreach (TECConnection conn in conScope.Connections)
+                {
+                    if (!(actualTemplates.ConnectionTemplates.Contains(conn)))
+                    {
+                        Assert.Fail("Connection not linked in controlled scope.");
+                    }
+                }
+
+                foreach (TECSystem sys in conScope.Systems)
+                {
+                    if (!(actualTemplates.SystemTemplates.Contains(sys)))
+                    {
+                        Assert.Fail("System not linked in controlled scope.");
+                    }
+                }
+
+                foreach (TECController controller in conScope.Controllers)
+                {
+                    if (!(actualTemplates.ControllerTemplates.Contains(controller)))
+                    {
+                        Assert.Fail("Controller not linked in controlled scope.");
+                    }
+                }
+
+                foreach (TECPanel panel in conScope.Panels)
+                {
+                    if (!(actualTemplates.PanelTemplates.Contains(panel)))
+                    {
+                        Assert.Fail("Panel not linked in controlled scope.");
+                    }
+                }
+            }
         }
     }
 }
