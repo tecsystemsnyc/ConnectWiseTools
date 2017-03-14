@@ -793,10 +793,61 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
+
+        [TestMethod]
+        public void Undo_Template_Panel()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
+            foreach (TECPanel item in Template.PanelTemplates)
+            {
+                expected.Add(item);
+            }
+            TECPanel edit = new TECPanel();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.PanelTemplates.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECPanel> actual = Template.PanelTemplates;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Template_Panel_Name()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECPanel expected = Template.PanelTemplates[0];
+            string expectedName = expected.Name;
+            
+            string edit = "edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.PanelTemplates[0].Name = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            TECPanel actual = Template.PanelTemplates[0];
+            Assert.AreEqual(expectedName, actual.Name, "Not Undone");
+
+        }
+
+
+
         #endregion
 
         #region Redo
-        
+
         [TestMethod]
         public void Redo_Template_Systems()
         {
@@ -1379,6 +1430,53 @@ namespace Tests
             PointTypes actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type;
             Assert.AreEqual(edit, actual, "Not Redone");
 
+        }
+
+        [TestMethod]
+        public void Redo_Template_Panel()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
+            foreach (TECPanel item in Template.PanelTemplates)
+            {
+                expected.Add(item);
+            }
+            TECPanel edit = new TECPanel();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.PanelTemplates.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECPanel> actual = Template.PanelTemplates;
+            Assert.AreEqual(expected.Count + 1, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Template_Panel_Name()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECPanel expected = Template.PanelTemplates[0];
+
+            string edit = "edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.PanelTemplates[0].Name = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            TECPanel actual = Template.PanelTemplates[0];
+            Assert.AreEqual(edit, actual.Name, "Not Undone");
         }
         #endregion
     }

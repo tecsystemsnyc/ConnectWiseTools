@@ -426,5 +426,17 @@ namespace Tests
             Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
             Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_Panel()
+        {
+            //Arrange
+            TECPanel expectedPanel = expectedTemplates.PanelTemplates[0];
+            TECPanel actualPanel = expectedTemplates.PanelTemplates[0];
+
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
+            Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
+            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
+        }
     }
 }

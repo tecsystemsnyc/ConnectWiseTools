@@ -421,8 +421,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-
-
+        
         [TestMethod]
         public void Undo_Bid_Panel()
         {
