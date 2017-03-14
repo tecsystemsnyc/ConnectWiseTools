@@ -26,23 +26,23 @@
                                       Grid.Row="1" Grid.RowSpan="2"
                                       x:Name="CSGrid"/>
         <grids:SystemsGridControl SystemsSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Systems}"
-                                 ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                 ViewModel="{Binding ScopeDataGrid}"
                                  Grid.Row="1" Grid.Column="1"/>
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <grids:PanelsGrid PanelsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Panels}"
+            <grids:PanelsGrid PanelsSource="{Binding SelectedControlledScope.Panels}"
                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                               Grid.Row="0"/>
-            <DataGrid ItemsSource="{Binding  ElementName=parent, Path=ViewModel.ControllerSelections}"
+            <DataGrid ItemsSource="{Binding ControllerSelections}"
                       AutoGenerateColumns="False"
                       dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                       IsReadOnly="True"
                       Grid.Row="1">
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn ItemsSource="{Binding  ElementName=parent, Path=ViewModel.SelectedControlledScope.Panels}"
+                    <DataGridComboBoxColumn ItemsSource="{Binding SelectedControlledScope.Panels}"
                                             SelectedItemBinding="{Binding Panel}"/>
                     <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto"/>
                     <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto"/>

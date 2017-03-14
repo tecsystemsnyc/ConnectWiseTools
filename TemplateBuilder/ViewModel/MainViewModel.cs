@@ -560,7 +560,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Visible;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Visible;

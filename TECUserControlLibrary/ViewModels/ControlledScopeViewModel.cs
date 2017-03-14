@@ -66,6 +66,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates = templates;
             ControllerSelections = new ObservableCollection<ControllerInPanel>();
+            setupVMs();
         }
 
         private void setupVMs()
@@ -92,7 +93,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             Object sourceItem;
             sourceItem = dropInfo.Data;
-            
+
+            var targetCollection = dropInfo.TargetCollection;
+
+            Type sourceType = sourceItem.GetType();
+            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+            if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+            {
+                var controllerInPanel = new ControllerInPanel();
+                (controllerInPanel as ControllerInPanel).Controller = sourceItem as TECController;
+                sourceItem = controllerInPanel;
+            }
+
             if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
                 ((IList)dropInfo.TargetCollection).Add(sourceItem);
