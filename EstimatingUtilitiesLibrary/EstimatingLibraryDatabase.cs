@@ -1076,7 +1076,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + ControlledScopeControllerTable.ControllerID.Name + " from " + ControlledScopeControllerTable.TableName + " where ";
             command += ControlledScopeControllerTable.ControlledScopeID.Name + " = '" + guid;
-            command += "'";
+            command += "')";
 
             DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
@@ -1090,7 +1090,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " in ";
             command += "(select " + ControlledScopeSystemTable.SystemID.Name + " from " + ControlledScopeSystemTable.TableName + " where ";
             command += ControlledScopeSystemTable.ControlledScopeID.Name + " = '" + guid;
-            command += "'";
+            command += "')";
 
             DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in pagesDT.Rows)
@@ -1104,7 +1104,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
             command += "(select " + ControlledScopeConnectionTable.ConnectionID.Name + " from " + ControlledScopeConnectionTable.TableName + " where ";
             command += ControlledScopeConnectionTable.ControlledScopeID.Name + " = '" + guid;
-            command += "'";
+            command += "')";
 
             DataTable dt = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
@@ -1118,7 +1118,7 @@ namespace EstimatingUtilitiesLibrary
             string command = "select * from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
             command += "(select " + ControlledScopePanelTable.PanelID.Name + " from " + ControlledScopePanelTable.TableName + " where ";
             command += ControlledScopePanelTable.ControlledScopeID.Name + " = '" + guid;
-            command += "'";
+            command += "')";
 
             DataTable dt = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
