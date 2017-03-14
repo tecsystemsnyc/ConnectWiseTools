@@ -415,6 +415,21 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Bid_Labor_ElecNonUnionRate()
+        {
+            //Act
+            double expectedRate = 0.456;
+            bid.Labor.ElectricalNonUnionRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualBid.Labor.ElectricalNonUnionRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
         public void Save_Bid_Labor_ElecSuperRate()
         {
             //Act
@@ -427,6 +442,47 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Labor_ElecSuperNonUnionRate()
+        {
+            //Act
+            double expectedRate = 23.94;
+            bid.Labor.ElectricalSuperNonUnionRate = expectedRate;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            double actualRate = actualBid.Labor.ElectricalSuperNonUnionRate;
+
+            //Assert
+            Assert.AreEqual(expectedRate, actualRate);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Labor_ElecIsOnOT()
+        {
+            //Act
+            bid.Labor.ElectricalIsOnOvertime = !bid.Labor.ElectricalIsOnOvertime;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            Assert.AreEqual(bid.Labor.ElectricalIsOnOvertime, actualBid.Labor.ElectricalIsOnOvertime);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Labor_ElecIsUnion()
+        {
+            //Act
+            bid.Labor.ElectricalIsUnion = !bid.Labor.ElectricalIsUnion;
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            //Assert
+            Assert.AreEqual(bid.Labor.ElectricalIsUnion, actualBid.Labor.ElectricalIsUnion);
         }
 
         #endregion Save Labor

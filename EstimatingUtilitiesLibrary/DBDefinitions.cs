@@ -121,8 +121,11 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", LaborType.GetProperty("ElectricalRate"));
         public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", LaborType.GetProperty("ElectricalSuperRate"));
+        public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", LaborType.GetProperty("ElectricalNonUnionRate"));
+        public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", LaborType.GetProperty("ElectricalSuperNonUnionRate"));
 
         public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", LaborType.GetProperty("ElectricalIsOnOvertime"));
+        public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", LaborType.GetProperty("ElectricalIsUnion"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
