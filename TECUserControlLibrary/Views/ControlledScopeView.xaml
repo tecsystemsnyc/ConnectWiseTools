@@ -23,7 +23,7 @@
                                       Grid.Row="1" Grid.RowSpan="2"
                                       x:Name="CSGrid"/>
         <cLib:SystemsGridControl SystemsSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Systems}"
-                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                 ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                  Grid.Row="1" Grid.Column="1"/>
         <cLib:ControllerGridControl ControllersSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Controllers}"
                                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"

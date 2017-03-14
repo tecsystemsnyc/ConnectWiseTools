@@ -1,5 +1,8 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GongSolutions.Wpf.DragDrop;
+using System;
+using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -9,8 +12,18 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ControlledScopeViewModel : ViewModelBase
+    public class ControlledScopeViewModel : ViewModelBase, IDropTarget
     {
+
+        #region VM Extenstions
+        public ScopeDataGridExtension ScopeDataGrid { get; set; }
+        #endregion
+
+        #region Delegates
+        public Action<IDropInfo> DragHandler;
+        public Action<IDropInfo> DropHandler;
+        #endregion
+
         private TECTemplates _templates;
         public TECTemplates Templates
         {
@@ -26,6 +39,23 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates = templates;
         }
-        
+
+        private void setupVMs()
+        {
+            ScopeDataGrid = new ScopeDataGridExtension(Templates);
+            ScopeDataGrid.DragHandler += DragOver;
+            ScopeDataGrid.DropHandler += Drop;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DragHandler(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            DropHandler(dropInfo);
+        }
+
     }
 }

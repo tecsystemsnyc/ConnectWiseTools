@@ -64,6 +64,7 @@ namespace TemplateBuilder.ViewModel
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public EditTabExtension EditTab { get; set; }
         public MaterialsCostsExtension MaterialsTab { get; set; }
+        public ControlledScopeViewModel ControlledScopeVM { get; set; }
         #endregion
 
         #region ViewModels
@@ -226,6 +227,10 @@ namespace TemplateBuilder.ViewModel
             MenuVM.UndoCommand = UndoCommand;
             MenuVM.RedoCommand = RedoCommand;
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
+
+            ControlledScopeVM = new ControlledScopeViewModel(Templates);
+            ControlledScopeVM.DragHandler += DragOver;
+            ControlledScopeVM.DropHandler += Drop;
         }
         #endregion
 

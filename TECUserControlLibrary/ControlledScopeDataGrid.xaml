@@ -19,8 +19,7 @@
         <DataGrid ItemsSource="{Binding Path=ControlledScopeSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=SelectedControlledScope}"
-                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                  IsReadOnly="True">
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
