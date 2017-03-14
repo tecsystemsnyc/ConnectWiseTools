@@ -39,9 +39,6 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the ElectricalViewModel class.
-        /// </summary>
         public ElectricalViewModel(TECBid bid)
         {
             Bid = bid;
