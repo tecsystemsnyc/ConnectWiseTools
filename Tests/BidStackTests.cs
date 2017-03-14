@@ -1608,6 +1608,7 @@ namespace Tests
 
         }
 
+        #region System
         [TestMethod]
         public void Redo_System_Name()
         {
@@ -1709,6 +1710,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Equipment
         [TestMethod]
         public void Redo_Equipment_Name()
         {
@@ -1789,7 +1793,9 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
+        #endregion
 
+        #region Subscope
         [TestMethod]
         public void Redo_SubScope_Name()
         {
@@ -1896,6 +1902,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Device
         [TestMethod]
         public void Redo_Device_Name()
         {
@@ -1991,6 +2000,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Point
         [TestMethod]
         public void Redo_Point_Name()
         {
@@ -2068,6 +2080,48 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
+
+        #endregion
+
+        #region Panel
+        [TestMethod]
+        public void Redo_Panel_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Panels[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Panels[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Panel_Type()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Panels[0].Type = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            TECPanelType actual = Bid.Panels[0].Type;
+            Assert.AreEqual(edit.Guid, actual.Guid, "Not Redone");
+
+        }
+        #endregion
         #endregion
     }
 }
