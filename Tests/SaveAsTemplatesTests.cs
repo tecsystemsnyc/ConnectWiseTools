@@ -218,6 +218,8 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
             Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
+            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
         }
 
         [TestMethod]
