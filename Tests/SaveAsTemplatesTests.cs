@@ -13,6 +13,8 @@ namespace Tests
     [TestClass]
     public class SaveAsTemplatesTests
     {
+        private const bool DEBUG = false;
+
         static TECTemplates expectedTemplates;
         static TECSystem expectedSystem;
         static TECEquipment expectedEquipment;
@@ -21,6 +23,9 @@ namespace Tests
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
         static TECController expectedController;
+        static TECAssociatedCost expectedAssociatedCost;
+        static TECConnectionType expectedConnectionType;
+        static TECConduitType expectedConduitType;
 
         static string path;
 
@@ -32,6 +37,9 @@ namespace Tests
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
         static TECController actualController;
+        static TECAssociatedCost actualAssociatedCost;
+        static TECConnectionType actualConnectionType;
+        static TECConduitType actualConduitType;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -58,6 +66,9 @@ namespace Tests
             expectedManufacturer = expectedTemplates.ManufacturerCatalog[0];
             expectedTag = expectedTemplates.Tags[0];
             expectedController = expectedTemplates.ControllerTemplates[0];
+            expectedAssociatedCost = expectedTemplates.AssociatedCostsCatalog[0];
+            expectedConnectionType = expectedTemplates.ConnectionTypeCatalog[0];
+            expectedConduitType = expectedTemplates.ConduitTypeCatalog[0];
 
             path = Path.GetTempFileName();
 
@@ -128,6 +139,33 @@ namespace Tests
                     break;
                 }
             }
+
+            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            {
+                if (cost.Guid == expectedAssociatedCost.Guid)
+                {
+                    actualAssociatedCost = cost;
+                    break;
+                }
+            }
+
+            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            {
+                if (connectionType.Guid == expectedConnectionType.Guid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            {
+                if (conduitType.Guid == expectedConduitType.Guid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
         }
 
         [ClassCleanup]
@@ -136,8 +174,50 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveAs test templates saved to: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveAs test templates saved to: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
+
+
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_LaborConstants()
+        {
+            TECLabor expectedLabor = expectedTemplates.Labor;
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+
+            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+
+            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+
+            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+
+            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_SubcontractLaborConstants()
+        {
+            TECLabor expectedLabor = expectedTemplates.Labor;
+            TECLabor actualLabor = actualTemplates.Labor;
+
+            //Assert
+            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
         }
 
         [TestMethod]
@@ -159,13 +239,13 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
             Assert.AreEqual(expectedSystem.Tags[0].Text, actualSystem.Tags[0].Text);
 
             Assert.AreEqual(expectedSysEquipment.Name, actualSysEquipment.Name);
             Assert.AreEqual(expectedSysEquipment.Description, actualSysEquipment.Description);
             Assert.AreEqual(expectedSysEquipment.Quantity, actualSysEquipment.Quantity);
-            Assert.AreEqual(expectedSysEquipment.BudgetPrice, actualSysEquipment.BudgetPrice);
+            Assert.AreEqual(expectedSysEquipment.BudgetUnitPrice, actualSysEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedSysEquipment.Tags[0].Text, actualSysEquipment.Tags[0].Text);
 
             Assert.AreEqual(expectedSysSubScope.Name, actualSysSubScope.Name);
@@ -176,7 +256,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
+            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
@@ -205,7 +285,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedEquipment.Tags[0].Text, actualEquipment.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipSubScope.Name, actualEquipSubScope.Name);
@@ -216,7 +296,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
+            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
@@ -244,11 +324,14 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
             Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSubScope.Length, actualSubScope.Length);
+            Assert.AreEqual(expectedSubScope.ConduitType.Name, actualSubScope.ConduitType.Name);
+            Assert.AreEqual(expectedSubScope.AssociatedCosts[0].Name, actualSubScope.AssociatedCosts[0].Name);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType, actualChildDevice.ConnectionType);
+            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
@@ -265,14 +348,13 @@ namespace Tests
         {
             //Arrange
             TECManufacturer actualChildMan = actualDevice.Manufacturer;
-
             TECManufacturer expectedChildMan = expectedDevice.Manufacturer;
 
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
             Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
@@ -302,7 +384,8 @@ namespace Tests
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
             Assert.AreEqual(expectedController.Cost, actualController.Cost);
-            
+            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
+
             foreach (TECIO expectedIO in expectedController.IO)
             {
                 bool ioExists = false;
@@ -316,6 +399,32 @@ namespace Tests
                 }
                 Assert.IsTrue(ioExists);
             }
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_AssociatedCost()
+        {
+            //Assert
+            Assert.AreEqual(expectedAssociatedCost.Name, actualAssociatedCost.Name);
+            Assert.AreEqual(expectedAssociatedCost.Cost, actualAssociatedCost.Cost);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_ConnectionType()
+        {
+            //Assert
+            Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
+            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_ConduitType()
+        {
+            //Assert
+            Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
+            Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
+            Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
         }
     }
 }

@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Scope_Builder"
         xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
@@ -44,55 +45,9 @@
             <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New"
-                          Command="{Binding NewCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_Open"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveAsCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-
-            <MenuItem Header="_View">
-                <MenuItem Header="_Show/Hide Templates"
-                          Command="{Binding ToggleTemplatesVisibilityCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-
-            <MenuItem Header="_Export">
-                <MenuItem Header="_To Document"
-                          Command="{Binding DocumentCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_To CSV"
-                          Command="{Binding CSVExportCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-
-            
-            
-            <MenuItem Header="_Templates">
-                <MenuItem Header="_Reload"
-                          Command="{Binding LoadTemplatesCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-           
-        </Menu>
+    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
@@ -121,7 +76,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Name:" Grid.Column="0" 
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Name}"
@@ -132,7 +87,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Bid Number:" Grid.Column="2"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.BidNumber}"
@@ -143,7 +98,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Estimator:" Grid.Column="4"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Estimator}"
@@ -154,7 +109,7 @@
                          VerticalAlignment="Center">
                 </TextBox>
                 <Label Content="Salesperson:" Grid.Column="6"
-                       Background="{DynamicResource WindowBackgroundBrush}"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
                        Foreground="{DynamicResource LightTextBrush}"
                        VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Bid.Salesperson}"
@@ -204,6 +159,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </ItemsPanelTemplate>
@@ -212,6 +168,10 @@
                     <TextBlock Text="{Binding CurrentStatusText}"/>
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="1"
+                               HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding ContextText}"/>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2"
                                HorizontalAlignment="Right">
                     <TextBlock Text="{Binding Version}"/>
                 </StatusBarItem>

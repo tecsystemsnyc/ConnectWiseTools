@@ -160,7 +160,6 @@
     <Compile Include="ViewModel\ReviewViewModel.cs" />
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
@@ -179,9 +178,6 @@
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
       <DependentUpon>ScopeEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -223,10 +219,6 @@
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingsView.xaml">
-      <SubType>Form</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -246,7 +238,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -274,6 +268,10 @@
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
+      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
+      <Name>DebugLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
       <Project>{b0f44768-5b48-47b3-bbe8-0dcbd4b0b0c0}</Project>
       <Name>EstimatingLibrary</Name>

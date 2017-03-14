@@ -199,6 +199,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controllerVisibility;
+
+        public Visibility AssociatedCostsVisibility
+        {
+            get { return _associatedCostsVisibility; }
+            set
+            {
+                _associatedCostsVisibility = value;
+                RaisePropertyChanged("AssociatedCostsVisibility");
+            }
+        }
+        private Visibility _associatedCostsVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -235,7 +246,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _deviceCost;
 
-        public ConnectionType DeviceConnectionType
+        public TECConnectionType DeviceConnectionType
         {
             get { return _deviceConnectionType; }
             set
@@ -244,7 +255,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DeviceConnectionType");
             }
         }
-        private ConnectionType _deviceConnectionType;
+        private TECConnectionType _deviceConnectionType;
 
         public string DeviceButtonContent
         {
@@ -367,6 +378,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private ObservableCollection<TECTag> _controllerTags;
+
+        public TECManufacturer ControllerManufacturer
+        {
+            get { return _controllerManufacturer; }
+            set
+            {
+                _controllerManufacturer = value;
+                RaisePropertyChanged("ControllerManufacturer");
+            }
+        }
+        private TECManufacturer _controllerManufacturer;
         
         #endregion //Device Interface Properties
 
@@ -426,6 +448,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllersItemsCollection");
             }
         }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostsItemsCollection;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsItemsCollection
+        {
+            get { return _associatedCostsItemsCollection; }
+            set
+            {
+                _associatedCostsItemsCollection = value;
+                RaisePropertyChanged("AssociatedCostsItemsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -450,8 +483,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             AddTagCommand = new RelayCommand(AddTagExecute);
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
-            AddDeviceCommand = new RelayCommand(AddDeviceExecute);
-            AddControllerCommand = new RelayCommand(AddControllerExecute);
+            AddDeviceCommand = new RelayCommand(AddDeviceExecute, CanAddDevice);
+            AddControllerCommand = new RelayCommand(AddControllerExecute, CanAddController);
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
@@ -481,7 +514,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SystemItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -499,7 +531,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 EquipmentItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -517,7 +548,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         {
                             if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SubScopeItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -540,29 +570,63 @@ namespace TECUserControlLibrary.ViewModelExtensions
             populateItemsCollections();
             SearchString = "";
         }
+
         private void AddTagExecute()
         {
             TECTag newTag = new TECTag();
             newTag.Text = TagName;
             Templates.Tags.Add(newTag);
         }
+        private bool canAddTag()
+        {
+            if(TagName != "") { return true; }
+            else { return false; }
+        }
+
         private void AddManufacturerExecute()
         {
-            TECManufacturer newMan = new TECManufacturer(ManufacturerName, ManufacturerMultiplier);
+            TECManufacturer newMan = new TECManufacturer();
+            newMan.Name = ManufacturerName;
+            newMan.Multiplier = ManufacturerMultiplier;
             Templates.ManufacturerCatalog.Add(newMan);
         }
+        private bool CanAddManufacturer()
+        {
+            if(ManufacturerName != "")
+            { return true; }
+            else { return false; }
+        }
+
         private void AddDeviceExecute()
         {
-            var newDevice = new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer);
+            var newDevice = new TECDevice();
+            newDevice.Name = DeviceName;
+            newDevice.Description = DeviceDescription;
+            newDevice.Cost = DeviceCost;
+            newDevice.ConnectionType = DeviceConnectionType;
+            newDevice.Manufacturer = DeviceManufacturer;
             newDevice.Tags = DeviceTags;
             Templates.DeviceCatalog.Add(newDevice);
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceConnectionType = 0;
+            DeviceConnectionType = null;
             DeviceManufacturer = null;
             DeviceTags = new ObservableCollection<TECTag>();
         }
+        private bool CanAddDevice()
+        {
+            if (DeviceManufacturer != null
+                && DeviceConnectionType != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddControllerExecute()
         {
             var newController = new TECController();
@@ -571,13 +635,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newController.Cost = ControllerCost;
             newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
+            newController.Manufacturer = ControllerManufacturer;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
             ControllerCost = 0;
             ControllerIO = new ObservableCollection<TECIO>();
             ControllerTags = new ObservableCollection<TECTag>();
+            ControllerManufacturer = null;
         }
+        private bool CanAddController()
+        {
+            if(ControllerManufacturer != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddIOToControllerExecute()
         {
             var newIO = new TECIO();
@@ -605,6 +683,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SubScopeItemsCollection = Templates.SubScopeTemplates;
             DevicesItemsCollection = Templates.DeviceCatalog;
             ControllersItemsCollection = Templates.ControllerTemplates;
+            AssociatedCostsItemsCollection = Templates.AssociatedCostsCatalog;
         }
 
         public void DragOver(IDropInfo dropInfo)

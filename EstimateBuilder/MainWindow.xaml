@@ -8,12 +8,15 @@
         xmlns:view="clr-namespace:EstimateBuilder.View"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Height="720"
-        Width="1024"
+        Width="1200"
         Title="{Binding TitleString}"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        x:Name="parent">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -44,55 +47,10 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New"
-                          Command="{Binding NewCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Open"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveAsCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Show/Hide Templates"
-                          Command="{Binding ScopeEditorVM.ToggleTemplatesVisibilityCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Templates">
-                <MenuItem Header="_Reload"
-                          Command="{Binding LoadTemplatesCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Drawing" Visibility="Collapsed">
-                <MenuItem Header="_Load"
-                          Command="{Binding LoadDrawingCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Export">
-                <MenuItem Header="_To Document"
-                          Command="{Binding DocumentCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_To CSV"
-                          Command="{Binding CSVExportCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-        </Menu>
+    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
+
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
 
 
         <Grid x:Name="LayoutRoot">
@@ -142,8 +100,8 @@
                     <view:ReviewView
                         ViewModel="{Binding ReviewVM}"/>
                 </TabItem>
-                <TabItem Header="Settings">
-                    <view:SettingsView
+                <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
+                    <cLibView:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>

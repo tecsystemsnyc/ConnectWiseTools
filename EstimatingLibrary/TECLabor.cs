@@ -11,6 +11,9 @@ namespace EstimatingLibrary
     {
         #region Properties
 
+        private Guid _guid;
+        public Guid Guid { get { return _guid; } }
+
         private int _numPoints;
         public int NumPoints
         {
@@ -378,6 +381,45 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalRate = value;
                 NotifyPropertyChanged("ElectricalRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        private double _electricalNonUnionRate;
+        public double ElectricalNonUnionRate
+        {
+            get { return _electricalNonUnionRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalNonUnionRate = value;
+                NotifyPropertyChanged("ElectricalNonUnionRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        public double ElectricalEffectiveRate
+        {
+            get
+            {
+                double rate;
+                if (ElectricalIsUnion)
+                {
+                    rate = ElectricalRate;
+                }
+                else
+                {
+                    rate = ElectricalNonUnionRate;
+                }
+
+                if (ElectricalIsOnOvertime)
+                {
+                    return (rate * 1.5);
+                }
+                else
+                {
+                    return rate;
+                }
             }
         }
 
@@ -385,7 +427,100 @@ namespace EstimatingLibrary
         {
             get
             {
-                return (ElectricalHours * ElectricalRate);
+                return (ElectricalHours * ElectricalEffectiveRate);
+            }
+        }
+
+        public double ElectricalSuperHours
+        {
+            get
+            {
+                return (ElectricalHours / 7);
+            }
+        }
+
+        private double _electricalSuperRate;
+        public double ElectricalSuperRate
+        {
+            get { return _electricalSuperRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalSuperRate = value;
+                NotifyPropertyChanged("ElectricalSuperRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        private double _electricalSuperNonUnionRate;
+        public double ElectricalSuperNonUnionRate
+        {
+            get { return _electricalSuperNonUnionRate; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalSuperNonUnionRate = value;
+                NotifyPropertyChanged("ElectricalSuperNonUnionRate", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        public double ElectricalSuperEffectiveRate
+        {
+            get
+            {
+                double rate;
+                if (ElectricalIsUnion)
+                {
+                    rate = ElectricalSuperRate;
+                }
+                else
+                {
+                    rate = ElectricalSuperNonUnionRate;
+                }
+                
+                if (ElectricalIsOnOvertime)
+                {
+                    return (rate * 1.5);
+                }
+                else
+                {
+                    return rate;
+                }
+            }
+        }
+
+        public double ElectricalSuperSubTotal
+        {
+            get
+            {
+                return (ElectricalSuperHours * ElectricalSuperEffectiveRate);
+            }
+        }
+
+        private bool _electricalIsOnOvertime;
+        public bool ElectricalIsOnOvertime
+        {
+            get { return _electricalIsOnOvertime; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalIsOnOvertime = value;
+                NotifyPropertyChanged("ElectricalIsOnOvertime", temp, this);
+                raiseLaborChanged();
+            }
+        }
+
+        private bool _electricalIsUnion;
+        public bool ElectricalIsUnion
+        {
+            get { return _electricalIsUnion; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalIsUnion = value;
+                NotifyPropertyChanged("ElectricalIsUnion", temp, this);
+                raiseLaborChanged();
             }
         }
         #endregion Electrical
@@ -394,7 +529,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return (ElectricalSubTotal);
+                return (ElectricalSubTotal + ElectricalSuperSubTotal);
             }
         }
 
@@ -409,33 +544,38 @@ namespace EstimatingLibrary
         #endregion
 
         #region Initializers
-        public TECLabor()
+        public TECLabor() : this(Guid.NewGuid()) { }
+
+        public TECLabor(Guid guid)
         {
+            _guid = guid;
+
             _pmCoef = 1.0;
             _pmExtraHours = 0;
-            _pmRate = 60;
+            _pmRate = 0;
 
             _engCoef = 1.0;
             _engExtraHours = 0;
-            _engRate = 60;
+            _engRate = 0;
 
             _commCoef = 1.0;
             _commExtraHours = 0;
-            _commRate = 60;
+            _commRate = 0;
 
             _softCoef = 1.0;
             _softExtraHours = 0;
-            _softRate = 60;
+            _softRate = 0;
 
             _graphCoef = 1.0;
             _graphExtraHours = 0;
-            _graphRate = 60;
+            _graphRate = 0;
 
             _electricalHours = 0;
-            _electricalRate = 115;
+            _electricalRate = 0;
+            _electricalSuperRate = 0;
         }
 
-        public TECLabor(TECLabor labor)
+        public TECLabor(TECLabor labor) : this()
         {
             _pmCoef = labor.PMCoef;
             _pmExtraHours = labor.PMExtraHours;
@@ -463,6 +603,27 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public void UpdateConstants(TECLabor labor)
+        {
+            PMCoef = labor.PMCoef;
+            PMRate = labor.PMRate;
+
+            ENGCoef = labor.ENGCoef;
+            ENGRate = labor.ENGRate;
+
+            SoftCoef = labor.SoftCoef;
+            SoftRate = labor.SoftRate;
+
+            GraphCoef = labor.GraphCoef;
+            GraphRate = labor.GraphRate;
+
+            CommCoef = labor.CommCoef;
+            CommRate = labor.CommRate;
+
+            ElectricalRate = labor.ElectricalRate;
+            ElectricalSuperRate = labor.ElectricalSuperRate;
+        }
+
         private void raiseLaborChanged()
         {
             RaisePropertyChanged("NumPoints");
@@ -502,20 +663,29 @@ namespace EstimatingLibrary
             RaisePropertyChanged("CommRate");
             RaisePropertyChanged("CommSubTotal");
 
-            RaisePropertyChanged("TECLaborSubTotal");
+            RaisePropertyChanged("TECSubTotal");
 
             RaisePropertyChanged("ElectricalHours");
             RaisePropertyChanged("ElectricalRate");
+            RaisePropertyChanged("ElectricalNonUnionRate");
+            RaisePropertyChanged("ElectricalEffectiveRate");
             RaisePropertyChanged("ElectricalSubTotal");
+
+            RaisePropertyChanged("ElectricalSuperHours");
+            RaisePropertyChanged("ElectricalSuperRate");
+            RaisePropertyChanged("ElectricalSuperNonUnionRate");
+            RaisePropertyChanged("ElectricalSuperEffectiveRate");
+            RaisePropertyChanged("ElectricalSuperSubTotal");
 
             RaisePropertyChanged("SubcontractorSubTotal");
 
             RaisePropertyChanged("TotalCost");
         }
 
-        public override object Copy()
+        public override Object Copy()
         {
             TECLabor outLabor = new TECLabor(this);
+            outLabor._guid = this.Guid;
             return outLabor;
         }
 

@@ -28,8 +28,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>40</ApplicationRevision>
-    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
+    <ApplicationRevision>41</ApplicationRevision>
+    <ApplicationVersion>1.2.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -56,7 +56,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0F065CE35C01600AC9B8FF437E19F075F8FFBE1F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>52EE9AB3C333D83AB576F8FB313CE9B2486425E3</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
@@ -185,6 +185,9 @@
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ConstantsView.xaml.cs">
+      <DependentUpon>ConstantsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,6 +203,10 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ConstantsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +259,10 @@
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
+      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
+      <Name>DebugLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
       <Project>{b0f44768-5b48-47b3-bbe8-0dcbd4b0b0c0}</Project>
       <Name>EstimatingLibrary</Name>

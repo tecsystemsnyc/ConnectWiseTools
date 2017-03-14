@@ -18,7 +18,8 @@
         <DataGrid ItemsSource="{Binding Path=ManufacturersSource}"
                   AutoGenerateColumns="False"
                   x:Name="ManufacturersGrid"
-                  IsReadOnly="True">
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Manufacturer" Width="*"/>

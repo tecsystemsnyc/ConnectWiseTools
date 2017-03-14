@@ -9,9 +9,11 @@ namespace EstimatingLibrary
 {
     public class TECController : TECScope
     {
+        #region Properties
         private double _cost;
         private ObservableCollection<TECConnection> _connections;
         private ObservableCollection<TECIO> _io;
+        private TECManufacturer _manufacturer;
 
         public double Cost
         {
@@ -43,6 +45,17 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("IO", temp, this);
             }
         }
+        public TECManufacturer Manufacturer
+        {
+            get { return _manufacturer; }
+            set
+            {
+                var temp = this.Copy();
+                _manufacturer = value;
+                NotifyPropertyChanged("Manufacturer", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+            }
+        }
 
         public List<IOType> AvailableIO
         {
@@ -53,15 +66,20 @@ namespace EstimatingLibrary
             get { return getNetworkIO(); }
         }
 
-        public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
+        #endregion
+        
+        #region Constructors
+        public TECController(Guid guid) : base(guid)
         {
-            _cost = cost;
+            _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
-
             IO.CollectionChanged += CollectionChanged;
         }
+        public TECController() : this(Guid.NewGuid()) { }
+        #endregion
 
+        #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -81,7 +99,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -90,18 +107,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
         }
-
-        public TECController() : this("", "", Guid.NewGuid(), 0)
-        {
-        }
+        #endregion
 
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Name,
-                this.Description,
-                this.Guid,
-                this.Cost);
+            TECController outController = new TECController(this.Guid);
+            outController._guid = this.Guid;
+            outController.copyPropertiesFromScope(this);
+            outController._cost = Cost;
+            outController._manufacturer = Manufacturer;
 
             foreach (TECIO io in this.IO)
             {
@@ -115,7 +130,6 @@ namespace EstimatingLibrary
             
             return outController;
         }
-
         public override Object DragDropCopy()
         {
             var outController = new TECController();
@@ -127,7 +141,6 @@ namespace EstimatingLibrary
 
             return outController;
         }
-
         private List<IOType> getAvailableIO()
         {
             var availableIO = new List<IOType>();
@@ -154,7 +167,6 @@ namespace EstimatingLibrary
             }
             return availableIO;
         }
-
         private List<IOType> getNetworkIO()
         {
             var outIO = new List<IOType>();
@@ -172,7 +184,6 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-
         public int NumberOfIOType(IOType ioType)
         {
             int outNum = 0;
@@ -187,7 +198,6 @@ namespace EstimatingLibrary
 
             return outNum;
         }
-
         public List<IOType> getUniqueIO()
         {
             var outList = new List<IOType>();
@@ -199,11 +209,8 @@ namespace EstimatingLibrary
                     outList.Add(io.Type);
                 }
             }
-            Console.WriteLine("IO: " + outList.Count);
             return outList;
         }
-
-
         #endregion
     }
 }

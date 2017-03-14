@@ -56,9 +56,10 @@
             <!--Choose Message-->
             <TabItem Visibility="Collapsed">
                 <Grid>
-                    <Label Content="Select an item to edit its properties."
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                    <TextBlock Text="Select an item to edit its properties."
+                         TextWrapping="Wrap" Foreground="Black"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
         </TabControl>

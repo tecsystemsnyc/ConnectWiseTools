@@ -11,6 +11,10 @@ using EstimatingUtilitiesLibrary;
 using System.Globalization;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Windows.Controls;
+using System.Drawing;
+using System.Windows.Media;
+using TECUserControlLibrary.UserControls;
 
 namespace TECUserControlLibrary.HelperConverters
 {
@@ -104,19 +108,10 @@ namespace TECUserControlLibrary.HelperConverters
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            double returnValue;
-
             string inString = (string)value;
             inString = inString.Trim(new Char[] { ' ','$', ',', '.' });
 
-            bool parsed = double.TryParse(inString, out returnValue);
-            Console.WriteLine("ConvertBack value passed: " + value);
-            if (!parsed)
-            {
-                Console.WriteLine("Cast to double failed in budgetPrice ConvertBack()");
-                returnValue = -1;
-            }
-            return returnValue;
+            return inString.ToDouble(-1);
         }
 
         #endregion
@@ -128,26 +123,14 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (((TECManufacturer)value).Name == "Unnamed Manufacturer")
-            {
-                return null;
-            }
-            else
-            {
-                return value;
-            }
+            
+            return value;
+
         }
-
-
+        
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
-            {
-                return new TECManufacturer();
-            } else
-            {
-                return value;
-            }
+             return value;
         }
 
         #endregion
@@ -161,7 +144,9 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return new TECLocation("None");
+                var location = new TECLocation();
+                location.Name = "None";
+                return location;
             }
             else
             {

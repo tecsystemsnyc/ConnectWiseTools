@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -39,7 +40,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment >= 0)
+                    if (system.BudgetUnitPrice >= 0)
                     {
                         budgetedSystems.Add(system);
                     }
@@ -55,7 +56,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment < 0)
+                    if (system.BudgetUnitPrice < 0)
                     {
                         budgetedSystems.Add(system);
                     }
@@ -185,10 +186,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished saving budget CSV.");
+                DebugHandler.LogDebugMessage("Saving budget to csv.");
             }
         }
 
@@ -204,14 +204,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;

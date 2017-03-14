@@ -10,9 +10,11 @@
         xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:view="clr-namespace:TemplateBuilder.View"
         
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
@@ -43,28 +45,9 @@
         <KeyBinding Command="{Binding RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
-    <DockPanel Background="{DynamicResource WindowBackgroundBrush}">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Load"
-                          Command="{Binding LoadCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_Save"
-                          Command="{Binding SaveCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-                <MenuItem Header="_Save As"
-                          Command="{Binding SaveToCommand}"
-                          Foreground="{DynamicResource WindowBackgroundBrush}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo"
-                          Command="{Binding UndoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-                <MenuItem Header="_Redo"
-                          Command="{Binding RedoCommand}"
-                          Foreground="{DynamicResource DarkTextBrush}"/>
-            </MenuItem>
-        </Menu>
+    <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
+        <cLibControls:MenuControl ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
@@ -107,6 +90,12 @@
                 <TabItem Header="Controllers">
                     <cLib:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                </TabItem>
+                <TabItem Header="Materials">
+                    <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
+                </TabItem>
+                <TabItem Header="Constants">
+                    <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
                 </TabItem>
             </TabControl>
 

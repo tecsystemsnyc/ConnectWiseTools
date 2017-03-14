@@ -18,7 +18,7 @@
         <DataGrid ItemsSource="{Binding Path=TagsSource}"
                   AutoGenerateColumns="False"
                   x:Name="TagsGrid"
-                  IsReadOnly="True">
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Text}" Header="Text" Width="*"/>
             </DataGrid.Columns>

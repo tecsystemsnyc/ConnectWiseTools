@@ -1,0 +1,128 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Deployment.Application;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace DebugLibrary
+{
+    public static class DebugHandler
+    {
+        //Bool representing whether or not the program has been deployed.
+        public static bool isReleased
+        {
+            get
+            {
+                try
+                {
+                    return ApplicationDeployment.IsNetworkDeployed;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        private const bool DEBUG_CREATES_LOG = false;
+
+        //The folder inside of AppData where the log folder hierarchy will be stored.
+        private const string APPDATA_FOLDER = @"TECSystems\Logs\";
+
+        private static string logPath;
+
+        public static void LogDebugMessage(string message, bool doLog = true)
+        {
+            if (doLog)
+            {
+                if (isReleased)
+                {
+                    addToLog(message);
+                }
+                else
+                {
+                    Console.WriteLine(message);
+                    if (DEBUG_CREATES_LOG)
+                    {
+                        addToLog(message);
+                    }
+                }
+            }
+        }
+
+        public static void LogError(string error, bool doLog = true)
+        {
+            if (doLog)
+            {
+                error = "ERROR: " + error;
+                if (isReleased)
+                {
+                    addToLog(error);
+                    MessageBox.Show(error);
+                }
+                else
+                {
+                    Console.WriteLine(error);
+                    if (DEBUG_CREATES_LOG)
+                    {
+                        addToLog(error);
+                    }
+                }
+            }
+        }
+
+        public static void LogError(Exception e, bool doLog = true)
+        {
+            LogError(e.Message, doLog);
+        }
+
+        private static void addToLog(string message)
+            //Adds a line to the current log file. File will be stored in Appdata\TECSystems\Logs using the date folder hieararcy and the time of the first message as the file name. 
+        {
+            if (logPath == null)
+                //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
+            {
+                logPath = createLogPath();
+                File.Create(logPath).Close();
+            }
+
+            using (StreamWriter writer = new StreamWriter(logPath, true))
+            {
+                DateTime date = DateTime.Now;
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
+                DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+                dtfi = culture.DateTimeFormat;
+                dtfi.TimeSeparator = "-";
+
+                writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
+            }
+        }
+
+        private static string createLogPath()
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string logFolder = Path.Combine(appData, APPDATA_FOLDER);
+
+            DateTime date = DateTime.Now;
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("ja-JP");
+            DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+            dtfi.DateSeparator = "\\";
+
+            logFolder += date.ToString("d", dtfi);
+
+            if (!Directory.Exists(logFolder)) { Directory.CreateDirectory(logFolder); }
+
+            culture = CultureInfo.CreateSpecificCulture("hr-HR");
+            dtfi = culture.DateTimeFormat;
+            dtfi.TimeSeparator = "-";
+
+            string logFileName = "Log-";
+            logFileName += date.ToString("T", dtfi);
+            return Path.Combine(logFolder, logFileName);
+        }
+    }
+}

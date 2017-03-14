@@ -16,7 +16,7 @@ namespace EstimatingLibrary
         private DateTime _dueDate;
         private string _salesperson;
         private string _estimator;
-        private Guid _infoGuid;
+        private Guid _guid;
         private TECLabor _labor;
         private TECBidParameters _parameters;
 
@@ -32,6 +32,13 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnection> _connections { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
+        private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
+        private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
+        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
+        private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
+        private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
+        private ObservableCollection<TECPanel> _panels { get; set; }
+        private ObservableCollection<TECPanelType> _panelTypeCatalog { get; set; }
 
         public string Name {
             get { return _name; }
@@ -63,6 +70,10 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("DueDate", temp, this);
             }
         }
+        public string DueDateString
+        {
+            get { return _dueDate.ToString("O"); }
+        }
         public string Salesperson
         {
             get { return _salesperson; }
@@ -83,9 +94,9 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Estimator", temp, this);
             }
         }
-        public Guid InfoGuid
+        public Guid Guid
         {
-            get { return _infoGuid; }
+            get { return _guid; }
         }
 
         public TECLabor Labor
@@ -97,15 +108,13 @@ namespace EstimatingLibrary
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
                 Labor.PropertyChanged += objectPropertyChanged;
+                Labor.NumPoints = getPointNumber();
             }
         }
 
         public TECBidParameters Parameters
         {
-            get
-            {
-                return _parameters;
-            }
+            get { return _parameters; }
             set
             {
                 var temp = Copy();
@@ -117,21 +126,38 @@ namespace EstimatingLibrary
         
         public double MaterialCost
         {
-            get { return getMaterialCost(); }
+            get
+            {
+                return EstimateCalculator.GetMaterialCost(this);
+            }
         }
-
+        public double Tax
+        {
+            get
+            {  return EstimateCalculator.GetTax(this); }
+        }
         public double TECSubtotal
         {
             get
             {
-                return getTECSubtotal();
+                return EstimateCalculator.GetTECSubtotal(this);
             }
+        }
+
+        public double SubcontractorLaborCost
+        {
+            get { return EstimateCalculator.GetElectricalLaborCost(this); }
+        }
+        public double ElectricalMaterialCost
+        {
+            get
+            { return EstimateCalculator.GetElectricalMaterialCost(this); }
         }
         public double SubcontractorSubtotal
         {
             get
             {
-                return getSubcontractorSubtotal();
+                return EstimateCalculator.GetSubcontractorSubtotal(this);
             }
         }
 
@@ -139,13 +165,13 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getTotalPrice();
+                return EstimateCalculator.GetTotalPrice(this);
             }
         }
 
         public double BudgetPrice
         {
-            get { return getBudgetPrice(); }
+            get { return EstimateCalculator.GetBudgetPrice(this); }
         }
         public int TotalPointNumber
         {
@@ -154,20 +180,13 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-
-        public double ElectricalMaterialCost
+        public double PricePerPoint
         {
-            get
-            {
-                return getElectricalMaterialCost();
-            }
+            get { return EstimateCalculator.GetPricePerPoint(this); }
         }
-        public double Tax
+        public double Margin
         {
-            get
-            {
-                return getTax();
-            }
+            get { return EstimateCalculator.GetMargin(this); }
         }
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
@@ -190,6 +209,7 @@ namespace EstimatingLibrary
                 _systems = value;
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
+                updatePoints();
             }
         }
         public ObservableCollection<TECDevice> DeviceCatalog {
@@ -299,46 +319,123 @@ namespace EstimatingLibrary
             get { return _proposalScope; }
             set { _proposalScope = value; }
         }
+        public ObservableCollection<TECConnectionType> ConnectionTypes
+        {
+            get { return _connectionTypes; }
+            set
+            {
+                var temp = this.Copy();
+                ConnectionTypes.CollectionChanged -= CollectionChanged;
+                _connectionTypes = value;
+                ConnectionTypes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConnectionTypes", temp, this);
+            }
+        }
+        public ObservableCollection<TECConduitType> ConduitTypes
+        {
+            get { return _conduitTypes; }
+            set
+            {
+                var temp = this.Copy();
+                ConduitTypes.CollectionChanged -= CollectionChanged;
+                _conduitTypes = value;
+                ConduitTypes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ConduitTypes", temp, this);
+            }
+        }
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsCatalog
+        {
+            get { return _associatedCostsCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                AssociatedCostsCatalog.CollectionChanged -= CollectionChanged;
+                _associatedCostsCatalog = value;
+                AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscCost> MiscCosts
+        {
+            get { return _miscCosts; }
+            set
+            {
+                var temp = this.Copy();
+                MiscCosts.CollectionChanged -= CollectionChanged;
+                _miscCosts = value;
+                MiscCosts.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCosts", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscWiring> MiscWiring
+        {
+            get { return _miscWiring; }
+            set
+            {
+                var temp = this.Copy();
+                MiscWiring.CollectionChanged -= CollectionChanged;
+                _miscWiring = value;
+                MiscWiring.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscWiring", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanelType> PanelTypeCatalog
+        {
+            get { return _panelTypeCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
+                _panelTypeCatalog = value;
+                PanelTypeCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanel> Panels
+        {
+            get { return _panels; }
+            set
+            {
+                var temp = this.Copy();
+                Panels.CollectionChanged -= CollectionChanged;
+                _panels = value;
+                Panels.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Panels", temp, this);
+            }
+        }
+
 
         #endregion //Properties
 
         #region Constructors
-        public TECBid(
-            string name,
-            string bidNumber,
-            DateTime dueDate,
-            string salesperson,
-            string estimator,
-            ObservableCollection<TECScopeBranch> scopeTree,
-            ObservableCollection<TECSystem> systems, 
-            ObservableCollection<TECDevice> deviceCatalog,
-            ObservableCollection<TECManufacturer> manufacturerCatalog,
-            ObservableCollection<TECNote> notes, 
-            ObservableCollection<TECExclusion> exclusions,
-            ObservableCollection<TECTag> tags, 
-            Guid infoGuid)
+        public TECBid(Guid guid)
         {
-            _name = name;
-            _bidNumber = bidNumber;
-            _dueDate = dueDate;
-            _salesperson = salesperson;
-            _estimator = estimator;
-            _scopeTree = scopeTree;
-            _systems = systems;
-            _deviceCatalog = deviceCatalog;
-            _manufacturerCatalog = manufacturerCatalog;
-            _notes = notes;
-            _exclusions = exclusions;
-            _tags = tags;
-            _infoGuid = infoGuid;
-            _labor = new TECLabor();
+            _guid = guid;
+            _name = "";
+            _bidNumber = "";
+            _salesperson = "";
+            _estimator = "";
+            _scopeTree = new ObservableCollection<TECScopeBranch>();
+            _systems = new ObservableCollection<TECSystem>();
+            _deviceCatalog = new ObservableCollection<TECDevice>();
+            _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
+            _notes = new ObservableCollection<TECNote>();
+            _exclusions = new ObservableCollection<TECExclusion>();
+            _tags = new ObservableCollection<TECTag>();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _connections = new ObservableCollection<TECConnection>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
+            _connectionTypes = new ObservableCollection<TECConnectionType>();
+            _conduitTypes = new ObservableCollection<TECConduitType>();
+            _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
+            _miscWiring = new ObservableCollection<TECMiscWiring>();
+            _miscCosts = new ObservableCollection<TECMiscCost>();
+            _panels = new ObservableCollection<TECPanel>();
+            _panelTypeCatalog = new ObservableCollection<TECPanelType>();
+            _labor = new TECLabor();
             _parameters = new TECBidParameters();
-
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -354,251 +451,126 @@ namespace EstimatingLibrary
             Controllers.CollectionChanged += CollectionChanged;
             Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
+            ConnectionTypes.CollectionChanged += CollectionChanged;
+            ConduitTypes.CollectionChanged += CollectionChanged;
+            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+            MiscCosts.CollectionChanged += CollectionChanged;
+            MiscWiring.CollectionChanged += CollectionChanged;
+            Panels.CollectionChanged += CollectionChanged;
+            PanelTypeCatalog.CollectionChanged += CollectionChanged;
 
-            registerPointNumChanges();
-            
+            registerSystems();
+
+            Labor.NumPoints = getPointNumber();
         }
 
-        public TECBid(
-            string name, 
-            string bidNumber,
-            DateTime dueDate,
-            string salesperson,
-            string estimator,
-            ObservableCollection<TECScopeBranch> scopeTree,
-            ObservableCollection<TECSystem> systems,
-            ObservableCollection<TECDevice> deviceCatalog,
-            ObservableCollection<TECManufacturer> manufacturerCatalog,
-            ObservableCollection<TECNote> notes,
-            ObservableCollection<TECExclusion> exclusions,
-            ObservableCollection<TECTag> tags)
-            : this(name, bidNumber, dueDate, salesperson, estimator, scopeTree, systems, deviceCatalog, manufacturerCatalog, notes, exclusions, tags, Guid.NewGuid()) { }
-        public TECBid() : 
-            this("", "", new DateTime(), "", "", new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), new ObservableCollection<TECDevice>(), new ObservableCollection<TECManufacturer>(), new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), new ObservableCollection<TECTag>())
+        public TECBid() : this(Guid.NewGuid())
         {
             foreach(string item in Defaults.Scope)
-            { ScopeTree.Add(new TECScopeBranch(item, "", new ObservableCollection<TECScopeBranch>())); }
+            {
+                var branchToAdd = new TECScopeBranch();
+                branchToAdd.Name = item;
+                ScopeTree.Add(new TECScopeBranch(branchToAdd));
+            }
             foreach (string item in Defaults.Exclusions)
-            { Exclusions.Add(new TECExclusion(item)); }
+            {
+                var exclusionToAdd = new TECExclusion();
+                exclusionToAdd.Text = item;
+                Exclusions.Add(new TECExclusion(exclusionToAdd));
+            }
             foreach (string item in Defaults.Notes)
-            { Notes.Add(new TECNote(item)); }
-
-            
+            {
+                var noteToAdd = new TECNote();
+                noteToAdd.Text = item;
+                Notes.Add(new TECNote(noteToAdd));
+            }
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this(bidSource.Name, bidSource.BidNumber, bidSource.DueDate, bidSource.Salesperson, bidSource.Estimator, new ObservableCollection<TECScopeBranch>(), new ObservableCollection<TECSystem>(), bidSource.DeviceCatalog, bidSource.ManufacturerCatalog, new ObservableCollection<TECNote>(), new ObservableCollection<TECExclusion>(), bidSource.Tags)
+        public TECBid(TECBid bidSource) : this(Guid.NewGuid())
         {
-            _labor = new TECLabor(bidSource.Labor);
+            _name = bidSource.Name;
+            _bidNumber = bidSource.BidNumber;
+            _dueDate = bidSource.DueDate;
+            _salesperson = bidSource.Salesperson;
+            _estimator = bidSource.Estimator;
+
+            _labor = bidSource.Labor.Copy() as TECLabor;
+            _parameters = bidSource.Parameters.Copy() as TECBidParameters;
+            Parameters.PropertyChanged += objectPropertyChanged;
+            Labor.PropertyChanged += objectPropertyChanged;
+
             foreach (TECScopeBranch branch in bidSource.ScopeTree)
-            {
-                ScopeTree.Add(new TECScopeBranch(branch));
-            }
+            { ScopeTree.Add(branch.Copy() as TECScopeBranch); }
             foreach (TECSystem system in bidSource.Systems)
-            {
-                Systems.Add(new TECSystem(system));
-            }
+            { Systems.Add(system.Copy() as TECSystem); }
             foreach (TECNote note in bidSource.Notes)
-            {
-                Notes.Add(new TECNote(note));
-            }
+            { Notes.Add(note.Copy() as TECNote); }
             foreach (TECExclusion exclusion in bidSource.Exclusions)
-            {
-                Exclusions.Add(new TECExclusion(exclusion));
-            }
+            { Exclusions.Add(exclusion.Copy() as TECExclusion); }
+            foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
+            {  AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
+            foreach(TECConduitType conduitType in bidSource.ConduitTypes)
+            { ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
+            foreach(TECConnectionType connectionType in bidSource.ConnectionTypes)
+            { ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
+            foreach(TECTag tag in bidSource.Tags)
+            { Tags.Add(tag.Copy() as TECTag); }
+            foreach (TECLocation location in bidSource.Locations)
+            { Locations.Add(location.Copy() as TECLocation); }
+            foreach (TECDrawing drawing in bidSource.Drawings)
+            { Drawings.Add(drawing.Copy() as TECDrawing); }
+            foreach(TECManufacturer manufacturer in bidSource.ManufacturerCatalog)
+            { ManufacturerCatalog.Add(manufacturer.Copy() as TECManufacturer); }
+            foreach(TECController controller in bidSource.Controllers)
+            { Controllers.Add(controller.Copy() as TECController); }
+            foreach(TECDevice device in bidSource.DeviceCatalog)
+            { DeviceCatalog.Add(device.Copy() as TECDevice); }
+            foreach(TECConnection connection in bidSource.Connections)
+            { Connections.Add(connection.Copy() as TECConnection); }
+            foreach(TECProposalScope propScope in bidSource.ProposalScope)
+            { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
+            foreach(TECMiscCost cost in bidSource.MiscCosts)
+            { MiscCosts.Add(cost.Copy() as TECMiscCost); }
+            foreach (TECMiscWiring wiring in bidSource.MiscWiring)
+            { MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECPanel panel in bidSource.Panels)
+            { Panels.Add(panel.Copy() as TECPanel); }
+            foreach (TECPanelType panelType in bidSource.PanelTypeCatalog)
+            { PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
         }
 
         #endregion //Constructors
 
         #region Methods
 
-
-        private void registerPointNumChanges()
-        {
-            foreach(TECSystem sys in Systems)
-            {
-                sys.Equipment.CollectionChanged += CollectionChanged;
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    equip.SubScope.CollectionChanged += CollectionChanged;
-                    foreach(TECSubScope sub in equip.SubScope)
-                    {
-                        sub.Points.CollectionChanged += Points_CollectionChanged;
-                    }
-                }
-            }
-        }
-
-        private double getMaterialCost()
-        {
-            double cost = 0;
-            foreach(TECSystem system in this.Systems)
-            {
-                cost += system.MaterialCost;
-            }
-            return cost;
-        }
-
-        private double getTECCost()
-        {
-            double outCost = 0;
-            outCost += Labor.TECSubTotal;
-            outCost += MaterialCost;
-            outCost *= Parameters.Escalation;
-            outCost *= Parameters.Overhead;
-            outCost += Tax;
-
-            return outCost;
-        }
-        private double getTECSubtotal()
-        {
-            double outCost = 0;
-            outCost += getTECCost();
-
-            outCost *= Parameters.Profit;
-
-            return outCost;
-        }
-
-        private double getSubcontractorCost()
-        {
-            double outCost = 0;
-            outCost += Labor.SubcontractorSubTotal;
-            outCost += ElectricalMaterialCost;
-            outCost *= Parameters.SubcontractorEscalation;
-
-            return outCost;
-        }
-        private double getSubcontractorSubtotal()
-        {
-            double outCost = 0;
-            outCost += getSubcontractorCost();
-            outCost *= Parameters.SubcontractorMarkup;
-
-            return outCost;
-        }
-
-        private double getTax()
-        {
-            double outTax = 0;
-
-            if (!Parameters.IsTaxExempt)
-            {
-                outTax += 1.0875 * MaterialCost;
-            }
-
-            return outTax;
-        }
-
-        private double getTotalPrice()
-        {
-            double outPrice = 0;
-
-            outPrice += TECSubtotal;
-            outPrice += SubcontractorSubtotal;
-
-            return outPrice;
-        }
-        
-        private double getBudgetPrice()
-        {
-            double price = 0;
-            foreach (TECSystem system in this.Systems)
-            {
-                if (system.TotalBudgetPrice >= 0)
-                {
-                    price += system.TotalBudgetPrice;
-                }
-            }
-            return price;
-        }
-
-        private int getPointNumber()
-        {
-            int totalPoints = 0;
-            foreach(TECSystem sys in Systems)
-            {
-                foreach(TECEquipment equip in sys.Equipment)
-                {
-                    foreach(TECSubScope sub in equip.SubScope)
-                    {
-                        foreach(TECPoint point in sub.Points)
-                        {
-                            totalPoints += point.Quantity;
-                        }
-                    }
-                }
-            }
-
-            return totalPoints;
-        }
-
-        //ONLY RETURNS TOTAL LENGTH AT THE MOMENT
-        private double getElectricalMaterialCost()
-        {
-            
-            double cost = 0;
-
-            foreach(TECConnection conn in Connections)
-            {
-                cost += conn.Length;
-            }
-
-            return cost;
-
-        }
-        
-        public override object Copy()
-        {
-            TECBid bid = new TECBid(this);
-            bid._infoGuid = InfoGuid;
-            return bid;
-        }
-
-        private void Points_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Labor.NumPoints = getPointNumber();
-        }
-
+        #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    if(item is TECProposalScope)
+                    if (item is TECProposalScope)
                     {
                         NotifyPropertyChanged("MetaAdd", this, item);
                     }
                     else
                     {
                         NotifyPropertyChanged("Add", this, item);
+                        if (item is TECCost)
+                        {
+                            updateElectricalMaterial();
+                            (item as TECObject).PropertyChanged += objectPropertyChanged;
+                        }
                         if (item is TECSystem)
                         {
-                            addProposalScope(item as TECSystem);
+                            var sys = item as TECSystem;
+                            addProposalScope(sys);
+                            sys.PropertyChanged += System_PropertyChanged;
+                            checkForTotalsInSystem(sys);
                         }
                     }
-
-                    if(item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged += CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    } 
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged += CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Points.CollectionChanged += Points_CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -611,6 +583,11 @@ namespace EstimatingLibrary
                     }
                     else
                     {
+                        if (item is TECCost)
+                        {
+                            updateElectricalMaterial();
+                            (item as TECCost).PropertyChanged -= objectPropertyChanged;
+                        }
                         NotifyPropertyChanged("Remove", this, item);
                         if (item is TECScope)
                         {
@@ -618,27 +595,10 @@ namespace EstimatingLibrary
                         }
                         if (item is TECSystem)
                         {
-                            removeProposalScope(item as TECSystem);
+                            var sys = item as TECSystem;
+                            sys.PropertyChanged -= System_PropertyChanged;
+                            removeProposalScope(sys);
                         }
-                    }
-
-                    if (item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged -= CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged -= CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Points.CollectionChanged -= Points_CollectionChanged;
-                        Labor.NumPoints = getPointNumber();
-                        raiseReviewChanges();
                     }
                 }
             }
@@ -647,10 +607,59 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Edit", this, sender);
             }
         }
-        
+
+        private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TotalPoints")
+            {
+                updatePoints();
+            }
+            else if (e.PropertyName == "TotalDevices")
+            {
+                updateDevices();
+            }
+            else if (e.PropertyName == "SubLength")
+            {
+                updateElectricalMaterial();
+            }
+        }
+
         private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            NotifyPropertyChanged("ChildChanged", (object)this, (object)Labor);
+            NotifyPropertyChanged("ChildChanged", this, sender);
+            if (sender is TECLabor)
+            { updateFromLabor(); }
+            else if (sender is TECBidParameters)
+            { updateFromParameters(); }
+            else if (sender is TECCost)
+            { updateElectricalMaterial(); }
+        }
+
+        #endregion
+
+
+        private int getPointNumber()
+        {
+            int totalPoints = 0;
+            foreach(TECSystem sys in Systems)
+            {
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        foreach(TECPoint point in sub.Points)
+                        { totalPoints += point.Quantity; }
+                    }
+                }
+            }
+            return totalPoints;
+        }
+        
+        public override object Copy()
+        {
+            TECBid bid = new TECBid(this);
+            bid._guid = Guid;
+            return bid;
         }
         
         private void checkForVisualsToRemove(TECScope item)
@@ -708,14 +717,89 @@ namespace EstimatingLibrary
             
         }
 
-        private void raiseReviewChanges()
+        private void registerSystems()
+        {
+            foreach(TECSystem system in Systems)
+            {
+                system.PropertyChanged += System_PropertyChanged;
+            }
+        }
+
+        private void updatePoints()
+        {
+            Labor.NumPoints = getPointNumber();
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            updateTotal();
+        }
+        private void updateDevices()
+        {
+            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            updateTotal();
+        }
+        private void updateElectricalMaterial()
+        {
+            RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("PricePerPoint");
+            RaisePropertyChanged("TotalPrice");
+        }
+        private void updateFromParameters()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            updateTotal();
+        }
+        private void updateFromLabor()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("PricePerPoint");
+            updateTotal();
+        }
+        private void updateAll()
+        {
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("ElectricalMaterialCost");
+        }
+
+        private void updateTotal()
         {
             RaisePropertyChanged("TotalPrice");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("MaterialCost");
-            RaisePropertyChanged("Tax");
-            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("PricePerPoint");
+            RaisePropertyChanged("Margin");
         }
+
+        private void checkForTotalsInSystem(TECSystem system)
+        {
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                foreach(TECSubScope sub in equip.SubScope)
+                {
+                    updateElectricalMaterial();
+                    if (sub.Points.Count > 0)
+                    {
+                        updatePoints();
+                    }
+                    if(sub.Devices.Count > 0)
+                    {
+                        updateDevices();
+                    }
+                }
+            }
+        }
+
         #endregion
 
     }

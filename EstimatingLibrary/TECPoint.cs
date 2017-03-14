@@ -45,20 +45,13 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(PointTypes type, string name, string description, Guid guid) : base(name, description, guid)
+        public TECPoint(Guid guid) : base(guid) { }
+        public TECPoint() : this(Guid.NewGuid()) { }
+        
+        public TECPoint(TECPoint pointSource) : this()
         {
-            _type = type;
-        }
-        public TECPoint(PointTypes type, string name, string description) : this(type, name, description, Guid.NewGuid()) { }
-        public TECPoint() : this(0, "", "") { }
-
-        public TECPoint(string type, string name, string description, Guid guid) : this(convertStringToType(type), name, description, guid) { }
-
-
-        public TECPoint(TECPoint pointSource) : this(pointSource.Type, pointSource.Name, pointSource.Description)
-        {
-            _quantity = pointSource.Quantity;
-            _tags = pointSource.Tags;
+            _type = pointSource.Type;
+            this.copyPropertiesFromScope(pointSource);
         }
         #endregion //Constructors
 
@@ -76,7 +69,7 @@ namespace EstimatingLibrary
             return outPoint;
         }
         #region Conversion Methods
-        private static PointTypes convertStringToType(string type)
+        public static PointTypes convertStringToType(string type)
         {
             switch (type.ToUpper())
             {
@@ -88,7 +81,7 @@ namespace EstimatingLibrary
                 default: return 0;
             }
         }
-        private static string convertTypeToString(PointTypes type)
+        public static string convertTypeToString(PointTypes type)
         {
             switch (type)
             {

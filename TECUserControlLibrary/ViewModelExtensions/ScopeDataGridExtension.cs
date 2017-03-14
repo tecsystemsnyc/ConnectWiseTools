@@ -35,21 +35,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _bid = value;
-                // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
                 populateLocationSelections();
-                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
-            }
-        }
-        
-        private ObservableCollection<TECLocation> _locationSelections;
-        public ObservableCollection<TECLocation> LocationSelections
-        {
-            get { return _locationSelections; }
-            set
-            {
-                _locationSelections = value;
-                RaisePropertyChanged("LocationSelections");
             }
         }
 
@@ -142,6 +129,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectionChanged?.Invoke(value);
             }
         }
+        private ObservableCollection<TECLocation> _locationSelections;
+        public ObservableCollection<TECLocation> LocationSelections
+        {
+            get { return _locationSelections; }
+            set
+            {
+                _locationSelections = value;
+                RaisePropertyChanged("LocationSelections");
+            }
+        }
 
         #endregion
 
@@ -203,11 +200,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Intializers
         public ScopeDataGridExtension(TECBid bid)
         {
-            Bid = bid;
+            _bid = bid;
+            populateLocationSelections();
             DataGridVisibilty = new VisibilityModel();
-
             setupCommands();
         }
+
+        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object location in e.NewItems)
+                { LocationSelections.Add(location as TECLocation); }
+            }
+            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object location in e.OldItems)
+                { LocationSelections.Remove(location as TECLocation); }
+            }
+        }
+
         public ScopeDataGridExtension(TECTemplates templates)
         {
             Templates = templates;
@@ -255,37 +267,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
             //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
             //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
         }
-        #endregion //Commands
 
-        public void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void populateLocationSelections()
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(TECLocation location in e.NewItems)
-                {
-                    LocationSelections.Add(location);
-                }
-                
-            } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach(TECLocation location in e.OldItems)
-                {
-                    LocationSelections.Remove(location);
-                }
-            }
-        }
-        
-        public void populateLocationSelections()
-        {
+            Bid.Locations.CollectionChanged += Locations_CollectionChanged;
             LocationSelections = new ObservableCollection<TECLocation>();
-
-            LocationSelections.Add(new TECLocation("None"));
-            foreach (TECLocation location in Bid.Locations)
+            var noneLocation = new TECLocation();
+            noneLocation.Name = "None";
+            LocationSelections.Add(noneLocation);
+            foreach(TECLocation location in Bid.Locations)
             {
                 LocationSelections.Add(location);
             }
         }
-
+        #endregion //Commands
+        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);

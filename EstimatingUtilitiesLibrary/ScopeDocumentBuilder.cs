@@ -17,6 +17,7 @@ using System.Windows;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.ObjectModel;
+using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -90,10 +91,9 @@ namespace EstimatingUtilitiesLibrary
                 image.Left = ShapePosition.Left;
                 image.WrapFormat.Style = WrapStyle.Through;
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECLogo.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not load TECLogo. Exception: " + e.Message);
             }
 
 
@@ -112,10 +112,9 @@ namespace EstimatingUtilitiesLibrary
                 Paragraph addressParagraph = addressFrame.AddParagraph();
                 addressParagraph.AddText(address);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECAddress.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
             }
         }
 
@@ -379,10 +378,9 @@ namespace EstimatingUtilitiesLibrary
                 footerParagraph.Format.Font.Size = 9;
                 footerParagraph.Format.Alignment = ParagraphAlignment.Center;
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECFooter.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
             }
         }
 

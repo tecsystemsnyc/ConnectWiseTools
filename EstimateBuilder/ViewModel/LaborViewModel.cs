@@ -1,7 +1,9 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Windows.Input;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -20,22 +22,22 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 _bid = value;
-                _labor = Bid.Labor;
                 RaisePropertyChanged("Bid");
-
             }
         }
 
-        private TECLabor _labor;
-        public TECLabor Labor
+        private TECTemplates _templates;
+        public TECTemplates Templates
         {
-            get { return _labor; }
+            get { return _templates; }
             set
             {
-                _labor = value;
-                RaisePropertyChanged("Labor");
+                _templates = value;
+                RaisePropertyChanged("Templates");
             }
         }
+
+        public bool TemplatesLoaded;
 
         /// <summary>
         /// Initializes a new instance of the LaborViewModel class.
@@ -44,26 +46,28 @@ namespace EstimateBuilder.ViewModel
         public LaborViewModel()
         {
             Bid = new TECBid();
-            Labor = new TECLabor();
-            /*
-            MessengerInstance.Register<GenericMessage<TECBid>>(this, PopulateBid);
+            Templates = new TECTemplates();
 
-            MessengerInstance.Send<NotificationMessage>(new NotificationMessage("LaborViewModelLoaded"));
-            */
+            ReloadCommand = new RelayCommand(ReloadExecute);
         }
 
-        #region Methods
+        public ICommand ReloadCommand { get; private set; }
 
-        #region Message Methods
+        public Action LoadTemplates;
 
-        public void PopulateBid(GenericMessage<TECBid> genericMessage)
+        private void ReloadExecute()
         {
-            Bid = genericMessage.Content;
-        }
-        
-        #endregion Message Methods
+            if (!TemplatesLoaded)
+            {
+                LoadTemplates();
+            }
 
-        #endregion //Methods
+            //Check again to see if templates are properly loaded after reloading. Should not be else.
+            if (TemplatesLoaded)
+            {
+                Bid.Labor.UpdateConstants(Templates.Labor);
+            }
+        }
 
     }
 }

@@ -16,7 +16,6 @@ namespace EstimatingLibrary
         private double _length;
         private TECController _controller;
         private ObservableCollection<TECScope> _scope;
-        private ObservableCollection<ConnectionType> _connectionTypes;
         private ObservableCollection<IOType> _ioTypes;
 
         public Guid Guid
@@ -54,15 +53,10 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Scope", temp, this);
             }
         }
-        public ObservableCollection<ConnectionType> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
-            get { return _connectionTypes; }
-            set
-            {
-                var temp = this.Copy();
-                _connectionTypes = value;
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
-            }
+            get { return getConnectionTypes(); }
+            
         }
         public ObservableCollection<IOType> IOTypes
         {
@@ -78,26 +72,22 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors 
-        public TECConnection(double length, ObservableCollection<ConnectionType> types, Guid guid)
+        public TECConnection(Guid guid)
         {
-            this._guid = guid;
-            this._length = length;
-            this._connectionTypes = types;
-            this._scope = new ObservableCollection<TECScope>();
-        }
-        public TECConnection()
-        {
-            _guid = Guid.NewGuid();
+            _guid = guid;
             _length = 0;
-            _connectionTypes = new ObservableCollection<ConnectionType>();
+            _scope = new ObservableCollection<TECScope>();
             _ioTypes = new ObservableCollection<IOType>();
             _controller = new TECController();
-            _scope = new ObservableCollection<TECScope>();
         }
+        public TECConnection() : this(Guid.NewGuid()) { }
 
-        public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.ConnectionTypes, connectionSource.Guid)
+        public TECConnection(TECConnection connectionSource) : this(connectionSource.Guid)
         {
+            _length = connectionSource.Length;
             _scope = connectionSource.Scope;
+            _ioTypes = connectionSource.IOTypes;
+            _controller = connectionSource.Controller;
         }
         #endregion //Constructors
 
@@ -105,11 +95,30 @@ namespace EstimatingLibrary
         public override Object Copy()
         {
             TECConnection connection = new TECConnection(this);
-
+            connection._guid = this._guid;
             return connection;
         }
-        
+
+        private ObservableCollection<TECConnectionType> getConnectionTypes()
+        {
+            var outConnectionTypes = new ObservableCollection<TECConnectionType>();
+
+            foreach(TECScope scope in Scope)
+            {
+                if(scope is TECSubScope)
+                {
+                    var sub = scope as TECSubScope;
+                    foreach(TECDevice dev in sub.Devices)
+                    {
+                        outConnectionTypes.Add(dev.ConnectionType);
+                    }
+                }
+            }
+
+            return outConnectionTypes;
+        }
+
         #endregion
-        
+
     }
 }

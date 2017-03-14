@@ -46,7 +46,14 @@
                 <cLib:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
                                             ViewModel="{Binding ScopeDataGrid}"/>
             </TabItem>
-            
+
+            <TabItem Header="By Location">
+                <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
+                                            SystemsSource="{Binding LocationDataGrid.SystemsByLocation}"
+                                            EquipmentSource="{Binding LocationDataGrid.EquipmentByLocation}"
+                                            SubScopeSource="{Binding LocationDataGrid.SubScopeByLocation}"
+                                            ViewModel="{Binding LocationDataGrid}"/>
+            </TabItem>
         </TabControl>
 
         

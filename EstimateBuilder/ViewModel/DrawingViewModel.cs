@@ -13,6 +13,7 @@ using TECUserControlLibrary;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using DebugLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -304,7 +305,6 @@ namespace EstimateBuilder.ViewModel
         {
             if (isConnecting)
             {
-                Console.WriteLine("Ending");
                 var newConnection = createConnection(connectionStart, arg, 1.0);
                 connectConnections(connectionStart.Item1, arg.Item1, newConnection);
                 Bid.Connections.Add(newConnection);
@@ -328,7 +328,6 @@ namespace EstimateBuilder.ViewModel
             }
             else
             {
-                Console.WriteLine("Starting");
                 connectionStart = arg;
                 isConnecting = true;
             }
@@ -363,7 +362,10 @@ namespace EstimateBuilder.ViewModel
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             System.Windows.Point dropPoint = dropInfo.DropPosition;
-            TECVisualScope newScope = new TECVisualScope(sourceItem, dropPoint.X, dropPoint.Y);
+            TECVisualScope newScope = new TECVisualScope();
+            newScope.Scope = sourceItem;
+            newScope.X = dropPoint.X;
+            newScope.Y = dropPoint.Y;
             CurrentPage.PageScope.Add(newScope);
             /*
             if(sourceItem is TECSystem)
@@ -459,7 +461,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void populateDisplayed()
         {
-            Console.WriteLine("populating");
+            DebugHandler.LogDebugMessage("Populating TECScope not on drawing.");
             foreach (TECSystem system in Bid.Systems)
             {
                 DisplaySystems.Add(system);
@@ -536,7 +538,7 @@ namespace EstimateBuilder.ViewModel
                 {
                     var availableConnections = subScope.AvailableConnections;
 
-                    foreach (ConnectionType conType in connection.ConnectionTypes)
+                    foreach (TECConnectionType conType in connection.ConnectionTypes)
                     {
                         if (availableConnections.Contains(conType))
                         {
@@ -594,7 +596,7 @@ namespace EstimateBuilder.ViewModel
                 if(item2.Item1 is TECSubScope)
                 {
                     var sub = item2.Item1 as TECSubScope;
-                    foreach (ConnectionType type in sub.ConnectionTypes)
+                    foreach (TECConnectionType type in sub.ConnectionTypes)
                     {
                         newConnection.ConnectionTypes.Add(type);
                     }
@@ -605,11 +607,12 @@ namespace EstimateBuilder.ViewModel
                 }
                 else
                 {
-                    var controller = item2.Item1 as TECController;
-                    foreach (ConnectionType type in controller.NetworkIO)
-                    {
-                        newConnection.ConnectionTypes.Add(type);
-                    }
+                    //MUST REIMPLIMENT
+                    //var controller = item2.Item1 as TECController;
+                    //foreach (IOType type in controller.NetworkIO)
+                    //{
+                    //    newConnection.ConnectionTypes.Add(type);
+                    //}
                 }
                 
             }
@@ -617,7 +620,7 @@ namespace EstimateBuilder.ViewModel
             {
                 newConnection.Controller = item2.Item1 as TECController;
                 var sub = item1.Item1 as TECSubScope;
-                foreach (ConnectionType type in sub.ConnectionTypes)
+                foreach (TECConnectionType type in sub.ConnectionTypes)
                 {
                     newConnection.ConnectionTypes.Add(type);
                 }

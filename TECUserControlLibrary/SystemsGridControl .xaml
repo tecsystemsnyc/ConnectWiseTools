@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="parent"
-             xmlns:dd="urn:gong-wpf-dragdrop">
+             x:Name="parent">
     <UserControl.Resources>
         <ResourceDictionary>
             <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
@@ -34,11 +34,16 @@
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
                                     Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding Path=Location, Converter={cnvt:SelectedLocationToLocationConverter}}"
+                                        Header="Location" Width="Auto"
+                                        DisplayMemberPath="Name"
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
+                <!--<DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
                                         Header="Location" Width="Auto"
-                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>-->
                 <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemQuantity,
@@ -51,13 +56,13 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemSubScopeCount,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
+                <DataGridTextColumn Binding="{Binding BudgetPriceModifier, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
                                     Header="Modifier"
                                     Width="Auto"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemModifierPrice,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding PriceWithEquipment, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
+                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
                                     Header="Unit Price"
                                     Width="Auto"
                                     IsReadOnly="True"

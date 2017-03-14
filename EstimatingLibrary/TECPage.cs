@@ -50,28 +50,19 @@ namespace EstimatingLibrary
         }
         private ObservableCollection<TECVisualConnection> _connections;
         #endregion
-
-        public TECPage(string path, int pageNum)
-        {
-            PageNum = pageNum;
-            Guid = Guid.NewGuid();
-            _path = path;
-            _pageScope = new ObservableCollection<TECVisualScope>();
-            _connections = new ObservableCollection<TECVisualConnection>();
-            PageScope.CollectionChanged += collectionChanged;
-            Connections.CollectionChanged += collectionChanged;
-        }
         
-        public TECPage(int pageNum, Guid guid)
+        public TECPage(Guid guid)
         {
-            PageNum = pageNum;
             Guid = guid;
-            _path = null;
+            PageNum = 0;
+            _path = "";
             _pageScope = new ObservableCollection<TECVisualScope>();
             _connections = new ObservableCollection<TECVisualConnection>();
             PageScope.CollectionChanged += collectionChanged;
             Connections.CollectionChanged += collectionChanged;
         }
+
+        public TECPage() : this(Guid.NewGuid()) { }
 
         public TECPage(TECPage page)
         {
@@ -81,7 +72,7 @@ namespace EstimatingLibrary
             _connections = new ObservableCollection<TECVisualConnection>();
             foreach (TECVisualScope vs in page.PageScope)
             {
-                _pageScope.Add(new TECVisualScope(vs));
+                _pageScope.Add(vs.Copy() as TECVisualScope);
             }
             PageScope.CollectionChanged += collectionChanged;
             Connections.CollectionChanged += collectionChanged;

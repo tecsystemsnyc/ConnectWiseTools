@@ -7,6 +7,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+             xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+             xmlns:cLibViewModels="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
              
              StartupUri="MainWindow.xaml"
              mc:Ignorable="d ignore">
@@ -34,8 +36,8 @@
             <DataTemplate DataType="{x:Type vm:ReviewViewModel}">
                 <views:ReviewView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-                <views:SettingsView />
+            <DataTemplate DataType="{x:Type cLibViewModels:SettingsViewModel}">
+                <cLibViews:SettingsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

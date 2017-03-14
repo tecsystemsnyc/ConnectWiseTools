@@ -8,6 +8,7 @@ namespace EstimatingLibrary
 {
     public class TECBidParameters : TECObject
     {
+        #region Properties
         private double _escalation;
         private double _overhead;
         private double _profit;
@@ -17,6 +18,13 @@ namespace EstimatingLibrary
         private bool _isTaxExempt;
         private bool _requiresBond;
         private bool _requiresWrapUp;
+
+        private Guid _guid;
+        
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
         
         public double Escalation
         {
@@ -81,7 +89,7 @@ namespace EstimatingLibrary
         }
         public bool RequiresBond
         {
-            get { return _isTaxExempt; }
+            get { return _requiresBond; }
             set
             {
                 var temp = this.Copy();
@@ -99,9 +107,11 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("RequiresWrapUp", temp, this);
             }
         }
-
-        public TECBidParameters()
+        #endregion
+        
+        public TECBidParameters(Guid guid)
         {
+            _guid = guid;
             _isTaxExempt = false;
             _requiresBond = false;
             _requiresWrapUp = false;
@@ -113,9 +123,12 @@ namespace EstimatingLibrary
             _subcontractorEscalation = 0;
         }
 
+        public TECBidParameters() : this(Guid.NewGuid()) { }
+
         public override object Copy()
         {
             var outParameters = new TECBidParameters();
+            outParameters._guid = _guid;
             outParameters._escalation = _escalation;
             outParameters._overhead = _overhead;
             outParameters._profit = _profit;

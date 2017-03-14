@@ -43,17 +43,17 @@
                 <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeQuantity, 
                                     Source={StaticResource proxy}}"/>
-
+                <DataGridTextColumn Binding="{Binding Length, UpdateSourceTrigger=LostFocus}" Header="Default Length" Width="Auto"
+                                    Visibility="{Binding Data.DataGridVisibilty.SubScopeLength, 
+                                    Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                            <Label Content="Devices and IO" FontSize="10"/>
+                    <Grid>
                             <local:DevicesPointsControl DevicesSource="{Binding Devices}"
                                                 PointsSource="{Binding Points}"
-                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                                Margin="30, 0, 0, 0"/>
-                     </StackPanel>
+                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>

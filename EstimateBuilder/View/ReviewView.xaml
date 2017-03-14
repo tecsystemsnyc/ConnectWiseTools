@@ -8,9 +8,19 @@
         x:Name="parent"
          d:DesignWidth="960" d:DesignHeight="660">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -65,78 +75,83 @@
         <Label Content="TEC Cost" FontWeight="Bold"
                Grid.Row="6"/>
         <Label Content="Material:" Grid.Row="7"/>
-        <Label Content="{Binding Bid.MaterialCost}" 
+        <TextBlock Text="{Binding Bid.MaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="7" Grid.Column="1"
-               HorizontalContentAlignment="Right"/>
+               TextAlignment="Right"/>
         <Label Content="Tax:" Grid.Row="8"/>
-        <Label Content="{Binding Bid.Tax}" 
-               Grid.Row="7" Grid.Column="1"
-               HorizontalContentAlignment="Right"/>
+        <TextBlock Text="{Binding Bid.Tax, StringFormat= {} {0:C}}" 
+               Grid.Row="8" Grid.Column="1"
+               TextAlignment="Right"/>
         <Label Content="Labor:" Grid.Row="9"/>
-        <Label Content="{Binding Bid.Labor.TECSubtotal}" 
+        <TextBlock Text="{Binding Bid.Labor.TECSubTotal, StringFormat= {} {0:C}}" 
                Grid.Row="9" Grid.Column="1"
-               HorizontalContentAlignment="Right"/>
+               TextAlignment="Right"/>
 
         <Label Content="Subcontractor Cost" FontWeight="Bold"
                Grid.Row="6" Grid.Column="3"/>
         <Label Content="Material:" Grid.Row="7" Grid.Column="3"/>
-        <Label Content="{Binding Bid.ElectricalMaterialCost}" 
+        <TextBlock Text="{Binding Bid.ElectricalMaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="7" Grid.Column="4"
-               HorizontalContentAlignment="Right"/>
+               TextAlignment="Right"/>
         <Label Content="Labor:" Grid.Row="8" Grid.Column="3"/>
-        <Label Content="{Binding Bid.Labor.SubcontractorSubtotal}" 
+        <TextBlock Text="{Binding Bid.SubcontractorLaborCost, StringFormat= {} {0:C}}" 
                Grid.Row="8" Grid.Column="4"
-               HorizontalContentAlignment="Right"/>
+               TextAlignment="Right"/>
         <Label Content="Escalation:" 
                Grid.Row="10"/>
-        <TextBox Text="{Binding Bid.Parameters.Escalation}"
+        <TextBox Text="{Binding Bid.Parameters.Escalation, StringFormat={}{0}%}"
                  Grid.Row="10"
                  Grid.Column="1"
-                 Margin="5"/>
+                 Margin="5"
+                 HorizontalContentAlignment="Right"/>
 
         <Label Content="Overhead:" 
                Grid.Row="11"/>
-        <TextBox Text="{Binding Bid.Parameters.Overhead}"
+        <TextBox Text="{Binding Bid.Parameters.Overhead, StringFormat={}{0}%}"
                  Grid.Row="11"
                  Grid.Column="1"
-                 Margin="5"/>
+                 Margin="5"
+                 HorizontalContentAlignment="Right"/>
 
         <Label Content="Profit:" 
                Grid.Row="12"/>
-        <TextBox Text="{Binding Bid.Parameters.Profit}"
+        <TextBox Text="{Binding Bid.Parameters.Profit, StringFormat={}{0}%}"
                  Grid.Row="12"
                  Grid.Column="1"
-                 Margin="5"/>
+                 Margin="5"
+                 HorizontalContentAlignment="Right"/>
 
         <Label Content="Escalation:" 
                Grid.Row="9"  Grid.Column="3"/>
-        <TextBox Text="{Binding Bid.Parameters.SubcontractorEscalation}"
+        <TextBox Text="{Binding Bid.Parameters.SubcontractorEscalation, StringFormat={}{0}%}"
                  Grid.Row="9"
                  Grid.Column="4"
-                 Margin="5"/>
+                 Margin="5"
+                 HorizontalContentAlignment="Right"/>
 
         <Label Content="Markup:" 
                Grid.Row="10"  Grid.Column="3"/>
-        <TextBox Text="{Binding Bid.Parameters.SubcontractorMarkup}"
+        <TextBox Text="{Binding Bid.Parameters.SubcontractorMarkup, StringFormat={}{0}%}"
                  Grid.Row="10"
                  Grid.Column="4"
-                 Margin="5"/>
+                 Margin="5"
+                 HorizontalContentAlignment="Right"/>
 
         <Label Content="Tax Emexpt?:"  Grid.Column="3" Grid.Row="1"/>
-        <CheckBox Content="{Binding Bid.Parameters.IsTaxExempt}"
+        <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
                   HorizontalAlignment="Right"
                  Grid.Column="4"
                  Margin="0,5,5,5" Grid.Row="1"/>
         <Label Content="Bond Required?:" 
                Grid.Row="2"  Grid.Column="3"/>
-        <CheckBox Content="{Binding Bid.Parameters.RequiresBond}"
+        <CheckBox IsChecked="{Binding Bid.Parameters.RequiresBond}"
                                     HorizontalAlignment="Right"
                  Grid.Row="2"
                  Grid.Column="4"
                  Margin="0,5,5,5"/>
         <Label Content="Wrap-Up Required?:" 
                Grid.Row="3"  Grid.Column="3"/>
-        <CheckBox Content="{Binding Bid.Parameters.RequiresWrapUp}"
+        <CheckBox IsChecked="{Binding Bid.Parameters.RequiresWrapUp}"
                                     HorizontalAlignment="Right"
                  Grid.Row="3"
                  Grid.Column="4"
@@ -144,28 +159,40 @@
 
         <Label Content="Subtotal" 
                Grid.Row="11"  Grid.Column="3"/>
-        <Label Content="{Binding Bid.SubcontractorSubtotal}"
+        <TextBlock Text="{Binding Bid.SubcontractorSubtotal, StringFormat= {} {0:C}}"
                  Grid.Row="11"
                  Grid.Column="4"
-               HorizontalAlignment="Right"/>
+               TextAlignment="Right"/>
 
         <Label Content="Subtotal" 
                Grid.Row="13"  Grid.Column="0"/>
-        <Label Content="{Binding Bid.TECSubtotal}"
+        <TextBlock Text="{Binding Bid.TECSubtotal, StringFormat= {} {0:C}}"
                  Grid.Row="13"
                  Grid.Column="1"
-               HorizontalAlignment="Right"/>
+               TextAlignment="Right"/>
+
+        <Label Content="Margin:" Grid.Row="15" Grid.Column="3"/>
+        <TextBlock Text="{Binding Bid.Margin, StringFormat={}{0}%}" 
+               Grid.Row="15" Grid.Column="4"
+               TextAlignment="Right"/>
 
         <Label Content="Total" 
-               Grid.Row="15"  Grid.Column="3"
+               Grid.Row="16"  Grid.Column="3"
                FontWeight="Bold"
                FontStyle="Italic"/>
-        <Border Grid.Row="15"
+        <Border Grid.Row="16"
                  Grid.Column="4"
                 BorderThickness="2"
                 BorderBrush="Black">
-            <Label Content="{Binding Bid.TotalPrice}" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding Bid.TotalPrice, StringFormat= {} {0:C}}" TextAlignment="Right"/>
         </Border>
+        
+        <Label Content="Price per Point:" Grid.Row="17" Grid.Column="3"/>
+        <TextBlock Text="{Binding Bid.PricePerPoint, StringFormat= {} {0:C}}" 
+               Grid.Row="17" Grid.Column="4"
+               TextAlignment="Right"/>
+        
+        
 
     </Grid>
 </UserControl>

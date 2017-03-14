@@ -9,7 +9,6 @@ namespace EstimatingLibrary
     public class TECTag : TECObject
     {
         #region Properties
-
         private string _text;
         private Guid _guid;
 
@@ -28,19 +27,20 @@ namespace EstimatingLibrary
         {
             get { return _guid; }
         }
-
         #endregion //Properties
 
         #region Constructors
-        public TECTag(string text, Guid guid)
+        public TECTag(Guid guid)
         {
-            _text = text;
+            _text = "";
             _guid = guid;
         }
-        public TECTag(string text) : this(text, Guid.NewGuid()) { }
-        public TECTag() : this("") { }
+        public TECTag() : this(Guid.NewGuid()) { }
 
-        public TECTag(TECTag sourceTag) : this(sourceTag.Text, sourceTag.Guid) { }
+        public TECTag(TECTag sourceTag) : this(sourceTag.Guid)
+        {
+            _text = sourceTag.Text;
+        }
 
         public override object Copy()
         {

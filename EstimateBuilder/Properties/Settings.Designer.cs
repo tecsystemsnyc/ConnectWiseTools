@@ -34,5 +34,17 @@ namespace EstimateBuilder.Properties {
                 this["ScopeDirectoryPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TemplatesHidden {
+            get {
+                return ((bool)(this["TemplatesHidden"]));
+            }
+            set {
+                this["TemplatesHidden"] = value;
+            }
+        }
     }
 }

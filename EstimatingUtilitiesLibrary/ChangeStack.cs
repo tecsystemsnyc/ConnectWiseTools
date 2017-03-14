@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,8 +13,8 @@ using System.Windows;
 namespace EstimatingUtilitiesLibrary
 {
     public enum Change {Add, Remove, Edit};
-
     public class ChangeStack
+
     {
         //List of change, target object, reference object
         //Example: Add, Bid, System
@@ -56,48 +57,28 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Methods
-
         private void registerBidChanges(TECBid Bid)
         {
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
             //System Changed
-            foreach (TECScopeBranch branch in Bid.ScopeTree) {
-                registerScope(branch); }
+            foreach (TECScopeBranch branch in Bid.ScopeTree)
+            { registerScope(branch); }
             //Notes changed
-            foreach (TECNote note in Bid.Notes) { note.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECNote note in Bid.Notes)
+            { note.PropertyChanged += Object_PropertyChanged; }
             //Exclusions changed
-            foreach (TECExclusion exclusion in Bid.Exclusions) { exclusion.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECExclusion exclusion in Bid.Exclusions)
+            { exclusion.PropertyChanged += Object_PropertyChanged; }
             //Locations changed
-            foreach (TECLocation location in Bid.Locations) { location.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECLocation location in Bid.Locations)
+            { location.PropertyChanged += Object_PropertyChanged; }
             //Manufacturers Changed
-            foreach (TECManufacturer manufacturer in Bid.ManufacturerCatalog) { manufacturer.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECManufacturer manufacturer in Bid.ManufacturerCatalog)
+            { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
-            {
-                system.PropertyChanged += Object_PropertyChanged;
-                //Equipment Collection Changed
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    //equipment Changed
-                    equipment.PropertyChanged += Object_PropertyChanged;
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        //Subscope Changed
-                        subScope.PropertyChanged += Object_PropertyChanged;
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            //Device Changed
-                            device.PropertyChanged += Object_PropertyChanged;
-                        }
-                        foreach (TECPoint point in subScope.Points)
-                        {
-                            //Point Changed
-                            point.PropertyChanged += Object_PropertyChanged;
-                        }
-                    }
-                }
-            }
+            { registerSystems(system); }
             //Bid.Drawings.CollectionChanged += Bid_CollectionChanged;
             foreach (TECDrawing drawing in Bid.Drawings)
             {
@@ -106,56 +87,67 @@ namespace EstimatingUtilitiesLibrary
                 {
                     page.PropertyChanged += Object_PropertyChanged;
                     foreach (TECVisualScope vs in page.PageScope)
-                    {
-                        vs.PropertyChanged += Object_PropertyChanged;
-                    }
+                    { vs.PropertyChanged += Object_PropertyChanged; }
                 }
             }
             foreach (TECController controller in Bid.Controllers)
-            {
-                controller.PropertyChanged += Object_PropertyChanged;
-            }
+            { controller.PropertyChanged += Object_PropertyChanged; }
             foreach (TECProposalScope propScope in Bid.ProposalScope)
-            {
-                registerPropScope(propScope);
-            }
+            { registerPropScope(propScope); }
+            foreach(TECConnectionType connectionType in Bid.ConnectionTypes)
+            { connectionType.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECConduitType conduitType in Bid.ConduitTypes)
+            { conduitType.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
+            { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECMiscCost cost in Bid.MiscCosts)
+            { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscWiring wiring in Bid.MiscWiring)
+            { wiring.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanelType panelType in Bid.PanelTypeCatalog)
+            { panelType.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanel panel in Bid.Panels)
+            { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECConnection connection in Bid.Connections)
+            { connection.PropertyChanged += Object_PropertyChanged; }
         }
-
         private void registerTemplatesChanges(TECTemplates Templates)
         {
             //Template Changed
             Templates.PropertyChanged += Object_PropertyChanged;
             foreach (TECSystem system in Templates.SystemTemplates)
-            {
-                registerSystems(system);
-            }
+            { registerSystems(system); }
             foreach(TECEquipment equipment in Templates.EquipmentTemplates)
-            {
-                registerEquipment(equipment);
-            }
+            { registerEquipment(equipment); }
             foreach(TECSubScope subScope in Templates.SubScopeTemplates)
-            {
-                registerSubScope(subScope);
-            }
+            {  registerSubScope(subScope); }
             foreach(TECDevice device in Templates.DeviceCatalog)
-            {
-                //Device Changed
-                device.PropertyChanged += Object_PropertyChanged;
-            }
+            { device.PropertyChanged += Object_PropertyChanged; }
             foreach(TECTag tag in Templates.Tags)
-            {
-                tag.PropertyChanged += Object_PropertyChanged;
-            }
+            { tag.PropertyChanged += Object_PropertyChanged; }
             foreach(TECManufacturer manufacturer in Templates.ManufacturerCatalog)
-            {
-                manufacturer.PropertyChanged += Object_PropertyChanged;
-            }
+            { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach(TECController controller in Templates.ControllerTemplates)
+            { controller.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
+            { connectionType.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
+            { conduitType.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
+            { cost.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscCost addition in Templates.MiscCostTemplates)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECMiscWiring addition in Templates.MiscWiringTemplates)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanelType addition in Templates.PanelTypeCatalog)
+            { addition.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECPanel panel in Templates.PanelTemplates)
+            { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECConnection connection in Templates.ConnectionTemplates)
             {
-                controller.PropertyChanged += Object_PropertyChanged;
+                connection.PropertyChanged += Object_PropertyChanged;
             }
         }
-
         private void registerSubScope(TECSubScope subScope)
         {
             //Subscope Changed
@@ -171,7 +163,6 @@ namespace EstimatingUtilitiesLibrary
                 point.PropertyChanged += Object_PropertyChanged;
             }
         }
-
         private void registerEquipment(TECEquipment equipment)
         {
             //equipment Changed
@@ -181,7 +172,6 @@ namespace EstimatingUtilitiesLibrary
                 registerSubScope(subScope);
             }
         }
-
         private void registerSystems(TECSystem system)
         {
             //SystemChanged
@@ -191,20 +181,16 @@ namespace EstimatingUtilitiesLibrary
                 registerEquipment(equipment);
             }
         }
-
         private void registerScope(TECScopeBranch branch)
         {
-            if (DEBUG_REGISTER)
-            {
-                Console.WriteLine("Scope Branch Registered. Name: " + branch.Name);
-            }
+
+            DebugHandler.LogDebugMessage(("Scope Branch Registered. Name: " + branch.Name), DEBUG_REGISTER);
             branch.PropertyChanged += Object_PropertyChanged;
             foreach(TECScopeBranch scope in branch.Branches)
             {
                 registerScope(scope);
             }
         }
-
         private void unregisterScope(TECScopeBranch branch)
         {
             foreach (TECScopeBranch scope in branch.Branches)
@@ -213,7 +199,6 @@ namespace EstimatingUtilitiesLibrary
                 unregisterScope(scope);
             }
         }
-
         private void registerPropScope(TECProposalScope pScope)
         {
             pScope.PropertyChanged += Object_PropertyChanged;
@@ -231,7 +216,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = UndoStack.Last();
-            if (DEBUG_STACK) { Console.WriteLine("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+            DebugHandler.LogDebugMessage("Undoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
             if (StackItem.Item1 == Change.Add)
             {
                 handleAdd(StackItem);
@@ -255,15 +240,21 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (DEBUG_STACK) { Console.WriteLine("After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+
+            string message = "After Undoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
             isDoing = false;
         }
-
         public void Redo()
         {
             isDoing = true;
             Tuple<Change, object, object> StackItem = RedoStack.Last();
-            if (DEBUG_STACK) { Console.WriteLine("Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count()); }
+
+            string message = "Redoing:       " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
+
             if (StackItem.Item1 == Change.Add)
             {
                 handleRemove(StackItem);
@@ -289,17 +280,18 @@ namespace EstimatingUtilitiesLibrary
                     UndoStack.RemoveAt(x);
                 }
             }
-            if (DEBUG_STACK) { Console.WriteLine("After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n"); }
+
+            message = "After Redoing: " + StackItem.Item1.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
             isDoing = false;
         }
-
         public void ClearStacks()
         {
             UndoStack.Clear();
             RedoStack.Clear();
             SaveStack.Clear();
         }
-
         public ChangeStack Copy()
         {
             var outStack = new ChangeStack();
@@ -360,7 +352,33 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Controllers.Remove((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECBid)StackItem.Item2).ConnectionTypes.Remove((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECBid)StackItem.Item2).ConduitTypes.Remove((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscCost)
+                {
+                    ((TECBid)StackItem.Item2).MiscCosts.Remove((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECBid)StackItem.Item2).MiscWiring.Remove((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECBid)StackItem.Item2).Panels.Remove((TECPanel)StackItem.Item3);
+                }
             }
+            else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
+            { ((TECScope)StackItem.Item2).AssociatedCosts.Remove((TECAssociatedCost)StackItem.Item3); }
             else if (StackItem.Item2 is TECSystem)
             {
                 ((TECSystem)StackItem.Item2).Equipment.Remove((TECEquipment)StackItem.Item3);
@@ -384,11 +402,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 ((TECPage)StackItem.Item2).PageScope.Remove((TECVisualScope)StackItem.Item3);
             }
-            else if (StackItem.Item3 is TECDrawing)
+            else if (StackItem.Item2 is TECDrawing)
             {
                 ((TECDrawing)StackItem.Item2).Pages.Remove((TECPage)StackItem.Item3);
             }
-
+            
             else if(StackItem.Item2 is TECTemplates)
             {
                 if(StackItem.Item3 is TECSystem)
@@ -419,9 +437,37 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).ControllerTemplates.Remove((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConnectionTypeCatalog.Remove((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConduitTypeCatalog.Remove((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Remove((TECAssociatedCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscCost)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscCostTemplates.Remove((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECTemplates)StackItem.Item2).MiscWiringTemplates.Remove((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECTemplates)StackItem.Item2).PanelTemplates.Remove((TECPanel)StackItem.Item3);
+                }
+            }
+            else
+            {
+                string message = "Target object: " + StackItem.Item2 + " and reference object " + StackItem.Item3 + " not handled in add";
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
             }
         }
-
         private void handleRemove(Tuple<Change, object, object> StackItem)
         {
             if (StackItem.Item2 is TECBid)
@@ -466,7 +512,33 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECBid)StackItem.Item2).Controllers.Add((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECBid)StackItem.Item2).ConnectionTypes.Add((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECBid)StackItem.Item2).ConduitTypes.Add((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECBid)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscCost)
+                {
+                    ((TECBid)StackItem.Item2).MiscCosts.Add((TECMiscCost)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECMiscWiring)
+                {
+                    ((TECBid)StackItem.Item2).MiscWiring.Add((TECMiscWiring)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECPanel)
+                {
+                    ((TECBid)StackItem.Item2).Panels.Add((TECPanel)StackItem.Item3);
+                }
             }
+            else if (StackItem.Item2 is TECScope && StackItem.Item3 is TECAssociatedCost)
+            { ((TECScope)StackItem.Item2).AssociatedCosts.Add((TECAssociatedCost)StackItem.Item3); }
             else if (StackItem.Item2 is TECSystem)
             {
                 ((TECSystem)StackItem.Item2).Equipment.Add((TECEquipment)StackItem.Item3);
@@ -494,7 +566,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 ((TECDrawing)StackItem.Item2).Pages.Add((TECPage)StackItem.Item3);
             }
-
+           
             else if (StackItem.Item2 is TECTemplates)
             {
                 if (StackItem.Item3 is TECSystem)
@@ -525,9 +597,25 @@ namespace EstimatingUtilitiesLibrary
                 {
                     ((TECTemplates)StackItem.Item2).ControllerTemplates.Add((TECController)StackItem.Item3);
                 }
+                else if (StackItem.Item3 is TECConnectionType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConnectionTypeCatalog.Add((TECConnectionType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECConduitType)
+                {
+                    ((TECTemplates)StackItem.Item2).ConduitTypeCatalog.Add((TECConduitType)StackItem.Item3);
+                }
+                else if (StackItem.Item3 is TECAssociatedCost)
+                {
+                    ((TECTemplates)StackItem.Item2).AssociatedCostsCatalog.Add((TECAssociatedCost)StackItem.Item3);
+                }
             }
-        }
+            else{
+                string message = "Target object: " + StackItem.Item2 + " and reference object " + StackItem.Item3 + " not handled in remove";
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            }
 
+        }
         private void handleEdit(Tuple<Change, object, object> StackItem)
         {
             var newItem = StackItem.Item3;
@@ -537,12 +625,11 @@ namespace EstimatingUtilitiesLibrary
             foreach (var property in properties)
             {
                 if(property.GetSetMethod() != null)
-                {
-                    property.SetValue(newItem, property.GetValue(oldItem));
-                }
+                { property.SetValue(newItem, property.GetValue(oldItem)); }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    string message = "Property could not be set: " + property.Name;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                 }
             }
         }
@@ -562,7 +649,8 @@ namespace EstimatingUtilitiesLibrary
                 }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Property could not be set: " + property.Name); }
+                    string message = "Property could not be set: " + property.Name;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                 }
             }
             return outObj;
@@ -570,7 +658,9 @@ namespace EstimatingUtilitiesLibrary
 
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
-            if (DEBUG_PROPERTIES) { Console.WriteLine("Propertychanged: " + e.PropertyName); }
+            string message = "Propertychanged: " + e.PropertyName;
+            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            
             if (!isDoing){ RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -580,41 +670,59 @@ namespace EstimatingUtilitiesLibrary
                 object newValue = args.NewValue;
                 if (e.PropertyName == "Add")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Add change: " + oldValue); }
+                    message = "Add change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "Remove")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Remove change: " + oldValue); }
+                    message = "Remove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "Edit")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Edit change: " + oldValue); }
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "ChildChanged")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Child change: " + oldValue); }
+                    message = "Child change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "LocationChanged")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Location change: " + oldValue); }
+                    message = "Location change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<Tuple<Change, object, object>>();
                     if (oldNew.Item1 != null)
@@ -629,38 +737,54 @@ namespace EstimatingUtilitiesLibrary
                     {
                         SaveStack.Add(save);
                     }
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if(e.PropertyName == "MetaAdd")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaAdd change: " + oldValue); }
+                    message = "MetaAdd change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Add, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "MetaRemove")
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("MetaRemove change: " + oldValue); }
+                    message = "MetaRemove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    
                     item = Tuple.Create<Change, Object, Object>(Change.Remove, oldValue, newValue);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else
                 {
-                    if (DEBUG_PROPERTIES) { Console.WriteLine("Edit change: " + oldValue); }
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
                     item = Tuple.Create<Change, Object, Object>(Change.Edit, oldValue, newValue);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
-                    if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 
             }
             else
             {
-                if(DEBUG_PROPERTIES) { Console.WriteLine("Property not compatible: " + e.PropertyName); }
-                if (DEBUG_STACK) { Console.WriteLine("Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count); }
+                message = "Property not compatible: " + e.PropertyName;
+                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
             }
         }
         
@@ -678,12 +802,23 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleSubScopeChildren(newItem as TECSubScope, stackItem.Item1);
             }
+            else if (newItem is TECController)
+            {
+                handleControllerChildren(newItem as TECController, stackItem.Item1);
+            }
+            else if (newItem is TECDevice && (stackItem.Item2 is TECBid || stackItem.Item2 is TECTemplates))
+            {
+                handleDeviceChildren(newItem as TECDevice, stackItem.Item1);
+            }
+            else if (newItem is TECConduitType || newItem is TECConnectionType)
+            {
+                handleScopeChildren(newItem as TECScope, stackItem.Item1);
+            }
 
             else if (newItem is TECDrawing)
             {
                 foreach (TECPage page in ((TECDrawing)newItem).Pages)
                 {
-                    //Console.WriteLine("Page added in handle children");
                     SaveStack.Add(new Tuple<Change, object, object>(Change.Add, newItem, page));
                     page.PropertyChanged += Object_PropertyChanged;
                 }
@@ -692,6 +827,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleSystemChildren(TECSystem item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
             foreach (TECEquipment newEquipment in item.Equipment)
             {
@@ -716,6 +852,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleEquipmentChildren(TECEquipment item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
             foreach (TECSubScope newSubScope in item.SubScope)
             {
@@ -729,7 +866,6 @@ namespace EstimatingUtilitiesLibrary
                 {
                     newSubScope.PropertyChanged -= Object_PropertyChanged;
                 }
-                
                 else
                 {
                     throw new ArgumentException("Change type not valid.");
@@ -741,9 +877,16 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleSubScopeChildren(TECSubScope item, Change change)
         {
+            handleScopeChildren(item as TECScope, change);
             Tuple<Change, object, object> stackItem;
+            if(item.ConduitType != null)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)item.ConduitType);
+                SaveStack.Add(stackItem);
+            }
             foreach (TECPoint newPoint in item.Points)
             {
+                handleScopeChildren(newPoint as TECScope, change);
                 stackItem = Tuple.Create(change, (object)item, (object)newPoint);
                 SaveStack.Add(stackItem);
                 if (change == Change.Add)
@@ -764,22 +907,41 @@ namespace EstimatingUtilitiesLibrary
             {
                 stackItem = Tuple.Create(change, (object)item, (object)newDevice);
                 SaveStack.Add(stackItem);
-                if (change == Change.Add)
-                {
-                    newDevice.PropertyChanged += Object_PropertyChanged;
-                }
-                else if (change == Change.Remove)
-                {
-                    newDevice.PropertyChanged -= Object_PropertyChanged;
-                } 
-                
-                else
-                {
-                    throw new ArgumentException("Change type not valid.");
-                }
             }
         }
 
+        private void handleDeviceChildren(TECDevice item, Change change)
+        {
+            handleScopeChildren(item as TECScope, change);
+            Tuple<Change, object, object> stackItem;
+            stackItem = Tuple.Create(change, (object)item, (object)item.Manufacturer);
+            SaveStack.Add(stackItem);
+            stackItem = Tuple.Create(change, (object)item, (object)item.ConnectionType);
+            SaveStack.Add(stackItem);
+        }
+
+        private void handleControllerChildren(TECController item, Change change)
+        {
+            handleScopeChildren(item as TECScope, change);
+            Tuple<Change, object, object> stackItem;
+            stackItem = Tuple.Create(change, (object)item, (object)item.Manufacturer);
+            SaveStack.Add(stackItem);
+        }
+
+        private void handleScopeChildren(TECScope item, Change change)
+        {
+            Tuple<Change, object, object> stackItem;
+            foreach(TECAssociatedCost cost in item.AssociatedCosts)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)cost);
+                SaveStack.Add(stackItem);
+            }
+            foreach(TECTag tag in item.Tags)
+            {
+                stackItem = Tuple.Create(change, (object)item, (object)tag);
+                SaveStack.Add(stackItem);
+            }
+        }
         #endregion
 
         #region Event Handlers

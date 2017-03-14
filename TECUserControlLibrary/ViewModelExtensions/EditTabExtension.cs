@@ -2,6 +2,7 @@
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModelExtensions
@@ -15,6 +16,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
     public class EditTabExtension : ViewModelBase
     {
         #region Properties
+        private bool isBid;
+
         public EditIndex TabIndex
         {
             get { return _TabIndex; }
@@ -32,6 +35,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _templates = value;
+                setCatalogs(value);
                 RaisePropertyChanged("Templates");
             }
         }
@@ -43,6 +47,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _bid = value;
+                setCatalogs(value);
+                RaisePropertyChanged("Bid");
             }
         }
         private TECBid _bid;
@@ -73,7 +79,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
                 TabIndex = EditIndex.Equipment;
-
             }
         }
         private TECEquipment _selectedEquipment;
@@ -164,6 +169,72 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllerIOQTY");
             }
         }
+
+        private TECAssociatedCost _selectedAssociatedCost;
+        public TECAssociatedCost SelectedAssociatedCost
+        {
+            get { return _selectedAssociatedCost; }
+            set
+            {
+                _selectedAssociatedCost = value;
+                RaisePropertyChanged("SelectedAssociatedCost");
+            }
+        }
+
+        private ObservableCollection<TECTag> _tagSelections;
+        public ObservableCollection<TECTag> TagSelections
+        {
+            get { return _tagSelections; }
+            set {
+                _tagSelections = value;
+                RaisePropertyChanged("TagSelections");
+            }
+        }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        {
+            get { return _associatedCostSelections; }
+            set
+            {
+                _associatedCostSelections = value;
+                RaisePropertyChanged("AssociatedCostSelections");
+            }
+        }
+
+        private ObservableCollection<TECConduitType> _conduitTypeSelections;
+        public ObservableCollection<TECConduitType> ConduitTypeSelections
+        {
+            get { return _conduitTypeSelections; }
+            set
+            {
+                _conduitTypeSelections = value;
+                RaisePropertyChanged("ConduitTypeSelections");
+            }
+        }
+
+        private ObservableCollection<TECManufacturer> _manufacturerSelections;
+        public ObservableCollection<TECManufacturer> ManufacturerSelections
+        {
+            get { return _manufacturerSelections; }
+            set
+            {
+                _manufacturerSelections = value;
+                RaisePropertyChanged("ManufacturerSelections");
+            }
+        }
+
+        private ObservableCollection<TECConnectionType> _connectionTypeSelections;
+        public ObservableCollection<TECConnectionType> ConnectionTypeSelections
+        {
+            get { return _connectionTypeSelections; }
+            set
+            {
+                _connectionTypeSelections = value;
+                RaisePropertyChanged("ConnectionTypeSelections");
+            }
+        }
+
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
@@ -178,6 +249,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand DeleteSelectedDeviceCommand { get; private set; }
         public ICommand DeleteSelectedPointCommand { get; private set; }
         public ICommand DeleteSelectedControllerCommand { get; private set; }
+        public ICommand AddAssociatedCostToSystemCommand { get; private set; }
+        public ICommand AddAssociatedCostToEquipmentCommand { get; private set; }
+        public ICommand AddAssociatedCostToSubScopeCommand { get; private set; }
+        public ICommand AddAssociatedCostToDeviceCommand { get; private set; }
+        public ICommand AddAssociatedCostToControllerCommand { get; private set; }
         #endregion
         #endregion
 
@@ -187,14 +263,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public EditTabExtension(TECTemplates templates)
         {
             Templates = templates;
+            setCatalogs(Templates);
             setupCommands();
+            isBid = false;
             TabIndex = EditIndex.Nothing;
         }
 
         public EditTabExtension(TECBid bid)
         {
             Bid = bid;
+            setCatalogs(Bid);
             setupCommands();
+            isBid = true;
             TabIndex = EditIndex.Nothing;
         }
 
@@ -215,6 +295,30 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
+            AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute);
+            AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute);
+            AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
+            AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute);
+            AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute);
+        }
+        private void setCatalogs(object type)
+        {
+            if(type is TECBid)
+            {
+                TagSelections = Bid.Tags;
+                ConduitTypeSelections = Bid.ConduitTypes;
+                AssociatedCostSelections = Bid.AssociatedCostsCatalog;
+                ManufacturerSelections = Bid.ManufacturerCatalog;
+                ConnectionTypeSelections = Bid.ConnectionTypes;
+            } else if (type is TECTemplates)
+            {
+                TagSelections = Templates.Tags;
+                AssociatedCostSelections = Templates.AssociatedCostsCatalog;
+                ConduitTypeSelections = Templates.ConduitTypeCatalog;
+                ManufacturerSelections = Templates.ManufacturerCatalog;
+                ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
+            }
+
         }
         
         #region Commands
@@ -339,8 +443,45 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             SelectedController = null;
         }
+
+        private void AddAssociatedCostToSystemExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedSystem != null)
+            {
+                SelectedSystem.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToEquipmentExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedEquipment != null)
+            {
+                SelectedEquipment.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+
+        }
+        private void AddAssociatedCostToSubScopeExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedSubScope != null)
+            {
+                SelectedSubScope.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToDeviceExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedDevice != null)
+            {
+                SelectedDevice.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
+        private void AddAssociatedCostToControllerExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedController != null)
+            {
+                SelectedController.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
         #endregion
-        
+
         #region Events
         public void updateSelection(object selection)
         {
@@ -358,7 +499,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             else if (selection is TECDevice)
             {
-                SelectedDevice = selection as TECDevice;
+                if (isBid)
+                { TabIndex = EditIndex.Nothing; }
+                else
+                { SelectedDevice = selection as TECDevice; }
+                
             }
             else if (selection is TECPoint)
             {

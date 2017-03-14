@@ -39,8 +39,7 @@ namespace EstimateBuilder.ViewModel
             setupLocationDataGrid();
 
             setVisibility();
-
-            ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
+            
             TemplatesVisibility = Visibility.Visible;
 
         }
@@ -94,10 +93,6 @@ namespace EstimateBuilder.ViewModel
 
         #endregion //Interface Properties
 
-        #region Commands Properties
-        public ICommand ToggleTemplatesVisibilityCommand { get; private set; }
-        #endregion //Commands Properties
-
         #region Visibility Properties
         private Visibility _templatesVisibility;
         public Visibility TemplatesVisibility
@@ -105,8 +100,11 @@ namespace EstimateBuilder.ViewModel
             get { return _templatesVisibility; }
             set
             {
-                _templatesVisibility = value;
-                RaisePropertyChanged("TemplatesVisibility");
+                if (value != _templatesVisibility)
+                {
+                    _templatesVisibility = value;
+                    RaisePropertyChanged("TemplatesVisibility");
+                }
             }
         }
         #endregion Visibility Properties
@@ -119,6 +117,7 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid = new ScopeDataGridExtension(Bid);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
             ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupLocationDataGrid()
@@ -138,21 +137,6 @@ namespace EstimateBuilder.ViewModel
             EditTab = new EditTabExtension(Bid);
         }
         #endregion
-        
-        #region Commands Methods
-        private void ToggleTemplatesVisibilityExecute()
-        {
-            if (TemplatesVisibility == Visibility.Visible)
-            {
-                TemplatesVisibility = Visibility.Hidden;
-            }
-            else if (TemplatesVisibility == Visibility.Hidden)
-            {
-                TemplatesVisibility = Visibility.Visible;
-            }
-        }
-
-        #endregion //Commands Methods
         
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
@@ -214,6 +198,7 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
             ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
+            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
         }
         
         #endregion //Helper Methods

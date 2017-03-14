@@ -49,9 +49,7 @@ namespace EstimatingUtilitiesLibrary
             //file is not locked
             return false;
         }
-
         
-
         public static string CommaSeparatedString(List<string> strings)
         {
             int i = 0;
@@ -114,12 +112,19 @@ namespace EstimatingUtilitiesLibrary
 
         #region String Extensions
 
-        public static int ToInt(this string str)
+        public static int ToInt(this string str, int? def = null)
         {
             int i;
             if (!int.TryParse(str, out i))
             {
-                throw new InvalidCastException("StringToInt() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(int));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToInt() failed. String: " + str);
+                }
             }
             else
             {
@@ -127,12 +132,19 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public static double ToDouble(this string str)
+        public static double ToDouble(this string str, double? def = null)
         {
             double d;
             if (!double.TryParse(str, out d))
             {
-                throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(double));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                }
             }
             else
             {

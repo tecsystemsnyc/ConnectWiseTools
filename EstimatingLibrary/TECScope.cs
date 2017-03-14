@@ -20,6 +20,7 @@ namespace EstimatingLibrary
         protected TECLocation _location;
 
         protected ObservableCollection<TECTag> _tags;
+        protected ObservableCollection<TECAssociatedCost> _associatedCosts;
 
         public string Name {
             get { return _name; }
@@ -29,7 +30,6 @@ namespace EstimatingLibrary
                 _name = value;
                 // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("Name", temp, this);
-                
             }
         }
         public string Description {
@@ -64,10 +64,21 @@ namespace EstimatingLibrary
             get { return _tags; }
             set
             {
-                    var temp = this.Copy();
-                    _tags = value;
-                    NotifyPropertyChanged("Tags", temp, this);
-                
+                var temp = this.Copy();
+                _tags = value;
+                NotifyPropertyChanged("Tags", temp, this);
+                Tags.CollectionChanged += collectionChanged;
+            }
+        }
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts
+        {
+            get { return _associatedCosts; }
+            set
+            {
+                var temp = this.Copy();
+                _associatedCosts = value;
+                NotifyPropertyChanged("AssociatedCosts", temp, this);
+                AssociatedCosts.CollectionChanged += collectionChanged;
             }
         }
 
@@ -87,15 +98,30 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECScope(string name, string description, Guid guid)
+        public TECScope(Guid guid)
         {
-            _name = name;
-            _description = description;
+            _name = "";
+            _description = "";
             _guid = guid;
 
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
             Tags.CollectionChanged += collectionChanged;
+            AssociatedCosts.CollectionChanged += collectionChanged;
+        }
+
+        protected void copyPropertiesFromScope(TECScope scope)
+        {
+            _name = scope.Name;
+            _description = scope.Description;
+            _quantity = scope.Quantity;
+            if(scope.Location != null)
+            { _location = scope.Location.Copy() as TECLocation; }
+            foreach (TECTag tag in scope.Tags)
+            { _tags.Add(tag.Copy() as TECTag); }
+            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
+            { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
         }
 
         abstract public Object DragDropCopy();
