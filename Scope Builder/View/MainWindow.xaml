@@ -151,32 +151,10 @@
                     <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
                 </TabItem>
             </TabControl>
-            
-            <StatusBar Grid.Row="3"
-                       Grid.ColumnSpan="6">
-                <StatusBar.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </StatusBar.ItemsPanel>
-                <StatusBarItem HorizontalAlignment="Left">
-                    <TextBlock Text="{Binding CurrentStatusText}"/>
-                </StatusBarItem>
-                <StatusBarItem Grid.Column="1"
-                               HorizontalAlignment="Left">
-                    <TextBlock Text="{Binding ContextText}"/>
-                </StatusBarItem>
-                <StatusBarItem Grid.Column="2"
-                               HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding Version}"/>
-                </StatusBarItem>
-            </StatusBar>
+
+            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=Window, Path=DataContext.StatusBarVM}"
+                Grid.Row="3"
+                       Grid.ColumnSpan="6"/>
         </Grid>
    </DockPanel>
 </Window>

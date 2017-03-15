@@ -68,12 +68,8 @@
             </Grid.ColumnDefinitions>
 
             <Image Source="{Binding TECLogo}"
-                   Grid.Column="1"
+                   Grid.Column="2"
                    Grid.RowSpan="2"/>
-
-            <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
-                       Text="{Binding Version}"
-                       Margin="10" Foreground="{DynamicResource LightTextBrush}"/>
 
             <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                 <TabItem Header="Scope Editor">
@@ -105,12 +101,8 @@
                         ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
-            <StatusBar Grid.Row="3"
-                       Grid.ColumnSpan="3">
-                <StatusBarItem>
-                    <TextBlock Text="{Binding CurrentStatusText}"/>
-                </StatusBarItem>
-            </StatusBar>
+            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                                           Grid.Row="3" Grid.ColumnSpan="3"/>
         </Grid>
     </DockPanel>
 </Window>

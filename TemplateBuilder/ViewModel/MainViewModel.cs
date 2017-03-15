@@ -33,6 +33,9 @@ namespace TemplateBuilder.ViewModel
             { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
             { Version = "Undeployed Version"; }
+
+            setupStatusBar();
+
             getTemplates();
 
             TECLogo = Path.GetTempFileName();
@@ -40,14 +43,15 @@ namespace TemplateBuilder.ViewModel
 
             Stack = new ChangeStack(Templates);
 
-            CurrentStatusText = "Done.";
+            StatusBarVM.CurrentStatusText = "Done.";
             TitleString = "Template Builder";
 
-            setupCommands();
+            
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
             setupMaterialsTab();
+            setupCommands();
             setupVMs();
 
             setVisibility(0);
@@ -69,6 +73,7 @@ namespace TemplateBuilder.ViewModel
 
         #region ViewModels
         public MenuViewModel MenuVM { get; set; }
+        public StatusBarExtension StatusBarVM { get; set; }
         #endregion
 
         public TECTemplates Templates
@@ -85,17 +90,6 @@ namespace TemplateBuilder.ViewModel
         public ChangeStack Stack { get; set; }
         public string TECLogo { get; set; }
         public string Version { get; set; }
-
-        public string CurrentStatusText
-        {
-            get { return _currentStatusText; }
-            set
-            {
-                _currentStatusText = value;
-                RaisePropertyChanged("CurrentStatusText");
-            }
-        }
-        private string _currentStatusText;
         public string TitleString
         {
             get { return _titleString; }
@@ -231,6 +225,13 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
             ControlledScopeVM.DropHandler += Drop;
+        }
+
+        private void setupStatusBar()
+        {
+            StatusBarVM = new StatusBarExtension();
+            StatusBarVM.CurrentStatusText = "Ready";
+            StatusBarVM.Version = Version;
         }
         #endregion
 

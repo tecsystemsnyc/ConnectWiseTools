@@ -83,7 +83,6 @@ namespace Scope_Builder.ViewModel
             programName = "Scope Builder";
 
             setupAll();
-            getVersion();
             DGTabIndex = 0;
 
             setVisibility(0);
@@ -137,18 +136,11 @@ namespace Scope_Builder.ViewModel
                     break;
             }
         }
-        private void getVersion()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { Version = "Undeployed Version"; }
-        }
         private void setContextText(object selected)
         {
             if(selected is TECScope && selected != null)
             {
-                ContextText = makeContextString(selected as TECScope);
+                StatusBarVM.ContextText = makeContextString(selected as TECScope);
             }
         }
         private string makeContextString(TECScope scope)

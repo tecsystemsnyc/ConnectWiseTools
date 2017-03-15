@@ -32,11 +32,6 @@ namespace EstimateBuilder.ViewModel
         {
             programName = "Estimate Builder";
 
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { Version = "Undeployed Version"; }
-
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
 
@@ -242,14 +237,7 @@ namespace EstimateBuilder.ViewModel
             ScopeEditorVM.Templates = Templates;
             LaborVM.Templates = Templates;
         }
-
-        private void getVersion()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { Version = "Undeployed Version"; }
-        }
+        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();

@@ -9,17 +9,24 @@ namespace TECUserControlLibrary.ViewModelExtensions
 {
     public class StatusBarExtension : ViewModelBase
     {
+        private const string BUG_REPORT_URL = "https://goo.gl/forms/FvbdNI8gMHmmKcvn2";
 
+        public string BugReportURL
+        {
+            get { return BUG_REPORT_URL; }
+        }
+
+        private string _currentStatusText;
         public string CurrentStatusText
         {
             get { return _currentStatusText; }
-            private set
+            set
             {
                 _currentStatusText = value;
                 RaisePropertyChanged("CurrentStatusText");
             }
         }
-        private string _currentStatusText;
+
         private string _contextText;
         public string ContextText
         {
@@ -30,8 +37,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ContextText");
             }
         }
-        
-        public string TECLogo { get; set; }
-        public string Version { get; set; }
+
+        private string _version;
+        public string Version
+        {
+            get { return _version; }
+            set
+            {
+                _version = value;
+                RaisePropertyChanged("Version");
+            }
+        }
     }
 }
