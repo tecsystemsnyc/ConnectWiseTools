@@ -10,10 +10,19 @@
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -21,37 +30,46 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Label Content="Controlled Scope"/>
+        <Label Content="Systems in Selected" Grid.Column="1"/>
+        <Label Content="Panels in Selected" Grid.Column="2"/>
         <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Templates.ControlledScopeTemplates}"
-                                       SelectedControlledScope="{Binding SelectedControlledScope}"
-                                      Grid.Row="1" Grid.RowSpan="2"
-                                      x:Name="CSGrid"/>
-        <grids:SystemsGridControl SystemsSource="{Binding ElementName=CSGrid, Path=SelectedControlledScope.Systems}"
-                                 ViewModel="{Binding ScopeDataGrid}"
-                                 Grid.Row="1" Grid.Column="1"/>
+                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                       Grid.Row="1" Grid.RowSpan="3"
+                                       x:Name="CSGrid"/>
+        <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                                  ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                  AllowAddingNew="False"
+                                  Grid.Row="1" Grid.Column="1"/>
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <grids:PanelsGrid PanelsSource="{Binding SelectedControlledScope.Panels}"
+            <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                               Grid.Row="0"/>
-            <DataGrid ItemsSource="{Binding ControllerSelections}"
+            <Label Content="Controllers in Selected" Grid.Row="1"/>
+            <DataGrid ItemsSource="{Binding ControllerCollection}"
                       AutoGenerateColumns="False"
                       dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                       IsReadOnly="True"
-                      Grid.Row="1">
+                      Grid.Row="2">
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn ItemsSource="{Binding SelectedControlledScope.Panels}"
-                                            SelectedItemBinding="{Binding Panel}"/>
+                    <DataGridComboBoxColumn ItemsSource="{Binding Data.PanelsCollection, Source={StaticResource proxy}}"
+                                            SelectedItemBinding="{Binding Panel}"
+                                            Header="Containing Panel"/>
                     <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto"/>
                     <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto"/>
                 </DataGrid.Columns>
 
             </DataGrid>
         </Grid>
-        
+        <Label Content="Connections" Grid.Column="1" Grid.Row="2"/>
         <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                             Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                             Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="2"/>
+
     </Grid>
 </UserControl>

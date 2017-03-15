@@ -315,7 +315,7 @@
             </TabItem>
             <TabItem Header="Add Panel"
                      Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
-                <local:AddPanelControl ViewModel="{Binding}"/>
+                <local:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

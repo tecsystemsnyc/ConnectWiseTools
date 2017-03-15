@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding TagSelections}"
+        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding ElementName=parent, Path=TagList}"
                               SelectedItem="{Binding SelectedTag}"
                   DisplayMemberPath="Text"/>
         <Button Grid.Row="0" Grid.Column="1" Content="Add Tag"

@@ -82,6 +82,39 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("SelectedTag");
             }
         }
+
+        private TECAssociatedCost _selectedAssociatedCost;
+        public TECAssociatedCost SelectedAssociatedCost
+        {
+            get { return _selectedAssociatedCost; }
+            set
+            {
+                _selectedAssociatedCost = value;
+                RaisePropertyChanged("SelectedAssociatedCost");
+            }
+        }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        {
+            get { return _associatedCostSelections; }
+            set
+            {
+                _associatedCostSelections = value;
+                RaisePropertyChanged("AssociatedCostSelections");
+            }
+        }
+
+        private ObservableCollection<TECTag> _tagSelections;
+        public ObservableCollection<TECTag> TagSelections
+        {
+            get { return _tagSelections; }
+            set
+            {
+                _tagSelections = value;
+                RaisePropertyChanged("TagSelections");
+            }
+        }
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -97,7 +130,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
-
+        public ICommand AddTagToPanelCommand { get; private set; }
+        public ICommand AddAssociatedCostToPanelCommand { get; private set; }
+        public ICommand AddPanelCommand { get; private set; }
         #endregion
 
         #region Visibility Properties
@@ -221,6 +256,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controlledScopeVisibility;
+
+        public Visibility PanelsVisibility
+        {
+            get { return _panelsVisibility; }
+            set
+            {
+                _panelsVisibility = value;
+                RaisePropertyChanged("PanelsVisibility");
+            }
+        }
+        private Visibility _panelsVisibility;
+        public Visibility AddPanelVisibility
+        {
+            get { return _addPanelVisibility; }
+            set
+            {
+                _addPanelVisibility = value;
+                RaisePropertyChanged("AddPanelVisibility");
+            }
+        }
+        private Visibility _addPanelVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -404,6 +460,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #endregion //Device Interface Properties
 
         #region Panel Interface Properties
+
+        private TECPanelType _selectedPanelType;
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+            }
+        }
         private string _panelName;
         public string PanelName
         {
@@ -444,6 +511,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("PanelTags");
             }
         }
+        private ObservableCollection<TECPanelType> _panelTypeSelections;
+        public ObservableCollection<TECPanelType> PanelTypeSelections
+        {
+            get { return _panelTypeSelections; }
+            set
+            {
+                _panelTypeSelections = value;
+                RaisePropertyChanged("PanelTypeSelections");
+            }
+        }
+
         #endregion
 
         #region Scope Collections
@@ -524,6 +602,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControlledScopeItemsCollection");
             }
         }
+
+        private ObservableCollection<TECPanel> _panelsItemsCollection;
+        public ObservableCollection<TECPanel> PanelsItemsCollection
+        {
+            get { return _panelsItemsCollection; }
+            set
+            {
+                _panelsItemsCollection = value;
+                RaisePropertyChanged("PanelsItemsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -553,13 +642,20 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
+            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
+            AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
+            AddPanelCommand = new RelayCommand(AddPanelExecute, AddPanelCanExecute);
 
             ControllerIO = new ObservableCollection<TECIO>();
 
             populateItemsCollections();
 
+            PanelTypeSelections = templates.PanelTypeCatalog;
+
             DeviceTags = new ObservableCollection<TECTag>();
             ControllerTags = new ObservableCollection<TECTag>();
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
         }
         #endregion
 
@@ -738,6 +834,42 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ControllerTags.Add(SelectedTag);
             SelectedTag = null;
         }
+        private void AddTagToPanelExecute()
+        {
+            PanelTags.Add(SelectedTag);
+            SelectedTag = null;
+        }
+        private void AddAssociatedCostToPanelExecute()
+        {
+            PanelAssociatedCosts.Add(SelectedAssociatedCost);
+            SelectedAssociatedCost = null;
+        }
+        private void AddPanelExecute()
+        {
+            var panel = new TECPanel();
+            panel.Type = SelectedPanelType;
+            panel.Name = PanelName;
+            panel.Description = PanelDescription;
+            panel.Tags = PanelTags;
+            panel.AssociatedCosts = PanelAssociatedCosts;
+            Templates.PanelTemplates.Add(panel);
+            SelectedPanelType = null;
+            PanelName = "";
+            PanelDescription = "";
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>(); 
+        }
+        private bool AddPanelCanExecute()
+        {
+            if(SelectedPanelType != null && PanelName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         #endregion
 
@@ -750,6 +882,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ControllersItemsCollection = Templates.ControllerTemplates;
             AssociatedCostsItemsCollection = Templates.AssociatedCostsCatalog;
             ControlledScopeItemsCollection = Templates.ControlledScopeTemplates;
+            PanelsItemsCollection = Templates.PanelTemplates;
         }
 
         public void DragOver(IDropInfo dropInfo)

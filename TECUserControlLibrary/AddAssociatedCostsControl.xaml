@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
+        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding ElementName=parent, Path=AssociatedCostList}"
                                SelectedItem="{Binding SelectedAssociatedCost}"
                                DisplayMemberPath="Name"/>
         <Button Grid.Row="0" Grid.Column="1" Content="Associate Cost"

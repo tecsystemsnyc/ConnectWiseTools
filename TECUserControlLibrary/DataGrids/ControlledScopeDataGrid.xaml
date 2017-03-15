@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,7 +19,7 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=ControlledScopeSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=SelectedControlledScope}"
+                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>

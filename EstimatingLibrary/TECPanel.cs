@@ -60,7 +60,9 @@ namespace EstimatingLibrary
 
         public override object DragDropCopy()
         {
-            throw new NotImplementedException();
+            var outPanel = new TECPanel(this);
+            return outPanel;
+
         }
 
 

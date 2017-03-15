@@ -8,6 +8,7 @@
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
+             x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,25 +19,16 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=PanelsSource}"
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <DataGrid ItemsSource="{Binding ElementName=parent, Path=PanelsSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=ViewModel.SelectedPanel, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
-                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}">
+                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedPanel, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
-                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
-                                    Visibility="{Binding Data.DataGridVisibilty.SystemName, 
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
-                                    Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
-                                    Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding Path=Location, Converter={cnvt:SelectedLocationToLocationConverter}}"
-                                        Header="Location" Width="Auto"
-                                        DisplayMemberPath="Name"
-                                        Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
-                
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" />
+                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -16,6 +16,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _panel = value;
+                handlePanelSelection(value);
                 RaisePropertyChanged("Panel");
             }
         }
@@ -30,8 +31,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("Controller");
             }
         }
-
-
+        
         public ControllerInPanel()
         {
 
