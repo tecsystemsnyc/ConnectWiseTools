@@ -66,11 +66,11 @@ namespace Tests
         //
         #endregion
 
-        [TestMethod]
-        public void EstimateBuilderVM()
-        {
-            var testVM = new EstimateBuilder.ViewModel.MainViewModel();
-            Assert.IsTrue(true);
-        }
+        //[TestMethod]
+        //public void EstimateBuilderVM()
+        //{
+        //    var testVM = new EstimateBuilder.ViewModel.MainViewModel();
+        //    Assert.IsTrue(true);
+        //}
     }
 }
