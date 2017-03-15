@@ -8,10 +8,12 @@ using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Deployment.Application;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -78,27 +80,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public string CurrentStatusText
-        {
-            get { return _currentStatusText; }
-            private set
-            {
-                _currentStatusText = value;
-                RaisePropertyChanged("CurrentStatusText");
-            }
-        }
-        private string _currentStatusText;
-        private string _contextText;
-        public string ContextText
-        {
-            get{  return _contextText; }
-            set
-            {
-                _contextText = value;
-                RaisePropertyChanged("ContextText");
-            }
-        }
-
         public string TitleString
         {
             get { return _titleString; }
@@ -111,7 +92,6 @@ namespace TECUserControlLibrary.ViewModels
         private string _titleString;
 
         public string TECLogo { get; set; }
-        public string Version { get; set; }
 
         #region Settings Properties
         public string TemplatesFilePath
@@ -161,11 +141,13 @@ namespace TECUserControlLibrary.ViewModels
 
         #region View Models
         public MenuViewModel MenuVM { get; set; }
+        public StatusBarExtension StatusBarVM { get; set; }
         #endregion
 
         #endregion
         public BidEditorBase()
         {
+            setupStatusBar();
             SetBusyStatus("Initializing Program...");
 
             setupCommands();
@@ -277,6 +259,17 @@ namespace TECUserControlLibrary.ViewModels
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
+        private void setupStatusBar()
+        {
+            StatusBarVM = new StatusBarExtension();
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            else
+            { StatusBarVM.Version = "Undeployed Version"; }
+
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+        }
         #endregion
 
         #region Helper Functions
@@ -285,9 +278,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (startupFile != "")
             {
-                CurrentStatusText = "Loading...";
+                SetBusyStatus("Loading " + startupFile);
                 LoadFromPath(startupFile);
-                CurrentStatusText = "Done.";
+                ResetStatus();
             }
         }
 
@@ -426,7 +419,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (path != null)
             {
-                CurrentStatusText = "Loading...";
+                SetBusyStatus("Loading " + path);
                 bidDBFilePath = path;
                 scopeDirectoryPath = Path.GetDirectoryName(path);
 
@@ -436,17 +429,17 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                CurrentStatusText = "Done.";
+                ResetStatus();
             }
         }
         protected void SetBusyStatus(string statusText)
         {
-            CurrentStatusText = statusText;
+            StatusBarVM.CurrentStatusText = statusText;
             isReady = false;
         }
         protected void ResetStatus()
         {
-            CurrentStatusText = DEFAULT_STATUS_TEXT;
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
             isReady = true;
         }
 
