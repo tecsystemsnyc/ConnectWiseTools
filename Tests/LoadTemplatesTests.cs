@@ -279,6 +279,16 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_Connection()
+        {
+            //Arrange
+            TECConnection actualConnection = actualTemplates.ConnectionTemplates[0];
+
+            //Assert
+            Assert.AreEqual(420, actualConnection.Length);
+        }
+
+        [TestMethod]
         public void Load_Templates_ConduitType()
         {
             Assert.AreEqual("Test ConduitType", actualConduitType.Name);
@@ -358,6 +368,7 @@ namespace Tests
                     break;
                 }
             }
+            if (expectedConn == null) { Assert.Fail(); }
             TECSystem expectedSys = null;
             foreach(TECSystem sys in actualTemplates.SystemTemplates)
             {
@@ -367,6 +378,7 @@ namespace Tests
                     break;
                 }
             }
+            if (expectedSys == null) { Assert.Fail(); }
             TECController expectedController = null;
             foreach(TECController controller in actualTemplates.ControllerTemplates)
             {
@@ -376,6 +388,7 @@ namespace Tests
                     break;
                 }
             }
+            if (expectedController == null) { Assert.Fail(); }
             TECPanel expectedPanel = null;
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
             {
@@ -385,6 +398,7 @@ namespace Tests
                     break;
                 }
             }
+            if (expectedPanel == null) { Assert.Fail(); }
 
             //Assert
             Assert.AreEqual("Test Controlled Scope", actualConScope.Name);

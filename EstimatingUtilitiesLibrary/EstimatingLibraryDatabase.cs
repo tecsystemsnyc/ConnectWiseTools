@@ -129,6 +129,7 @@ namespace EstimatingUtilitiesLibrary
             templates.ManufacturerCatalog = getAllManufacturers();
             templates.ControllerTemplates = getControllers();
             templates.ConnectionTypeCatalog = getConnectionTypes();
+            templates.ConnectionTemplates = getConnections();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
             templates.MiscWiringTemplates = getMiscWiring();

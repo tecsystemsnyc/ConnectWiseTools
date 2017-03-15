@@ -1224,8 +1224,8 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECControlledScope);
         public static Type ReferenceType = typeof(TECController);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,

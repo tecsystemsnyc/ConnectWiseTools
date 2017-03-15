@@ -475,9 +475,12 @@ namespace EstimatingLibrary
         {
             foreach(TECControlledScope scope in controlledScope)
             {
-                linkScopeObjects(scope.Systems, templates.SystemTemplates);
-                linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
-                linkScopeObjects(scope.Panels, templates.PanelTemplates);
+                //linkScopeObjects(scope.Systems, templates.SystemTemplates);
+                linkSystemsInControlledScope(templates.SystemTemplates, scope);
+                //linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
+                linkControllersInControlledScope(templates.ControllerTemplates, scope);
+                //linkScopeObjects(scope.Panels, templates.PanelTemplates);
+                linkPanelsInControlledScope(templates.PanelTemplates, scope);
                 linkConnectionsInControlledScope(templates.ConnectionTemplates, scope);
             }
         }
@@ -485,12 +488,36 @@ namespace EstimatingLibrary
         {
             foreach(TECPanel panel in panels)
             {
-                linkScopeObjects(panel.Controllers, controllers);
+                ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
+                foreach(TECController panelController in panel.Controllers)
+                {
+                    foreach(TECController controller in controllers)
+                    {
+                        if (panelController.Guid == controller.Guid)
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
+                    }
+                }
+                panel.Controllers = controllersToLink;
             }
         }
         static private void linkConnectionsInController(ObservableCollection<TECConnection> connections, TECController controller)
         {
-            linkScopeObjects(controller.Connections, connections);
+            ObservableCollection<TECConnection> connectionsToLink = new ObservableCollection<TECConnection>();
+            foreach(TECConnection controllerConnection in controller.Connections)
+            {
+                foreach(TECConnection connection in connections)
+                {
+                    if (controllerConnection.Guid == connection.Guid)
+                    {
+                        connectionsToLink.Add(connection);
+                        break;
+                    }
+                }
+            }
+            controller.Connections = connectionsToLink;
         }
         static private void linkConnectionsInSubScope(ObservableCollection<TECConnection> connections, TECSubScope subScope)
         {
@@ -554,21 +581,69 @@ namespace EstimatingLibrary
             }
             conScope.Connections = connectionsToLink;
         }
-        static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
+        static private void linkSystemsInControlledScope(ObservableCollection<TECSystem> systems, TECControlledScope conScope)
         {
-            var linkedList = new ObservableCollection<TECScope>();
-            foreach(TECScope refScope in (IList)scopeReferenceList)
+            ObservableCollection<TECSystem> systemsToLink = new ObservableCollection<TECSystem>();
+            foreach(TECSystem conScopeSys in conScope.Systems)
             {
-                foreach(TECScope objectScope in (IList)scopeObjectList)
+                foreach(TECSystem sys in systems)
                 {
-                    if(refScope.Guid == objectScope.Guid)
+                    if (conScopeSys.Guid == sys.Guid)
                     {
-                        linkedList.Add(objectScope as TECScope);
+                        systemsToLink.Add(sys);
+                        break;
                     }
                 }
             }
-            scopeReferenceList = linkedList;
+            conScope.Systems = systemsToLink;
         }
+        static private void linkControllersInControlledScope(ObservableCollection<TECController> controllers, TECControlledScope conScope)
+        {
+            ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
+            foreach(TECController conScopeCon in conScope.Controllers)
+            {
+                foreach(TECController con in controllers)
+                {
+                    if (conScopeCon.Guid == con.Guid)
+                    {
+                        controllersToLink.Add(con);
+                        break;
+                    }
+                }
+            }
+            conScope.Controllers = controllersToLink;
+        }
+        static private void linkPanelsInControlledScope(ObservableCollection<TECPanel> panels, TECControlledScope conScope)
+        {
+            ObservableCollection<TECPanel> panelsToLink = new ObservableCollection<TECPanel>();
+            foreach(TECPanel conScopePanel in conScope.Panels)
+            {
+                foreach(TECPanel panel in panels)
+                {
+                    if (conScopePanel.Guid == panel.Guid)
+                    {
+                        panelsToLink.Add(panel);
+                        break;
+                    }
+                }
+            }
+            conScope.Panels = panelsToLink;
+        }
+        //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
+        //{
+        //    var linkedList = new ObservableCollection<TECScope>();
+        //    foreach(TECScope refScope in (IList)scopeReferenceList)
+        //    {
+        //        foreach(TECScope objectScope in (IList)scopeObjectList)
+        //        {
+        //            if(refScope.Guid == objectScope.Guid)
+        //            {
+        //                linkedList.Add(objectScope as TECScope);
+        //            }
+        //        }
+        //    }
+        //    scopeReferenceList = linkedList;
+        //}
         #endregion Link Methods
 
     }
