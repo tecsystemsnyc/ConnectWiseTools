@@ -212,6 +212,7 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("EquipmentQuantity");
             RaisePropertyChanged("PriceWithEquipment");
+            RaisePropertyChanged("TotalBudgetPrice");
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
