@@ -186,6 +186,9 @@
     <Compile Include="DataGrids\ScopeTreeGridControl.xaml.cs">
       <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StatusBarControl.xaml.cs">
+      <DependentUpon>StatusBarControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,7 @@
     <Compile Include="ViewModelExtensions\MaterialsCostsExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\StatusBarExtension.cs" />
     <Compile Include="ViewModels\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetViewModel.cs" />
     <Compile Include="ViewModels\ControlledScopeViewModel.cs" />
@@ -353,6 +357,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ScopeTreeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StatusBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

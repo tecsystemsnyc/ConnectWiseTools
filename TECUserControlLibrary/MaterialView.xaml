@@ -185,15 +185,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <Button Grid.Column="0" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddPanelTypeCommand}"/>
         </Grid>
-        <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
-                                          Grid.Row="7" Grid.RowSpan="1"
-                                          Margin="5"/>
         <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
-                                    Grid.Row="7" Grid.Column="1"/>
+                                    Grid.Row="7" Grid.Column="1"
+                                    Margin="5"/>
     </Grid>
 </UserControl>

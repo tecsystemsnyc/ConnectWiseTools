@@ -120,11 +120,32 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private string _panelTypeName;
+        public string PanelTypeName
+        {
+            get { return _panelTypeName; }
+            set
+            {
+                _panelTypeName = value;
+                RaisePropertyChanged("PanelTypeName");
+            }
+        }
+        private double _panelTypeCost;
+        public double PanelTypeCost
+        {
+            get { return _panelTypeCost; }
+            set
+            {
+                _panelTypeCost = value;
+                RaisePropertyChanged("PanelTypeCost");
+            }
+        }
 
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
         public ICommand AddAssociatedCostCommand { get; private set; }
+        public ICommand AddPanelTypeCommand { get; private set; }
         #endregion
 
         #region Delegates
@@ -145,7 +166,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
             AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
-            AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute);
+            AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
+            AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
         }
 
         private void addConnectionTypeExecute()
@@ -190,6 +212,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else
             {
                 return true;
+            }
+        }
+        private void addPanelTypeExecute()
+        {
+            var panelType = new TECPanelType();
+            panelType.Name = PanelTypeName;
+            panelType.Cost = PanelTypeCost;
+
+            Templates.PanelTypeCatalog.Add(panelType);
+            PanelTypeName = "";
+            PanelTypeCost = 0;
+        }
+        private bool canAddPanelTypeExecute()
+        {
+            if(PanelTypeName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

@@ -400,8 +400,51 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECManufacturer _controllerManufacturer;
-        
+
         #endregion //Device Interface Properties
+
+        #region Panel Interface Properties
+        private string _panelName;
+        public string PanelName
+        {
+            get { return _panelName; }
+            set
+            {
+                _panelName = value;
+                RaisePropertyChanged("PanelName");
+            }
+        }
+        private string _panelDescription;
+        public string PanelDescription
+        {
+            get { return _panelDescription; }
+            set
+            {
+                _panelDescription = value;
+                RaisePropertyChanged("PanelDescription");
+            }
+        }
+        private ObservableCollection<TECAssociatedCost> _panelAssociatedCosts;
+        public ObservableCollection<TECAssociatedCost> PanelAssociatedCosts
+        {
+            get { return _panelAssociatedCosts; }
+            set
+            {
+                _panelAssociatedCosts = value;
+                RaisePropertyChanged("PanelAssociatedCosts");
+            }
+        }
+        private ObservableCollection<TECTag> _panelTags;
+        public ObservableCollection<TECTag> PanelTags
+        {
+            get { return _panelTags; }
+            set
+            {
+                _panelTags = value;
+                RaisePropertyChanged("PanelTags");
+            }
+        }
+        #endregion
 
         #region Scope Collections
         private ObservableCollection<TECSystem> _systemItemsCollection;
