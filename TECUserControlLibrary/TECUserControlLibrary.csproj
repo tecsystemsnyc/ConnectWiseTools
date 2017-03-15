@@ -103,6 +103,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddAssociatedCostsControl.xaml.cs">
+      <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddPanelControl.xaml.cs">
+      <DependentUpon>AddPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddTagControl.xaml.cs">
+      <DependentUpon>AddTagControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
@@ -132,6 +141,9 @@
     </Compile>
     <Compile Include="DataGrids\PanelsGrid.xaml.cs">
       <DependentUpon>PanelsGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\PanelTypeGridControl.xaml.cs">
+      <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
@@ -212,6 +224,18 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VisibilityModel.cs" />
+    <Page Include="AddAssociatedCostsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddTagControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AssociatedCostsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -245,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\PanelsGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\PanelTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

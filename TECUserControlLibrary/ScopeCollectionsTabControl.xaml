@@ -309,6 +309,14 @@
                      Visibility="{Binding Path=ViewModel.ControlledScopeVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControlledScopeItemsCollection}"/>
             </TabItem>
+            <TabItem Header="Panels"
+                     Visibility="{Binding Path=ViewModel.PanelsVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.PanelsItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Add Panel"
+                     Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
+                <local:AddPanelControl ViewModel="{Binding}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
