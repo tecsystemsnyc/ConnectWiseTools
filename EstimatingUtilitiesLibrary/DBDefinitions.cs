@@ -1183,11 +1183,11 @@ namespace EstimatingUtilitiesLibrary
     public class ControlledScopeSystemTable : TableBase
     {
         public static new string TableName = "TECControlledScopeTECSystem";
-        public static Type ObjectType = typeof(TECControlledScope);
-        public static Type ReferenceType = typeof(TECSystem);
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static Type SystemType = typeof(TECSystem);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,
@@ -1195,8 +1195,8 @@ namespace EstimatingUtilitiesLibrary
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            ControlledScopeType,
+            SystemType
         };
     }
     public class ControlledScopeConnectionTable : TableBase

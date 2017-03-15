@@ -581,7 +581,24 @@ namespace Tests
             testConnection.Controller = expectedController;
             testConnection.Scope.Add(subScope);
 
+            TECConnection controlledConnection = new TECConnection();
+            testConnection.ConduitType = testConduitType;
+            testConnection.Length = 24;
+            testConnection.Controller = expectedController;
+            testConnection.Scope.Add(subScope);
+
             templates.ConnectionTemplates.Add(testConnection);
+
+            //Controlled Scope
+            TECControlledScope testConScope = new TECControlledScope();
+            testConScope.Name = "Test Controlled Scope";
+            testConScope.Description = "Test Description";
+            testConScope.Systems.Add(system.DragDropCopy() as TECSystem);
+            testConScope.Panels.Add(panel.DragDropCopy() as TECPanel);
+            testConScope.Controllers.Add(expectedController.DragDropCopy() as TECController);
+            testConScope.Connections.Add(controlledConnection);
+
+            templates.ControlledScopeTemplates.Add(testConScope);
 
             return templates;
         }

@@ -467,11 +467,55 @@ namespace Tests
         public void SaveAs_Templates_PanelType()
         {
             //Arrange
-            TECPanelType expectedCost = expectedTemplates.PanelTypeCatalog[0];
-            TECPanelType actualCost = expectedTemplates.PanelTypeCatalog[0];
+            TECPanelType expectedPanelType = expectedTemplates.PanelTypeCatalog[0];
+            TECPanelType actualPanelType = actualTemplates.PanelTypeCatalog[0];
 
-            Assert.AreEqual(expectedCost.Name, expectedTemplates.PanelTypeCatalog[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedTemplates.PanelTypeCatalog[0].Cost);
+            Assert.AreEqual(expectedPanelType.Name, actualPanelType.Name);
+            Assert.AreEqual(expectedPanelType.Cost, actualPanelType.Cost);
+        }
+
+        [TestMethod]
+        public void SaveAs_Templates_ControlledScope()
+        {
+            //Arrange
+            TECControlledScope expectedConScope = expectedTemplates.ControlledScopeTemplates[0];
+            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
+
+            TECSystem expectedSystem = null;
+            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            {
+                if (sys.Name == "Test System")
+                {
+                    expectedSystem = sys;
+                    break;
+                }
+            }
+            TECPanel expectedPanel = null;
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Name == "Test Panel")
+                {
+                    expectedPanel = panel;
+                    break;
+                }
+            }
+            TECController expectedController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Name == "Test Controller")
+                {
+                    expectedController = controller;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
+            Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
+            Assert.AreEqual(expectedSystem, actualConScope.Systems[0]);
+            Assert.AreEqual(expectedPanel, actualConScope.Panels[0]);
+            Assert.AreEqual(expectedController, actualConScope.Controllers[0]);
+            Assert.AreEqual(42, actualConScope.Connections[0].Length);
         }
     }
 }

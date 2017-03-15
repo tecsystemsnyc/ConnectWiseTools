@@ -121,20 +121,20 @@ namespace EstimatingUtilitiesLibrary
             
             templates = getTemplatesInfo();
             templates.Labor = getLaborConstsInTemplates(templates);
-            templates.SystemTemplates = getAllSystems();
+            templates.SystemTemplates = getOrphanSystems();
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.DeviceCatalog = getAllDevices();
             templates.Tags = getAllTags();
             templates.ManufacturerCatalog = getAllManufacturers();
-            templates.ControllerTemplates = getControllers();
+            templates.ControllerTemplates = getOrphanControllers();
             templates.ConnectionTypeCatalog = getConnectionTypes();
             templates.ConnectionTemplates = getConnections();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
             templates.MiscWiringTemplates = getMiscWiring();
             templates.MiscCostTemplates = getMiscCosts();
-            templates.PanelTemplates = getPanels();
+            templates.PanelTemplates = getOrphanPanels();
             templates.PanelTypeCatalog = getPanelTypes();
             templates.ControlledScopeTemplates = getControlledScope();
             ModelLinkingHelper.LinkTemplates(templates);
@@ -546,6 +546,25 @@ namespace EstimatingUtilitiesLibrary
             { systems.Add(getSystemFromRow(row)); }
             return systems;
         }
+        static private ObservableCollection<TECSystem> getOrphanSystems()
+        {
+            //Returns the systems that are not in the ControlledScopeSystem table.
+            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+
+            string command = "select * from " + SystemTable.TableName;
+            command += " where " + SystemTable.SystemID.Name + " not in ";
+            command += "(select " + ControlledScopeSystemTable.SystemID.Name;
+            command += " from " + ControlledScopeSystemTable.TableName + ")";
+
+            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in systemsDT.Rows)
+            {
+                systems.Add(getSystemFromRow(row));
+            }
+
+            return systems;
+        }
+
         static private ObservableCollection<TECEquipment> getOrphanEquipment()
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
@@ -833,6 +852,24 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
+        static private ObservableCollection<TECController> getOrphanControllers()
+        {
+            //Returns the controllers that are not in the ControlledScopeController table.
+            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
+
+            string command = "select * from " + ControllerTable.TableName;
+            command += " where " + ControllerTable.ControllerID.Name + " not in ";
+            command += "(select " + ControlledScopeControllerTable.ControllerID.Name;
+            command += " from " + ControlledScopeControllerTable.TableName + ")";
+
+            DataTable controllersDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in controllersDT.Rows)
+            {
+                controllers.Add(getControllerFromRow(row));
+            }
+
+            return controllers;
+        }
         static private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
@@ -1024,6 +1061,24 @@ namespace EstimatingUtilitiesLibrary
 
             DataTable panelTypesDT = SQLiteDB.getDataFromTable(PanelTable.TableName);
             foreach (DataRow row in panelTypesDT.Rows)
+            {
+                panels.Add(getPanelFromRow(row));
+            }
+
+            return panels;
+        }
+        static private ObservableCollection<TECPanel> getOrphanPanels()
+        {
+            //Returns the panels that are not in the ControlledScopePanel table.
+            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
+
+            string command = "select * from " + PanelTable.TableName;
+            command += " where " + PanelTable.PanelID.Name + " not in ";
+            command += "(select " + ControlledScopePanelTable.PanelID.Name;
+            command += " from " + ControlledScopePanelTable.TableName + ")";
+
+            DataTable panelsDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in panelsDT.Rows)
             {
                 panels.Add(getPanelFromRow(row));
             }
@@ -1965,6 +2020,32 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(connection, templates);
                 if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
+            }
+            foreach(TECControlledScope conScope in templates.ControlledScopeTemplates)
+            {
+                saveFullControlledScope(conScope, templates);
+            }
+        }
+
+        private static void saveFullControlledScope(TECControlledScope conScope, TECTemplates templates)
+        {
+            addObject(conScope, templates);
+            saveScopeChildProperties(conScope);
+            foreach(TECSystem sys in conScope.Systems)
+            {
+                addObject(sys, conScope);
+            }
+            foreach(TECPanel panel in conScope.Panels)
+            {
+                addObject(panel, conScope);
+            }
+            foreach(TECController control in conScope.Controllers)
+            {
+                addObject(control, conScope);
+            }
+            foreach(TECConnection connect in conScope.Connections)
+            {
+                addObject(connect, conScope);
             }
         }
 
