@@ -38,10 +38,12 @@
                   Grid.Row="2" Grid.Column="1"
                   Margin="2"/>
         <local:AddAssociatedCostsControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                         AssociatedCostList="{Binding AssociatedCostList}"
+                                         AssociatedCostList="{Binding AssociatedCostSelections}"
+                                         AddAssociatedCostCommand="{Binding AddAssociatedCostToPanelCommand}"
                                          Grid.Row="3" Grid.ColumnSpan="2"/>
         <local:AddTagControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                             TagList="{Binding TagList}"
+                             TagList="{Binding TagSelections}"
+                             AddTagCommand="{Binding AddTagToPanelCommand}"
                              Grid.Row="4" Grid.ColumnSpan="2"/>
 
         <Button Content="Add Panel" Command="{Binding AddPanelCommand}"

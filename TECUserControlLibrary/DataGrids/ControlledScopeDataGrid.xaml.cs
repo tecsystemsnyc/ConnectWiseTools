@@ -25,23 +25,7 @@ namespace TECUserControlLibrary.DataGrids
         #region DPs
 
         /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
-        /// </summary>
-        public TECControlledScope SelectedControlledScope
-        {
-            get { return (TECControlledScope)GetValue(SelectedControlledScopeProperty); }
-            set { SetValue(ControlledScopeSourceProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the DevicesSource dependency property
-        /// </summary>
-        public static readonly DependencyProperty SelectedControlledScopeProperty =
-            DependencyProperty.Register("SelectedControlledScope", typeof(TECControlledScope),
-              typeof(ControlledScopeDataGrid), new PropertyMetadata(default(TECControlledScope)));
-
-        /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
+        /// Gets or sets the ControlledScopeSource which is displayed
         /// </summary>
         public ObservableCollection<TECControlledScope> ControlledScopeSource
         {
@@ -50,7 +34,7 @@ namespace TECUserControlLibrary.DataGrids
         }
 
         /// <summary>
-        /// Identified the DevicesSource dependency property
+        /// Identified the ControlledScopeSource dependency property
         /// </summary>
         public static readonly DependencyProperty ControlledScopeSourceProperty =
             DependencyProperty.Register("ControlledScopeSource", typeof(ObservableCollection<TECControlledScope>),
