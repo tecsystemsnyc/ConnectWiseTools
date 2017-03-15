@@ -28,9 +28,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _bid = value;
-                RaisePropertyChanged("Bid");
-                RaisePropertyChanged("BudgetedSystems");
-                RaisePropertyChanged("UnbudgetedSystems");
+                raiseBudgetChanges();
                 setupBid(value);
             }
         }
@@ -89,9 +87,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _manualAdjustmentAmount = Math.Ceiling(BudgetSubTotal*(value/100));
-                RaisePropertyChanged("ManualAdjustmentPercentage");
-                RaisePropertyChanged("ManualAdjustmentAmount");
-                RaisePropertyChanged("TotalPrice");
+                raiseBudgetChanges();
             }
         }
 
@@ -104,9 +100,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _manualAdjustmentAmount = Math.Ceiling(value);
-                RaisePropertyChanged("ManualAdjustmentPercentage");
-                RaisePropertyChanged("ManualAdjustmentAmount");
-                RaisePropertyChanged("TotalPrice");
+                raiseBudgetChanges();
             }
         }
 
