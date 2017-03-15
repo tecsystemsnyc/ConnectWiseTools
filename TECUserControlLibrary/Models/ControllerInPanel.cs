@@ -47,7 +47,6 @@ namespace TECUserControlLibrary.Models
             {
                 Panel.Controllers.Remove(Controller);
             }
-            
         }
 
         public override object Copy()

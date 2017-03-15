@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -24,12 +25,19 @@
                   CanUserAddRows="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding Controller}"
                                         Header="Controller" Width="Auto"
                                         DisplayMemberPath="Name"/>
-                
+                <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Connection.Length, UpdateSourceTrigger=LostFocus}" Header="Length" Width="Auto"
+                                    IsReadOnly="{Binding Connection, Converter={cnvt:NullToBoolConverter}}"/>
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding Connection.ConduitType}"
+                                        Header="Conduit" Width="Auto"
+                                        IsReadOnly="{Binding Connection, Converter={cnvt:NullToBoolConverter}}"
+                                        DisplayMemberPath="Name"/>
+
             </DataGrid.Columns>
            
         </DataGrid>
