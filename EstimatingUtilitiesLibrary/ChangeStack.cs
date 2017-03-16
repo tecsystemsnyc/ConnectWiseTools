@@ -688,7 +688,7 @@ namespace EstimatingUtilitiesLibrary
         {
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-            
+
             if (!isDoing){ RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {

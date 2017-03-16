@@ -4,6 +4,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using TECUserControlLibrary.Models;
@@ -28,6 +29,17 @@ namespace TECUserControlLibrary.ViewModels
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
         #endregion
+
+        private Visibility _debugVisibilty;
+        public Visibility DebugVisibility
+        {
+            get { return _debugVisibilty; }
+            set
+            {
+                _debugVisibilty = value;
+                RaisePropertyChanged("DebugVisibility");
+            }
+        }
 
         private ObservableCollection<TECController> _controllerSelections;
         public ObservableCollection<TECController> ControllerSelections
@@ -88,12 +100,13 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedControlledScope = value;
                 if(value != null)
                 {
+                    ControllerSelections = new ObservableCollection<TECController>();
+                    ControllerCollection = new ObservableCollection<ControllerInPanel>();
+                    PanelsCollection = new ObservableCollection<TECPanel>();
                     updateControllerSelections();
                     updateControllerCollection();
                     updatePanels();
                     updateSubScopeConnections();
-                    ControllerSelections = new ObservableCollection<TECController>();
-                    SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
                     registerChanges();
                 }
                 RaisePropertyChanged("SelectedControlledScope");
@@ -122,6 +135,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             PanelsCollection = new ObservableCollection<TECPanel>();
+            DebugVisibility = Visibility.Collapsed;
             setupVMs();
         }
 
@@ -130,6 +144,11 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid = new ScopeDataGridExtension(Templates);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -157,7 +176,8 @@ namespace TECUserControlLibrary.ViewModels
             var targetCollection = dropInfo.TargetCollection;
 
             Type sourceType = sourceItem.GetType();
-            sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+            if(sourceItem is TECScope)
+            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
             {
@@ -171,24 +191,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 ((IList)dropInfo.TargetCollection).Add(sourceItem);
                 if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
+                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
             }
             else
             {
                 if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-                }
+                {  ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
                 else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
             }
         }
 
@@ -212,7 +224,6 @@ namespace TECUserControlLibrary.ViewModels
                 controllerInPanelToAdd.Controller = controller;
                 controllerInPanelToAdd.Panel = panelToAdd;
                 ControllerCollection.Add(controllerInPanelToAdd);
-
             }
         }
         private void updatePanels()
@@ -221,6 +232,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void updateSubScopeConnections()
         {
+            SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             foreach (TECSystem system in SelectedControlledScope.Systems)
             {
                 foreach(TECEquipment equipment in system.Equipment)
@@ -229,6 +241,8 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         var subConnectionToAdd = new SubScopeConnection();
                         subConnectionToAdd.SubScope = subScope;
+                        subConnectionToAdd.ParentSystem = system;
+                        subConnectionToAdd.ParentEquipment = equipment;
                         foreach(TECConnection connection in SelectedControlledScope.Connections)
                         {
                             if (connection.Scope.Contains(subScope))
@@ -248,25 +262,29 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void SubConnectionToAdd_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void SubConnectionToAdd_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            handlePropertyChanged(e);
+        }
+        private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
                 PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                if(e.PropertyName == "Connection")
+                if (e.PropertyName == "Connection")
                 {
-                    if(args.OldValue != null)
+                    if (args.OldValue != null)
                     {
                         SelectedControlledScope.Connections.Remove(args.OldValue as TECConnection);
                     }
-                    if(args.NewValue != null)
+                    if (args.NewValue != null)
                     {
                         SelectedControlledScope.Connections.Add(args.NewValue as TECConnection);
                     }
                 }
             }
         }
-
+        
         private void registerChanges()
         {
             SelectedControlledScope.Systems.CollectionChanged += collectionChanged;

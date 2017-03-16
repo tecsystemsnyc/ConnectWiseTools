@@ -26,18 +26,17 @@
 
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding Controller}"
+                                        SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged}"
                                         Header="Controller" Width="Auto"
                                         DisplayMemberPath="Name"/>
-                <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Connection.Length, UpdateSourceTrigger=LostFocus}" Header="Length" Width="Auto"
-                                    IsReadOnly="{Binding Connection, Converter={cnvt:NullToBoolConverter}}"/>
+                <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding ParentEquipment.Name}" Header="Equipment" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Point" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Connection.Length, UpdateSourceTrigger=LostFocus}" Header="Length" Width="Auto"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding Connection.ConduitType}"
                                         Header="Conduit" Width="Auto"
-                                        IsReadOnly="{Binding Connection, Converter={cnvt:NullToBoolConverter}}"
                                         DisplayMemberPath="Name"/>
-
             </DataGrid.Columns>
            
         </DataGrid>
