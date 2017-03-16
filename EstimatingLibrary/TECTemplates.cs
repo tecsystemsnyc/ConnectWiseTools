@@ -28,7 +28,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
         private ObservableCollection<TECPanelType> _panelTypeCatalog;
         private ObservableCollection<TECPanel> _panelTemplates;
-        private ObservableCollection<TECConnection> _connectionTemplates;
 
         public Guid Guid
         {
@@ -225,18 +224,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("PanelTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECConnection> ConnectionTemplates
-        {
-            get { return _connectionTemplates; }
-            set
-            {
-                var temp = this.Copy();
-                ConnectionTemplates.CollectionChanged -= CollectionChanged;
-                _connectionTemplates = value;
-                ConnectionTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ConnectionTemplates", temp, this);
-            }
-        }
 
         public override object Copy()
         {
@@ -272,7 +259,6 @@ namespace EstimatingLibrary
             _panelTypeCatalog = new ObservableCollection<TECPanelType>();
             _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
             _panelTemplates = new ObservableCollection<TECPanel>();
-            _connectionTemplates = new ObservableCollection<TECConnection>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -289,7 +275,6 @@ namespace EstimatingLibrary
             PanelTemplates.CollectionChanged += CollectionChanged;
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
             ControlledScopeTemplates.CollectionChanged += CollectionChanged;
-            ConnectionTemplates.CollectionChanged += CollectionChanged;
 
             Labor.PropertyChanged += objectPropertyChanged;
         }
@@ -339,10 +324,6 @@ namespace EstimatingLibrary
             foreach(TECControlledScope scope in templatesSource.ControlledScopeTemplates)
             {
                 ControlledScopeTemplates.Add(scope);
-            }
-            foreach(TECConnection connection in templatesSource.ConnectionTemplates)
-            {
-                ConnectionTemplates.Add(connection);
             }
         }
 

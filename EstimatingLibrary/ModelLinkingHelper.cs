@@ -39,8 +39,6 @@ namespace EstimatingLibrary
             linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
             linkAssociatedCostsWithScope(templates);
             linkPanelTypesInPanel(templates.PanelTypeCatalog, templates.PanelTemplates);
-            linkConduitTypesInTemplates(templates);
-            linkConnectionsInTemplates(templates);
             linkControllersInPanels(templates.ControllerTemplates, templates.PanelTemplates);
             linkControlledScope(templates.ControlledScopeTemplates, templates);
         }
@@ -359,9 +357,12 @@ namespace EstimatingLibrary
             {
                 foreach (TECManufacturer manufacturer in mans)
                 {
-                    if (controller.Manufacturer.Guid == manufacturer.Guid)
+                    if (controller.Manufacturer != null)
                     {
-                        controller.Manufacturer = manufacturer;
+                        if (controller.Manufacturer.Guid == manufacturer.Guid)
+                        {
+                            controller.Manufacturer = manufacturer;
+                        }
                     }
                 }
             }
@@ -475,10 +476,6 @@ namespace EstimatingLibrary
         {
             linkConduitTypeWithConnections(bid.ConduitTypes, bid.Connections);
         }
-        static private void linkConduitTypesInTemplates(TECTemplates templates)
-        {
-            linkConduitTypeWithConnections(templates.ConduitTypeCatalog, templates.ConnectionTemplates);
-        }
       
         static private void linkConduitTypeWithConnections(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECConnection> connections)
         {
@@ -503,7 +500,7 @@ namespace EstimatingLibrary
             {
                 foreach(TECPanelType type in panelTypes)
                 {
-                    if(type != null)
+                    if (panel.Type != null)
                     {
                         if (panel.Type.Guid == type.Guid)
                         {
@@ -601,25 +598,7 @@ namespace EstimatingLibrary
                 linkConnectionsInEquipment(connections, equipment);
             }
         }
-        static private void linkConnectionsInTemplates(TECTemplates templates)
-        {
-            foreach(TECSystem system in templates.SystemTemplates)
-            {
-                linkConnectionsInSystem(templates.ConnectionTemplates, system);
-            }
-            foreach(TECEquipment equipment in templates.EquipmentTemplates)
-            {
-                linkConnectionsInEquipment(templates.ConnectionTemplates, equipment);
-            }
-            foreach(TECSubScope subScope in templates.SubScopeTemplates)
-            {
-                linkConnectionsInSubScope(templates.ConnectionTemplates, subScope);
-            }
-            foreach(TECController controller in templates.ControllerTemplates)
-            {
-                linkConnectionsInController(templates.ConnectionTemplates, controller);
-            }
-        }
+        
         //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
         //{
         //    var linkedList = new ObservableCollection<TECScope>();

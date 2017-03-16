@@ -13,7 +13,7 @@ namespace Tests
     [TestClass]
     public class SaveAsTemplatesTests
     {
-        private const bool DEBUG = false;
+        private const bool DEBUG = true;
 
         static TECTemplates expectedTemplates;
         static TECSystem expectedSystem;
@@ -432,7 +432,7 @@ namespace Tests
         {
             //Arrange
             TECPanel expectedPanel = expectedTemplates.PanelTemplates[0];
-            TECPanel actualPanel = expectedTemplates.PanelTemplates[0];
+            TECPanel actualPanel = actualTemplates.PanelTemplates[0];
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
@@ -444,11 +444,11 @@ namespace Tests
         {
             //Arrange
             TECMiscCost expectedCost = expectedTemplates.MiscCostTemplates[0];
-            TECMiscCost actualCost = expectedTemplates.MiscCostTemplates[0];
+            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
 
-            Assert.AreEqual(expectedCost.Name, expectedTemplates.MiscCostTemplates[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedTemplates.MiscCostTemplates[0].Cost);
-            Assert.AreEqual(expectedCost.Quantity, expectedTemplates.MiscCostTemplates[0].Quantity);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
 
         [TestMethod]
@@ -456,11 +456,11 @@ namespace Tests
         {
             //Arrange
             TECMiscWiring expectedCost = expectedTemplates.MiscWiringTemplates[0];
-            TECMiscWiring actualCost = expectedTemplates.MiscWiringTemplates[0];
+            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
 
-            Assert.AreEqual(expectedCost.Name, expectedTemplates.MiscWiringTemplates[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedTemplates.MiscWiringTemplates[0].Cost);
-            Assert.AreEqual(expectedCost.Quantity, expectedTemplates.MiscWiringTemplates[0].Quantity);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
 
         [TestMethod]
@@ -481,40 +481,12 @@ namespace Tests
             TECControlledScope expectedConScope = expectedTemplates.ControlledScopeTemplates[0];
             TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
 
-            TECSystem expectedSystem = null;
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
-            {
-                if (sys.Name == "Test System")
-                {
-                    expectedSystem = sys;
-                    break;
-                }
-            }
-            TECPanel expectedPanel = null;
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
-            {
-                if (panel.Name == "Test Panel")
-                {
-                    expectedPanel = panel;
-                    break;
-                }
-            }
-            TECController expectedController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller.Name == "Test Controller")
-                {
-                    expectedController = controller;
-                    break;
-                }
-            }
-
             //Assert
             Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
             Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
-            Assert.AreEqual(expectedSystem, actualConScope.Systems[0]);
-            Assert.AreEqual(expectedPanel, actualConScope.Panels[0]);
-            Assert.AreEqual(expectedController, actualConScope.Controllers[0]);
+            Assert.AreEqual(expectedConScope.Systems[0].Name, actualConScope.Systems[0].Name);
+            Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
+            Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
             Assert.AreEqual(42, actualConScope.Connections[0].Length);
         }
     }
