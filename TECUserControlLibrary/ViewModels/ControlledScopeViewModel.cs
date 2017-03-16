@@ -236,6 +236,10 @@ namespace TECUserControlLibrary.ViewModels
                                 subConnectionToAdd.Connection = connection;
                                 subConnectionToAdd.Controller = connection.Controller;
                             }
+                            else
+                            {
+                                subConnectionToAdd.Controller = null;
+                            }
                         }
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
                         subConnectionToAdd.PropertyChanged += SubConnectionToAdd_PropertyChanged;
