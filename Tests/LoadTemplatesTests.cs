@@ -279,16 +279,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Templates_Connection()
-        {
-            //Arrange
-            TECConnection actualConnection = actualTemplates.ConnectionTemplates[0];
-
-            //Assert
-            Assert.AreEqual(420, actualConnection.Length);
-        }
-
-        [TestMethod]
         public void Load_Templates_ConduitType()
         {
             Assert.AreEqual("Test ConduitType", actualConduitType.Name);
@@ -350,6 +340,14 @@ namespace Tests
             TECPanelType actualPanelType = actualPanel.Type;
 
             //Assert
+            foreach(TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Name == "Controlled Panel")
+                {
+                    Assert.Fail();
+                }
+            }
+
             Assert.AreEqual("Test Panel", actualPanel.Name);
             Assert.AreEqual("Test Panel Type", actualPanelType.Name);
         }
@@ -538,16 +536,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Templates_Linked_ConduitTypes()
-        {
-            foreach (TECConnection connection in actualTemplates.ConnectionTemplates)
-            {
-                if ((connection.ConduitType != null) && (!actualTemplates.ConduitTypeCatalog.Contains(connection.ConduitType)))
-                { Assert.Fail("Conduit types in connection templates not linked"); }
-            }
-        }
-
-        [TestMethod]
         public void Load_Templates_Linked_Tags()
         {
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -662,45 +650,6 @@ namespace Tests
             }
 
             Assert.IsTrue(true, "All Connection types linked");
-        }
-
-        [TestMethod]
-        public void Load_Templates_Linked_ControlledScope()
-        {
-            foreach (TECControlledScope conScope in actualTemplates.ControlledScopeTemplates)
-            {
-                foreach (TECConnection conn in conScope.Connections)
-                {
-                    if (!(actualTemplates.ConnectionTemplates.Contains(conn)))
-                    {
-                        Assert.Fail("Connection not linked in controlled scope.");
-                    }
-                }
-
-                foreach (TECSystem sys in conScope.Systems)
-                {
-                    if (!(actualTemplates.SystemTemplates.Contains(sys)))
-                    {
-                        Assert.Fail("System not linked in controlled scope.");
-                    }
-                }
-
-                foreach (TECController controller in conScope.Controllers)
-                {
-                    if (!(actualTemplates.ControllerTemplates.Contains(controller)))
-                    {
-                        Assert.Fail("Controller not linked in controlled scope.");
-                    }
-                }
-
-                foreach (TECPanel panel in conScope.Panels)
-                {
-                    if (!(actualTemplates.PanelTemplates.Contains(panel)))
-                    {
-                        Assert.Fail("Panel not linked in controlled scope.");
-                    }
-                }
-            }
         }
     }
 }

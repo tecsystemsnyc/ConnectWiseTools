@@ -464,6 +464,9 @@ namespace Tests
             system.Description = "System Description";
             system.BudgetPriceModifier = 587.3;
 
+            TECSystem controlledSystem = new TECSystem();
+            controlledSystem.Name = "Controlled System";
+
             TECEquipment sysEquip = new TECEquipment();
             sysEquip.Name = "System Equipment";
             sysEquip.Description = "Child Equipment";
@@ -529,16 +532,23 @@ namespace Tests
             templates.SubScopeTemplates.Add(subScope);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid());
+            TECController expectedController = new TECController();
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
 
+            TECController controlledController = new TECController();
+            controlledController.Name = "Controlled Controller";
+
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;
             ioToAdd.Quantity = 5;
+
             expectedController.IO.Add(ioToAdd);
             expectedController.Manufacturer = testMan;
+
+            controlledController.IO.Add(ioToAdd);
+            controlledController.Manufacturer = testMan;
 
             templates.ControllerTemplates.Add(expectedController);
 
@@ -572,30 +582,27 @@ namespace Tests
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
 
+            TECPanel controlledPanel = new TECPanel();
+            controlledPanel.Type = panelType;
+            controlledPanel.Name = "Controlled Panel";
+
             templates.PanelTemplates.Add(panel);
 
             //Connections
-            TECConnection testConnection = new TECConnection();
-            testConnection.ConduitType = testConduitType;
-            testConnection.Length = 42;
-            testConnection.Controller = expectedController;
-            testConnection.Scope.Add(subScope);
-
             TECConnection controlledConnection = new TECConnection();
-            testConnection.ConduitType = testConduitType;
-            testConnection.Length = 24;
-            testConnection.Controller = expectedController;
-            testConnection.Scope.Add(subScope);
+            controlledConnection.ConduitType = testConduitType;
+            controlledConnection.Length = 42;
+            controlledConnection.Controller = controlledController;
 
-            templates.ConnectionTemplates.Add(testConnection);
+            controlledController.Connections.Add(controlledConnection);
 
             //Controlled Scope
             TECControlledScope testConScope = new TECControlledScope();
             testConScope.Name = "Test Controlled Scope";
             testConScope.Description = "Test Description";
-            testConScope.Systems.Add(system.DragDropCopy() as TECSystem);
-            testConScope.Panels.Add(panel.DragDropCopy() as TECPanel);
-            testConScope.Controllers.Add(expectedController.DragDropCopy() as TECController);
+            testConScope.Systems.Add(controlledSystem.DragDropCopy() as TECSystem);
+            testConScope.Panels.Add(controlledPanel.DragDropCopy() as TECPanel);
+            testConScope.Controllers.Add(controlledController.DragDropCopy() as TECController);
             testConScope.Connections.Add(controlledConnection);
 
             templates.ControlledScopeTemplates.Add(testConScope);

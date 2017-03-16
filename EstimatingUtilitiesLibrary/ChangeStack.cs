@@ -143,10 +143,6 @@ namespace EstimatingUtilitiesLibrary
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECConnection connection in Templates.ConnectionTemplates)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
-            }
         }
         private void registerSubScope(TECSubScope subScope)
         {

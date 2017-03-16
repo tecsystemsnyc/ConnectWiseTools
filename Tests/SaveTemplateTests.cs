@@ -14,7 +14,7 @@ namespace Tests
     [TestClass]
     public class SaveTemplateTests
     {
-        static bool DEBUG = false;
+        static bool DEBUG = true;
 
         static TECTemplates OGTemplates;
         TECTemplates templates;

@@ -1202,11 +1202,11 @@ namespace EstimatingUtilitiesLibrary
     public class ControlledScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECControlledScopeTECConnection";
-        public static Type ObjectType = typeof(TECControlledScope);
-        public static Type ReferenceType = typeof(TECConnection);
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static Type ConnectionType = typeof(TECConnection);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,
@@ -1214,8 +1214,8 @@ namespace EstimatingUtilitiesLibrary
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            ControlledScopeType,
+            ConnectionType
         };
     }
     public class ControlledScopeControllerTable : TableBase
@@ -1240,11 +1240,11 @@ namespace EstimatingUtilitiesLibrary
     public class ControlledScopePanelTable : TableBase
     {
         public static new string TableName = "TECControlledScopeTECPanel";
-        public static Type ObjectType = typeof(TECControlledScope);
-        public static Type ReferenceType = typeof(TECPanel);
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static Type PanelType = typeof(TECPanel);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField PanelID = new TableField("PanelID", "TEXT", PanelType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,
@@ -1252,8 +1252,8 @@ namespace EstimatingUtilitiesLibrary
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            ControlledScopeType,
+            PanelType
         };
     }
 

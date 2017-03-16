@@ -129,7 +129,6 @@ namespace EstimatingUtilitiesLibrary
             templates.ManufacturerCatalog = getAllManufacturers();
             templates.ControllerTemplates = getOrphanControllers();
             templates.ConnectionTypeCatalog = getConnectionTypes();
-            templates.ConnectionTemplates = getConnections();
             templates.ConduitTypeCatalog = getConduitTypes();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
             templates.MiscWiringTemplates = getMiscWiring();
@@ -710,7 +709,7 @@ namespace EstimatingUtilitiesLibrary
             if (manTable.Rows.Count > 0)
             { return getManufacturerFromRow(manTable.Rows[0]); }
             else
-            { return new TECManufacturer(); }
+            { return null; }
         }
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
         {
@@ -723,7 +722,7 @@ namespace EstimatingUtilitiesLibrary
             if (connectionTypeTable.Rows.Count > 0)
             { return (getConnectionTypeFromRow(connectionTypeTable.Rows[0])); }
             else
-            { return new TECConnectionType(); }
+            { return null; }
         }
         static private TECConduitType getConduitTypeInConnection(Guid connectionID)
         {
@@ -980,7 +979,7 @@ namespace EstimatingUtilitiesLibrary
                 return new TECSystem(new Guid(row[VisualScopeScopeTable.ScopeID.Name].ToString()));
             }
             else
-            { return new TECSystem(); }
+            { return null; }
         }
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
@@ -995,7 +994,7 @@ namespace EstimatingUtilitiesLibrary
             if (manTable.Rows.Count > 0)
             { return getManufacturerFromRow(manTable.Rows[0]); }
             else
-            { return new TECManufacturer(); }
+            { return null; }
         }
         static private TECBidParameters getBidParameters(TECBid bid)
         {
@@ -1110,7 +1109,7 @@ namespace EstimatingUtilitiesLibrary
             if (manTable.Rows.Count > 0)
             { return getPanelTypeFromRow(manTable.Rows[0]); }
             else
-            { return new TECPanelType(); }
+            { return null; }
         }
         static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
         {
@@ -2015,11 +2014,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECPanel panel in templates.PanelTemplates)
             {
                 savePanel(panel, templates);
-            }
-            foreach(TECConnection connection in templates.ConnectionTemplates)
-            {
-                addObject(connection, templates);
-                if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
             }
             foreach(TECControlledScope conScope in templates.ControlledScopeTemplates)
             {
