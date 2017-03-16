@@ -359,54 +359,14 @@ namespace Tests
         {
             //Arrange
             TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
-            TECConnection expectedConn = null;
-            foreach (TECConnection conn in actualTemplates.ConnectionTemplates)
-            {
-                if (conn.Guid.ToString() == "7a99c54b-4a2c-4685-b305-683b8edf2fb7")
-                {
-                    expectedConn = conn;
-                    break;
-                }
-            }
-            if (expectedConn == null) { Assert.Fail(); }
-            TECSystem expectedSys = null;
-            foreach(TECSystem sys in actualTemplates.SystemTemplates)
-            {
-                if (sys.Guid.ToString() == "5b1fac5d-6026-4dfc-98c6-20a8ae357dfd")
-                {
-                    expectedSys = sys;
-                    break;
-                }
-            }
-            if (expectedSys == null) { Assert.Fail(); }
-            TECController expectedController = null;
-            foreach(TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller.Guid.ToString() == "721ecc05-915c-4d9a-9a78-68b11609ec52")
-                {
-                    expectedController = controller;
-                    break;
-                }
-            }
-            if (expectedController == null) { Assert.Fail(); }
-            TECPanel expectedPanel = null;
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
-            {
-                if (panel.Guid.ToString() == "510c76f3-3722-4ec6-b6fc-7d8c6cfbe44e")
-                {
-                    expectedPanel = panel;
-                    break;
-                }
-            }
-            if (expectedPanel == null) { Assert.Fail(); }
 
             //Assert
             Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
             Assert.AreEqual("Test Controlled Description", actualConScope.Description);
-            Assert.IsTrue(actualConScope.Connections.Contains(expectedConn));
-            Assert.IsTrue(actualConScope.Systems.Contains(expectedSys));
-            Assert.IsTrue(actualConScope.Controllers.Contains(expectedController));
-            Assert.IsTrue(actualConScope.Panels.Contains(expectedPanel));
+            Assert.AreEqual(420, actualConScope.Connections[0].Length);
+            Assert.AreEqual("Controlled System", actualConScope.Systems[0].Name);
+            Assert.AreEqual("Controlled Controller", actualConScope.Controllers[0].Name);
+            Assert.AreEqual("Controlled Panel", actualConScope.Panels[0].Name);
         }
 
         [TestMethod]

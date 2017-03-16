@@ -46,6 +46,38 @@ namespace EstimatingLibrary
         }
 
         #region Link Methods
+        static private void linkScopeChildren(TECScope scope, object bidOrTemp)
+        {
+            if (bidOrTemp is TECBid)
+            {
+                linkTags((bidOrTemp as TECBid).Tags, scope);
+                linkAssociatedCostsInScope((bidOrTemp as TECBid).AssociatedCostsCatalog, scope);
+                linkLocationsInScope((bidOrTemp as TECBid).Locations, scope);
+                
+            }
+            else if (bidOrTemp is TECTemplates)
+            {
+                linkTags((bidOrTemp as TECTemplates).Tags, scope);
+                linkAssociatedCostsInScope((bidOrTemp as TECTemplates).AssociatedCostsCatalog, scope);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+        static private void linkScopeChildrenInSystem(TECSystem system, object bidOrTemp)
+        {
+            linkScopeChildren(system, bidOrTemp);
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                linkScopeChildren(equip, bidOrTemp);
+                foreach(TECSubScope ss in equip.SubScope)
+                {
+                    linkScopeChildren(ss, bidOrTemp);
+                }
+            }
+        }
+
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
             //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
@@ -115,6 +147,17 @@ namespace EstimatingLibrary
                             { subScope.Location = location; }
                         }
                     }
+                }
+            }
+        }
+        static private void linkLocationsInScope(ObservableCollection<TECLocation> locations, TECScope scope)
+        {
+            foreach (TECLocation location in locations)
+            {
+                if (scope.Location != null && scope.Location.Guid == location.Guid)
+                {
+                    scope.Location = location;
+                    break;
                 }
             }
         }
@@ -475,13 +518,25 @@ namespace EstimatingLibrary
         {
             foreach(TECControlledScope scope in controlledScope)
             {
-                //linkScopeObjects(scope.Systems, templates.SystemTemplates);
-                linkSystemsInControlledScope(templates.SystemTemplates, scope);
-                //linkScopeObjects(scope.Controllers, templates.ControllerTemplates);
-                linkControllersInControlledScope(templates.ControllerTemplates, scope);
-                //linkScopeObjects(scope.Panels, templates.PanelTemplates);
-                linkPanelsInControlledScope(templates.PanelTemplates, scope);
-                linkConnectionsInControlledScope(templates.ConnectionTemplates, scope);
+                linkAllDevicesFromSystems(scope.Systems, templates.DeviceCatalog);
+                linkPanelTypesInPanel(templates.PanelTypeCatalog, scope.Panels);
+                linkConduitTypeWithConnections(templates.ConduitTypeCatalog, scope.Connections);
+                linkManufacturersWithControllers(templates.ManufacturerCatalog, scope.Controllers);
+                foreach(TECSystem sys in scope.Systems)
+                {
+                    linkConnectionsInSystem(scope.Connections, sys);
+                    linkScopeChildrenInSystem(sys, templates);
+                }
+                linkControllersInPanels(scope.Controllers, scope.Panels);
+                foreach (TECController control in scope.Controllers)
+                {
+                    linkConnectionsInController(scope.Connections, control);
+                    linkScopeChildren(control, templates);
+                }
+                foreach (TECPanel panel in scope.Panels)
+                {
+                    linkScopeChildren(panel, templates);
+                }
             }
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
@@ -564,70 +619,6 @@ namespace EstimatingLibrary
             {
                 linkConnectionsInController(templates.ConnectionTemplates, controller);
             }
-        }
-        static private void linkConnectionsInControlledScope(ObservableCollection<TECConnection> connections, TECControlledScope conScope)
-        {
-            ObservableCollection<TECConnection> connectionsToLink = new ObservableCollection<TECConnection>();
-            foreach(TECConnection conScopeConnection in conScope.Connections)
-            {
-                foreach(TECConnection templateConnection in connections)
-                {
-                    if (conScopeConnection.Guid == templateConnection.Guid)
-                    {
-                        connectionsToLink.Add(templateConnection);
-                        break;
-                    }
-                }
-            }
-            conScope.Connections = connectionsToLink;
-        }
-        static private void linkSystemsInControlledScope(ObservableCollection<TECSystem> systems, TECControlledScope conScope)
-        {
-            ObservableCollection<TECSystem> systemsToLink = new ObservableCollection<TECSystem>();
-            foreach(TECSystem conScopeSys in conScope.Systems)
-            {
-                foreach(TECSystem sys in systems)
-                {
-                    if (conScopeSys.Guid == sys.Guid)
-                    {
-                        systemsToLink.Add(sys);
-                        break;
-                    }
-                }
-            }
-            conScope.Systems = systemsToLink;
-        }
-        static private void linkControllersInControlledScope(ObservableCollection<TECController> controllers, TECControlledScope conScope)
-        {
-            ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
-            foreach(TECController conScopeCon in conScope.Controllers)
-            {
-                foreach(TECController con in controllers)
-                {
-                    if (conScopeCon.Guid == con.Guid)
-                    {
-                        controllersToLink.Add(con);
-                        break;
-                    }
-                }
-            }
-            conScope.Controllers = controllersToLink;
-        }
-        static private void linkPanelsInControlledScope(ObservableCollection<TECPanel> panels, TECControlledScope conScope)
-        {
-            ObservableCollection<TECPanel> panelsToLink = new ObservableCollection<TECPanel>();
-            foreach(TECPanel conScopePanel in conScope.Panels)
-            {
-                foreach(TECPanel panel in panels)
-                {
-                    if (conScopePanel.Guid == panel.Guid)
-                    {
-                        panelsToLink.Add(panel);
-                        break;
-                    }
-                }
-            }
-            conScope.Panels = panelsToLink;
         }
         //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
         //{
