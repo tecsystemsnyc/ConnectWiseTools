@@ -133,6 +133,7 @@ namespace Scope_Builder.ViewModel
         {
             BudgetVM.Bid = Bid;
             ScopeDataGrid.Bid = Bid;
+            LocationDataGrid.Bid = Bid;
         }
         private void setVisibility(int tIndex)
         {
