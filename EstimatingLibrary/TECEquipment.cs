@@ -39,6 +39,7 @@ namespace EstimatingLibrary
                     _budgetPrice = value;
                 }
                 NotifyPropertyChanged("BudgetPrice", temp, this);
+                Console.WriteLine("Budget price changed in equipment");
                 RaisePropertyChanged("TotalBudgetPrice");
             }
         }

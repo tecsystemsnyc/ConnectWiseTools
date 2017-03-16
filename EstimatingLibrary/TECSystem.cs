@@ -134,7 +134,7 @@ namespace EstimatingLibrary
         {
             _budgetPrice = budgetPrice;
             _equipment = equipment;
-
+            subscribeToEquipment();
             Equipment.CollectionChanged += Equipment_CollectionChanged;
         }
 
@@ -190,24 +190,6 @@ namespace EstimatingLibrary
             return cost;
         }
 
-        private void EquipmentChanged(string name)
-        {
-            if(name == "Quantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
-                RaisePropertyChanged("EquipmentQuantity");
-            } else if (name == "SubScopeQuantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-            } else if (name == "BudgetPrice")
-            {
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
-            }
-        }
-
         private void Equipment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("EquipmentQuantity");
@@ -218,12 +200,14 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    (item as TECScope).PropertyChanged += equipmentChanged; ;
                 }
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
+                    (item as TECScope).PropertyChanged -= equipmentChanged;
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -231,14 +215,34 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Edit", this, sender);
             }
 
-            subscribeToEquipment();
+        }
+
+        private void equipmentChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Console.WriteLine("Equipment in system chnaged property: " + e.PropertyName);
+            if (e.PropertyName == "Quantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("PriceWithEquipment");
+                RaisePropertyChanged("EquipmentQuantity");
+            }
+            else if (e.PropertyName == "SubScopeQuantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+            }
+            else if (e.PropertyName == "BudgetPrice")
+            {
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("PriceWithEquipment");
+            }
         }
 
         private void subscribeToEquipment()
         {
             foreach (TECEquipment scope in this.Equipment)
             {
-                scope.PropertyChanged += (equipSender, args) => this.EquipmentChanged(args.PropertyName);
+                scope.PropertyChanged += equipmentChanged;
             }
         }
 
