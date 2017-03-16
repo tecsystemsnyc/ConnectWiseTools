@@ -31,7 +31,7 @@
     <ProductName>Scope Builder</ProductName>
     <PublisherName>TECSystems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>26</ApplicationRevision>
+    <ApplicationRevision>27</ApplicationRevision>
     <ApplicationVersion>1.2.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
