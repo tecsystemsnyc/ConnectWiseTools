@@ -38,8 +38,18 @@ namespace TECUserControlLibrary.Models
             get { return _connection; }
             set
             {
-                _connection = value;
-                RaisePropertyChanged("Connection");
+                if(_connection != null)
+                {
+                    var temp = _connection.Copy();
+                    _connection = value;
+                    NotifyPropertyChanged("Connection", temp, value);
+                }
+                else
+                {
+                    _connection = value;
+                    NotifyPropertyChanged("Connection", null, value);
+                }
+                
             }
         }
 
@@ -61,7 +71,6 @@ namespace TECUserControlLibrary.Models
             {
                 Connection = null;
             }
-
         }
 
         public override object Copy()

@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ControlledScopeViewModel : ViewModelBase, IDropTarget
     {
-
+        #region Properties
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         #endregion
@@ -68,8 +68,17 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelsCollection");
             }
         }
-
-
+        private ObservableCollection<TECConduitType> _conduitTypeSelections;
+        public ObservableCollection<TECConduitType> ConduitTypeSelections
+        {
+            get { return _conduitTypeSelections; }
+            set
+            {
+                _conduitTypeSelections = value;
+                RaisePropertyChanged("ConduitTypeSelections");
+            }
+        }
+        
         private TECControlledScope _selectedControlledScope;
         public TECControlledScope SelectedControlledScope
         {
@@ -83,6 +92,8 @@ namespace TECUserControlLibrary.ViewModels
                     updateControllerCollection();
                     updatePanels();
                     updateSubScopeConnections();
+                    ControllerSelections = new ObservableCollection<TECController>();
+                    SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
                     registerChanges();
                 }
                 RaisePropertyChanged("SelectedControlledScope");
@@ -100,10 +111,13 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
+        
+        #endregion
 
         public ControlledScopeViewModel(TECTemplates templates)
         {
             Templates = templates;
+            ConduitTypeSelections = Templates.ConduitTypeCatalog;
             ControllerSelections = new ObservableCollection<TECController>();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
@@ -143,18 +157,16 @@ namespace TECUserControlLibrary.ViewModels
             var targetCollection = dropInfo.TargetCollection;
 
             Type sourceType = sourceItem.GetType();
+            sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
             {
                 var controllerInPanel = new ControllerInPanel();
                 (controllerInPanel as ControllerInPanel).Controller = sourceItem as TECController;
+                SelectedControlledScope.Controllers.Add(sourceItem as TECController);
                 sourceItem = controllerInPanel;
             }
-            else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-            }
-
+            
             if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
             {
                 ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -186,7 +198,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void updateControllerCollection()
         {
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
             foreach (TECController controller in SelectedControlledScope.Controllers)
             {
                 TECPanel panelToAdd = null;
@@ -210,7 +221,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void updateSubScopeConnections()
         {
-            foreach(TECSystem system in SelectedControlledScope.Systems)
+            foreach (TECSystem system in SelectedControlledScope.Systems)
             {
                 foreach(TECEquipment equipment in system.Equipment)
                 {
@@ -227,6 +238,26 @@ namespace TECUserControlLibrary.ViewModels
                             }
                         }
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
+                        subConnectionToAdd.PropertyChanged += SubConnectionToAdd_PropertyChanged;
+                    }
+                }
+            }
+        }
+
+        private void SubConnectionToAdd_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                if(e.PropertyName == "Connection")
+                {
+                    if(args.OldValue != null)
+                    {
+                        SelectedControlledScope.Connections.Remove(args.OldValue as TECConnection);
+                    }
+                    if(args.NewValue != null)
+                    {
+                        SelectedControlledScope.Connections.Add(args.NewValue as TECConnection);
                     }
                 }
             }
@@ -241,6 +272,20 @@ namespace TECUserControlLibrary.ViewModels
         {
             updateSubScopeConnections();
             updateControllerSelections();
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    if(item is SubScopeConnection)
+                    {
+                        (item as SubScopeConnection).PropertyChanged += SubConnectionToAdd_PropertyChanged;
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                
+            }
         }
     }
 }
