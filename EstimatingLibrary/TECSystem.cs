@@ -193,15 +193,15 @@ namespace EstimatingLibrary
             {
                 RaisePropertyChanged("SubScopeQuantity");
                 RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
+                RaisePropertyChanged("BudgetUnitPrice");
                 RaisePropertyChanged("EquipmentQuantity");
             } else if (name == "SubScopeQuantity")
             {
                 RaisePropertyChanged("SubScopeQuantity");
-            } else if (name == "BudgetPrice")
+            } else if (name == "BudgetUnitPrice")
             {
                 RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
+                RaisePropertyChanged("BudgetUnitPrice");
             } else if (name == "TotalPoints")
             {
                 RaisePropertyChanged("TotalPoints");
@@ -218,7 +218,7 @@ namespace EstimatingLibrary
         private void Equipment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("EquipmentQuantity");
-            RaisePropertyChanged("PriceWithEquipment");
+            RaisePropertyChanged("BudgetUnitPrice");
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
