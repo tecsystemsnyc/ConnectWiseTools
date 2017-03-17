@@ -80,6 +80,10 @@
                     <view:ElectricalView
                         ViewModel="{Binding ElectricalVM}"/>
                 </TabItem>
+                <TabItem Header="Network">
+                    <cLibView:NetworkView
+                        ViewModel="{Binding NetworkVM}"/>
+                </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
                     <view:DrawingView
                         ViewModel="{Binding DrawingVM}"/>

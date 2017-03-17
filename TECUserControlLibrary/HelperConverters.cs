@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Windows.Media;
 using TECUserControlLibrary.UserControls;
+using System.Collections.ObjectModel;
 
 namespace TECUserControlLibrary.HelperConverters
 {
@@ -60,6 +61,30 @@ namespace TECUserControlLibrary.HelperConverters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        #endregion
+    }
+
+    public class BooleanToVisibilityConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NullReferenceException();
         }
 
         #endregion
@@ -284,6 +309,25 @@ namespace TECUserControlLibrary.HelperConverters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public class ConnectionIOConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((ObservableCollection<IOType>)value)[0];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            ObservableCollection<IOType> io = new ObservableCollection<IOType>();
+            io.Add((IOType)value);
+            return io;
         }
 
         #endregion

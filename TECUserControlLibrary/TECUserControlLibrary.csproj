@@ -140,6 +140,9 @@
     <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\NetworkGridControl.xaml.cs">
+      <DependentUpon>NetworkGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\PanelsGrid.xaml.cs">
       <DependentUpon>PanelsGrid.xaml</DependentUpon>
     </Compile>
@@ -168,6 +171,7 @@
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ControllerInPanel.cs" />
+    <Compile Include="Models\NetworkControllerConnnection.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="DataGrids\NotesGridControl.xaml.cs">
@@ -210,6 +214,7 @@
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
     <Compile Include="ViewModelExtensions\MaterialsCostsExtension.cs" />
+    <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
     <Compile Include="ViewModelExtensions\StatusBarExtension.cs" />
@@ -225,6 +230,9 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\ControlledScopeView.xaml.cs">
       <DependentUpon>ControlledScopeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NetworkView.xaml.cs">
+      <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -271,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ControllerGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\NetworkGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -440,6 +452,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControlledScopeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NetworkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
