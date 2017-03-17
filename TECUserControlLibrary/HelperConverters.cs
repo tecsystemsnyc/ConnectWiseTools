@@ -15,7 +15,6 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Windows.Media;
 using TECUserControlLibrary.UserControls;
-using System.Collections.ObjectModel;
 
 namespace TECUserControlLibrary.HelperConverters
 {
@@ -296,6 +295,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            Console.WriteLine("Converting");
             if(value == null)
             {
                 return true;
@@ -314,6 +314,71 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class SelectedItemToControllerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var controller = new TECController();
+                controller.Name = "None";
+                return controller;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+
+            if (((TECController)value).Name == "None")
+            {
+                return null;
+            }
+            else
+            {
+                return value;
+            }
+        }
+        #endregion
+    }
+    public class SelectedItemToPanelConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var panel = new TECPanel();
+                panel.Name = "None";
+                return panel;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+
+            if (((TECPanel)value).Name == "None")
+            {
+                return null;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        #endregion
+    }
     public class ConnectionIOConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members

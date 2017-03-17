@@ -526,7 +526,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.ControllerVisibility = Visibility.Collapsed;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Visible;
 
                     break;
                 case 5:

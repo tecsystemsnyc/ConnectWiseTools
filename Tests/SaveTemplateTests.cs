@@ -1908,5 +1908,81 @@ namespace Tests
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
         }
         #endregion
+
+        #region Save ConntrolledScope
+        [TestMethod]
+        public void Save_Templates_Add_ControlledScope()
+        {
+            //Act
+            TECControlledScope expectedScope = new TECControlledScope();
+            expectedScope.Name = "New controlled scope";
+            expectedScope.Description = "New controlled scope desc";
+
+            var scopeSystem = new TECSystem();
+            scopeSystem.Name = "Test Scope System";
+            scopeSystem.Description = "Test scope system description";
+            expectedScope.Systems.Add(scopeSystem);
+
+            var scopeController = new TECController();
+            scopeController.Name = "Test Scope Controller";
+            expectedScope.Controllers.Add(scopeController);
+
+            var scopePanel = new TECPanel();
+            scopePanel.Name = "Test Scope Name";
+            expectedScope.Panels.Add(scopePanel);
+
+            var scopeConnection = new TECConnection();
+            expectedScope.Connections.Add(scopeConnection);
+
+            templates.ControlledScopeTemplates.Add(expectedScope);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECControlledScope actualScope = null;
+            foreach (TECControlledScope scope in actualTemplates.ControlledScopeTemplates)
+            {
+                if (expectedScope.Guid == scope.Guid)
+                {
+                    actualScope = scope;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedScope.Name, actualScope.Name);
+            Assert.AreEqual(expectedScope.Description, actualScope.Description);
+            Assert.AreEqual(expectedScope.Systems.Count, actualScope.Systems.Count);
+            Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
+            Assert.AreEqual(expectedScope.Connections.Count, actualScope.Connections.Count);
+            Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_ControlledScope()
+        {
+            //Act
+            int oldNumScope = templates.ControlledScopeTemplates.Count;
+            TECControlledScope scopeToRemove = templates.ControlledScopeTemplates[0];
+
+            templates.ControlledScopeTemplates.Remove(scopeToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            foreach (TECControlledScope scope in templates.ControlledScopeTemplates)
+            {
+                if (scope.Guid == scopeToRemove.Guid)
+                {
+                    Assert.Fail();
+                }
+            }
+
+            Assert.AreEqual((oldNumScope - 1), templates.ControlledScopeTemplates.Count);
+        }
+        #endregion
     }
 }

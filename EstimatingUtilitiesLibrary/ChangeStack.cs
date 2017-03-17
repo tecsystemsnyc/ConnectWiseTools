@@ -143,6 +143,8 @@ namespace EstimatingUtilitiesLibrary
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
+            { scope.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerSubScope(TECSubScope subScope)
         {
@@ -684,7 +686,7 @@ namespace EstimatingUtilitiesLibrary
         {
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-            
+
             if (!isDoing){ RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {

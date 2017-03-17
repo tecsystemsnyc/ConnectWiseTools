@@ -26,7 +26,6 @@
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" />
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto" />
             </DataGrid.Columns>

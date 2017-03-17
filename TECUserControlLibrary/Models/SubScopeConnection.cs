@@ -42,20 +42,44 @@ namespace TECUserControlLibrary.Models
                 {
                     var temp = _connection.Copy();
                     _connection = value;
-                    NotifyPropertyChanged("Connection", temp, value);
+                    NotifyPropertyChanged("Connection", temp as object, value as object);
                 }
                 else
                 {
                     _connection = value;
-                    NotifyPropertyChanged("Connection", null, value);
+                    NotifyPropertyChanged("Connection", null, value as object);
                 }
                 
             }
         }
 
+        private TECSystem _parentSystem;
+        public TECSystem ParentSystem
+        {
+            get { return _parentSystem; }
+            set
+            {
+                _parentSystem = value;
+                RaisePropertyChanged("ParentSystem");
+            }
+        }
+
+        private TECEquipment _parentEquipment;
+        public TECEquipment ParentEquipment
+        {
+            get { return _parentEquipment; }
+            set
+            {
+                _parentEquipment = value;
+                RaisePropertyChanged("ParentEquipment");
+            }
+        }
+
         public SubScopeConnection()
         {
-
+            _connection = null;
+            _controller = null;
+            _subScope = null;
         }
 
         private void handleControllerSelection(TECController controller)

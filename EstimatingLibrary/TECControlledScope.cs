@@ -104,14 +104,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    if(item != null) { NotifyPropertyChanged("Add", this, item); }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    if (item != null) { NotifyPropertyChanged("Remove", this, item); }
                 }
             }
         }
