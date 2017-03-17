@@ -91,8 +91,27 @@
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Controllers">
-                    <grids:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
-                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Controllers"/>
+                        <grids:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
+                                                     ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
+                                                     Grid.Row="1"
+                                                     Margin="5"/>
+                        <Label Grid.Row="0" Grid.Column="1" Content="Panels"/>
+                        <grids:PanelsGrid PanelsSource="{Binding Templates.PanelTemplates}"
+                                          ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
+                                          Grid.Row="1" Grid.Column="1"
+                                          Margin="5"/>
+                    </Grid>
+                    
                 </TabItem>
                 <TabItem Header="Materials">
                     <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>

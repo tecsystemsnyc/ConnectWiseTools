@@ -148,7 +148,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             PanelsCollection = new ObservableCollection<TECPanel>();
-            DebugVisibility = Visibility.Collapsed;
+            DebugVisibility = Visibility.Visible;
             setupVMs();
         }
 
