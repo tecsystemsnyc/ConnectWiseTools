@@ -88,7 +88,7 @@ namespace EstimatingLibrary
         public TECEquipment(Guid guid) : base(guid)
         {
             _budgetUnitPrice = -1;
-            _subScope = new ObservableCollection<TECSubScope>(); ;
+            _subScope = new ObservableCollection<TECSubScope>();
 
             SubScope.CollectionChanged += SubScope_CollectionChanged;
         }

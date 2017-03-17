@@ -304,7 +304,16 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (args.OldValue != null)
                     {
-                        SelectedControlledScope.Connections.Remove(args.OldValue as TECConnection);
+                        var connectionToRemove = new TECConnection();
+                        foreach(TECConnection connection in SelectedControlledScope.Connections)
+                        {
+                            if((args.OldValue as TECConnection).Guid == connection.Guid)
+                            {
+                                connectionToRemove = connection;
+                                break;
+                            }
+                        }
+                        SelectedControlledScope.Connections.Remove(connectionToRemove);
                     }
                     if (args.NewValue != null)
                     {
