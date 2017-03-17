@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -168,6 +170,19 @@ namespace EstimatingUtilitiesLibrary
         }
 
         #endregion Cast Conversions
+
+        public static object GetChildCollection(object childObject, object parentObject)
+        {
+            Type childType = childObject.GetType();
+
+            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
+            {
+                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
+                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
+            }
+            return null;
+        }
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };

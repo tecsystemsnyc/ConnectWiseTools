@@ -1917,6 +1917,7 @@ namespace Tests
             TECControlledScope expectedScope = new TECControlledScope();
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
+            templates.ControlledScopeTemplates.Add(expectedScope);
 
             var scopeSystem = new TECSystem();
             scopeSystem.Name = "Test Scope System";
@@ -1934,7 +1935,6 @@ namespace Tests
             var scopeConnection = new TECConnection();
             expectedScope.Connections.Add(scopeConnection);
 
-            templates.ControlledScopeTemplates.Add(expectedScope);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 

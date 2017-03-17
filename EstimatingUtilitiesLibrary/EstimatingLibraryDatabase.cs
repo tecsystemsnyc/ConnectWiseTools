@@ -186,11 +186,11 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB = new SQLiteDatabase(tempPath);
 
-            foreach (Tuple<Change, object, object> change in changeStack.SaveStack)
+            foreach (StackItem change in changeStack.SaveStack)
             {
-                Change changeType = change.Item1;
-                object targetObject = change.Item3;
-                object refObject = change.Item2;
+                Change changeType = change.Change;
+                object targetObject = change.TargetObject;
+                object refObject = change.ReferenceObject;
 
                 if (changeType == Change.Add)
                 {
@@ -223,11 +223,11 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB = new SQLiteDatabase(tempPath);
 
-            foreach (Tuple<Change, object, object> change in changeStack.SaveStack)
+            foreach (StackItem change in changeStack.SaveStack)
             {
-                Change changeType = change.Item1;
-                object targetObject = change.Item3;
-                object refObject = change.Item2;
+                Change changeType = change.Change;
+                object targetObject = change.TargetObject;
+                object refObject = change.ReferenceObject;
 
                 if (changeType == Change.Add)
                 {
@@ -2208,7 +2208,7 @@ namespace EstimatingUtilitiesLibrary
         {
             var tableInfo = new TableInfo(table);
 
-            var childrenCollection = getChildCollection(objectsToAdd[0], objectsToAdd[1]);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(objectsToAdd[0], objectsToAdd[1]);
             
             foreach(TECObject child in (IList)childrenCollection)
             {
@@ -2636,17 +2636,6 @@ namespace EstimatingUtilitiesLibrary
 
             return includes;
         }
-        private static object getChildCollection(object childObject, object parentObject)
-        {
-            Type childType = childObject.GetType();
-
-            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
-            {
-                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
-                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
-            }
-            return null;
-        }
         private static List<Type> getUniqueTypes(List<Type> types)
         {
             var outList = new List<Type>();
@@ -2668,7 +2657,7 @@ namespace EstimatingUtilitiesLibrary
             parent = (parentObject as TECScope);
 
             int quantity = 0;
-            var childCollection = getChildCollection(childObject, parentObject);
+            var childCollection = UtilitiesMethods.GetChildCollection(childObject, parentObject);
 
             foreach(TECScope item in (IList)childCollection)
             {

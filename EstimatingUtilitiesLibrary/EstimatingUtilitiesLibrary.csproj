@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="ScopeDocumentBuilder.cs" />
     <Compile Include="SQLiteDatabase.cs" />
+    <Compile Include="StackItem.cs" />
     <Compile Include="UtilitiesMethods.cs" />
   </ItemGroup>
   <ItemGroup>
