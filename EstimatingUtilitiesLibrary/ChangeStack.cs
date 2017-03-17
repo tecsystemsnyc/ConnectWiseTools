@@ -663,6 +663,17 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
+        
+        private void registerGeneric(TECObject obj)
+        {
+            obj.PropertyChanged += Object_PropertyChanged;
+            var properties = obj.GetType().GetProperties();
+            foreach(var property in properties)
+            {
+
+            }
+
+        }
         #endregion
 
         #region Event Handlers
