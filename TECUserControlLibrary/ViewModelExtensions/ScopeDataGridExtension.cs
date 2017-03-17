@@ -205,21 +205,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DataGridVisibilty = new VisibilityModel();
             setupCommands();
         }
-
-        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(object location in e.NewItems)
-                { LocationSelections.Add(location as TECLocation); }
-            }
-            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object location in e.OldItems)
-                { LocationSelections.Remove(location as TECLocation); }
-            }
-        }
-
         public ScopeDataGridExtension(TECTemplates templates)
         {
             Templates = templates;
@@ -267,6 +252,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
             //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
         }
+        #endregion //Commands
 
         private void populateLocationSelections()
         {
@@ -280,7 +266,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 LocationSelections.Add(location);
             }
         }
-        #endregion //Commands
+        
         
         public void DragOver(IDropInfo dropInfo)
         {
@@ -292,5 +278,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DropHandler(dropInfo);
         }
         #endregion
+        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object location in e.NewItems)
+                { LocationSelections.Add(location as TECLocation); }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object location in e.OldItems)
+                { LocationSelections.Remove(location as TECLocation); }
+            }
+        }
     }
 }

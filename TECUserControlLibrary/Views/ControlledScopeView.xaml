@@ -7,6 +7,7 @@
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="600">
@@ -57,8 +58,9 @@
                       CanUserAddRows="False"
                       Grid.Row="2">
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn ItemsSource="{Binding Data.PanelsCollection, Source={StaticResource proxy}}"
-                                            SelectedItemBinding="{Binding Panel}"
+                    <DataGridComboBoxColumn ItemsSource="{Binding Data.PanelSelections, Source={StaticResource proxy}}"
+                                            SelectedItemBinding="{Binding Panel, Converter={cnvt:SelectedItemToPanelConverter}}"
+                                            DisplayIndex="0"
                                             DisplayMemberPath="Name"
                                             Header="Containing Panel"/>
                     <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto"/>

@@ -80,6 +80,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelsCollection");
             }
         }
+        private ObservableCollection<TECPanel> _panelSelections;
+        public ObservableCollection<TECPanel> PanelSelections
+        {
+            get { return _panelSelections; }
+            set
+            {
+                _panelSelections = value;
+                RaisePropertyChanged("PanelSelections");
+            }
+        }
         private ObservableCollection<TECConduitType> _conduitTypeSelections;
         public ObservableCollection<TECConduitType> ConduitTypeSelections
         {
@@ -101,12 +111,8 @@ namespace TECUserControlLibrary.ViewModels
                 if(value != null)
                 {
                     ControllerSelections = new ObservableCollection<TECController>();
-                    ControllerCollection = new ObservableCollection<ControllerInPanel>();
                     PanelsCollection = new ObservableCollection<TECPanel>();
-                    updateControllerSelections();
-                    updateControllerCollection();
-                    updatePanels();
-                    updateSubScopeConnections();
+                    updateCollections();
                     registerChanges();
                 }
                 RaisePropertyChanged("SelectedControlledScope");
@@ -130,7 +136,14 @@ namespace TECUserControlLibrary.ViewModels
         public ControlledScopeViewModel(TECTemplates templates)
         {
             Templates = templates;
-            ConduitTypeSelections = Templates.ConduitTypeCatalog;
+            ConduitTypeSelections = new ObservableCollection<TECConduitType>();
+            var noneConduit = new TECConduitType();
+            noneConduit.Name = "None";
+            ConduitTypeSelections.Add(noneConduit);
+            foreach(TECConduitType type in Templates.ConduitTypeCatalog)
+            {
+                ConduitTypeSelections.Add(type);
+            }
             ControllerSelections = new ObservableCollection<TECController>();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
@@ -206,10 +219,18 @@ namespace TECUserControlLibrary.ViewModels
 
         private void updateControllerSelections()
         {
-            ControllerSelections = SelectedControlledScope.Controllers;
+            ControllerSelections = new ObservableCollection<TECController>();
+            var noneController = new TECController();
+            noneController.Name = "None";
+            ControllerSelections.Add(noneController);
+            foreach(TECController controller in SelectedControlledScope.Controllers)
+            {
+                ControllerSelections.Add(controller);
+            }
         }
         private void updateControllerCollection()
         {
+            ControllerCollection = new ObservableCollection<ControllerInPanel>();
             foreach (TECController controller in SelectedControlledScope.Controllers)
             {
                 TECPanel panelToAdd = null;
@@ -229,6 +250,14 @@ namespace TECUserControlLibrary.ViewModels
         private void updatePanels()
         {
             PanelsCollection = SelectedControlledScope.Panels;
+            PanelSelections = new ObservableCollection<TECPanel>();
+            var nonePanel = new TECPanel();
+            nonePanel.Name = "None";
+            PanelSelections.Add(nonePanel);
+            foreach(TECPanel panel in SelectedControlledScope.Panels)
+            {
+                PanelSelections.Add(panel);
+            }
         }
         private void updateSubScopeConnections()
         {
@@ -288,12 +317,13 @@ namespace TECUserControlLibrary.ViewModels
         private void registerChanges()
         {
             SelectedControlledScope.Systems.CollectionChanged += collectionChanged;
+            SelectedControlledScope.Controllers.CollectionChanged += collectionChanged;
+            SelectedControlledScope.Panels.CollectionChanged += collectionChanged;
         }
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateSubScopeConnections();
-            updateControllerSelections();
+            updateCollections();
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach(object item in e.NewItems)
@@ -308,6 +338,14 @@ namespace TECUserControlLibrary.ViewModels
             {
                 
             }
+        }
+        
+        private void updateCollections()
+        {
+            updateControllerSelections();
+            updateControllerCollection();
+            updatePanels();
+            updateSubScopeConnections();
         }
     }
 }

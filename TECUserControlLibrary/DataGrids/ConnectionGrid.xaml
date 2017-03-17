@@ -26,7 +26,8 @@
 
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged}"
+                                        SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={cnvt:SelectedItemToControllerConverter}}"
                                         Header="Controller" Width="Auto"
                                         DisplayMemberPath="Name"/>
                 <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" IsReadOnly="True"/>
