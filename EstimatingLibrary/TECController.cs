@@ -89,6 +89,7 @@ namespace EstimatingLibrary
                 _connections.Add(new TECConnection(connection));
             }
             _manufacturer = controllerSource.Manufacturer;
+            _cost = controllerSource.Cost;
         }
 
         #endregion
@@ -146,13 +147,8 @@ namespace EstimatingLibrary
         }
         public override Object DragDropCopy()
         {
-            var outController = new TECController();
-            outController.Name = Name;
-            outController.Description = Description;
-            outController.Cost = Cost;
-            outController.IO = IO;
-            outController.Tags = Tags;
-
+            var outController = new TECController(this);
+            
             return outController;
         }
         private List<IOType> getAvailableIO()
