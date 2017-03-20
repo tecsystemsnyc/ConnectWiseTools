@@ -43,7 +43,12 @@ namespace EstimatingLibrary
             _labor = 0;
         }
         public TECConduitType() : this(Guid.NewGuid()) { }
-
+        public TECConduitType(TECConduitType conduitSource) : this()
+        {
+            copyPropertiesFromScope(conduitSource);
+            _cost = conduitSource.Cost;
+            _labor = conduitSource.Labor;
+        }
         public override object Copy()
         {
             var outType = new TECConduitType();

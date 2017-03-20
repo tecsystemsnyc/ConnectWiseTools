@@ -1221,11 +1221,11 @@ namespace EstimatingUtilitiesLibrary
     public class ControlledScopeControllerTable : TableBase
     {
         public static new string TableName = "TECControlledScopeTECController";
-        public static Type ObjectType = typeof(TECControlledScope);
-        public static Type ReferenceType = typeof(TECController);
+        public static Type ScopeType = typeof(TECControlledScope);
+        public static Type ControllerType = typeof(TECController);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControlledScopeID,
@@ -1233,8 +1233,8 @@ namespace EstimatingUtilitiesLibrary
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            ScopeType,
+            ControllerType
         };
     }
     public class ControlledScopePanelTable : TableBase

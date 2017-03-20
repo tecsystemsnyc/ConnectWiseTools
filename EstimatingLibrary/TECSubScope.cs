@@ -95,9 +95,9 @@ namespace EstimatingLibrary
         public TECSubScope(TECSubScope sourceSubScope) : this()
         {
             foreach(TECDevice device in sourceSubScope.Devices)
-            { Devices.Add(device.Copy() as TECDevice); }
+            { Devices.Add(new TECDevice(device)); }
             foreach(TECPoint point in sourceSubScope.Points)
-            { Points.Add(point.Copy() as TECPoint); }
+            { Points.Add(new TECPoint(point)); }
             
             this.copyPropertiesFromScope(sourceSubScope);
         }
@@ -199,8 +199,14 @@ namespace EstimatingLibrary
 
         public override Object Copy()
         {
-            TECSubScope outScope = new TECSubScope(this);
+            TECSubScope outScope = new TECSubScope();
             outScope._guid = Guid;
+            foreach (TECDevice device in this.Devices)
+            { outScope.Devices.Add(device.Copy() as TECDevice); }
+            foreach (TECPoint point in this.Points)
+            { outScope.Points.Add(point.Copy() as TECPoint); }
+
+            outScope.copyPropertiesFromScope(this);
             return outScope;
         }
 

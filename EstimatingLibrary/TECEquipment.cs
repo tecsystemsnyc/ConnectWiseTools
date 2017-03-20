@@ -98,7 +98,7 @@ namespace EstimatingLibrary
         public TECEquipment(TECEquipment equipmentSource) : this()
         {
             foreach(TECSubScope subScope in equipmentSource.SubScope)
-            { SubScope.Add(subScope.Copy() as TECSubScope); }
+            { SubScope.Add(new TECSubScope(subScope)); }
             _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
 
             this.copyPropertiesFromScope(equipmentSource);
@@ -108,8 +108,13 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            TECEquipment outEquip = new TECEquipment(this);
+            TECEquipment outEquip = new TECEquipment();
             outEquip._guid = this.Guid;
+            foreach (TECSubScope subScope in this.SubScope)
+            { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
+            _budgetUnitPrice = this.BudgetUnitPrice;
+
+            outEquip.copyPropertiesFromScope(this);
             return outEquip;
         }
 

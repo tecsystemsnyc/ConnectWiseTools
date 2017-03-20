@@ -1926,6 +1926,7 @@ namespace Tests
 
             var scopeController = new TECController();
             scopeController.Name = "Test Scope Controller";
+            scopeController.Manufacturer = templates.ManufacturerCatalog[0];
             expectedScope.Controllers.Add(scopeController);
 
             var scopePanel = new TECPanel();
@@ -1934,8 +1935,7 @@ namespace Tests
 
             var scopeConnection = new TECConnection();
             expectedScope.Connections.Add(scopeConnection);
-
-
+            
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);

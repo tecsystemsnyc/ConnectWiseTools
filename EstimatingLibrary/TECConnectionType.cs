@@ -43,7 +43,13 @@ namespace EstimatingLibrary
             _labor = 0;
         }
         public TECConnectionType() : this(Guid.NewGuid()) { }
-
+        public TECConnectionType(TECConnectionType connectionTypeSource) : this()
+        {
+            copyPropertiesFromScope(connectionTypeSource);
+            _cost = connectionTypeSource.Cost;
+            _labor = connectionTypeSource.Labor;
+        }
+        
         public override object Copy()
         {
             var outType = new TECConnectionType();

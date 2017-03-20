@@ -54,6 +54,12 @@ namespace EstimatingLibrary
             _quantity = 1;
         }
 
+        public TECIO(TECIO ioSource) : this()
+        {
+            _quantity = ioSource.Quantity;
+            _type = ioSource.Type;
+        }
+
         public static IOType convertStringToType(string type)
         {
             switch (type.ToUpper())

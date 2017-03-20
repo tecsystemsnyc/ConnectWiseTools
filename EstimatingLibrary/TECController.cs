@@ -77,6 +77,20 @@ namespace EstimatingLibrary
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
+        public TECController(TECController controllerSource) : this()
+        {
+            copyPropertiesFromScope(controllerSource);
+            foreach(TECIO io in controllerSource.IO)
+            {
+                _io.Add(new TECIO(io));
+            }
+            foreach(TECConnection connection in controllerSource.Connections)
+            {
+                _connections.Add(new TECConnection(connection));
+            }
+            _manufacturer = controllerSource.Manufacturer;
+        }
+
         #endregion
 
         #region Event Handlers

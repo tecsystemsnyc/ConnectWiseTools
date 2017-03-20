@@ -111,23 +111,23 @@ namespace EstimatingLibrary
             AssociatedCosts.CollectionChanged += collectionChanged;
         }
 
+
+        abstract public Object DragDropCopy();
+        #endregion //Constructors
+
+        #region Methods
         protected void copyPropertiesFromScope(TECScope scope)
         {
             _name = scope.Name;
             _description = scope.Description;
             _quantity = scope.Quantity;
-            if(scope.Location != null)
+            if (scope.Location != null)
             { _location = scope.Location.Copy() as TECLocation; }
             foreach (TECTag tag in scope.Tags)
             { _tags.Add(tag.Copy() as TECTag); }
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
         }
-
-        abstract public Object DragDropCopy();
-        #endregion //Constructors
-
-        #region Methods
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
