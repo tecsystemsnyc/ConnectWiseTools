@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary
             TargetObject = e.NewValue as TECObject;
             TargetType = e.NewType;
         }
-        public StackItem(Change change, object targetObject, object referenceObject)
+        public StackItem(Change change, object referenceObject, object targetObject)
         {
             Change = change;
             ReferenceObject = referenceObject as TECObject;
