@@ -495,49 +495,49 @@ namespace EstimatingLibrary
             _salesperson = bidSource.Salesperson;
             _estimator = bidSource.Estimator;
 
-            _labor = bidSource.Labor.Copy() as TECLabor;
-            _parameters = bidSource.Parameters.Copy() as TECBidParameters;
+            _labor = new TECLabor(bidSource.Labor);
+            _parameters = new TECBidParameters(bidSource.Parameters);
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
             foreach (TECScopeBranch branch in bidSource.ScopeTree)
-            { ScopeTree.Add(branch.Copy() as TECScopeBranch); }
+            { ScopeTree.Add(new TECScopeBranch(branch)); }
             foreach (TECSystem system in bidSource.Systems)
-            { Systems.Add(system.Copy() as TECSystem); }
+            { Systems.Add(new TECSystem(system)); }
             foreach (TECNote note in bidSource.Notes)
-            { Notes.Add(note.Copy() as TECNote); }
+            { Notes.Add(new TECNote(note)); }
             foreach (TECExclusion exclusion in bidSource.Exclusions)
-            { Exclusions.Add(exclusion.Copy() as TECExclusion); }
+            { Exclusions.Add(new TECExclusion(exclusion)); }
             foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
-            {  AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
+            {  AssociatedCostsCatalog.Add(new TECAssociatedCost(cost)); }
             foreach(TECConduitType conduitType in bidSource.ConduitTypes)
-            { ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
+            { ConduitTypes.Add(new TECConduitType(conduitType)); }
             foreach(TECConnectionType connectionType in bidSource.ConnectionTypes)
-            { ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
+            { ConnectionTypes.Add(new TECConnectionType(connectionType)); }
             foreach(TECTag tag in bidSource.Tags)
-            { Tags.Add(tag.Copy() as TECTag); }
+            { Tags.Add(new TECTag(tag)); }
             foreach (TECLocation location in bidSource.Locations)
-            { Locations.Add(location.Copy() as TECLocation); }
+            { Locations.Add(new TECLocation(location)); }
             foreach (TECDrawing drawing in bidSource.Drawings)
-            { Drawings.Add(drawing.Copy() as TECDrawing); }
+            { Drawings.Add(new TECDrawing(drawing)); }
             foreach(TECManufacturer manufacturer in bidSource.ManufacturerCatalog)
-            { ManufacturerCatalog.Add(manufacturer.Copy() as TECManufacturer); }
+            { ManufacturerCatalog.Add(new TECManufacturer(manufacturer)); }
             foreach(TECController controller in bidSource.Controllers)
-            { Controllers.Add(controller.Copy() as TECController); }
+            { Controllers.Add(new TECController(controller)); }
             foreach(TECDevice device in bidSource.DeviceCatalog)
-            { DeviceCatalog.Add(device.Copy() as TECDevice); }
+            { DeviceCatalog.Add(new TECDevice(device)); }
             foreach(TECConnection connection in bidSource.Connections)
-            { Connections.Add(connection.Copy() as TECConnection); }
+            { Connections.Add(new TECConnection(connection)); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
-            { ProposalScope.Add(propScope.Copy() as TECProposalScope); }
+            { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach(TECMiscCost cost in bidSource.MiscCosts)
-            { MiscCosts.Add(cost.Copy() as TECMiscCost); }
+            { MiscCosts.Add(new TECMiscCost(cost)); }
             foreach (TECMiscWiring wiring in bidSource.MiscWiring)
-            { MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
+            { MiscWiring.Add(new TECMiscWiring(wiring)); }
             foreach (TECPanel panel in bidSource.Panels)
-            { Panels.Add(panel.Copy() as TECPanel); }
+            { Panels.Add(new TECPanel(panel)); }
             foreach (TECPanelType panelType in bidSource.PanelTypeCatalog)
-            { PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
+            { PanelTypeCatalog.Add(new TECPanelType(panelType)); }
         }
 
         #endregion //Constructors
@@ -657,8 +657,58 @@ namespace EstimatingLibrary
         
         public override object Copy()
         {
-            TECBid bid = new TECBid(this);
-            bid._guid = Guid;
+            TECBid bid = new TECBid(Guid);
+            
+            bid._name = this.Name;
+            bid._bidNumber = this.BidNumber;
+            bid._dueDate = this.DueDate;
+            bid._salesperson = this.Salesperson;
+            bid._estimator = this.Estimator;
+
+            bid._labor = this.Labor.Copy() as TECLabor;
+            bid._parameters = this.Parameters.Copy() as TECBidParameters;
+            bid.Parameters.PropertyChanged += bid.objectPropertyChanged;
+            bid.Labor.PropertyChanged += bid.objectPropertyChanged;
+
+            foreach (TECScopeBranch branch in this.ScopeTree)
+            { bid.ScopeTree.Add(branch.Copy() as TECScopeBranch); }
+            foreach (TECSystem system in this.Systems)
+            { bid.Systems.Add(system.Copy() as TECSystem); }
+            foreach (TECNote note in this.Notes)
+            { bid.Notes.Add(note.Copy() as TECNote); }
+            foreach (TECExclusion exclusion in this.Exclusions)
+            { bid.Exclusions.Add(exclusion.Copy() as TECExclusion); }
+            foreach (TECAssociatedCost cost in this.AssociatedCostsCatalog)
+            { bid.AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
+            foreach (TECConduitType conduitType in this.ConduitTypes)
+            { bid.ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
+            foreach (TECConnectionType connectionType in this.ConnectionTypes)
+            { bid.ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
+            foreach (TECTag tag in this.Tags)
+            { bid.Tags.Add(tag.Copy() as TECTag); }
+            foreach (TECLocation location in this.Locations)
+            { bid.Locations.Add(location.Copy() as TECLocation); }
+            foreach (TECDrawing drawing in this.Drawings)
+            { bid.Drawings.Add(drawing.Copy() as TECDrawing); }
+            foreach (TECManufacturer manufacturer in this.ManufacturerCatalog)
+            { bid.ManufacturerCatalog.Add(manufacturer.Copy() as TECManufacturer); }
+            foreach (TECController controller in this.Controllers)
+            { bid.Controllers.Add(controller.Copy() as TECController); }
+            foreach (TECDevice device in this.DeviceCatalog)
+            { bid.DeviceCatalog.Add(device.Copy() as TECDevice); }
+            foreach (TECConnection connection in this.Connections)
+            { bid.Connections.Add(connection.Copy() as TECConnection); }
+            foreach (TECProposalScope propScope in this.ProposalScope)
+            { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
+            foreach (TECMiscCost cost in this.MiscCosts)
+            { bid.MiscCosts.Add(cost.Copy() as TECMiscCost); }
+            foreach (TECMiscWiring wiring in this.MiscWiring)
+            { bid.MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECPanel panel in this.Panels)
+            { bid.Panels.Add(panel.Copy() as TECPanel); }
+            foreach (TECPanelType panelType in this.PanelTypeCatalog)
+            { bid.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
+
             return bid;
         }
         

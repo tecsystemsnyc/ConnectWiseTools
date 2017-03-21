@@ -125,7 +125,9 @@ namespace EstimatingLibrary
 
         public override object DragDropCopy()
         {
-            throw new NotImplementedException();
+            var outScope = new TECControlledScope(this);
+            return outScope;
+
         }
     }
 }

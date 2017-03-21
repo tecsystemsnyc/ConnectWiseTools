@@ -30,6 +30,13 @@ namespace EstimatingLibrary
         }
 
         public TECAssociatedCost() : this(Guid.NewGuid()) { }
+
+        public TECAssociatedCost(TECAssociatedCost costSource) : this()
+        {
+            copyPropertiesFromScope(costSource);
+            copyPropertiesFromCost(costSource);
+            _labor = this.Labor;
+        }
         #endregion
         
         public override object Copy()

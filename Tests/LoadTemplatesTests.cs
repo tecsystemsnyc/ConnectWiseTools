@@ -368,6 +368,54 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_ControlledScope_Linking()
+        {
+            //Arrange
+            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
+            var connectionsInSystemsLinked = true;
+            var connectionsInControllersLinked = true;
+            var controllersInPanelsLinked = true;
+
+            foreach(TECSystem system in actualConScope.Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (!actualConScope.Connections.Contains(subScope.Connection))
+                        {
+                            connectionsInSystemsLinked = false;
+                        }
+                    }
+                }
+            }
+            foreach(TECController controller in actualConScope.Controllers)
+            {
+                foreach(TECConnection connection in controller.Connections)
+                {
+                    if (!actualConScope.Connections.Contains(connection))
+                    {
+                        connectionsInControllersLinked = false;
+                    }
+                }
+            }
+            foreach(TECPanel panel in actualConScope.Panels)
+            {
+                foreach(TECController controller in panel.Controllers)
+                {
+                    if (!actualConScope.Controllers.Contains(controller))
+                    {
+                        controllersInPanelsLinked = false;
+                    }
+                }
+            }
+
+            Assert.IsTrue(connectionsInSystemsLinked);
+            Assert.IsTrue(connectionsInControllersLinked);
+            Assert.IsTrue(controllersInPanelsLinked);
+        }
+
+        [TestMethod]
         public void Load_Templates_Linked_Devices()
         {
             foreach(TECSystem system in actualTemplates.SystemTemplates)

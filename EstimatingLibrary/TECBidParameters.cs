@@ -124,6 +124,18 @@ namespace EstimatingLibrary
         }
 
         public TECBidParameters() : this(Guid.NewGuid()) { }
+        public TECBidParameters(TECBidParameters parametersSource) : this()
+        {
+            _isTaxExempt = parametersSource.IsTaxExempt;
+            _requiresBond = parametersSource.RequiresBond;
+            _requiresWrapUp = parametersSource.RequiresWrapUp;
+
+            _escalation = parametersSource.Escalation;
+            _overhead = parametersSource.Overhead;
+            _profit = parametersSource.Profit;
+            _subcontractorMarkup = parametersSource.SubcontractorMarkup;
+            _subcontractorEscalation = parametersSource.SubcontractorEscalation;
+        }
 
         public override object Copy()
         {

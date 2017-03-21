@@ -10,6 +10,10 @@ namespace EstimatingLibrary
     {
         public TECPanelType(Guid guid) : base(guid) { }
         public TECPanelType() : this(Guid.NewGuid()) { }
+        public TECPanelType(TECPanelType typeSource) : this()
+        {
+            copyPropertiesFromCost(typeSource);
+        }
 
         public override object Copy()
         {

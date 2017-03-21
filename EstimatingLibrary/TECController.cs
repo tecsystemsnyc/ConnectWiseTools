@@ -77,6 +77,21 @@ namespace EstimatingLibrary
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
+        public TECController(TECController controllerSource) : this()
+        {
+            copyPropertiesFromScope(controllerSource);
+            foreach(TECIO io in controllerSource.IO)
+            {
+                _io.Add(new TECIO(io));
+            }
+            foreach(TECConnection connection in controllerSource.Connections)
+            {
+                _connections.Add(new TECConnection(connection));
+            }
+            _manufacturer = controllerSource.Manufacturer;
+            _cost = controllerSource.Cost;
+        }
+
         #endregion
 
         #region Event Handlers
@@ -132,13 +147,8 @@ namespace EstimatingLibrary
         }
         public override Object DragDropCopy()
         {
-            var outController = new TECController();
-            outController.Name = Name;
-            outController.Description = Description;
-            outController.Cost = Cost;
-            outController.IO = IO;
-            outController.Tags = Tags;
-
+            var outController = new TECController(this);
+            
             return outController;
         }
         private List<IOType> getAvailableIO()

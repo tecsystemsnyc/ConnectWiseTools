@@ -74,6 +74,12 @@ namespace EstimatingLibrary
             Notes.CollectionChanged += CollectionChanged;
             Children.CollectionChanged += CollectionChanged;
         }
+        public TECProposalScope(TECProposalScope scopeSource) : this(scopeSource.Scope, scopeSource.IsProposed, scopeSource.Notes)
+        {
+            Children.CollectionChanged -= CollectionChanged;
+            Children = scopeSource.Children;
+            Children.CollectionChanged += CollectionChanged;
+        }
         #endregion
 
         #region Event handlers

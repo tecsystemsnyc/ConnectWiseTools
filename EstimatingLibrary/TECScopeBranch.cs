@@ -39,7 +39,7 @@ namespace EstimatingLibrary
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(branch.Copy() as TECScopeBranch);
+                Branches.Add(new TECScopeBranch(branch));
             }
             this.copyPropertiesFromScope(scopeBranchSource);
         }
@@ -47,8 +47,15 @@ namespace EstimatingLibrary
 
         public override Object Copy()
         {
-            TECScopeBranch outScope = new TECScopeBranch(this);
-            outScope._guid = _guid;
+            TECScopeBranch outScope = new TECScopeBranch();
+            outScope._guid = Guid;
+
+            foreach (TECScopeBranch branch in this.Branches)
+            {
+                outScope.Branches.Add(branch.Copy() as TECScopeBranch);
+            }
+            this.copyPropertiesFromScope(this);
+
             return outScope;
         }
 

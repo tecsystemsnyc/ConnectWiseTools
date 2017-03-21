@@ -148,7 +148,7 @@ namespace EstimatingLibrary
         public TECSystem(TECSystem sourceSystem) : this()
         {
             foreach (TECEquipment equipment in sourceSystem.Equipment)
-            { Equipment.Add(equipment.Copy() as TECEquipment); }
+            { Equipment.Add(new TECEquipment(equipment)); }
             _budgetPriceModifier = sourceSystem.BudgetPriceModifier;
             this.copyPropertiesFromScope(sourceSystem);
         }
@@ -157,8 +157,12 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            TECSystem outSystem = new TECSystem(this);
+            TECSystem outSystem = new TECSystem();
             outSystem._guid = Guid;
+            foreach (TECEquipment equipment in this.Equipment)
+            { outSystem.Equipment.Add(equipment.Copy() as TECEquipment); }
+            outSystem._budgetPriceModifier = this.BudgetPriceModifier;
+            outSystem.copyPropertiesFromScope(this);
             return outSystem;
         }
 

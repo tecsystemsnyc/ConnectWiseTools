@@ -15,7 +15,6 @@ namespace EstimatingUtilitiesLibrary
 {
     public enum Change {Add, Remove, Edit};
     public class ChangeStack
-
     {
         //List of change, target object, reference object
         //Example: Add, Bid, System
@@ -39,6 +38,7 @@ namespace EstimatingUtilitiesLibrary
             RedoStack = new List<StackItem>();
             SaveStack = new List<StackItem>();
         }
+        
         public ChangeStack(TECBid bid) : this()
         {
             Bid = bid;
@@ -662,6 +662,17 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, (object)scope, (object)tag);
                 SaveStack.Add(item);
             }
+        }
+        
+        private void registerGeneric(TECObject obj)
+        {
+            obj.PropertyChanged += Object_PropertyChanged;
+            var properties = obj.GetType().GetProperties();
+            foreach(var property in properties)
+            {
+
+            }
+
         }
         #endregion
 

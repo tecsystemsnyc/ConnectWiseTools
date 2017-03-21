@@ -225,12 +225,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public override object Copy()
-        {
-            var outTemplate = new TECTemplates(this);
-            outTemplate._guid = _guid;
-            return outTemplate; 
-        }
 
         #endregion //Properties
 
@@ -286,44 +280,44 @@ namespace EstimatingLibrary
               Labor.PropertyChanged += objectPropertyChanged;
             }
             foreach (TECSystem system in templatesSource.SystemTemplates)
-            { SystemTemplates.Add(system.Copy() as TECSystem); }
+            { SystemTemplates.Add(new TECSystem(system)); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
-            { EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
+            { EquipmentTemplates.Add(new TECEquipment(equip)); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
-            { SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
+            { SubScopeTemplates.Add(new TECSubScope(subScope)); }
             foreach (TECDevice device in templatesSource.DeviceCatalog)
-            { DeviceCatalog.Add(device.Copy() as TECDevice); }
+            { DeviceCatalog.Add(new TECDevice(device)); }
             foreach (TECTag tag in templatesSource.Tags)
-            { Tags.Add(tag.Copy() as TECTag); }
+            { Tags.Add(new TECTag(tag)); }
             foreach (TECManufacturer man in templatesSource.ManufacturerCatalog)
-            { ManufacturerCatalog.Add(man.Copy() as TECManufacturer); }
+            { ManufacturerCatalog.Add(new TECManufacturer(man)); }
             foreach(TECConnectionType connectionType in templatesSource.ConnectionTypeCatalog)
-            { ConnectionTypeCatalog.Add(connectionType.Copy() as TECConnectionType); }
+            { ConnectionTypeCatalog.Add(new TECConnectionType(connectionType)); }
             foreach (TECConduitType conduitType in templatesSource.ConduitTypeCatalog)
-            { ConduitTypeCatalog.Add(conduitType.Copy() as TECConduitType); }
+            { ConduitTypeCatalog.Add(new TECConduitType(conduitType)); }
             foreach(TECAssociatedCost cost in templatesSource.AssociatedCostsCatalog)
-            { AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
+            { AssociatedCostsCatalog.Add(new TECAssociatedCost(cost)); }
             foreach(TECController controller in templatesSource.ControllerTemplates)
-            { ControllerTemplates.Add(controller.Copy() as TECController); }
+            { ControllerTemplates.Add(new TECController(controller)); }
             foreach(TECMiscCost cost in templatesSource.MiscCostTemplates)
             {
-                MiscCostTemplates.Add(cost);
+                MiscCostTemplates.Add(new TECMiscCost(cost));
             }
             foreach(TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
             {
-                MiscWiringTemplates.Add(wiring);
+                MiscWiringTemplates.Add(new TECMiscWiring(wiring));
             }
             foreach(TECPanel panel in templatesSource.PanelTemplates)
             {
-                PanelTemplates.Add(panel);
+                PanelTemplates.Add(new TECPanel(panel));
             }
             foreach (TECPanelType panelType in templatesSource.PanelTypeCatalog)
             {
-                PanelTypeCatalog.Add(panelType);
+                PanelTypeCatalog.Add(new TECPanelType(panelType));
             }
             foreach(TECControlledScope scope in templatesSource.ControlledScopeTemplates)
             {
-                ControlledScopeTemplates.Add(scope);
+                ControlledScopeTemplates.Add(new TECControlledScope(scope));
             }
         }
 
@@ -357,5 +351,60 @@ namespace EstimatingLibrary
             NotifyPropertyChanged("ChildChanged", this, sender);
         }
         #endregion
+
+        public override object Copy()
+        {
+            var outTemplate = new TECTemplates();
+            outTemplate._guid = _guid;
+
+            if (_labor != null)
+            {
+                outTemplate._labor = this.Labor;
+                outTemplate.Labor.PropertyChanged += outTemplate.objectPropertyChanged;
+            }
+            foreach (TECSystem system in this.SystemTemplates)
+            { outTemplate.SystemTemplates.Add(system.Copy() as TECSystem); }
+            foreach (TECEquipment equip in this.EquipmentTemplates)
+            { outTemplate.EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
+            foreach (TECSubScope subScope in this.SubScopeTemplates)
+            { outTemplate.SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
+            foreach (TECDevice device in this.DeviceCatalog)
+            { outTemplate.DeviceCatalog.Add(device.Copy() as TECDevice); }
+            foreach (TECTag tag in this.Tags)
+            { outTemplate.Tags.Add(tag.Copy() as TECTag); }
+            foreach (TECManufacturer man in this.ManufacturerCatalog)
+            { outTemplate.ManufacturerCatalog.Add(man.Copy() as TECManufacturer); }
+            foreach (TECConnectionType connectionType in this.ConnectionTypeCatalog)
+            { outTemplate.ConnectionTypeCatalog.Add(connectionType.Copy() as TECConnectionType); }
+            foreach (TECConduitType conduitType in this.ConduitTypeCatalog)
+            { outTemplate.ConduitTypeCatalog.Add(conduitType.Copy() as TECConduitType); }
+            foreach (TECAssociatedCost cost in this.AssociatedCostsCatalog)
+            { outTemplate.AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
+            foreach (TECController controller in this.ControllerTemplates)
+            { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
+            foreach (TECMiscCost cost in this.MiscCostTemplates)
+            {
+                outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMiscCost);
+            }
+            foreach (TECMiscWiring wiring in this.MiscWiringTemplates)
+            {
+                outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring);
+            }
+            foreach (TECPanel panel in this.PanelTemplates)
+            {
+                outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel);
+            }
+            foreach (TECPanelType panelType in this.PanelTypeCatalog)
+            {
+                outTemplate.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType);
+            }
+            foreach (TECControlledScope scope in this.ControlledScopeTemplates)
+            {
+                outTemplate.ControlledScopeTemplates.Add(scope.Copy() as TECControlledScope);
+            }
+
+            return outTemplate;
+        }
+
     }
 }
