@@ -609,6 +609,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleConnectionChildren(newItem as TECConnection, item.Change);
             }
+            else if (newItem is TECControlledScope)
+            {
+                handleControlledScope(newItem as TECControlledScope, item.Change);
+            }
 
             else if (newItem is TECDrawing)
             {
@@ -739,6 +743,41 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECTag tag in scope.Tags)
             {
                 item = new StackItem(change, (object)scope, (object)tag);
+                SaveStack.Add(item);
+            }
+        }
+
+        private void handleControlledScope(TECControlledScope scope, Change change)
+        {
+            StackItem item;
+            foreach (TECSystem system in scope.Systems)
+            {
+                handleScopeChildren(system as TECScope, change);
+                system.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)system);
+                SaveStack.Add(item);
+                handleSystemChildren(system, change);
+            }
+            foreach (TECController controller in scope.Controllers)
+            {
+                handleScopeChildren(controller as TECScope, change);
+                controller.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)controller);
+                SaveStack.Add(item);
+                handleControllerChildren(controller, change);
+            }
+            foreach (TECConnection connection in scope.Connections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)connection);
+                SaveStack.Add(item);
+                handleConnectionChildren(connection, change);
+            }
+            foreach(TECPanel panel in scope.Panels)
+            {
+                handleScopeChildren(panel as TECScope, change);
+                panel.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)panel);
                 SaveStack.Add(item);
             }
         }

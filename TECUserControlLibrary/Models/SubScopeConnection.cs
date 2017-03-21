@@ -90,10 +90,17 @@ namespace TECUserControlLibrary.Models
                 connection.Controller = controller;
                 connection.Scope.Add(SubScope);
                 Connection = connection;
+                Controller.Connections.Add(Connection);
+                SubScope.Connection = Connection;
             }
             else
             {
-                Connection = null;
+                if(Connection != null)
+                {
+                    Controller.Connections.Remove(Connection);
+                    Connection = null;
+                    SubScope.Connection = null;
+                }
             }
         }
 
