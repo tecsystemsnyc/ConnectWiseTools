@@ -41,11 +41,11 @@
                                     Binding="{Binding Connection.Length}"
                                     Width="Auto"/>
                 <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.ConduitTypes}" SelectedItemBinding="{Binding Connection.ConduitType}"
+                                        ItemsSource="{Binding Data.ConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Connection.ConduitType}"
                                         DisplayMemberPath="Name"
                                         Width="Auto"/>
                 <DataGridCheckBoxColumn Header="Connected"
-                                        Visibility="{Binding Data.HasBMS, Converter={cnvt:BooleanToVisibilityConverter}}"
+                                        Visibility="{Binding Data.HasBMS, Source={StaticResource proxy}, Converter={cnvt:BooleanToVisibilityConverter}}"
                                         Binding="{Binding IsConnected}"
                                         IsReadOnly="True"
                                         Width="Auto"/>
