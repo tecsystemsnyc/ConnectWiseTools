@@ -74,7 +74,7 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         public NetworkViewModel(TECBid bid)
         {
-            Bid = bid;
+            _bid = bid;
 
             AddServerCommand = new RelayCommand(AddServerExecute);
             AddBMSControllerCommand = new RelayCommand(AddBMSControllerExecute);
