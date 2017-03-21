@@ -18,6 +18,7 @@ namespace EstimatingLibrary
         private bool _isTaxExempt;
         private bool _requiresBond;
         private bool _requiresWrapUp;
+        private bool _hasBMS;
 
         private Guid _guid;
         
@@ -107,6 +108,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("RequiresWrapUp", temp, this);
             }
         }
+        public bool HasBMS
+        {
+            get { return _hasBMS; }
+            set
+            {
+                var temp = this.Copy();
+                _hasBMS = value;
+                NotifyPropertyChanged("HasBMS", temp, this);
+            }
+        }
         #endregion
         
         public TECBidParameters(Guid guid)
@@ -115,6 +126,7 @@ namespace EstimatingLibrary
             _isTaxExempt = false;
             _requiresBond = false;
             _requiresWrapUp = false;
+            _hasBMS = true;
 
             _escalation = 0;
             _overhead = 0;
@@ -129,6 +141,7 @@ namespace EstimatingLibrary
             _isTaxExempt = parametersSource.IsTaxExempt;
             _requiresBond = parametersSource.RequiresBond;
             _requiresWrapUp = parametersSource.RequiresWrapUp;
+            _hasBMS = parametersSource.HasBMS;
 
             _escalation = parametersSource.Escalation;
             _overhead = parametersSource.Overhead;
@@ -149,6 +162,7 @@ namespace EstimatingLibrary
             outParameters._isTaxExempt = _isTaxExempt;
             outParameters._requiresBond = _requiresBond;
             outParameters._requiresWrapUp = _requiresWrapUp;
+            outParameters._hasBMS = _hasBMS;
 
             return outParameters;
         }

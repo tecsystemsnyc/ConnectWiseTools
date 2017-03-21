@@ -26,7 +26,7 @@
                                     IsReadOnly="True"
                                     Width="Auto"/>
                 <DataGridComboBoxColumn Header="Networked To" 
-                                        ItemsSource="{Binding Data.Controllers}" SelectedItemBinding="{Binding ParentController}"
+                                        ItemsSource="{Binding Data.Controllers, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentController}"
                                         DisplayMemberPath="Name"
                                         Width="Auto"/>
                 <DataGridComboBoxColumn Header="IO"
