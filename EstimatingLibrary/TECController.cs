@@ -74,6 +74,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
+            Connections.CollectionChanged += CollectionChanged;
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
@@ -101,16 +102,29 @@ namespace EstimatingLibrary
             {
                 foreach(Object item in e.NewItems)
                 {
-                    (item as TECIO).PropertyChanged += ObjectPropertyChanged;
-                    NotifyPropertyChanged("Add", this, item);
+                    if(item is TECIO)
+                    {
+                        (item as TECIO).PropertyChanged += ObjectPropertyChanged;
+                        NotifyPropertyChanged("Add", this, item);
+                    } else if(item is TECConnection)
+                    {
+                        NotifyPropertyChanged("AddRelationship", this, item);
+                    }
+
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (Object item in e.OldItems)
                 {
-                    (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
-                    NotifyPropertyChanged("Remove", this, item);
+                    if (item is TECIO)
+                    {
+                        (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
+                        NotifyPropertyChanged("Remove", this, item);
+                    } else if(item is TECConnection)
+                    {
+                        NotifyPropertyChanged("RemoveRelationship", this, item);
+                    }
                 }
             }
         }

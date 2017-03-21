@@ -1167,8 +1167,8 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECPanel);
         public static Type ReferenceType = typeof(TECController);
 
-        public static TableField PanelID = new TableField("PanelID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             PanelID,

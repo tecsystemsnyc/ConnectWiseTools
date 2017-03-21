@@ -194,15 +194,23 @@ namespace EstimatingUtilitiesLibrary
 
                 if (changeType == Change.Add)
                 {
-                    addUpdate(targetObject, refObject);
+                    addObject(targetObject, refObject);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    editUpdate(targetObject, refObject);
+                    editObject(targetObject, refObject);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    removeUpdate(targetObject, refObject);
+                    removeObject(targetObject, refObject);
+                }
+                else if(changeType == Change.AddRelationship)
+                {
+                    addRelationship(targetObject, refObject);
+                }
+                else if(changeType == Change.RemoveRelationship)
+                {
+                    removeRelationship(targetObject, refObject);
                 }
             }
 
@@ -231,15 +239,23 @@ namespace EstimatingUtilitiesLibrary
 
                 if (changeType == Change.Add)
                 {
-                    addUpdate(targetObject, refObject);
+                    addObject(targetObject, refObject);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    editUpdate(targetObject, refObject);
+                    editObject(targetObject, refObject);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    removeUpdate(targetObject, refObject);
+                    removeObject(targetObject, refObject);
+                }
+                else if (changeType == Change.AddRelationship)
+                {
+                    addRelationship(targetObject, refObject);
+                }
+                else if (changeType == Change.RemoveRelationship)
+                {
+                    removeRelationship(targetObject, refObject);
                 }
             }
 
@@ -253,16 +269,7 @@ namespace EstimatingUtilitiesLibrary
             File.Delete(tempPath);
         }
         #endregion Public Functions
-
-        #region Update Functions
-        static private void addUpdate(object tarObject, object refObject)
-        { addObject(tarObject, refObject); }
-        static private void removeUpdate(object tarObject, object refObject)
-        { removeObject(tarObject, refObject); }
-        static private void editUpdate(object tarObject, object refObject)
-        { editObject(tarObject, refObject); }
-        #endregion Update Functions
-            
+        
         #region Loading from DB Methods
 
         static private TECBid getBidInfo()
@@ -2237,6 +2244,20 @@ namespace EstimatingUtilitiesLibrary
             }
             
         }
+
+        private static void addRelationship(params Object[] objectsToAdd)
+        {
+            //ObjectsToAdd = [targetObject, referenceObject];
+            var relevantTables = getRelevantTablesForAddRemoveRelationship(objectsToAdd);
+            foreach (TableBase table in relevantTables)
+            {
+                var tableInfo = new TableInfo(table);
+                if (tableInfo.IsRelationTable)
+                { updateIndexedRelation(table, objectsToAdd); }
+                else
+                { addObjectToTable(table, objectsToAdd); }
+            }
+        }
         #endregion
 
         #region Generic Remove Methods
@@ -2274,6 +2295,17 @@ namespace EstimatingUtilitiesLibrary
                 if (!SQLiteDB.Delete(tableInfo.Name, data))
                 { DebugHandler.LogError("Couldn't remove data from " + tableInfo.Name + " table."); }
             }
+        }
+
+        private static void removeRelationship(params Object[] objectsToRemove)
+        {
+            var relevantTables = getRelevantTablesForAddRemoveRelationship(objectsToRemove);
+            foreach (TableBase table in relevantTables)
+            {
+                var tableInfo = new TableInfo(table);
+                removeObjectFromTable(table, objectsToRemove);
+            }
+
         }
         #endregion
 
@@ -2463,6 +2495,30 @@ namespace EstimatingUtilitiesLibrary
             return relevantTables;
 
         }
+        private static List<TableBase> getRelevantTablesForAddRemoveRelationship(params Object[] relevantObjects)
+        {
+            var relevantTables = new List<TableBase>();
+            var objectTypes = getObjectTypes(relevantObjects);
+
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = new TableInfo(table);
+
+                //TableInfo.Item4 = List<TableType>
+                bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
+                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
+
+                if ((allTypesMatch || baseAndObjectMatch) && (shouldIncludeCatalog))
+                {
+                    relevantTables.Add(table);
+                }
+            }
+
+            return relevantTables;
+
+        }
+
         private static string objectToDBString(Object inObject)
         {
             string outstring = "";

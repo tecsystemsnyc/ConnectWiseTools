@@ -32,9 +32,10 @@ namespace TECUserControlLibrary.Models
             }
         }
         
-        public ControllerInPanel()
+        public ControllerInPanel(TECController controller, TECPanel panel)
         {
-
+            _controller = controller;
+            _panel = panel;
         }
 
         private void handlePanelSelection(TECPanel originalPanel, TECPanel selectedPanel)
