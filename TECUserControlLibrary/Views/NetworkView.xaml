@@ -81,7 +81,7 @@
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
 
-            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding Path=BMSControllerSource}"/>
+            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllerSource}"/>
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -113,7 +113,7 @@
             <TextBlock Text="General Controllers"
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
-            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding Path=GeneralControllerSource}"/>
+            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=GeneralControllerSource}"/>
         </Grid>
         <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                 BorderBrush="Black"
