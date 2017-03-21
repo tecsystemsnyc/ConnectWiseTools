@@ -80,6 +80,7 @@ namespace EstimateBuilder.ViewModel
         public ReviewViewModel ReviewVM { get; set; }
         public ProposalViewModel ProposalVM { get; set; }
         public ElectricalViewModel ElectricalVM { get; set; }
+        public NetworkViewModel NetworkVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -147,6 +148,11 @@ namespace EstimateBuilder.ViewModel
         {
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
+        }
+
+        private void setupNetworkVM()
+        {
+            NetworkVM = new NetworkViewModel(Bid);
         }
         #endregion
 
@@ -219,6 +225,7 @@ namespace EstimateBuilder.ViewModel
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
             setupMenuVM();
+            setupNetworkVM();
         }
 
         private void refreshAllBids()
@@ -230,6 +237,7 @@ namespace EstimateBuilder.ViewModel
             //SettingsVM.Bid = Bid;
             ProposalVM.Bid = Bid;
             ElectricalVM.refresh(Bid);
+            NetworkVM.Bid = Bid;
         }
 
         private void refreshAllTemplates()

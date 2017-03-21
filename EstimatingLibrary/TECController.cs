@@ -14,6 +14,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnection> _connections;
         private ObservableCollection<TECIO> _io;
         private TECManufacturer _manufacturer;
+        private bool _isServer;
+        private bool _isBMS;
 
         public double Cost
         {
@@ -54,6 +56,26 @@ namespace EstimatingLibrary
                 _manufacturer = value;
                 NotifyPropertyChanged("Manufacturer", temp, this);
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+            }
+        }
+        public bool IsServer
+        {
+            get { return _isServer; }
+            set
+            {
+                var temp = this.Copy();
+                _isServer = value;
+                NotifyPropertyChanged("IsServer", temp, this);
+            }
+        }
+        public bool IsBMS
+        {
+            get { return _isBMS; }
+            set
+            {
+                var temp = this.Copy();
+                _isBMS = value;
+                NotifyPropertyChanged("IsBMS", temp, this);
             }
         }
 
