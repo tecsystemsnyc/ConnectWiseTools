@@ -26,18 +26,21 @@
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Panels.Count}" Header="Panels" Width="Auto"
+                                    IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Controllers.Count}" Header="Controllers" Width="Auto"
+                                    IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Systems.Count}" Header="Systems" Width="Auto"
+                                    IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Connections.Count}" Header="Connections" Width="Auto"
+                                    IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
-
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -38,9 +38,12 @@ namespace EstimatingLibrary
             get { return _controller; }
             set
             {
-                var temp = this.Copy();
+                var oldNew = Tuple.Create<Object, Object>(_controller, value);
+                var temp = Copy();
                 _controller = value;
                 NotifyPropertyChanged("Controller", temp, this);
+                temp = Copy();
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
             }
         }
         public ObservableCollection<TECScope> Scope
@@ -75,10 +78,12 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var temp = this.Copy();
+                var oldNew = Tuple.Create<Object, Object>(_controller, value);
+                var temp = Copy();
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                temp = Copy();
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
             }
         }
         #endregion //Properties

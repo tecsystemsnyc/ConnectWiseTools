@@ -64,8 +64,7 @@ namespace EstimatingLibrary
             return outPanel;
 
         }
-
-
+        
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
