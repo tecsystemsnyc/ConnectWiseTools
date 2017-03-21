@@ -43,7 +43,7 @@ namespace EstimatingLibrary
                 _controller = value;
                 NotifyPropertyChanged("Controller", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
+                NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
         public ObservableCollection<TECScope> Scope
@@ -78,7 +78,7 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_controller, value);
+                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
                 var temp = Copy();
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
@@ -96,7 +96,10 @@ namespace EstimatingLibrary
             _scope = new ObservableCollection<TECScope>();
             _ioTypes = new ObservableCollection<IOType>();
             _controller = new TECController();
+            Scope.CollectionChanged += collectionChanged;
+            IOTypes.CollectionChanged += collectionChanged;
         }
+
         public TECConnection() : this(Guid.NewGuid()) { }
 
         public TECConnection(TECConnection connectionSource) : this()
@@ -111,6 +114,25 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
+
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("AddRelationship", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                }
+            }
+        }
+
         public override Object Copy()
         {
             TECConnection connection = new TECConnection(this);

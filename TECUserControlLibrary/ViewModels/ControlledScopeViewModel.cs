@@ -194,8 +194,7 @@ namespace TECUserControlLibrary.ViewModels
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
             {
-                var controllerInPanel = new ControllerInPanel();
-                (controllerInPanel as ControllerInPanel).Controller = sourceItem as TECController;
+                var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
                 SelectedControlledScope.Controllers.Add(sourceItem as TECController);
                 sourceItem = controllerInPanel;
             }
@@ -234,7 +233,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECController controller in SelectedControlledScope.Controllers)
             {
                 TECPanel panelToAdd = null;
-                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel();
                 foreach (TECPanel panel in SelectedControlledScope.Panels)
                 {
                     if (panel.Controllers.Contains(controller))
@@ -242,8 +240,7 @@ namespace TECUserControlLibrary.ViewModels
                         panelToAdd = panel;
                     }
                 }
-                controllerInPanelToAdd.Controller = controller;
-                controllerInPanelToAdd.Panel = panelToAdd;
+                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
                 ControllerCollection.Add(controllerInPanelToAdd);
             }
         }

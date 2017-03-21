@@ -58,6 +58,7 @@
 
                 <ComboBox ItemsSource="{Binding Path=BMSControllerSource}"
                           SelectedItem="{Binding Path=SelectedBMSController}"
+                          DisplayMemberPath="Controller.Name"
                           Margin="5"/>
                 <Button Grid.Column="1" Margin="5"
                         Content="Add"
@@ -91,6 +92,7 @@
 
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=GeneralControllerSource}"
                           SelectedItem="{Binding Path=SelectedGeneralController}"
+                          DisplayMemberPath="Controller.Name"
                           Margin="5"/>
                 <Button Grid.Column="2" Margin="5"
                         Content="Add"

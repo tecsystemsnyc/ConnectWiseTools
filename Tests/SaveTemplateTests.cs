@@ -1922,6 +1922,9 @@ namespace Tests
             var scopeSystem = new TECSystem();
             scopeSystem.Name = "Test Scope System";
             scopeSystem.Description = "Test scope system description";
+            scopeSystem.Equipment.Add(new TECEquipment());
+            scopeSystem.Equipment[0].SubScope.Add(new TECSubScope());
+
             expectedScope.Systems.Add(scopeSystem);
 
             var scopeController = new TECController();
@@ -1934,6 +1937,8 @@ namespace Tests
             expectedScope.Panels.Add(scopePanel);
 
             var scopeConnection = new TECConnection();
+            scopeConnection.Controller = scopeController;
+            scopeConnection.Scope.Add(scopeSystem.Equipment[0].SubScope[0]);
             expectedScope.Connections.Add(scopeConnection);
             
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
@@ -1957,6 +1962,7 @@ namespace Tests
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Connections.Count, actualScope.Connections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
+            Assert.IsTrue(actualScope.Connections[0].Scope.Contains(actualScope.Systems[0].Equipment[0].SubScope[0]));
         }
 
         [TestMethod]
@@ -1983,6 +1989,7 @@ namespace Tests
 
             Assert.AreEqual((oldNumScope - 1), templates.ControlledScopeTemplates.Count);
         }
+
         #endregion
     }
 }

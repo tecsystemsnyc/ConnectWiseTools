@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public enum Change {Add, Remove, Edit};
+    public enum Change {Add, Remove, Edit, AddRelationship, RemoveRelationship};
     public class ChangeStack
     {
         //List of change, target object, reference object
@@ -21,7 +21,7 @@ namespace EstimatingUtilitiesLibrary
         //Example: Edit, New Object, Old Object
         public List<StackItem> UndoStack { get; set; }
         public List<StackItem> RedoStack { get; set; }
-        public List<StackItem> SaveStack { get; set; }
+        public ObservableCollection<StackItem> SaveStack { get; set; }
         public TECBid Bid;
         public TECTemplates Templates;
 
@@ -36,9 +36,21 @@ namespace EstimatingUtilitiesLibrary
         {
             UndoStack = new List<StackItem>();
             RedoStack = new List<StackItem>();
-            SaveStack = new List<StackItem>();
+            SaveStack = new ObservableCollection<StackItem>();
+            SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-        
+
+        private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    var obj = item;
+                }
+            }
+        }
+
         public ChangeStack(TECBid bid) : this()
         {
             Bid = bid;
@@ -139,7 +151,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
             foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
-            { scope.PropertyChanged += Object_PropertyChanged; }
+            { registerControlledScope(scope); }
         }
         private void registerSubScope(TECSubScope subScope)
         {
@@ -204,19 +216,39 @@ namespace EstimatingUtilitiesLibrary
                 registerScope(child);
             }
         }
+        private void registerControlledScope(TECControlledScope scope)
+        {
+            scope.PropertyChanged += Object_PropertyChanged;
+            foreach(TECPanel panel in scope.Panels)
+            {
+                panel.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECController controller in scope.Controllers)
+            {
+                controller.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECConnection connection in scope.Connections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECSystem system in scope.Systems)
+            {
+                registerSystems(system);
+            }
+        }
 
         public void Undo()
         {
             isDoing = true;
             StackItem item = UndoStack.Last();
             DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
-            if (item.Change == Change.Add)
+            if (item.Change == Change.Add || item.Change == Change.AddRelationship)
             {
                 handleAdd(item);
                 UndoStack.Remove(item);
                 UndoStack.Remove(UndoStack.Last());
                 RedoStack.Add(item);
-            } else if(item.Change == Change.Remove)
+            } else if(item.Change == Change.Remove || item.Change == Change.RemoveRelationship)
             {
                 handleRemove(item);
                 UndoStack.Remove(item);
@@ -453,6 +485,29 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
+                else if (e.PropertyName == "RelationshipPropertyChanged")
+                {
+                    message = "Object changed: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    var oldNew = newValue as Tuple<Object, Object>;
+                    var toSave = new List<StackItem>();
+                    if (oldNew.Item1 != null)
+                    {
+                        toSave.Add(new StackItem(Change.RemoveRelationship, oldValue, oldNew.Item1));
+                    }
+                    if (oldNew.Item2 != null)
+                    {
+                        toSave.Add(new StackItem(Change.AddRelationship, oldValue, oldNew.Item2));
+                    }
+                    foreach (var save in toSave)
+                    {
+                        SaveStack.Add(save);
+                    }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
                 else if(e.PropertyName == "MetaAdd")
                 {
                     message = "MetaAdd change: " + oldValue;
@@ -472,6 +527,30 @@ namespace EstimatingUtilitiesLibrary
                     
                     item = new StackItem(Change.Remove, args);
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if(e.PropertyName == "AddRelationship")
+                {
+                    message = "Add relationship change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.AddRelationship, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if(e.PropertyName == "RemoveRelationShip")
+                {
+                    message = "Remove relationship change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.RemoveRelationship, args);
+                    UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
@@ -514,7 +593,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleSubScopeChildren(newItem as TECSubScope, item.Change);
             }
-            else if (newItem is TECController)
+            else if (newItem is TECController && (item.ReferenceObject is TECBid || item.ReferenceObject is TECTemplates))
             {
                 handleControllerChildren(newItem as TECController, item.Change);
             }
