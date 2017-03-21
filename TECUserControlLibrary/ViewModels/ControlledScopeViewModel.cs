@@ -345,16 +345,31 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                
+                foreach(object item in e.OldItems)
+                {
+                    if(item is ControllerInPanel)
+                    {
+                        foreach(TECPanel panel in SelectedControlledScope.Panels)
+                        {
+                            if(panel.Controllers.Contains((item as ControllerInPanel).Controller))
+                            {
+                                panel.Controllers.Remove((item as ControllerInPanel).Controller);
+                            }
+                        }
+                        SelectedControlledScope.Controllers.Remove((item as ControllerInPanel).Controller);
+                    }
+                }
             }
         }
         
         private void updateCollections()
         {
+            ControllerCollection.CollectionChanged -= collectionChanged;
             updateControllerSelections();
             updateControllerCollection();
             updatePanels();
             updateSubScopeConnections();
+            ControllerCollection.CollectionChanged += collectionChanged;
         }
     }
 }

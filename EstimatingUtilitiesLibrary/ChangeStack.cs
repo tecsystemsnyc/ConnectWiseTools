@@ -430,9 +430,9 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
-                else if (e.PropertyName == "LocationChanged")
+                else if (e.PropertyName == "ObjectPropertyChanged")
                 {
-                    message = "Location change: " + oldValue;
+                    message = "Object changed: " + oldValue;
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                     
                     var oldNew = newValue as Tuple<Object, Object>;

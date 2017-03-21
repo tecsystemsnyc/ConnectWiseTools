@@ -92,7 +92,7 @@ namespace EstimatingLibrary
                 _location = value;
                 NotifyPropertyChanged("Location", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("LocationChanged", temp, oldNew);
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
             }
         }
         #endregion //Properties
