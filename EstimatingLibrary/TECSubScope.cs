@@ -64,17 +64,14 @@ namespace EstimatingLibrary
         {
             get { return getConnectionTypes(); }
         }
-
         public List<TECConnectionType> AvailableConnections
         {
             get { return getAvailableConnectionTypes(); }
         }
-
         public ObservableCollection<PointTypes> AllPointTypes
         {
             get { return getAllPointTypes(); }
         }
-
         public ObservableCollection<IOType> AllIOTypes
         {
             get { return getAllIOTypes(); }
@@ -95,8 +92,11 @@ namespace EstimatingLibrary
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope) : this()
+        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if(guidDictionary != null)
+            { guidDictionary[sourceSubScope.Guid] = _guid; }
+            
             foreach(TECDevice device in sourceSubScope.Devices)
             { Devices.Add(new TECDevice(device)); }
             foreach(TECPoint point in sourceSubScope.Points)

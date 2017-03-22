@@ -7,6 +7,7 @@ using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -206,6 +207,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void addControlledScope(TECBid bid, TECControlledScope controlledScope)
         {
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var systemCollection = new ObservableCollection<TECSystem>();
             var controllerCollection = new ObservableCollection<TECController>();
             var connectionCollection = new ObservableCollection<TECConnection>();
@@ -226,15 +228,13 @@ namespace EstimateBuilder.ViewModel
             {
                 connectionCollection.Add(new TECConnection(connection));
             }
-            foreach(TECSystem system in systemCollection)
-            {
-                bid.Systems.Add(system);
-            }
-            foreach(TECController controller in controllerCollection)
+            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+              panelCollection, connectionCollection, bid);
+            foreach (TECController controller in controllerCollection)
             {
                 bid.Controllers.Add(controller);
             }
-            foreach(TECPanel panel in panelCollection)
+            foreach (TECPanel panel in panelCollection)
             {
                 bid.Panels.Add(panel);
             }
@@ -242,9 +242,11 @@ namespace EstimateBuilder.ViewModel
             {
                 bid.Connections.Add(connection);
             }
-
-            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-               panelCollection, connectionCollection, bid);
+            foreach (TECSystem system in systemCollection)
+            {
+                bid.Systems.Add(system);
+            }
+            
         }
         #endregion //Helper Methods
         #endregion //Methods

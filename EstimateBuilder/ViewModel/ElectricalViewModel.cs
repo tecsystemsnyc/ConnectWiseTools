@@ -59,14 +59,21 @@ namespace EstimateBuilder.ViewModel
 
         public ElectricalViewModel(TECBid bid)
         {
-            Bid = bid;
-            updateCollections();
-            registerSubScope();
+            refresh(bid);
         }
 
         public void refresh(TECBid bid)
         {
             Bid = bid;
+            ConduitTypeSelections = new ObservableCollection<TECConduitType>();
+            var noneConduit = new TECConduitType();
+            noneConduit.Name = "None";
+            ConduitTypeSelections.Add(noneConduit);
+            foreach (TECConduitType type in Bid.ConduitTypes)
+            {
+                ConduitTypeSelections.Add(type);
+            }
+            Bid.Controllers.CollectionChanged += collectionChanged;
             updateCollections();
             registerSubScope();
         }
@@ -113,7 +120,7 @@ namespace EstimateBuilder.ViewModel
                     }
                 }
             }
-            updateSubScopeConnections();
+            updateCollections();
         }
         private void SubConnectionToAdd_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {

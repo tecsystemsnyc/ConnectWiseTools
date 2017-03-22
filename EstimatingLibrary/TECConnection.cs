@@ -104,8 +104,11 @@ namespace EstimatingLibrary
 
         public TECConnection() : this(Guid.NewGuid()) { }
 
-        public TECConnection(TECConnection connectionSource) : this()
+        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if (guidDictionary != null)
+            { guidDictionary[connectionSource.Guid] = _guid; }
+
             _length = connectionSource.Length;
             _scope = connectionSource.Scope;
             _ioTypes = connectionSource.IOTypes;

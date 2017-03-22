@@ -104,8 +104,10 @@ namespace EstimatingLibrary
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
-        public TECController(TECController controllerSource) : this()
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if (guidDictionary != null)
+            { guidDictionary[controllerSource.Guid] = _guid; }
             copyPropertiesFromScope(controllerSource);
             foreach(TECIO io in controllerSource.IO)
             {
@@ -113,7 +115,7 @@ namespace EstimatingLibrary
             }
             foreach(TECConnection connection in controllerSource.Connections)
             {
-                _connections.Add(new TECConnection(connection));
+                _connections.Add(new TECConnection(connection, guidDictionary));
             }
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
