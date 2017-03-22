@@ -534,6 +534,7 @@ namespace EstimatingLibrary
                 {
                     linkScopeChildren(panel, templates);
                 }
+                //linkScopeInConnections(scope.Connections, scope.Systems);
             }
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
@@ -580,6 +581,7 @@ namespace EstimatingLibrary
                     if (connection.Guid == subScope.Connection.Guid)
                     {
                         subScope.Connection = connection;
+                        connection.Scope.Add(subScope);
                     }
                 }
             }
@@ -598,7 +600,42 @@ namespace EstimatingLibrary
                 linkConnectionsInEquipment(connections, equipment);
             }
         }
-        
+        static private void linkScopeInConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECSystem> systems)
+        {
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECSystem system in systems)
+                {
+                    linkScopeWithConnection(connection, system);
+                    foreach(TECEquipment equipment in system.Equipment)
+                    {
+                        linkScopeWithConnection(connection, equipment);
+                        foreach(TECSubScope subScope in equipment.SubScope)
+                        {
+                            linkScopeWithConnection(connection, subScope);
+                        }
+                    }
+                }
+            }
+        }
+        static private void linkScopeWithConnection(TECConnection connection, TECScope scope)
+        {
+            ObservableCollection<TECScope> scopeToReplace = new ObservableCollection<TECScope>();
+            foreach(TECScope connScope in connection.Scope)
+            {
+                if(connScope.Guid == scope.Guid)
+                {
+                    scopeToReplace.Add(connScope);
+                }
+            }
+            foreach(TECScope item in scopeToReplace)
+            {
+                connection.Scope.Remove(item);
+                connection.Scope.Add(scope);
+            }
+
+        }
+
         //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
         //{
         //    var linkedList = new ObservableCollection<TECScope>();
