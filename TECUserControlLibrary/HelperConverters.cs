@@ -335,7 +335,6 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-
             if (((TECController)value).Name == "None")
             {
                 return null;

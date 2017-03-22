@@ -988,6 +988,50 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
+        
+        static private TECController getControllerInConnection(Guid connectionID)
+        {
+            var tables = getAllTableNames();
+            if (tables.Contains(ConnectionTable.TableName))
+            {
+                var outController = new TECController();
+                string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+                command += "(select " + ControllerConnectionTable.ControllerID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+                command += ControllerConnectionTable.ConnectionID.Name + " = '" + connectionID;
+                command += "')";
+                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
+                if( connectionDT.Rows.Count > 0){
+                    outController = getControllerPlaceholderFromRow(connectionDT.Rows[0]);
+                }
+                return outController;
+            }
+            else
+            { return  null; }
+        }
+        static private ObservableCollection<TECScope> getScopeInConnection(Guid connectionID)
+        {
+            var outScope = new ObservableCollection<TECScope>();
+
+            string command = "select * from " + SubScopeTable.TableName + " where " + SubScopeTable.SubScopeID.Name + " in ";
+            command += "(select " + ScopeConnectionTable.ScopeID.Name + " from " + ScopeConnectionTable.TableName + " where ";
+            command += ScopeConnectionTable.ConnectionID.Name + " = '" + connectionID;
+            command += "')";
+
+            DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in scopeDT.Rows)
+            { outScope.Add(getSubScopePlaceholderFromRow(row)); }
+
+            command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            command += "(select " + ScopeConnectionTable.ScopeID.Name + " from " + ScopeConnectionTable.TableName + " where ";
+            command += ScopeConnectionTable.ConnectionID.Name + " = '" + connectionID;
+            command += "')";
+
+            scopeDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in scopeDT.Rows)
+            { outScope.Add(getControllerPlaceholderFromRow(row)); }
+
+            return outScope;
+        }
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
@@ -1722,6 +1766,8 @@ namespace EstimatingUtilitiesLibrary
             TECConnection connection = new TECConnection(guid);
             connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
+            connection.Controller = getControllerInConnection(connection.Guid);
+            connection.Scope = getScopeInConnection(connection.Guid);
             return connection;
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
@@ -1801,6 +1847,28 @@ namespace EstimatingUtilitiesLibrary
 
             return controlledScope;
         }
+
+        private static TECSubScope getSubScopePlaceholderFromRow(DataRow row)
+        {
+            Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
+            TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
+            subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
+            subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
+            subScopeToAdd.Tags = getTagsInScope(subScopeID);
+            return subScopeToAdd;
+        }
+        private static TECController getControllerPlaceholderFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
+            TECController controller = new TECController(guid);
+
+            controller.Name = row[ControllerTable.Name.Name].ToString();
+            controller.Description = row[ControllerTable.Description.Name].ToString();
+            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
+            return controller;
+        }
+
+
         #endregion
 
         #region Generic Create Methods

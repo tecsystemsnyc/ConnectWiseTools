@@ -52,8 +52,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                Scope.CollectionChanged -= collectionChanged;
                 _scope = value;
                 NotifyPropertyChanged("Scope", temp, this);
+                Scope.CollectionChanged += collectionChanged;
             }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes

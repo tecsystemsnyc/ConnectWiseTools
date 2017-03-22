@@ -33,8 +33,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                Connections.CollectionChanged -= CollectionChanged;
                 _connections = value;
                 NotifyPropertyChanged("Connections", temp, this);
+                Connections.CollectionChanged += CollectionChanged;
             }
         }
         public ObservableCollection<TECIO> IO
@@ -43,8 +45,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                IO.CollectionChanged -= CollectionChanged;
                 _io = value;
                 NotifyPropertyChanged("IO", temp, this);
+                IO.CollectionChanged += CollectionChanged;
             }
         }
         public TECManufacturer Manufacturer

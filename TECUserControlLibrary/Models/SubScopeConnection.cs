@@ -75,11 +75,11 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public SubScopeConnection()
+        public SubScopeConnection(TECConnection connection, TECController controller, TECSubScope subscope)
         {
-            _connection = null;
-            _controller = null;
-            _subScope = null;
+            _connection = connection;
+            _controller = controller;
+            _subScope = subscope;
         }
 
         private void handleControllerSelection(TECController controller)

@@ -110,8 +110,6 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedControlledScope = value;
                 if(value != null)
                 {
-                    ControllerSelections = new ObservableCollection<TECController>();
-                    PanelsCollection = new ObservableCollection<TECPanel>();
                     updateCollections();
                     registerChanges();
                 }
@@ -265,23 +263,26 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        var subConnectionToAdd = new SubScopeConnection();
-                        subConnectionToAdd.SubScope = subScope;
-                        subConnectionToAdd.ParentSystem = system;
-                        subConnectionToAdd.ParentEquipment = equipment;
+                        TECSubScope subScopetoAdd = subScope;
+                        TECConnection connectionToAdd = null;
+                        TECController controllerToAdd = null;
+                        
                         foreach(TECConnection connection in SelectedControlledScope.Connections)
                         {
                             if (connection.Scope.Contains(subScope))
                             {
-                                subConnectionToAdd.Connection = connection;
-                                subConnectionToAdd.Controller = connection.Controller;
-                            }
-                            else
-                            {
-                                subConnectionToAdd.Controller = null;
+                                connectionToAdd = connection;
+                                controllerToAdd = connection.Controller;
                             }
                         }
+
+                        var subConnectionToAdd = new SubScopeConnection(connectionToAdd, controllerToAdd, subScopetoAdd);
+
+                        subConnectionToAdd.ParentSystem = system;
+                        subConnectionToAdd.ParentEquipment = equipment;
+
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
+                        
                         subConnectionToAdd.PropertyChanged += SubConnectionToAdd_PropertyChanged;
                     }
                 }
@@ -362,10 +363,10 @@ namespace TECUserControlLibrary.ViewModels
         private void updateCollections()
         {
             ControllerCollection.CollectionChanged -= collectionChanged;
+            updateSubScopeConnections();
             updateControllerSelections();
             updateControllerCollection();
             updatePanels();
-            updateSubScopeConnections();
             ControllerCollection.CollectionChanged += collectionChanged;
         }
     }

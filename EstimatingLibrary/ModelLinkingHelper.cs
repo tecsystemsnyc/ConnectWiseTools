@@ -171,7 +171,6 @@ namespace EstimatingLibrary
                         if(controllerConnection.Guid == connection.Guid)
                         {
                             linkedConnections.Add(connection);
-                            connection.Scope.Add(controller);
                         }
                     }
                 }
@@ -190,7 +189,6 @@ namespace EstimatingLibrary
                                 if (subScope.Connection.Guid == connection.Guid)
                                 {
                                     subScope.Connection = connection;
-                                    connection.Scope.Add(subScope);
                                 }
                             }
                         }
@@ -534,7 +532,8 @@ namespace EstimatingLibrary
                 {
                     linkScopeChildren(panel, templates);
                 }
-                //linkScopeInConnections(scope.Connections, scope.Systems);
+                linkScopeInConnections(scope.Connections, scope.Systems);
+                linkControllersInConnections(scope.Connections, scope.Controllers);
             }
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
@@ -634,6 +633,19 @@ namespace EstimatingLibrary
                 connection.Scope.Add(scope);
             }
 
+        }
+        static private void linkControllersInConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers)
+        {
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECController controller in controllers)
+                {
+                    if(connection.Controller.Guid == controller.Guid)
+                    {
+                        connection.Controller = controller;
+                    }
+                }
+            }
         }
 
         //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
