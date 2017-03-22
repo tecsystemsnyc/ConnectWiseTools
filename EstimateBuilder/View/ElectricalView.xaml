@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
@@ -21,8 +22,9 @@
         <Label Content="Wiring"/>
         <Label Grid.Column="1"
                Content="Misc. Wiring"/>
-        <cLib:SubScopeWiringGridControl SubScopeSource="{Binding AllSubScope}"
-                                        Grid.Row="1" Margin="5"/>
+        <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                              Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1"
+                              Margin="5"/>
         <DataGrid ItemsSource="{Binding Bid.MiscCosts}"
                   Grid.Row="1" Grid.Column="1"
                   AutoGenerateColumns="False"

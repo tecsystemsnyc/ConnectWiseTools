@@ -146,7 +146,7 @@ namespace EstimateBuilder.ViewModel
             Type sourceType = sourceItem.GetType();
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if (sourceItem != null && sourceType == targetType)
+            if (sourceItem != null && sourceType == targetType || sourceItem is TECControlledScope)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -156,7 +156,11 @@ namespace EstimateBuilder.ViewModel
         public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            if(dropInfo.Data is TECControlledScope)
+            {
+                addControlledScope(Bid, dropInfo.Data as TECControlledScope);
+            }
+            else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
@@ -200,7 +204,48 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
             ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
         }
-        
+        private void addControlledScope(TECBid bid, TECControlledScope controlledScope)
+        {
+            var systemCollection = new ObservableCollection<TECSystem>();
+            var controllerCollection = new ObservableCollection<TECController>();
+            var connectionCollection = new ObservableCollection<TECConnection>();
+            var panelCollection = new ObservableCollection<TECPanel>();
+            foreach(TECSystem system in controlledScope.Systems)
+            {
+                systemCollection.Add(system.DragDropCopy() as TECSystem);
+            }
+            foreach(TECController controller in controlledScope.Controllers)
+            {
+                controllerCollection.Add(controller.DragDropCopy() as TECController);
+            }
+            foreach(TECPanel panel in controlledScope.Panels)
+            {
+                panelCollection.Add(panel.DragDropCopy() as TECPanel);
+            }
+            foreach(TECConnection connection in controlledScope.Connections)
+            {
+                connectionCollection.Add(new TECConnection(connection));
+            }
+            foreach(TECSystem system in systemCollection)
+            {
+                bid.Systems.Add(system);
+            }
+            foreach(TECController controller in controllerCollection)
+            {
+                bid.Controllers.Add(controller);
+            }
+            foreach(TECPanel panel in panelCollection)
+            {
+                bid.Panels.Add(panel);
+            }
+            foreach(TECConnection connection in connectionCollection)
+            {
+                bid.Connections.Add(connection);
+            }
+
+            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+               panelCollection, connectionCollection, bid);
+        }
         #endregion //Helper Methods
         #endregion //Methods
     }
