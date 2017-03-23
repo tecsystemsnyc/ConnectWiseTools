@@ -55,6 +55,7 @@
                                             SubScopeSource="{Binding LocationDataGrid.SubScopeByLocation}"
                                             ViewModel="{Binding LocationDataGrid}"/>
             </TabItem>
+           
         </TabControl>
 
         

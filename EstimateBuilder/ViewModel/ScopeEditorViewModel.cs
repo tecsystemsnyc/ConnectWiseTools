@@ -7,6 +7,7 @@ using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -146,7 +147,7 @@ namespace EstimateBuilder.ViewModel
             Type sourceType = sourceItem.GetType();
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if (sourceItem != null && sourceType == targetType)
+            if (sourceItem != null && sourceType == targetType || sourceItem is TECControlledScope)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -156,7 +157,11 @@ namespace EstimateBuilder.ViewModel
         public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            if(dropInfo.Data is TECControlledScope)
+            {
+                addControlledScope(Bid, dropInfo.Data as TECControlledScope);
+            }
+            else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
@@ -200,7 +205,51 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
             ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
         }
-        
+        private void addControlledScope(TECBid bid, TECControlledScope controlledScope)
+        {
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            var systemCollection = new ObservableCollection<TECSystem>();
+            var controllerCollection = new ObservableCollection<TECController>();
+            var connectionCollection = new ObservableCollection<TECConnection>();
+            var panelCollection = new ObservableCollection<TECPanel>();
+            foreach(TECSystem system in controlledScope.Systems)
+            {
+                systemCollection.Add(new TECSystem(system, guidDictionary));
+            }
+            foreach(TECController controller in controlledScope.Controllers)
+            {
+                controllerCollection.Add(new TECController(controller, guidDictionary));
+            }
+            foreach(TECPanel panel in controlledScope.Panels)
+            {
+                panelCollection.Add(new TECPanel(panel, guidDictionary));
+            }
+            foreach(TECConnection connection in controlledScope.Connections)
+            {
+                connectionCollection.Add(new TECConnection(connection, guidDictionary));
+            }
+
+            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+              panelCollection, connectionCollection, bid, guidDictionary);
+
+            foreach (TECController controller in controllerCollection)
+            {
+                bid.Controllers.Add(controller);
+            }
+            foreach (TECPanel panel in panelCollection)
+            {
+                bid.Panels.Add(panel);
+            }
+            foreach(TECConnection connection in connectionCollection)
+            {
+                bid.Connections.Add(connection);
+            }
+            foreach (TECSystem system in systemCollection)
+            {
+                bid.Systems.Add(system);
+            }
+            
+        }
         #endregion //Helper Methods
         #endregion //Methods
     }

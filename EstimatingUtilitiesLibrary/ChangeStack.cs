@@ -39,18 +39,6 @@ namespace EstimatingUtilitiesLibrary
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-
-        private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(object item in e.NewItems)
-                {
-                    var obj = item;
-                }
-            }
-        }
-
         public ChangeStack(TECBid bid) : this()
         {
             Bid = bid;
@@ -61,6 +49,20 @@ namespace EstimatingUtilitiesLibrary
             Templates = templates;
             registerTemplatesChanges(templates);
         }
+        #endregion
+
+        #region Collection Watching
+        private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    var obj = item;
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -609,6 +611,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleConnectionChildren(newItem as TECConnection, item.Change);
             }
+            else if (newItem is TECControlledScope)
+            {
+                handleControlledScope(newItem as TECControlledScope, item.Change);
+            }
 
             else if (newItem is TECDrawing)
             {
@@ -619,7 +625,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private void handleSystemChildren(TECSystem system, Change change)
         {
             handleScopeChildren(system as TECScope, change);
@@ -644,7 +649,6 @@ namespace EstimatingUtilitiesLibrary
                 handleEquipmentChildren(newEquipment, change);
             }
         }
-
         private void handleEquipmentChildren(TECEquipment equipment, Change change)
         {
             handleScopeChildren(equipment as TECScope, change);
@@ -669,7 +673,6 @@ namespace EstimatingUtilitiesLibrary
                 handleSubScopeChildren(newSubScope, change);
             }
         }
-
         private void handleSubScopeChildren(TECSubScope subScope, Change change)
         {
             handleScopeChildren(subScope as TECScope, change);
@@ -699,17 +702,15 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
             StackItem item;
             if (connection.ConduitType != null)
             {
                 item = new StackItem(change, (object)connection, (object)connection.ConduitType);
-                SaveStack.Add(item);
+                //SaveStack.Add(item);
             }
         }
-
         private void handleDeviceChildren(TECDevice device, Change change)
         {
             handleScopeChildren(device as TECScope, change);
@@ -719,7 +720,6 @@ namespace EstimatingUtilitiesLibrary
             item = new StackItem(change, (object)device, (object)device.ConnectionType);
             SaveStack.Add(item);
         }
-
         private void handleControllerChildren(TECController controller, Change change)
         {
             handleScopeChildren(controller as TECScope, change);
@@ -727,7 +727,6 @@ namespace EstimatingUtilitiesLibrary
             item = new StackItem(change, (object)controller, (object)controller.Manufacturer);
             SaveStack.Add(item);
         }
-
         private void handleScopeChildren(TECScope scope, Change change)
         {
             StackItem item;
@@ -739,6 +738,40 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECTag tag in scope.Tags)
             {
                 item = new StackItem(change, (object)scope, (object)tag);
+                SaveStack.Add(item);
+            }
+        }
+        private void handleControlledScope(TECControlledScope scope, Change change)
+        {
+            StackItem item;
+            foreach (TECSystem system in scope.Systems)
+            {
+                handleScopeChildren(system as TECScope, change);
+                system.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)system);
+                SaveStack.Add(item);
+                handleSystemChildren(system, change);
+            }
+            foreach (TECController controller in scope.Controllers)
+            {
+                handleScopeChildren(controller as TECScope, change);
+                controller.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)controller);
+                SaveStack.Add(item);
+                handleControllerChildren(controller, change);
+            }
+            foreach (TECConnection connection in scope.Connections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)connection);
+                SaveStack.Add(item);
+                handleConnectionChildren(connection, change);
+            }
+            foreach(TECPanel panel in scope.Panels)
+            {
+                handleScopeChildren(panel as TECScope, change);
+                panel.PropertyChanged += Object_PropertyChanged;
+                item = new StackItem(change, (object)scope, (object)panel);
                 SaveStack.Add(item);
             }
         }

@@ -43,6 +43,34 @@ namespace EstimatingLibrary
             linkControlledScope(templates.ControlledScopeTemplates, templates);
         }
 
+        public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
+            ObservableCollection<TECPanel> panels, ObservableCollection<TECConnection> connections, TECBid bid, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+
+            linkAllDevicesFromSystems(systems, bid.DeviceCatalog);
+            linkPanelTypesInPanel(bid.PanelTypeCatalog, panels);
+            linkConduitTypeWithConnections(bid.ConduitTypes, connections);
+            linkManufacturersWithControllers(bid.ManufacturerCatalog, controllers);
+
+            foreach (TECSystem sys in systems)
+            {
+                linkConnectionsInSystem(connections, sys, guidDictionary);
+                linkScopeChildrenInSystem(sys, bid);
+            }
+            linkControllersInPanels(controllers, panels, guidDictionary);
+            foreach (TECController control in controllers)
+            {
+                linkConnectionsInController(connections, control, guidDictionary);
+                linkScopeChildren(control, bid);
+            }
+            foreach (TECPanel panel in panels)
+            {
+                linkScopeChildren(panel, bid);
+            }
+            linkScopeInConnections(connections, systems, guidDictionary);
+            linkControllersInConnections(connections, controllers, guidDictionary);
+        }
+
         #region Link Methods
         static private void linkScopeChildren(TECScope scope, object bidOrTemp)
         {
@@ -161,42 +189,16 @@ namespace EstimatingLibrary
         }
         static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> bidSystems)
         {
-            foreach(TECController controller in controllers)
+            foreach (TECSystem sys in bidSystems)
             {
-                var linkedConnections = new ObservableCollection<TECConnection>();
-                foreach(TECConnection controllerConnection in controller.Connections)
-                {
-                    foreach (TECConnection connection in connections)
-                    {
-                        if(controllerConnection.Guid == connection.Guid)
-                        {
-                            linkedConnections.Add(connection);
-                            connection.Scope.Add(controller);
-                        }
-                    }
-                }
-                controller.Connections = linkedConnections;
+                linkConnectionsInSystem(connections, sys);
             }
-            foreach(TECSystem system in bidSystems)
+            foreach (TECController control in controllers)
             {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    foreach(TECSubScope subScope in equipment.SubScope)
-                    {
-                        if(subScope.Connection != null)
-                        {
-                            foreach (TECConnection connection in connections)
-                            {
-                                if (subScope.Connection.Guid == connection.Guid)
-                                {
-                                    subScope.Connection = connection;
-                                    connection.Scope.Add(subScope);
-                                }
-                            }
-                        }
-                    }
-                }
+                linkConnectionsInController(connections, control);
             }
+            linkScopeInConnections(connections, bidSystems);
+            linkControllersInConnections(connections, controllers);
         }
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
         {
@@ -534,9 +536,11 @@ namespace EstimatingLibrary
                 {
                     linkScopeChildren(panel, templates);
                 }
+                linkScopeInConnections(scope.Connections, scope.Systems);
+                linkControllersInConnections(scope.Connections, scope.Controllers);
             }
         }
-        static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
+        static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach(TECPanel panel in panels)
             {
@@ -550,12 +554,17 @@ namespace EstimatingLibrary
                             controllersToLink.Add(controller);
                             break;
                         }
+                        else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
                     }
                 }
                 panel.Controllers = controllersToLink;
             }
         }
-        static private void linkConnectionsInController(ObservableCollection<TECConnection> connections, TECController controller)
+        static private void linkConnectionsInController(ObservableCollection<TECConnection> connections, TECController controller, Dictionary<Guid, Guid> guidDictionary = null)
         {
             ObservableCollection<TECConnection> connectionsToLink = new ObservableCollection<TECConnection>();
             foreach(TECConnection controllerConnection in controller.Connections)
@@ -566,12 +575,16 @@ namespace EstimatingLibrary
                     {
                         connectionsToLink.Add(connection);
                         break;
+                    } else if (guidDictionary != null && guidDictionary[controllerConnection.Guid] == guidDictionary[connection.Guid])
+                    {
+                        connectionsToLink.Add(connection);
+                        break;
                     }
                 }
             }
             controller.Connections = connectionsToLink;
         }
-        static private void linkConnectionsInSubScope(ObservableCollection<TECConnection> connections, TECSubScope subScope)
+        static private void linkConnectionsInSubScope(ObservableCollection<TECConnection> connections, TECSubScope subScope, Dictionary<Guid, Guid> guidDictionary = null)
         {
             if(subScope.Connection != null)
             {
@@ -580,25 +593,81 @@ namespace EstimatingLibrary
                     if (connection.Guid == subScope.Connection.Guid)
                     {
                         subScope.Connection = connection;
+                        connection.Scope.Add(subScope);
+                    }
+                    else if(guidDictionary != null && guidDictionary[connection.Guid] == guidDictionary[subScope.Connection.Guid])
+                    {
+                        subScope.Connection = connection;
+                        connection.Scope.Add(subScope);
                     }
                 }
             }
         }
-        static private void linkConnectionsInEquipment(ObservableCollection<TECConnection> connections, TECEquipment equipment)
+        static private void linkConnectionsInEquipment(ObservableCollection<TECConnection> connections, TECEquipment equipment, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                linkConnectionsInSubScope(connections, subscope);
+                linkConnectionsInSubScope(connections, subscope, guidDictionary);
             }
         }
-        static private void linkConnectionsInSystem(ObservableCollection<TECConnection> connections, TECSystem system)
+        static private void linkConnectionsInSystem(ObservableCollection<TECConnection> connections, TECSystem system, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach(TECEquipment equipment in system.Equipment)
             {
-                linkConnectionsInEquipment(connections, equipment);
+                linkConnectionsInEquipment(connections, equipment, guidDictionary);
             }
         }
-        
+        static private void linkScopeInConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECSystem system in systems)
+                {
+                    foreach(TECEquipment equipment in system.Equipment)
+                    {
+                        foreach(TECSubScope subScope in equipment.SubScope)
+                        {
+                            linkScopeWithConnection(connection, subScope, guidDictionary);
+                        }
+                    }
+                }
+            }
+        }
+        static private void linkScopeWithConnection(TECConnection connection, TECScope scope, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+            ObservableCollection<TECScope> scopeToReplace = new ObservableCollection<TECScope>();
+            foreach(TECScope connScope in connection.Scope)
+            {
+                if(connScope.Guid == scope.Guid)
+                {
+                    scopeToReplace.Add(connScope);
+                }
+                else if(guidDictionary!= null && guidDictionary[connScope.Guid] == guidDictionary[scope.Guid])
+                {
+                    scopeToReplace.Add(connScope);
+                }
+            }
+            foreach(TECScope item in scopeToReplace)
+            {
+                connection.Scope.Remove(item);
+                connection.Scope.Add(scope);
+            }
+
+        }
+        static private void linkControllersInConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECController controller in controllers)
+                {
+                    if ((connection.Controller.Guid == controller.Guid) || (guidDictionary != null && guidDictionary[connection.Controller.Guid] == guidDictionary[controller.Guid]));
+                    {
+                        connection.Controller = controller;
+                    }
+                }
+            }
+        }
+
         //static private void linkScopeObjects(object scopeReferenceList, object scopeObjectList)
         //{
         //    var linkedList = new ObservableCollection<TECScope>();

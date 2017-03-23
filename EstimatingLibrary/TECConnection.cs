@@ -52,8 +52,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                Scope.CollectionChanged -= collectionChanged;
                 _scope = value;
                 NotifyPropertyChanged("Scope", temp, this);
+                Scope.CollectionChanged += collectionChanged;
             }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes
@@ -102,12 +104,26 @@ namespace EstimatingLibrary
 
         public TECConnection() : this(Guid.NewGuid()) { }
 
-        public TECConnection(TECConnection connectionSource) : this()
+        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = connectionSource.Guid; }
+
             _length = connectionSource.Length;
-            _scope = connectionSource.Scope;
+            foreach(TECScope scope in connectionSource.Scope)
+            {
+                if(scope is TECSubScope)
+                {
+                    _scope.Add(new TECSubScope((scope as TECSubScope), guidDictionary));
+                }
+                else if (scope is TECController)
+                {
+                    _scope.Add(new TECController((scope as TECController), guidDictionary));
+                }
+
+            }
             _ioTypes = connectionSource.IOTypes;
-            _controller = connectionSource.Controller;
+            _controller = new TECController(connectionSource.Controller, guidDictionary, false);
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
@@ -155,7 +171,6 @@ namespace EstimatingLibrary
                     }
                 }
             }
-
             return outConnectionTypes;
         }
 
