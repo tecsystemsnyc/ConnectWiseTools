@@ -228,8 +228,10 @@ namespace EstimateBuilder.ViewModel
             {
                 connectionCollection.Add(new TECConnection(connection, guidDictionary));
             }
+
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
               panelCollection, connectionCollection, bid, guidDictionary);
+
             foreach (TECController controller in controllerCollection)
             {
                 bid.Controllers.Add(controller);

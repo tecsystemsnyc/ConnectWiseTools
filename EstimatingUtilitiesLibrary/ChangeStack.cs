@@ -39,18 +39,6 @@ namespace EstimatingUtilitiesLibrary
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-
-        private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(object item in e.NewItems)
-                {
-                    var obj = item;
-                }
-            }
-        }
-
         public ChangeStack(TECBid bid) : this()
         {
             Bid = bid;
@@ -61,6 +49,20 @@ namespace EstimatingUtilitiesLibrary
             Templates = templates;
             registerTemplatesChanges(templates);
         }
+        #endregion
+
+        #region Collection Watching
+        private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    var obj = item;
+                }
+            }
+        }
+
         #endregion
 
         #region Methods

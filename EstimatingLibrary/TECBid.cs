@@ -45,9 +45,12 @@ namespace EstimatingLibrary
             set
             {
                 var temp = Copy();
-                _name = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Name", temp, this);
+                if(_name != value)
+                {
+                    _name = value;
+                    // Call RaisePropertyChanged whenever the property is updated
+                    NotifyPropertyChanged("Name", temp, this);
+                }
             }
         }
         public string BidNumber
@@ -105,6 +108,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = Copy();
+                Labor.PropertyChanged -= objectPropertyChanged;
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
                 Labor.PropertyChanged += objectPropertyChanged;
@@ -118,6 +122,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = Copy();
+                Parameters.PropertyChanged -= objectPropertyChanged;
                 _parameters = value;
                 NotifyPropertyChanged("Parameters", temp, this);
                 Parameters.PropertyChanged += objectPropertyChanged;
@@ -559,7 +564,7 @@ namespace EstimatingLibrary
                     {
                         NotifyPropertyChanged("Add", this, item);
                         if (item is TECCost)
-                        {
+                         
                             updateElectricalMaterial();
                             (item as TECObject).PropertyChanged += objectPropertyChanged;
                         }
