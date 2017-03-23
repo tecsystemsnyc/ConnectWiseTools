@@ -107,12 +107,23 @@ namespace EstimatingLibrary
         public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
-            { guidDictionary[connectionSource.Guid] = _guid; }
+            { guidDictionary[_guid] = connectionSource.Guid; }
 
             _length = connectionSource.Length;
-            _scope = connectionSource.Scope;
+            foreach(TECScope scope in connectionSource.Scope)
+            {
+                if(scope is TECSubScope)
+                {
+                    _scope.Add(new TECSubScope((scope as TECSubScope), guidDictionary));
+                }
+                else if (scope is TECController)
+                {
+                    _scope.Add(new TECController((scope as TECController), guidDictionary));
+                }
+
+            }
             _ioTypes = connectionSource.IOTypes;
-            _controller = connectionSource.Controller;
+            _controller = new TECController(connectionSource.Controller, guidDictionary, false);
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }

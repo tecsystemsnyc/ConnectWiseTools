@@ -98,7 +98,7 @@ namespace EstimatingLibrary
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
-            { guidDictionary[equipmentSource.Guid] = _guid; }
+            { guidDictionary[_guid] = equipmentSource.Guid; }
 
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             { SubScope.Add(new TECSubScope(subScope, guidDictionary)); }

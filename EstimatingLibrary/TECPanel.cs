@@ -41,13 +41,18 @@ namespace EstimatingLibrary
         public TECPanel(Guid guid) : base(guid)
         {
             _guid = guid;
-
             _controllers = new ObservableCollection<TECController>();
         }
         public TECPanel() : this(Guid.NewGuid()) { }
-        public TECPanel(TECPanel panel) : this()
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
+            foreach(TECController controller in panel.Controllers)
+            {
+                _controllers.Add(new TECController(controller, guidDictionary));
+            }
             _type = panel.Type;
         }
 

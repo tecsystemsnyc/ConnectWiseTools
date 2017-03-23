@@ -148,7 +148,7 @@ namespace EstimatingLibrary
         public TECSystem(TECSystem sourceSystem, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
-            { guidDictionary[sourceSystem.Guid] = _guid; }
+            { guidDictionary[_guid] = sourceSystem.Guid; }
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             { Equipment.Add(new TECEquipment(equipment, guidDictionary)); }
             _budgetPriceModifier = sourceSystem.BudgetPriceModifier;

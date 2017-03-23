@@ -104,23 +104,28 @@ namespace EstimatingLibrary
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null, bool includeChildren = true) : this()
         {
             if (guidDictionary != null)
-            { guidDictionary[controllerSource.Guid] = _guid; }
+            { guidDictionary[_guid] = controllerSource.Guid; }
             copyPropertiesFromScope(controllerSource);
-            foreach(TECIO io in controllerSource.IO)
+            if(includeChildren == true)
             {
-                _io.Add(new TECIO(io));
+                foreach (TECIO io in controllerSource.IO)
+                {
+                    _io.Add(new TECIO(io));
+                }
+                foreach (TECConnection connection in controllerSource.Connections)
+                {
+                    _connections.Add(new TECConnection(connection, guidDictionary));
+                }
             }
-            foreach(TECConnection connection in controllerSource.Connections)
-            {
-                _connections.Add(new TECConnection(connection, guidDictionary));
-            }
+            
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
 
+       
         #endregion
 
         #region Event Handlers

@@ -214,22 +214,22 @@ namespace EstimateBuilder.ViewModel
             var panelCollection = new ObservableCollection<TECPanel>();
             foreach(TECSystem system in controlledScope.Systems)
             {
-                systemCollection.Add(system.DragDropCopy() as TECSystem);
+                systemCollection.Add(new TECSystem(system, guidDictionary));
             }
             foreach(TECController controller in controlledScope.Controllers)
             {
-                controllerCollection.Add(controller.DragDropCopy() as TECController);
+                controllerCollection.Add(new TECController(controller, guidDictionary));
             }
             foreach(TECPanel panel in controlledScope.Panels)
             {
-                panelCollection.Add(panel.DragDropCopy() as TECPanel);
+                panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
             foreach(TECConnection connection in controlledScope.Connections)
             {
-                connectionCollection.Add(new TECConnection(connection));
+                connectionCollection.Add(new TECConnection(connection, guidDictionary));
             }
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-              panelCollection, connectionCollection, bid);
+              panelCollection, connectionCollection, bid, guidDictionary);
             foreach (TECController controller in controllerCollection)
             {
                 bid.Controllers.Add(controller);
