@@ -41,7 +41,8 @@
 
             <DataGrid Grid.Row="1" ItemsSource="{Binding Path=ServerControllers}"
                     AutoGenerateColumns="False"
-                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
+                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                      IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"

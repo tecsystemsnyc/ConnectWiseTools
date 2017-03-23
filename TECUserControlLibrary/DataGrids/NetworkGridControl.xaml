@@ -72,12 +72,13 @@
                                     Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
                                     Margin="5"/>
                         </Grid>
-                        <DataGrid ItemsSource="{Binding Controller.Connections}"
-                                  AutoGenerateColumns="False">
+                        <DataGrid ItemsSource="{Binding Controller.ChildConnections}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                                 <DataGridTextColumn Header="IO Type"
-                                                    Binding="{Binding Connection.IOTypes, Converter={cnvt:ConnectionIOConverter}}"/>
+                                                    Binding="{Binding IOTypes, Converter={cnvt:ConnectionIOConverter}}"/>
                                 <DataGridTextColumn Binding="{Binding Scope.Count}" Header="Qty Controllers"/>
                             </DataGrid.Columns>
                             <DataGrid.RowDetailsTemplate>
@@ -85,7 +86,8 @@
                                     <StackPanel>
                                         <Label Content="Controllers" FontSize="10"/>
                                         <DataGrid ItemsSource="{Binding Scope}"
-                                                  AutoGenerateColumns="False">
+                                                  AutoGenerateColumns="False"
+                                                  IsReadOnly="True">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Name"
                                                                     Binding="{Binding Name}"
