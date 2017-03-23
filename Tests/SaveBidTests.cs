@@ -3270,5 +3270,87 @@ namespace Tests
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
         }
         #endregion
+
+        #region Add Controlled Scope
+        [TestMethod]
+        public void Save_Bid_Add_ControlledScope()
+        {
+            //Act
+            TECControlledScope scope = new TECControlledScope();
+            scope.Name = "Test Controlled Scope";
+            scope.Description = "Test description";
+
+            var expectedSystem = new TECSystem();
+            expectedSystem.Name = "CSSYSTEM";
+            var expectedEquipment = new TECEquipment();
+            expectedEquipment.Name = "CSEQUIPMENT";
+            var expectedSubScope = new TECSubScope();
+            expectedSubScope.Name = "CSSUBSCOPE";
+            expectedEquipment.SubScope.Add(expectedSubScope);
+            expectedSystem.Equipment.Add(expectedEquipment);
+
+            var expectedPanel = new TECPanel();
+            expectedPanel.Name = "CSPANEL";
+            var expectedController = new TECController();
+            expectedController.Name = "CSCONTROLLER";
+            expectedPanel.Controllers.Add(expectedController);
+
+            var expectedConnection = new TECConnection();
+            expectedConnection.Length = 1212;
+            expectedConnection.Controller = expectedController;
+            expectedConnection.Scope.Add(expectedSubScope);
+
+            bid.addControlledScope(scope);
+
+            EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+
+            TECPanel actualpanel = null;
+            TECController actualController = null;
+            TECConnection actualConnection = null;
+            TECSystem actualSystem = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Name == "CSCONTROLLER")
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Name == "CSSYSTEM")
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+            foreach (TECConnection connection in actualBid.Connections)
+            {
+                if (connection.Length == 1212)
+                {
+                    actualConnection = connection;
+                    break;
+                }
+            }
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Name == "CSPANEL")
+                {
+                    actualpanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.IsTrue(actualController.Connections.Contains(actualConnection));
+            Assert.IsTrue(actualController == actualConnection.Controller);
+            Assert.IsTrue(actualConnection.Scope.Contains(actualSystem.Equipment[0].SubScope[0]));
+            Assert.IsTrue(actualpanel.Controllers.Contains(actualController));
+        }
+        #endregion
     }
 }
