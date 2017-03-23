@@ -32,14 +32,10 @@ namespace EstimatingLibrary
             get { return _pmCoef; }
             set
             {
-                if(_pmCoef != value)
-                {
-                    var temp = this.Copy();
-                    _pmCoef = value;
-                    NotifyPropertyChanged("PMCoef", temp, this);
-                    raiseLaborChanged();
-                }
-                
+                var temp = this.Copy();
+                _pmCoef = value;
+                NotifyPropertyChanged("PMCoef", temp, this);
+                raiseLaborChanged();
             }
         }
 
@@ -57,14 +53,10 @@ namespace EstimatingLibrary
             get { return _pmExtraHours; }
             set
             {
-                if(_pmExtraHours != value)
-                {
-                    var temp = this.Copy();
-                    _pmExtraHours = value;
-                    NotifyPropertyChanged("PMExtaHours", temp, this);
-                    raiseLaborChanged();
-                }
-               
+                var temp = this.Copy();
+                _pmExtraHours = value;
+                NotifyPropertyChanged("PMExtaHours", temp, this);
+                raiseLaborChanged();
             }
         }
 
@@ -82,14 +74,11 @@ namespace EstimatingLibrary
             get { return _pmRate; }
             set
             {
-                if(_pmRate != value)
-                {
-                    var temp = this.Copy();
-                    _pmRate = value;
-                    NotifyPropertyChanged("PMRate", temp, this);
-                    raiseLaborChanged();
-                }
-                
+                var temp = this.Copy();
+                _pmRate = value;
+                NotifyPropertyChanged("PMRate", temp, this);
+                raiseLaborChanged();
+               
             }
         }
 
@@ -110,14 +99,11 @@ namespace EstimatingLibrary
             get { return _engCoef; }
             set
             {
-                if(_engCoef != value)
-                {
                     var temp = this.Copy();
                     _engCoef = value;
                     NotifyPropertyChanged("ENGCoef", temp, this);
                     raiseLaborChanged();
-                }
-                
+              
             }
         }
 
@@ -135,13 +121,11 @@ namespace EstimatingLibrary
             get { return _engExtraHours; }
             set
             {
-                if(_engExtraHours != value)
-                {
-                    var temp = this.Copy();
-                    _engExtraHours = value;
-                    NotifyPropertyChanged("ENGExtaHours", temp, this);
-                    raiseLaborChanged();
-                }
+
+                var temp = this.Copy();
+                _engExtraHours = value;
+                NotifyPropertyChanged("ENGExtaHours", temp, this);
+                raiseLaborChanged();
             }
         }
 
@@ -159,14 +143,12 @@ namespace EstimatingLibrary
             get { return _engRate; }
             set
             {
-                if(_engRate != value)
-                {
+                
                     var temp = this.Copy();
                     _engRate = value;
                     NotifyPropertyChanged("ENGRate", temp, this);
                     raiseLaborChanged();
-                }
-                
+               
             }
         }
 
@@ -186,14 +168,12 @@ namespace EstimatingLibrary
             get { return _commCoef; }
             set
             {
-                if (_commCoef != value)
-                {
+              
                     var temp = this.Copy();
                     _commCoef = value;
                     NotifyPropertyChanged("CommCoef", temp, this);
                     raiseLaborChanged();
-                }
-                
+               
             }
         }
 
@@ -211,13 +191,12 @@ namespace EstimatingLibrary
             get { return _commExtraHours; }
             set
             {
-                if(_commExtraHours != value)
-                {
+               
                     var temp = this.Copy();
                     _commExtraHours = value;
                     NotifyPropertyChanged("CommExtaHours", temp, this);
                     raiseLaborChanged();
-                }
+              
             }
         }
 
@@ -235,14 +214,12 @@ namespace EstimatingLibrary
             get { return _commRate; }
             set
             {
-                if(_commRate != value)
-                {
+               
                     var temp = this.Copy();
                     _commRate = value;
                     NotifyPropertyChanged("CommRate", temp, this);
                     raiseLaborChanged();
-                }
-                
+               
             }
         }
 
@@ -262,13 +239,11 @@ namespace EstimatingLibrary
             get { return _softCoef; }
             set
             {
-                if(_softCoef != value)
-                {
+              
                     var temp = this.Copy();
                     _softCoef = value;
                     NotifyPropertyChanged("SoftCoef", temp, this);
                     raiseLaborChanged();
-                }
                 
             }
         }

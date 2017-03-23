@@ -554,7 +554,7 @@ namespace EstimatingLibrary
                             controllersToLink.Add(controller);
                             break;
                         }
-                        else if (guidDictionary != null & guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
+                        else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
                         {
                             controllersToLink.Add(controller);
                             break;

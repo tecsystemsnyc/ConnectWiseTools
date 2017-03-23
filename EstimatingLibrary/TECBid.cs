@@ -568,7 +568,6 @@ namespace EstimatingLibrary
                         NotifyPropertyChanged("Add", this, item);
                         if (item is TECCost)
                         { 
-                         
                             updateElectricalMaterial();
                             (item as TECObject).PropertyChanged += objectPropertyChanged;
                         }
@@ -635,7 +634,7 @@ namespace EstimatingLibrary
 
         private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            NotifyPropertyChanged("ChildChanged", this, sender);
+            //NotifyPropertyChanged("ChildChanged", this, sender);
             if (sender is TECLabor)
             { updateFromLabor(); }
             else if (sender is TECBidParameters)

@@ -171,7 +171,6 @@ namespace EstimatingLibrary
                     }
                 }
             }
-
             return outConnectionTypes;
         }
 

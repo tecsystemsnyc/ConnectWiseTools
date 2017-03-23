@@ -120,12 +120,10 @@ namespace EstimatingLibrary
                     _connections.Add(new TECConnection(connection, guidDictionary));
                 }
             }
-            
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
-
-       
+        
         #endregion
 
         #region Event Handlers
