@@ -159,7 +159,7 @@ namespace EstimateBuilder.ViewModel
             Object sourceItem;
             if(dropInfo.Data is TECControlledScope)
             {
-                addControlledScope(Bid, dropInfo.Data as TECControlledScope);
+                Bid.addControlledScope(dropInfo.Data as TECControlledScope);
             }
             else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
@@ -204,51 +204,6 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
             ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-        }
-        private void addControlledScope(TECBid bid, TECControlledScope controlledScope)
-        {
-            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var systemCollection = new ObservableCollection<TECSystem>();
-            var controllerCollection = new ObservableCollection<TECController>();
-            var connectionCollection = new ObservableCollection<TECConnection>();
-            var panelCollection = new ObservableCollection<TECPanel>();
-            foreach(TECSystem system in controlledScope.Systems)
-            {
-                systemCollection.Add(new TECSystem(system, guidDictionary));
-            }
-            foreach(TECController controller in controlledScope.Controllers)
-            {
-                controllerCollection.Add(new TECController(controller, guidDictionary));
-            }
-            foreach(TECPanel panel in controlledScope.Panels)
-            {
-                panelCollection.Add(new TECPanel(panel, guidDictionary));
-            }
-            foreach(TECConnection connection in controlledScope.Connections)
-            {
-                connectionCollection.Add(new TECConnection(connection, guidDictionary));
-            }
-
-            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-              panelCollection, connectionCollection, bid, guidDictionary);
-
-            foreach (TECController controller in controllerCollection)
-            {
-                bid.Controllers.Add(controller);
-            }
-            foreach (TECPanel panel in panelCollection)
-            {
-                bid.Panels.Add(panel);
-            }
-            foreach(TECConnection connection in connectionCollection)
-            {
-                bid.Connections.Add(connection);
-            }
-            foreach (TECSystem system in systemCollection)
-            {
-                bid.Systems.Add(system);
-            }
-            
         }
         #endregion //Helper Methods
         #endregion //Methods

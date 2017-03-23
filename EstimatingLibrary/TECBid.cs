@@ -552,6 +552,51 @@ namespace EstimatingLibrary
 
         #region Methods
 
+        public void addControlledScope(TECControlledScope controlledScope)
+        {
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            var systemCollection = new ObservableCollection<TECSystem>();
+            var controllerCollection = new ObservableCollection<TECController>();
+            var connectionCollection = new ObservableCollection<TECConnection>();
+            var panelCollection = new ObservableCollection<TECPanel>();
+            foreach (TECSystem system in controlledScope.Systems)
+            {
+                systemCollection.Add(new TECSystem(system, guidDictionary));
+            }
+            foreach (TECController controller in controlledScope.Controllers)
+            {
+                controllerCollection.Add(new TECController(controller, guidDictionary));
+            }
+            foreach (TECPanel panel in controlledScope.Panels)
+            {
+                panelCollection.Add(new TECPanel(panel, guidDictionary));
+            }
+            foreach (TECConnection connection in controlledScope.Connections)
+            {
+                connectionCollection.Add(new TECConnection(connection, guidDictionary));
+            }
+
+            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+              panelCollection, connectionCollection, this, guidDictionary);
+
+            foreach (TECController controller in controllerCollection)
+            {
+                Controllers.Add(controller);
+            }
+            foreach (TECPanel panel in panelCollection)
+            {
+                Panels.Add(panel);
+            }
+            foreach (TECConnection connection in connectionCollection)
+            {
+                Connections.Add(connection);
+            }
+            foreach (TECSystem system in systemCollection)
+            {
+                Systems.Add(system);
+            }
+        }
+
         #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

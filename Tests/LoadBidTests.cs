@@ -438,7 +438,18 @@ namespace Tests
         {
             //Arrange
             TECConnection actualConnection = actualBid.Connections[0];
-            TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
+
+            TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
+            TECController expectedController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Name == "Test Connected Controller")
+                {
+                    expectedController = controller;
+                    break;
+                }
+            }
+
 
             double expectedLength = 493.45;
 
@@ -454,7 +465,7 @@ namespace Tests
             bool hasSubScope = false;
             foreach (TECScope scope in actualConnection.Scope)
             {
-                if (scope == actualSubScope)
+                if (scope == expectedSubScope)
                 {
                     hasSubScope = true;
                 }
@@ -462,6 +473,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
+            Assert.AreEqual(expectedController, actualConnection.Controller);
             Assert.IsTrue(hasThreeC18, "Connection type failed to load.");
             Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
         }

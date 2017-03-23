@@ -1744,7 +1744,7 @@ namespace EstimatingUtilitiesLibrary
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
-            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
+            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
@@ -1864,7 +1864,7 @@ namespace EstimatingUtilitiesLibrary
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
-            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble();
+            controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             return controller;
         }
 
@@ -1965,6 +1965,10 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECConnection connection in bid.Connections)
             {
                 addObject(connection, bid);
+                foreach (TECScope scope in connection.Scope)
+                {
+                    addRelationship(scope, connection);
+                }
                 if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
             }
             foreach (TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)

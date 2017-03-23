@@ -3091,7 +3091,7 @@ namespace Tests
         }
         #endregion
 
-        #region Save Misc Wiring
+        #region Save Panel Type
         [TestMethod]
         public void Save_Bid_Add_PanelType()
         {

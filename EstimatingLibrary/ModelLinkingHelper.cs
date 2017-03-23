@@ -593,12 +593,10 @@ namespace EstimatingLibrary
                     if (connection.Guid == subScope.Connection.Guid)
                     {
                         subScope.Connection = connection;
-                        connection.Scope.Add(subScope);
                     }
                     else if(guidDictionary != null && guidDictionary[connection.Guid] == guidDictionary[subScope.Connection.Guid])
                     {
                         subScope.Connection = connection;
-                        connection.Scope.Add(subScope);
                     }
                 }
             }
