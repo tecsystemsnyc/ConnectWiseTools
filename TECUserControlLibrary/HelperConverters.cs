@@ -386,7 +386,15 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((ObservableCollection<IOType>)value)[0];
+            ObservableCollection<IOType> val = (ObservableCollection<IOType>)value;
+            if (val.Count > 0)
+            {
+                return val[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

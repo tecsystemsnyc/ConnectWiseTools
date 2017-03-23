@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TECUserControlLibrary.Models
 {
@@ -28,11 +29,19 @@ namespace TECUserControlLibrary.Models
             get { return _parentController; }
             set
             {
-                TECController oldParent = _parentController;
-                _parentController = value;
-                RaisePropertyChanged("ParentController");
-                handleParentControllerChanged(oldParent, ParentController);
-                RaisePropertyChanged("IsConnected");
+                if (value == Controller)
+                {
+                    MessageBox.Show("Cannot network controller back to itself.");
+                }
+                else
+                {
+                    TECController oldParent = _parentController;
+                    _parentController = value;
+                    handleParentControllerChanged(oldParent, ParentController);
+                    RaisePropertyChanged("ParentController");
+                    RaisePropertyChanged("IsConnected");
+                    RaisePropertyChanged("PossibleIOType");
+                }
             }
         }
 
@@ -45,17 +54,6 @@ namespace TECUserControlLibrary.Models
                 var oldConnection = _connection;
                 _connection = value;
                 NotifyPropertyChanged("Connection", oldConnection, _connection);
-            }
-        }
-
-        private ObservableCollection<TECConnectionType> _possibleConnectionTypes;
-        public ObservableCollection<TECConnectionType> PossibleConnectionTypes
-        {
-            get { return _possibleConnectionTypes; }
-            set
-            {
-                _possibleConnectionTypes = value;
-                RaisePropertyChanged("PossibleConnectionTypes");
             }
         }
 
@@ -85,6 +83,7 @@ namespace TECUserControlLibrary.Models
                 return isConnected(Controller);
             }
         }
+        
         #endregion
 
         public NetworkControllerConnnection(TECController controller)
@@ -102,31 +101,58 @@ namespace TECUserControlLibrary.Models
         #region Methods
         private void handleParentControllerChanged(TECController oldParent, TECController newParent)
         {
-            if (oldParent == null)
+            if (oldParent != null)
             {
-                if (newParent != null)
-                {
-                    Connection = new TECConnection();
-                    Connection.Controller = newParent;
-                    Controller.Connections.Add(Connection);
-                }
-            }
-            else if (oldParent != null)
-            {
-                //Unlink old parent
+                //Unlink old parent and old connection
                 oldParent.Connections.Remove(Connection);
-                if (newParent != null)
+                Controller.Connections.Remove(Connection);
+            }
+
+            if (newParent != null)
+            {
+                if (newParent.IsBMS)
                 {
-                    //Link new parent
-                    Connection.Controller = newParent;
-                    newParent.Connections.Add(Connection);
+                    bool isAlreadyParent = false;
+                    foreach (TECConnection connection in newParent.Connections)
+                    {
+                        if (connection.Controller == newParent)
+                        {
+                            isAlreadyParent = true;
+                            Connection = connection;
+                            Connection.Scope.Add(Controller);
+                            Controller.Connections.Add(connection);
+                            break;
+                        }
+                    }
+                    
+                    if (!isAlreadyParent)
+                    {
+                        //Link new parent
+                        Connection = new TECConnection();
+                        Connection.Controller = newParent;
+                        Connection.Scope.Add(Controller);
+                        Controller.Connections.Add(Connection);
+
+                        newParent.Connections.Add(Connection);
+                    }
                 }
                 else
                 {
-                    //If new parent is null, remove old connection
-                    Connection = null;
-                    Controller.Connections.Remove(getParentConnection(Controller));
+                    if (getParentConnection(newParent) != null)
+                    {
+                        Connection = getParentConnection(newParent);
+                        ParentController = getParentConnection(newParent).Controller;
+                        Controller.Connections.Add(Connection);
+                    }
+                    else
+                    {
+                        ParentController = null;
+                    }
                 }
+            }
+            else
+            {
+                Connection = null;
             }
         }
         private TECConnection getParentConnection(TECController controller)
@@ -140,8 +166,13 @@ namespace TECUserControlLibrary.Models
             }
             return null;
         }
-        private bool isConnected(TECController controller)
+        private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
         {
+            if (searchedControllers == null)
+            {
+                searchedControllers = new List<TECController>();
+            }
+
             if (controller.IsServer)
             {
                 return true;
@@ -150,11 +181,25 @@ namespace TECUserControlLibrary.Models
             {
                 return false;
             }
+            else if (searchedControllers.Contains(controller))
+            {
+                return false;
+            }
             else
             {
-                bool parentIsConnected = isConnected(getParentConnection(controller).Controller);
+                searchedControllers.Add(controller);
+                TECController parentController = getParentConnection(controller).Controller;
+                if (parentController == null)
+                {
+
+                }
+                bool parentIsConnected = isConnected(parentController, searchedControllers);
                 return parentIsConnected;
             }
+        }
+        public void RefreshBMSConnection()
+        {
+            RaisePropertyChanged("IsConnected");
         }
 
         public override object Copy()

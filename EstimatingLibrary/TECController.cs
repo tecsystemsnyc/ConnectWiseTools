@@ -66,6 +66,10 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _isServer = value;
                 NotifyPropertyChanged("IsServer", temp, this);
+                if (IsServer)
+                {
+                    IsBMS = true;
+                }
             }
         }
         public bool IsBMS
@@ -76,6 +80,10 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _isBMS = value;
                 NotifyPropertyChanged("IsBMS", temp, this);
+                if (!IsBMS)
+                {
+                    IsServer = false;
+                }
             }
         }
 
