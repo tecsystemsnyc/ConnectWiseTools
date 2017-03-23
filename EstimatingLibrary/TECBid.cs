@@ -44,9 +44,9 @@ namespace EstimatingLibrary
             get { return _name; }
             set
             {
-                var temp = Copy();
                 if(_name != value)
                 {
+                    var temp = Copy();
                     _name = value;
                     // Call RaisePropertyChanged whenever the property is updated
                     NotifyPropertyChanged("Name", temp, this);
@@ -107,12 +107,15 @@ namespace EstimatingLibrary
             get { return _labor; }
             set
             {
-                var temp = Copy();
-                Labor.PropertyChanged -= objectPropertyChanged;
-                _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
-                Labor.PropertyChanged += objectPropertyChanged;
-                Labor.NumPoints = getPointNumber();
+                if(_labor != value)
+                {
+                    var temp = Copy();
+                    Labor.PropertyChanged -= objectPropertyChanged;
+                    _labor = value;
+                    NotifyPropertyChanged("Labor", temp, this);
+                    Labor.PropertyChanged += objectPropertyChanged;
+                    Labor.NumPoints = getPointNumber();
+                }
             }
         }
 
@@ -564,6 +567,7 @@ namespace EstimatingLibrary
                     {
                         NotifyPropertyChanged("Add", this, item);
                         if (item is TECCost)
+                        { 
                          
                             updateElectricalMaterial();
                             (item as TECObject).PropertyChanged += objectPropertyChanged;

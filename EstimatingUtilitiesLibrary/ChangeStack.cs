@@ -625,7 +625,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         private void handleSystemChildren(TECSystem system, Change change)
         {
             handleScopeChildren(system as TECScope, change);
@@ -650,7 +649,6 @@ namespace EstimatingUtilitiesLibrary
                 handleEquipmentChildren(newEquipment, change);
             }
         }
-
         private void handleEquipmentChildren(TECEquipment equipment, Change change)
         {
             handleScopeChildren(equipment as TECScope, change);
@@ -675,7 +673,6 @@ namespace EstimatingUtilitiesLibrary
                 handleSubScopeChildren(newSubScope, change);
             }
         }
-
         private void handleSubScopeChildren(TECSubScope subScope, Change change)
         {
             handleScopeChildren(subScope as TECScope, change);
@@ -705,7 +702,6 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
             StackItem item;
@@ -715,7 +711,6 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-
         private void handleDeviceChildren(TECDevice device, Change change)
         {
             handleScopeChildren(device as TECScope, change);
@@ -725,7 +720,6 @@ namespace EstimatingUtilitiesLibrary
             item = new StackItem(change, (object)device, (object)device.ConnectionType);
             SaveStack.Add(item);
         }
-
         private void handleControllerChildren(TECController controller, Change change)
         {
             handleScopeChildren(controller as TECScope, change);
@@ -733,7 +727,6 @@ namespace EstimatingUtilitiesLibrary
             item = new StackItem(change, (object)controller, (object)controller.Manufacturer);
             SaveStack.Add(item);
         }
-
         private void handleScopeChildren(TECScope scope, Change change)
         {
             StackItem item;
@@ -748,7 +741,6 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-
         private void handleControlledScope(TECControlledScope scope, Change change)
         {
             StackItem item;
