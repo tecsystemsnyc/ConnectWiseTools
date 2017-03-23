@@ -119,7 +119,7 @@ namespace EstimatingLibrary
                 }
                 else if (scope is TECController)
                 {
-                    _scope.Add(new TECController((scope as TECController), guidDictionary));
+                    _scope.Add(new TECController((scope as TECController), guidDictionary, false));
                 }
 
             }

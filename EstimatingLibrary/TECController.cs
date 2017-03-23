@@ -35,8 +35,26 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _connections = value;
                 RaisePropertyChanged("Connections");
+                RaisePropertyChanged("ChildConnections");
+                Connections.CollectionChanged += CollectionChanged;
             }
         }
+        public ObservableCollection<TECConnection> ChildConnections
+        {
+            get
+            {
+                ObservableCollection<TECConnection> children = new ObservableCollection<TECConnection>();
+                foreach (TECConnection connection in Connections)
+                {
+                    if (connection.Controller == this)
+                    {
+                        children.Add(connection);
+                    }
+                }
+                return children;
+            }
+        }
+
         public ObservableCollection<TECIO> IO
         {
             get { return _io; }
@@ -149,6 +167,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            RaisePropertyChanged("ChildConnections");
         }
         private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
