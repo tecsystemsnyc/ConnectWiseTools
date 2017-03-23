@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -38,11 +39,12 @@
                     HorizontalAlignment="Center"/>
 
 
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=ServerSource}"
-                    AutoGenerateColumns="False">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=ServerControllers}"
+                    AutoGenerateColumns="False"
+                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
-                                        Binding="{Binding Controller.Name}"
+                                        Binding="{Binding Name}"
                                         IsReadOnly="True"
                                         Width="*"/>
                 </DataGrid.Columns>
@@ -63,7 +65,7 @@
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
 
-            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllerSource}"/>
+            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllers}"/>
 
         </Grid>
         <Border Grid.Column="1"
@@ -83,7 +85,8 @@
             <DataGrid Grid.Row="1"
                       ItemsSource="{Binding Path=StandaloneControllers}"
                       AutoGenerateColumns="False"
-                      IsReadOnly="True">
+                      IsReadOnly="True"
+                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"

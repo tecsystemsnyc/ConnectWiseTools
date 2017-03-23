@@ -7,22 +7,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConduitType : TECScope
+    public class TECConduitType : TECCost
     {
         #region Properties
-
-        protected double _cost;
-        public double Cost
-        {
-            get { return _cost; }
-            set
-            {
-                var temp = Copy();
-                _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
-            }
-        }
-
+       
         protected double _labor;
         public double Labor
         {
@@ -46,15 +34,15 @@ namespace EstimatingLibrary
         public TECConduitType(TECConduitType conduitSource) : this()
         {
             copyPropertiesFromScope(conduitSource);
-            _cost = conduitSource.Cost;
+            copyPropertiesFromCost(conduitSource);
             _labor = conduitSource.Labor;
         }
         public override object Copy()
         {
             var outType = new TECConduitType();
             outType.copyPropertiesFromScope(this);
+            outType.copyPropertiesFromCost(this);
             outType._guid = this._guid;
-            outType._cost = this._cost;
             outType._labor = this._labor;
 
             return outType;
