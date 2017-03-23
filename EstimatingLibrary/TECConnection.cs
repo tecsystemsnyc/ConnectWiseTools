@@ -40,8 +40,11 @@ namespace EstimatingLibrary
             {
                 var oldNew = Tuple.Create<Object, Object>(_controller, value);
                 var temp = Copy();
+                _controller.Connections.Remove(this);
                 _controller = value;
-                NotifyPropertyChanged("Controller", temp, this);
+                if(_controller != null)
+                { _controller.Connections.Add(this); }
+                RaisePropertyChanged("Controller");
                 temp = Copy();
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
@@ -83,7 +86,7 @@ namespace EstimatingLibrary
                 var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
                 var temp = Copy();
                 _conduitType = value;
-                NotifyPropertyChanged("ConduitType", temp, this);
+                RaisePropertyChanged("ConduitType");
                 temp = Copy();
                 NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
             }
@@ -98,12 +101,10 @@ namespace EstimatingLibrary
             _scope = new ObservableCollection<TECScope>();
             _ioTypes = new ObservableCollection<IOType>();
             _controller = new TECController();
-            Scope.CollectionChanged += collectionChanged;
+            Scope.CollectionChanged += Scope_CollectionChanged; ;
             IOTypes.CollectionChanged += collectionChanged;
         }
-
         public TECConnection() : this(Guid.NewGuid()) { }
-
         public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
@@ -123,7 +124,7 @@ namespace EstimatingLibrary
 
             }
             _ioTypes = connectionSource.IOTypes;
-            _controller = new TECController(connectionSource.Controller, guidDictionary, false);
+            _controller = new TECController(connectionSource.Controller, guidDictionary);
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
@@ -144,6 +145,40 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
+                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                }
+            }
+        }
+
+        private void Scope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    if(item is TECController)
+                    {
+                        (item as TECController).Connections.Add(this);
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        (item as TECSubScope).Connection = this;
+                    }
+                    NotifyPropertyChanged("AddRelationship", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECController)
+                    {
+                        (item as TECController).Connections.Remove(this);
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        (item as TECSubScope).Connection = null;
+                    }
                     NotifyPropertyChanged("RemoveRelationship", this, item);
                 }
             }
