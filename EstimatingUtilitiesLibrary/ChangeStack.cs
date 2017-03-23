@@ -708,7 +708,7 @@ namespace EstimatingUtilitiesLibrary
             if (connection.ConduitType != null)
             {
                 item = new StackItem(change, (object)connection, (object)connection.ConduitType);
-                //SaveStack.Add(item);
+                SaveStack.Add(item);
             }
         }
         private void handleDeviceChildren(TECDevice device, Change change)

@@ -411,8 +411,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Panels", temp, this);
             }
         }
-
-
+        
         #endregion //Properties
 
         #region Constructors
@@ -468,7 +467,6 @@ namespace EstimatingLibrary
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
-
             Labor.NumPoints = getPointNumber();
         }
 
