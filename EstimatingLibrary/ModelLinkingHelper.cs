@@ -184,83 +184,86 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAllConnections(ObservableCollection<TECConnection> connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
+        static private void linkAllConnections(object connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            foreach(TECConnection connection in connections)
+            if (connections is ObservableCollection<TECSubScopeConnection> || connections is ObservableCollection<TECNetworkConnection> || connections is ObservableCollection<TECConnection>)
             {
-                //All Connections
-                foreach (TECController controller in controllers)
+                foreach (TECConnection connection in (IList)connections)
                 {
-                    bool isCopy = guidDictionary != null && guidDictionary[connection.ParentController.Guid] == guidDictionary[controller.Guid];
-                    if (controller.Guid == connection.ParentController.Guid || isCopy)
-                    { connection.ParentController = controller; }
-                }
-
-                #region If Connection is NetworkConnection
-                if (connection is TECNetworkConnection)
-                {
-                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
-
-                    List<TECController> controllerToRemove = new List<TECController>();
-                    List<TECController> controllerToAdd = new List<TECController>();
-
+                    //All Connections
                     foreach (TECController controller in controllers)
                     {
-                        foreach (TECController childController in netConnect.ChildrenControllers)
-                        {
-                            bool isCopy = guidDictionary != null && guidDictionary[childController.Guid] == guidDictionary[controller.Guid];
-                            if (childController.Guid == controller.Guid || isCopy)
-                            {
-                                controllerToRemove.Add(childController);
-                                controllerToAdd.Add(controller);
-                            }
-                        }
+                        bool isCopy = guidDictionary != null && guidDictionary[connection.ParentController.Guid] == guidDictionary[controller.Guid];
+                        if (controller.Guid == connection.ParentController.Guid || isCopy)
+                        { connection.ParentController = controller; }
                     }
 
-                    foreach (TECController controller in controllerToRemove)
-                    { netConnect.ChildrenControllers.Remove(controller); }
-                    foreach (TECController controller in controllerToAdd)
-                    { netConnect.ChildrenControllers.Add(controller); }
-                }
-                #endregion
-
-                #region If Connection is SubScopeConnection
-                else if (connection is TECSubScopeConnection)
-                {
-                    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-
-                    List<TECScope> ssToRemove = new List<TECScope>();
-                    List<TECScope> ssToAdd = new List<TECScope>();
-
-                    foreach (TECSystem system in systems)
+                    #region If Connection is NetworkConnection
+                    if (connection is TECNetworkConnection)
                     {
-                        foreach (TECEquipment equipment in system.Equipment)
+                        TECNetworkConnection netConnect = connection as TECNetworkConnection;
+
+                        List<TECController> controllerToRemove = new List<TECController>();
+                        List<TECController> controllerToAdd = new List<TECController>();
+
+                        foreach (TECController controller in controllers)
                         {
-                            foreach (TECSubScope subScope in equipment.SubScope)
+                            foreach (TECController childController in netConnect.ChildrenControllers)
                             {
-                                foreach (TECSubScope childSS in ssConnect.SubScope)
+                                bool isCopy = guidDictionary != null && guidDictionary[childController.Guid] == guidDictionary[controller.Guid];
+                                if (childController.Guid == controller.Guid || isCopy)
                                 {
-                                    bool isCopy = guidDictionary != null && guidDictionary[childSS.Guid] == guidDictionary[subScope.Guid];
-                                    if (childSS.Guid == subScope.Guid || isCopy)
+                                    controllerToRemove.Add(childController);
+                                    controllerToAdd.Add(controller);
+                                }
+                            }
+                        }
+
+                        foreach (TECController controller in controllerToRemove)
+                        { netConnect.ChildrenControllers.Remove(controller); }
+                        foreach (TECController controller in controllerToAdd)
+                        { netConnect.ChildrenControllers.Add(controller); }
+                    }
+                    #endregion
+
+                    #region If Connection is SubScopeConnection
+                    else if (connection is TECSubScopeConnection)
+                    {
+                        TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+
+                        List<TECScope> ssToRemove = new List<TECScope>();
+                        List<TECScope> ssToAdd = new List<TECScope>();
+
+                        foreach (TECSystem system in systems)
+                        {
+                            foreach (TECEquipment equipment in system.Equipment)
+                            {
+                                foreach (TECSubScope subScope in equipment.SubScope)
+                                {
+                                    foreach (TECSubScope childSS in ssConnect.SubScope)
                                     {
-                                        ssToRemove.Add(childSS);
-                                        ssToAdd.Add(subScope);
+                                        bool isCopy = guidDictionary != null && guidDictionary[childSS.Guid] == guidDictionary[subScope.Guid];
+                                        if (childSS.Guid == subScope.Guid || isCopy)
+                                        {
+                                            ssToRemove.Add(childSS);
+                                            ssToAdd.Add(subScope);
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        foreach (TECSubScope ss in ssToRemove)
+                        { ssConnect.SubScope.Remove(ss); }
+                        foreach (TECSubScope ss in ssToAdd)
+                        { ssConnect.SubScope.Add(ss); }
                     }
+                    #endregion
 
-                    foreach (TECSubScope ss in ssToRemove)
-                    { ssConnect.SubScope.Remove(ss); }
-                    foreach (TECSubScope ss in ssToAdd)
-                    { ssConnect.SubScope.Add(ss); }
-                }
-                #endregion
-
-                else
-                {
-                    throw new NotImplementedException();
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
             }
         }
@@ -540,22 +543,29 @@ namespace EstimatingLibrary
             scope.AssociatedCosts = costsToAssign;
         }
        
-        static private void linkConduitTypeWithConnections(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECConnection> connections)
+        static private void linkConduitTypeWithConnections(ObservableCollection<TECConduitType> conduitTypes, object connections)
         {
-            foreach (TECConnection connection in connections)
+            if (connections is ObservableCollection<TECSubScopeConnection> || connections is ObservableCollection<TECNetworkConnection> || connections is ObservableCollection<TECConnection>)
             {
-                if (connection.ConduitType != null)
+                foreach (TECConnection connection in (IList)connections)
                 {
-                    foreach (TECConduitType conduitType in conduitTypes)
+                    if (connection.ConduitType != null)
                     {
-                        if (connection.ConduitType.Guid == conduitType.Guid)
+                        foreach (TECConduitType conduitType in conduitTypes)
                         {
-                            connection.ConduitType = conduitType;
+                            if (connection.ConduitType.Guid == conduitType.Guid)
+                            {
+                                connection.ConduitType = conduitType;
+                            }
                         }
                     }
                 }
-
             }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            
         }
         static private void linkPanelTypesInPanel(ObservableCollection<TECPanelType> panelTypes, ObservableCollection<TECPanel> panels)
         {
