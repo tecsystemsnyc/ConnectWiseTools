@@ -22,31 +22,31 @@ namespace TECUserControlLibrary.DataGrids
     /// </summary>
     public partial class NetworkGridControl : UserControl
     {
-        ///// <summary>
-        ///// Gets or sets the ViewModel which is used
-        ///// </summary>
-        //public Object ViewModel
-        //{
-        //    get { return (Object)GetValue(ViewModelProperty); }
-        //    set { SetValue(ViewModelProperty, value); }
-        //}
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
 
-        ///// <summary>
-        ///// Identified the ViewModel dependency property
-        ///// </summary>
-        //public static readonly DependencyProperty ViewModelProperty =
-        //    DependencyProperty.Register("ViewModel", typeof(Object),
-        //      typeof(NetworkGridControl));
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(NetworkGridControl));
 
-        //public ObservableCollection<NetworkControllerConnnection> ControllerConnectionsSource
-        //{
-        //    get { return (ObservableCollection<NetworkControllerConnnection>)GetValue(ControllerConnectionsSourceProperty); }
-        //    set { SetValue(ControllerConnectionsSourceProperty, value); }
-        //}
+        public ObservableCollection<object> ControllerConnectionsSource
+        {
+            get { return (ObservableCollection<object>)GetValue(ControllerConnectionsSourceProperty); }
+            set { SetValue(ControllerConnectionsSourceProperty, value); }
+        }
 
-        //public static readonly DependencyProperty ControllerConnectionsSourceProperty =
-        //    DependencyProperty.Register("ControllerConnectionsSource", typeof(ObservableCollection<NetworkControllerConnnection>),
-        //        typeof(NetworkGridControl), new PropertyMetadata(default(ObservableCollection<NetworkControllerConnnection>)));
+        public static readonly DependencyProperty ControllerConnectionsSourceProperty =
+            DependencyProperty.Register("ControllerConnectionsSource", typeof(ObservableCollection<object>),
+                typeof(NetworkGridControl), new PropertyMetadata(default(ObservableCollection<object>)));
 
         public NetworkGridControl()
         {
