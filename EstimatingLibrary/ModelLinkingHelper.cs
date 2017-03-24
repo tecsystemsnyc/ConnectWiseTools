@@ -188,50 +188,81 @@ namespace EstimatingLibrary
         {
             foreach(TECConnection connection in connections)
             {
-                List<TECScope> scopeToRemove = new List<TECScope>();
-                List<TECScope> scopeToAdd = new List<TECScope>();
-
-                foreach (TECSystem system in systems)
+                //All Connections
+                foreach (TECController controller in controllers)
                 {
-                    foreach(TECEquipment equipment in system.Equipment)
+                    bool isCopy = guidDictionary != null && guidDictionary[connection.ParentController.Guid] == guidDictionary[controller.Guid];
+                    if (controller.Guid == connection.ParentController.Guid || isCopy)
+                    { connection.ParentController = controller; }
+                }
+
+                #region If Connection is NetworkConnection
+                if (connection is TECNetworkConnection)
+                {
+                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
+
+                    List<TECController> controllerToRemove = new List<TECController>();
+                    List<TECController> controllerToAdd = new List<TECController>();
+
+                    foreach (TECController controller in controllers)
                     {
-                        foreach(TECSubScope subScope in equipment.SubScope)
+                        foreach (TECController childController in netConnect.ChildrenControllers)
                         {
-                            foreach(TECScope scope in connection.Scope)
+                            bool isCopy = guidDictionary != null && guidDictionary[childController.Guid] == guidDictionary[controller.Guid];
+                            if (childController.Guid == controller.Guid || isCopy)
                             {
-                                bool isCopy = guidDictionary != null && guidDictionary[scope.Guid] == guidDictionary[subScope.Guid];
-                                if (scope.Guid == subScope.Guid || isCopy)
+                                controllerToRemove.Add(childController);
+                                controllerToAdd.Add(controller);
+                            }
+                        }
+                    }
+
+                    foreach (TECController controller in controllerToRemove)
+                    { netConnect.ChildrenControllers.Remove(controller); }
+                    foreach (TECController controller in controllerToAdd)
+                    { netConnect.ChildrenControllers.Add(controller); }
+                }
+                #endregion
+
+                #region If Connection is SubScopeConnection
+                else if (connection is TECSubScopeConnection)
+                {
+                    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+
+                    List<TECScope> ssToRemove = new List<TECScope>();
+                    List<TECScope> ssToAdd = new List<TECScope>();
+
+                    foreach (TECSystem system in systems)
+                    {
+                        foreach (TECEquipment equipment in system.Equipment)
+                        {
+                            foreach (TECSubScope subScope in equipment.SubScope)
+                            {
+                                foreach (TECSubScope childSS in ssConnect.SubScope)
                                 {
-                                    scopeToRemove.Add(scope);
-                                    scopeToAdd.Add(subScope);
+                                    bool isCopy = guidDictionary != null && guidDictionary[childSS.Guid] == guidDictionary[subScope.Guid];
+                                    if (childSS.Guid == subScope.Guid || isCopy)
+                                    {
+                                        ssToRemove.Add(childSS);
+                                        ssToAdd.Add(subScope);
+                                    }
                                 }
                             }
                         }
                     }
+
+                    foreach (TECSubScope ss in ssToRemove)
+                    { ssConnect.SubScope.Remove(ss); }
+                    foreach (TECSubScope ss in ssToAdd)
+                    { ssConnect.SubScope.Add(ss); }
                 }
-                foreach(TECController controller in controllers)
+                #endregion
+
+                else
                 {
-                    bool isCopy = guidDictionary != null && guidDictionary[connection.Controller.Guid] == guidDictionary[controller.Guid];
-                    if (controller.Guid == connection.Controller.Guid || isCopy)
-                    { connection.Controller = controller; }
-                    foreach (TECScope scope in connection.Scope)
-                    {
-                        isCopy = guidDictionary != null && guidDictionary[scope.Guid] == guidDictionary[controller.Guid];
-                        if (scope.Guid == controller.Guid || isCopy)
-                        {
-                            scopeToRemove.Add(scope);
-                            scopeToAdd.Add(controller);
-                        }
-                    }
-                }
-                foreach (TECScope scope in scopeToRemove)
-                { connection.Scope.Remove(scope); }
-                foreach(TECScope scope in scopeToAdd)
-                {
-                    connection.Scope.Add(scope);
+                    throw new NotImplementedException();
                 }
             }
-            
         }
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
         {

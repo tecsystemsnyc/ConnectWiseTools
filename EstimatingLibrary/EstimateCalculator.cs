@@ -77,12 +77,30 @@ namespace EstimatingLibrary
             foreach (TECConnection conn in bid.Connections)
             {
                 var length = conn.Length;
-                foreach (TECConnectionType type in conn.ConnectionTypes)
+
+                if (conn is TECNetworkConnection)
                 {
+                    TECConnectionType type = (conn as TECNetworkConnection).ConnectionType;
                     cost += length * type.Cost;
                     foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                     { cost += associatedCost.Cost; }
                 }
+                else if (conn is TECSubScopeConnection)
+                {
+                    foreach (TECConnectionType type in (conn as TECSubScopeConnection).ConnectionTypes)
+                    {
+                        cost += length * type.Cost;
+                        foreach(TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        {
+                            cost += associatedCost.Cost;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                
             }
             return cost;
         }
@@ -91,24 +109,42 @@ namespace EstimatingLibrary
         /// </summary>
         public static double GetElectricalLaborCost(TECBid bid)
         {
-            double labor = 0;
+            double laborHours = 0;
 
             foreach (TECConnection conn in bid.Connections)
             {
                 var length = conn.Length;
-                foreach (TECConnectionType type in conn.ConnectionTypes)
-                {
-                    labor += length * type.Labor;
-                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                    { labor += associatedCost.Cost; }
-                }
                 if (conn.ConduitType != null)
-                { labor += conn.Length * conn.ConduitType.Labor; }
+                { laborHours += conn.Length * conn.ConduitType.Labor; }
+
+                if (conn is TECNetworkConnection)
+                {
+                    TECConnectionType type = (conn as TECNetworkConnection).ConnectionType;
+                    laborHours += length * type.Labor;
+                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                    { laborHours += associatedCost.Labor; }
+                }
+                else if (conn is TECSubScopeConnection)
+                {
+                    foreach (TECConnectionType type in (conn as TECSubScopeConnection).ConnectionTypes)
+                    {
+                        laborHours += length * type.Labor;
+                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        {
+                            laborHours += associatedCost.Labor;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+
             }
             
-            labor *= bid.Labor.ElectricalRate;
-            labor += bid.Labor.SubcontractorSubTotal;
-            return labor;
+            double laborCost =  laborHours * bid.Labor.ElectricalEffectiveRate;
+            laborCost += bid.Labor.SubcontractorSubTotal;
+            return laborCost;
         }
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 

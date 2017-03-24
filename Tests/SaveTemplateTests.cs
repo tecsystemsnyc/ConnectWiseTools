@@ -1936,9 +1936,9 @@ namespace Tests
             scopePanel.Name = "Test Scope Name";
             expectedScope.Panels.Add(scopePanel);
 
-            var scopeConnection = new TECConnection();
-            scopeConnection.Controller = scopeController;
-            scopeConnection.Scope.Add(scopeSystem.Equipment[0].SubScope[0]);
+            var scopeConnection = new TECSubScopeConnection();
+            scopeConnection.ParentController = scopeController;
+            scopeConnection.SubScope.Add(scopeSystem.Equipment[0].SubScope[0]);
             expectedScope.Connections.Add(scopeConnection);
             
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
@@ -1955,6 +1955,16 @@ namespace Tests
                 }
             }
 
+            TECSubScopeConnection actualSSConnection = null;
+            foreach (TECSubScopeConnection ssConnect in actualScope.Connections)
+            {
+                if (ssConnect.Guid == scopeConnection.Guid)
+                {
+                    actualSSConnection = ssConnect;
+                    break;
+                }
+            }
+
             //Assert
             Assert.AreEqual(expectedScope.Name, actualScope.Name);
             Assert.AreEqual(expectedScope.Description, actualScope.Description);
@@ -1962,7 +1972,7 @@ namespace Tests
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Connections.Count, actualScope.Connections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualScope.Connections[0].Scope.Contains(actualScope.Systems[0].Equipment[0].SubScope[0]));
+            Assert.IsTrue(actualSSConnection.SubScope.Contains(actualScope.Systems[0].Equipment[0].SubScope[0]));
         }
 
         [TestMethod]

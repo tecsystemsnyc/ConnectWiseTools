@@ -135,8 +135,8 @@ namespace EstimateBuilder.ViewModel
                 {
                     if (args.OldValue != null)
                     {
-                        var connectionToRemove = new TECConnection();
-                        foreach (TECConnection connection in Bid.Connections)
+                        var connectionToRemove = new TECSubScopeConnection();
+                        foreach (TECSubScopeConnection connection in Bid.Connections)
                         {
                             if ((args.OldValue as TECConnection).Guid == connection.Guid)
                             {
@@ -181,15 +181,15 @@ namespace EstimateBuilder.ViewModel
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         TECSubScope subScopetoAdd = subScope;
-                        TECConnection connectionToAdd = null;
+                        TECSubScopeConnection connectionToAdd = null;
                         TECController controllerToAdd = null;
 
-                        foreach (TECConnection connection in Bid.Connections)
+                        foreach (TECSubScopeConnection connection in Bid.Connections)
                         {
-                            if (connection.Scope.Contains(subScope))
+                            if (connection.SubScope.Contains(subScope))
                             {
                                 connectionToAdd = connection;
-                                controllerToAdd = connection.Controller;
+                                controllerToAdd = connection.ParentController;
                             }
                         }
 
