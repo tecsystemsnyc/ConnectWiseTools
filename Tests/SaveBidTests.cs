@@ -3299,7 +3299,7 @@ namespace Tests
             var expectedConnection = new TECSubScopeConnection();
             expectedConnection.Length = 1212;
             expectedConnection.ParentController = expectedController;
-            expectedConnection.SubScope.Add(expectedSubScope);
+            expectedConnection.SubScope = expectedSubScope;
             expectedController.ChildrenConnections.Add(expectedConnection);
             expectedSubScope.Connection = expectedConnection;
 
@@ -3356,7 +3356,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
             Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
-            Assert.IsTrue(actualConnection.SubScope.Contains(actualSystem.Equipment[0].SubScope[0]), "Scope not linked in connection");
+            Assert.IsTrue(actualConnection.SubScope == actualSystem.Equipment[0].SubScope[0], "Scope not linked in connection");
             Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
         }
         #endregion
