@@ -269,7 +269,7 @@ namespace TECUserControlLibrary.ViewModels
                         
                         foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
                         {
-                            if (connection.SubScope.Contains(subScope))
+                            if (connection.SubScope == subScope)
                             {
                                 connectionToAdd = connection;
                                 controllerToAdd = connection.ParentController;

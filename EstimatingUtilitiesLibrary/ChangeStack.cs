@@ -761,16 +761,13 @@ namespace EstimatingUtilitiesLibrary
             else if (connection is TECSubScopeConnection)
             {
                 TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-                foreach (TECSubScope ss in ssConnect.SubScope)
+                if (change == Change.Add)
                 {
-                    if (change == Change.Add)
-                    {
-                        SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ss));
-                    }
-                    else if (change == Change.Remove)
-                    {
-                        SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ss));
-                    }
+                    SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
+                }
+                else if (change == Change.Remove)
+                {
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
                 }
             }
             #endregion

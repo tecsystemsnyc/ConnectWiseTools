@@ -88,7 +88,7 @@ namespace TECUserControlLibrary.Models
             {
                 var connection = new TECSubScopeConnection();
                 connection.ParentController = controller;
-                connection.SubScope.Add(SubScope);
+                connection.SubScope = SubScope;
                 Connection = connection;
                 Controller.ChildrenConnections.Add(Connection);
                 SubScope.Connection = Connection;
