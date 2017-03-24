@@ -11,18 +11,18 @@ namespace EstimatingLibrary
     {
         #region Properties
         //---Stored---
-        private ObservableCollection<TECSubScope> _subScope;
+        private TECSubScope _subScope;
         
-        public ObservableCollection<TECSubScope> SubScope
+        public TECSubScope SubScope
         {
             get { return _subScope; }
             set
             {
-                var temp = this.Copy();
-                SubScope.CollectionChanged -= SubScope_CollectionChanged;
+                var oldNew = Tuple.Create<Object, Object>(_subScope, value);
                 _subScope = value;
-                NotifyPropertyChanged("SubScope", temp, this);
-                SubScope.CollectionChanged += SubScope_CollectionChanged;
+                RaisePropertyChanged("SubScope");
+                var temp = Copy();
+                NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
 
@@ -32,14 +32,12 @@ namespace EstimatingLibrary
             get
             {
                 var outConnectionTypes = new ObservableCollection<TECConnectionType>();
-
-                foreach (TECSubScope ss in SubScope)
+                
+                foreach (TECDevice dev in SubScope.Devices)
                 {
-                    foreach (TECDevice dev in ss.Devices)
-                    {
-                        outConnectionTypes.Add(dev.ConnectionType);
-                    }
+                    outConnectionTypes.Add(dev.ConnectionType);
                 }
+
                 return outConnectionTypes;
             }
         }
@@ -48,32 +46,23 @@ namespace EstimatingLibrary
             get
             {
                 var outIOTypes = new ObservableCollection<IOType>();
-
-                foreach (TECSubScope ss in SubScope)
+                
+                foreach (TECDevice dev in SubScope.Devices)
                 {
-                    foreach (TECDevice dev in ss.Devices)
-                    {
-                        outIOTypes.Add(dev.IOType);
-                    }
+                    outIOTypes.Add(dev.IOType);
                 }
+
                 return outIOTypes;
             }
         }
         #endregion
 
         #region Constructors
-        public TECSubScopeConnection(Guid guid) : base(guid)
-        {
-            _subScope = new ObservableCollection<TECSubScope>();
-            SubScope.CollectionChanged += SubScope_CollectionChanged;
-        }
+        public TECSubScopeConnection(Guid guid) : base(guid) {}
         public TECSubScopeConnection() : base (Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
-            foreach (TECSubScope ss in connectionSource.SubScope)
-            {
-                 _subScope.Add(new TECSubScope(ss, guidDictionary));
-            }
+            _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary);
         }
         #endregion Constructors
 
@@ -83,34 +72,6 @@ namespace EstimatingLibrary
             TECSubScopeConnection connection = new TECSubScopeConnection(this);
             connection._guid = this._guid;
             return connection;
-        }
-        #endregion
-
-        #region Event Handlers
-        private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Connection = this;
-                    }
-                    NotifyPropertyChanged("AddRelationship", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    if (item is TECSubScope)
-                    {
-                        (item as TECSubScope).Connection = null;
-                    }
-                    NotifyPropertyChanged("RemoveRelationship", this, item);
-                }
-            }
         }
         #endregion
 

@@ -126,7 +126,6 @@ namespace EstimatingLibrary
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
             IO.CollectionChanged += IO_CollectionChanged;
-            ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
         public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
@@ -170,10 +169,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
         private void IOPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -181,6 +176,44 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
+        }
+        #endregion
+
+        #region Connection Methods
+
+        public TECNetworkConnection AddController(TECController controller, TECConnection connection = null)
+        {
+            if (connection != null)
+            {
+                foreach (TECNetworkConnection conn in ChildrenConnections)
+                {
+                    if (connection == conn)
+                    {
+                        conn.ChildrenControllers.Add(controller);
+                        controller.ParentConnection = conn;
+                        return conn;
+                    }
+                }
+                throw new ArgumentOutOfRangeException();
+            }
+            else
+            {
+                TECNetworkConnection netConnect = new TECNetworkConnection();
+                ChildrenConnections.Add(netConnect);
+                netConnect.ParentController = this;
+                netConnect.ChildrenControllers.Add(controller);
+                controller.ParentConnection = netConnect;
+                return netConnect;
+            }
+        }
+
+        public TECSubScopeConnection AddSubScope(TECSubScope subScope)
+        {
+            TECSubScopeConnection connection = new TECSubScopeConnection();
+            ChildrenConnections.Add(connection);
+            connection.ParentController = this;
+            connection.SubScope = subScope;
+
         }
         #endregion
 
