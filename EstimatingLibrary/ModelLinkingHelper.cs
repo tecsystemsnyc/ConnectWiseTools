@@ -11,7 +11,6 @@ namespace EstimatingLibrary
 {
     public static class ModelLinkingHelper
     {
-
         public static void LinkBid(TECBid bid)
         {
             linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
