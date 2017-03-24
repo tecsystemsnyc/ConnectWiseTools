@@ -55,10 +55,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                Scope.CollectionChanged -= collectionChanged;
+                Scope.CollectionChanged -= Scope_CollectionChanged;
                 _scope = value;
                 NotifyPropertyChanged("Scope", temp, this);
-                Scope.CollectionChanged += collectionChanged;
+                Scope.CollectionChanged += Scope_CollectionChanged;
             }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes
@@ -83,10 +83,10 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
+                var oldNew = Tuple.Create<Object, Object>(_conduitType, value); 
                 var temp = Copy();
                 _conduitType = value;
-                RaisePropertyChanged("ConduitType");
+                NotifyPropertyChanged("ConduitType", temp, this);
                 temp = Copy();
                 NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
             }

@@ -615,7 +615,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleControlledScope(newItem as TECControlledScope, item.Change);
             }
-
+            else if (newItem is TECPanel)
+            {
+                handlePanelChildren(newItem as TECPanel, item.Change);
+            }
             else if (newItem is TECDrawing)
             {
                 foreach (TECPage page in ((TECDrawing)newItem).Pages)
@@ -710,6 +713,31 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, (object)connection, (object)connection.ConduitType);
                 SaveStack.Add(item);
             }
+            if (connection.Controller != null)
+            {
+                if (change == Change.Add)
+                {
+                    item = new StackItem(Change.AddRelationship, (object)connection, (object)connection.Controller);
+                    SaveStack.Add(item);
+                }
+                else if (change == Change.Remove)
+                {
+                    item = new StackItem(Change.RemoveRelationship, (object)connection, (object)connection.Controller);
+                    SaveStack.Add(item);
+                }
+            }
+            foreach (TECScope scope in connection.Scope)
+            {
+                if(change == Change.Add)
+                {
+                    item = new StackItem(Change.AddRelationship, (object)connection, (object)scope);
+                    SaveStack.Add(item);
+                }else if(change == Change.Remove)
+                {
+                    item = new StackItem(Change.RemoveRelationship, (object)connection, (object)scope);
+                    SaveStack.Add(item);
+                }
+            }
         }
         private void handleDeviceChildren(TECDevice device, Change change)
         {
@@ -775,7 +803,24 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-        
+        private void handlePanelChildren(TECPanel panel, Change change)
+        {
+            foreach(TECController controller in panel.Controllers)
+            {
+                StackItem item;
+                if (change == Change.Add)
+                {
+                    item = new StackItem(Change.AddRelationship, (object)controller, (object)controller);
+                    SaveStack.Add(item);
+                }
+                else if (change == Change.Remove)
+                {
+                    item = new StackItem(Change.RemoveRelationship, (object)controller, (object)controller);
+                    SaveStack.Add(item);
+                }
+            }
+        }
+
         private void registerGeneric(TECObject obj)
         {
             obj.PropertyChanged += Object_PropertyChanged;
