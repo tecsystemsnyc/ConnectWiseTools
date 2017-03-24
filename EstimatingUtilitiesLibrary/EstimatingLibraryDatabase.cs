@@ -1191,9 +1191,9 @@ namespace EstimatingUtilitiesLibrary
 
             return systems;
         }
-        static private ObservableCollection<TECConnection> getConnectionsInControlledScope(Guid guid)
+        static private ObservableCollection<TECSubScopeConnection> getConnectionsInControlledScope(Guid guid)
         {
-            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
+            ObservableCollection<TECSubScopeConnection> connections = new ObservableCollection<TECSubScopeConnection>();
             string command = "select * from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
             command += "(select " + ControlledScopeConnectionTable.ConnectionID.Name + " from " + ControlledScopeConnectionTable.TableName + " where ";
             command += ControlledScopeConnectionTable.ControlledScopeID.Name + " = '" + guid;
@@ -1762,7 +1762,7 @@ namespace EstimatingUtilitiesLibrary
 
             return paramters;
         }
-        private static TECConnection getSubScopeConnectionFromRow(DataRow row)
+        private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeConnectionTable.ConnectionID.Name].ToString());
             TECSubScopeConnection connection = new TECSubScopeConnection(guid);
@@ -1772,7 +1772,7 @@ namespace EstimatingUtilitiesLibrary
             connection.SubScope = getChildrenInSubScopeConnection(connection.Guid);
             return connection;
         }
-        private static TECConnection getNetworkConnectionFromRow(DataRow row)
+        private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[NetworkConnectionTable.ConnectionID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);

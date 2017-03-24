@@ -571,10 +571,6 @@ namespace EstimatingLibrary
             {
                 panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
-            foreach (TECNetworkConnection connection in controlledScope.Connections)
-            {
-                connectionCollection.Add(new TECNetworkConnection(connection, guidDictionary));
-            }
             foreach (TECSubScopeConnection connection in controlledScope.Connections)
             {
                 connectionCollection.Add(new TECSubScopeConnection(connection, guidDictionary));
