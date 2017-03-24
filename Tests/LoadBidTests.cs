@@ -436,7 +436,7 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Connection()
         {
-            throw new NotImplementedException();
+            Assert.Fail();
             ////Arrange
             //TECConnection actualConnection = actualBid.Connections[0];
 
