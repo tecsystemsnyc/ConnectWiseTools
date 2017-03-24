@@ -19,8 +19,9 @@ namespace EstimatingLibrary
             get { return _childrenControllers; }
             set
             {
+                var temp = this.Copy();
                 _childrenControllers = value;
-                RaisePropertyChanged("ChildrenControllers");
+                NotifyPropertyChanged("ChildrenControllers", temp, this);
             }
         }
         public TECConnectionType ConnectionType
@@ -28,8 +29,10 @@ namespace EstimatingLibrary
             get { return _connectionType; }
             set
             {
+                var temp = this.Copy();
                 _connectionType = value;
-                RaisePropertyChanged("ConnectionType");
+                NotifyPropertyChanged("ConnectionType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -37,8 +40,10 @@ namespace EstimatingLibrary
             get { return _ioType; }
             set
             {
+                var temp = this.Copy();
                 _ioType = value;
-                RaisePropertyChanged("IOType");
+                NotifyPropertyChanged("IOType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion
@@ -81,10 +86,6 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECController)
-                    {
-                        (item as TECController).ParentConnection = this;
-                    }
                     NotifyPropertyChanged("AddRelationship", this, item);
                 }
             }
@@ -92,10 +93,6 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECController)
-                    {
-                        (item as TECController).ParentConnection = null;
-                    }
                     NotifyPropertyChanged("RemoveRelationship", this, item);
                 }
             }

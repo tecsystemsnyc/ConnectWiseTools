@@ -38,12 +38,8 @@ namespace EstimatingLibrary
             {
                 var oldNew = Tuple.Create<Object, Object>(_parentController, value);
                 var temp = Copy();
-                _parentController.ChildrenConnections.Remove(this);
                 _parentController = value;
-                if(_parentController != null)
-                { _parentController.ChildrenConnections.Add(this); }
                 RaisePropertyChanged("ParentController");
-                temp = Copy();
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
