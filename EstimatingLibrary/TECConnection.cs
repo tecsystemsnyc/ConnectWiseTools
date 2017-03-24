@@ -12,7 +12,7 @@ namespace EstimatingLibrary
     public abstract class TECConnection : TECObject
     {
         #region Properties
-        private Guid _guid;
+        protected Guid _guid;
         protected double _length;
         protected TECController _parentController;
         protected TECConduitType _conduitType;
