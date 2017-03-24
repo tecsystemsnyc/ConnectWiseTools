@@ -534,10 +534,26 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ConnectionTable : TableBase
+    public class SubScopeConnectionTable : TableBase
     {
-        public static new string TableName = "TECConnection";
-        public static Type ObjectType = typeof(TECConnection);
+        public static new string TableName = "TECSubScopeConnection";
+        public static Type ObjectType = typeof(TECSubScopeConnection);
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ConnectionID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType
+        };
+    }
+    public class NetworkConnectionTable : TableBase
+    {
+        public static new string TableName = "TECNetworkConnectionConnection";
+        public static Type ObjectType = typeof(TECNetworkConnection);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
