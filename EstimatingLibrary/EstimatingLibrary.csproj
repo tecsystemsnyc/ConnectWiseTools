@@ -134,6 +134,7 @@
     <Compile Include="TECScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TECScopeBranch.cs" />
+    <Compile Include="TECSubScopeConnection.cs" />
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTag.cs" />
     <Compile Include="TECTemplates.cs" />

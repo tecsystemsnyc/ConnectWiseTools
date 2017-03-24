@@ -210,6 +210,5 @@ namespace EstimatingLibrary
         }
 
         #endregion
-
     }
 }
