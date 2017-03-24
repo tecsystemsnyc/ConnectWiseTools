@@ -334,15 +334,14 @@ namespace Tests
             bid.Panels.Add(panel);
 
             //Connections
-            TECConnection testConnection = new TECConnection();
+            TECSubScopeConnection testConnection = new TECSubScopeConnection();
             testConnection.ConduitType = conduitType1;
             testConnection.Length = 42;
-            testConnection.Controller = expectedController;
-            testConnection.Scope.Add(subScope1);
+            testConnection.ParentController = expectedController;
+            testConnection.SubScope = subScope1;
 
             bid.Connections.Add(testConnection);
             
-
             //Bid
             return bid;
         }
@@ -589,12 +588,12 @@ namespace Tests
             templates.PanelTemplates.Add(panel);
 
             //Connections
-            TECConnection controlledConnection = new TECConnection();
+            TECSubScopeConnection controlledConnection = new TECSubScopeConnection();
             controlledConnection.ConduitType = testConduitType;
             controlledConnection.Length = 42;
-            controlledConnection.Controller = controlledController;
+            controlledConnection.ParentController = controlledController;
 
-            controlledController.Connections.Add(controlledConnection);
+            controlledController.ChildrenConnections.Add(controlledConnection);
 
             //Controlled Scope
             TECControlledScope testConScope = new TECControlledScope();
