@@ -76,6 +76,14 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("NetworkControllers");
             }
         }
+
+        public IOType SelectedIO { get; set; }
+        #endregion
+
+        #region Commands
+
+        public ICommand AddConnectionCommand { get; private set; }
+
         #endregion
 
         public NetworkViewModel(TECBid bid)
@@ -83,6 +91,8 @@ namespace TECUserControlLibrary.ViewModels
             _bid = bid;
 
             update();
+
+            AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x));
         }
 
         #region Methods
@@ -209,6 +219,18 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
+        #region Commands Methods
+
+        private void AddConnectionExecute(TECController controller)
+        {
+            TECConnection newConnection = new TECConnection();
+            newConnection.IOTypes.Add(SelectedIO);
+            newConnection.Controller = controller;
+            controller.Connections.Add(newConnection);
+        }
+
+        #endregion
+
         #region Event Handlers
 
         private void Controllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -312,7 +334,7 @@ namespace TECUserControlLibrary.ViewModels
             Type sourceType = sourceItem.GetType();
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if (sourceItem != null)
+            if (sourceItem != null && !(sourceItem is TECConnection))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Move;

@@ -70,6 +70,7 @@
                             <Button Grid.Column="2"
                                     Content="Add"
                                     Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
+                                    CommandParameter="{Binding Controller}"
                                     Margin="5"/>
                         </Grid>
                         <DataGrid ItemsSource="{Binding Controller.ChildConnections}"
