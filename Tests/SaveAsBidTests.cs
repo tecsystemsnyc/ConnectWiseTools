@@ -555,30 +555,31 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_Connection()
         {
-            //Arrange
-            TECConnection actualConnection = actualBid.Connections[0];
-            TECConnection expectedConnection = expectedBid.Connections[0];
+            throw new NotImplementedException();
+            ////Arrange
+            //TECConnection actualConnection = actualBid.Connections[0];
+            //TECConnection expectedConnection = expectedBid.Connections[0];
 
-            //Assert
-            Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
-            Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
-            Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
-            Assert.AreEqual(expectedConnection.Controller.Guid, actualConnection.Controller.Guid);
-            Assert.AreEqual(expectedConnection.Scope.Count, actualConnection.Scope.Count);
+            ////Assert
+            //Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
+            //Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
+            //Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
+            //Assert.AreEqual(expectedConnection.Controller.Guid, actualConnection.Controller.Guid);
+            //Assert.AreEqual(expectedConnection.Scope.Count, actualConnection.Scope.Count);
             
-            foreach (TECScope expectedScope in expectedConnection.Scope)
-            {
-                bool hasScope = false;
-                foreach (TECScope actualScope in actualConnection.Scope)
-                {
-                    if (expectedScope.Guid == actualScope.Guid)
-                    {
-                        hasScope = true;
-                        break;
-                    }
-                }
-                Assert.IsTrue(hasScope);
-            }
+            //foreach (TECScope expectedScope in expectedConnection.Scope)
+            //{
+            //    bool hasScope = false;
+            //    foreach (TECScope actualScope in actualConnection.Scope)
+            //    {
+            //        if (expectedScope.Guid == actualScope.Guid)
+            //        {
+            //            hasScope = true;
+            //            break;
+            //        }
+            //    }
+            //    Assert.IsTrue(hasScope);
+            //}
         }
 
         [TestMethod]
