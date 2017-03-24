@@ -230,33 +230,22 @@ namespace EstimatingLibrary
                     else if (connection is TECSubScopeConnection)
                     {
                         TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-
-                        List<TECScope> ssToRemove = new List<TECScope>();
-                        List<TECScope> ssToAdd = new List<TECScope>();
-
+                        
                         foreach (TECSystem system in systems)
                         {
                             foreach (TECEquipment equipment in system.Equipment)
                             {
                                 foreach (TECSubScope subScope in equipment.SubScope)
                                 {
-                                    foreach (TECSubScope childSS in ssConnect.SubScope)
+                                    bool isCopy = guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid];
+                                    if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                                     {
-                                        bool isCopy = guidDictionary != null && guidDictionary[childSS.Guid] == guidDictionary[subScope.Guid];
-                                        if (childSS.Guid == subScope.Guid || isCopy)
-                                        {
-                                            ssToRemove.Add(childSS);
-                                            ssToAdd.Add(subScope);
-                                        }
+                                        ssConnect.SubScope = subScope;
                                     }
                                 }
                             }
                         }
-
-                        foreach (TECSubScope ss in ssToRemove)
-                        { ssConnect.SubScope.Remove(ss); }
-                        foreach (TECSubScope ss in ssToAdd)
-                        { ssConnect.SubScope.Add(ss); }
+                        
                     }
                     #endregion
 
