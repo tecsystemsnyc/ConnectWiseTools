@@ -186,7 +186,7 @@ namespace EstimateBuilder.ViewModel
 
                         foreach (TECSubScopeConnection connection in Bid.Connections)
                         {
-                            if (connection.SubScope.Contains(subScope))
+                            if (connection.SubScope == subScope)
                             {
                                 connectionToAdd = connection;
                                 controllerToAdd = connection.ParentController;

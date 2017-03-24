@@ -391,7 +391,7 @@ namespace Tests
             }
             foreach(TECController controller in actualConScope.Controllers)
             {
-                foreach(TECConnection connection in controller.Connections)
+                foreach(TECSubScopeConnection connection in controller.ChildrenConnections)
                 {
                     if (!actualConScope.Connections.Contains(connection))
                     {
