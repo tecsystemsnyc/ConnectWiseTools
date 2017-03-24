@@ -1938,7 +1938,7 @@ namespace Tests
 
             var scopeConnection = new TECSubScopeConnection();
             scopeConnection.ParentController = scopeController;
-            scopeConnection.SubScope.Add(scopeSystem.Equipment[0].SubScope[0]);
+            scopeConnection.SubScope = scopeSystem.Equipment[0].SubScope[0];
             expectedScope.Connections.Add(scopeConnection);
             
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
@@ -1972,7 +1972,7 @@ namespace Tests
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Connections.Count, actualScope.Connections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualSSConnection.SubScope.Contains(actualScope.Systems[0].Equipment[0].SubScope[0]));
+            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Systems[0].Equipment[0].SubScope[0]);
         }
 
         [TestMethod]
