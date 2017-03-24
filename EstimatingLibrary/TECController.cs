@@ -194,7 +194,7 @@ namespace EstimatingLibrary
                         return conn;
                     }
                 }
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
             }
             else
             {
@@ -213,7 +213,49 @@ namespace EstimatingLibrary
             ChildrenConnections.Add(connection);
             connection.ParentController = this;
             connection.SubScope = subScope;
+            subScope.Connection = connection;
+            return connection;
+        }
 
+        public void RemoveController(TECController controller)
+        {
+            bool exists = false;
+            foreach (TECNetworkConnection connection in ChildrenConnections)
+            {
+                if (connection.ChildrenControllers.Contains(controller))
+                {
+                    exists = true;
+                    controller.ParentConnection = null;
+                    connection.ChildrenControllers.Remove(controller);
+                }
+            }
+            if (!exists)
+            {
+                throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
+            }
+        }
+
+        public void RemoveSubScope(TECSubScope subScope)
+        {
+            TECSubScopeConnection connectionToRemove = null;
+            foreach (TECSubScopeConnection connection in ChildrenConnections)
+            {
+                if (connection.SubScope == subScope)
+                {
+                    subScope.Connection = null;
+                    connection.SubScope = null;
+                    connection.ParentController = null;
+                    connectionToRemove = connection;
+                }
+            }
+            if (connectionToRemove != null)
+            {
+                ChildrenConnections.Remove(connectionToRemove);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Passed subscope does not exist in any connection in controller.");
+            }
         }
         #endregion
 
@@ -252,12 +294,9 @@ namespace EstimatingLibrary
 
             foreach (TECSubScopeConnection connected in ChildrenConnections)
             {
-                foreach(TECSubScope ss in connected.SubScope)
+                foreach(TECDevice device in connected.SubScope.Devices)
                 {
-                    foreach(TECDevice device in ss.Devices)
-                    {
-                        availableIO.Remove(device.IOType);
-                    }
+                    availableIO.Remove(device.IOType);
                 }
             }
             return availableIO;
