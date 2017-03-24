@@ -33,16 +33,16 @@ namespace EstimatingLibrary
         }
         public TECController ParentController
         {
-            get { return _controller; }
+            get { return _parentController; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_controller, value);
+                var oldNew = Tuple.Create<Object, Object>(_parentController, value);
                 var temp = Copy();
-                _controller.Connections.Remove(this);
-                _controller = value;
-                if(_controller != null)
-                { _controller.Connections.Add(this); }
-                RaisePropertyChanged("Controller");
+                _parentController.Connections.Remove(this);
+                _parentController = value;
+                if(_parentController != null)
+                { _parentController.Connections.Add(this); }
+                RaisePropertyChanged("ParentController");
                 temp = Copy();
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
@@ -75,7 +75,7 @@ namespace EstimatingLibrary
             { guidDictionary[_guid] = connectionSource.Guid; }
 
             _length = connectionSource.Length;
-            _parentController = new TECController(connectionSource.ParentController, guidDictionary, false);
+            _parentController = new TECController(connectionSource.ParentController, guidDictionary);
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
