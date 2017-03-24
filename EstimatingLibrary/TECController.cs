@@ -10,8 +10,10 @@ namespace EstimatingLibrary
     public class TECController : TECScope
     {
         #region Properties
+        //---Stored---
         private double _cost;
-        private ObservableCollection<TECConnection> _connections;
+        private TECNetworkConnection _parentConnection;
+        private ObservableCollection<TECConnection> _childrenConnections;
         private ObservableCollection<TECIO> _io;
         private TECManufacturer _manufacturer;
         private bool _isServer;
@@ -27,34 +29,24 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public ObservableCollection<TECConnection> Connections
+        public TECNetworkConnection ParentConnection
         {
-            get { return _connections; }
+            get { return _parentConnection; }
             set
             {
-                var temp = this.Copy();
-                _connections = value;
-                RaisePropertyChanged("Connections");
-                RaisePropertyChanged("ChildConnections");
-                Connections.CollectionChanged += CollectionChanged;
+                _parentConnection = value;
+                RaisePropertyChanged("ParentConnection");
             }
         }
-        public ObservableCollection<TECConnection> ChildConnections
+        public ObservableCollection<TECConnection> ChildrenConnections
         {
-            get
+            get { return _childrenConnections; }
+            set
             {
-                ObservableCollection<TECConnection> children = new ObservableCollection<TECConnection>();
-                foreach (TECConnection connection in Connections)
-                {
-                    if (connection.Controller == this)
-                    {
-                        children.Add(connection);
-                    }
-                }
-                return children;
+                _childrenConnections = value;
+                RaisePropertyChanged("ChildrenConnections");
             }
         }
-
         public ObservableCollection<TECIO> IO
         {
             get { return _io; }
@@ -107,6 +99,7 @@ namespace EstimatingLibrary
             }
         }
 
+        //---Derived---
         public List<IOType> AvailableIO
         {
             get { return getAvailableIO(); }
@@ -123,7 +116,7 @@ namespace EstimatingLibrary
         {
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
-            _connections = new ObservableCollection<TECConnection>();
+            _childrenConnections = new ObservableCollection<TECConnection>();
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
@@ -167,7 +160,6 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            RaisePropertyChanged("ChildConnections");
         }
         private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -212,16 +204,13 @@ namespace EstimatingLibrary
                 }
             }
 
-            foreach (TECConnection connected in this.Connections)
+            foreach (TECSubScopeConnection connected in ChildrenConnections)
             {
-                foreach(TECScope scope in connected.Scope)
+                foreach(TECSubScope ss in connected.SubScope)
                 {
-                    if(scope is TECSubScope)
+                    foreach(TECDevice device in ss.Devices)
                     {
-                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
-                        {
-                            availableIO.Remove(device.IOType);
-                        }
+                        availableIO.Remove(device.IOType);
                     }
                 }
             }

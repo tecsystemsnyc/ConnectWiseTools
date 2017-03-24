@@ -220,27 +220,27 @@ namespace EstimateBuilder.ViewModel
 
         #endregion Drawing Scale Properties
 
-        public DrawingViewModel()
-        {
-            isConnecting = false;
-            PercentageZoom = 1;
+        //public DrawingViewModel()
+        //{
+        //    isConnecting = false;
+        //    PercentageZoom = 1;
 
-            PreviousPageCommand = new RelayCommand(PreviousPageExecute);
-            NextPageCommand = new RelayCommand(NextPageExecute);
-            ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
-            AddControllerCommand = new RelayCommand(AddControllerExecute);
+        //    PreviousPageCommand = new RelayCommand(PreviousPageExecute);
+        //    NextPageCommand = new RelayCommand(NextPageExecute);
+        //    ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
+        //    AddControllerCommand = new RelayCommand(AddControllerExecute);
 
-            pageIndexes = new Dictionary<TECDrawing, int>();
+        //    pageIndexes = new Dictionary<TECDrawing, int>();
 
-            DisplaySystems = new ObservableCollection<TECSystem>();
-            DisplayEquipment = new ObservableCollection<TECEquipment>();
-            DisplaySubScope = new ObservableCollection<TECSubScope>();
-            DisplayConnections = new ObservableCollection<TECVisualConnection>();
+        //    DisplaySystems = new ObservableCollection<TECSystem>();
+        //    DisplayEquipment = new ObservableCollection<TECEquipment>();
+        //    DisplaySubScope = new ObservableCollection<TECSubScope>();
+        //    DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
-            Bid = new TECBid();
+        //    Bid = new TECBid();
 
             
-        }
+        //}
         
         #region Methods
 
@@ -301,38 +301,38 @@ namespace EstimateBuilder.ViewModel
             return true;
         }
 
-        private void ConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
-        {
-            if (isConnecting)
-            {
-                var newConnection = createConnection(connectionStart, arg, 1.0);
-                connectConnections(connectionStart.Item1, arg.Item1, newConnection);
-                Bid.Connections.Add(newConnection);
-                bool isShown = false;
-                foreach(TECVisualConnection vc in CurrentPage.Connections)
-                {
-                    if(((vc.Scope1 == connectionStart.Item2) && (vc.Scope2 == arg.Item2))
-                        || ((vc.Scope2 == connectionStart.Item2) && (vc.Scope1 == arg.Item2)))
-                    {
-                        isShown = true;
-                    }
-                }
-                if (!isShown)
-                {
-                    TECVisualConnection connectionToAdd = new TECVisualConnection(connectionStart.Item2, arg.Item2);
-                    connectionToAdd.Connections = new ObservableCollection<TECConnection>();
-                    connectionToAdd.Connections.Add(newConnection);
-                    CurrentPage.Connections.Add(connectionToAdd);
-                }
-                isConnecting = false;
-            }
-            else
-            {
-                connectionStart = arg;
-                isConnecting = true;
-            }
+        //private void ConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
+        //{
+        //    if (isConnecting)
+        //    {
+        //        var newConnection = createConnection(connectionStart, arg, 1.0);
+        //        connectConnections(connectionStart.Item1, arg.Item1, newConnection);
+        //        Bid.Connections.Add(newConnection);
+        //        bool isShown = false;
+        //        foreach(TECVisualConnection vc in CurrentPage.Connections)
+        //        {
+        //            if(((vc.Scope1 == connectionStart.Item2) && (vc.Scope2 == arg.Item2))
+        //                || ((vc.Scope2 == connectionStart.Item2) && (vc.Scope1 == arg.Item2)))
+        //            {
+        //                isShown = true;
+        //            }
+        //        }
+        //        if (!isShown)
+        //        {
+        //            TECVisualConnection connectionToAdd = new TECVisualConnection(connectionStart.Item2, arg.Item2);
+        //            connectionToAdd.Connections = new ObservableCollection<TECConnection>();
+        //            connectionToAdd.Connections.Add(newConnection);
+        //            CurrentPage.Connections.Add(connectionToAdd);
+        //        }
+        //        isConnecting = false;
+        //    }
+        //    else
+        //    {
+        //        connectionStart = arg;
+        //        isConnecting = true;
+        //    }
             
-        }
+        //}
         
         private void AddControllerExecute()
         {
@@ -502,63 +502,63 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private bool canAcceptConnection(TECObject item, TECConnection connection)
-        {
-            bool canConnect = false;
+        //private bool canAcceptConnection(TECObject item, TECConnection connection)
+        //{
+        //    bool canConnect = false;
 
-            if(item is TECController)
-            {
-                var controller = item as TECController;
+        //    if(item is TECController)
+        //    {
+        //        var controller = item as TECController;
 
-                var availableIO = controller.AvailableIO;
+        //        var availableIO = controller.AvailableIO;
                 
-                foreach(TECScope scope in connection.Scope)
-                {
-                    if(scope is TECSubScope)
-                    {
-                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
-                        {
-                            if (availableIO.Contains(device.IOType))
-                            {
-                                availableIO.Remove(device.IOType);
-                                canConnect = true;
-                            } else
-                            {
-                                canConnect = false;
-                            }
+        //        foreach(TECScope scope in connection.Scope)
+        //        {
+        //            if(scope is TECSubScope)
+        //            {
+        //                foreach(TECDevice device in ((TECSubScope)scope).Devices)
+        //                {
+        //                    if (availableIO.Contains(device.IOType))
+        //                    {
+        //                        availableIO.Remove(device.IOType);
+        //                        canConnect = true;
+        //                    } else
+        //                    {
+        //                        canConnect = false;
+        //                    }
                             
-                        }
-                    }
-                }
-            } 
-            else if (item is TECSubScope)
-            {
-                var subScope = item as TECSubScope;
-                if(subScope.Connection == null)
-                {
-                    var availableConnections = subScope.AvailableConnections;
+        //                }
+        //            }
+        //        }
+        //    } 
+        //    else if (item is TECSubScope)
+        //    {
+        //        var subScope = item as TECSubScope;
+        //        if(subScope.Connection == null)
+        //        {
+        //            var availableConnections = subScope.AvailableConnections;
 
-                    foreach (TECConnectionType conType in connection.ConnectionTypes)
-                    {
-                        if (availableConnections.Contains(conType))
-                        {
-                            availableConnections.Remove(conType);
-                            canConnect = true;
-                        }
-                        else
-                        {
-                            canConnect = false;
-                        }
-                    }
-                }
-                else
-                {
-                    canConnect = false;
-                }
-            }
+        //            //foreach (TECConnectionType conType in connection.ConnectionTypes)
+        //            //{
+        //            //    if (availableConnections.Contains(conType))
+        //            //    {
+        //            //        availableConnections.Remove(conType);
+        //            //        canConnect = true;
+        //            //    }
+        //            //    else
+        //            //    {
+        //            //        canConnect = false;
+        //            //    }
+        //            //}
+        //        }
+        //        else
+        //        {
+        //            canConnect = false;
+        //        }
+        //    }
 
-            return canConnect;
-        }
+        //    return canConnect;
+        //}
         private bool canStartConnection(TECObject item)
         {
             /*
@@ -585,70 +585,70 @@ namespace EstimateBuilder.ViewModel
             return true;
         }
 
-        private TECConnection createConnection(Tuple<TECObject, TECVisualScope, string> item1, Tuple<TECObject, TECVisualScope, string> item2, double scale)
-        {
-            double length = UtilitiesMethods.getLength(item1.Item2, item2.Item2, scale);
-            var newConnection = new TECConnection();
-            newConnection.Length = length;
-            if (item1.Item1 is TECController)
-            {
-                newConnection.Controller = item1.Item1 as TECController;
-                if(item2.Item1 is TECSubScope)
-                {
-                    var sub = item2.Item1 as TECSubScope;
-                    foreach (TECConnectionType type in sub.ConnectionTypes)
-                    {
-                        newConnection.ConnectionTypes.Add(type);
-                    }
-                    foreach(IOType ioType in sub.AllIOTypes)
-                    {
-                        newConnection.IOTypes.Add(ioType);
-                    }
-                }
-                else
-                {
-                    //MUST REIMPLIMENT
-                    //var controller = item2.Item1 as TECController;
-                    //foreach (IOType type in controller.NetworkIO)
-                    //{
-                    //    newConnection.ConnectionTypes.Add(type);
-                    //}
-                }
+        //private TECConnection createConnection(Tuple<TECObject, TECVisualScope, string> item1, Tuple<TECObject, TECVisualScope, string> item2, double scale)
+        //{
+        //    double length = UtilitiesMethods.getLength(item1.Item2, item2.Item2, scale);
+        //    var newConnection = new TECConnection();
+        //    newConnection.Length = length;
+        //    if (item1.Item1 is TECController)
+        //    {
+        //        newConnection.Controller = item1.Item1 as TECController;
+        //        if(item2.Item1 is TECSubScope)
+        //        {
+        //            var sub = item2.Item1 as TECSubScope;
+        //            foreach (TECConnectionType type in sub.ConnectionTypes)
+        //            {
+        //                newConnection.ConnectionTypes.Add(type);
+        //            }
+        //            foreach(IOType ioType in sub.AllIOTypes)
+        //            {
+        //                newConnection.IOTypes.Add(ioType);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //MUST REIMPLIMENT
+        //            //var controller = item2.Item1 as TECController;
+        //            //foreach (IOType type in controller.NetworkIO)
+        //            //{
+        //            //    newConnection.ConnectionTypes.Add(type);
+        //            //}
+        //        }
                 
-            }
-            else
-            {
-                newConnection.Controller = item2.Item1 as TECController;
-                var sub = item1.Item1 as TECSubScope;
-                foreach (TECConnectionType type in sub.ConnectionTypes)
-                {
-                    newConnection.ConnectionTypes.Add(type);
-                }
-            }
-            newConnection.Scope.Add(item2.Item1 as TECScope);
+        //    }
+        //    else
+        //    {
+        //        newConnection.Controller = item2.Item1 as TECController;
+        //        var sub = item1.Item1 as TECSubScope;
+        //        foreach (TECConnectionType type in sub.ConnectionTypes)
+        //        {
+        //            newConnection.ConnectionTypes.Add(type);
+        //        }
+        //    }
+        //    newConnection.Scope.Add(item2.Item1 as TECScope);
 
-            return newConnection;
-        }
+        //    return newConnection;
+        //}
 
-        private void connectConnections(TECObject item1, TECObject item2, TECConnection connection)
-        {
-            if(item1 is TECController)
-            {
-                ((TECController)item1).Connections.Add(connection);
-            } else if (item1 is TECSubScope)
-            {
-                ((TECSubScope)item1).Connection = connection;
-            }
+        //private void connectConnections(TECObject item1, TECObject item2, TECConnection connection)
+        //{
+        //    if(item1 is TECController)
+        //    {
+        //        ((TECController)item1).Connections.Add(connection);
+        //    } else if (item1 is TECSubScope)
+        //    {
+        //        ((TECSubScope)item1).Connection = connection;
+        //    }
 
-            if (item2 is TECController)
-            {
-                ((TECController)item2).Connections.Add(connection);
-            }
-            else if (item2 is TECSubScope)
-            {
-                ((TECSubScope)item2).Connection = connection;
-            }
-        }
+        //    if (item2 is TECController)
+        //    {
+        //        ((TECController)item2).Connections.Add(connection);
+        //    }
+        //    else if (item2 is TECSubScope)
+        //    {
+        //        ((TECSubScope)item2).Connection = connection;
+        //    }
+        //}
 
         private void setBitmap()
         {

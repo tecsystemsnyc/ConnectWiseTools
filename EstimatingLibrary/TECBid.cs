@@ -532,8 +532,10 @@ namespace EstimatingLibrary
             { Controllers.Add(new TECController(controller)); }
             foreach(TECDevice device in bidSource.DeviceCatalog)
             { DeviceCatalog.Add(new TECDevice(device)); }
-            foreach(TECConnection connection in bidSource.Connections)
-            { Connections.Add(new TECConnection(connection)); }
+            foreach(TECNetworkConnection connection in bidSource.Connections)
+            { Connections.Add(new TECNetworkConnection(connection)); }
+            foreach(TECSubScopeConnection connection in bidSource.Connections)
+            { Connections.Add(new TECSubScopeConnection(connection)); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach(TECMiscCost cost in bidSource.MiscCosts)
@@ -569,9 +571,13 @@ namespace EstimatingLibrary
             {
                 panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
-            foreach (TECConnection connection in controlledScope.Connections)
+            foreach (TECNetworkConnection connection in controlledScope.Connections)
             {
-                connectionCollection.Add(new TECConnection(connection, guidDictionary));
+                connectionCollection.Add(new TECNetworkConnection(connection, guidDictionary));
+            }
+            foreach (TECSubScopeConnection connection in controlledScope.Connections)
+            {
+                connectionCollection.Add(new TECSubScopeConnection(connection, guidDictionary));
             }
 
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,

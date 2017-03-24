@@ -16,7 +16,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _subScope = value;
-                RaisePropertyChanged("Panel");
+                RaisePropertyChanged("Subscope");
             }
         }
 
@@ -32,8 +32,8 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        private TECConnection _connection;
-        public TECConnection Connection
+        private TECSubScopeConnection _connection;
+        public TECSubScopeConnection Connection
         {
             get { return _connection; }
             set
@@ -75,7 +75,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public SubScopeConnection(TECConnection connection, TECController controller, TECSubScope subscope)
+        public SubScopeConnection(TECSubScopeConnection connection, TECController controller, TECSubScope subscope)
         {
             _connection = connection;
             _controller = controller;
@@ -86,18 +86,18 @@ namespace TECUserControlLibrary.Models
         {
             if (controller != null)
             {
-                var connection = new TECConnection();
-                connection.Controller = controller;
-                connection.Scope.Add(SubScope);
+                var connection = new TECSubScopeConnection();
+                connection.ParentController = controller;
+                connection.SubScope.Add(SubScope);
                 Connection = connection;
-                Controller.Connections.Add(Connection);
+                Controller.ChildrenConnections.Add(Connection);
                 SubScope.Connection = Connection;
             }
             else
             {
                 if(Connection != null)
                 {
-                    Controller.Connections.Remove(Connection);
+                    Controller.ChildrenConnections.Remove(Connection);
                     Connection = null;
                     SubScope.Connection = null;
                 }

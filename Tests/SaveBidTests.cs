@@ -3296,11 +3296,11 @@ namespace Tests
             expectedController.Manufacturer = new TECManufacturer();
             expectedPanel.Controllers.Add(expectedController);
             
-            var expectedConnection = new TECConnection();
+            var expectedConnection = new TECSubScopeConnection();
             expectedConnection.Length = 1212;
-            expectedConnection.Controller = expectedController;
-            expectedConnection.Scope.Add(expectedSubScope);
-            expectedController.Connections.Add(expectedConnection);
+            expectedConnection.ParentController = expectedController;
+            expectedConnection.SubScope.Add(expectedSubScope);
+            expectedController.ChildrenConnections.Add(expectedConnection);
             expectedSubScope.Connection = expectedConnection;
 
             scope.Systems.Add(expectedSystem);
@@ -3316,7 +3316,7 @@ namespace Tests
 
             TECPanel actualpanel = null;
             TECController actualController = null;
-            TECConnection actualConnection = null;
+            TECSubScopeConnection actualConnection = null;
             TECSystem actualSystem = null;
             foreach (TECController controller in actualBid.Controllers)
             {
@@ -3334,7 +3334,7 @@ namespace Tests
                     break;
                 }
             }
-            foreach (TECConnection connection in actualBid.Connections)
+            foreach (TECSubScopeConnection connection in actualBid.Connections)
             {
                 if (connection.Length == 1212)
                 {
@@ -3354,9 +3354,9 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.IsTrue(actualController.Connections.Contains(actualConnection), "Connections not linked in controller");
-            Assert.IsTrue(actualController == actualConnection.Controller, "Controller not linked in connection");
-            Assert.IsTrue(actualConnection.Scope.Contains(actualSystem.Equipment[0].SubScope[0]), "Scope not linked in connection");
+            Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
+            Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
+            Assert.IsTrue(actualConnection.SubScope.Contains(actualSystem.Equipment[0].SubScope[0]), "Scope not linked in connection");
             Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
         }
         #endregion

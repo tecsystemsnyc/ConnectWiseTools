@@ -41,11 +41,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("IOType");
             }
         }
-        
-        public ObservableCollection<IOType> PossibleIO
-        {
-            get { }
-        }
         #endregion
 
         #region Constructors

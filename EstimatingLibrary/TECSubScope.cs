@@ -37,8 +37,8 @@ namespace EstimatingLibrary
             }
         }
         
-        private TECConnection _connection { get; set; }
-        public TECConnection Connection {
+        private TECSubScopeConnection _connection { get; set; }
+        public TECSubScopeConnection Connection {
             get { return _connection; }
             set
             {

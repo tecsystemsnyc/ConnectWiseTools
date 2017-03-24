@@ -707,36 +707,77 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
-            StackItem item;
+            //Conduit Type
             if (connection.ConduitType != null)
             {
-                item = new StackItem(change, (object)connection, (object)connection.ConduitType);
-                SaveStack.Add(item);
+                SaveStack.Add(new StackItem(change, connection, connection.ConduitType));
             }
-            if (connection.Controller != null)
+
+            //Parent Controller
+            if (connection.ParentController != null)
             {
                 if (change == Change.Add)
                 {
-                    item = new StackItem(Change.AddRelationship, (object)connection, (object)connection.Controller);
-                    SaveStack.Add(item);
+                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ParentController));
                 }
                 else if (change == Change.Remove)
                 {
-                    item = new StackItem(Change.RemoveRelationship, (object)connection, (object)connection.Controller);
-                    SaveStack.Add(item);
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ParentController));
                 }
             }
-            foreach (TECScope scope in connection.Scope)
+
+            #region If Connection is NetworkConnection
+            if (connection is TECNetworkConnection)
             {
-                if(change == Change.Add)
+                TECNetworkConnection netConnect = connection as TECNetworkConnection;
+
+                foreach (TECController controller in netConnect.ChildrenControllers)
                 {
-                    item = new StackItem(Change.AddRelationship, (object)connection, (object)scope);
-                    SaveStack.Add(item);
-                }else if(change == Change.Remove)
-                {
-                    item = new StackItem(Change.RemoveRelationship, (object)connection, (object)scope);
-                    SaveStack.Add(item);
+                    if (change == Change.Add)
+                    {
+                        SaveStack.Add(new StackItem(Change.AddRelationship, netConnect, controller));
+                    }
+                    else if (change == Change.Remove)
+                    {
+                        SaveStack.Add(new StackItem(Change.RemoveRelationship, netConnect, controller));
+                    }
                 }
+
+                if (netConnect.ConnectionType != null)
+                {
+                    if (change == Change.Add)
+                    {
+                        SaveStack.Add(new StackItem(Change.AddRelationship, netConnect, netConnect.ConnectionType));
+                    }
+                    else if (change == Change.Remove)
+                    {
+                        SaveStack.Add(new StackItem(Change.RemoveRelationship, netConnect, netConnect.ConnectionType));
+                    }
+                }
+            }
+            #endregion
+
+            #region If Connection is SubScopeConnection
+            else if (connection is TECSubScopeConnection)
+            {
+                TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                foreach (TECSubScope ss in ssConnect.SubScope)
+                {
+                    if (change == Change.Add)
+                    {
+                        SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ss));
+                    }
+                    else if (change == Change.Remove)
+                    {
+                        SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ss));
+                    }
+                }
+            }
+            #endregion
+            
+            else
+            {
+                throw new NotImplementedException();
             }
         }
         private void handleDeviceChildren(TECDevice device, Change change)

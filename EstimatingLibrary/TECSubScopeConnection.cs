@@ -7,85 +7,87 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    class TECSubScopeConnection : TECConnection
+    public class TECSubScopeConnection : TECConnection
     {
-        private ObservableCollection<TECSubScope> _scope;
-        public ObservableCollection<TECSubScope> Scope
+        #region Properties
+        //---Stored---
+        private ObservableCollection<TECSubScope> _subScope;
+        
+        public ObservableCollection<TECSubScope> SubScope
         {
-            get { return _scope; }
+            get { return _subScope; }
             set
             {
                 var temp = this.Copy();
-                Scope.CollectionChanged -= Scope_CollectionChanged;
-                _scope = value;
-                NotifyPropertyChanged("Scope", temp, this);
-                Scope.CollectionChanged += Scope_CollectionChanged;
+                SubScope.CollectionChanged -= SubScope_CollectionChanged;
+                _subScope = value;
+                NotifyPropertyChanged("SubScope", temp, this);
+                SubScope.CollectionChanged += SubScope_CollectionChanged;
             }
         }
 
+        //---Derived---
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
-            get { return getConnectionTypes(); }
+            get
+            {
+                var outConnectionTypes = new ObservableCollection<TECConnectionType>();
 
+                foreach (TECSubScope ss in SubScope)
+                {
+                    foreach (TECDevice dev in ss.Devices)
+                    {
+                        outConnectionTypes.Add(dev.ConnectionType);
+                    }
+                }
+                return outConnectionTypes;
+            }
         }
         public ObservableCollection<IOType> IOTypes
         {
-            get { return getIOTypes(); }
+            get
+            {
+                var outIOTypes = new ObservableCollection<IOType>();
+
+                foreach (TECSubScope ss in SubScope)
+                {
+                    foreach (TECDevice dev in ss.Devices)
+                    {
+                        outIOTypes.Add(dev.IOType);
+                    }
+                }
+                return outIOTypes;
+            }
         }
+        #endregion
 
         #region Constructors
         public TECSubScopeConnection(Guid guid) : base(guid)
         {
-            _scope = new ObservableCollection<TECSubScope>();
-            Scope.CollectionChanged += Scope_CollectionChanged;
+            _subScope = new ObservableCollection<TECSubScope>();
+            SubScope.CollectionChanged += SubScope_CollectionChanged;
         }
         public TECSubScopeConnection() : base (Guid.NewGuid()) { }
-        public TECSubScopeConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
+        public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
-            foreach (TECScope scope in connectionSource.Scope)
+            foreach (TECSubScope ss in connectionSource.SubScope)
             {
-                 _scope.Add(new TECSubScope((scope as TECSubScope), guidDictionary));
+                 _subScope.Add(new TECSubScope(ss, guidDictionary));
             }
         }
         #endregion Constructors
+
+        #region Methods
         public override Object Copy()
         {
             TECSubScopeConnection connection = new TECSubScopeConnection(this);
             connection._guid = this._guid;
             return connection;
         }
-        
-        private ObservableCollection<TECConnectionType> getConnectionTypes()
-        {
-            var outConnectionTypes = new ObservableCollection<TECConnectionType>();
+        #endregion
 
-            foreach (TECSubScope scope in Scope)
-            {
-                var sub = scope as TECSubScope;
-                foreach (TECDevice dev in sub.Devices)
-                {
-                    outConnectionTypes.Add(dev.ConnectionType);
-                }
-            }
-            return outConnectionTypes;
-        }
-        private ObservableCollection<IOType> getIOTypes()
-        {
-            var outIOTypes = new ObservableCollection<IOType>();
-
-            foreach (TECScope scope in Scope)
-            {
-                var sub = scope as TECSubScope;
-                foreach (TECDevice dev in sub.Devices)
-                {
-                    outIOTypes.Add(dev.IOType);
-                }
-               
-            }
-            return outIOTypes;
-        }
-
-        private void Scope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        #region Event Handlers
+        private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -93,7 +95,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECController)
                     {
-                        (item as TECController).Connections.Add(this);
+                        (item as TECController).ChildrenConnections.Add(this);
                     }
                     else if (item is TECSubScope)
                     {
@@ -108,7 +110,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECController)
                     {
-                        (item as TECController).Connections.Remove(this);
+                        (item as TECController).ChildrenConnections.Remove(this);
                     }
                     else if (item is TECSubScope)
                     {
@@ -118,6 +120,7 @@ namespace EstimatingLibrary
                 }
             }
         }
+        #endregion
 
     }
 }
