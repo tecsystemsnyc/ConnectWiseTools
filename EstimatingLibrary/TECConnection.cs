@@ -38,8 +38,11 @@ namespace EstimatingLibrary
             {
                 var oldNew = Tuple.Create<Object, Object>(_controller, value);
                 var temp = Copy();
+                _controller.Connections.Remove(this);
                 _controller = value;
-                NotifyPropertyChanged("Controller", temp, this);
+                if(_controller != null)
+                { _controller.Connections.Add(this); }
+                RaisePropertyChanged("Controller");
                 temp = Copy();
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
@@ -49,7 +52,7 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
+                var oldNew = Tuple.Create<Object, Object>(_conduitType, value); 
                 var temp = Copy();
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
@@ -65,9 +68,7 @@ namespace EstimatingLibrary
             _guid = guid;
             _length = 0;
         }
-
         public TECConnection() : this(Guid.NewGuid()) { }
-
         public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)

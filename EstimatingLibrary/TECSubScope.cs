@@ -42,12 +42,8 @@ namespace EstimatingLibrary
             get { return _connection; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_connection, value);
-                var temp = Copy();
                 _connection = value;
-                NotifyPropertyChanged("Connection", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
+                RaisePropertyChanged("Connection");
             }
         }
 

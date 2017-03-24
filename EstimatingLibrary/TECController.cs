@@ -33,9 +33,8 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                Connections.CollectionChanged -= CollectionChanged;
                 _connections = value;
-                NotifyPropertyChanged("Connections", temp, this);
+                RaisePropertyChanged("Connections");
                 RaisePropertyChanged("ChildConnections");
                 Connections.CollectionChanged += CollectionChanged;
             }
@@ -125,25 +124,17 @@ namespace EstimatingLibrary
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _connections = new ObservableCollection<TECConnection>();
-            Connections.CollectionChanged += CollectionChanged;
             IO.CollectionChanged += CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null, bool includeChildren = true) : this()
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
             copyPropertiesFromScope(controllerSource);
-            if(includeChildren == true)
+            foreach (TECIO io in controllerSource.IO)
             {
-                foreach (TECIO io in controllerSource.IO)
-                {
-                    _io.Add(new TECIO(io));
-                }
-                foreach (TECConnection connection in controllerSource.Connections)
-                {
-                    _connections.Add(new TECConnection(connection, guidDictionary));
-                }
+                _io.Add(new TECIO(io));
             }
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
@@ -162,11 +153,7 @@ namespace EstimatingLibrary
                     {
                         (item as TECIO).PropertyChanged += ObjectPropertyChanged;
                         NotifyPropertyChanged("Add", this, item);
-                    } else if(item is TECConnection)
-                    {
-                        NotifyPropertyChanged("AddRelationship", this, item);
-                    }
-
+                    } 
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -177,9 +164,6 @@ namespace EstimatingLibrary
                     {
                         (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
                         NotifyPropertyChanged("Remove", this, item);
-                    } else if(item is TECConnection)
-                    {
-                        NotifyPropertyChanged("RemoveRelationship", this, item);
                     }
                 }
             }
@@ -207,11 +191,6 @@ namespace EstimatingLibrary
             foreach (TECIO io in this.IO)
             {
                 outController.IO.Add(io);
-            }
-
-            foreach (TECConnection conn in this.Connections)
-            {
-                outController.Connections.Add(conn);
             }
             
             return outController;

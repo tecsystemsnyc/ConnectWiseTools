@@ -904,42 +904,6 @@ namespace EstimatingUtilitiesLibrary
             { connections.Add(getConnectionFromRow(row)); }
             return connections;
         }
-        static private ObservableCollection<TECConnection> getConnectionsInController(Guid controllerID)
-        {
-            var tables = getAllTableNames();
-            if (tables.Contains(ConnectionTable.TableName))
-            {
-                var outConnections = new ObservableCollection<TECConnection>();
-                string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
-                command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
-                command += ControllerConnectionTable.ControllerID.Name + " = '" + controllerID;
-                command += "')";
-                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
-                foreach (DataRow row in connectionDT.Rows)
-                { outConnections.Add(getConnectionFromRow(row)); }
-                return outConnections;
-            }
-            else
-            { return new ObservableCollection<TECConnection>(); }
-        }
-        static private TECConnection getConnectionInScope(Guid ScopeID)
-        {
-            var tables = getAllTableNames();
-            if (tables.Contains(ConnectionTable.TableName))
-            {
-                string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
-                command += "(select " + ScopeConnectionTable.ConnectionID.Name + " from " + ScopeConnectionTable.TableName + " where ";
-                command += ScopeConnectionTable.ScopeID.Name + " = '" + ScopeID;
-                command += "')";
-                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
-                if (connectionDT.Rows.Count > 0)
-                { return getConnectionFromRow(connectionDT.Rows[0]); }
-                else
-                { return null; }
-            }
-            else
-            { return null; }
-        }
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
         {
             ObservableCollection<TECProposalScope> propScope = new ObservableCollection<TECProposalScope>();
@@ -1590,7 +1554,6 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.Location = getLocationInScope(subScopeID);
             subScopeToAdd.Tags = getTagsInScope(subScopeID);
             subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
-            subScopeToAdd.Connection = getConnectionInScope(subScopeID);
             return subScopeToAdd;
         }
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
@@ -1749,7 +1712,6 @@ namespace EstimatingUtilitiesLibrary
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
             controller.AssociatedCosts = getAssociatedCostsInScope(guid);
-            controller.Connections = getConnectionsInController(guid);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
@@ -1965,11 +1927,7 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECConnection connection in bid.Connections)
             {
                 addObject(connection, bid);
-                foreach (TECScope scope in connection.Scope)
-                {
-                    addRelationship(scope, connection);
-                }
-                if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
+                saveConnectionChildren(connection);
             }
             foreach (TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
             { addObject(associatedCost, bid); }
@@ -2234,8 +2192,6 @@ namespace EstimatingUtilitiesLibrary
         private static void saveControllerChildProperties(TECController controller)
         {
             if(controller.Manufacturer != null) { addObject(controller.Manufacturer, controller); }
-            foreach(TECConnection connection in controller.Connections)
-            {  addObject(connection, controller); }
             foreach(TECIO IO in controller.IO)
             { addObject(IO, controller); }
         }
@@ -2250,6 +2206,15 @@ namespace EstimatingUtilitiesLibrary
             addObject(panel.Type, panel);
             saveScopeChildProperties(panel);
 
+        }
+        private static void saveConnectionChildren(TECConnection connection)
+        {
+            foreach (TECScope scope in connection.Scope)
+            {
+                addRelationship(scope, connection);
+            }
+            if(connection.Controller != null) { addRelationship(connection.Controller, connection); }
+            if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
         }
         #endregion
 
@@ -2580,8 +2545,13 @@ namespace EstimatingUtilitiesLibrary
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
                 bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
-
-                if ((allTypesMatch || baseAndObjectMatch) && (shouldIncludeCatalog))
+                if(allTypesMatch && shouldIncludeCatalog)
+                {
+                    relevantTables = new List<TableBase>();
+                    relevantTables.Add(table);
+                    return relevantTables;
+                }
+                else if ((baseAndObjectMatch) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }
