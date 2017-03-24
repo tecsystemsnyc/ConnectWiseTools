@@ -467,6 +467,7 @@ namespace EstimatingLibrary
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
+            registerControllers();
             Labor.NumPoints = getPointNumber();
         }
 
@@ -616,12 +617,16 @@ namespace EstimatingLibrary
                             updateElectricalMaterial();
                             (item as TECObject).PropertyChanged += objectPropertyChanged;
                         }
-                        if (item is TECSystem)
+                        else if (item is TECSystem)
                         {
                             var sys = item as TECSystem;
                             addProposalScope(sys);
                             sys.PropertyChanged += System_PropertyChanged;
                             checkForTotalsInSystem(sys);
+                        }
+                        else if (item is TECController)
+                        {
+                            (item as TECController).ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
                         }
                     }
                 }
@@ -636,21 +641,27 @@ namespace EstimatingLibrary
                     }
                     else
                     {
-                        if (item is TECCost)
-                        {
-                            updateElectricalMaterial();
-                            (item as TECCost).PropertyChanged -= objectPropertyChanged;
-                        }
+                        
                         NotifyPropertyChanged("Remove", this, item);
                         if (item is TECScope)
                         {
                             checkForVisualsToRemove((TECScope)item);
                         }
-                        if (item is TECSystem)
+
+                        if (item is TECCost)
+                        {
+                            updateElectricalMaterial();
+                            (item as TECCost).PropertyChanged -= objectPropertyChanged;
+                        }
+                        else if (item is TECSystem)
                         {
                             var sys = item as TECSystem;
                             sys.PropertyChanged -= System_PropertyChanged;
                             removeProposalScope(sys);
+                        }
+                        else if (item is TECController)
+                        {
+                            (item as TECController).ChildrenConnections.CollectionChanged -= ChildrenConnections_CollectionChanged;
                         }
                     }
                 }
@@ -686,6 +697,24 @@ namespace EstimatingLibrary
             { updateFromParameters(); }
             else if (sender is TECCost)
             { updateElectricalMaterial(); }
+        }
+
+        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(TECConnection item in e.NewItems)
+                {
+                    Connections.Add(item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECConnection item in e.OldItems)
+                {
+                    Connections.Remove(item);
+                }
+            }
         }
 
         #endregion
@@ -827,6 +856,15 @@ namespace EstimatingLibrary
                 system.PropertyChanged += System_PropertyChanged;
             }
         }
+
+        private void registerControllers()
+        {
+            foreach (TECController controller in Controllers)
+            {
+                controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged; ;
+            }
+        }
+
 
         private void updatePoints()
         {
