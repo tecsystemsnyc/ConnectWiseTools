@@ -899,9 +899,12 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECConnection> getConnections()
         {
             ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>(); 
-            DataTable connectionDT = SQLiteDB.getDataFromTable(ConnectionTable.TableName); 
+            DataTable connectionDT = SQLiteDB.getDataFromTable(SubScopeConnectionTable.TableName); 
             foreach (DataRow row in connectionDT.Rows)
-            { connections.Add(getConnectionFromRow(row)); }
+            { connections.Add(getSubScopeConnectionFromRow(row)); }
+            connectionDT = SQLiteDB.getDataFromTable(NetworkConnectionTable.TableName);
+            foreach (DataRow row in connectionDT.Rows)
+            { connections.Add(getNetworkConnectionFromRow(row)); }
             return connections;
         }
         static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
@@ -956,7 +959,7 @@ namespace EstimatingUtilitiesLibrary
         static private TECController getControllerInConnection(Guid connectionID)
         {
             var tables = getAllTableNames();
-            if (tables.Contains(ConnectionTable.TableName))
+            if (tables.Contains(SubScopeConnectionTable.TableName) || tables.Contains(NetworkConnectionTable.TableName))
             {
                 var outController = new TECController();
                 string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
@@ -972,30 +975,50 @@ namespace EstimatingUtilitiesLibrary
             else
             { return  null; }
         }
-        static private ObservableCollection<TECScope> getScopeInConnection(Guid connectionID)
+        static private ObservableCollection<TECSubScope> getChildrenInSubScopeConnection(Guid connectionID)
         {
-            var outScope = new ObservableCollection<TECScope>();
+            var outScope = new ObservableCollection<TECSubScope>();
 
             string command = "select * from " + SubScopeTable.TableName + " where " + SubScopeTable.SubScopeID.Name + " in ";
-            command += "(select " + ScopeConnectionTable.ScopeID.Name + " from " + ScopeConnectionTable.TableName + " where ";
-            command += ScopeConnectionTable.ConnectionID.Name + " = '" + connectionID;
+            command += "(select " + SubScopeConnectionChildrenTable.ChildID.Name + " from " + SubScopeConnectionChildrenTable.TableName + " where ";
+            command += SubScopeConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
             DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
             { outScope.Add(getSubScopePlaceholderFromRow(row)); }
-
-            command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
-            command += "(select " + ScopeConnectionTable.ScopeID.Name + " from " + ScopeConnectionTable.TableName + " where ";
-            command += ScopeConnectionTable.ConnectionID.Name + " = '" + connectionID;
+            
+            return outScope;
+        }
+        static private ObservableCollection<TECController> getChildrenInNetworkConnection(Guid connectionID)
+        {
+            var outScope = new ObservableCollection<TECController>();
+            
+            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            command += "(select " + NetworkConnectionChildrenTable.ChildID.Name + " from " + NetworkConnectionChildrenTable.TableName + " where ";
+            command += NetworkConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
-            scopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row)); }
 
             return outScope;
         }
+        static private IOType getIOTypeInNetworkConnection(Guid connectionID)
+        {
+            IOType outIO = 0;
+            string command = "select * from " + NetworkConnectionIOTypeTable.TableName + " where ";
+            command += NetworkConnectionIOTypeTable.ConnectionID.Name + " = '" + connectionID + "'";
+
+            DataTable typeDT = SQLiteDB.getDataFromCommand(command);
+            if(typeDT.Rows.Count > 0)
+            {
+                outIO = TECIO.convertStringToType(typeDT.Rows[0][NetworkConnectionIOTypeTable.IOType.Name].ToString());
+            }
+            return outIO;
+        }
+
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
@@ -1171,14 +1194,14 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECConnection> getConnectionsInControlledScope(Guid guid)
         {
             ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
-            string command = "select * from " + ConnectionTable.TableName + " where " + ConnectionTable.ConnectionID.Name + " in ";
+            string command = "select * from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
             command += "(select " + ControlledScopeConnectionTable.ConnectionID.Name + " from " + ControlledScopeConnectionTable.TableName + " where ";
             command += ControlledScopeConnectionTable.ControlledScopeID.Name + " = '" + guid;
             command += "')";
 
             DataTable dt = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
-            { connections.Add(getConnectionFromRow(row)); }
+            { connections.Add(getSubScopeConnectionFromRow(row)); }
 
             return connections;
         }
@@ -1219,17 +1242,17 @@ namespace EstimatingUtilitiesLibrary
 
                     foreach (Tuple<TECSubScope, TECVisualScope> item in vSubScope)
                     {
-                        foreach (TECConnection connection in connectionsToAdd)
+                        foreach (TECSubScopeConnection connection in connectionsToAdd)
                         {
                             foreach (TECVisualScope vController in vControllers)
                             {
-                                if ((connection.Controller == vController.Scope) && (connection.Scope.Contains(item.Item1)))
-                                {
-                                    ObservableCollection<TECConnection> childConnections = new ObservableCollection<TECConnection>();
-                                    childConnections.Add(connection);
-                                    TECVisualConnection visConnection = new TECVisualConnection(vController, item.Item2);
-                                    vConnectionsToAdd.Add(visConnection);
-                                }
+                                //if ((connection.ParentController == vController.Scope) && (connection.SubScope == item.Item1))
+                                //{
+                                //    ObservableCollection<TECSubScopeConnection> childConnections = new ObservableCollection<TECSubScopeConnection>();
+                                //    childConnections.Add(connection);
+                                //    TECVisualConnection visConnection = new TECVisualConnection(vController, item.Item2);
+                                //    vConnectionsToAdd.Add(visConnection);
+                                //}
                             }
                         }
                     }
@@ -1722,16 +1745,6 @@ namespace EstimatingUtilitiesLibrary
             io.Quantity = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
             return io;
         }
-        private static TECConnection getConnectionFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[ConnectionTable.ConnectionID.Name].ToString());
-            TECConnection connection = new TECConnection(guid);
-            connection.Length = row[ConnectionTable.Length.Name].ToString().ToDouble();
-            connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.Controller = getControllerInConnection(connection.Guid);
-            connection.Scope = getScopeInConnection(connection.Guid);
-            return connection;
-        }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
         {
             Guid guid = new Guid(row[BidParametersTable.ParamtersID.Name].ToString());
@@ -1748,6 +1761,27 @@ namespace EstimatingUtilitiesLibrary
             paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
 
             return paramters;
+        }
+        private static TECConnection getSubScopeConnectionFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[SubScopeConnectionTable.ConnectionID.Name].ToString());
+            TECSubScopeConnection connection = new TECSubScopeConnection(guid);
+            connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
+            connection.ConduitType = getConduitTypeInConnection(connection.Guid);
+            connection.ParentController = getControllerInConnection(connection.Guid);
+            connection.SubScope = getChildrenInSubScopeConnection(connection.Guid);
+            return connection;
+        }
+        private static TECConnection getNetworkConnectionFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[NetworkConnectionTable.ConnectionID.Name].ToString());
+            TECNetworkConnection connection = new TECNetworkConnection(guid);
+            connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
+            connection.ConduitType = getConduitTypeInConnection(connection.Guid);
+            connection.IOType = getIOTypeInNetworkConnection(connection.Guid);
+            connection.ParentController = getControllerInConnection(connection.Guid);
+            connection.ChildrenControllers = getChildrenInNetworkConnection(connection.Guid);
+            return connection;
         }
 
         private static TECMiscCost getMiscCostFromRow(DataRow row)
@@ -2209,11 +2243,15 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveConnectionChildren(TECConnection connection)
         {
-            foreach (TECScope scope in connection.Scope)
+            if(connection is TECNetworkConnection)
             {
-                addRelationship(scope, connection);
+                foreach (TECController scope in (connection as TECNetworkConnection).ChildrenControllers)
+                {
+                    addRelationship(scope, connection);
+                }
             }
-            if(connection.Controller != null) { addRelationship(connection.Controller, connection); }
+            
+            if(connection.ParentController != null) { addRelationship(connection.ParentController, connection); }
             if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
         }
         #endregion

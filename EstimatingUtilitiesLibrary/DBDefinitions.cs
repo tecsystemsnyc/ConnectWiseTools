@@ -1162,10 +1162,9 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECNetworkConnectionTECIOType";
         public static Type ObjectType = typeof(TECConnection);
-        public static Type ReferenceType = typeof(TECIO);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField TypeID = new TableField("IOType", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -1173,8 +1172,7 @@ namespace EstimatingUtilitiesLibrary
         };
         public static new List<Type> Types = new List<Type>()
         {
-            ObjectType,
-            ReferenceType
+            ObjectType
         };
     }
     public class NetworkConnectionChildrenTable : TableBase
@@ -1278,7 +1276,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECControlledScopeTECConnection";
         public static Type ControlledScopeType = typeof(TECControlledScope);
-        public static Type ConnectionType = typeof(TECConnection);
+        public static Type ConnectionType = typeof(TECSubScopeConnection);
 
         public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
