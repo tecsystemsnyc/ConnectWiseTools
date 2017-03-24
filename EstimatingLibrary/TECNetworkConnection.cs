@@ -47,10 +47,9 @@ namespace EstimatingLibrary
         public TECNetworkConnection(Guid guid) : base(guid)
         {
             _childrenControllers = new ObservableCollection<TECController>();
+            ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
         }
-
         public TECNetworkConnection() : this(Guid.NewGuid()) { }
-
         public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
             _childrenControllers = new ObservableCollection<TECController>();
@@ -74,5 +73,33 @@ namespace EstimatingLibrary
             throw new NotImplementedException();
         }
         #endregion Methods
+
+        #region Event Handlers
+        private void ChildrenControllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    if (item is TECController)
+                    {
+                        (item as TECController).ParentConnection = this;
+                    }
+                    NotifyPropertyChanged("AddRelationship", this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECController)
+                    {
+                        (item as TECController).ParentConnection = null;
+                    }
+                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                }
+            }
+        }
+        #endregion
     }
 }

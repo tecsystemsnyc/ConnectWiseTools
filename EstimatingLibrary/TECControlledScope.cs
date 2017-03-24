@@ -9,8 +9,8 @@ namespace EstimatingLibrary
 {
     public class TECControlledScope : TECScope
     {
-        private ObservableCollection<TECConnection> _connections { get; set; }
-        public ObservableCollection<TECConnection> Connections
+        private ObservableCollection<TECSubScopeConnection> _connections { get; set; }
+        public ObservableCollection<TECSubScopeConnection> Connections
         {
             get { return _connections; }
             set
@@ -67,7 +67,7 @@ namespace EstimatingLibrary
 
         public TECControlledScope(Guid guid) : base(guid)
         {
-            _connections = new ObservableCollection<TECConnection>();
+            _connections = new ObservableCollection<TECSubScopeConnection>();
             _systems = new ObservableCollection<TECSystem>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
@@ -80,7 +80,7 @@ namespace EstimatingLibrary
         public TECControlledScope(TECControlledScope source) : this()
         {
             copyPropertiesFromScope(source);
-            foreach(TECConnection connection in source._connections)
+            foreach(TECSubScopeConnection connection in source._connections)
             {
                 _connections.Add(connection);
             }

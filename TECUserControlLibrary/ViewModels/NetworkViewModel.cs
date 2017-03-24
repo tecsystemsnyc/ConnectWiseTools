@@ -44,8 +44,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<NetworkControllerConnnection> _bmsControllers;
-        public ObservableCollection<NetworkControllerConnnection> BMSControllers
+        private ObservableCollection<TECController> _bmsControllers;
+        public ObservableCollection<TECController> BMSControllers
         {
             get { return _bmsControllers; }
             set
@@ -100,7 +100,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             //Reset Collections
             ServerControllers = new ObservableCollection<TECController>();
-            BMSControllers = new ObservableCollection<NetworkControllerConnnection>();
+            BMSControllers = new ObservableCollection<TECController>();
             StandaloneControllers = new ObservableCollection<TECController>();
             NetworkControllers = new ObservableCollection<TECController>();
 
@@ -123,9 +123,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 NetworkControllers.Add(controller);
             }
-            foreach (NetworkControllerConnnection networkConnection in BMSControllers)
+            foreach (TECController controller in BMSControllers)
             {
-                NetworkControllers.Add(networkConnection.Controller);
+                NetworkControllers.Add(controller);
             }
         }
 
@@ -137,29 +137,17 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (controller.IsBMS)
             {
-                BMSControllers.Add(new NetworkControllerConnnection(controller));
+                BMSControllers.Add(controller);
             }
-            else
+            else if (controller.ParentConnection == null)
             {
-                bool standalone = true;
-                foreach (TECConnection connection in controller.Connections)
-                {
-                    if ((connection.Controller != null) && (connection.Controller != controller))
-                    {
-                        standalone = false;
-                        break;
-                    }
-                }
-                if (standalone)
-                {
-                    StandaloneControllers.Add(controller);
-                }
+                StandaloneControllers.Add(controller);
             }
         }
 
         private void removeController(TECController controller)
         {
-            removeAllConnections(controller);
+            controller.ParentConnection = null;
 
             //Remove from server controllers
             if (ServerControllers.Contains(controller))
@@ -168,19 +156,9 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             //Remove from BMS controllers
-            NetworkControllerConnnection connectionToRemove = null;
-            foreach (NetworkControllerConnnection networkConnection in BMSControllers)
+            if (BMSControllers.Contains(controller))
             {
-                if (controller == networkConnection.Controller)
-                {
-                    connectionToRemove = networkConnection;
-                    networkConnection.ParentController = null;
-                    break;
-                }
-            }
-            if (connectionToRemove != null)
-            {
-                BMSControllers.Remove(connectionToRemove);
+                BMSControllers.Remove(controller);
             }
 
             //Remove from standalone controllers
@@ -189,44 +167,16 @@ namespace TECUserControlLibrary.ViewModels
                 StandaloneControllers.Remove(controller);
             }
         }
-
-        private void removeAllConnections(TECController controller)
-        {
-            //Remove connections
-            foreach (TECConnection connection in controller.Connections)
-            //Foreach connection in controller
-            {
-                if (controller == connection.Controller)
-                //If the controller is the "parent" to the connection.
-                {
-                    foreach (TECController child in connection.Scope)
-                    //Foreach "child" in the connection
-                    {
-                        if (!child.IsBMS)
-                        //If the "child" isn't a BMS controller, put back into standalone controllers.
-                        {
-                            StandaloneControllers.Add(child);
-                        }
-                        child.Connections.Remove(connection);
-                    }
-                }
-                else
-                //Controller must be a child
-                {
-                    connection.Scope.Remove(controller);
-                }
-            }
-        }
         #endregion
 
         #region Commands Methods
 
         private void AddConnectionExecute(TECController controller)
         {
-            TECConnection newConnection = new TECConnection();
-            newConnection.IOTypes.Add(SelectedIO);
-            newConnection.Controller = controller;
-            controller.Connections.Add(newConnection);
+            TECNetworkConnection newConnection = new TECNetworkConnection();
+            newConnection.IOType = SelectedIO;
+            newConnection.ParentController = controller;
+            controller.ChildrenConnections.Add(newConnection);
         }
 
         #endregion
@@ -287,13 +237,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is NetworkControllerConnnection)
+                    if (item is TECController)
                     {
-                        NetworkControllers.Add((item as NetworkControllerConnnection).Controller);
-                        foreach(TECConnection connection in (item as NetworkControllerConnnection).Controller.Connections)
-                        {
-                            connection.PropertyChanged += Connection_PropertyChanged;
-                        }
+                        NetworkControllers.Add(item as TECController);
                     }
                 }
             }
@@ -301,24 +247,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is NetworkControllerConnnection)
+                    if (item is TECController)
                     {
-                        NetworkControllers.Remove((item as NetworkControllerConnnection).Controller);
-                        foreach (TECConnection connection in (item as NetworkControllerConnnection).Controller.Connections)
-                        {
-                            connection.PropertyChanged -= Connection_PropertyChanged;
-                        }
+                        NetworkControllers.Remove(item as TECController);
                     }
                 }
-            }
-        }
-
-        private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if ((e.PropertyName == "AddRelationship") && ((e as PropertyChangedExtendedEventArgs<object>).NewValue is TECController))
-            {
-                TECController newController = (e as PropertyChangedExtendedEventArgs<object>).NewValue as TECController;
-                newController.Connections.Add(sender as TECConnection);
             }
         }
 
@@ -357,17 +290,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     removeController(sourceItem as TECController);
                 }
-                else if (sourceType == typeof(NetworkControllerConnnection))
-                {
-                    removeController((sourceItem as NetworkControllerConnnection).Controller);
-                }
-                else if (sourceType == typeof(TECScope))
-                {
-                    if (sourceItem is TECController)
-                    {
-                        removeController(sourceItem as TECController);
-                    }
-                }
                 else if (sourceType == typeof(TECConnection))
                 {
                     return;
@@ -383,16 +305,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     sourceController = (sourceItem as TECController);
                 }
-                else if (sourceItem is NetworkControllerConnnection)
-                {
-                    sourceController = (sourceItem as NetworkControllerConnnection).Controller;
-                }
 
                 if (targetType == typeof(TECController))
                 {
                     if (targetCollection == ServerControllers)
                     {
                         sourceController.IsServer = true;
+                        sortAndAddController(sourceController);
+                    }
+                    else if (targetCollection == BMSControllers)
+                    {
+                        sourceController.IsBMS = true;
+                        sourceController.IsServer = false;
                         sortAndAddController(sourceController);
                     }
                     else if (targetCollection == StandaloneControllers)
@@ -403,15 +327,6 @@ namespace TECUserControlLibrary.ViewModels
                     else
                     {
                         throw new NotImplementedException();
-                    }
-                }
-                else if (targetType == typeof(NetworkControllerConnnection))
-                {
-                    if (targetCollection == BMSControllers)
-                    {
-                        sourceController.IsBMS = true;
-                        sourceController.IsServer = false;
-                        sortAndAddController(sourceController);
                     }
                 }
                 else if (targetType == typeof(TECScope))

@@ -264,15 +264,15 @@ namespace TECUserControlLibrary.ViewModels
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
                         TECSubScope subScopetoAdd = subScope;
-                        TECConnection connectionToAdd = null;
+                        TECSubScopeConnection connectionToAdd = null;
                         TECController controllerToAdd = null;
                         
-                        foreach(TECConnection connection in SelectedControlledScope.Connections)
+                        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
                         {
-                            if (connection.Scope.Contains(subScope))
+                            if (connection.SubScope.Contains(subScope))
                             {
                                 connectionToAdd = connection;
-                                controllerToAdd = connection.Controller;
+                                controllerToAdd = connection.ParentController;
                             }
                         }
 
@@ -302,8 +302,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (args.OldValue != null)
                     {
-                        var connectionToRemove = new TECConnection();
-                        foreach(TECConnection connection in SelectedControlledScope.Connections)
+                        var connectionToRemove = new TECSubScopeConnection();
+                        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
                         {
                             if((args.OldValue as TECConnection).Guid == connection.Guid)
                             {
@@ -315,7 +315,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     if (args.NewValue != null)
                     {
-                        SelectedControlledScope.Connections.Add(args.NewValue as TECConnection);
+                        SelectedControlledScope.Connections.Add(args.NewValue as TECSubScopeConnection);
                     }
                 }
             }

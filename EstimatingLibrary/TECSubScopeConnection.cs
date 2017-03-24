@@ -93,11 +93,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECController)
-                    {
-                        (item as TECController).ChildrenConnections.Add(this);
-                    }
-                    else if (item is TECSubScope)
+                    if (item is TECSubScope)
                     {
                         (item as TECSubScope).Connection = this;
                     }
@@ -108,11 +104,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECController)
-                    {
-                        (item as TECController).ChildrenConnections.Remove(this);
-                    }
-                    else if (item is TECSubScope)
+                    if (item is TECSubScope)
                     {
                         (item as TECSubScope).Connection = null;
                     }

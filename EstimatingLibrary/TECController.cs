@@ -34,6 +34,14 @@ namespace EstimatingLibrary
             get { return _parentConnection; }
             set
             {
+                if (value == null)
+                {
+                    _parentConnection.ChildrenControllers.Remove(this);
+                    if (_parentConnection.ChildrenControllers.Count < 1)
+                    {
+                        _parentConnection.ParentController.ChildrenConnections.Remove(_parentConnection);
+                    }
+                }
                 _parentConnection = value;
                 RaisePropertyChanged("ParentConnection");
             }
@@ -53,10 +61,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                IO.CollectionChanged -= CollectionChanged;
+                IO.CollectionChanged -= IO_CollectionChanged;
                 _io = value;
                 NotifyPropertyChanged("IO", temp, this);
-                IO.CollectionChanged += CollectionChanged;
+                IO.CollectionChanged += IO_CollectionChanged;
             }
         }
         public TECManufacturer Manufacturer
@@ -117,7 +125,8 @@ namespace EstimatingLibrary
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
-            IO.CollectionChanged += CollectionChanged;
+            IO.CollectionChanged += IO_CollectionChanged;
+            ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
         }
         public TECController() : this(Guid.NewGuid()) { }
         public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
@@ -136,7 +145,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Event Handlers
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -144,7 +153,7 @@ namespace EstimatingLibrary
                 {
                     if(item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged += ObjectPropertyChanged;
+                        (item as TECIO).PropertyChanged += IOPropertyChanged;
                         NotifyPropertyChanged("Add", this, item);
                     } 
                 }
@@ -155,13 +164,17 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
+                        (item as TECIO).PropertyChanged -= IOPropertyChanged;
                         NotifyPropertyChanged("Remove", this, item);
                     }
                 }
             }
         }
-        private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        private void IOPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
             if (e.PropertyName == "Quantity")
