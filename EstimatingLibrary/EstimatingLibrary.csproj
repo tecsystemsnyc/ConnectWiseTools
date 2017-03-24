@@ -123,6 +123,7 @@
     <Compile Include="TECManufacturer.cs" />
     <Compile Include="TECMiscCost.cs" />
     <Compile Include="TECMiscWiring.cs" />
+    <Compile Include="TECNetworkConnection.cs" />
     <Compile Include="TECNote.cs" />
     <Compile Include="TECObject.cs" />
     <Compile Include="TECPage.cs" />
