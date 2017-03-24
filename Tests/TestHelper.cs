@@ -333,14 +333,10 @@ namespace Tests
 
             bid.Panels.Add(panel);
 
-            //Connections
-            TECSubScopeConnection testConnection = new TECSubScopeConnection();
+            //Connections]
+            TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = conduitType1;
             testConnection.Length = 42;
-            testConnection.ParentController = expectedController;
-            testConnection.SubScope = subScope1;
-
-            bid.Connections.Add(testConnection);
             
             //Bid
             return bid;
