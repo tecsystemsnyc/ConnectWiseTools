@@ -66,7 +66,7 @@
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
 
-            <grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllers}"/>
+            <!--<grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllers}"/>-->
 
         </Grid>
         <Border Grid.Column="1"
