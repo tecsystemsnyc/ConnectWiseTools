@@ -263,20 +263,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        TECSubScope subScopetoAdd = subScope;
-                        TECSubScopeConnection connectionToAdd = null;
-                        TECController controllerToAdd = null;
-                        
-                        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
-                        {
-                            if (connection.SubScope == subScope)
-                            {
-                                connectionToAdd = connection;
-                                controllerToAdd = connection.ParentController;
-                            }
-                        }
-
-                        var subConnectionToAdd = new SubScopeConnection(connectionToAdd, controllerToAdd, subScopetoAdd);
+                        var subConnectionToAdd = new SubScopeConnection(subScope.Connection, subScope.Connection.ParentController, subScope);
 
                         subConnectionToAdd.ParentSystem = system;
                         subConnectionToAdd.ParentEquipment = equipment;
@@ -297,27 +284,27 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                if (e.PropertyName == "Connection")
-                {
-                    if (args.OldValue != null)
-                    {
-                        var connectionToRemove = new TECSubScopeConnection();
-                        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
-                        {
-                            if((args.OldValue as TECConnection).Guid == connection.Guid)
-                            {
-                                connectionToRemove = connection;
-                                break;
-                            }
-                        }
-                        SelectedControlledScope.Connections.Remove(connectionToRemove);
-                    }
-                    if (args.NewValue != null)
-                    {
-                        SelectedControlledScope.Connections.Add(args.NewValue as TECSubScopeConnection);
-                    }
-                }
+                //PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                //if (e.PropertyName == "Connection")
+                //{
+                //    if (args.OldValue != null)
+                //    {
+                //        var connectionToRemove = new TECSubScopeConnection();
+                //        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
+                //        {
+                //            if((args.OldValue as TECConnection).Guid == connection.Guid)
+                //            {
+                //                connectionToRemove = connection;
+                //                break;
+                //            }
+                //        }
+                //        SelectedControlledScope.Connections.Remove(connectionToRemove);
+                //    }
+                //    if (args.NewValue != null)
+                //    {
+                //        SelectedControlledScope.Connections.Add(args.NewValue as TECSubScopeConnection);
+                //    }
+                //}
             }
         }
         

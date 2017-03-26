@@ -16,6 +16,10 @@ namespace EstimatingLibrary
         {
             RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
         }
+        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue, Type oldType, Type newType)
+        {
+            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue, oldType, newType));
+        }
         protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

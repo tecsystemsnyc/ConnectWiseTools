@@ -962,16 +962,16 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECConduitType expected = Bid.Connections[0].ConduitType;
+            TECConduitType expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
             TECConduitType edit = Bid.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Connections[0].ConduitType = edit;
+            Bid.Controllers[0].ChildrenConnections[0].ConduitType = edit;
             testStack.Undo();
 
             //assert
-            TECConduitType actual = Bid.Connections[0].ConduitType;
+            TECConduitType actual = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
             Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
 
         }

@@ -74,33 +74,35 @@ namespace EstimatingLibrary
                 cost += wiring.Cost * wiring.Quantity;
             }
 
-            foreach (TECConnection conn in bid.Connections)
+            foreach (TECController controller in bid.Controllers)
             {
-                var length = conn.Length;
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    var length = connection.Length;
 
-                if (conn is TECNetworkConnection)
-                {
-                    TECConnectionType type = (conn as TECNetworkConnection).ConnectionType;
-                    cost += length * type.Cost;
-                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                    { cost += associatedCost.Cost; }
-                }
-                else if (conn is TECSubScopeConnection)
-                {
-                    foreach (TECConnectionType type in (conn as TECSubScopeConnection).ConnectionTypes)
+                    if (connection is TECNetworkConnection)
                     {
+                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                         cost += length * type.Cost;
-                        foreach(TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        { cost += associatedCost.Cost; }
+                    }
+                    else if (connection is TECSubScopeConnection)
+                    {
+                        foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                         {
-                            cost += associatedCost.Cost;
+                            cost += length * type.Cost;
+                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            {
+                                cost += associatedCost.Cost;
+                            }
                         }
                     }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                
             }
             return cost;
         }
@@ -111,33 +113,36 @@ namespace EstimatingLibrary
         {
             double laborHours = 0;
 
-            foreach (TECConnection conn in bid.Connections)
+            foreach (TECController controller in bid.Controllers)
             {
-                var length = conn.Length;
-                if (conn.ConduitType != null)
-                { laborHours += conn.Length * conn.ConduitType.Labor; }
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    var length = connection.Length;
+                    if (connection.ConduitType != null)
+                    { laborHours += connection.Length * connection.ConduitType.Labor; }
 
-                if (conn is TECNetworkConnection)
-                {
-                    TECConnectionType type = (conn as TECNetworkConnection).ConnectionType;
-                    laborHours += length * type.Labor;
-                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                    { laborHours += associatedCost.Labor; }
-                }
-                else if (conn is TECSubScopeConnection)
-                {
-                    foreach (TECConnectionType type in (conn as TECSubScopeConnection).ConnectionTypes)
+                    if (connection is TECNetworkConnection)
                     {
+                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                         laborHours += length * type.Labor;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        { laborHours += associatedCost.Labor; }
+                    }
+                    else if (connection is TECSubScopeConnection)
+                    {
+                        foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                         {
-                            laborHours += associatedCost.Labor;
+                            laborHours += length * type.Labor;
+                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            {
+                                laborHours += associatedCost.Labor;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    throw new NotImplementedException();
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
 
             }

@@ -92,7 +92,7 @@ namespace EstimatingLibrary
                 _location = value;
                 NotifyPropertyChanged("Location", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
             }
         }
         #endregion //Properties
@@ -135,14 +135,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged("Add", this, item, typeof(TECScope), item.GetType());
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged("Remove", this, item, typeof(TECScope), item.GetType());
                 }
             }
         }

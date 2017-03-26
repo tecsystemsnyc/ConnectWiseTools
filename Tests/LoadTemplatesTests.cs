@@ -361,7 +361,7 @@ namespace Tests
             //Assert
             Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
             Assert.AreEqual("Test Controlled Description", actualConScope.Description);
-            Assert.AreEqual(420, actualConScope.Connections[0].Length);
+            Assert.AreEqual(420, actualConScope.Controllers[0].ChildrenConnections[0].Length);
             Assert.AreEqual("Controlled System", actualConScope.Systems[0].Name);
             Assert.AreEqual("Controlled Controller", actualConScope.Controllers[0].Name);
             Assert.AreEqual("Controlled Panel", actualConScope.Panels[0].Name);
@@ -382,20 +382,10 @@ namespace Tests
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        if (!actualConScope.Connections.Contains(subScope.Connection))
+                        if (!actualConScope.Controllers[0].ChildrenConnections.Contains(subScope.Connection))
                         {
                             connectionsInSystemsLinked = false;
                         }
-                    }
-                }
-            }
-            foreach(TECController controller in actualConScope.Controllers)
-            {
-                foreach(TECSubScopeConnection connection in controller.ChildrenConnections)
-                {
-                    if (!actualConScope.Connections.Contains(connection))
-                    {
-                        connectionsInControllersLinked = false;
                     }
                 }
             }

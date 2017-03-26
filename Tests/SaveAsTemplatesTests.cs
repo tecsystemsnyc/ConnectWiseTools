@@ -487,7 +487,7 @@ namespace Tests
             Assert.AreEqual(expectedConScope.Systems[0].Name, actualConScope.Systems[0].Name);
             Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
             Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
-            Assert.AreEqual(42, actualConScope.Connections[0].Length);
+            Assert.AreEqual(42, actualConScope.Controllers[0].ChildrenConnections[0].Length);
         }
     }
 }

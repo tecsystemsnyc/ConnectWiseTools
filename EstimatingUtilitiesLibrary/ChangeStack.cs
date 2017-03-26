@@ -100,7 +100,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             foreach (TECController controller in Bid.Controllers)
-            { controller.PropertyChanged += Object_PropertyChanged; }
+            { registerController(controller); }
             foreach (TECProposalScope propScope in Bid.ProposalScope)
             { registerPropScope(propScope); }
             foreach(TECConnectionType connectionType in Bid.ConnectionTypes)
@@ -117,8 +117,6 @@ namespace EstimatingUtilitiesLibrary
             { panelType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECConnection connection in Bid.Connections)
-            { connection.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
@@ -227,15 +225,19 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach(TECController controller in scope.Controllers)
             {
-                controller.PropertyChanged += Object_PropertyChanged;
-            }
-            foreach(TECConnection connection in scope.Connections)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
+                registerController(controller);
             }
             foreach(TECSystem system in scope.Systems)
             {
                 registerSystems(system);
+            }
+        }
+        private void registerController(TECController controller)
+        {
+            controller.PropertyChanged += Object_PropertyChanged;
+            foreach(TECConnection connection in controller.ChildrenConnections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
             }
         }
 
@@ -473,11 +475,11 @@ namespace EstimatingUtilitiesLibrary
                     var toSave = new List<StackItem>();
                     if (oldNew.Item1 != null)
                     {
-                        toSave.Add(new StackItem(Change.Remove, oldValue, oldNew.Item1));
+                        toSave.Add(new StackItem(Change.Remove, oldValue, oldNew.Item1, args.OldType, args.NewType));
                     }
                     if (oldNew.Item2 != null)
                     {
-                        toSave.Add(new StackItem(Change.Add, oldValue, oldNew.Item2));
+                        toSave.Add(new StackItem(Change.Add, oldValue, oldNew.Item2, args.OldType, args.NewType));
                     }
                     foreach(var save in toSave)
                     {
@@ -496,11 +498,11 @@ namespace EstimatingUtilitiesLibrary
                     var toSave = new List<StackItem>();
                     if (oldNew.Item1 != null)
                     {
-                        toSave.Add(new StackItem(Change.RemoveRelationship, oldValue, oldNew.Item1));
+                        toSave.Add(new StackItem(Change.RemoveRelationship, oldValue, oldNew.Item1, args.OldType, args.NewType));
                     }
                     if (oldNew.Item2 != null)
                     {
-                        toSave.Add(new StackItem(Change.AddRelationship, oldValue, oldNew.Item2));
+                        toSave.Add(new StackItem(Change.AddRelationship, oldValue, oldNew.Item2, args.OldType, args.NewType));
                     }
                     foreach (var save in toSave)
                     {
@@ -707,6 +709,8 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
+            SaveStack.Add(new StackItem(change, connection, connection));
+
             //Conduit Type
             if (connection.ConduitType != null)
             {
@@ -825,13 +829,6 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, (object)scope, (object)controller);
                 SaveStack.Add(item);
                 handleControllerChildren(controller, change);
-            }
-            foreach (TECConnection connection in scope.Connections)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
-                item = new StackItem(change, (object)scope, (object)connection);
-                SaveStack.Add(item);
-                handleConnectionChildren(connection, change);
             }
             foreach(TECPanel panel in scope.Panels)
             {

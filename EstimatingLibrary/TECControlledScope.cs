@@ -9,20 +9,6 @@ namespace EstimatingLibrary
 {
     public class TECControlledScope : TECScope
     {
-        private ObservableCollection<TECSubScopeConnection> _connections { get; set; }
-        public ObservableCollection<TECSubScopeConnection> Connections
-        {
-            get { return _connections; }
-            set
-            {
-                var temp = this.Copy();
-                Connections.CollectionChanged -= CollectionChanged;
-                _connections = value;
-                Connections.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Connections", temp, this);
-            }
-        }
-
         private ObservableCollection<TECSystem> _systems { get; set; }
         public ObservableCollection<TECSystem> Systems
         {
@@ -67,11 +53,9 @@ namespace EstimatingLibrary
 
         public TECControlledScope(Guid guid) : base(guid)
         {
-            _connections = new ObservableCollection<TECSubScopeConnection>();
             _systems = new ObservableCollection<TECSystem>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
-            Connections.CollectionChanged += CollectionChanged;
             Systems.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
@@ -80,10 +64,6 @@ namespace EstimatingLibrary
         public TECControlledScope(TECControlledScope source) : this()
         {
             copyPropertiesFromScope(source);
-            foreach(TECSubScopeConnection connection in source._connections)
-            {
-                _connections.Add(connection);
-            }
             foreach (TECSystem system in source._systems)
             {
                 _systems.Add(system);
@@ -105,10 +85,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     if(item != null) { NotifyPropertyChanged("Add", this, item); }
-                    if (item is TECController)
-                    {
-                        (item as TECController).ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
-                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -116,27 +92,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     if (item != null) { NotifyPropertyChanged("Remove", this, item); }
-                    if (item is TECController)
-                    {
-                        (item as TECController).ChildrenConnections.CollectionChanged -= ChildrenConnections_CollectionChanged;
-                    }
-                }
-            }
-        }
-        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (TECSubScopeConnection item in e.NewItems)
-                {
-                    Connections.Add(item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECSubScopeConnection item in e.OldItems)
-                {
-                    Connections.Remove(item);
                 }
             }
         }
@@ -155,14 +110,6 @@ namespace EstimatingLibrary
             return outScope;
 
         }
-
-        private void registerControllers()
-        {
-            foreach (TECController controller in Controllers)
-            {
-                controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged; ;
-            }
-        }
-
+        
     }
 }

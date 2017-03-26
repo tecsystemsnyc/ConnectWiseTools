@@ -3306,7 +3306,6 @@ namespace Tests
             scope.Systems.Add(expectedSystem);
             scope.Panels.Add(expectedPanel);
             scope.Controllers.Add(expectedController);
-            scope.Connections.Add(expectedConnection);
 
             bid.addControlledScope(scope);
 
@@ -3334,7 +3333,7 @@ namespace Tests
                     break;
                 }
             }
-            foreach (TECSubScopeConnection connection in actualBid.Connections)
+            foreach (TECSubScopeConnection connection in actualController.ChildrenConnections)
             {
                 if (connection.Length == 1212)
                 {

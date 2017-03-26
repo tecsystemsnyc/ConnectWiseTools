@@ -1142,7 +1142,7 @@ namespace EstimatingUtilitiesLibrary
     public class NetworkConnectionConnectionTypeTable : TableBase
     {
         public static new string TableName = "TECNetworkConnectionTECConnectionType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(TECNetworkConnection);
         public static Type ReferenceType = typeof(TECConnectionType);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
@@ -1161,7 +1161,7 @@ namespace EstimatingUtilitiesLibrary
     public class NetworkConnectionIOTypeTable : TableBase
     {
         public static new string TableName = "TECNetworkConnectionTECIOType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(TECNetworkConnection);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
@@ -1178,7 +1178,7 @@ namespace EstimatingUtilitiesLibrary
     public class NetworkConnectionChildrenTable : TableBase
     {
         public static new string TableName = "TECNetworkConnectionChild";
-        public static Type ConnectionType = typeof(TECConnection);
+        public static Type ConnectionType = typeof(TECNetworkConnection);
         public static Type ChildType = typeof(TECController);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
@@ -1198,7 +1198,7 @@ namespace EstimatingUtilitiesLibrary
     public class SubScopeConnectionChildrenTable : TableBase
     {
         public static new string TableName = "TECSubScopeConnectionChild";
-        public static Type ConnectionType = typeof(TECConnection);
+        public static Type ConnectionType = typeof(TECSubScopeConnection);
         public static Type ChildType = typeof(TECSubScope);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
@@ -1270,25 +1270,6 @@ namespace EstimatingUtilitiesLibrary
         {
             ControlledScopeType,
             SystemType
-        };
-    }
-    public class ControlledScopeConnectionTable : TableBase
-    {
-        public static new string TableName = "TECControlledScopeTECConnection";
-        public static Type ControlledScopeType = typeof(TECControlledScope);
-        public static Type ConnectionType = typeof(TECSubScopeConnection);
-
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeID,
-            ConnectionID 
-            };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ControlledScopeType,
-            ConnectionType
         };
     }
     public class ControlledScopeControllerTable : TableBase
@@ -1435,7 +1416,6 @@ namespace EstimatingUtilitiesLibrary
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
-            new ControlledScopeConnectionTable(),
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
@@ -1506,7 +1486,6 @@ namespace EstimatingUtilitiesLibrary
             new BidBidParametersTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
-            new ControlledScopeConnectionTable(),
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),

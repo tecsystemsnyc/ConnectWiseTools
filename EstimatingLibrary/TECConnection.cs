@@ -36,11 +36,8 @@ namespace EstimatingLibrary
             get { return _parentController; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_parentController, value);
-                var temp = Copy();
                 _parentController = value;
                 RaisePropertyChanged("ParentController");
-                NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
         public TECConduitType ConduitType
@@ -53,7 +50,7 @@ namespace EstimatingLibrary
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew);
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECConduitType));
             }
         }
         #endregion //Properties

@@ -34,5 +34,19 @@ namespace EstimatingUtilitiesLibrary
             TargetObject = targetObject as TECObject;
             if (TargetObject != null) { TargetType = targetObject.GetType(); }
         }
+        public StackItem(Change change, object referenceObject, object targetObject, Type referenceType, Type targetType)
+        {
+            Change = change;
+            ReferenceObject = referenceObject as TECObject;
+            ReferenceType = referenceType;
+
+            TargetObject = targetObject as TECObject;
+            TargetType = targetType;
+        }
+
+        public object[] Objects()
+        {
+            return new object[] { TargetObject, ReferenceObject };
+        }
     }
 }

@@ -598,7 +598,7 @@ namespace Tests
             testConScope.Systems.Add(controlledSystem.DragDropCopy() as TECSystem);
             testConScope.Panels.Add(controlledPanel.DragDropCopy() as TECPanel);
             testConScope.Controllers.Add(controlledController.DragDropCopy() as TECController);
-            testConScope.Connections.Add(controlledConnection);
+            testConScope.Controllers[0].AddSubScope(subScope);
 
             templates.ControlledScopeTemplates.Add(testConScope);
 

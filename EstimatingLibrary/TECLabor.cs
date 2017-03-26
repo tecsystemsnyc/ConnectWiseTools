@@ -78,7 +78,6 @@ namespace EstimatingLibrary
                 _pmRate = value;
                 NotifyPropertyChanged("PMRate", temp, this);
                 raiseLaborChanged();
-               
             }
         }
 

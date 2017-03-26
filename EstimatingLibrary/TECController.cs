@@ -126,8 +126,10 @@ namespace EstimatingLibrary
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
+            ChildrenConnections.CollectionChanged += collectionChanged;
             IO.CollectionChanged += IO_CollectionChanged;
         }
+        
         public TECController() : this(Guid.NewGuid()) { }
         public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
@@ -176,6 +178,23 @@ namespace EstimatingLibrary
             if (e.PropertyName == "Quantity")
             {
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
+            }
+        }
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
+                }
             }
         }
         #endregion

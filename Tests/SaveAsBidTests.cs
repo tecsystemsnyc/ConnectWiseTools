@@ -556,8 +556,8 @@ namespace Tests
         public void SaveAs_Bid_SubScopeConnection()
         {
             //Arrange
-            TECSubScopeConnection actualConnection = actualBid.Connections[0] as TECSubScopeConnection;
-            TECSubScopeConnection expectedConnection = expectedBid.Connections[0] as TECSubScopeConnection;
+            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            TECSubScopeConnection expectedConnection = expectedBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
 
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);

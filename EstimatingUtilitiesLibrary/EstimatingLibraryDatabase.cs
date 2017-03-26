@@ -42,35 +42,35 @@ namespace EstimatingUtilitiesLibrary
             if (templates.DeviceCatalog.Count > 0)
             {
                 foreach (TECDevice device in templates.DeviceCatalog)
-                { editObject(device, bid); }
+                { editObject(new StackItem(Change.Edit, bid, device)); }
             }
 
             if (templates.ManufacturerCatalog.Count > 0)
             {
                 foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-                { editObject(manufacturer, bid); }
+                { editObject(new StackItem(Change.Edit, bid, manufacturer)); }
             }
 
             if (templates.Tags.Count > 0)
             {
                 foreach (TECTag tag in templates.Tags)
-                { editObject(tag, bid); }
+                { editObject(new StackItem(Change.Edit, bid, tag)); }
             }
 
             if(templates.ConnectionTypeCatalog.Count > 0)
             {
                 foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
-                { editObject(connectionType, bid); }
+                { editObject(new StackItem(Change.Edit, bid, connectionType)); }
             }
             if (templates.ConduitTypeCatalog.Count > 0)
             {
                 foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
-                { editObject(conduitType, bid); }
+                { editObject(new StackItem(Change.Edit, bid, conduitType)); }
             }
             if(templates.AssociatedCostsCatalog.Count > 0)
             {
                 foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
-                { editObject(cost, bid); }
+                { editObject(new StackItem(Change.Edit, bid, cost)); }
             }
             //watch.Stop();
             //Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
@@ -89,7 +89,6 @@ namespace EstimatingUtilitiesLibrary
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Connections = getConnections();
             bid.Controllers = getControllers();
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
@@ -194,23 +193,23 @@ namespace EstimatingUtilitiesLibrary
 
                 if (changeType == Change.Add)
                 {
-                    addObject(targetObject, refObject);
+                    addObject(change);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    editObject(targetObject, refObject);
+                    editObject(change);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    removeObject(targetObject, refObject);
+                    removeObject(change);
                 }
                 else if(changeType == Change.AddRelationship)
                 {
-                    addRelationship(targetObject, refObject);
+                    addRelationship(change);
                 }
                 else if(changeType == Change.RemoveRelationship)
                 {
-                    removeRelationship(targetObject, refObject);
+                    removeRelationship(change);
                 }
             }
 
@@ -239,23 +238,23 @@ namespace EstimatingUtilitiesLibrary
 
                 if (changeType == Change.Add)
                 {
-                    addObject(targetObject, refObject);
+                    addObject(change);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    editObject(targetObject, refObject);
+                    editObject(change);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    removeObject(targetObject, refObject);
+                    removeObject(change);
                 }
                 else if (changeType == Change.AddRelationship)
                 {
-                    addRelationship(targetObject, refObject);
+                    addRelationship(change);
                 }
                 else if (changeType == Change.RemoveRelationship)
                 {
-                    removeRelationship(targetObject, refObject);
+                    removeRelationship(change);
                 }
             }
 
@@ -1003,7 +1002,7 @@ namespace EstimatingUtilitiesLibrary
 
             DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
-            { outScope.Add(getControllerPlaceholderFromRow(row)); }
+            { outScope.Add(getControllerFromRow(row)); }
 
             return outScope;
         }
@@ -1192,20 +1191,6 @@ namespace EstimatingUtilitiesLibrary
 
             return systems;
         }
-        static private ObservableCollection<TECSubScopeConnection> getConnectionsInControlledScope(Guid guid)
-        {
-            ObservableCollection<TECSubScopeConnection> connections = new ObservableCollection<TECSubScopeConnection>();
-            string command = "select * from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
-            command += "(select " + ControlledScopeConnectionTable.ConnectionID.Name + " from " + ControlledScopeConnectionTable.TableName + " where ";
-            command += ControlledScopeConnectionTable.ControlledScopeID.Name + " = '" + guid;
-            command += "')";
-
-            DataTable dt = SQLiteDB.getDataFromCommand(command);
-            foreach (DataRow row in dt.Rows)
-            { connections.Add(getSubScopeConnectionFromRow(row)); }
-
-            return connections;
-        }
         static private ObservableCollection<TECPanel> getPanelsInControlledScope(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
@@ -1219,6 +1204,44 @@ namespace EstimatingUtilitiesLibrary
             { panels.Add(getPanelFromRow(row)); }
 
             return panels;
+        }
+        static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller)
+        {
+            var tables = getAllTableNames();
+            ObservableCollection<TECConnection> outScope = new ObservableCollection<TECConnection>();
+            string command;
+            DataTable scopeDT;
+
+            if (tables.Contains(NetworkConnectionTable.TableName))
+            {
+                command = "select * from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ConnectionID.Name + " in ";
+                command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+                command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
+                command += "')";
+
+                scopeDT = SQLiteDB.getDataFromCommand(command);
+                foreach (DataRow row in scopeDT.Rows)
+                {
+                    var networkConnection = getNetworkConnectionFromRow(row);
+                    networkConnection.ParentController = controller;
+                    outScope.Add(networkConnection);
+                }
+            }
+
+            command = "select * from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
+            command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+            command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
+            command += "')";
+
+            scopeDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in scopeDT.Rows)
+            {
+                var subScopeConnection = getSubScopeConnectionFromRow(row);
+                subScopeConnection.ParentController = controller;
+                outScope.Add(subScopeConnection);
+            }
+
+            return outScope;
         }
         #endregion //Loading from DB Methods
 
@@ -1538,6 +1561,7 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Table Row to Object Methods
+        #region Base Scope
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
@@ -1580,22 +1604,36 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
             return subScopeToAdd;
         }
+        private static TECPoint getPointFromRow(DataRow row)
+        {
+            Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
+            TECPoint pointToAdd = new TECPoint(pointID);
+            pointToAdd.Name = row[PointTable.Name.Name].ToString();
+            pointToAdd.Description = row[PointTable.Description.Name].ToString();
+            pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
+            pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
+            pointToAdd.Tags = getTagsInScope(pointID);
+            pointToAdd.AssociatedCosts = getAssociatedCostsInScope(pointID);
+            return pointToAdd;
+        }
+        #endregion
+        #region Catalogs
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
-            string name = row[ConnectionTypeTable.Name.Name].ToString();
-            string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
-            string costString = row[ConnectionTypeTable.Cost.Name].ToString();
+        string name = row[ConnectionTypeTable.Name.Name].ToString();
+        string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
+        string costString = row[ConnectionTypeTable.Cost.Name].ToString();
 
-            double cost = costString.ToDouble(0);
-            double labor = laborString.ToDouble(0);
+        double cost = costString.ToDouble(0);
+        double labor = laborString.ToDouble(0);
 
-            var outConnectionType = new TECConnectionType(guid);
-            outConnectionType.Name = name;
+        var outConnectionType = new TECConnectionType(guid);
+        outConnectionType.Name = name;
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
             outConnectionType.Tags = getTagsInScope(guid);
-            outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
+        outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
             return outConnectionType;
         }
         private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
@@ -1624,28 +1662,6 @@ namespace EstimatingUtilitiesLibrary
             deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
             deviceToAdd.AssociatedCosts = getAssociatedCostsInScope(deviceToAdd.Guid);
             return deviceToAdd;
-        }
-        private static TECPoint getPointFromRow(DataRow row)
-        {
-            Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
-            TECPoint pointToAdd = new TECPoint(pointID);
-            pointToAdd.Name = row[PointTable.Name.Name].ToString();
-            pointToAdd.Description = row[PointTable.Description.Name].ToString();
-            pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
-            pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
-            pointToAdd.Tags = getTagsInScope(pointID);
-            pointToAdd.AssociatedCosts = getAssociatedCostsInScope(pointID);
-            return pointToAdd;
-        }
-        private static TECScopeBranch getScopeBranchFromRow(DataRow row)
-        {
-            Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
-            TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
-            branch.Name = row[ScopeBranchTable.Name.Name].ToString();
-            branch.Description = row[ScopeBranchTable.Description.Name].ToString();
-            branch.Branches = getChildBranchesInBranch(scopeBranchID);
-            branch.Tags = getTagsInScope(scopeBranchID);
-            return branch;
         }
         private static TECManufacturer getManufacturerFromRow(DataRow row)
         {
@@ -1676,6 +1692,35 @@ namespace EstimatingUtilitiesLibrary
             conduitType.AssociatedCosts = getAssociatedCostsInScope(conduitGuid);
             return conduitType;
         }
+        private static TECTag getTagFromRow(DataRow row)
+        {
+            var tag = new TECTag(new Guid(row["TagID"].ToString()));
+            tag.Text = row["TagString"].ToString();
+            return tag;
+        }
+        private static TECPanelType getPanelTypeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PanelTypeTable.PanelTypeID.Name].ToString());
+            TECPanelType panelType = new TECPanelType(guid);
+
+            panelType.Name = row[PanelTypeTable.Name.Name].ToString();
+            panelType.Cost = row[PanelTypeTable.Cost.Name].ToString().ToDouble(0);
+
+            return panelType;
+        }
+
+        #endregion
+        #region Scope Qualifiers
+        private static TECScopeBranch getScopeBranchFromRow(DataRow row)
+        {
+            Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
+            TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
+            branch.Name = row[ScopeBranchTable.Name.Name].ToString();
+            branch.Description = row[ScopeBranchTable.Description.Name].ToString();
+            branch.Branches = getChildBranchesInBranch(scopeBranchID);
+            branch.Tags = getTagsInScope(scopeBranchID);
+            return branch;
+        }
         private static TECNote getNoteFromRow(DataRow row)
         {
             Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
@@ -1688,14 +1733,10 @@ namespace EstimatingUtilitiesLibrary
             Guid exclusionId = new Guid(row["ExclusionID"].ToString());
             TECExclusion exclusion = new TECExclusion(exclusionId);
             exclusion.Text = row["ExclusionText"].ToString();
-            return exclusion; 
+            return exclusion;
         }
-        private static TECTag getTagFromRow(DataRow row)
-        {
-            var tag = new TECTag(new Guid(row["TagID"].ToString()));
-            tag.Text = row["TagString"].ToString();
-            return tag;
-        }
+        #endregion
+        #region Drawing Objects
         private static TECDrawing getDrawingFromRow(DataRow row)
         {
             string name = row[DrawingTable.Name.Name].ToString();
@@ -1724,6 +1765,22 @@ namespace EstimatingUtilitiesLibrary
             visualScope.Scope = getScopeGuidInVisualScope(guid);
             return visualScope;
         }
+        #endregion
+        #region Control Scope
+        private static TECPanel getPanelFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
+            TECPanel panel = new TECPanel(guid);
+
+            panel.Name = row[PanelTable.Name.Name].ToString();
+            panel.Description = row[PanelTable.Desciption.Name].ToString();
+            panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
+            panel.Type = getPanelTypeInPanel(guid);
+            panel.Controllers = getControllersInPanel(guid);
+
+            return panel;
+        }
+
         private static TECController getControllerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
@@ -1736,6 +1793,7 @@ namespace EstimatingUtilitiesLibrary
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);
             controller.AssociatedCosts = getAssociatedCostsInScope(guid);
+            controller.ChildrenConnections = getConnectionsInController(controller);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
@@ -1746,30 +1804,12 @@ namespace EstimatingUtilitiesLibrary
             io.Quantity = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
             return io;
         }
-        private static TECBidParameters getBidParametersFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[BidParametersTable.ParamtersID.Name].ToString());
-            TECBidParameters paramters = new TECBidParameters(guid);
-
-            paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
-            paramters.Overhead = row[BidParametersTable.Overhead.Name].ToString().ToDouble(0);
-            paramters.Profit = row[BidParametersTable.Profit.Name].ToString().ToDouble(0);
-            paramters.SubcontractorMarkup = row[BidParametersTable.SubcontractorMarkup.Name].ToString().ToDouble(0);
-            paramters.SubcontractorEscalation = row[BidParametersTable.SubcontractorEscalation.Name].ToString().ToDouble(0);
-
-            paramters.IsTaxExempt = row[BidParametersTable.IsTaxExempt.Name].ToString().ToInt(0).ToBool();
-            paramters.RequiresBond = row[BidParametersTable.RequiresBond.Name].ToString().ToInt(0).ToBool();
-            paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
-
-            return paramters;
-        }
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeConnectionTable.ConnectionID.Name].ToString());
             TECSubScopeConnection connection = new TECSubScopeConnection(guid);
             connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.ParentController = getControllerInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
             return connection;
         }
@@ -1780,11 +1820,12 @@ namespace EstimatingUtilitiesLibrary
             connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.IOType = getIOTypeInNetworkConnection(connection.Guid);
-            connection.ParentController = getControllerInConnection(connection.Guid);
             connection.ChildrenControllers = getChildrenInNetworkConnection(connection.Guid);
             return connection;
         }
+        #endregion
 
+        #region Misc
         private static TECMiscCost getMiscCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[MiscCostTable.MiscCostID.Name].ToString());
@@ -1807,29 +1848,26 @@ namespace EstimatingUtilitiesLibrary
 
             return wiring;
         }
-        private static TECPanelType getPanelTypeFromRow(DataRow row)
+        private static TECBidParameters getBidParametersFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[PanelTypeTable.PanelTypeID.Name].ToString());
-            TECPanelType panelType = new TECPanelType(guid);
+            Guid guid = new Guid(row[BidParametersTable.ParamtersID.Name].ToString());
+            TECBidParameters paramters = new TECBidParameters(guid);
 
-            panelType.Name = row[PanelTypeTable.Name.Name].ToString();
-            panelType.Cost = row[PanelTypeTable.Cost.Name].ToString().ToDouble(0);
+            paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
+            paramters.Overhead = row[BidParametersTable.Overhead.Name].ToString().ToDouble(0);
+            paramters.Profit = row[BidParametersTable.Profit.Name].ToString().ToDouble(0);
+            paramters.SubcontractorMarkup = row[BidParametersTable.SubcontractorMarkup.Name].ToString().ToDouble(0);
+            paramters.SubcontractorEscalation = row[BidParametersTable.SubcontractorEscalation.Name].ToString().ToDouble(0);
 
-            return panelType;
+            paramters.IsTaxExempt = row[BidParametersTable.IsTaxExempt.Name].ToString().ToInt(0).ToBool();
+            paramters.RequiresBond = row[BidParametersTable.RequiresBond.Name].ToString().ToInt(0).ToBool();
+            paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
+
+            return paramters;
         }
-        private static TECPanel getPanelFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
-            TECPanel panel = new TECPanel(guid);
 
-            panel.Name = row[PanelTable.Name.Name].ToString();
-            panel.Description = row[PanelTable.Desciption.Name].ToString();
-            panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
-            panel.Type = getPanelTypeInPanel(guid);
-            panel.Controllers = getControllersInPanel(guid);
+        #endregion
 
-            return panel;
-        }
         private static TECControlledScope getControlledScopeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
@@ -1839,12 +1877,10 @@ namespace EstimatingUtilitiesLibrary
             controlledScope.Description = row[ControlledScopeTable.Desciption.Name].ToString();
             controlledScope.Controllers = getControllersInControlledScope(guid);
             controlledScope.Systems = getSystemsInControlledScope(guid);
-            controlledScope.Connections = getConnectionsInControlledScope(guid);
             controlledScope.Panels = getPanelsInControlledScope(guid);
 
             return controlledScope;
         }
-
         private static TECSubScope getSubScopePlaceholderFromRow(DataRow row)
         {
             Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
@@ -1864,8 +1900,6 @@ namespace EstimatingUtilitiesLibrary
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             return controller;
         }
-
-
         #endregion
 
         #region Generic Create Methods
@@ -1942,80 +1976,75 @@ namespace EstimatingUtilitiesLibrary
         #region Generic Complete Save Methods
         private static void saveCompleteBid(TECBid bid)
         {
-            addObject(bid, bid);
-            addObject(bid.Labor, bid);
-            addObject(bid.Parameters, bid);
+            addObject(new StackItem(Change.Add, bid, bid));
+            addObject(new StackItem(Change.Add, bid, bid.Labor));
+            addObject(new StackItem(Change.Add, bid, bid.Parameters));
             foreach(TECSystem system in bid.Systems)
             {
-                addObject(system, bid);
+                addObject(new StackItem(Change.Add, bid, system));
                 saveScopeChildProperties(system);
                 saveCompleteEquipment(system);
             }
             foreach(TECManufacturer manufacturer in bid.ManufacturerCatalog)
-            { addObject(manufacturer, bid); }
+            { addObject(new StackItem(Change.Add, bid, manufacturer)); }
             foreach(TECController controller in bid.Controllers)
             {
-                addObject(controller, bid);
+                addObject(new StackItem(Change.Add, bid, controller));
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach(TECConnection connection in bid.Connections)
-            {
-                addObject(connection, bid);
-                saveConnectionChildren(connection);
-            }
             foreach (TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
-            { addObject(associatedCost, bid); }
+            { addObject(new StackItem(Change.Add, bid, associatedCost)); }
             foreach (TECNote note in bid.Notes)
-            { addObject(note, bid); }
+            { addObject(new StackItem(Change.Add, bid, note)); }
             foreach (TECExclusion exclusion in bid.Exclusions)
-            { addObject(exclusion, bid); }
+            { addObject(new StackItem(Change.Add, bid, exclusion)); }
             foreach (TECLocation location in bid.Locations)
-            { addObject(location, bid); }
+            { addObject(new StackItem(Change.Add, bid, location)); }
             foreach (TECConduitType conduitType in bid.ConduitTypes)
             {
-                addObject(conduitType, bid);
+                addObject(new StackItem(Change.Add, bid, conduitType));
                 saveScopeChildProperties(conduitType);
             }
             foreach (TECConnectionType connectionType in bid.ConnectionTypes)
             {
-                addObject(connectionType, bid);
+                addObject(new StackItem(Change.Add, bid, connectionType));
                 saveScopeChildProperties(connectionType);
             }
             foreach (TECTag tag in bid.Tags)
-            { addObject(tag, bid); }
+            { addObject(new StackItem(Change.Add, bid, tag)); }
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {
-                addObject(branch, bid);
+                addObject(new StackItem(Change.Add, bid, branch));
                 saveCompleteScopeBranch(branch);
             }
             foreach(TECDrawing drawing in bid.Drawings)
             {
-                addObject(drawing, bid);
+                addObject(new StackItem(Change.Add, bid, drawing));
                 saveCompletePage(drawing);
             }
             foreach(TECProposalScope proposalScope in bid.ProposalScope)
             {
-                addObject(proposalScope, bid);
+                addObject(new StackItem(Change.Add, bid, proposalScope));
                 saveCompleteProposalScope(proposalScope);
             }
             foreach(TECDevice device in bid.DeviceCatalog)
             {
-                addObject(device, bid);
+                addObject(new StackItem(Change.Add, bid, device));
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
             }
             foreach(TECMiscCost cost in bid.MiscCosts)
             {
-                addObject(cost, bid);
+                addObject(new StackItem(Change.Add, bid, cost));
             }
             foreach (TECMiscWiring wiring in bid.MiscWiring)
             {
-                addObject(wiring, bid);
+                addObject(new StackItem(Change.Add, bid, wiring));
             }
             foreach (TECPanelType panelType in bid.PanelTypeCatalog)
             {
-                addObject(panelType, bid);
+                addObject(new StackItem(Change.Add, bid, panelType));
             }
             foreach (TECPanel panel in bid.Panels)
             {
@@ -2024,25 +2053,25 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveCompleteTemplate(TECTemplates templates)
         {
-            addObject(templates, templates);
-            addObject(templates.Labor, templates);
+            addObject(new StackItem(Change.Add, templates, templates));
+            addObject(new StackItem(Change.Add, templates, templates.Labor));
             foreach(TECTag tag in templates.Tags)
-            { addObject(tag, templates); }
+            { addObject(new StackItem(Change.Add, templates, tag)); }
             foreach (TECSystem system in templates.SystemTemplates)
             {
-                addObject(system, templates);
+                addObject(new StackItem(Change.Add, templates, system));
                 saveScopeChildProperties(system);
                 saveCompleteEquipment(system);
             }
             foreach (TECEquipment equipment in templates.EquipmentTemplates)
             {
-                addObject(equipment, templates);
+                addObject(new StackItem(Change.Add, templates, equipment));
                 saveScopeChildProperties(equipment);
                 saveCompleteSubScope(equipment);
             }
             foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
-                addObject(subScope, templates);
+                addObject(new StackItem(Change.Add, templates, subScope));
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
@@ -2052,36 +2081,36 @@ namespace EstimatingUtilitiesLibrary
                 saveDeviceInCatalog(device, templates);
             }
             foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-            { addObject(manufacturer, templates); }
+            { addObject(new StackItem(Change.Add, templates, manufacturer)); }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                addObject(controller, templates);
+                addObject(new StackItem(Change.Add, templates, controller));
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
             foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
             {
-                addObject(conduitType, templates);
+                addObject(new StackItem(Change.Add, templates, conduitType));
                 saveAssociatedCosts(conduitType);
             }
             foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
             {
-                addObject(connectionType, templates);
+                addObject(new StackItem(Change.Add, templates, connectionType));
                 saveAssociatedCosts(connectionType);
             }
             foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
-            { addObject(associatedCost, templates); }
+            { addObject(new StackItem(Change.Add, templates, associatedCost)); }
             foreach (TECMiscCost cost in templates.MiscCostTemplates)
             {
-                addObject(cost, templates);
+                addObject(new StackItem(Change.Add, templates, cost));
             }
             foreach (TECMiscWiring wiring in templates.MiscWiringTemplates)
             {
-                addObject(wiring, templates);
+                addObject(new StackItem(Change.Add, templates, wiring));
             }
             foreach (TECPanelType panelType in templates.PanelTypeCatalog)
             {
-                addObject(panelType, templates);
+                addObject(new StackItem(Change.Add, templates, panelType));
             }
             foreach (TECPanel panel in templates.PanelTemplates)
             {
@@ -2095,36 +2124,36 @@ namespace EstimatingUtilitiesLibrary
 
         private static void saveFullControlledScope(TECControlledScope conScope, TECTemplates templates)
         {
-            addObject(conScope, templates);
+            addObject(new StackItem(Change.Add, templates, conScope));
             saveScopeChildProperties(conScope);
-            foreach(TECSystem sys in conScope.Systems)
+            foreach (TECSystem system in conScope.Systems)
             {
-                addObject(sys, conScope);
+                addObject(new StackItem(Change.Add, conScope, system));
+                saveScopeChildProperties(system);
+                saveCompleteEquipment(system);
             }
-            foreach(TECPanel panel in conScope.Panels)
+            foreach (TECPanel panel in conScope.Panels)
             {
-                addObject(panel, conScope);
+                savePanel(panel, templates);
             }
-            foreach(TECController control in conScope.Controllers)
+            foreach(TECController controller in conScope.Controllers)
             {
-                addObject(control, conScope);
-            }
-            foreach(TECConnection connect in conScope.Connections)
-            {
-                addObject(connect, conScope);
+                addObject(new StackItem(Change.Add, conScope, controller));
+                saveScopeChildProperties(controller);
+                saveControllerChildProperties(controller);
             }
         }
 
         private static void saveDevicesInSubScope(TECSubScope subscope)
         {
             foreach(TECDevice device in subscope.Devices)
-            { addObject(device, subscope); }
+            { addObject(new StackItem(Change.Add, subscope, device)); }
         }
         private static void saveDeviceInCatalog(TECDevice device, object bidOrTemplates)
         {
             if(bidOrTemplates is TECBid || bidOrTemplates is TECTemplates)
             {
-                addObject(device, bidOrTemplates);
+                addObject(new StackItem(Change.Add, bidOrTemplates, device));
                 saveScopeChildProperties(device);
                 saveDeviceChildProperties(device);
             }
@@ -2133,7 +2162,7 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECPoint point in subScope.Points)
             {
-                addObject(point, subScope);
+                addObject(new StackItem(Change.Add, subScope, point));
                 saveScopeChildProperties(point);
             }
         }
@@ -2141,7 +2170,7 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECSubScope subScope in equipment.SubScope)
             {
-                addObject(subScope, equipment);
+                addObject(new StackItem(Change.Add, equipment, subScope));
                 saveScopeChildProperties(subScope);
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
@@ -2151,7 +2180,7 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECEquipment equipment in system.Equipment)
             {
-                addObject(equipment, system);
+                addObject(new StackItem(Change.Add, system, equipment));
                 saveScopeChildProperties(equipment);
                 saveCompleteSubScope(equipment);
             }
@@ -2160,25 +2189,25 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach(TECScopeBranch subBranch in branch.Branches)
             {
-                addObject(subBranch, branch);
+                addObject(new StackItem(Change.Add, branch, subBranch));
                 saveCompleteScopeBranch(subBranch);
             }
         }
         private static void saveCompleteVisualScope(TECPage page)
         {
             foreach(TECVisualScope visualScope in page.PageScope)
-            { addObject(visualScope, page); }
+            { addObject(new StackItem(Change.Add, page, visualScope)); }
         }
         private static void saveCompleteVisualConnections(TECPage page)
         {
             foreach (TECVisualConnection visualConnection in page.Connections)
-            { addObject(visualConnection, page); }
+            { addObject(new StackItem(Change.Add, page, visualConnection)); }
         }
         private static void saveCompletePage(TECDrawing drawing)
         {
             foreach(TECPage page in drawing.Pages)
             {
-                addObject(page, drawing);
+                addObject(new StackItem(Change.Add, drawing, page));
                 saveCompleteVisualScope(page);
                 saveCompleteVisualConnections(page);
             }
@@ -2188,12 +2217,12 @@ namespace EstimatingUtilitiesLibrary
             
             foreach(TECProposalScope subProposalScope in proposalScope.Children)
             {
-                addObject(subProposalScope, proposalScope);
+                addObject(new StackItem(Change.Add, proposalScope, subProposalScope));
                 saveCompleteProposalScope(subProposalScope);
             }
             foreach(TECScopeBranch branch in proposalScope.Notes)
             {
-                addObject(branch, proposalScope);
+                addObject(new StackItem(Change.Add, proposalScope, branch));
                 saveCompleteScopeBranch(branch);
             }
         }
@@ -2207,38 +2236,45 @@ namespace EstimatingUtilitiesLibrary
         {
             if(scope.Location != null)
             {
-                addObject(scope.Location, scope);
+                addObject(new StackItem(Change.Add, scope, scope.Location, typeof(TECScope), typeof(TECLocation)));
             }
         }
         private static void saveTags(TECScope scope)
         {
             foreach(TECTag tag in scope.Tags)
             {
-                addObject(tag, scope);
+                addObject(new StackItem(Change.Add, scope, tag, typeof(TECScope), typeof(TECTag)));
             }
         }
         private static void saveAssociatedCosts(TECScope scope)
         {
             foreach(TECAssociatedCost cost in scope.AssociatedCosts)
             {
-                addObject(cost, scope);
+                addObject(new StackItem(Change.Add, scope, cost, typeof(TECScope), typeof(TECAssociatedCost)));
             }
         }
         private static void saveControllerChildProperties(TECController controller)
         {
-            if(controller.Manufacturer != null) { addObject(controller.Manufacturer, controller); }
+            if(controller.Manufacturer != null) { addObject(new StackItem(Change.AddRelationship, controller, controller.Manufacturer)); }
             foreach(TECIO IO in controller.IO)
-            { addObject(IO, controller); }
+            { addObject(new StackItem(Change.Add, controller, IO)); }
+            foreach(TECConnection connection in controller.ChildrenConnections)
+            {
+                addObject(new StackItem(Change.Add, controller, connection, typeof(TECController), typeof(TECConnection)));
+                addObject(new StackItem(Change.Add, controller, connection));
+
+                saveConnectionChildren(connection);
+            }
         }
         private static void saveDeviceChildProperties(TECDevice device)
         {
-            if(device.Manufacturer != null) { addObject(device.Manufacturer, device); }
-            if(device.ConnectionType != null) { addObject(device.ConnectionType, device); }
+            if(device.Manufacturer != null) { addObject(new StackItem(Change.Add, device, device.Manufacturer)); }
+            if(device.ConnectionType != null) { addObject(new StackItem(Change.Add, device, device.ConnectionType)); }
         }
         private static void savePanel(TECPanel panel, object bidOrTemplates)
         {
-            addObject(panel, bidOrTemplates);
-            addObject(panel.Type, panel);
+            addObject(new StackItem(Change.Add, bidOrTemplates, panel));
+            addObject(new StackItem(Change.Add, panel, panel.Type));
             saveScopeChildProperties(panel);
 
         }
@@ -2248,40 +2284,37 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach (TECController scope in (connection as TECNetworkConnection).ChildrenControllers)
                 {
-                    addRelationship(scope, connection);
+                    addRelationship(new StackItem(Change.AddRelationship, connection, scope, typeof(TECNetworkConnection), typeof(TECController)));
                 }
             }
             else if(connection is TECSubScopeConnection)
             {
-                if ((connection as TECSubScopeConnection).SubScope != null) { addRelationship((connection as TECSubScopeConnection).SubScope, connection); }
+                if ((connection as TECSubScopeConnection).SubScope != null) { addRelationship(new StackItem(Change.AddRelationship, connection, (connection as TECSubScopeConnection).SubScope, typeof(TECSubScopeConnection), typeof(TECSubScope))); }
             }
 
-            if (connection.ParentController != null) { addRelationship(connection.ParentController, connection); }
-            if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
+            if (connection.ConduitType != null) { addObject(new StackItem(Change.AddRelationship,  connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType))); }
         }
         #endregion
 
         #region Generic Add Methods
-        private static void addObject(params Object[] objectsToAdd)
+        private static void addObject(StackItem item)
         {
             //ObjectsToAdd = [targetObject, referenceObject];
-            var relevantTables = getRelevantTablesForAddRemove(objectsToAdd);
+            var relevantTables = getRelevantTablesForAddRemove(item);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
-                { updateIndexedRelation(table, objectsToAdd); }
+                { updateIndexedRelation(table, item); }
                 else
-                { addObjectToTable(table, objectsToAdd); } 
+                { addObjectToTable(table, item); } 
             } 
         }
-        private static void addObjectToTable(TableBase table, params Object[] objectsToAdd)
+        private static void addObjectToTable(TableBase table, StackItem item)
         {
-            //ObjectsToAdd = [targetObject, referenceObject];
             var tableInfo = new TableInfo(table);
-            var relevantObjects = objectsToAdd;
             
-            Dictionary<string, string> data = assembleDataToAddRemove(table, objectsToAdd);
+            Dictionary<string, string> data = assembleDataToAddRemove(table, item);
 
             if (data.Count > 0)
             {
@@ -2291,11 +2324,11 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-        private static void updateIndexedRelation(TableBase table, params Object[] objectsToAdd)
+        private static void updateIndexedRelation(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
 
-            var childrenCollection = UtilitiesMethods.GetChildCollection(objectsToAdd[0], objectsToAdd[1]);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetObject, item.ReferenceObject);
             
             foreach(TECObject child in (IList)childrenCollection)
             {
@@ -2309,10 +2342,10 @@ namespace EstimatingUtilitiesLibrary
                     }
                     else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
-                        var dataString = objectToDBString(getQuantityInParentCollection(objectsToAdd[0], objectsToAdd[1]));
+                        var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                         data.Add(field.Name, dataString);
                     }
-                    assembleDataWithObjects(data, objectsToAdd, tableInfo, field);
+                    assembleDataWithObjects(data, item.Objects(), tableInfo, field);
                 }
                 if (data.Count > 0)
                 {
@@ -2325,46 +2358,46 @@ namespace EstimatingUtilitiesLibrary
             
         }
 
-        private static void addRelationship(params Object[] objectsToAdd)
+        private static void addRelationship(StackItem item)
         {
             //ObjectsToAdd = [targetObject, referenceObject];
-            var relevantTables = getRelevantTablesForAddRemoveRelationship(objectsToAdd);
+            var relevantTables = getRelevantTablesForAddRemoveRelationship(item);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
-                { updateIndexedRelation(table, objectsToAdd); }
+                { updateIndexedRelation(table, item); }
                 else
-                { addObjectToTable(table, objectsToAdd); }
+                { addObjectToTable(table, item); }
             }
         }
         #endregion
 
         #region Generic Remove Methods
-        private static void removeObject(params Object[] objectsToRemove)
+        private static void removeObject(StackItem item)
         {
-            var relevantTables = getRelevantTablesForAddRemove(objectsToRemove);
+            var relevantTables = getRelevantTablesForAddRemove(item);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
-                removeObjectFromTable(table, objectsToRemove);
+                removeObjectFromTable(table, item);
             }
 
         }
-        private static void removeObjectFromTable(TableBase table, params Object[] objectsToRemove)
+        private static void removeObjectFromTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
             if (fieldsIncludeQuantity(tableInfo.Fields))
             {
-                var qty = getQuantityInParentCollection(objectsToRemove[0], objectsToRemove[1]);
+                var qty = getQuantityInParentCollection(item.TargetObject, item.ReferenceObject);
                 if (qty > 1)
                 {
-                    editObjectInTable(table, objectsToRemove);
+                    editObjectInTable(table, item);
                     return;
                 }
             }
 
-            Dictionary<string, string> data = assembleDataToAddRemove(table, objectsToRemove);
+            Dictionary<string, string> data = assembleDataToAddRemove(table, item);
             if(data.ContainsKey("Quantity"))
             {
                 data.Remove("Quantity");
@@ -2377,46 +2410,46 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        private static void removeRelationship(params Object[] objectsToRemove)
+        private static void removeRelationship(StackItem item)
         {
-            var relevantTables = getRelevantTablesForAddRemoveRelationship(objectsToRemove);
+            var relevantTables = getRelevantTablesForAddRemoveRelationship(item);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
-                removeObjectFromTable(table, objectsToRemove);
+                removeObjectFromTable(table, item);
             }
 
         }
         #endregion
 
         #region Generic Edit Methods
-        private static void editObject(params Object[] objectsToEdit)
+        private static void editObject(StackItem item)
         {
-            var relevantTables = getRelevantTablesToEdit(objectsToEdit);
+            var relevantTables = getRelevantTablesToEdit(item);
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
-                editObjectInTable(table, objectsToEdit);
+                editObjectInTable(table, item);
             }
         }
-        private static void editObjectInTable(TableBase table, params Object[] objectsToEdit)
+        private static void editObjectInTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
-            var relevantObjects = objectsToEdit;
+            var relevantObjects = new Object[]
+                { item.TargetObject,
+                item.ReferenceObject}; 
             Dictionary<string, string> data = new Dictionary<string, string>();
-            if(objectsToEdit.Length == 2)
+            
+            if(item.TargetType == item.ReferenceType)
             {
-                if(objectsToEdit[0].GetType() == objectsToEdit[1].GetType())
-                {
-                    relevantObjects = new Object[]
-                    { objectsToEdit[0] };
-                }
+                relevantObjects = new Object[]
+                { item.TargetObject };
             }
             foreach (TableField field in tableInfo.Fields)
             {
                 if ((field.Property != null) && (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties)))
                 {
-                    var dataString = objectToDBString(getQuantityInParentCollection(objectsToEdit[0], objectsToEdit[1]));
+                    var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                     data.Add(field.Name, dataString);
                 }
                 assembleDataWithObjects(data, relevantObjects, tableInfo, field);
@@ -2428,10 +2461,10 @@ namespace EstimatingUtilitiesLibrary
                 { DebugHandler.LogError("Couldn't edit data in " + tableInfo.Name + " table."); }
             }
         }
-        private static List<TableBase> getRelevantTablesToEdit(params Object[] objectsToEdit)
+        private static List<TableBase> getRelevantTablesToEdit(StackItem item)
         {
             var relevantTables = new List<TableBase>();
-            var objectTypes = getObjectTypes(objectsToEdit);
+            var objectTypes = new List<Type> {item.TargetType, item.ReferenceType };
 
             foreach (TableBase table in AllTables.Tables)
             {
@@ -2485,10 +2518,14 @@ namespace EstimatingUtilitiesLibrary
             }
             return primaryKeys;
         }
-        private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, params Object[] inputObjects)
+        private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
-            var relevantObjects = inputObjects;
+            var relevantObjects = new object[]
+            {
+                item.TargetObject,
+                item.ReferenceObject
+            };
             Dictionary<string, string> data = new Dictionary<string, string>();
 
             var isHierarchial = false;
@@ -2496,13 +2533,15 @@ namespace EstimatingUtilitiesLibrary
             {
                 isHierarchial = true;
                 relevantObjects = new object[]
-                { inputObjects[1],
-                    inputObjects[0] };
+                { 
+                    item.ReferenceObject,
+                    item.TargetObject
+                };
             }
             else if (tableInfo.Types.Count == 1)
             {
                 relevantObjects = new object[]
-                { inputObjects[0] };
+                { item.TargetObject };
             }
 
             int currentField = 0;
@@ -2523,7 +2562,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
-                        var dataString = objectToDBString(getQuantityInParentCollection(inputObjects[0], inputObjects[1]));
+                        var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                         data.Add(field.Name, dataString);
                     } else if (field.Property.Name == "DBVersion" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
@@ -2551,10 +2590,10 @@ namespace EstimatingUtilitiesLibrary
             }
             return data;
         }
-        private static List<TableBase> getRelevantTablesForAddRemove(params Object[] relevantObjects)
+        private static List<TableBase> getRelevantTablesForAddRemove(StackItem item)
         {
             var relevantTables = new List<TableBase>();
-            var objectTypes = getObjectTypes(relevantObjects);
+            List<Type> objectTypes = new List<Type> { item.TargetType, item.ReferenceType };
 
             foreach (TableBase table in AllTables.Tables)
             {
@@ -2562,8 +2601,9 @@ namespace EstimatingUtilitiesLibrary
 
                 //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(item.TargetType, tableInfo.Types);
+                //bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
+                bool baseAndObjectMatch = false;
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
                 if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
@@ -2575,10 +2615,10 @@ namespace EstimatingUtilitiesLibrary
             return relevantTables;
 
         }
-        private static List<TableBase> getRelevantTablesForAddRemoveRelationship(params Object[] relevantObjects)
+        private static List<TableBase> getRelevantTablesForAddRemoveRelationship(StackItem item)
         {
             var relevantTables = new List<TableBase>();
-            var objectTypes = getObjectTypes(relevantObjects);
+            List<Type> objectTypes = new List<Type> {item.TargetType, item.ReferenceType };
 
             foreach (TableBase table in AllTables.Tables)
             {
@@ -2586,17 +2626,12 @@ namespace EstimatingUtilitiesLibrary
 
                 //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
-                bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
                 if(allTypesMatch && shouldIncludeCatalog)
                 {
                     relevantTables = new List<TableBase>();
                     relevantTables.Add(table);
                     return relevantTables;
-                }
-                else if ((baseAndObjectMatch) && (shouldIncludeCatalog))
-                {
-                    relevantTables.Add(table);
                 }
             }
 

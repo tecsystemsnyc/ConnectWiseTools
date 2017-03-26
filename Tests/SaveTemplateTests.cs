@@ -1931,15 +1931,11 @@ namespace Tests
             scopeController.Name = "Test Scope Controller";
             scopeController.Manufacturer = templates.ManufacturerCatalog[0];
             expectedScope.Controllers.Add(scopeController);
+            scopeController.AddSubScope(scopeSystem.Equipment[0].SubScope[0]);
 
             var scopePanel = new TECPanel();
             scopePanel.Name = "Test Scope Name";
             expectedScope.Panels.Add(scopePanel);
-
-            var scopeConnection = new TECSubScopeConnection();
-            scopeConnection.ParentController = scopeController;
-            scopeConnection.SubScope = scopeSystem.Equipment[0].SubScope[0];
-            expectedScope.Connections.Add(scopeConnection);
             
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
@@ -1956,9 +1952,9 @@ namespace Tests
             }
 
             TECSubScopeConnection actualSSConnection = null;
-            foreach (TECSubScopeConnection ssConnect in actualScope.Connections)
+            foreach (TECSubScopeConnection ssConnect in actualScope.Controllers[0].ChildrenConnections)
             {
-                if (ssConnect.Guid == scopeConnection.Guid)
+                if (ssConnect.Guid == scopeController.ChildrenConnections[0].Guid)
                 {
                     actualSSConnection = ssConnect;
                     break;
@@ -1970,7 +1966,7 @@ namespace Tests
             Assert.AreEqual(expectedScope.Description, actualScope.Description);
             Assert.AreEqual(expectedScope.Systems.Count, actualScope.Systems.Count);
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
-            Assert.AreEqual(expectedScope.Connections.Count, actualScope.Connections.Count);
+            Assert.AreEqual(expectedScope.Controllers[0].ChildrenConnections.Count, actualScope.Controllers[0].ChildrenConnections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
             Assert.IsTrue(actualSSConnection.SubScope == actualScope.Systems[0].Equipment[0].SubScope[0]);
         }

@@ -29,7 +29,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECTag> _tags { get; set; }
         private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLocation> _locations { get; set; }
-        private ObservableCollection<TECConnection> _connections { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
         private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
@@ -298,18 +297,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Locations", temp, this);
             }
         }
-        public ObservableCollection<TECConnection> Connections
-        {
-            get { return _connections; }
-            set
-            {
-                var temp = this.Copy();
-                Connections.CollectionChanged -= CollectionChanged;
-                _connections = value;
-                Connections.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Connections", temp, this);
-            }
-        }
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
@@ -432,7 +419,6 @@ namespace EstimatingLibrary
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
-            _connections = new ObservableCollection<TECConnection>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
             _conduitTypes = new ObservableCollection<TECConduitType>();
@@ -456,7 +442,6 @@ namespace EstimatingLibrary
             Drawings.CollectionChanged += CollectionChanged;
             Locations.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
-            Connections.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
             ConnectionTypes.CollectionChanged += CollectionChanged;
             ConduitTypes.CollectionChanged += CollectionChanged;
@@ -467,7 +452,6 @@ namespace EstimatingLibrary
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            registerControllers();
             Labor.NumPoints = getPointNumber();
         }
 
@@ -533,10 +517,6 @@ namespace EstimatingLibrary
             { Controllers.Add(new TECController(controller)); }
             foreach(TECDevice device in bidSource.DeviceCatalog)
             { DeviceCatalog.Add(new TECDevice(device)); }
-            foreach(TECNetworkConnection connection in bidSource.Connections)
-            { Connections.Add(new TECNetworkConnection(connection)); }
-            foreach(TECSubScopeConnection connection in bidSource.Connections)
-            { Connections.Add(new TECSubScopeConnection(connection)); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach(TECMiscCost cost in bidSource.MiscCosts)
@@ -572,13 +552,9 @@ namespace EstimatingLibrary
             {
                 panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
-            foreach (TECSubScopeConnection connection in controlledScope.Connections)
-            {
-                connectionCollection.Add(new TECSubScopeConnection(connection, guidDictionary));
-            }
 
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-              panelCollection, connectionCollection, this, guidDictionary);
+              panelCollection, this, guidDictionary);
 
             foreach (TECController controller in controllerCollection)
             {
@@ -587,10 +563,6 @@ namespace EstimatingLibrary
             foreach (TECPanel panel in panelCollection)
             {
                 Panels.Add(panel);
-            }
-            foreach (TECSubScopeConnection connection in connectionCollection)
-            {
-                Connections.Add(connection);
             }
             foreach (TECSystem system in systemCollection)
             {
@@ -624,10 +596,6 @@ namespace EstimatingLibrary
                             sys.PropertyChanged += System_PropertyChanged;
                             checkForTotalsInSystem(sys);
                         }
-                        else if (item is TECController)
-                        {
-                            (item as TECController).ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
-                        }
                     }
                 }
             }
@@ -659,10 +627,6 @@ namespace EstimatingLibrary
                             sys.PropertyChanged -= System_PropertyChanged;
                             removeProposalScope(sys);
                         }
-                        else if (item is TECController)
-                        {
-                            (item as TECController).ChildrenConnections.CollectionChanged -= ChildrenConnections_CollectionChanged;
-                        }
                     }
                 }
             }
@@ -692,31 +656,27 @@ namespace EstimatingLibrary
         {
             //NotifyPropertyChanged("ChildChanged", this, sender);
             if (sender is TECLabor)
-            { updateFromLabor(); }
+            {
+                updateFromLabor();
+                List<string> userAdjustmentPropertyNames = new List<string>()
+                {
+                    "PMExtraHours",
+                    "SoftExtraHours",
+                    "GraphExtraHours",
+                    "ENGExtraHours",
+                    "CommExtraHours"
+                };
+                if (userAdjustmentPropertyNames.Contains(e.PropertyName))
+                {
+                    NotifyPropertyChanged("Edit", (object)this, (object)Labor);
+                }
+            }
             else if (sender is TECBidParameters)
             { updateFromParameters(); }
             else if (sender is TECCost)
             { updateElectricalMaterial(); }
         }
-
-        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(TECConnection item in e.NewItems)
-                {
-                    Connections.Add(item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECConnection item in e.OldItems)
-                {
-                    Connections.Remove(item);
-                }
-            }
-        }
-
+        
         #endregion
         
         private int getPointNumber()
@@ -777,17 +737,6 @@ namespace EstimatingLibrary
             { bid.Controllers.Add(controller.Copy() as TECController); }
             foreach (TECDevice device in this.DeviceCatalog)
             { bid.DeviceCatalog.Add(device.Copy() as TECDevice); }
-            foreach(TECConnection connection in this.Connections)
-            {
-                if(connection is TECSubScopeConnection)
-                {
-                    bid.Connections.Add((TECSubScopeConnection)connection.Copy() as TECSubScopeConnection);
-                }
-                else if (connection is TECNetworkConnection)
-                {
-                    bid.Connections.Add((TECNetworkConnection)connection.Copy() as TECNetworkConnection);
-                }
-            }
             foreach (TECProposalScope propScope in this.ProposalScope)
             { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
             foreach (TECMiscCost cost in this.MiscCosts)
@@ -862,13 +811,6 @@ namespace EstimatingLibrary
             foreach(TECSystem system in Systems)
             {
                 system.PropertyChanged += System_PropertyChanged;
-            }
-        }
-        private void registerControllers()
-        {
-            foreach (TECController controller in Controllers)
-            {
-                controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged; ;
             }
         }
         

@@ -165,7 +165,7 @@ namespace Tests
         {
             //Arrange
             TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            TECConnection actualConnection = actualBid.Connections[0];
+            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
 
             //Assert
             string expectedName = "Test SubScope";
@@ -393,7 +393,7 @@ namespace Tests
         {
             //Arrange
             TECController actualController = actualBid.Controllers[0];
-            TECConnection actualConnection = actualBid.Connections[0];
+            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
 
             string expectedName = "Test Controller";
             string expectedDescription = "Test Controller Description";
@@ -437,7 +437,7 @@ namespace Tests
         public void Load_Bid_SubScopeConnection()
         {
             //Arrange
-            TECSubScopeConnection actualConnection = actualBid.Connections[0] as TECSubScopeConnection;
+            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
 
             TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
             TECController expectedController = null;
@@ -686,12 +686,15 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Linked_ConduitTypes()
         {
-            foreach (TECConnection connection in actualBid.Connections)
+            foreach (TECController controller in actualBid.Controllers)
             {
-                if (!actualBid.ConduitTypes.Contains(connection.ConduitType))
-                { Assert.Fail("Conduit types in connection not linked"); }
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (!actualBid.ConduitTypes.Contains(connection.ConduitType))
+                    { Assert.Fail("Conduit types in connection not linked"); }
+                }
             }
-               
+            
             Assert.IsTrue(true, "All conduit types Linked");
         }
 
