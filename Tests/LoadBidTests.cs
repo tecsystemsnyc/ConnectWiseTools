@@ -434,49 +434,36 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_Connection()
+        public void Load_Bid_SubScopeConnection()
         {
-            Assert.Fail();
-            ////Arrange
-            //TECConnection actualConnection = actualBid.Connections[0];
+            //Arrange
+            TECSubScopeConnection actualConnection = actualBid.Connections[0] as TECSubScopeConnection;
 
-            //TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            //TECController expectedController = null;
-            //foreach (TECController controller in actualBid.Controllers)
-            //{
-            //    if (controller.Name == "Test Connected Controller")
-            //    {
-            //        expectedController = controller;
-            //        break;
-            //    }
-            //}
+            TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
+            TECController expectedController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Name == "Test Controller")
+                {
+                    expectedController = controller;
+                    break;
+                }
+            }
+             
 
+            double expectedLength = 493.45;
+            
+            bool hasSubScope = false;
+            if (actualConnection.SubScope == expectedSubScope)
+            {
+                hasSubScope = true;
+            }
+            
 
-            //double expectedLength = 493.45;
-
-            //bool hasThreeC18 = false;
-            //foreach (TECConnectionType type in actualConnection.ConnectionTypes)
-            //{
-            //    if (type.Name == "ThreeC18")
-            //    {
-            //        hasThreeC18 = true;
-            //    }
-            //}
-
-            //bool hasSubScope = false;
-            //foreach (TECScope scope in actualConnection.Scope)
-            //{
-            //    if (scope == expectedSubScope)
-            //    {
-            //        hasSubScope = true;
-            //    }
-            //}
-
-            ////Assert
-            //Assert.AreEqual(expectedLength, actualConnection.Length);
-            //Assert.AreEqual(expectedController, actualConnection.Controller);
-            //Assert.IsTrue(hasThreeC18, "Connection type failed to load.");
-            //Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
+            //Assert
+            Assert.AreEqual(expectedLength, actualConnection.Length);
+            Assert.AreEqual(expectedController, actualConnection.ParentController);
+            Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
         }
 
         [TestMethod]

@@ -72,7 +72,7 @@ namespace EstimatingLibrary
 
             _length = connectionSource.Length;
             //if(connectionSource.)
-            if(_parentController != null)
+            if(connectionSource._parentController != null)
             { _parentController = new TECController(connectionSource.ParentController, guidDictionary); }
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }

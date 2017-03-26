@@ -64,7 +64,7 @@ namespace EstimatingLibrary
             {
                 linkScopeChildren(panel, bid);
             }
-            linkAllConnections(connections, controllers, systems, guidDictionary);
+            linkAllConnections(connections, controllers, systems, guidDictionary, false);
         }
 
         #region Link Methods
@@ -183,18 +183,27 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAllConnections(object connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
+        static private void linkAllConnections(object connections, ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems,
+            Dictionary<Guid, Guid> guidDictionary = null, bool removeControllerAddConnection = true)
         {
             if (connections is ObservableCollection<TECSubScopeConnection> || connections is ObservableCollection<TECNetworkConnection> || connections is ObservableCollection<TECConnection>)
             {
+                var connectionList = new ObservableCollection<TECConnection>();
                 foreach (TECConnection connection in (IList)connections)
+                {
+                    connectionList.Add(connection);
+                }
+                foreach (TECConnection connection in connectionList)
                 {
                     //All Connections
                     foreach (TECController controller in controllers)
                     {
                         bool isCopy = guidDictionary != null && guidDictionary[connection.ParentController.Guid] == guidDictionary[controller.Guid];
                         if (controller.Guid == connection.ParentController.Guid || isCopy)
-                        { connection.ParentController = controller; }
+                        {
+                            connection.ParentController = controller;
+                            controller.ChildrenConnections.Add(connection);
+                        }
                     }
 
                     #region If Connection is NetworkConnection
@@ -240,15 +249,15 @@ namespace EstimatingLibrary
                                     if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                                     {
                                         ssConnect.SubScope = subScope;
+                                        subScope.Connection = ssConnect;
                                     }
                                 }
                             }
                         }
-                        
                     }
                     #endregion
 
-                    else
+                    else 
                     {
                         throw new NotImplementedException();
                     }

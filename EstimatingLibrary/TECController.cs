@@ -51,8 +51,9 @@ namespace EstimatingLibrary
             get { return _childrenConnections; }
             set
             {
+                var temp = this.Copy();
                 _childrenConnections = value;
-                RaisePropertyChanged("ChildrenConnections");
+                NotifyPropertyChanged("ChildrenConnections", temp, this);
             }
         }
         public ObservableCollection<TECIO> IO
@@ -141,7 +142,7 @@ namespace EstimatingLibrary
             _cost = controllerSource.Cost;
         }
         
-        #endregion
+        #endregion 
 
         #region Event Handlers
         private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -206,7 +207,6 @@ namespace EstimatingLibrary
                 return netConnect;
             }
         }
-
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connection = new TECSubScopeConnection();
@@ -216,7 +216,6 @@ namespace EstimatingLibrary
             subScope.Connection = connection;
             return connection;
         }
-
         public void RemoveController(TECController controller)
         {
             bool exists = false;
@@ -234,7 +233,6 @@ namespace EstimatingLibrary
                 throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
             }
         }
-
         public void RemoveSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connectionToRemove = null;
@@ -272,6 +270,10 @@ namespace EstimatingLibrary
             {
                 outController.IO.Add(io);
             }
+            //foreach(TECConnection connection in ChildrenConnections)
+            //{
+            //    outController.ChildrenConnections.Add(connection.Copy() as TECConnection);
+            //}
             
             return outController;
         }

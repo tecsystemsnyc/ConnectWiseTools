@@ -105,6 +105,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     if(item != null) { NotifyPropertyChanged("Add", this, item); }
+                    if (item is TECController)
+                    {
+                        (item as TECController).ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -112,9 +116,31 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     if (item != null) { NotifyPropertyChanged("Remove", this, item); }
+                    if (item is TECController)
+                    {
+                        (item as TECController).ChildrenConnections.CollectionChanged -= ChildrenConnections_CollectionChanged;
+                    }
                 }
             }
         }
+        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECSubScopeConnection item in e.NewItems)
+                {
+                    Connections.Add(item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECSubScopeConnection item in e.OldItems)
+                {
+                    Connections.Remove(item);
+                }
+            }
+        }
+
 
         public override object Copy()
         {
@@ -129,5 +155,14 @@ namespace EstimatingLibrary
             return outScope;
 
         }
+
+        private void registerControllers()
+        {
+            foreach (TECController controller in Controllers)
+            {
+                controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged; ;
+            }
+        }
+
     }
 }

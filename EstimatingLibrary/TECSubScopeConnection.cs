@@ -62,7 +62,7 @@ namespace EstimatingLibrary
         public TECSubScopeConnection() : base (Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
-            if(_subScope != null)
+            if(connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
             
         }
@@ -73,6 +73,10 @@ namespace EstimatingLibrary
         {
             TECSubScopeConnection connection = new TECSubScopeConnection(this);
             connection._guid = this._guid;
+            if (_parentController != null)
+            { connection._parentController = _parentController.Copy() as TECController; }
+            if (_subScope != null)
+            { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
         }
         #endregion

@@ -196,35 +196,7 @@ namespace EstimatingLibrary
             }
             return cost;
         }
-
-        private void EquipmentChanged(string name)
-        {
-            if(name == "Quantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("BudgetUnitPrice");
-                RaisePropertyChanged("EquipmentQuantity");
-            } else if (name == "SubScopeQuantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-            } else if (name == "BudgetUnitPrice")
-            {
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("BudgetUnitPrice");
-            } else if (name == "TotalPoints")
-            {
-                RaisePropertyChanged("TotalPoints");
-            } else if (name == "TotalDevices")
-            {
-                RaisePropertyChanged("TotalDevices");
-            }
-            else if (name == "SubLength")
-            {
-                RaisePropertyChanged("SubLength");
-            }
-        }
-
+        
         private void Equipment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("EquipmentQuantity");
@@ -256,8 +228,43 @@ namespace EstimatingLibrary
         {
             foreach (TECEquipment scope in this.Equipment)
             {
-                scope.PropertyChanged += (equipSender, args) => this.EquipmentChanged(args.PropertyName);
+                scope.PropertyChanged += Scope_PropertyChanged;
             }
+        }
+
+        private void Scope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var name = e.PropertyName;
+
+            if (name == "Quantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("BudgetUnitPrice");
+                RaisePropertyChanged("EquipmentQuantity");
+            }
+            else if (name == "SubScopeQuantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+            }
+            else if (name == "BudgetUnitPrice")
+            {
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("BudgetUnitPrice");
+            }
+            else if (name == "TotalPoints")
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            else if (name == "TotalDevices")
+            {
+                RaisePropertyChanged("TotalDevices");
+            }
+            else if (name == "SubLength")
+            {
+                RaisePropertyChanged("SubLength");
+            }
+          
         }
 
         private void checkForTotalsInEquipment(TECEquipment equipment)

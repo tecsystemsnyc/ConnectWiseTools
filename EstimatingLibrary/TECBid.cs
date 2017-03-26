@@ -588,7 +588,7 @@ namespace EstimatingLibrary
             {
                 Panels.Add(panel);
             }
-            foreach (TECConnection connection in connectionCollection)
+            foreach (TECSubScopeConnection connection in connectionCollection)
             {
                 Connections.Add(connection);
             }
@@ -610,7 +610,7 @@ namespace EstimatingLibrary
                         NotifyPropertyChanged("MetaAdd", this, item);
                     }
                     else
-                    {
+                    { 
                         NotifyPropertyChanged("Add", this, item);
                         if (item is TECCost)
                         { 
@@ -718,8 +718,7 @@ namespace EstimatingLibrary
         }
 
         #endregion
-
-
+        
         private int getPointNumber()
         {
             int totalPoints = 0;
@@ -778,8 +777,17 @@ namespace EstimatingLibrary
             { bid.Controllers.Add(controller.Copy() as TECController); }
             foreach (TECDevice device in this.DeviceCatalog)
             { bid.DeviceCatalog.Add(device.Copy() as TECDevice); }
-            foreach (TECConnection connection in this.Connections)
-            { bid.Connections.Add(connection.Copy() as TECConnection); }
+            foreach(TECConnection connection in this.Connections)
+            {
+                if(connection is TECSubScopeConnection)
+                {
+                    bid.Connections.Add((TECSubScopeConnection)connection.Copy() as TECSubScopeConnection);
+                }
+                else if (connection is TECNetworkConnection)
+                {
+                    bid.Connections.Add((TECNetworkConnection)connection.Copy() as TECNetworkConnection);
+                }
+            }
             foreach (TECProposalScope propScope in this.ProposalScope)
             { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
             foreach (TECMiscCost cost in this.MiscCosts)
@@ -856,7 +864,6 @@ namespace EstimatingLibrary
                 system.PropertyChanged += System_PropertyChanged;
             }
         }
-
         private void registerControllers()
         {
             foreach (TECController controller in Controllers)
@@ -864,8 +871,7 @@ namespace EstimatingLibrary
                 controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged; ;
             }
         }
-
-
+        
         private void updatePoints()
         {
             Labor.NumPoints = getPointNumber();
@@ -914,7 +920,6 @@ namespace EstimatingLibrary
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("ElectricalMaterialCost");
         }
-
         private void updateTotal()
         {
             RaisePropertyChanged("TotalPrice");
@@ -940,7 +945,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
+        
         #endregion
 
     }

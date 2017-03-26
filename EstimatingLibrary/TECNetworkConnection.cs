@@ -65,7 +65,7 @@ namespace EstimatingLibrary
 
             if (connectionSource.ConnectionType != null)
             {
-                _connectionType = new TECConnectionType(connectionSource.ConnectionType);
+                _connectionType = connectionSource.ConnectionType;
             }
 
             _ioType = connectionSource.IOType;
@@ -75,7 +75,11 @@ namespace EstimatingLibrary
         #region Methods
         public override object Copy()
         {
-            throw new NotImplementedException();
+            TECNetworkConnection connection = new TECNetworkConnection(this);
+            connection._guid = this._guid;
+            if (_parentController != null)
+            { connection.ParentController = _parentController.Copy() as TECController; }
+            return connection;
         }
         #endregion Methods
 

@@ -607,7 +607,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleScopeChildren(newItem as TECScope, item.Change);
             }
-            else if (newItem is TECConnection)
+            else if (newItem is TECConnection || newItem is TECSubScopeConnection || newItem is TECNetworkConnection )
             {
                 handleConnectionChildren(newItem as TECConnection, item.Change);
             }
@@ -758,18 +758,18 @@ namespace EstimatingUtilitiesLibrary
             #endregion
 
             #region If Connection is SubScopeConnection
-            else if (connection is TECSubScopeConnection)
-            {
-                TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-                if (change == Change.Add)
-                {
-                    SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
-                }
-                else if (change == Change.Remove)
-                {
-                    SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
-                }
-            }
+            //else if (connection is TECSubScopeConnection)
+            //{
+            //    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+            //    if (change == Change.Add)
+            //    {
+            //        SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
+            //    }
+            //    else if (change == Change.Remove)
+            //    {
+            //        SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
+            //    }
+            //}
             #endregion
             
             else
@@ -848,12 +848,12 @@ namespace EstimatingUtilitiesLibrary
                 StackItem item;
                 if (change == Change.Add)
                 {
-                    item = new StackItem(Change.AddRelationship, (object)controller, (object)controller);
+                    item = new StackItem(Change.AddRelationship, (object)controller, (object)panel);
                     SaveStack.Add(item);
                 }
                 else if (change == Change.Remove)
                 {
-                    item = new StackItem(Change.RemoveRelationship, (object)controller, (object)controller);
+                    item = new StackItem(Change.RemoveRelationship, (object)controller, (object)panel);
                     SaveStack.Add(item);
                 }
             }

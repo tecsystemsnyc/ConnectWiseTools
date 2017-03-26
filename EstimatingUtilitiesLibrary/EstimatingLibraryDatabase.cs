@@ -2251,8 +2251,12 @@ namespace EstimatingUtilitiesLibrary
                     addRelationship(scope, connection);
                 }
             }
-            
-            if(connection.ParentController != null) { addRelationship(connection.ParentController, connection); }
+            else if(connection is TECSubScopeConnection)
+            {
+                if ((connection as TECSubScopeConnection).SubScope != null) { addRelationship((connection as TECSubScopeConnection).SubScope, connection); }
+            }
+
+            if (connection.ParentController != null) { addRelationship(connection.ParentController, connection); }
             if (connection.ConduitType != null) { addObject(connection.ConduitType, connection); }
         }
         #endregion

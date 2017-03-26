@@ -553,33 +553,19 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_Connection()
+        public void SaveAs_Bid_SubScopeConnection()
         {
-            throw new NotImplementedException();
-            ////Arrange
-            //TECConnection actualConnection = actualBid.Connections[0];
-            //TECConnection expectedConnection = expectedBid.Connections[0];
+            //Arrange
+            TECSubScopeConnection actualConnection = actualBid.Connections[0] as TECSubScopeConnection;
+            TECSubScopeConnection expectedConnection = expectedBid.Connections[0] as TECSubScopeConnection;
 
-            ////Assert
-            //Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
-            //Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
-            //Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
-            //Assert.AreEqual(expectedConnection.Controller.Guid, actualConnection.Controller.Guid);
-            //Assert.AreEqual(expectedConnection.Scope.Count, actualConnection.Scope.Count);
+            //Assert
+            Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
+            Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
+            Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
+            Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
+            Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
             
-            //foreach (TECScope expectedScope in expectedConnection.Scope)
-            //{
-            //    bool hasScope = false;
-            //    foreach (TECScope actualScope in actualConnection.Scope)
-            //    {
-            //        if (expectedScope.Guid == actualScope.Guid)
-            //        {
-            //            hasScope = true;
-            //            break;
-            //        }
-            //    }
-            //    Assert.IsTrue(hasScope);
-            //}
         }
 
         [TestMethod]
