@@ -77,8 +77,7 @@ namespace EstimatingLibrary
         {
             TECNetworkConnection connection = new TECNetworkConnection(this);
             connection._guid = this._guid;
-            if (_parentController != null)
-            { connection.ParentController = _parentController.Copy() as TECController; }
+            
             return connection;
         }
         #endregion Methods

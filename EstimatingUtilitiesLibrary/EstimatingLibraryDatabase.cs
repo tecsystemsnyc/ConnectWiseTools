@@ -2134,7 +2134,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECPanel panel in conScope.Panels)
             {
-                savePanel(panel, templates);
+                savePanel(panel, conScope);
             }
             foreach(TECController controller in conScope.Controllers)
             {
@@ -2261,8 +2261,6 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 addObject(new StackItem(Change.Add, controller, connection, typeof(TECController), typeof(TECConnection)));
-                addObject(new StackItem(Change.Add, controller, connection));
-
                 saveConnectionChildren(connection);
             }
         }
@@ -2271,10 +2269,14 @@ namespace EstimatingUtilitiesLibrary
             if(device.Manufacturer != null) { addObject(new StackItem(Change.Add, device, device.Manufacturer)); }
             if(device.ConnectionType != null) { addObject(new StackItem(Change.Add, device, device.ConnectionType)); }
         }
-        private static void savePanel(TECPanel panel, object bidOrTemplates)
+        private static void savePanel(TECPanel panel, object parent)
         {
-            addObject(new StackItem(Change.Add, bidOrTemplates, panel));
+            addObject(new StackItem(Change.Add, parent, panel));
             addObject(new StackItem(Change.Add, panel, panel.Type));
+            foreach(TECController controller in panel.Controllers)
+            {
+                addRelationship(new StackItem(Change.AddRelationship, panel, controller));
+            }
             saveScopeChildProperties(panel);
 
         }
@@ -2575,7 +2577,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return data;
-        }
+        } 
         private static Dictionary<string, string> assembleDataWithObjects(Dictionary<string, string> data, Object[] relevantObjects, TableInfo tableInfo, TableField field)
         {
             foreach (Object item in relevantObjects)
@@ -2594,19 +2596,20 @@ namespace EstimatingUtilitiesLibrary
         {
             var relevantTables = new List<TableBase>();
             List<Type> objectTypes = new List<Type> { item.TargetType, item.ReferenceType };
-
+            List<Type> objectTypesWithTarget = new List<Type> { item.TargetType, item.ReferenceType, item.TargetObject.GetType() };
             foreach (TableBase table in AllTables.Tables)
             {
                 var tableInfo = new TableInfo(table);
 
                 //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = hasOnlyType(item.TargetType, tableInfo.Types);
+                bool allTypesAndTargetObjectTypeMatch = sharesAllTypes(objectTypesWithTarget, tableInfo.Types);
+                bool tableHasOnlyType = hasOnlyType(item.TargetObject.GetType(), tableInfo.Types);
                 //bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
                 bool baseAndObjectMatch = false;
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
-                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch) && (shouldIncludeCatalog))
+                if ((allTypesMatch || tableHasOnlyType || baseAndObjectMatch || allTypesAndTargetObjectTypeMatch) && (shouldIncludeCatalog))
                 {
                     relevantTables.Add(table);
                 }

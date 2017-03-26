@@ -538,7 +538,6 @@ namespace EstimatingLibrary
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var systemCollection = new ObservableCollection<TECSystem>();
             var controllerCollection = new ObservableCollection<TECController>();
-            var connectionCollection = new ObservableCollection<TECConnection>();
             var panelCollection = new ObservableCollection<TECPanel>();
             foreach (TECSystem system in controlledScope.Systems)
             {
@@ -626,6 +625,7 @@ namespace EstimatingLibrary
                             var sys = item as TECSystem;
                             sys.PropertyChanged -= System_PropertyChanged;
                             removeProposalScope(sys);
+                            handleSystemSubScopeRemoval(item as TECSystem);
                         }
                     }
                 }
@@ -649,6 +649,18 @@ namespace EstimatingLibrary
             else if (e.PropertyName == "SubLength")
             {
                 updateElectricalMaterial();
+            }
+            else if(e.PropertyName == "RemovedSubScope")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                if(args.NewValue is TECEquipment)
+                {
+                    handleEquipmentSubScopeRemoval(args.NewValue as TECEquipment);
+                } else
+                {
+                    handleSubScopeRemovalInConnections(args.NewValue as TECSubScope);
+
+                }
             }
         }
 
@@ -884,6 +896,39 @@ namespace EstimatingLibrary
                     {
                         updateDevices();
                     }
+                }
+            }
+        }
+
+        private void handleSystemSubScopeRemoval(TECSystem system)
+        {
+            foreach(TECEquipment equipment in system.Equipment)
+            {
+                handleEquipmentSubScopeRemoval(equipment);
+            }
+        }
+        private void handleEquipmentSubScopeRemoval(TECEquipment equipment)
+        {
+            foreach (TECSubScope subScope in equipment.SubScope)
+            {
+                handleSubScopeRemovalInConnections(subScope);
+            }
+        }
+        private void handleSubScopeRemovalInConnections(TECSubScope subScope)
+        {
+            foreach (TECController controller in Controllers)
+            {
+                ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
+                foreach (TECSubScopeConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.SubScope == subScope)
+                    {
+                        subScopeToRemove.Add(subScope as TECSubScope);
+                    }
+                }
+                foreach (TECSubScope sub in subScopeToRemove)
+                {
+                    controller.RemoveSubScope(sub);
                 }
             }
         }

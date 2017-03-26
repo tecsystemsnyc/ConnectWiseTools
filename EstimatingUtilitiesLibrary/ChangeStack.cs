@@ -560,6 +560,7 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
+                else if (e.PropertyName == "RemovedSubScope") { }
                 else
                 {
                     message = "Edit change: " + oldValue;
@@ -709,7 +710,6 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
-            SaveStack.Add(new StackItem(change, connection, connection));
 
             //Conduit Type
             if (connection.ConduitType != null)
@@ -762,20 +762,20 @@ namespace EstimatingUtilitiesLibrary
             #endregion
 
             #region If Connection is SubScopeConnection
-            //else if (connection is TECSubScopeConnection)
-            //{
-            //    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-            //    if (change == Change.Add)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
-            //    }
-            //    else if (change == Change.Remove)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
-            //    }
-            //}
+            else if (connection is TECSubScopeConnection)
+            {
+                TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                if (change == Change.Add)
+                {
+                    SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
+                }
+                else if (change == Change.Remove)
+                {
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
+                }
+            }
             #endregion
-            
+
             else
             {
                 throw new NotImplementedException();
@@ -796,18 +796,24 @@ namespace EstimatingUtilitiesLibrary
             StackItem item;
             item = new StackItem(change, (object)controller, (object)controller.Manufacturer);
             SaveStack.Add(item);
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                item = new StackItem(change, controller, connection, typeof(TECController), typeof(TECConnection));
+                SaveStack.Add(item);
+                handleConnectionChildren(connection, change);
+            }
         }
         private void handleScopeChildren(TECScope scope, Change change)
         {
             StackItem item;
             foreach(TECAssociatedCost cost in scope.AssociatedCosts)
             {
-                item = new StackItem(change, (object)scope, (object)cost);
+                item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECAssociatedCost));
                 SaveStack.Add(item);
             }
             foreach(TECTag tag in scope.Tags)
             {
-                item = new StackItem(change, (object)scope, (object)tag);
+                item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECTag));
                 SaveStack.Add(item);
             }
         }

@@ -140,6 +140,24 @@ namespace EstimatingLibrary
             {
                 _io.Add(new TECIO(io));
             }
+            foreach(TECConnection connection in controllerSource.ChildrenConnections)
+            {
+                if (connection is TECSubScopeConnection)
+                {
+                    TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, guidDictionary);
+                    connectionToAdd.ParentController = this;
+                    _childrenConnections.Add(connectionToAdd);
+
+                }
+                else if (connection is TECNetworkConnection)
+                {
+
+                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, guidDictionary);
+                    connectionToAdd.ParentController = this;
+                    _childrenConnections.Add(connectionToAdd);
+
+                }
+            }
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
@@ -219,9 +237,9 @@ namespace EstimatingLibrary
             else
             {
                 TECNetworkConnection netConnect = new TECNetworkConnection();
-                ChildrenConnections.Add(netConnect);
                 netConnect.ParentController = this;
                 netConnect.ChildrenControllers.Add(controller);
+                ChildrenConnections.Add(netConnect);
                 controller.ParentConnection = netConnect;
                 return netConnect;
             }
@@ -229,9 +247,9 @@ namespace EstimatingLibrary
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connection = new TECSubScopeConnection();
-            ChildrenConnections.Add(connection);
             connection.ParentController = this;
             connection.SubScope = subScope;
+            ChildrenConnections.Add(connection);
             subScope.Connection = connection;
             return connection;
         }
@@ -280,7 +298,6 @@ namespace EstimatingLibrary
         public override Object Copy()
         {
             TECController outController = new TECController(this.Guid);
-            outController._guid = this.Guid;
             outController.copyPropertiesFromScope(this);
             outController._cost = Cost;
             outController._manufacturer = Manufacturer;
@@ -289,11 +306,13 @@ namespace EstimatingLibrary
             {
                 outController.IO.Add(io);
             }
-            //foreach(TECConnection connection in ChildrenConnections)
-            //{
-            //    outController.ChildrenConnections.Add(connection.Copy() as TECConnection);
-            //}
-            
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                var outConnection = connection.Copy() as TECConnection;
+                outConnection.ParentController = outController;
+                outController.ChildrenConnections.Add(outConnection);
+            }
+
             return outController;
         }
         public override Object DragDropCopy()
@@ -366,6 +385,7 @@ namespace EstimatingLibrary
             }
             return outList;
         }
+        
         #endregion
     }
 }

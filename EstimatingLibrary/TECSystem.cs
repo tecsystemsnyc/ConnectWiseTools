@@ -148,9 +148,7 @@ namespace EstimatingLibrary
         public TECSystem(TECSystem sourceSystem, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
-            {
-                guidDictionary[_guid] = sourceSystem.Guid;
-            }
+            { guidDictionary[_guid] = sourceSystem.Guid; }
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             {
                 Equipment.Add(new TECEquipment(equipment, guidDictionary));
@@ -214,6 +212,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged("RemovedSubScope", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -263,6 +262,10 @@ namespace EstimatingLibrary
             else if (name == "SubLength")
             {
                 RaisePropertyChanged("SubLength");
+            } else if (name == "RemovedSubScope")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                NotifyPropertyChanged("SubScopeRemoved", this, args.NewValue);
             }
           
         }

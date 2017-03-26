@@ -584,21 +584,27 @@ namespace Tests
             templates.PanelTemplates.Add(panel);
 
             //Connections
-            TECSubScopeConnection controlledConnection = new TECSubScopeConnection();
-            controlledConnection.ConduitType = testConduitType;
-            controlledConnection.Length = 42;
-            controlledConnection.ParentController = controlledController;
+            //TECSubScopeConnection controlledConnection = new TECSubScopeConnection();
+            //controlledConnection.ConduitType = testConduitType;
+            //controlledConnection.Length = 42;
+            //controlledConnection.ParentController = controlledController;
 
-            controlledController.ChildrenConnections.Add(controlledConnection);
+            //controlledController.ChildrenConnections.Add(controlledConnection);
 
             //Controlled Scope
             TECControlledScope testConScope = new TECControlledScope();
             testConScope.Name = "Test Controlled Scope";
             testConScope.Description = "Test Description";
-            testConScope.Systems.Add(controlledSystem.DragDropCopy() as TECSystem);
-            testConScope.Panels.Add(controlledPanel.DragDropCopy() as TECPanel);
-            testConScope.Controllers.Add(controlledController.DragDropCopy() as TECController);
-            testConScope.Controllers[0].AddSubScope(subScope);
+            var controlledScopeSystem = controlledSystem.DragDropCopy() as TECSystem;
+            testConScope.Systems.Add(controlledScopeSystem);
+            var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
+            testConScope.Panels.Add(controlledScopePanel);
+            var controlledScopeController = controlledController.DragDropCopy() as TECController;
+            controlledScopePanel.Controllers.Add(controlledScopeController);
+            testConScope.Controllers.Add(controlledScopeController);
+            var connection = controlledScopeController.AddSubScope(subScope.DragDropCopy() as TECSubScope);
+            connection.Length = 42;
+            controlledScopeController.ChildrenConnections[0].ConduitType = testConduitType;
 
             templates.ControlledScopeTemplates.Add(testConScope);
 

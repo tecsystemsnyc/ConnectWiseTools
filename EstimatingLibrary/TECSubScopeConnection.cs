@@ -19,9 +19,9 @@ namespace EstimatingLibrary
             set
             {
                 var oldNew = Tuple.Create<Object, Object>(_subScope, value);
+                var temp = Copy();
                 _subScope = value;
                 RaisePropertyChanged("SubScope");
-                var temp = Copy();
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
@@ -73,8 +73,6 @@ namespace EstimatingLibrary
         {
             TECSubScopeConnection connection = new TECSubScopeConnection(this);
             connection._guid = this._guid;
-            if (_parentController != null)
-            { connection._parentController = _parentController.Copy() as TECController; }
             if (_subScope != null)
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;

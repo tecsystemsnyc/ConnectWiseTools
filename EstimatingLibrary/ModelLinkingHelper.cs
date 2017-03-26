@@ -63,7 +63,7 @@ namespace EstimatingLibrary
             {
                 linkScopeChildren(panel, bid);
             }
-            linkAllConnections(controllers, systems);
+            linkAllConnections(controllers, systems, guidDictionary);
         }
         #endregion
 
@@ -183,7 +183,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems)
+        static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach(TECSystem system in systems)
             {
@@ -195,7 +195,8 @@ namespace EstimatingLibrary
                         {
                             foreach(TECSubScopeConnection connection in controller.ChildrenConnections)
                             {
-                                if(connection.SubScope.Guid == subScope.Guid)
+                                bool isCopy = (guidDictionary != null && guidDictionary[connection.SubScope.Guid] == guidDictionary[subScope.Guid]);
+                                if (connection.SubScope.Guid == subScope.Guid || isCopy)
                                 {
                                     connection.SubScope = subScope;
                                     subScope.Connection = connection;
