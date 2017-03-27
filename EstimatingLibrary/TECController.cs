@@ -38,6 +38,7 @@ namespace EstimatingLibrary
                 _parentConnection = value;
                 NotifyPropertyChanged("ParentConnection", temp, this);
                 RaisePropertyChanged("ParentController");
+                RaisePropertyChanged("NetworkIO");
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
@@ -114,6 +115,7 @@ namespace EstimatingLibrary
         {
             get
             { return getNetworkIO(); }
+            private set { }
         }
 
         public TECController ParentController

@@ -258,10 +258,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
-                    <DataGrid>
-                        <DataGrid.Columns>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    
                 </Grid>
             </TabItem>
         </TabControl>
