@@ -86,8 +86,7 @@
                                         DisplayMemberPath="Name"
                                         Width="Auto"/>
                             <DataGridComboBoxColumn Header="IO"
-                                        ItemsSource="{Binding NetworkIO}" SelectedItemBinding="{Binding ParentConnection.IOType}"
-                                        DisplayMemberPath="Name"
+                                        ItemsSource="{Binding Path=NetworkIO}" SelectedItemBinding="{Binding ParentConnection.IOType}"
                                         Width="Auto"/>
                         <DataGridComboBoxColumn Header="Wire"
                                         ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentConnection.ConnectionType}"

@@ -105,13 +105,15 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public List<IOType> AvailableIO
+        public ObservableCollection<IOType> AvailableIO
         {
             get { return getAvailableIO(); }
         }
-        public List<IOType> NetworkIO
+        
+        public ObservableCollection<IOType> NetworkIO
         {
-            get { return getNetworkIO(); }
+            get
+            { return getNetworkIO(); }
         }
 
         public TECController ParentController
@@ -353,9 +355,9 @@ namespace EstimatingLibrary
             
             return outController;
         }
-        private List<IOType> getAvailableIO()
+        private ObservableCollection<IOType> getAvailableIO()
         {
-            var availableIO = new List<IOType>();
+            var availableIO = new ObservableCollection<IOType>();
             foreach (TECIO type in this.IO)
             {
                 for(var x = 0; x < type.Quantity; x++)
@@ -373,9 +375,9 @@ namespace EstimatingLibrary
             }
             return availableIO;
         }
-        private List<IOType> getNetworkIO()
+        private ObservableCollection<IOType> getNetworkIO()
         {
-            var outIO = new List<IOType>();
+            var outIO = new ObservableCollection<IOType>();
             foreach (TECIO io in this.IO)
             {
                 var type = io.Type;

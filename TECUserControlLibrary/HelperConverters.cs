@@ -475,4 +475,47 @@ namespace TECUserControlLibrary.HelperConverters
 
         #endregion
     }
+
+    public class IOTypeConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ObservableCollection<IOType>)
+            {
+                ObservableCollection<IOType> ioTypes = value as ObservableCollection<IOType>;
+                ObservableCollection<string> stringTypes = new ObservableCollection<string>();
+
+                foreach (IOType type in ioTypes)
+                {
+                    stringTypes.Add(TECIO.convertTypeToString(type));
+                }
+
+                return stringTypes;
+            }
+            else if (value is IOType)
+            {
+                return (TECIO.convertTypeToString((IOType)value));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string)
+            {
+                return (TECIO.convertStringToType((string)value));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+    }
 }

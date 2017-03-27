@@ -95,8 +95,6 @@ namespace TECUserControlLibrary.ViewModels
             update();
 
             AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x));
-
-            NetworkControllers.CollectionChanged += NetworkControllers_CollectionChanged;
         }
 
         #region Methods
@@ -111,6 +109,8 @@ namespace TECUserControlLibrary.ViewModels
             Bid.Controllers.CollectionChanged += Controllers_CollectionChanged;
             ServerControllers.CollectionChanged += ServerControllers_CollectionChanged;
             BMSControllers.CollectionChanged += BMSControllers_CollectionChanged;
+
+            NetworkControllers.CollectionChanged += NetworkControllers_CollectionChanged;
 
             //Sort all controllers
             foreach (TECController controller in Bid.Controllers)
@@ -267,7 +267,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (item is TECController)
                     {
-                        NetworkControllers.Add(item as TECController);
                         (item as TECController).PropertyChanged += NetworkController_PropertyChanged;
                     }
                 }
@@ -278,7 +277,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (item is TECController)
                     {
-                        NetworkControllers.Remove(item as TECController);
                         (item as TECController).PropertyChanged -= NetworkController_PropertyChanged;
                     }
                 }
