@@ -802,6 +802,11 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
                 handleConnectionChildren(connection, change);
             }
+            foreach (TECIO io in controller.IO)
+            {
+                item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
+                SaveStack.Add(item);
+            }
         }
         private void handleScopeChildren(TECScope scope, Change change)
         {

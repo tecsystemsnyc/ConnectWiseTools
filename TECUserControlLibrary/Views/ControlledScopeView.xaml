@@ -65,13 +65,20 @@
                                             Header="Containing Panel"/>
                     <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto"/>
                 </DataGrid.Columns>
-
             </DataGrid>
         </Grid>
         <Label Content="Connections" Grid.Column="1" Grid.Row="2"/>
         <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                              Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="2"/>
+        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" Background="{DynamicResource SectionBackgroundBrush}"
+                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
+                x:Name="placeholderCanvas">
+            <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
+          Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
+            <Label Content="Select a Controlled Scope to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Canvas>
 
     </Grid>
 </UserControl>

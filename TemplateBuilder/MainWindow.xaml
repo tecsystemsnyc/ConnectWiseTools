@@ -90,7 +90,7 @@
                     <grids:DevicesGridControl DevicesSource="{Binding Templates.DeviceCatalog}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
-                <TabItem Header="Controllers">
+                <TabItem Header="Controllers and Panels">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -111,7 +111,6 @@
                                           Grid.Row="1" Grid.Column="1"
                                           Margin="5"/>
                     </Grid>
-                    
                 </TabItem>
                 <TabItem Header="Materials">
                     <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>

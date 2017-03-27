@@ -247,4 +247,5 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         #endregion
     }
+
 }
