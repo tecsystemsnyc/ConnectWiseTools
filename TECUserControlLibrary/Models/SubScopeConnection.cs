@@ -31,28 +31,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("Controller");
             }
         }
-
-        private TECSubScopeConnection _connection;
-        public TECSubScopeConnection Connection
-        {
-            get { return _connection; }
-            set
-            {
-                if(_connection != null)
-                {
-                    var temp = _connection.Copy();
-                    _connection = value;
-                    NotifyPropertyChanged("Connection", temp as object, value as object);
-                }
-                else
-                {
-                    _connection = value;
-                    NotifyPropertyChanged("Connection", null, value as object);
-                }
-                
-            }
-        }
-
+        
         private TECSystem _parentSystem;
         public TECSystem ParentSystem
         {
@@ -75,31 +54,27 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public SubScopeConnection(TECSubScopeConnection connection, TECController controller, TECSubScope subscope)
+        public SubScopeConnection(TECSubScope subscope)
         {
-            _connection = connection;
-            _controller = controller;
             _subScope = subscope;
+            _controller = null;
+            if(subscope.Connection != null)
+            {
+                _controller = SubScope.Connection.ParentController;
+            }
         }
 
         private void handleControllerSelection(TECController controller)
         {
             if (controller != null)
             {
-                var connection = new TECSubScopeConnection();
-                connection.ParentController = controller;
-                connection.SubScope = SubScope;
-                Connection = connection;
-                Controller.ChildrenConnections.Add(Connection);
-                SubScope.Connection = Connection;
+                Controller.AddSubScope(SubScope);
             }
             else
             {
-                if(Connection != null)
+                if(SubScope.Connection != null)
                 {
-                    Controller.ChildrenConnections.Remove(Connection);
-                    Connection = null;
-                    SubScope.Connection = null;
+                    Controller.RemoveSubScope(SubScope);
                 }
             }
         }

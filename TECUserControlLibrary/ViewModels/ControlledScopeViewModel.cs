@@ -263,48 +263,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        var subConnectionToAdd = new SubScopeConnection(subScope.Connection, subScope.Connection.ParentController, subScope);
+                        
+                        var subConnectionToAdd = new SubScopeConnection(subScope);
 
                         subConnectionToAdd.ParentSystem = system;
                         subConnectionToAdd.ParentEquipment = equipment;
 
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
-                        
-                        subConnectionToAdd.PropertyChanged += SubConnectionToAdd_PropertyChanged;
                     }
                 }
-            }
-        }
-
-        private void SubConnectionToAdd_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            handlePropertyChanged(e);
-        }
-        private void handlePropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                //PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                //if (e.PropertyName == "Connection")
-                //{
-                //    if (args.OldValue != null)
-                //    {
-                //        var connectionToRemove = new TECSubScopeConnection();
-                //        foreach(TECSubScopeConnection connection in SelectedControlledScope.Connections)
-                //        {
-                //            if((args.OldValue as TECConnection).Guid == connection.Guid)
-                //            {
-                //                connectionToRemove = connection;
-                //                break;
-                //            }
-                //        }
-                //        SelectedControlledScope.Connections.Remove(connectionToRemove);
-                //    }
-                //    if (args.NewValue != null)
-                //    {
-                //        SelectedControlledScope.Connections.Add(args.NewValue as TECSubScopeConnection);
-                //    }
-                //}
             }
         }
         
@@ -320,13 +287,9 @@ namespace TECUserControlLibrary.ViewModels
             updateCollections();
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
-                {
-                    if(item is SubScopeConnection)
-                    {
-                        (item as SubScopeConnection).PropertyChanged += SubConnectionToAdd_PropertyChanged;
-                    }
-                }
+                //foreach(object item in e.NewItems)
+                //{
+                //}
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {

@@ -1215,7 +1215,7 @@ namespace EstimatingUtilitiesLibrary
             if (tables.Contains(NetworkConnectionTable.TableName))
             {
                 command = "select * from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ConnectionID.Name + " in ";
-                command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
+                command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where "; 
                 command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
                 command += "')";
 

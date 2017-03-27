@@ -52,7 +52,9 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                ChildrenConnections.CollectionChanged -= collectionChanged;
                 _childrenConnections = value;
+                ChildrenConnections.CollectionChanged += collectionChanged;
                 NotifyPropertyChanged("ChildrenConnections", temp, this);
             }
         }
