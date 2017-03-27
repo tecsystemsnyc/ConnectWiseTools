@@ -122,38 +122,7 @@ namespace EstimateBuilder.ViewModel
             }
             updateCollections();
         }
-        private void SubConnectionToAdd_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            handlePropertyChanged(e);
-        }
-        private void handlePropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                if (e.PropertyName == "Connection")
-                {
-                    //if (args.OldValue != null)
-                    //{
-                    //    var connectionToRemove = new TECSubScopeConnection();
-                    //    foreach (TECSubScopeConnection connection in Bid.Connections)
-                    //    {
-                    //        if ((args.OldValue as TECConnection).Guid == connection.Guid)
-                    //        {
-                    //            connectionToRemove = connection;
-                    //            break;
-                    //        }
-                    //    }
-                    //    Bid.Connections.Remove(connectionToRemove);
-                    //}
-                    //if (args.NewValue != null)
-                    //{
-                    //    Bid.Connections.Add(args.NewValue as TECConnection);
-                    //}
-                }
-            }
-        }
-
+        
         private void updateCollections()
         {
             updateSubScopeConnections();
@@ -180,15 +149,13 @@ namespace EstimateBuilder.ViewModel
                 {
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        
-                        var subConnectionToAdd = new SubScopeConnection(subScope.Connection, subScope.Connection.ParentController, subScope);
+                        var subConnectionToAdd = new SubScopeConnection(subScope);
 
                         subConnectionToAdd.ParentSystem = system;
                         subConnectionToAdd.ParentEquipment = equipment;
 
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
 
-                        subConnectionToAdd.PropertyChanged += SubConnectionToAdd_PropertyChanged;
                     }
                 }
             }

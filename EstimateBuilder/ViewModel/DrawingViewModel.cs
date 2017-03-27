@@ -220,28 +220,28 @@ namespace EstimateBuilder.ViewModel
 
         #endregion Drawing Scale Properties
 
-        //public DrawingViewModel()
-        //{
-        //    isConnecting = false;
-        //    PercentageZoom = 1;
+        public DrawingViewModel()
+        {
+            isConnecting = false;
+            PercentageZoom = 1;
 
-        //    PreviousPageCommand = new RelayCommand(PreviousPageExecute);
-        //    NextPageCommand = new RelayCommand(NextPageExecute);
-        //    ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
-        //    AddControllerCommand = new RelayCommand(AddControllerExecute);
+            PreviousPageCommand = new RelayCommand(PreviousPageExecute);
+            NextPageCommand = new RelayCommand(NextPageExecute);
+            //ConnectCommand = new RelayCommand<Tuple<TECObject, TECVisualScope, string>>(vs => ConnectExecute(vs), vs => CanConnectExecute(vs));
+            AddControllerCommand = new RelayCommand(AddControllerExecute);
 
-        //    pageIndexes = new Dictionary<TECDrawing, int>();
+            pageIndexes = new Dictionary<TECDrawing, int>();
 
-        //    DisplaySystems = new ObservableCollection<TECSystem>();
-        //    DisplayEquipment = new ObservableCollection<TECEquipment>();
-        //    DisplaySubScope = new ObservableCollection<TECSubScope>();
-        //    DisplayConnections = new ObservableCollection<TECVisualConnection>();
+            DisplaySystems = new ObservableCollection<TECSystem>();
+            DisplayEquipment = new ObservableCollection<TECEquipment>();
+            DisplaySubScope = new ObservableCollection<TECSubScope>();
+            DisplayConnections = new ObservableCollection<TECVisualConnection>();
 
-        //    Bid = new TECBid();
+            Bid = new TECBid();
 
-            
-        //}
-        
+
+        }
+
         #region Methods
 
         #region Commands
