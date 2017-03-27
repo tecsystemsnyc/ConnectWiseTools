@@ -37,6 +37,7 @@ namespace EstimatingLibrary
                 var temp = Copy();
                 _parentConnection = value;
                 NotifyPropertyChanged("ParentConnection", temp, this);
+                RaisePropertyChanged("ParentController");
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
@@ -111,6 +112,35 @@ namespace EstimatingLibrary
         public List<IOType> NetworkIO
         {
             get { return getNetworkIO(); }
+        }
+
+        public TECController ParentController
+        {
+            get
+            {
+                if (ParentConnection == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return ParentConnection.ParentController;
+                }
+            }
+            set
+            {
+                if (ParentConnection != null)
+                {
+                    ParentController.RemoveController(this);
+                }
+
+                if (value != null)
+                {
+                    value.AddController(this);
+                }
+
+                RaisePropertyChanged("ParentController");
+            }
         }
 
         #endregion
@@ -216,27 +246,34 @@ namespace EstimatingLibrary
 
         public TECNetworkConnection AddController(TECController controller, TECConnection connection = null)
         {
-            if (connection != null)
+            if (controller != this)
             {
-                foreach (TECNetworkConnection conn in ChildrenConnections)
+                if (connection != null)
                 {
-                    if (connection == conn)
+                    foreach (TECNetworkConnection conn in ChildrenConnections)
                     {
-                        conn.ChildrenControllers.Add(controller);
-                        controller.ParentConnection = conn;
-                        return conn;
+                        if (connection == conn)
+                        {
+                            conn.ChildrenControllers.Add(controller);
+                            controller.ParentConnection = conn;
+                            return conn;
+                        }
                     }
+                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
                 }
-                throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+                else
+                {
+                    TECNetworkConnection netConnect = new TECNetworkConnection();
+                    netConnect.ParentController = this;
+                    netConnect.ChildrenControllers.Add(controller);
+                    ChildrenConnections.Add(netConnect);
+                    controller.ParentConnection = netConnect;
+                    return netConnect;
+                }
             }
             else
             {
-                TECNetworkConnection netConnect = new TECNetworkConnection();
-                netConnect.ParentController = this;
-                netConnect.ChildrenControllers.Add(controller);
-                ChildrenConnections.Add(netConnect);
-                controller.ParentConnection = netConnect;
-                return netConnect;
+                return null;
             }
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)

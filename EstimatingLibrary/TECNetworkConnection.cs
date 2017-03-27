@@ -10,6 +10,7 @@ namespace EstimatingLibrary
     public class TECNetworkConnection : TECConnection
     {
         #region Properties
+        //---Stored---
         private ObservableCollection<TECController> _childrenControllers;
         private TECConnectionType _connectionType;
         private IOType _ioType;
@@ -22,6 +23,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _childrenControllers = value;
                 NotifyPropertyChanged("ChildrenControllers", temp, this);
+                RaisePropertyChanged("PossibleIO");
             }
         }
         public TECConnectionType ConnectionType
@@ -44,6 +46,41 @@ namespace EstimatingLibrary
                 _ioType = value;
                 NotifyPropertyChanged("IOType", temp, this);
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+            }
+        }
+
+        //---Derived---
+        public ObservableCollection<IOType> PossibleIO
+        {
+            get
+            {
+                ObservableCollection<IOType> IO = new ObservableCollection<IOType>();
+                if (ParentController != null)
+                {
+                    //Start off with all IO in the parent controller
+                    foreach(IOType io in ParentController.NetworkIO)
+                    {
+                        IO.Add(io);
+                    }
+
+                    //If any IO aren't in children controllers, remove them.
+                    foreach(TECController child in ChildrenControllers)
+                    {
+                        List<IOType> ioToRemove = new List<IOType>();
+                        foreach(IOType io in IO)
+                        {
+                            if (!child.NetworkIO.Contains(io))
+                            {
+                                ioToRemove.Add(io);
+                            }
+                        }
+                        foreach(IOType io in ioToRemove)
+                        {
+                            IO.Remove(io);
+                        }
+                    }
+                }
+                return IO;
             }
         }
         #endregion
@@ -90,6 +127,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("AddRelationship", this, item);
+                    RaisePropertyChanged("PossibleIO");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -97,6 +135,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("RemoveRelationship", this, item);
+                    RaisePropertyChanged("PossibleIO");
                 }
             }
         }

@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
@@ -83,6 +84,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
 
         public ICommand AddConnectionCommand { get; private set; }
+        public ICommand ParentControllerChangedCommand { get; private set; }
 
         #endregion
 
@@ -93,6 +95,8 @@ namespace TECUserControlLibrary.ViewModels
             update();
 
             AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x));
+
+            NetworkControllers.CollectionChanged += NetworkControllers_CollectionChanged;
         }
 
         #region Methods
@@ -252,6 +256,41 @@ namespace TECUserControlLibrary.ViewModels
                         NetworkControllers.Remove(item as TECController);
                     }
                 }
+            }
+        }
+
+        private void NetworkControllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    if (item is TECController)
+                    {
+                        NetworkControllers.Add(item as TECController);
+                        (item as TECController).PropertyChanged += NetworkController_PropertyChanged;
+                    }
+                }
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECController)
+                    {
+                        NetworkControllers.Remove(item as TECController);
+                        (item as TECController).PropertyChanged -= NetworkController_PropertyChanged;
+                    }
+                }
+            }
+        }
+
+        private void NetworkController_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                TECController controller = (sender as TECController);
+                controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
             }
         }
 
