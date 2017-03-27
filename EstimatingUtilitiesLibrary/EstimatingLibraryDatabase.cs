@@ -1818,7 +1818,7 @@ namespace EstimatingUtilitiesLibrary
             var io = new TECIO(guid);
             io.Type = TECIO.convertStringToType(row[IOTable.IOType.Name].ToString());
             io.Quantity = row[IOTable.Quantity.Name].ToString().ToInt();
-            io.IOModule = getModuleInIO(quid);
+            io.IOModule = getModuleInIO(guid);
             return io;
         }
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
