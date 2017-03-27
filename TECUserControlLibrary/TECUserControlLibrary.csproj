@@ -170,6 +170,7 @@
     <Compile Include="MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
