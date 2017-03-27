@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!--<Label Content="Wiring"/>-->
-        <Label Content=""/>
+        <Label Content="Wiring"/>
         <Label Grid.Column="1"
                Content="Misc. Wiring"/>
         <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
