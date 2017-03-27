@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:cLib="clr-namespace:TECUserControlLibrary"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -14,9 +17,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+    <Grid DataContext="{Binding ViewModel, ElementName=parent}"
            Background="{DynamicResource TextBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -26,7 +30,7 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <!--Server Grid-->
         <Grid Grid.RowSpan="2" Margin="5">
             <Grid.RowDefinitions>
@@ -39,9 +43,9 @@
                     HorizontalAlignment="Center"/>
 
 
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=ServerControllers}"
+            <DataGrid Grid.Row="1" ItemsSource="{Binding ServerControllers}"
                     AutoGenerateColumns="False"
-                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                      dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
                       IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
@@ -66,7 +70,43 @@
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
 
-            <!--<grids:NetworkGridControl Grid.Row="1" ViewModel="{Binding}" ControllerConnectionsSource="{Binding Path=BMSControllers}"/>-->
+            <Grid Grid.Row="1">
+                <DataGrid ItemsSource="{Binding BMSControllers}"
+                          AutoGenerateColumns="False"
+                          dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
+                          CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                        <DataGridTextColumn Header="Controller"
+                                    Binding="{Binding Name}"
+                                    IsReadOnly="True"
+                                    Width="Auto"/>
+                        <DataGridComboBoxColumn Header="Networked To" 
+                                        ItemsSource="{Binding Data.NetworkControllers, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentController, Converter={cnvt:SelectedItemToControllerConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto"/>
+                            <DataGridComboBoxColumn Header="IO"
+                                        ItemsSource="{Binding NetworkIO}" SelectedItemBinding="{Binding ParentConnection.IOType}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto"/>
+                        <DataGridComboBoxColumn Header="Wire"
+                                        ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentConnection.ConnectionType}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto"/>
+                        <DataGridTextColumn Header="Length"
+                                    Binding="{Binding ParentConnection.Length, Mode=TwoWay}"
+                                    Width="Auto"/>
+                        <DataGridComboBoxColumn Header="Conduit"
+                                        ItemsSource="{Binding Data.Bid.ConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentConnection.ConduitType}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto"/>
+                        <DataGridCheckBoxColumn Header="Connected"
+                                        Binding="{Binding Converter={cnvt:ControllerIsConnnectedConverter}, Mode=OneWay}"
+                                        IsReadOnly="True"
+                                        Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
 
         </Grid>
         <Border Grid.Column="1"
@@ -84,10 +124,10 @@
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
             <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding Path=StandaloneControllers}"
+                      ItemsSource="{Binding StandaloneControllers}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
-                      dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
+                      dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"
@@ -99,12 +139,12 @@
                                         Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>
-            
+
         </Grid>
         <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                 BorderBrush="Black"
                 BorderThickness="1 1 1 1"/>
 
-        
+
     </Grid>
 </UserControl>

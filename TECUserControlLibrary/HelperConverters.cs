@@ -410,7 +410,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<IOType> val = (ObservableCollection<IOType>)value;
+            List<IOType> val = (List<IOType>)value;
             if (val.Count > 0)
             {
                 return val[0];
@@ -423,7 +423,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<IOType> io = new ObservableCollection<IOType>();
+            List<IOType> io = new List<IOType>();
             io.Add((IOType)value);
             return io;
         }
@@ -431,4 +431,48 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class ControllerIsConnnectedConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (isConnected(value as TECController));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
+        {
+            if (searchedControllers == null)
+            {
+                searchedControllers = new List<TECController>();
+            }
+
+            if (controller.IsServer)
+            {
+                return true;
+            }
+            else if (controller.ParentConnection == null || searchedControllers.Contains(controller))
+            {
+                return false;
+            }
+            else
+            {
+                searchedControllers.Add(controller);
+                TECController parentController = controller.ParentConnection.ParentController;
+                if (parentController == null)
+                {
+                    throw new NullReferenceException("Parent controller to passed controller is null, but parent connection isn't.");
+                }
+                bool parentIsConnected = isConnected(parentController, searchedControllers);
+                return parentIsConnected;
+            }
+        }
+
+        #endregion
+    }
 }
