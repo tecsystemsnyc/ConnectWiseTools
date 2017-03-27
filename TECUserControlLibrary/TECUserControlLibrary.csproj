@@ -140,6 +140,9 @@
     <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\IOModuleGridControl.xaml.cs">
+      <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\PanelsGrid.xaml.cs">
       <DependentUpon>PanelsGrid.xaml</DependentUpon>
     </Compile>
@@ -275,6 +278,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ControllerGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\IOModuleGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

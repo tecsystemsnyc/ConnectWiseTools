@@ -241,11 +241,11 @@
                         <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding PanelTypeName}"/>
+                      Text="{Binding IOModuleName}"/>
                         <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding PanelTypeCost}"/>
+                      Text="{Binding IOModuleName}"/>
 
                     </Grid>
                     <Grid Grid.Row="2">
@@ -256,11 +256,12 @@
 
                         <Button Grid.Column="0" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
-                    Command="{Binding AddPanelTypeCommand}"/>
+                    Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
-                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
-                                    Grid.Row="3" 
-                                    Margin="5"/>
+                    <DataGrid>
+                        <DataGrid.Columns>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

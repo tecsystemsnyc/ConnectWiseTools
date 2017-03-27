@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ElectricalViewModel : ViewModelBase
+    public class ElectricalViewModel : ViewModelBase, IDropTarget
     {
         private TECBid _bid;
         public TECBid Bid
@@ -161,7 +162,14 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        public void DragOver(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-
+        public void Drop(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
