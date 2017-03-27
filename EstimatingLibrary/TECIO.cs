@@ -23,6 +23,12 @@ namespace EstimatingLibrary
     public class TECIO : TECObject
     {
         #region Properties
+        private Guid _guid;
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+
         private IOType _type;
         public IOType Type
         {
@@ -47,12 +53,27 @@ namespace EstimatingLibrary
             }
         }
 
+        private TECIOModule _ioModule;
+        public TECIOModule IOModule
+        {
+            get { return _ioModule; }
+            set
+            {
+                var temp = this.Copy();
+                _ioModule = value;
+                NotifyPropertyChanged("IOModule", temp, this);
+            }
+        }
+
         #endregion
         
-        public TECIO()
+        public TECIO(Guid guid)
         {
+            _guid = guid;
             _quantity = 1;
         }
+
+        public TECIO() : this(Guid.NewGuid()) { }
 
         public TECIO(TECIO ioSource) : this()
         {
