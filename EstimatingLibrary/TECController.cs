@@ -34,16 +34,9 @@ namespace EstimatingLibrary
             get { return _parentConnection; }
             set
             {
-                if (value == null)
-                {
-                    _parentConnection.ChildrenControllers.Remove(this);
-                    if (_parentConnection.ChildrenControllers.Count < 1)
-                    {
-                        _parentConnection.ParentController.ChildrenConnections.Remove(_parentConnection);
-                    }
-                }
+                var temp = Copy();
                 _parentConnection = value;
-                RaisePropertyChanged("ParentConnection");
+                NotifyPropertyChanged("ParentConnection", temp, this);
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
