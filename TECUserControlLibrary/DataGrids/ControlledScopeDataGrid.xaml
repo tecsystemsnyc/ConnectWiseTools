@@ -37,10 +37,6 @@
                                     IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Connections.Count}" Header="Connections" Width="Auto"
-                                    IsReadOnly="True"
-                                    Visibility="{Binding Data.DebugVisibility,
-                                    Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

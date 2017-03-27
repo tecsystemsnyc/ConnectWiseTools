@@ -189,4 +189,5 @@ namespace EstimatingUtilitiesLibrary
     public enum GridIndex { Systems, Scope, Notes, Exclusions};
     public enum AddIndex { System, Equipment, SubScope, Devices, Tags};
     public enum LocationScopeType { System, Equipment, SubScope};
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules};
 }
