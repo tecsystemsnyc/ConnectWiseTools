@@ -20,7 +20,9 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
+                Controller.PropertyChanged -= Controller_PropertyChanged;
                 _controller = value;
+                Controller.PropertyChanged += Controller_PropertyChanged;
                 RaisePropertyChanged("Controller");
             }
         }
@@ -108,8 +110,9 @@ namespace TECUserControlLibrary.Models
         {
             Controller = controller;
             PossibleParents = networkControllers;
-        }
 
+            Controller.PropertyChanged += Controller_PropertyChanged;
+        }
         #region Methods
 
         private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
@@ -147,5 +150,14 @@ namespace TECUserControlLibrary.Models
 
         #endregion
 
+        #region Event Handlers
+        private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                RaisePropertyChanged("ParentController");
+            }
+        }
+        #endregion
     }
 }
