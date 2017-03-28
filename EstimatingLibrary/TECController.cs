@@ -51,6 +51,7 @@ namespace EstimatingLibrary
                 _childrenConnections = value;
                 ChildrenConnections.CollectionChanged += collectionChanged;
                 NotifyPropertyChanged("ChildrenConnections", temp, this);
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
         public ObservableCollection<TECIO> IO
@@ -255,6 +256,10 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
                 }
+            }
+            if (sender == ChildrenConnections)
+            {
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
         #endregion
