@@ -65,7 +65,290 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
 
+        #region Event Handlers
+        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
+
+        private void handlePropertyChanged(PropertyChangedEventArgs e)
+        {
+            string message = "Propertychanged: " + e.PropertyName;
+            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+            if (!isDoing) { RedoStack.Clear(); }
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                StackItem item;
+                object oldValue = args.OldValue;
+                object newValue = args.NewValue;
+                if (e.PropertyName == "Add")
+                {
+                    message = "Add change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Add, args);
+                    item.TargetObject.PropertyChanged += Object_PropertyChanged;
+                    handleChildren(item);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "Remove")
+                {
+                    message = "Remove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Remove, args);
+                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
+                    handleChildren(item);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "Edit")
+                {
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Edit, args);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "ChildChanged")
+                {
+                    message = "Child change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Edit, args);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "ObjectPropertyChanged")
+                {
+                    message = "Object changed: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    var oldNew = newValue as Tuple<Object, Object>;
+                    var toSave = new List<StackItem>();
+                    if (oldNew.Item1 != null)
+                    {
+                        toSave.Add(new StackItem(Change.Remove, oldValue, oldNew.Item1, args.OldType, args.NewType));
+                    }
+                    if (oldNew.Item2 != null)
+                    {
+                        toSave.Add(new StackItem(Change.Add, oldValue, oldNew.Item2, args.OldType, args.NewType));
+                    }
+                    foreach (var save in toSave)
+                    {
+                        SaveStack.Add(save);
+                    }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "RelationshipPropertyChanged")
+                {
+                    message = "Object changed: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    var oldNew = newValue as Tuple<Object, Object>;
+                    var toSave = new List<StackItem>();
+                    if (oldNew.Item1 != null)
+                    {
+                        toSave.Add(new StackItem(Change.RemoveRelationship, oldValue, oldNew.Item1, args.OldType, args.NewType));
+                    }
+                    if (oldNew.Item2 != null)
+                    {
+                        toSave.Add(new StackItem(Change.AddRelationship, oldValue, oldNew.Item2, args.OldType, args.NewType));
+                    }
+                    foreach (var save in toSave)
+                    {
+                        SaveStack.Add(save);
+                    }
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "MetaAdd")
+                {
+                    message = "MetaAdd change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Add, args);
+                    ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "MetaRemove")
+                {
+                    message = "MetaRemove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Remove, args);
+                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "AddRelationship")
+                {
+                    message = "Add relationship change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.AddRelationship, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "RemoveRelationShip")
+                {
+                    message = "Remove relationship change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.RemoveRelationship, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "RemovedSubScope") { }
+                else
+                {
+                    message = "Edit change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Edit, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+
+            }
+            else
+            {
+                message = "Property not compatible: " + e.PropertyName;
+                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            }
+        }
+        #endregion //Event Handlers
+
         #region Methods
+
+        public void Undo()
+        {
+            isDoing = true;
+            StackItem item = UndoStack.Last();
+            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
+            if (item.Change == Change.Add || item.Change == Change.AddRelationship)
+            {
+                handleAdd(item);
+                UndoStack.Remove(item);
+                UndoStack.Remove(UndoStack.Last());
+                RedoStack.Add(item);
+            }
+            else if (item.Change == Change.Remove || item.Change == Change.RemoveRelationship)
+            {
+                handleRemove(item);
+                UndoStack.Remove(item);
+                UndoStack.Remove(UndoStack.Last());
+                RedoStack.Add(item);
+            }
+            else if (item.Change == Change.Edit)
+            {
+                int index = UndoStack.IndexOf(item);
+                RedoStack.Add(new StackItem(Change.Edit, copy(item.TargetObject), item.TargetObject));
+                handleEdit(item);
+                for (int x = (UndoStack.Count - 1); x >= index; x--)
+                {
+                    UndoStack.RemoveAt(x);
+                }
+            }
+
+            string message = "After Undoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
+            isDoing = false;
+        }
+        public void Redo()
+        {
+            isDoing = true;
+            StackItem item = RedoStack.Last();
+
+            string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
+            if (item.Change == Change.Add)
+            {
+                handleRemove(item);
+                RedoStack.Remove(item);
+            }
+            else if (item.Change == Change.Remove)
+            {
+                handleAdd(item);
+                RedoStack.Remove(item);
+            }
+            else if (item.Change == Change.Edit)
+            {
+                int index = 0;
+                if (UndoStack.Count > 0)
+                {
+                    index = UndoStack.IndexOf(UndoStack.Last());
+                }
+
+                handleEdit(item);
+                RedoStack.Remove(item);
+                for (int x = (UndoStack.Count - 2); x > index; x--)
+                {
+                    UndoStack.RemoveAt(x);
+                }
+            }
+
+            message = "After Redoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
+            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+
+            isDoing = false;
+        }
+        public void ClearStacks()
+        {
+            UndoStack.Clear();
+            RedoStack.Clear();
+            SaveStack.Clear();
+        }
+        public ChangeStack Copy()
+        {
+            var outStack = new ChangeStack();
+            foreach (var item in UndoStack)
+            {
+                outStack.UndoStack.Add(item);
+            }
+            foreach (var item in RedoStack)
+            {
+                outStack.RedoStack.Add(item);
+            }
+            foreach (var item in SaveStack)
+            {
+                outStack.SaveStack.Add(item);
+            }
+            return outStack;
+        }
+
         private void registerBidChanges(TECBid Bid)
         {
             //Bid Changed
@@ -252,103 +535,6 @@ namespace EstimatingUtilitiesLibrary
                 io.PropertyChanged += Object_PropertyChanged;
             }
         }
-
-        public void Undo()
-        {
-            isDoing = true;
-            StackItem item = UndoStack.Last();
-            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
-            if (item.Change == Change.Add || item.Change == Change.AddRelationship)
-            {
-                handleAdd(item);
-                UndoStack.Remove(item);
-                UndoStack.Remove(UndoStack.Last());
-                RedoStack.Add(item);
-            } else if(item.Change == Change.Remove || item.Change == Change.RemoveRelationship)
-            {
-                handleRemove(item);
-                UndoStack.Remove(item);
-                UndoStack.Remove(UndoStack.Last());
-                RedoStack.Add(item);
-            }
-            else if (item.Change == Change.Edit)
-            {
-                int index = UndoStack.IndexOf(item);
-                RedoStack.Add(new StackItem(Change.Edit, copy(item.TargetObject), item.TargetObject));
-                handleEdit(item);
-                for (int x = (UndoStack.Count - 1); x >= index; x--)
-                {
-                    UndoStack.RemoveAt(x);
-                }
-            }
-
-            string message = "After Undoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-
-            isDoing = false;
-        }
-        public void Redo()
-        {
-            isDoing = true;
-            StackItem item = RedoStack.Last();
-
-            string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-            
-            if (item.Change == Change.Add)
-            {
-                handleRemove(item);
-                RedoStack.Remove(item);
-            }
-            else if (item.Change == Change.Remove)
-            {
-                handleAdd(item);
-                RedoStack.Remove(item);
-            }
-            else if (item.Change == Change.Edit)
-            {
-                int index = 0;
-                if (UndoStack.Count > 0)
-                {
-                    index = UndoStack.IndexOf(UndoStack.Last());
-                } 
-                
-                handleEdit(item);
-                RedoStack.Remove(item);
-                for (int x = (UndoStack.Count - 2); x > index; x--)
-                {
-                    UndoStack.RemoveAt(x);
-                }
-            }
-
-            message = "After Redoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-
-            isDoing = false;
-        }
-        public void ClearStacks()
-        {
-            UndoStack.Clear();
-            RedoStack.Clear();
-            SaveStack.Clear();
-        }
-        public ChangeStack Copy()
-        {
-            var outStack = new ChangeStack();
-            foreach (var item in UndoStack)
-            {
-                outStack.UndoStack.Add(item);
-            }
-            foreach (var item in RedoStack)
-            {
-                outStack.RedoStack.Add(item);
-            }
-            foreach (var item in SaveStack)
-            {
-                outStack.SaveStack.Add(item);
-            }
-            return outStack;
-        }
         
         private void handleAdd(StackItem item)
         {
@@ -414,186 +600,6 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             return outObj;
-        }
-
-        private void handlePropertyChanged(PropertyChangedEventArgs e)
-        {
-            string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-            if (!isDoing){ RedoStack.Clear(); }
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                StackItem item;
-                object oldValue = args.OldValue;
-                object newValue = args.NewValue;
-                if (e.PropertyName == "Add")
-                {
-                    message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.Add, args);
-                    item.TargetObject.PropertyChanged += Object_PropertyChanged;
-                    handleChildren(item);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "Remove")
-                {
-                    message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.Remove, args);
-                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
-                    handleChildren(item);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "Edit")
-                {
-                    message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-                    
-                    item = new StackItem(Change.Edit, args);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "ChildChanged")
-                {
-                    message = "Child change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-                    
-                    item = new StackItem(Change.Edit, args);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "ObjectPropertyChanged")
-                {
-                    message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-                    
-                    var oldNew = newValue as Tuple<Object, Object>;
-                    var toSave = new List<StackItem>();
-                    if (oldNew.Item1 != null)
-                    {
-                        toSave.Add(new StackItem(Change.Remove, oldValue, oldNew.Item1, args.OldType, args.NewType));
-                    }
-                    if (oldNew.Item2 != null)
-                    {
-                        toSave.Add(new StackItem(Change.Add, oldValue, oldNew.Item2, args.OldType, args.NewType));
-                    }
-                    foreach(var save in toSave)
-                    {
-                        SaveStack.Add(save);
-                    }
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "RelationshipPropertyChanged")
-                {
-                    message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    var oldNew = newValue as Tuple<Object, Object>;
-                    var toSave = new List<StackItem>();
-                    if (oldNew.Item1 != null)
-                    {
-                        toSave.Add(new StackItem(Change.RemoveRelationship, oldValue, oldNew.Item1, args.OldType, args.NewType));
-                    }
-                    if (oldNew.Item2 != null)
-                    {
-                        toSave.Add(new StackItem(Change.AddRelationship, oldValue, oldNew.Item2, args.OldType, args.NewType));
-                    }
-                    foreach (var save in toSave)
-                    {
-                        SaveStack.Add(save);
-                    }
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if(e.PropertyName == "MetaAdd")
-                {
-                    message = "MetaAdd change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.Add, args);
-                    ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "MetaRemove")
-                {
-                    message = "MetaRemove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-                    
-                    item = new StackItem(Change.Remove, args);
-                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if(e.PropertyName == "AddRelationship")
-                {
-                    message = "Add relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.AddRelationship, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if(e.PropertyName == "RemoveRelationShip")
-                {
-                    message = "Remove relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.RemoveRelationship, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                else if (e.PropertyName == "RemovedSubScope") { }
-                else
-                {
-                    message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-
-                    item = new StackItem(Change.Edit, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-                }
-                
-            }
-            else
-            {
-                message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
-                message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
-            }
         }
         
         private void handleChildren(StackItem item)
@@ -821,7 +827,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
                 SaveStack.Add(item);
-                item = new StackItem(change, io, io.IOModule);
+                if(io.IOModule != null)
+                {
+                    item = new StackItem(change, io, io.IOModule);
+                }
                 SaveStack.Add(item);
             }
         }
@@ -893,8 +902,7 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-
-
+        
         private void registerGeneric(TECObject obj)
         {
             obj.PropertyChanged += Object_PropertyChanged;
@@ -906,10 +914,6 @@ namespace EstimatingUtilitiesLibrary
 
         }
         #endregion
-
-        #region Event Handlers
-        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
         
-        #endregion //Event Handlers
     }
 }

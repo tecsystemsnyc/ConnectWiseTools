@@ -983,7 +983,6 @@ namespace EstimatingUtilitiesLibrary
             return ioModules;
         }
 
-
         static private TECController getControllerInConnection(Guid connectionID)
         {
             var tables = getAllTableNames();
@@ -2322,7 +2321,11 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECIO IO in controller.IO)
             {
                 addObject(new StackItem(Change.Add, controller, IO));
-                addObject(new StackItem(Change.Add, IO, IO.IOModule));
+                if(IO.IOModule != null)
+                {
+                    addObject(new StackItem(Change.Add, IO, IO.IOModule));
+
+                }
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
