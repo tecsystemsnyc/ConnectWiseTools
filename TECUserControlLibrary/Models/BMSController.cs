@@ -1,10 +1,12 @@
 ﻿using EstimatingLibrary;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TECUserControlLibrary.Models
 {
@@ -20,9 +22,15 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
-                Controller.PropertyChanged -= Controller_PropertyChanged;
+                if (Controller != null)
+                {
+                    Controller.PropertyChanged -= Controller_PropertyChanged;
+                }
                 _controller = value;
-                Controller.PropertyChanged += Controller_PropertyChanged;
+                if (Controller != null)
+                {
+                    Controller.PropertyChanged += Controller_PropertyChanged;
+                }
                 RaisePropertyChanged("Controller");
             }
         }
@@ -32,10 +40,6 @@ namespace TECUserControlLibrary.Models
             set
             {
                 ObservableCollection<TECController> newParents = new ObservableCollection<TECController>();
-
-                TECController noneController = new TECController();
-                noneController.Name = "None";
-                newParents.Add(noneController);
 
                 foreach (TECController possibleParent in value)
                 {
@@ -112,7 +116,10 @@ namespace TECUserControlLibrary.Models
             PossibleParents = networkControllers;
 
             Controller.PropertyChanged += Controller_PropertyChanged;
+
+            ClearParentControllerCommand = new RelayCommand(ClearParentControllerExecute);
         }
+
         #region Methods
 
         private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
@@ -158,6 +165,17 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("ParentController");
             }
         }
+        #endregion
+
+        #region Commands
+
+        public ICommand ClearParentControllerCommand { get; private set; }
+
+        private void ClearParentControllerExecute()
+        {
+            ParentController = null;
+        }
+
         #endregion
     }
 }
