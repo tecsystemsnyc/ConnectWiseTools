@@ -26,6 +26,8 @@ namespace EstimatingLibrary
             linkPanelTypesInPanel(bid.PanelTypeCatalog, bid.Panels);
             linkControllersInPanels(bid.Controllers, bid.Panels);
             linkAllConnections(bid.Controllers, bid.Systems);
+            linkIOModules(bid.Controllers, bid.IOModuleCatalog);
+            linkManufacturersWithIOModules(bid.ManufacturerCatalog, bid.IOModuleCatalog);
         }
         public static void LinkTemplates(TECTemplates templates)
         {
@@ -40,6 +42,8 @@ namespace EstimatingLibrary
             linkPanelTypesInPanel(templates.PanelTypeCatalog, templates.PanelTemplates);
             linkControllersInPanels(templates.ControllerTemplates, templates.PanelTemplates);
             linkControlledScope(templates.ControlledScopeTemplates, templates);
+            linkIOModules(templates.ControllerTemplates, templates.IOModuleCatalog);
+            linkManufacturersWithIOModules(templates.ManufacturerCatalog, templates.IOModuleCatalog);
         }
         public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
             ObservableCollection<TECPanel> panels, TECBid bid, Dictionary<Guid, Guid> guidDictionary = null)
@@ -565,6 +569,40 @@ namespace EstimatingLibrary
                     }
                 }
                 panel.Controllers = controllersToLink;
+            }
+        }
+        static private void linkIOModules(ObservableCollection<TECController> controllers, ObservableCollection<TECIOModule> ioModules)
+        {
+            foreach(TECController controller in controllers)
+            {
+                foreach(TECIO io in controller.IO)
+                {
+                    if(io.IOModule != null)
+                    {
+                        foreach (TECIOModule module in ioModules)
+                        {
+                            if (io.IOModule.Guid == module.Guid)
+                            {
+                                io.IOModule = module;
+                                break;
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
+        {
+            foreach(TECIOModule module in ioModules)
+            {
+                foreach (TECManufacturer manufacturer in manufacturers)
+                {
+                    if(module.Manufacturer.Guid == manufacturer.Guid)
+                    {
+                        module.Manufacturer = manufacturer;
+                    }
+                }
             }
         }
 

@@ -212,6 +212,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates = templates;
             setupCommands();
+            setupDefaultValues();
         }
         
         #region Methods
@@ -325,6 +326,29 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);
+        }
+
+        private void setupDefaultValues()
+        {
+            ConnectionTypeName = "";
+            ConnectionTypeCost = 0;
+            ConnectionTypeLabor = 0;
+
+            ConduitTypeName = "";
+            ConduitTypeCost = 0;
+            ConduitTypeLabor = 0;
+
+            AssociatedCostName = "";
+            AssociatedCostCost = 0;
+            AssociatedCostLabor = 0;
+
+            PanelTypeName = "";
+            PanelTypeCost = 0;
+
+            IOModuleName = "";
+            IOModuleDescription = "";
+            IOModuleCost = 0;
+            IOModuleIOPerModule = 1;
         }
         #endregion
     }

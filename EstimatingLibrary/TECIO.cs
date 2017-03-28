@@ -59,9 +59,12 @@ namespace EstimatingLibrary
             get { return _ioModule; }
             set
             {
-                var temp = this.Copy();
+                var oldNew = Tuple.Create<Object, Object>(_ioModule, value);
+                var temp = Copy();
                 _ioModule = value;
                 NotifyPropertyChanged("IOModule", temp, this);
+                temp = Copy();
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
             }
         }
 
@@ -123,9 +126,10 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            var outIO = new TECIO();
+            var outIO = new TECIO(Guid);
             outIO._type = Type;
             outIO._quantity = Quantity;
+            outIO._ioModule = IOModule;
             return outIO;
         }
     }

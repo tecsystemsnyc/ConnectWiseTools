@@ -117,6 +117,10 @@ namespace EstimatingUtilitiesLibrary
             { panelType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach (TECIOModule ioModule in Bid.IOModuleCatalog)
+            {
+                ioModule.PropertyChanged += Object_PropertyChanged;
+            }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
@@ -135,7 +139,7 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECManufacturer manufacturer in Templates.ManufacturerCatalog)
             { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach(TECController controller in Templates.ControllerTemplates)
-            { controller.PropertyChanged += Object_PropertyChanged; }
+            { registerController(controller); }
             foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
             { connectionType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
@@ -152,6 +156,10 @@ namespace EstimatingUtilitiesLibrary
             { panel.PropertyChanged += Object_PropertyChanged; }
             foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
             { registerControlledScope(scope); }
+            foreach(TECIOModule ioModule in Templates.IOModuleCatalog)
+            {
+                ioModule.PropertyChanged += Object_PropertyChanged;
+            }
         }
         private void registerSubScope(TECSubScope subScope)
         {
@@ -238,6 +246,10 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 connection.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach(TECIO io in controller.IO)
+            {
+                io.PropertyChanged += Object_PropertyChanged;
             }
         }
 
@@ -629,6 +641,9 @@ namespace EstimatingUtilitiesLibrary
                     SaveStack.Add(new StackItem(Change.Add, newItem, page));
                     page.PropertyChanged += Object_PropertyChanged;
                 }
+            } else if (newItem is TECIOModule)
+            {
+                handleIOModuelChildren(newItem as TECIOModule, item.Change);
             }
         }
         private void handleSystemChildren(TECSystem system, Change change)
@@ -806,6 +821,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
                 SaveStack.Add(item);
+                item = new StackItem(change, io, io.IOModule);
+                SaveStack.Add(item);
             }
         }
         private void handleScopeChildren(TECScope scope, Change change)
@@ -866,6 +883,17 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+        private void handleIOModuelChildren(TECIOModule ioModule, Change change)
+        {
+            handleScopeChildren(ioModule as TECScope, change);
+            StackItem item;
+            if(ioModule.Manufacturer != null)
+            {
+                item = new StackItem(change, (object)ioModule, (object)ioModule.Manufacturer);
+                SaveStack.Add(item);
+            }
+        }
+
 
         private void registerGeneric(TECObject obj)
         {

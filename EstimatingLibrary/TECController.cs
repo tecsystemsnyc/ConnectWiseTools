@@ -64,7 +64,6 @@ namespace EstimatingLibrary
                 _io = value;
                 NotifyPropertyChanged("IO", temp, this);
                 IO.CollectionChanged += IO_CollectionChanged;
-                registerIO();
             }
         }
         public TECManufacturer Manufacturer
@@ -217,7 +216,6 @@ namespace EstimatingLibrary
                 {
                     if(item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged += IOPropertyChanged;
                         NotifyPropertyChanged("Add", this, item);
                     } 
                 }
@@ -228,20 +226,12 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged -= IOPropertyChanged;
                         NotifyPropertyChanged("Remove", this, item);
                     }
                 }
             }
         }
-        private void IOPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-            if (e.PropertyName == "Quantity")
-            {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
-            }
-        }
+
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -439,13 +429,6 @@ namespace EstimatingLibrary
                 }
             }
             return outList;
-        }
-        private void registerIO()
-        {
-            foreach(TECIO io in IO)
-            {
-                io.PropertyChanged += IOPropertyChanged;
-            }
         }
         #endregion
     }

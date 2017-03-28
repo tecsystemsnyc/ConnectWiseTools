@@ -246,7 +246,7 @@
                         <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding IOModuleName}"/>
+                      Text="{Binding IOModuleCost}"/>
                         <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="5" Margin="2"
@@ -270,7 +270,8 @@
                        VerticalAlignment="Center"
                                    Grid.Column="2"/>
                         <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}" SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="3" Margin="2"
-                      Text="{Binding IOModuleIOPerModule}"/>
+                      Text="{Binding IOModuleIOPerModule}"
+                                  DisplayMemberPath="Name"/>
 
                         <Button Grid.Column="4" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"

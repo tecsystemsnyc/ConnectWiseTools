@@ -231,7 +231,9 @@ namespace EstimatingLibrary
             set
             {
                 var temp = Copy();
+                IOModuleCatalog.CollectionChanged -= CollectionChanged;
                 _ioModuleCatalog = value;
+                IOModuleCatalog.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("IOModuleCatalog", temp, this);
             }
         }

@@ -97,6 +97,8 @@ namespace EstimatingUtilitiesLibrary
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
             bid.PanelTypeCatalog = getPanelTypes();
+            bid.IOModuleCatalog = getIOModules();
+
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
             //watch.Stop();
@@ -135,6 +137,7 @@ namespace EstimatingUtilitiesLibrary
             templates.PanelTemplates = getOrphanPanels();
             templates.PanelTypeCatalog = getPanelTypes();
             templates.ControlledScopeTemplates = getControlledScope();
+            templates.IOModuleCatalog = getIOModules();
             ModelLinkingHelper.LinkTemplates(templates);
             SQLiteDB.Connection.Close();
             return templates;
@@ -970,7 +973,17 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
-        
+        static private ObservableCollection<TECIOModule> getIOModules()
+        {
+            ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
+            DataTable ioModuleDT = SQLiteDB.getDataFromTable(IOModuleTable.TableName);
+
+            foreach (DataRow row in ioModuleDT.Rows)
+            { ioModules.Add(getIOModuleFromRow(row)); }
+            return ioModules;
+        }
+
+
         static private TECController getControllerInConnection(Guid connectionID)
         {
             var tables = getAllTableNames();
@@ -1822,7 +1835,6 @@ namespace EstimatingUtilitiesLibrary
 
             return panel;
         }
-
         private static TECController getControllerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
