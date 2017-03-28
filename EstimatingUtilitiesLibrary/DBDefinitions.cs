@@ -650,7 +650,7 @@ namespace EstimatingUtilitiesLibrary
         
         public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Desciption = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
         
         public static new List<TableField> PrimaryKey = new List<TableField>()
@@ -670,7 +670,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Desciption = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -680,6 +680,45 @@ namespace EstimatingUtilitiesLibrary
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType
+        };
+    }
+    public class IOModuleTable : CatalogTableBase
+    {
+        public static new string TableName = "TECIOModule";
+        public static Type IOModuleType = typeof(TECIOModule);
+
+        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", IOModuleType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", IOModuleType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
+        public static TableField Cost = new TableField("Cost", "REAL", IOModuleType.GetProperty("Cost"));
+        public static TableField IOPerModule = new TableField("IOPerModule", "REAL", IOModuleType.GetProperty("IOPerModule"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            IOModuleID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            IOModuleType
+        };
+
+    }
+    public class IOTable : TableBase
+    {
+        public static new string TableName = "TECIO";
+        public static Type IOObjectType = typeof(TECIO);
+
+        public static TableField IOID = new TableField("ControllerID", "TEXT", IOObjectType.GetProperty("Guid"));
+        public static TableField IOType = new TableField("IOType", "TEXT", IOObjectType.GetProperty("Type"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", IOObjectType.GetProperty("Quantity"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            IOID
+        };
+        public static new List<Type> Types = new List<Type>()
+        {
+            IOObjectType
         };
     }
 
@@ -767,20 +806,38 @@ namespace EstimatingUtilitiesLibrary
             CostType
         };
     }
-    public class ControllerIOTypeTable : TableBase
+    public class ControllerIOTable : TableBase
     {
         public static new string TableName = "TECControllerTECIO";
         public static Type ObjectType = typeof(TECController);
         public static Type ReferenceType = typeof(TECIO);
-      
+
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOType = new TableField("IOType", "TEXT", ReferenceType.GetProperty("Type"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ReferenceType.GetProperty("Quantity"));
+        public static TableField IOID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
-            IOType
+            IOID
             };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
+    public class IOIOModuleTable : TableBase
+    {
+        public static new string TableName = "TECIOModuleTECIO";
+        public static Type ObjectType = typeof(TECIOModule);
+        public static Type ReferenceType = typeof(TECIO);
+
+        public static TableField ModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ModuleID,
+            IOID
+        };
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType,
@@ -1339,6 +1396,8 @@ namespace EstimatingUtilitiesLibrary
             new PanelTypeTable(),
             new SubScopeConnectionTable(),
             new NetworkConnectionTable(),
+            new IOTable(),
+            new IOModuleTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1358,7 +1417,8 @@ namespace EstimatingUtilitiesLibrary
             new ControllerTable(),
             new AssociatedCostTable(),
             new ControllerConnectionTable(),
-            new ControllerIOTypeTable(),
+            new ControllerIOTable(),
+            new IOIOModuleTable(),
             new ProposalScopeTable(),
             new ProposalScopeScopeBranchTable(),
             new BidScopeBranchTable(),
@@ -1409,7 +1469,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopePointTable(),
             new ScopeTagTable(),
             new ControllerTable(),
-            new ControllerIOTypeTable(),
+            new ControllerIOTable(),
+            new IOIOModuleTable(),
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
@@ -1456,6 +1517,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeTable(),
             new SubScopeConnectionTable(),
             new NetworkConnectionTable(),
+            new IOModuleTable(),
+            new IOTable(),
 
 
             new BidLaborTable(),
@@ -1465,7 +1528,8 @@ namespace EstimatingUtilitiesLibrary
             new AssociatedCostTable(),
             new ProposalScopeScopeBranchTable(),
             new ControllerTable(),
-            new ControllerIOTypeTable(),
+            new ControllerIOTable(),
+            new IOIOModuleTable(),
             new ControllerConnectionTable(),
             new ScopeBranchHierarchyTable(),
             new BidSystemTable(),

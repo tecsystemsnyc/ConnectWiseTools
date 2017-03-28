@@ -887,10 +887,12 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
         {
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
-            string command = "select * from " + ControllerIOTypeTable.TableName + " where ";
-            command += ControllerIOTypeTable.ControllerID.Name + " = '" + controllerID + "'";
-            
-                DataTable typeDT = SQLiteDB.getDataFromCommand(command);
+            string command = "select * from " + IOTable.TableName + " where " + IOTable.IOID.Name + " in ";
+            command += "(select " + ControllerIOTable.IOID.Name + " from " + ControllerIOTable.TableName + " where ";
+            command += ControllerIOTable.ControllerID.Name + " = '" + controllerID;
+            command += "')";
+
+            DataTable typeDT = SQLiteDB.getDataFromCommand(command);
                 foreach (DataRow row in typeDT.Rows)
                 {  outIO.Add(getIOFromRow(row)); }
             return outIO;
@@ -1242,6 +1244,20 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return outScope;
+        }
+        static private TECIOModule getModuleInIO(Guid ioID)
+        {
+            string command = "select * from " + IOModuleTable.TableName + " where " + IOModuleTable.IOModuleID.Name + " in ";
+            command += "(select " + IOIOModuleTable.ModuleID.Name + " from " + IOIOModuleTable.TableName;
+            command += " where " + IOIOModuleTable.IOID.Name + " = '";
+            command += ioID;
+            command += "')";
+
+            DataTable moduleTable = SQLiteDB.getDataFromCommand(command);
+            if (moduleTable.Rows.Count > 0)
+            { return getIOModuleFromRow(moduleTable.Rows[0]); }
+            else
+            { return null; }
         }
         #endregion //Loading from DB Methods
 
@@ -1773,7 +1789,7 @@ namespace EstimatingUtilitiesLibrary
             TECPanel panel = new TECPanel(guid);
 
             panel.Name = row[PanelTable.Name.Name].ToString();
-            panel.Description = row[PanelTable.Desciption.Name].ToString();
+            panel.Description = row[PanelTable.Description.Name].ToString();
             panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
             panel.Type = getPanelTypeInPanel(guid);
             panel.Controllers = getControllersInPanel(guid);
@@ -1798,10 +1814,11 @@ namespace EstimatingUtilitiesLibrary
         }
         private static TECIO getIOFromRow(DataRow row)
         {
-            IOType type = TECIO.convertStringToType(row[ControllerIOTypeTable.IOType.Name].ToString());
-            var io = new TECIO();
-            io.Type = type;
-            io.Quantity = row[ControllerIOTypeTable.Quantity.Name].ToString().ToInt();
+            Guid guid = new Guid(row[IOTable.IOID.Name].ToString());
+            var io = new TECIO(guid);
+            io.Type = TECIO.convertStringToType(row[IOTable.IOType.Name].ToString());
+            io.Quantity = row[IOTable.Quantity.Name].ToString().ToInt();
+            io.IOModule = getModuleInIO(guid);
             return io;
         }
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
@@ -1874,7 +1891,7 @@ namespace EstimatingUtilitiesLibrary
             TECControlledScope controlledScope = new TECControlledScope(guid);
 
             controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
-            controlledScope.Description = row[ControlledScopeTable.Desciption.Name].ToString();
+            controlledScope.Description = row[ControlledScopeTable.Description.Name].ToString();
             controlledScope.Controllers = getControllersInControlledScope(guid);
             controlledScope.Systems = getSystemsInControlledScope(guid);
             controlledScope.Panels = getPanelsInControlledScope(guid);
@@ -1899,6 +1916,17 @@ namespace EstimatingUtilitiesLibrary
             controller.Description = row[ControllerTable.Description.Name].ToString();
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             return controller;
+        }
+        private static TECIOModule getIOModuleFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[IOModuleTable.IOModuleID.Name].ToString());
+            TECIOModule module = new TECIOModule(guid);
+
+            module.Name = row[IOModuleTable.Name.Name].ToString();
+            module.Description = row[IOModuleTable.Description.Name].ToString();
+            module.Cost = row[IOModuleTable.Cost.Name].ToString().ToDouble(0);
+            module.IOPerModule = row[IOModuleTable.IOPerModule.Name].ToString().ToInt(1);
+            return module;
         }
         #endregion
 

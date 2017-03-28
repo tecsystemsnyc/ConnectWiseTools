@@ -216,8 +216,7 @@
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>
                     <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
-                                    Grid.Row="3" 
-                                    Margin="5"/>
+                                    Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">
@@ -258,7 +257,8 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
-                    
+                    <grids:IOModuleGridControl IOModuleSource="{Binding Templates.IOModuleCatalog}"
+                                               Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
         </TabControl>
