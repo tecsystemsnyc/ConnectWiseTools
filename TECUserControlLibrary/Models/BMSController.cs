@@ -79,6 +79,7 @@ namespace TECUserControlLibrary.Models
                 {
                     Controller.ParentController = null;
                 }
+                RaisePropertyChanged("ParentController");
             }
         }
         public ObservableCollection<string> PossibleIO
