@@ -63,6 +63,7 @@ namespace EstimatingLibrary
                 _io = value;
                 NotifyPropertyChanged("IO", temp, this);
                 IO.CollectionChanged += IO_CollectionChanged;
+                registerIO();
             }
         }
         public TECManufacturer Manufacturer
@@ -434,7 +435,13 @@ namespace EstimatingLibrary
             }
             return outList;
         }
-        
+        private void registerIO()
+        {
+            foreach(TECIO io in IO)
+            {
+                io.PropertyChanged += IOPropertyChanged;
+            }
+        }
         #endregion
     }
 }
