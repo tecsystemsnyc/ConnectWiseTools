@@ -147,6 +147,19 @@ namespace EstimatingLibrary
             }
         }
 
+        public ObservableCollection<TECNetworkConnection> ChildNetworkConnections
+        {
+            get
+            {
+                ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
+                foreach (TECNetworkConnection netConnect in ChildrenConnections)
+                {
+                    networkConnections.Add(netConnect);
+                }
+                return networkConnections;
+            }
+        }
+
         #endregion
         
         #region Constructors
