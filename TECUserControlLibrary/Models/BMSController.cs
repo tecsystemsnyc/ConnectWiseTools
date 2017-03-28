@@ -30,24 +30,33 @@ namespace TECUserControlLibrary.Models
             set
             {
                 ObservableCollection<TECController> newParents = new ObservableCollection<TECController>();
+
+                TECController noneController = new TECController();
+                noneController.Name = "None";
+                newParents.Add(noneController);
+
                 foreach (TECController possibleParent in value)
                 {
-                    foreach (IOType thisType in Controller.NetworkIO)
+                    if (possibleParent != null && Controller != possibleParent)
                     {
-                        foreach (IOType parentType in possibleParent.NetworkIO)
+                        foreach (IOType thisType in Controller.NetworkIO)
                         {
-                            if (thisType == parentType)
+                            foreach (IOType parentType in possibleParent.NetworkIO)
                             {
-                                newParents.Add(possibleParent);
+                                if (thisType == parentType)
+                                {
+                                    newParents.Add(possibleParent);
+                                    break;
+                                }
+                            }
+                            if (newParents.Contains(possibleParent))
+                            {
                                 break;
                             }
                         }
-                        if (newParents.Contains(possibleParent))
-                        {
-                            break;
-                        }
                     }
                 }
+                
                 _possibleParents = newParents;
                 RaisePropertyChanged("PossibleParents");
             }
@@ -70,17 +79,54 @@ namespace TECUserControlLibrary.Models
             }
             private set { }
         }
+        public bool IsConnected
+        {
+            get { return isConnected(Controller); }
+        }
         #endregion
 
-        public BMSController(TECController controller)
+        public BMSController(TECController controller, ObservableCollection<TECController> networkControllers)
         {
             Controller = controller;
-            PossibleParents = new ObservableCollection<TECController>();
+            PossibleParents = networkControllers;
+        }
+
+        #region Methods
+
+        private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
+        {
+            if (searchedControllers == null)
+            {
+                searchedControllers = new List<TECController>();
+            }
+
+            if (controller.IsServer)
+            {
+                return true;
+            }
+            else if (controller.ParentConnection == null || searchedControllers.Contains(controller))
+            {
+                return false;
+            }
+            else
+            {
+                searchedControllers.Add(controller);
+                TECController parentController = controller.ParentConnection.ParentController;
+                if (parentController == null)
+                {
+                    throw new NullReferenceException("Parent controller to passed controller is null, but parent connection isn't.");
+                }
+                bool parentIsConnected = isConnected(parentController, searchedControllers);
+                return parentIsConnected;
+            }
         }
 
         public override object Copy()
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
     }
 }
