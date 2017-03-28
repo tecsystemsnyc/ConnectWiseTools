@@ -43,7 +43,7 @@ namespace TECUserControlLibrary.Models
 
                 foreach (TECController possibleParent in value)
                 {
-                    if (possibleParent != null && Controller != possibleParent)
+                    if (possibleParent != null && Controller != possibleParent && !isDescendantOf(possibleParent, Controller))
                     {
                         foreach (IOType thisType in Controller.NetworkIO)
                         {
@@ -86,6 +86,7 @@ namespace TECUserControlLibrary.Models
                     Controller.ParentController = null;
                 }
                 RaisePropertyChanged("ParentController");
+                RaisePropertyChanged("IsConnected");
             }
         }
         public ObservableCollection<string> PossibleIO
@@ -150,6 +151,22 @@ namespace TECUserControlLibrary.Models
             }
         }
 
+        private bool isDescendantOf(TECController descendantController, TECController ancestorController)
+        {
+            if (descendantController.ParentController == ancestorController)
+            {
+                return true;
+            }
+            else if (descendantController.ParentController == null)
+            {
+                return false;
+            }
+            else
+            {
+                return (isDescendantOf(descendantController.ParentController, ancestorController));
+            }
+        }
+
         public override object Copy()
         {
             throw new NotImplementedException();
@@ -163,6 +180,7 @@ namespace TECUserControlLibrary.Models
             if (e.PropertyName == "ParentController")
             {
                 RaisePropertyChanged("ParentController");
+                RaisePropertyChanged("IsConnected");
             }
         }
         #endregion
