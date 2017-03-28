@@ -235,6 +235,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private ObservableCollection<TECIOModule> _ioModuleSelections;
+        public ObservableCollection<TECIOModule> IOModuleSelections
+        {
+            get { return _ioModuleSelections; }
+            set
+            {
+                _ioModuleSelections = value;
+                RaisePropertyChanged("IOModuleSelections");
+            }
+        }
+
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
@@ -310,6 +321,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 AssociatedCostSelections = Bid.AssociatedCostsCatalog;
                 ManufacturerSelections = Bid.ManufacturerCatalog;
                 ConnectionTypeSelections = Bid.ConnectionTypes;
+                IOModuleSelections = Bid.IOModuleCatalog;
             } else if (type is TECTemplates)
             {
                 TagSelections = Templates.Tags;
@@ -317,6 +329,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ConduitTypeSelections = Templates.ConduitTypeCatalog;
                 ManufacturerSelections = Templates.ManufacturerCatalog;
                 ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
+                IOModuleSelections = Templates.IOModuleCatalog;
             }
 
         }
