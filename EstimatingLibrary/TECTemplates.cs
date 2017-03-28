@@ -28,6 +28,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
         private ObservableCollection<TECPanelType> _panelTypeCatalog;
         private ObservableCollection<TECPanel> _panelTemplates;
+        private ObservableCollection<TECIOModule> _ioModuleCatalog;
 
         public Guid Guid
         {
@@ -224,6 +225,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("PanelTemplates", temp, this);
             }
         }
+        public ObservableCollection<TECIOModule> IOModuleCatalog
+        {
+            get { return _ioModuleCatalog; }
+            set
+            {
+                var temp = Copy();
+                _ioModuleCatalog = value;
+                NotifyPropertyChanged("IOModuleCatalog", temp, this);
+            }
+        }
 
 
         #endregion //Properties
@@ -318,6 +329,10 @@ namespace EstimatingLibrary
             foreach(TECControlledScope scope in templatesSource.ControlledScopeTemplates)
             {
                 ControlledScopeTemplates.Add(new TECControlledScope(scope));
+            }
+            foreach(TECIOModule module in templatesSource.IOModuleCatalog)
+            {
+                //IOModuleCatalog.Add(new TECIOModule(module));
             }
         }
 
