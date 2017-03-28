@@ -264,6 +264,7 @@ namespace EstimatingLibrary
             _panelTypeCatalog = new ObservableCollection<TECPanelType>();
             _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
             _panelTemplates = new ObservableCollection<TECPanel>();
+            _ioModuleCatalog = new ObservableCollection<TECIOModule>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
@@ -280,6 +281,7 @@ namespace EstimatingLibrary
             PanelTemplates.CollectionChanged += CollectionChanged;
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
             ControlledScopeTemplates.CollectionChanged += CollectionChanged;
+            IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             Labor.PropertyChanged += objectPropertyChanged;
         }
@@ -332,7 +334,7 @@ namespace EstimatingLibrary
             }
             foreach(TECIOModule module in templatesSource.IOModuleCatalog)
             {
-                //IOModuleCatalog.Add(new TECIOModule(module));
+                IOModuleCatalog.Add(new TECIOModule(module));
             }
         }
 
@@ -416,6 +418,10 @@ namespace EstimatingLibrary
             foreach (TECControlledScope scope in this.ControlledScopeTemplates)
             {
                 outTemplate.ControlledScopeTemplates.Add(scope.Copy() as TECControlledScope);
+            }
+            foreach (TECIOModule module in IOModuleCatalog)
+            {
+                IOModuleCatalog.Add(module.Copy() as TECIOModule);
             }
 
             return outTemplate;

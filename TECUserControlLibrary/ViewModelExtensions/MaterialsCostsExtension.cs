@@ -141,11 +141,44 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private string _ioModuleName;
+        public string IOModuleName
+        {
+            get { return _ioModuleName; }
+            set
+            {
+                _ioModuleName = value;
+                RaisePropertyChanged("IOModuleName");
+            }
+        }
+        private double _ioModuleCCost;
+        public double IOModuleCost
+        {
+            get { return _ioModuleCCost; }
+            set
+            {
+                _ioModuleCCost = value;
+                RaisePropertyChanged("IOModuleCost");
+            }
+        }
+        private int _ioModuleIOPerModule;
+        public int IOModuleIOPerModule
+        {
+            get { return IOModuleIOPerModule; }
+            set
+            {
+                _ioModuleIOPerModule = value;
+                RaisePropertyChanged("IOModuleIOPerModule");
+            }
+        }
+
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
-        public ICommand AddAssociatedCostCommand { get; private set; }
+        public ICommand AddAssociatedCostCommand { get; private set; } 
         public ICommand AddPanelTypeCommand { get; private set; }
+        public ICommand AddIOModuleCommand { get; private set; }
+
         #endregion
 
         #region Delegates
@@ -168,6 +201,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
+            AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
         }
 
         private void addConnectionTypeExecute()
@@ -227,6 +261,29 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private bool canAddPanelTypeExecute()
         {
             if(PanelTypeName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void addIOModuleExecute()
+        {
+            var ioModule = new TECIOModule();
+            ioModule.Name = IOModuleName;
+            ioModule.Cost = IOModuleCost;
+            ioModule.IOPerModule = IOModuleIOPerModule;
+
+            Templates.IOModuleCatalog.Add(ioModule);
+            IOModuleName = "";
+            IOModuleCost = 0;
+            IOModuleIOPerModule = 1;
+        }
+        private bool canAddIOModuleExecute()
+        {
+            if (IOModuleName != "")
             {
                 return true;
             }

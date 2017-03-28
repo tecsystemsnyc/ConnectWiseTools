@@ -123,7 +123,7 @@ namespace EstimatingLibrary
         public TECController ParentController
         {
             get
-            {
+            { 
                 if (ParentConnection == null)
                 {
                     return null;

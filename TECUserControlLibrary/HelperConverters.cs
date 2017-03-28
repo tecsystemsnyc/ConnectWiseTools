@@ -473,4 +473,35 @@ namespace TECUserControlLibrary.HelperConverters
 
         #endregion
     }
+    public class SelectedItemToIOModuleConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var module = new TECIOModule();
+                module.Name = "None";
+                return module;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (((TECIOModule)value).Name == "None")
+            {
+                return null;
+            }
+            else
+            {
+                return value;
+            }
+        }
+        #endregion
+    }
 }

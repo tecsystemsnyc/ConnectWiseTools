@@ -25,12 +25,18 @@ namespace EstimatingLibrary
             _ioPerModule = 0;
         }
         public TECIOModule() : this(Guid.NewGuid()) { }
+        public TECIOModule(TECIOModule ioModuleSource) : this()
+        {
+            copyPropertiesFromCost(this);
+            _ioPerModule = ioModuleSource.IOPerModule;
+        }
+
 
         public override object Copy()
         {
-            var outObject = new TECIOModule();
+            var outObject = new TECIOModule(this.Guid);
             outObject.copyPropertiesFromCost(this);
-            outObject.IOPerModule = this.IOPerModule;
+            outObject._ioPerModule = this.IOPerModule;
             return outObject;
         }
     }
