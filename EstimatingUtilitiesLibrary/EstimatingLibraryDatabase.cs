@@ -717,6 +717,20 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
+        static private TECManufacturer getManufacturerInIOModule(Guid guid)
+        {
+            string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            command += "(select " + IOModuleManufacturerTable.ManufacturerID.Name + " from " + IOModuleManufacturerTable.TableName;
+            command += " where " + IOModuleManufacturerTable.IOModuleID.Name + " = '";
+            command += guid;
+            command += "')";
+
+            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            if (manTable.Rows.Count > 0)
+            { return getManufacturerFromRow(manTable.Rows[0]); }
+            else
+            { return null; }
+        }
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
         {
             string command = "select * from "+ConnectionTypeTable.TableName+" where "+ ConnectionTypeTable .ConnectionTypeID.Name+ " in ";
@@ -1724,6 +1738,18 @@ namespace EstimatingUtilitiesLibrary
 
             return panelType;
         }
+        private static TECIOModule getIOModuleFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[IOModuleTable.IOModuleID.Name].ToString());
+            TECIOModule module = new TECIOModule(guid);
+
+            module.Name = row[IOModuleTable.Name.Name].ToString();
+            module.Description = row[IOModuleTable.Description.Name].ToString();
+            module.Cost = row[IOModuleTable.Cost.Name].ToString().ToDouble(0);
+            module.IOPerModule = row[IOModuleTable.IOPerModule.Name].ToString().ToInt(1);
+            module.Manufacturer = getManufacturerInIOModule(guid);
+            return module;
+        }
 
         #endregion
         #region Scope Qualifiers
@@ -1917,17 +1943,6 @@ namespace EstimatingUtilitiesLibrary
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             return controller;
         }
-        private static TECIOModule getIOModuleFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[IOModuleTable.IOModuleID.Name].ToString());
-            TECIOModule module = new TECIOModule(guid);
-
-            module.Name = row[IOModuleTable.Name.Name].ToString();
-            module.Description = row[IOModuleTable.Description.Name].ToString();
-            module.Cost = row[IOModuleTable.Cost.Name].ToString().ToDouble(0);
-            module.IOPerModule = row[IOModuleTable.IOPerModule.Name].ToString().ToInt(1);
-            return module;
-        }
         #endregion
 
         #region Generic Create Methods
@@ -2078,6 +2093,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, bid);
             }
+            foreach (TECIOModule ioModule in bid.IOModuleCatalog)
+            {
+                saveCompleteIOModule(ioModule, bid);
+            }
         }
         private static void saveCompleteTemplate(TECTemplates templates)
         {
@@ -2147,6 +2166,10 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECControlledScope conScope in templates.ControlledScopeTemplates)
             {
                 saveFullControlledScope(conScope, templates);
+            }
+            foreach(TECIOModule ioModule in templates.IOModuleCatalog)
+            {
+                saveCompleteIOModule(ioModule, templates);
             }
         }
 
@@ -2285,7 +2308,10 @@ namespace EstimatingUtilitiesLibrary
         {
             if(controller.Manufacturer != null) { addObject(new StackItem(Change.AddRelationship, controller, controller.Manufacturer)); }
             foreach(TECIO IO in controller.IO)
-            { addObject(new StackItem(Change.Add, controller, IO)); }
+            {
+                addObject(new StackItem(Change.Add, controller, IO));
+                addObject(new StackItem(Change.Add, IO, IO.IOModule));
+            }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 addObject(new StackItem(Change.Add, controller, connection, typeof(TECController), typeof(TECConnection)));
@@ -2323,6 +2349,11 @@ namespace EstimatingUtilitiesLibrary
             }
 
             if (connection.ConduitType != null) { addObject(new StackItem(Change.AddRelationship,  connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType))); }
+        }
+        private static void saveCompleteIOModule(TECIOModule ioModule, object parent)
+        {
+            addObject(new StackItem(Change.Add, ioModule, parent));
+            addObject(new StackItem(Change.Add, ioModule.Manufacturer, ioModule));
         }
         #endregion
 
