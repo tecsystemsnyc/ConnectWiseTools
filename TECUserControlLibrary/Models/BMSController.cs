@@ -1,10 +1,12 @@
 ﻿using EstimatingLibrary;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TECUserControlLibrary.Models
 {
@@ -20,7 +22,15 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
+                if (Controller != null)
+                {
+                    Controller.PropertyChanged -= Controller_PropertyChanged;
+                }
                 _controller = value;
+                if (Controller != null)
+                {
+                    Controller.PropertyChanged += Controller_PropertyChanged;
+                }
                 RaisePropertyChanged("Controller");
             }
         }
@@ -30,10 +40,6 @@ namespace TECUserControlLibrary.Models
             set
             {
                 ObservableCollection<TECController> newParents = new ObservableCollection<TECController>();
-
-                TECController noneController = new TECController();
-                noneController.Name = "None";
-                newParents.Add(noneController);
 
                 foreach (TECController possibleParent in value)
                 {
@@ -63,7 +69,6 @@ namespace TECUserControlLibrary.Models
         }
 
         //---Derived---
-        private TECController _parentController;
         public TECController ParentController
         {
             get
@@ -109,7 +114,10 @@ namespace TECUserControlLibrary.Models
         {
             Controller = controller;
             PossibleParents = networkControllers;
-            ParentController = controller.ParentController;
+
+            Controller.PropertyChanged += Controller_PropertyChanged;
+
+            ClearParentControllerCommand = new RelayCommand(ClearParentControllerExecute);
         }
 
         #region Methods
@@ -149,5 +157,25 @@ namespace TECUserControlLibrary.Models
 
         #endregion
 
+        #region Event Handlers
+        private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                RaisePropertyChanged("ParentController");
+            }
+        }
+        #endregion
+
+        #region Commands
+
+        public ICommand ClearParentControllerCommand { get; private set; }
+
+        private void ClearParentControllerExecute()
+        {
+            ParentController = null;
+        }
+
+        #endregion
     }
 }

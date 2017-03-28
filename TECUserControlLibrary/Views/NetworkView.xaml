@@ -18,6 +18,16 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
+            <DataTemplate x:Key="ClearButton">
+                <StackPanel DataContext="{Binding RelativeSource={RelativeSource Self}}">
+                    <Button Name="ClearParentController"
+                        Command="{Binding DataContext.ClearParentControllerCommand, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                        Content="Clear"
+                        Margin="5"
+                        />
+                </StackPanel>
+                
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ViewModel, ElementName=parent}"
@@ -99,7 +109,8 @@
                             </DataGridComboBoxColumn.EditingElementStyle>
                         </DataGridComboBoxColumn>
                         <!--I don't actually know how it works but it does. Something to do with DataGridComboBoxColumn not actually being part of the visual tree.-->
-                        
+                        <DataGridTemplateColumn CellTemplate="{StaticResource ClearButton}" Width="50"/>
+
                         <DataGridComboBoxColumn Header="IO"
                                         ItemsSource="{Binding Path=Controller.NetworkIO}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.IOType}"
                                         Width="Auto"/>
