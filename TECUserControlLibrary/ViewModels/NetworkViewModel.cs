@@ -305,7 +305,7 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "ParentController")
             {
                 TECController controller = (sender as TECController);
-                if (controller.ParentConnection.PossibleIO.Count > 0)
+                if (controller.ParentConnection != null && controller.ParentConnection.PossibleIO.Count > 0)
                 {
                     controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
                 }
