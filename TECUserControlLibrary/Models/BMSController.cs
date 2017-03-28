@@ -63,6 +63,25 @@ namespace TECUserControlLibrary.Models
         }
 
         //---Derived---
+        public TECController ParentController
+        {
+            get
+            {
+                return Controller.ParentController;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    value.AddController(Controller);
+                }
+                else
+                {
+                    Controller.ParentController = null;
+                }
+                RaisePropertyChanged("ParentController");
+            }
+        }
         public ObservableCollection<string> PossibleIO
         {
             get
