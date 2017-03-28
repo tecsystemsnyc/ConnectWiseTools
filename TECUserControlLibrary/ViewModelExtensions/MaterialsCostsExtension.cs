@@ -151,6 +151,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("IOModuleName");
             }
         }
+        private string _ioModuleDescription;
+        public string IOModuleDescription
+        {
+            get { return _ioModuleDescription; }
+            set
+            {
+                _ioModuleDescription = value;
+                RaisePropertyChanged("IOModuleDescription");
+            }
+        }
         private double _ioModuleCCost;
         public double IOModuleCost
         {
@@ -164,11 +174,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private int _ioModuleIOPerModule;
         public int IOModuleIOPerModule
         {
-            get { return IOModuleIOPerModule; }
+            get { return _ioModuleIOPerModule; }
             set
             {
                 _ioModuleIOPerModule = value;
                 RaisePropertyChanged("IOModuleIOPerModule");
+            }
+        }
+        private TECManufacturer _ioModuleManufacturer;
+        public TECManufacturer IOModuleManufacturer
+        {
+            get { return _ioModuleManufacturer; }
+            set
+            {
+                _ioModuleManufacturer = value;
+                RaisePropertyChanged("IOModuleManufacturer");
             }
         }
 
@@ -275,15 +295,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ioModule.Name = IOModuleName;
             ioModule.Cost = IOModuleCost;
             ioModule.IOPerModule = IOModuleIOPerModule;
+            ioModule.Description = IOModuleDescription;
+            ioModule.Manufacturer = IOModuleManufacturer;
 
             Templates.IOModuleCatalog.Add(ioModule);
             IOModuleName = "";
+            IOModuleDescription = "";
             IOModuleCost = 0;
             IOModuleIOPerModule = 1;
+            IOModuleManufacturer = null;
         }
         private bool canAddIOModuleExecute()
         {
-            if (IOModuleName != "")
+            if (IOModuleName != "" && IOModuleManufacturer != null)
             {
                 return true;
             }

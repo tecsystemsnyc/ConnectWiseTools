@@ -236,6 +236,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
@@ -245,15 +247,32 @@
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding IOModuleName}"/>
+                        <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding IOModuleDescription}"/>
 
                     </Grid>
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        <TextBlock Text="IO per Module:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding IOModuleIOPerModule}"/>
+                        <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"
+                                   Grid.Column="2"/>
+                        <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}" SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="3" Margin="2"
+                      Text="{Binding IOModuleIOPerModule}"/>
 
-                        <Button Grid.Column="0" Grid.ColumnSpan="2"
+                        <Button Grid.Column="4" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>

@@ -81,10 +81,10 @@
                                     Binding="{Binding Path=Controller.Name}"
                                     IsReadOnly="True"
                                     Width="Auto"/>
-                        
-                        <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem-->
+
+                        <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem  , Converter={cnvt:SelectedItemToControllerConverter}-->
                         <DataGridComboBoxColumn Header="Networked To" 
-                                        SelectedItemBinding="{Binding Path=ParentController, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToControllerConverter}}"
+                                        SelectedItemBinding="{Binding Path=ParentController, UpdateSourceTrigger=PropertyChanged}"
                                         DisplayMemberPath="Name"
                                         Width="Auto">
                             <DataGridComboBoxColumn.ElementStyle>

@@ -63,6 +63,7 @@ namespace TECUserControlLibrary.Models
         }
 
         //---Derived---
+        private TECController _parentController;
         public TECController ParentController
         {
             get
@@ -108,6 +109,7 @@ namespace TECUserControlLibrary.Models
         {
             Controller = controller;
             PossibleParents = networkControllers;
+            ParentController = controller.ParentController;
         }
 
         #region Methods
