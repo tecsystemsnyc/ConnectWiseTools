@@ -709,7 +709,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECIO";
         public static Type IOObjectType = typeof(TECIO);
 
-        public static TableField IOID = new TableField("ControllerID", "TEXT", IOObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", IOObjectType.GetProperty("Guid"));
         public static TableField IOType = new TableField("IOType", "TEXT", IOObjectType.GetProperty("Type"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", IOObjectType.GetProperty("Quantity"));
 
@@ -813,7 +813,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ReferenceType = typeof(TECIO);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
@@ -1458,6 +1458,8 @@ namespace EstimatingUtilitiesLibrary
             new MiscWiringTable(),
             new ControlledScopeTable(),
             new SubScopeConnectionTable(),
+            new IOModuleTable(),
+            new IOTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
