@@ -7,13 +7,20 @@
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=PanelTypeSource}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
         </DataGrid>

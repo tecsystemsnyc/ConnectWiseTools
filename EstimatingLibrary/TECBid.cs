@@ -38,6 +38,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
         private ObservableCollection<TECPanelType> _panelTypeCatalog { get; set; }
+        private ObservableCollection<TECIOModule> _ioModuleCatalog;
+
 
         public string Name {
             get { return _name; }
@@ -398,7 +400,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Panels", temp, this);
             }
         }
-        
+        public ObservableCollection<TECIOModule> IOModuleCatalog
+        {
+            get { return _ioModuleCatalog; }
+            set
+            {
+                var temp = Copy();
+                IOModuleCatalog.CollectionChanged -= CollectionChanged;
+                _ioModuleCatalog = value;
+                IOModuleCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("IOModuleCatalog", temp, this);
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -427,6 +440,7 @@ namespace EstimatingLibrary
             _miscCosts = new ObservableCollection<TECMiscCost>();
             _panels = new ObservableCollection<TECPanel>();
             _panelTypeCatalog = new ObservableCollection<TECPanelType>();
+            _ioModuleCatalog = new ObservableCollection<TECIOModule>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             Parameters.PropertyChanged += objectPropertyChanged;
@@ -450,6 +464,7 @@ namespace EstimatingLibrary
             MiscWiring.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
             PanelTypeCatalog.CollectionChanged += CollectionChanged;
+            IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
             Labor.NumPoints = getPointNumber();
@@ -475,6 +490,9 @@ namespace EstimatingLibrary
                 noteToAdd.Text = item;
                 Notes.Add(new TECNote(noteToAdd));
             }
+            _parameters.Overhead = 25;
+            _parameters.Profit = 20;
+            _parameters.SubcontractorMarkup = 20;
         }
 
         //Copy Constructor
@@ -527,6 +545,10 @@ namespace EstimatingLibrary
             { Panels.Add(new TECPanel(panel)); }
             foreach (TECPanelType panelType in bidSource.PanelTypeCatalog)
             { PanelTypeCatalog.Add(new TECPanelType(panelType)); }
+            foreach (TECIOModule module in bidSource.IOModuleCatalog)
+            {
+                IOModuleCatalog.Add(new TECIOModule(module));
+            }
         }
 
         #endregion //Constructors
@@ -759,7 +781,10 @@ namespace EstimatingLibrary
             { bid.Panels.Add(panel.Copy() as TECPanel); }
             foreach (TECPanelType panelType in this.PanelTypeCatalog)
             { bid.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
-
+            foreach (TECIOModule module in IOModuleCatalog)
+            {
+                IOModuleCatalog.Add(module.Copy() as TECIOModule);
+            }
             return bid;
         }
         

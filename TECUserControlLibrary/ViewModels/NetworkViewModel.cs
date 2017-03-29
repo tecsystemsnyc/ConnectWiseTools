@@ -141,7 +141,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (controller.IsBMS)
             {
-                BMSControllers.Add(new BMSController(controller));
+                BMSControllers.Add(new BMSController(controller, NetworkControllers));
             }
             else if (controller.ParentConnection == null)
             {
@@ -305,7 +305,7 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "ParentController")
             {
                 TECController controller = (sender as TECController);
-                if (controller.ParentConnection.PossibleIO.Count > 0)
+                if (controller.ParentConnection != null && controller.ParentConnection.PossibleIO.Count > 0)
                 {
                     controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
                 }
@@ -347,6 +347,10 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     removeController(sourceItem as TECController);
                 }
+                else if (sourceType == typeof(BMSController))
+                {
+                    removeController((sourceItem as BMSController).Controller);
+                }
                 else if (sourceType == typeof(TECConnection))
                 {
                     return;
@@ -362,18 +366,16 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     sourceController = (sourceItem as TECController);
                 }
+                else if (sourceItem is BMSController)
+                {
+                    sourceController = (sourceItem as BMSController).Controller;
+                }
 
                 if (targetType == typeof(TECController))
                 {
                     if (targetCollection == ServerControllers)
                     {
                         sourceController.IsServer = true;
-                        sortAndAddController(sourceController);
-                    }
-                    else if (targetCollection == BMSControllers)
-                    {
-                        sourceController.IsBMS = true;
-                        sourceController.IsServer = false;
                         sortAndAddController(sourceController);
                     }
                     else if (targetCollection == StandaloneControllers)
@@ -383,13 +385,29 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        throw new NotImplementedException();
+                        bool foundCollection = false;
+                        //See if target collection is a child controller connection
+                        foreach (BMSController bmsController in BMSControllers)
+                        {
+                            foreach (TECNetworkConnection connection in bmsController.Controller.ChildrenConnections)
+                            {
+                                if (targetCollection == connection.ChildrenControllers)
+                                {
+                                    foundCollection = true;
+                                    sourceController.IsBMS = false;
+                                    connection.ChildrenControllers.Add(sourceController);
+                                    break;
+                                }
+                            }
+                            if (foundCollection) break;
+                        }
                     }
                 }
-                else if (targetType == typeof(TECScope))
+                else if (targetType == typeof(BMSController))
                 {
-                    sourceController.IsBMS = false;
-                    ((IList)targetCollection).Add(sourceController);
+                    sourceController.IsBMS = true;
+                    sourceController.IsServer = false;
+                    sortAndAddController(sourceController);
                 }
                 else if (targetType == typeof(TECConnection))
                 {

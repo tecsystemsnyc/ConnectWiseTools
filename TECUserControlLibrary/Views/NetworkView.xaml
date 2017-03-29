@@ -18,6 +18,16 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
+            <DataTemplate x:Key="ClearButton">
+                <StackPanel DataContext="{Binding RelativeSource={RelativeSource Self}}">
+                    <Button Name="ClearParentController"
+                        Command="{Binding DataContext.ClearParentControllerCommand, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                        Content="Clear Connection"
+                        Margin="5"
+                        />
+                </StackPanel>
+                
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ViewModel, ElementName=parent}"
@@ -78,32 +88,110 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                         <DataGridTextColumn Header="Controller"
-                                    Binding="{Binding Name}"
+                                    Binding="{Binding Path=Controller.Name}"
                                     IsReadOnly="True"
-                                    Width="Auto"/>
+                                    Width="Auto" MinWidth="70"/>
+
+                        <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem  , Converter={cnvt:SelectedItemToControllerConverter}-->
                         <DataGridComboBoxColumn Header="Networked To" 
-                                        ItemsSource="{Binding Data.NetworkControllers, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentController, Converter={cnvt:SelectedItemToControllerConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                        SelectedItemBinding="{Binding Path=ParentController, UpdateSourceTrigger=PropertyChanged}"
                                         DisplayMemberPath="Name"
-                                        Width="Auto"/>
-                            <DataGridComboBoxColumn Header="IO"
-                                        ItemsSource="{Binding Path=NetworkIO}" SelectedItemBinding="{Binding ParentConnection.IOType}"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="90">
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=PossibleParents}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=PossibleParents}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+                        </DataGridComboBoxColumn>
+                        <!--I don't actually know how it works but it does. Something to do with DataGridComboBoxColumn not actually being part of the visual tree.-->
+                        <DataGridComboBoxColumn Header="IO"
+                                        SelectedItemBinding="{Binding Path=Controller.ParentConnection.IOType, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="Auto" MinWidth="60">
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=Controller.NetworkIO}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=Controller.NetworkIO}"/>
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+                        </DataGridComboBoxColumn>
                         <DataGridComboBoxColumn Header="Wire"
-                                        ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentConnection.ConnectionType}"
+                                        ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConnectionType}"
                                         DisplayMemberPath="Name"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="40"/>
                         <DataGridTextColumn Header="Length"
-                                    Binding="{Binding ParentConnection.Length, Mode=TwoWay}"
-                                    Width="Auto"/>
+                                    Binding="{Binding Path=Controller.ParentConnection.Length, Mode=TwoWay}"
+                                    Width="Auto" MinWidth="50"/>
                         <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.Bid.ConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding ParentConnection.ConduitType}"
+                                        ItemsSource="{Binding Data.Bid.ConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConduitType}"
                                         DisplayMemberPath="Name"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="60"/>
                         <DataGridCheckBoxColumn Header="Connected"
-                                        Binding="{Binding Converter={cnvt:ControllerIsConnnectedConverter}, Mode=OneWay}"
+                                        Binding="{Binding IsConnected, Mode=OneWay}"
                                         IsReadOnly="True"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="60"/>
+                        <DataGridTemplateColumn CellTemplate="{StaticResource ClearButton}" Width="100"/>
+
                     </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="Daisy Chains/Network Connections" FontSize="10"/>
+                                    <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding Controller.NetworkIO}"
+                                      SelectedItem="{Binding Data.SelectedIO, Source={StaticResource proxy}}"
+                                      Margin="5"/>
+                                    <Button Grid.Column="2"
+                                    Content="Add"
+                                    Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
+                                    CommandParameter="{Binding Controller}"
+                                    Margin="5"/>
+                                </Grid>
+                                <DataGrid ItemsSource="{Binding Controller.ChildNetworkConnections}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                                        <DataGridTextColumn Header="IO Type"
+                                                    Binding="{Binding IOType}"/>
+                                        <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"/>
+                                    </DataGrid.Columns>
+                                    <DataGrid.RowDetailsTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <Label Content="Controllers" FontSize="10"/>
+                                                <DataGrid ItemsSource="{Binding ChildrenControllers}"
+                                                  AutoGenerateColumns="False"
+                                                  IsReadOnly="True">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Name"
+                                                                    Binding="{Binding Name}"
+                                                                    IsReadOnly="True"
+                                                                    Width="Auto"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGrid.RowDetailsTemplate>
+                                </DataGrid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
                 </DataGrid>
             </Grid>
 
@@ -131,11 +219,11 @@
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"
                                         IsReadOnly="True"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="40"/>
                     <DataGridTextColumn Header="Description"
                                         Binding="{Binding Description}"
                                         IsReadOnly="True"
-                                        Width="Auto"/>
+                                        Width="Auto" MinWidth="70"/>
                 </DataGrid.Columns>
             </DataGrid>
 

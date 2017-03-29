@@ -23,10 +23,10 @@
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" MinWidth="40" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" MinWidth="70" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Type}" Header="Type" MinWidth="40" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" MinWidth="70" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

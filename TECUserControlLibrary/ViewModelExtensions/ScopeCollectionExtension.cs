@@ -267,6 +267,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _panelsVisibility;
+
         public Visibility AddPanelVisibility
         {
             get { return _addPanelVisibility; }

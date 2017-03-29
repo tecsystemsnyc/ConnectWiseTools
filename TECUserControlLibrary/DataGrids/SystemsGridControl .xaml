@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="700"
              x:Name="parent">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -29,15 +29,15 @@
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
-                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" MinWidth="40"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemName, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto" MinWidth="70"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemDescription,
                                     Source={StaticResource proxy}}"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.LocationSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding Path=Location, Converter={cnvt:SelectedLocationToLocationConverter}}"
-                                        Header="Location" Width="Auto"
+                                        Header="Location" Width="Auto" MinWidth="60"
                                         DisplayMemberPath="Name"
                                         Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>
                 <!--<DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
@@ -45,34 +45,34 @@
                                         DisplayMemberPath="Name"
                                         Header="Location" Width="Auto"
                                         Visibility="{Binding Data.DataGridVisibilty.SystemLocation, Source={StaticResource proxy}}"/>-->
-                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto" MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemQuantity,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding EquipmentQuantity}" Header="Equipment Each" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding EquipmentQuantity}" Header="Equipment Each" Width="Auto" MinWidth="100" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemEquipmentCount,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" MinWidth="80" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemSubScopeCount,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding BudgetPriceModifier, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
                                     Header="Modifier"
-                                    Width="Auto"
+                                    Width="Auto" MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemModifierPrice,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding BudgetUnitPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}"
                                     Header="Unit Price"
-                                    Width="Auto"
+                                    Width="Auto" MinWidth="60"
                                     IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemUnitPrice,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding TotalBudgetPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     Header="Total Price" 
-                                    Width="Auto"
+                                    Width="Auto" MinWidth="60"
                                     IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemTotalPrice,

@@ -51,6 +51,7 @@ namespace EstimatingLibrary
                 _childrenConnections = value;
                 ChildrenConnections.CollectionChanged += collectionChanged;
                 NotifyPropertyChanged("ChildrenConnections", temp, this);
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
         public ObservableCollection<TECIO> IO
@@ -121,7 +122,7 @@ namespace EstimatingLibrary
         public TECController ParentController
         {
             get
-            {
+            { 
                 if (ParentConnection == null)
                 {
                     return null;
@@ -144,6 +145,19 @@ namespace EstimatingLibrary
                 }
 
                 RaisePropertyChanged("ParentController");
+            }
+        }
+
+        public ObservableCollection<TECNetworkConnection> ChildNetworkConnections
+        {
+            get
+            {
+                ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
+                foreach (TECNetworkConnection netConnect in ChildrenConnections)
+                {
+                    networkConnections.Add(netConnect);
+                }
+                return networkConnections;
             }
         }
 
@@ -202,7 +216,6 @@ namespace EstimatingLibrary
                 {
                     if(item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged += IOPropertyChanged;
                         NotifyPropertyChanged("Add", this, item);
                     } 
                 }
@@ -213,20 +226,12 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        (item as TECIO).PropertyChanged -= IOPropertyChanged;
                         NotifyPropertyChanged("Remove", this, item);
                     }
                 }
             }
         }
-        private void IOPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-            if (e.PropertyName == "Quantity")
-            {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
-            }
-        }
+
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -242,6 +247,10 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
                 }
+            }
+            if (sender == ChildrenConnections)
+            {
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
         #endregion
@@ -421,7 +430,6 @@ namespace EstimatingLibrary
             }
             return outList;
         }
-        
         #endregion
     }
 }

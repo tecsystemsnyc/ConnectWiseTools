@@ -31,8 +31,8 @@
                   AutoGenerateColumns="False"
                   Margin="5">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
             </DataGrid.Columns>
         </DataGrid>

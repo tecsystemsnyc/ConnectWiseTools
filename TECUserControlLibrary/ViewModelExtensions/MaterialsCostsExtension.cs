@@ -141,11 +141,64 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private string _ioModuleName;
+        public string IOModuleName
+        {
+            get { return _ioModuleName; }
+            set
+            {
+                _ioModuleName = value;
+                RaisePropertyChanged("IOModuleName");
+            }
+        }
+        private string _ioModuleDescription;
+        public string IOModuleDescription
+        {
+            get { return _ioModuleDescription; }
+            set
+            {
+                _ioModuleDescription = value;
+                RaisePropertyChanged("IOModuleDescription");
+            }
+        }
+        private double _ioModuleCCost;
+        public double IOModuleCost
+        {
+            get { return _ioModuleCCost; }
+            set
+            {
+                _ioModuleCCost = value;
+                RaisePropertyChanged("IOModuleCost");
+            }
+        }
+        private int _ioModuleIOPerModule;
+        public int IOModuleIOPerModule
+        {
+            get { return _ioModuleIOPerModule; }
+            set
+            {
+                _ioModuleIOPerModule = value;
+                RaisePropertyChanged("IOModuleIOPerModule");
+            }
+        }
+        private TECManufacturer _ioModuleManufacturer;
+        public TECManufacturer IOModuleManufacturer
+        {
+            get { return _ioModuleManufacturer; }
+            set
+            {
+                _ioModuleManufacturer = value;
+                RaisePropertyChanged("IOModuleManufacturer");
+            }
+        }
+
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
-        public ICommand AddAssociatedCostCommand { get; private set; }
+        public ICommand AddAssociatedCostCommand { get; private set; } 
         public ICommand AddPanelTypeCommand { get; private set; }
+        public ICommand AddIOModuleCommand { get; private set; }
+
         #endregion
 
         #region Delegates
@@ -159,6 +212,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates = templates;
             setupCommands();
+            setupDefaultValues();
         }
         
         #region Methods
@@ -168,6 +222,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
+            AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
         }
 
         private void addConnectionTypeExecute()
@@ -235,6 +290,33 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        private void addIOModuleExecute()
+        {
+            var ioModule = new TECIOModule();
+            ioModule.Name = IOModuleName;
+            ioModule.Cost = IOModuleCost;
+            ioModule.IOPerModule = IOModuleIOPerModule;
+            ioModule.Description = IOModuleDescription;
+            ioModule.Manufacturer = IOModuleManufacturer;
+
+            Templates.IOModuleCatalog.Add(ioModule);
+            IOModuleName = "";
+            IOModuleDescription = "";
+            IOModuleCost = 0;
+            IOModuleIOPerModule = 1;
+            IOModuleManufacturer = null;
+        }
+        private bool canAddIOModuleExecute()
+        {
+            if (IOModuleName != "" && IOModuleManufacturer != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -244,6 +326,29 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);
+        }
+
+        private void setupDefaultValues()
+        {
+            ConnectionTypeName = "";
+            ConnectionTypeCost = 0;
+            ConnectionTypeLabor = 0;
+
+            ConduitTypeName = "";
+            ConduitTypeCost = 0;
+            ConduitTypeLabor = 0;
+
+            AssociatedCostName = "";
+            AssociatedCostCost = 0;
+            AssociatedCostLabor = 0;
+
+            PanelTypeName = "";
+            PanelTypeCost = 0;
+
+            IOModuleName = "";
+            IOModuleDescription = "";
+            IOModuleCost = 0;
+            IOModuleIOPerModule = 1;
         }
         #endregion
     }

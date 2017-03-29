@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="500"
              x:Name="parent"
              xmlns:dd="urn:gong-wpf-dragdrop">
     <UserControl.Resources>
@@ -36,37 +36,37 @@
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" />
-                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" MinWidth="40"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentName, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"  MinWidth="70"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentDescription, 
                                     Source={StaticResource proxy}}"/>
                 <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         DisplayMemberPath="Name"
                                         ItemsSource="{Binding Data.LocationSelections,
                                         Source={StaticResource proxy}}"
-                                        Header="Location" Width="Auto"
+                                        Header="Location" Width="Auto"  MinWidth="60"
                                         Visibility="{Binding Data.DataGridVisibilty.EquipmentLocation,
                                         Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"
+                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"  MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentQuantity,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" IsReadOnly="True"  MinWidth="70"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentSubScopeCount,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding BudgetUnitPrice, UpdateSourceTrigger=LostFocus, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     Header="Unit Price" 
-                                    Width="Auto"
+                                    Width="Auto" MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentUnitPrice, 
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding TotalBudgetPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     IsReadOnly="True"
                                     Header="Total Price" 
-                                    Width="Auto"
+                                    Width="Auto" MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentTotalPrice, 
                                     Source={StaticResource proxy}}"/>

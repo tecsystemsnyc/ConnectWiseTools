@@ -709,7 +709,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECIO";
         public static Type IOObjectType = typeof(TECIO);
 
-        public static TableField IOID = new TableField("ControllerID", "TEXT", IOObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", IOObjectType.GetProperty("Guid"));
         public static TableField IOType = new TableField("IOType", "TEXT", IOObjectType.GetProperty("Type"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", IOObjectType.GetProperty("Quantity"));
 
@@ -813,7 +813,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ReferenceType = typeof(TECIO);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOID = new TableField("ControllerID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
@@ -1367,6 +1367,24 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
+    public class IOModuleManufacturerTable: TableBase
+    {
+        public static new string TableName = "TECIOModuleTECManufacturer";
+        public static Type ObjectType = typeof(TECIOModule);
+        public static Type ReferenceType = typeof(TECManufacturer);
+
+        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            IOModuleID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
 
     public static class AllBidTables
     {
@@ -1434,7 +1452,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new NetworkConnectionIOTypeTable()
+            new NetworkConnectionIOTypeTable(),
+            new IOModuleManufacturerTable()
             };
     }
 
@@ -1458,6 +1477,8 @@ namespace EstimatingUtilitiesLibrary
             new MiscWiringTable(),
             new ControlledScopeTable(),
             new SubScopeConnectionTable(),
+            new IOModuleTable(),
+            new IOTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1481,7 +1502,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
             new PanelControllerTable(),
-            new SubScopeConnectionChildrenTable()
+            new SubScopeConnectionChildrenTable(),
+            new IOModuleManufacturerTable()
         };
     }
 
@@ -1556,7 +1578,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new NetworkConnectionIOTypeTable()
+            new NetworkConnectionIOTypeTable(),
+            new IOModuleManufacturerTable()
         };
     }
 
