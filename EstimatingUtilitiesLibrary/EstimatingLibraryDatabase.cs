@@ -39,44 +39,20 @@ namespace EstimatingUtilitiesLibrary
 
             //watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
-            if (templates.DeviceCatalog.Count > 0)
-            {
-                foreach (TECDevice device in templates.DeviceCatalog)
-                { editObject(new StackItem(Change.Edit, bid, device)); }
-            }
-
-            if (templates.ManufacturerCatalog.Count > 0)
-            {
-                foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-                { editObject(new StackItem(Change.Edit, bid, manufacturer)); }
-            }
-
-            if (templates.Tags.Count > 0)
-            {
-                foreach (TECTag tag in templates.Tags)
-                { editObject(new StackItem(Change.Edit, bid, tag)); }
-            }
-
-            if(templates.ConnectionTypeCatalog.Count > 0)
-            {
-                foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
-                { editObject(new StackItem(Change.Edit, bid, connectionType)); }
-            }
-            if (templates.ConduitTypeCatalog.Count > 0)
-            {
-                foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
-                { editObject(new StackItem(Change.Edit, bid, conduitType)); }
-            }
-            if(templates.AssociatedCostsCatalog.Count > 0)
-            {
-                foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
-                { editObject(new StackItem(Change.Edit, bid, cost)); }
-            }
-            if(templates.IOModuleCatalog.Count > 0)
-            {
-                foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
-                { editObject(new StackItem(Change.Edit, bid, cost)); }
-            }
+            foreach (TECDevice device in templates.DeviceCatalog)
+            { editObject(new StackItem(Change.Edit, bid, device)); }
+            foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+            { editObject(new StackItem(Change.Edit, bid, manufacturer)); }
+            foreach (TECTag tag in templates.Tags)
+            { editObject(new StackItem(Change.Edit, bid, tag)); }
+            foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
+            { editObject(new StackItem(Change.Edit, bid, connectionType)); }
+            foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
+            { editObject(new StackItem(Change.Edit, bid, conduitType)); }
+            foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
+            { editObject(new StackItem(Change.Edit, bid, cost)); }
+            foreach(TECIOModule module in templates.IOModuleCatalog)
+            { editObject(new StackItem(Change.Edit, bid, module)); }
             //watch.Stop();
             //Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 

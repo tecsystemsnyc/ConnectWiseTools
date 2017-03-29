@@ -129,6 +129,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectionChanged?.Invoke(value);
             }
         }
+        private TECPanel _selectedPanel;
+        public TECPanel SelectedPanel
+        {
+            get { return _selectedPanel; }
+            set
+            {
+                _selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                SelectionChanged?.Invoke(value);
+            }
+        }
         private ObservableCollection<TECLocation> _locationSelections;
         public ObservableCollection<TECLocation> LocationSelections
         {
@@ -139,7 +150,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("LocationSelections");
             }
         }
-
         #endregion
 
         #region Point Interface Properties
@@ -267,12 +277,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         
-        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);

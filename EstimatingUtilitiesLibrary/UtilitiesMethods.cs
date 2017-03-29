@@ -201,9 +201,21 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
 
+        public static void AddCatalogsToBid(TECBid bid, TECTemplates templates)
+        {
+            bid.DeviceCatalog = templates.DeviceCatalog;
+            bid.ManufacturerCatalog = templates.ManufacturerCatalog;
+            bid.PanelTypeCatalog = templates.PanelTypeCatalog;
+            bid.ConduitTypes = templates.ConduitTypeCatalog;
+            bid.ConnectionTypes = templates.ConnectionTypeCatalog;
+            bid.Tags = templates.Tags;
+            bid.IOModuleCatalog = templates.IOModuleCatalog;
+            bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
+        }
+
     }
 
-    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };
+    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, Nothing };
     public enum GridIndex { Systems, Scope, Notes, Exclusions};
     public enum AddIndex { System, Equipment, SubScope, Devices, Tags};
     public enum LocationScopeType { System, Equipment, SubScope};

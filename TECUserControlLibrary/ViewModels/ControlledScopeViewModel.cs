@@ -21,6 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ControlledScopeViewModel : ViewModelBase, IDropTarget
     {
         #region Properties
+        
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         #endregion
@@ -28,7 +29,24 @@ namespace TECUserControlLibrary.ViewModels
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
+
+        public Action<Object> SelectionChanged;
         #endregion
+
+        private ControllerInPanel _selectedControllerInPanel;
+        public ControllerInPanel SelectedControllerInPanel
+        {
+            get
+            {
+                return _selectedControllerInPanel;
+            }
+            set
+            {
+                _selectedControllerInPanel = value;
+                RaisePropertyChanged("SelectedControllerInPanel");
+                SelectionChanged.Invoke(_selectedControllerInPanel.Controller);
+            }
+        }
 
         private Visibility _debugVisibilty;
         public Visibility DebugVisibility
@@ -153,6 +171,7 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs()
         {
             ScopeDataGrid = new ScopeDataGridExtension(Templates);
+            ScopeDataGrid.SelectionChanged += SelectionChanged;
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;

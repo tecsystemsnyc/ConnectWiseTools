@@ -783,7 +783,7 @@ namespace EstimatingLibrary
             { bid.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
             foreach (TECIOModule module in IOModuleCatalog)
             {
-                IOModuleCatalog.Add(module.Copy() as TECIOModule);
+                bid.IOModuleCatalog.Add(module.Copy() as TECIOModule);
             }
             return bid;
         }

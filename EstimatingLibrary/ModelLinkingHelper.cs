@@ -53,7 +53,7 @@ namespace EstimatingLibrary
             linkPanelTypesInPanel(bid.PanelTypeCatalog, panels);
             linkConduitTypeWithConnections(bid.ConduitTypes, controllers);
             linkManufacturersWithControllers(bid.ManufacturerCatalog, controllers);
-
+            linkIOModules(controllers, bid.IOModuleCatalog);
             foreach (TECSystem sys in systems)
             {
                 linkScopeChildrenInSystem(sys, bid);
@@ -531,7 +531,8 @@ namespace EstimatingLibrary
                 linkPanelTypesInPanel(templates.PanelTypeCatalog, scope.Panels);
                 linkConduitTypeWithConnections(templates.ConduitTypeCatalog, scope.Controllers);
                 linkManufacturersWithControllers(templates.ManufacturerCatalog, scope.Controllers);
-                foreach(TECSystem sys in scope.Systems)
+                linkIOModules(scope.Controllers, templates.IOModuleCatalog);
+                foreach (TECSystem sys in scope.Systems)
                 {
                     linkScopeChildrenInSystem(sys, templates);
                 }

@@ -3353,6 +3353,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
             Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
             Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
             Assert.IsTrue(actualConnection.SubScope == actualSystem.Equipment[0].SubScope[0], "Scope not linked in connection");
