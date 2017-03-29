@@ -741,6 +741,23 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
+        static private TECConnectionType getConnectionTypeInNetworkConnection(Guid netConnectionID)
+        {
+            string command = "select * from " + ConnectionTypeTable.TableName + " where " + ConnectionTypeTable.ConnectionTypeID.Name + " in ";
+            command += "(select " + NetworkConnectionConnectionTypeTable.TypeID.Name + " from " + NetworkConnectionConnectionTypeTable.TableName + " where ";
+            command += NetworkConnectionConnectionTypeTable.ConnectionID.Name + " = '" + netConnectionID;
+            command += "')";
+
+            DataTable connectionTypeDT = SQLiteDB.getDataFromCommand(command);
+            if (connectionTypeDT.Rows.Count > 0)
+            {
+                return (getConnectionTypeFromRow(connectionTypeDT.Rows[0]));
+            }
+            else
+            {
+                return null;
+            }
+        }
         static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
         {
             string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
@@ -1000,33 +1017,20 @@ namespace EstimatingUtilitiesLibrary
             
             return outScope;
         }
-        static private ObservableCollection<TECController> getChildrenInNetworkConnection(Guid connectionID)
+        static private ObservableCollection<TECController> getControllersInNetworkConnection(Guid connectionID)
         {
             var outScope = new ObservableCollection<TECController>();
             
             string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
-            command += "(select " + NetworkConnectionChildrenTable.ChildID.Name + " from " + NetworkConnectionChildrenTable.TableName + " where ";
-            command += NetworkConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
+            command += "(select " + NetworkConnectionControllerTable.ControllerID.Name + " from " + NetworkConnectionControllerTable.TableName + " where ";
+            command += NetworkConnectionControllerTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
             DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
-            { outScope.Add(getControllerFromRow(row)); }
+            { outScope.Add(getControllerPlaceholderFromRow(row)); }
 
             return outScope;
-        }
-        static private IOType getIOTypeInNetworkConnection(Guid connectionID)
-        {
-            IOType outIO = 0;
-            string command = "select * from " + NetworkConnectionIOTypeTable.TableName + " where ";
-            command += NetworkConnectionIOTypeTable.ConnectionID.Name + " = '" + connectionID + "'";
-
-            DataTable typeDT = SQLiteDB.getDataFromCommand(command);
-            if(typeDT.Rows.Count > 0)
-            {
-                outIO = TECIO.convertStringToType(typeDT.Rows[0][NetworkConnectionIOTypeTable.IOType.Name].ToString());
-            }
-            return outIO;
         }
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
@@ -1233,6 +1237,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     var networkConnection = getNetworkConnectionFromRow(row);
                     networkConnection.ParentController = controller;
+                   
                     outScope.Add(networkConnection);
                 }
             }
@@ -1854,9 +1859,10 @@ namespace EstimatingUtilitiesLibrary
             Guid guid = new Guid(row[NetworkConnectionTable.ConnectionID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);
             connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
+            connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.IOType = getIOTypeInNetworkConnection(connection.Guid);
-            connection.ChildrenControllers = getChildrenInNetworkConnection(connection.Guid);
+            connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid);
+            connection.ConnectionType = getConnectionTypeInNetworkConnection(connection.Guid);
             return connection;
         }
         #endregion
@@ -2335,10 +2341,7 @@ namespace EstimatingUtilitiesLibrary
         {
             if(connection is TECNetworkConnection)
             {
-                foreach (TECController scope in (connection as TECNetworkConnection).ChildrenControllers)
-                {
-                    addRelationship(new StackItem(Change.AddRelationship, connection, scope, typeof(TECNetworkConnection), typeof(TECController)));
-                }
+                saveNetworkConnectionChildProperties(connection as TECNetworkConnection);
             }
             else if(connection is TECSubScopeConnection)
             {
@@ -2351,6 +2354,14 @@ namespace EstimatingUtilitiesLibrary
         {
             addObject(new StackItem(Change.Add, parent, ioModule));
             addObject(new StackItem(Change.Add, ioModule.Manufacturer, ioModule));
+        }
+        private static void saveNetworkConnectionChildProperties(TECNetworkConnection netConnect)
+        {
+            addObject(new StackItem(Change.Add, netConnect, netConnect.ConnectionType));
+            foreach(TECController controller in netConnect.ChildrenControllers)
+            {
+                addRelationship(new StackItem(Change.Add, netConnect, controller, typeof(TECNetworkConnection), typeof (TECController)));
+            }
         }
         #endregion
 

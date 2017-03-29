@@ -187,11 +187,14 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddConnectionExecute(TECController controller)
         {
-            TECNetworkConnection newConnection = new TECNetworkConnection();
-            newConnection.IOType = SelectedIO;
-            newConnection.ConnectionType = SelectedWire;
-            newConnection.ParentController = controller;
-            controller.ChildrenConnections.Add(newConnection);
+            if (SelectedIO != 0 && SelectedWire != null)
+            {
+                TECNetworkConnection newConnection = new TECNetworkConnection();
+                newConnection.IOType = SelectedIO;
+                newConnection.ConnectionType = SelectedWire;
+                newConnection.ParentController = controller;
+                controller.ChildrenConnections.Add(newConnection);
+            }
         }
 
         #endregion
@@ -311,15 +314,22 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "ParentController")
             {
                 TECController controller = (sender as TECController);
-                if (controller.ParentConnection != null && controller.ParentConnection.PossibleIO.Count > 0)
+                if (controller.ParentConnection != null)
                 {
-                    if (controller.ParentConnection.PossibleIO.Contains(IOType.BACnetIP))
+                    if (controller.ParentConnection.PossibleIO.Count > 0)
                     {
-                        controller.ParentConnection.IOType = IOType.BACnetIP;
+                        if (controller.ParentConnection.PossibleIO.Contains(IOType.BACnetIP))
+                        {
+                            controller.ParentConnection.IOType = IOType.BACnetIP;
+                        }
+                        else
+                        {
+                            controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
+                        }
                     }
-                    else
+                    if (Bid.ConnectionTypes.Count > 0)
                     {
-                        controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
+                        controller.ParentConnection.ConnectionType = Bid.ConnectionTypes[0];
                     }
                 }
             }

@@ -28,6 +28,7 @@ namespace EstimatingLibrary
             linkAllConnections(bid.Controllers, bid.Systems);
             linkIOModules(bid.Controllers, bid.IOModuleCatalog);
             linkManufacturersWithIOModules(bid.ManufacturerCatalog, bid.IOModuleCatalog);
+            linkAllConnectionTypes(bid.Controllers, bid.ConnectionTypes);
         }
         public static void LinkTemplates(TECTemplates templates)
         {
@@ -210,6 +211,26 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            foreach (TECController controller in controllers)
+            {
+                foreach (TECNetworkConnection netConnect in controller.ChildNetworkConnections)
+                {
+                    ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
+                    foreach (TECController child in netConnect.ChildrenControllers)
+                    {
+                        foreach (TECController bidController in controllers)
+                        {
+                            bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
+                            if (child.Guid == bidController.Guid || isCopy)
+                            {
+                                controllersToAdd.Add(bidController);
+                                bidController.ParentConnection = netConnect;
+                            }
+                        }
+                    }
+                    netConnect.ChildrenControllers = controllersToAdd;
+                }
+            }
         }
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
         {
@@ -285,6 +306,26 @@ namespace EstimatingLibrary
                             controller.Manufacturer = manufacturer;
                         }
                     }
+                }
+            }
+        }
+        static private void linkAllConnectionTypes(ObservableCollection<TECController> controllers, ObservableCollection<TECConnectionType> connectionTypes)
+        {
+            foreach (TECController controller in controllers)
+            {
+                foreach (TECNetworkConnection connection in controller.ChildrenConnections)
+                {
+                    bool typeFound = false;
+                    foreach (TECConnectionType type in connectionTypes)
+                    {
+                        if (connection.ConnectionType.Guid == type.Guid)
+                        {
+                            connection.ConnectionType = type;
+                            typeFound = true;
+                            break;
+                        }
+                    }
+                    if (typeFound) break;
                 }
             }
         }

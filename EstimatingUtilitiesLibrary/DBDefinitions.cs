@@ -552,11 +552,12 @@ namespace EstimatingUtilitiesLibrary
     }
     public class NetworkConnectionTable : TableBase
     {
-        public static new string TableName = "TECNetworkConnectionConnection";
+        public static new string TableName = "TECNetworkConnection";
         public static Type ObjectType = typeof(TECNetworkConnection);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ConnectionID
@@ -1216,41 +1217,24 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class NetworkConnectionIOTypeTable : TableBase
+    public class NetworkConnectionControllerTable : TableBase
     {
-        public static new string TableName = "TECNetworkConnectionTECIOType";
-        public static Type ObjectType = typeof(TECNetworkConnection);
-
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ConnectionID
-        };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType
-        };
-    }
-    public class NetworkConnectionChildrenTable : TableBase
-    {
-        public static new string TableName = "TECNetworkConnectionChild";
+        public static new string TableName = "TECNetworkConnectionTECController";
         public static Type ConnectionType = typeof(TECNetworkConnection);
-        public static Type ChildType = typeof(TECController);
+        public static Type ControllerType = typeof(TECController);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
-        public static TableField ChildID = new TableField("ScopeID", "TEXT", ChildType.GetProperty("Guid"));
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
 
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ConnectionID,
-            ChildID
+            ControllerID
             };
         public static new List<Type> Types = new List<Type>()
         {
             ConnectionType,
-            ChildType
+            ControllerType
         };
     }
     public class SubScopeConnectionChildrenTable : TableBase
@@ -1451,9 +1435,8 @@ namespace EstimatingUtilitiesLibrary
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionChildrenTable(),
+            new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new NetworkConnectionIOTypeTable(),
             new IOModuleManufacturerTable()
             };
     }
@@ -1577,9 +1560,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
             new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionChildrenTable(),
+            new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new NetworkConnectionIOTypeTable(),
             new IOModuleManufacturerTable()
         };
     }

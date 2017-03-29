@@ -176,8 +176,13 @@
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                                         <DataGridTextColumn Header="IO Type"
-                                                    Binding="{Binding IOType}"/>
-                                        <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"/>
+                                                    Binding="{Binding IOType}"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Wire"
+                                                            Binding="{Binding ConnectionType.Name}"
+                                                            IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"
+                                                            IsReadOnly="True"/>
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
