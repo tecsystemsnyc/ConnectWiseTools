@@ -95,12 +95,11 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         public override object Copy()
         {
-            var outScope = new TECControlledScope();
-            outScope._guid = this._guid;
+            var outScope = new TECControlledScope(_guid);
+            outScope.copyPropertiesFromScope(this);
             foreach(TECController controller in Controllers)
             {
                 outScope.Controllers.Add(controller.Copy() as TECController);

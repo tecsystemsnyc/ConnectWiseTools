@@ -616,7 +616,9 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleSubScopeChildren(newItem as TECSubScope, item.Change);
             }
-            else if (newItem is TECController && (item.ReferenceObject is TECBid || item.ReferenceObject is TECTemplates))
+            else if (newItem is TECController && (item.ReferenceObject is TECBid 
+                || item.ReferenceObject is TECTemplates 
+                || item.ReferenceObject is TECControlledScope))
             {
                 handleControllerChildren(newItem as TECController, item.Change);
             }
@@ -815,8 +817,11 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(controller as TECScope, change);
             StackItem item;
-            item = new StackItem(change, (object)controller, (object)controller.Manufacturer);
-            SaveStack.Add(item);
+            if(controller.Manufacturer != null)
+            {
+                item = new StackItem(change, controller, controller.Manufacturer);
+                SaveStack.Add(item);
+            }
             foreach (TECConnection connection in controller.ChildrenConnections)
             {
                 item = new StackItem(change, controller, connection, typeof(TECController), typeof(TECConnection));
