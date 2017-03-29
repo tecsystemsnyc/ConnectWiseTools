@@ -258,6 +258,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private ObservableCollection<TECPanelType> _panelTypeSelections;
+        public ObservableCollection<TECPanelType> PanelTypeSelections
+        {
+            get { return _panelTypeSelections; }
+            set
+            {
+                _panelTypeSelections = value;
+                RaisePropertyChanged("PanelTypeSelections");
+            }
+        }
+
         #region CommandProperties
         public ICommand AddTagToSystemCommand { get; private set; }
         public ICommand AddTagToEquipmentCommand { get; private set; }
