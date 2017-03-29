@@ -77,16 +77,19 @@ namespace TECUserControlLibrary.Models
             }
             set
             {
-                if (value != null)
+                if (value != ParentController)
                 {
-                    value.AddController(Controller);
+                    if (value != null)
+                    {
+                        value.AddController(Controller);
+                    }
+                    else
+                    {
+                        Controller.ParentController = null;
+                    }
+                    RaisePropertyChanged("ParentController");
+                    RaisePropertyChanged("IsConnected");
                 }
-                else
-                {
-                    Controller.ParentController = null;
-                }
-                RaisePropertyChanged("ParentController");
-                RaisePropertyChanged("IsConnected");
             }
         }
         public ObservableCollection<string> PossibleIO
@@ -122,6 +125,10 @@ namespace TECUserControlLibrary.Models
         }
 
         #region Methods
+        public void RaiseIsConnected()
+        {
+            RaisePropertyChanged("IsConnected");
+        }
 
         private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
         {

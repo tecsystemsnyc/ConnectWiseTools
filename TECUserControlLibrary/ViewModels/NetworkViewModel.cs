@@ -51,7 +51,18 @@ namespace TECUserControlLibrary.ViewModels
             get { return _bmsControllers; }
             set
             {
+                if (BMSControllers != null)
+                {
+                    foreach (BMSController controller in BMSControllers)
+                    {
+                        controller.PropertyChanged -= BMSController_PropertyChanged;
+                    }
+                }
                 _bmsControllers = value;
+                foreach (BMSController controller in BMSControllers)
+                {
+                    controller.PropertyChanged += BMSController_PropertyChanged;
+                }
                 RaisePropertyChanged("BMSControllers");
             }
         }
@@ -141,13 +152,16 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (controller.IsBMS)
             {
-                BMSControllers.Add(new BMSController(controller, NetworkControllers));
+                BMSController newBMSController = new BMSController(controller, NetworkControllers);
+                BMSControllers.Add(newBMSController);
             }
             else if (controller.ParentConnection == null)
             {
                 StandaloneControllers.Add(controller);
             }
         }
+
+        
 
         private void removeController(TECController controller)
         {
@@ -252,7 +266,9 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (item is BMSController)
                     {
-                        NetworkControllers.Add((item as BMSController).Controller);
+                        BMSController newBMSController = (item as BMSController);
+                        newBMSController.PropertyChanged += BMSController_PropertyChanged;
+                        NetworkControllers.Add(newBMSController.Controller);
                     }
                 }
             }
@@ -262,6 +278,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (item is BMSController)
                     {
+                        BMSController oldBMSController = (item as BMSController);
+                        oldBMSController.PropertyChanged -= BMSController_PropertyChanged;
                         NetworkControllers.Remove((item as BMSController).Controller);
                     }
                 }
@@ -307,7 +325,26 @@ namespace TECUserControlLibrary.ViewModels
                 TECController controller = (sender as TECController);
                 if (controller.ParentConnection != null && controller.ParentConnection.PossibleIO.Count > 0)
                 {
-                    controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
+                    if (controller.ParentConnection.PossibleIO.Contains(IOType.BACnetIP))
+                    {
+                        controller.ParentConnection.IOType = IOType.BACnetIP;
+                    }
+                    else
+                    {
+                        controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
+                    }
+                }
+            }
+        }
+
+        private void BMSController_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                foreach (BMSController bmsController in BMSControllers)
+                {
+                    bmsController.RaiseIsConnected();
+                    bmsController.PossibleParents = NetworkControllers;
                 }
             }
         }
