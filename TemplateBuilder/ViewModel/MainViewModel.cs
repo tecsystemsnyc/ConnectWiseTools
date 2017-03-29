@@ -452,6 +452,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -521,12 +523,14 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.DevicesVisibility = Visibility.Collapsed;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Visible;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Visible;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Visible;
 
                     break;
                 case 5:
@@ -542,7 +546,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
                     ScopeCollection.TagsVisibility = Visibility.Collapsed;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                     break;
                 case 6:
                     ScopeCollection.TabIndex = 10;

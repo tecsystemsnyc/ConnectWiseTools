@@ -490,6 +490,9 @@ namespace EstimatingLibrary
                 noteToAdd.Text = item;
                 Notes.Add(new TECNote(noteToAdd));
             }
+            _parameters.Overhead = 25;
+            _parameters.Profit = 20;
+            _parameters.SubcontractorMarkup = 20;
         }
 
         //Copy Constructor

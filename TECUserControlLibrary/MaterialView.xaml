@@ -23,14 +23,15 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type uLib:MaterialType}}}"
                       SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialType}"
-                      Margin="5"/>
+                      Margin="5"
+                  VerticalContentAlignment="Center"/>
         <TabControl Grid.Column="1" Grid.RowSpan="4"
                     SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={cnvt:EnumerationToIntegerConverter}}">
             <TabItem Visibility="Collapsed">

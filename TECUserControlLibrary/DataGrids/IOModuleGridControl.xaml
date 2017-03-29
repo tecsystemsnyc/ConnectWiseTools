@@ -19,12 +19,12 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"  MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <DataGridTextColumn Binding="{Binding IOPerModule}" Header="IO per Module" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding IOPerModule}" Header="IO per Module" MinWidth="90" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" MinWidth="70" Width="Auto" IsReadOnly="True"/>
 
             </DataGrid.Columns>
         </DataGrid>

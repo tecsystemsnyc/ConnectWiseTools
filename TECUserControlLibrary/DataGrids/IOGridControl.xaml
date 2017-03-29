@@ -24,12 +24,12 @@
                   CanUserAddRows="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="60" IsReadOnly="True"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.IOModuleSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding IOModule, UpdateSourceTrigger=PropertyChanged,
                                         Converter={cnvt:SelectedItemToIOModuleConverter}}"
-                                        Header="IO Module" Width="Auto"
+                                        Header="IO Module" Width="Auto" MinWidth="70"
                                         DisplayMemberPath="Name"/>
             </DataGrid.Columns>
 

@@ -22,8 +22,8 @@
                   CanUserDeleteRows="False">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Manufacturer" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Multiplier}" Header="Multiplier" Width="*"
+                <DataGridTextColumn Binding="{Binding Name}" Header="Manufacturer" Width="Auto"  MinWidth="80"/>
+                <DataGridTextColumn Binding="{Binding Multiplier}" Header="Multiplier" Width="Auto" MinWidth="70"
                                     ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
             

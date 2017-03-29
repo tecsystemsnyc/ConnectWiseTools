@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="500"
              x:Name="parent"
              xmlns:dd="urn:gong-wpf-dragdrop">
     <UserControl.Resources>
@@ -23,13 +23,13 @@
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
                 <!--<DataGridTextColumn Binding="{Binding Quantity}" Header="Qty." Width="Auto"/>-->
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>
+                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
