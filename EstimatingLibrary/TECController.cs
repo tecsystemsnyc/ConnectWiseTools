@@ -381,7 +381,6 @@ namespace EstimatingLibrary
         public override Object DragDropCopy()
         {
             var outController = new TECController(this);
-            
             return outController;
         }
         private ObservableCollection<IOType> getAvailableIO()

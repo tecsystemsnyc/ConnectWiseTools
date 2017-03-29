@@ -84,7 +84,10 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if(item != null) { NotifyPropertyChanged("Add", this, item); }
+                    if(item != null)
+                    {
+                        NotifyPropertyChanged("Add", this, item);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
