@@ -1823,6 +1823,7 @@ namespace EstimatingUtilitiesLibrary
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
+            controller.Type = UtilitiesMethods.StringToEnum<ControllerType>(row[ControllerTable.Type.Name].ToString(), ControllerType.IsStandalone);
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
             controller.Manufacturer = getManufacturerInController(guid);

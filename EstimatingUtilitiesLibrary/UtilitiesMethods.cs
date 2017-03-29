@@ -169,6 +169,24 @@ namespace EstimatingUtilitiesLibrary
             else { throw new InvalidCastException("Int to Bool cast failed. Int: " + i); }
         }
 
+        #region Enum Conversions
+        public static T StringToEnum<T>(string str)
+        {
+            return (T)Enum.Parse(typeof(T), str);
+        }
+        public static T StringToEnum<T>(string str, T def)
+        {
+            try
+            {
+                return (T)Enum.Parse(typeof(T), str);
+            }
+            catch
+            {
+                return def;
+            }
+        }
+        #endregion
+
         #endregion Cast Conversions
 
         public static object GetChildCollection(object childObject, object parentObject)
