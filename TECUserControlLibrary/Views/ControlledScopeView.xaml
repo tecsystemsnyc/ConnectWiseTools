@@ -55,6 +55,7 @@
             <DataGrid ItemsSource="{Binding ControllerCollection}"
                       AutoGenerateColumns="False"
                       dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                      SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedControllerInPanel}"
                       CanUserAddRows="False"
                       Grid.Row="2">
                 <DataGrid.Columns>

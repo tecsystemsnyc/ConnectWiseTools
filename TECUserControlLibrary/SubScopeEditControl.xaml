@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -37,7 +37,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label Content="Name:"/>
             <TextBox Text="{Binding SelectedSubScope.Name}" Grid.Column="1" 
@@ -45,12 +44,6 @@
                      Margin="5"/>
             <Label Content="Description:" Grid.Row="1"/>
             <TextBox Text="{Binding SelectedSubScope.Description}" Grid.Column="1" Grid.Row="1" 
-                                 VerticalAlignment="Top"
-                             Margin="5"/>
-            <Label Content="Conduit:" Grid.Row="2"/>
-            <ComboBox ItemsSource="{Binding ConduitTypeSelections}" Grid.Column="1" Grid.Row="2" 
-                      SelectedItem="{Binding SelectedSubScope.ConduitType}"
-                      DisplayMemberPath="Name"
                                  VerticalAlignment="Top"
                              Margin="5"/>
         </Grid>

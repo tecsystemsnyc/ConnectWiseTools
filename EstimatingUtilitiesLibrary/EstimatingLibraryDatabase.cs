@@ -2348,7 +2348,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveCompleteIOModule(TECIOModule ioModule, object parent)
         {
-            addObject(new StackItem(Change.Add, ioModule, parent));
+            addObject(new StackItem(Change.Add, parent, ioModule));
             addObject(new StackItem(Change.Add, ioModule.Manufacturer, ioModule));
         }
         #endregion
