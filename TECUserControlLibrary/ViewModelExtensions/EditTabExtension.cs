@@ -148,6 +148,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanel _selectedPanel;
+        public TECPanel SelectedPanel
+        {
+            get { return _selectedPanel; }
+            set
+            {
+                _selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                TabIndex = EditIndex.Panel;
+            }
+        }
+
         private IOType _controllerIO;
         public IOType ControllerIO
         {
@@ -253,6 +265,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToPointCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
+        public ICommand AddTagToPanelCommand { get; private set; }
         public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
@@ -260,11 +273,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand DeleteSelectedDeviceCommand { get; private set; }
         public ICommand DeleteSelectedPointCommand { get; private set; }
         public ICommand DeleteSelectedControllerCommand { get; private set; }
+        public ICommand DeleteSelectedPanelCommand { get; private set; }
         public ICommand AddAssociatedCostToSystemCommand { get; private set; }
         public ICommand AddAssociatedCostToEquipmentCommand { get; private set; }
         public ICommand AddAssociatedCostToSubScopeCommand { get; private set; }
         public ICommand AddAssociatedCostToDeviceCommand { get; private set; }
         public ICommand AddAssociatedCostToControllerCommand { get; private set; }
+        public ICommand AddAssociatedCostToPanelCommand { get; private set; }
+
         #endregion
         #endregion
 
@@ -299,6 +315,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
+            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
@@ -306,11 +323,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedDeviceCommand = new RelayCommand(DeleteSelectedDeviceExecute);
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
+            DeleteSelectedPanelCommand = new RelayCommand(DeleteSelectedPanelExecute);
             AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute);
             AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute);
             AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
             AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute);
             AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute);
+            AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
         }
         private void setCatalogs(object type)
         {
@@ -379,6 +398,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
 
         }
+        private void AddTagToPanelExecute()
+        {
+            if (SelectedTag != null && SelectedPanel != null)
+            {
+                SelectedPanel.Tags.Add(SelectedTag);
+            }
+
+        }
+
         private void AddIOToControllerExecute()
         {
             var newIO = new TECIO();
@@ -456,6 +484,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             SelectedController = null;
         }
+        private void DeleteSelectedPanelExecute()
+        {
+            if (SelectedPanel != null && Templates != null)
+            {
+                Templates.PanelTemplates.Remove(SelectedPanel);
+            }
+            else if (SelectedPanel != null && Bid != null)
+            {
+                Bid.Panels.Remove(SelectedPanel);
+            }
+            SelectedPanel = null;
+        }
 
         private void AddAssociatedCostToSystemExecute()
         {
@@ -493,6 +533,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 SelectedController.AssociatedCosts.Add(SelectedAssociatedCost);
             }
         }
+        private void AddAssociatedCostToPanelExecute()
+        {
+            if (SelectedAssociatedCost != null && SelectedPanel != null)
+            {
+                SelectedPanel.AssociatedCosts.Add(SelectedAssociatedCost);
+            }
+        }
         #endregion
 
         #region Events
@@ -525,7 +572,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECController)
             {
                 SelectedController = selection as TECController;
-            } else
+            } else if (selection is TECPanel)
+            {
+                SelectedPanel = selection as TECPanel;
+            }
+            else
             {
                 TabIndex = EditIndex.Nothing;
             }

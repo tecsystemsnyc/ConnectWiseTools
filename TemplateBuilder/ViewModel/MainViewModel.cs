@@ -45,7 +45,6 @@ namespace TemplateBuilder.ViewModel
 
             StatusBarVM.CurrentStatusText = "Done.";
             TitleString = "Template Builder";
-
             
             setupScopeCollecion();
             setupEditTab();
@@ -225,6 +224,7 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
             ControlledScopeVM.DropHandler += Drop;
+            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
 
         private void setupStatusBar()

@@ -16,9 +16,9 @@ using System.Windows.Shapes;
 namespace TECUserControlLibrary
 {
     /// <summary>
-    /// Interaction logic for ControllerEditControl.xaml
+    /// Interaction logic for PanelEditControl.xaml
     /// </summary>
-    public partial class ControllerEditControl : UserControl
+    public partial class PanelEditControl : UserControl
     {
         #region DPs
         /// <summary>
@@ -35,9 +35,10 @@ namespace TECUserControlLibrary
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ControllerEditControl));
+              typeof(PanelEditControl));
         #endregion
-        public ControllerEditControl()
+
+        public PanelEditControl()
         {
             InitializeComponent();
         }
