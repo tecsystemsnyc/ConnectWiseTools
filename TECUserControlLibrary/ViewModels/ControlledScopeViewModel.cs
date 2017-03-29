@@ -44,7 +44,23 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedControllerInPanel = value;
                 RaisePropertyChanged("SelectedControllerInPanel");
-                SelectionChanged.Invoke(_selectedControllerInPanel.Controller);
+                if()
+                SelectionChanged?.Invoke(_selectedControllerInPanel.Controller);
+            }
+        }
+
+        private TECPanel _selectedPanel;
+        public TECPanel SelectedPanel
+        {
+            get
+            {
+                return _selectedPanel;
+            }
+            set
+            {
+                _selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                SelectionChanged?.Invoke(value);
             }
         }
 

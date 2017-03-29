@@ -224,7 +224,8 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
             ControlledScopeVM.DropHandler += Drop;
-            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
+            ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
 
         private void setupStatusBar()
