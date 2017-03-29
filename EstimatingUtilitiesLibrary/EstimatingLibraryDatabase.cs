@@ -72,6 +72,11 @@ namespace EstimatingUtilitiesLibrary
                 foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
                 { editObject(new StackItem(Change.Edit, bid, cost)); }
             }
+            if(templates.IOModuleCatalog.Count > 0)
+            {
+                foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
+                { editObject(new StackItem(Change.Edit, bid, cost)); }
+            }
             //watch.Stop();
             //Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
