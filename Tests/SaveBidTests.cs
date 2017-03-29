@@ -3293,7 +3293,7 @@ namespace Tests
             expectedPanel.Name = "CSPANEL";
             var expectedController = new TECController();
             expectedController.Name = "CSCONTROLLER";
-            expectedController.Manufacturer = new TECManufacturer();
+            expectedController.Manufacturer = bid.ManufacturerCatalog[0];
             expectedPanel.Controllers.Add(expectedController);
             
             var expectedConnection = new TECSubScopeConnection();

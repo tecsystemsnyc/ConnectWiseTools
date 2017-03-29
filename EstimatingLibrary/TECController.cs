@@ -365,10 +365,9 @@ namespace EstimatingLibrary
             outController.copyPropertiesFromScope(this);
             outController._cost = Cost;
             outController._manufacturer = Manufacturer;
-
             foreach (TECIO io in this.IO)
             {
-                outController.IO.Add(io);
+                outController.IO.Add(io.Copy() as TECIO);
             }
             foreach (TECConnection connection in ChildrenConnections)
             {
