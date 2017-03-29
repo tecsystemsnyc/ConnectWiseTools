@@ -162,6 +162,7 @@
                                     <ComboBox Grid.Column="4"
                                       ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}"
                                       SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
+                                              DisplayMemberPath="Name"
                                       Margin="5"/>
                                     <Button Grid.Column="5"
                                     Content="Add"
@@ -180,11 +181,12 @@
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
-                                            <StackPanel MinHeight="50">
+                                            <StackPanel>
                                                 <Label Content="Controllers" FontSize="10"/>
                                                 <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                                   AutoGenerateColumns="False"
-                                                  IsReadOnly="True">
+                                                  IsReadOnly="True"
+                                                          MinHeight="50">
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="Name"
                                                                     Binding="{Binding Name}"
