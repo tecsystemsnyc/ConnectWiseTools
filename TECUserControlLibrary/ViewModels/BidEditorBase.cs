@@ -231,9 +231,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = new TECBid();
             Bid.Labor.UpdateConstants(Templates.Labor);
-            Bid.DeviceCatalog = Templates.DeviceCatalog;
-            Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-            Bid.Tags = Templates.Tags;
+            UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
             bidDBFilePath = null;
         }
         private void setupStack()

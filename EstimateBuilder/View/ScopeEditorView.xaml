@@ -43,9 +43,26 @@
 
             </TabItem>
             
-            <TabItem Header="Controllers">
-                <grids:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
-                                            ViewModel="{Binding ScopeDataGrid}"/>
+            <TabItem Header="Controllers and Panels">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Controllers"/>
+                    <grids:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
+                                            ViewModel="{Binding ScopeDataGrid}" Grid.Row="1"
+                                                 Margin="5"/>
+                    <Label Content="Panels" Grid.Column="1"/>
+                    <grids:PanelsGrid PanelsSource="{Binding Bid.Panels}"
+                                      ViewModel="{Binding ScopeDataGrid}" Grid.Column="1" Grid.Row="1"
+                                      Margin="5"/>
+                </Grid>
+                
             </TabItem>
 
             <TabItem Header="By Location">

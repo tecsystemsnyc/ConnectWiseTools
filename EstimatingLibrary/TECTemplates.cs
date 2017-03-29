@@ -402,17 +402,11 @@ namespace EstimatingLibrary
             foreach (TECController controller in this.ControllerTemplates)
             { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
             foreach (TECMiscCost cost in this.MiscCostTemplates)
-            {
-                outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMiscCost);
-            }
+            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMiscCost); }
             foreach (TECMiscWiring wiring in this.MiscWiringTemplates)
-            {
-                outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring);
-            }
+            { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring); }
             foreach (TECPanel panel in this.PanelTemplates)
-            {
-                outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel);
-            }
+            { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
             foreach (TECPanelType panelType in this.PanelTypeCatalog)
             {
                 outTemplate.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType);
@@ -423,9 +417,8 @@ namespace EstimatingLibrary
             }
             foreach (TECIOModule module in IOModuleCatalog)
             {
-                IOModuleCatalog.Add(module.Copy() as TECIOModule);
+                outTemplate.IOModuleCatalog.Add(module.Copy() as TECIOModule);
             }
-
             return outTemplate;
         }
 
