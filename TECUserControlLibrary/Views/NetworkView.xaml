@@ -56,11 +56,10 @@
             <DataGrid Grid.Row="1" ItemsSource="{Binding ServerControllers}"
                     AutoGenerateColumns="False"
                       dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
-                      IsReadOnly="True">
+                      CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"
-                                        IsReadOnly="True"
                                         Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
@@ -89,7 +88,6 @@
                         <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                         <DataGridTextColumn Header="Controller"
                                     Binding="{Binding Path=Controller.Name}"
-                                    IsReadOnly="True"
                                     Width="Auto" MinWidth="70"/>
 
                         <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem  , Converter={cnvt:SelectedItemToControllerConverter}-->
@@ -147,16 +145,25 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Content="Daisy Chains/Network Connections" FontSize="10"/>
-                                    <ComboBox Grid.Column="1"
+                                    <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="2"
                                       ItemsSource="{Binding Controller.NetworkIO}"
                                       SelectedItem="{Binding Data.SelectedIO, Source={StaticResource proxy}}"
                                       Margin="5"/>
-                                    <Button Grid.Column="2"
+                                    <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="4"
+                                      ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}"
+                                      SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
+                                      Margin="5"/>
+                                    <Button Grid.Column="5"
                                     Content="Add"
                                     Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
                                     CommandParameter="{Binding Controller}"
@@ -164,7 +171,7 @@
                                 </Grid>
                                 <DataGrid ItemsSource="{Binding Controller.ChildNetworkConnections}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True">
+                                  CanUserAddRows="False">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                                         <DataGridTextColumn Header="IO Type"
@@ -173,7 +180,7 @@
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
+                                            <StackPanel MinHeight="50">
                                                 <Label Content="Controllers" FontSize="10"/>
                                                 <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                                   AutoGenerateColumns="False"
@@ -181,8 +188,10 @@
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="Name"
                                                                     Binding="{Binding Name}"
-                                                                    IsReadOnly="True"
                                                                     Width="Auto"/>
+                                                        <DataGridTextColumn Header="Description"
+                                                        Binding="{Binding Description}"
+                                                            Width="Auto" MinWidth="70"/>
                                                     </DataGrid.Columns>
                                                 </DataGrid>
                                             </StackPanel>
@@ -213,16 +222,14 @@
             <DataGrid Grid.Row="1"
                       ItemsSource="{Binding StandaloneControllers}"
                       AutoGenerateColumns="False"
-                      IsReadOnly="True"
+                      CanUserAddRows="False"
                       dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name}"
-                                        IsReadOnly="True"
                                         Width="Auto" MinWidth="40"/>
                     <DataGridTextColumn Header="Description"
                                         Binding="{Binding Description}"
-                                        IsReadOnly="True"
                                         Width="Auto" MinWidth="70"/>
                 </DataGrid.Columns>
             </DataGrid>

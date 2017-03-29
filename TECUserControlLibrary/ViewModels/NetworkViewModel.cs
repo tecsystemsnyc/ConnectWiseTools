@@ -90,6 +90,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public IOType SelectedIO { get; set; }
+        public TECConnectionType SelectedWire { get; set; }
         #endregion
 
         #region Commands
@@ -127,20 +128,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECController controller in Bid.Controllers)
             {
                 sortAndAddController(controller);
-            }
-
-            //Setup network collection
-            TECController noneController = new TECController();
-            noneController.Name = "None";
-            NetworkControllers.Add(noneController);
-
-            foreach (TECController controller in ServerControllers)
-            {
-                NetworkControllers.Add(controller);
-            }
-            foreach (BMSController controller in BMSControllers)
-            {
-                NetworkControllers.Add(controller.Controller);
             }
         }
 
@@ -202,6 +189,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECNetworkConnection newConnection = new TECNetworkConnection();
             newConnection.IOType = SelectedIO;
+            newConnection.ConnectionType = SelectedWire;
             newConnection.ParentController = controller;
             controller.ChildrenConnections.Add(newConnection);
         }
@@ -412,12 +400,12 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetCollection == ServerControllers)
                     {
-                        sourceController.IsServer = true;
+                        sourceController.Type = ControllerType.IsServer;
                         sortAndAddController(sourceController);
                     }
                     else if (targetCollection == StandaloneControllers)
                     {
-                        sourceController.IsBMS = false;
+                        sourceController.Type = ControllerType.IsStandalone;
                         sortAndAddController(sourceController);
                     }
                     else
@@ -431,7 +419,7 @@ namespace TECUserControlLibrary.ViewModels
                                 if (targetCollection == connection.ChildrenControllers)
                                 {
                                     foundCollection = true;
-                                    sourceController.IsBMS = false;
+                                    sourceController.Type = ControllerType.IsNetworked;
                                     connection.ChildrenControllers.Add(sourceController);
                                     break;
                                 }
@@ -442,8 +430,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (targetType == typeof(BMSController))
                 {
-                    sourceController.IsBMS = true;
-                    sourceController.IsServer = false;
+                    sourceController.Type = ControllerType.IsBMS;
                     sortAndAddController(sourceController);
                 }
                 else if (targetType == typeof(TECConnection))
