@@ -317,19 +317,23 @@ namespace EstimatingLibrary
         {
             foreach (TECController controller in controllers)
             {
-                foreach (TECNetworkConnection connection in controller.ChildrenConnections)
+                foreach (TECConnection connection in controller.ChildrenConnections) 
                 {
-                    bool typeFound = false;
-                    foreach (TECConnectionType type in connectionTypes)
+                    if (connection is TECNetworkConnection)
                     {
-                        if (connection.ConnectionType.Guid == type.Guid)
+                        TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                        bool typeFound = false;
+                        foreach (TECConnectionType type in connectionTypes)
                         {
-                            connection.ConnectionType = type;
-                            typeFound = true;
-                            break;
+                            if (netConnect.ConnectionType.Guid == type.Guid)
+                            {
+                                netConnect.ConnectionType = type;
+                                typeFound = true;
+                                break;
+                            }
                         }
+                        if (typeFound) break;
                     }
-                    if (typeFound) break;
                 }
             }
         }
