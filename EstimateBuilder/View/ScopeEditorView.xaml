@@ -37,6 +37,8 @@
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
 
+            <TabItem Header="NoneTab" Visibility="Collapsed"/>
+
             <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
                 <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>

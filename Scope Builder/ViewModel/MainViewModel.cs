@@ -38,14 +38,15 @@ namespace Scope_Builder.ViewModel
     {
         #region Properties
 
-        private int _dGTabIndex;
-        public int DGTabIndex
+        private GridIndex _dGTabIndex;
+        public GridIndex DGTabIndex
         {
             get { return _dGTabIndex; }
             set
             {
                 _dGTabIndex = value;
                 RaisePropertyChanged("DGTabIndex");
+                updateVisibility();
             }
         }
 
@@ -83,9 +84,7 @@ namespace Scope_Builder.ViewModel
             programName = "Scope Builder";
 
             setupAll();
-            DGTabIndex = 0;
-
-            setVisibility(0);
+            DGTabIndex = GridIndex.Scope;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
@@ -119,21 +118,63 @@ namespace Scope_Builder.ViewModel
         #endregion //Commands Methods
 
         #region Helper Functions
-        private void setVisibility(int tIndex)
+        private void updateVisibility()
         {
-            ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-            ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-            ScopeCollection.TagsVisibility = Visibility.Collapsed;
-            ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-
-            switch (tIndex)
+            if (DGTabIndex == GridIndex.Scope)
             {
-                case 0:
-                    ScopeDataGrid.DataGridVisibilty.ExpandSubScope = Visibility.Visible;
-                    break;
-                default:
-                    break;
+                ScopeCollection.SystemsVisibility = Visibility.Visible;
+                ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                ScopeCollection.DevicesVisibility = Visibility.Visible;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+            }
+            else if (DGTabIndex == GridIndex.Location)
+            {
+
+            }
+            else if (DGTabIndex == GridIndex.Proposal)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+            }
+            else if (DGTabIndex == GridIndex.Budget)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
         private void setContextText(object selected)
