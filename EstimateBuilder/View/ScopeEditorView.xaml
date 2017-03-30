@@ -10,10 +10,17 @@
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         xmlns:helpers="clr-namespace:EstimateBuilder.Helpers"
         xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-        mc:Ignorable="d ignore"
+            xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+             mc:Ignorable="d ignore"
              x:Name="parent"
         d:DesignWidth="960" d:DesignHeight="660">
-
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid  Background="{DynamicResource WindowBackgroundBrush}"
            DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
@@ -46,24 +53,7 @@
             </TabItem>
             
             <TabItem Header="Controllers and Panels">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Controllers"/>
-                    <grids:ControllerInPanelGridControl ViewModel="{Binding ScopeDataGrid}" Grid.Row="1"
-                                                 Margin="5"/>
-                    <Label Content="Panels" Grid.Column="1"/>
-                    <grids:PanelsGrid PanelsSource="{Binding Bid.Panels}"
-                                      ViewModel="{Binding ScopeDataGrid}" Grid.Column="1" Grid.Row="1"
-                                      Margin="5"/>
-                </Grid>
-                
+                <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
             </TabItem>
 
             <TabItem Header="By Location">

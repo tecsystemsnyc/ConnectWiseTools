@@ -38,7 +38,7 @@ namespace EstimateBuilder.ViewModel
             setupScopeCollection();
             setupScopeDataGrid();
             setupLocationDataGrid();
-            populateControllerCollection();
+            setupControllersPanelsTab();
 
             DGTabIndex = GridIndex.Scope;
 
@@ -67,6 +67,7 @@ namespace EstimateBuilder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public EditTabExtension EditTab { get; set; }
+        public ControllersPanelsViewModel ControllersPanelsTab { get; set; } 
         #endregion
 
         #region Interface Properties
@@ -94,36 +95,7 @@ namespace EstimateBuilder.ViewModel
         }
         private TECBid _bid;
         #endregion Scope Properties
-
-        private ObservableCollection<ControllerInPanel> _controllerCollection;
-        public ObservableCollection<ControllerInPanel> ControllerCollection
-        {
-            get
-            {
-                return _controllerCollection;
-            }
-            set
-            {
-                _controllerCollection = value;
-                RaisePropertyChanged("ControllerCollection");
-            }
-        }
-
-        private ControllerInPanel _selectedControllerInPanel;
-        public ControllerInPanel SelectedControllerInPanel
-        {
-            get { return _selectedControllerInPanel; }
-            set
-            {
-                _selectedControllerInPanel = value;
-                RaisePropertyChanged("SelectedControllerInPanel");
-                if(value != null)
-                {
-                    ScopeDataGrid.SelectedController = value.Controller;
-                }
-            }
-        }
-
+        
         #endregion //Interface Properties
 
         #region Visibility Properties
@@ -168,6 +140,11 @@ namespace EstimateBuilder.ViewModel
         private void setupEditTab()
         {
             EditTab = new EditTabExtension(Bid);
+        }
+        private void setupControllersPanelsTab()
+        {
+            ControllersPanelsTab = new ControllersPanelsViewModel(Bid);
+            ControllersPanelsTab.SelectionChanged += EditTab.updateSelection;
         }
         #endregion
         
@@ -327,24 +304,7 @@ namespace EstimateBuilder.ViewModel
                 throw new NotImplementedException();
             }
         }
-        private void populateControllerCollection()
-        {
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            foreach(TECController controller in Bid.Controllers)
-            {
-                TECController controllerToAdd = controller;
-                TECPanel panelToAdd = null;
-                foreach(TECPanel panel in Bid.Panels)
-                {
-                    if (panel.Controllers.Contains(controller))
-                    {
-                        panelToAdd = panel;
-                        break;
-                    }
-                }
-                ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
-            }
-        }
+        
         #endregion //Helper Methods
 
         #region Event Handlers
