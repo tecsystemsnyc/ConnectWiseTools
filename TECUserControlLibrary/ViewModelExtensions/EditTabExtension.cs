@@ -318,6 +318,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         #region Methods
 
+        private bool addIOCanExecute()
+        {
+            bool hasIO = false;
+            if (SelectedController != null)
+            {
+                foreach (TECIO io in SelectedController.IO)
+                {
+                    if (io.Type == ControllerIO)
+                    {
+                        hasIO = true;
+                        break;
+                    }
+                }
+                return !hasIO;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void setupCommands()
         {
             AddTagToSystemCommand = new RelayCommand(AddTagToSystemExecute);
@@ -327,7 +348,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
             AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
-            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
+            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, addIOCanExecute);
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);

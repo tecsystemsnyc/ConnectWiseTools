@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -54,6 +55,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _subScopeByLocation = value;
                 RaisePropertyChanged("SubScopeByLocation");
+            }
+        }
+
+        private LocationScopeType _selectedScopeType;
+        public LocationScopeType SelectedScopeType
+        {
+            get { return _selectedScopeType; }
+            set
+            {
+                _selectedScopeType = value;
+                RaisePropertyChanged("SelectedScopeType");
             }
         }
 

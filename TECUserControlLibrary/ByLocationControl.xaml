@@ -30,10 +30,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type uLib:LocationScopeType}}}"
-                      SelectedItem="{Binding Path=SelectedScopeType}"
+                      SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType}"
                       Margin="5"/>
             <TabControl Grid.Row="1"
-                        SelectedIndex="{Binding Path=SelectedScopeType, Converter={cnvt:EnumerationToIntegerConverter}}">
+                        SelectedIndex="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType, Converter={cnvt:LocationScopeTypeToIntegerConverter}}">
                 <TabItem Visibility="Collapsed">
                     <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=SystemsSource}"
                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"

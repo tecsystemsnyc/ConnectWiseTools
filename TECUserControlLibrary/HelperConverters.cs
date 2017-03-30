@@ -230,23 +230,7 @@ namespace TECUserControlLibrary.HelperConverters
         }
     }
 
-    public class EnumerationToIntegerConverter : BaseConverter, IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            int outInt = System.Convert.ToInt32(value);
-            return outInt;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (EditIndex)value; 
-        }
-
-        #endregion
-    }
+    
 
     public class PercentageConverter : BaseConverter, IValueConverter
     {
@@ -504,4 +488,80 @@ namespace TECUserControlLibrary.HelperConverters
         }
         #endregion
     }
+
+    #region Enumeration Converters
+
+    public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (EditIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class GridIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (GridIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class ScopeCollectionIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (ScopeCollectionIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class LocationScopeTypeToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (LocationScopeType)value;
+        }
+
+        #endregion
+    }
+
+    #endregion
 }

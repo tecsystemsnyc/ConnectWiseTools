@@ -21,7 +21,9 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                ChildrenControllers.CollectionChanged -= ChildrenControllers_CollectionChanged;
                 _childrenControllers = value;
+                ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
                 NotifyPropertyChanged("ChildrenControllers", temp, this);
                 RaisePropertyChanged("PossibleIO");
             }
