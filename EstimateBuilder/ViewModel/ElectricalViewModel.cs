@@ -164,12 +164,10 @@ namespace EstimateBuilder.ViewModel
 
         public void DragOver(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
         }
     }
 }

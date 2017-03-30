@@ -229,9 +229,7 @@ namespace TECUserControlLibrary.HelperConverters
             return value;
         }
     }
-
     
-
     public class PercentageConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members

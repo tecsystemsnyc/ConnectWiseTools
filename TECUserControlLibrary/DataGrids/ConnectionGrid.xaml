@@ -33,7 +33,7 @@
                 <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding ParentEquipment.Name}" Header="Equipment" Width="Auto" MinWidth="70" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Point" Width="Auto" MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus}" Header="Length" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Length" Width="Auto" MinWidth="50"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding SubScope.Connection.ConduitType}"
                                         Header="Conduit" Width="Auto"
