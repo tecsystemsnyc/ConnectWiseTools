@@ -21,6 +21,7 @@ namespace EstimatingLibrary
             set
             {
                 _numPoints = value;
+                RaisePropertyChanged("NumPoints");
                 raiseLaborChanged();
             }
         }
@@ -380,6 +381,7 @@ namespace EstimatingLibrary
             set
             {
                 _electricalHours = value;
+                RaisePropertyChanged("ElectricalHours");
                 raiseLaborChanged();
             }
         }
@@ -651,54 +653,32 @@ namespace EstimatingLibrary
 
         private void raiseLaborChanged()
         {
-            RaisePropertyChanged("NumPoints");
-
-            RaisePropertyChanged("PMCoef");
             RaisePropertyChanged("PMPointHours");
-            RaisePropertyChanged("PMExtraHours");
             RaisePropertyChanged("PMTotalHours");
-            RaisePropertyChanged("PMRate");
             RaisePropertyChanged("PMSubTotal");
-
-            RaisePropertyChanged("ENGCoef");
+            
             RaisePropertyChanged("ENGPointHours");
-            RaisePropertyChanged("ENGExtraHours");
             RaisePropertyChanged("ENGTotalHours");
-            RaisePropertyChanged("ENGRate");
             RaisePropertyChanged("ENGSubTotal");
-
-            RaisePropertyChanged("SoftCoef");
+            
             RaisePropertyChanged("SoftPointHours");
-            RaisePropertyChanged("SoftExtraHours");
             RaisePropertyChanged("SoftTotalHours");
-            RaisePropertyChanged("SoftRate");
             RaisePropertyChanged("SoftSubTotal");
-
-            RaisePropertyChanged("GraphCoef");
+            
             RaisePropertyChanged("GraphPointHours");
-            RaisePropertyChanged("GraphExtraHours");
             RaisePropertyChanged("GraphTotalHours");
-            RaisePropertyChanged("GraphRate");
             RaisePropertyChanged("GraphSubTotal");
-
-            RaisePropertyChanged("CommCoef");
+            
             RaisePropertyChanged("CommPointHours");
-            RaisePropertyChanged("CommExtraHours");
             RaisePropertyChanged("CommTotalHours");
-            RaisePropertyChanged("CommRate");
             RaisePropertyChanged("CommSubTotal");
 
             RaisePropertyChanged("TECSubTotal");
-
-            RaisePropertyChanged("ElectricalHours");
-            RaisePropertyChanged("ElectricalRate");
-            RaisePropertyChanged("ElectricalNonUnionRate");
+            
             RaisePropertyChanged("ElectricalEffectiveRate");
             RaisePropertyChanged("ElectricalSubTotal");
 
             RaisePropertyChanged("ElectricalSuperHours");
-            RaisePropertyChanged("ElectricalSuperRate");
-            RaisePropertyChanged("ElectricalSuperNonUnionRate");
             RaisePropertyChanged("ElectricalSuperEffectiveRate");
             RaisePropertyChanged("ElectricalSuperSubTotal");
 
