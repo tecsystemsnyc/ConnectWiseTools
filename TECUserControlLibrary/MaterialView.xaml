@@ -33,7 +33,7 @@
                       Margin="5"
                   VerticalContentAlignment="Center"/>
         <TabControl Grid.Column="1" Grid.RowSpan="4"
-                    SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={cnvt:EnumerationToIntegerConverter}}">
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={cnvt:EditIndexToIntegerConverter}}">
             <TabItem Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>

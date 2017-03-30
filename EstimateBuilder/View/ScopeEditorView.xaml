@@ -35,7 +35,7 @@
                     Grid.RowSpan="2"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
-                    SelectedIndex="{Binding DGTabIndex}">
+                    SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
 
             <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
                 <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"

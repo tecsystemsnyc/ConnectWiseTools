@@ -43,7 +43,13 @@
         </Grid>
         <TabControl Grid.Row="1"
                     Background="{DynamicResource SectionBackgroundBrush}"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex}">
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:ScopeCollectionIndexToIntegerConverter}}">
+            <TabItem Visibility="Collapsed">
+                <TextBlock Text="Choose another tab to display relevant templates."
+                         TextWrapping="Wrap" Foreground="Black"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </TabItem>
             <TabItem Header="Sys"
                 Visibility="{Binding Path=ViewModel.SystemsVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
@@ -299,12 +305,6 @@
                      Visibility="{Binding Path=ViewModel.AssociatedCostsVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
             </TabItem>
-            <TabItem Visibility="Collapsed">
-                <TextBlock Text="Choose another tab to display relevant templates."
-                         TextWrapping="Wrap" Foreground="Black"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
-            </TabItem>
             <TabItem Header="Controlled Scope"
                      Visibility="{Binding Path=ViewModel.ControlledScopeVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControlledScopeItemsCollection}"/>
@@ -317,6 +317,7 @@
                      Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
                 <local:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
             </TabItem>
+            
         </TabControl>
     </Grid>
 </UserControl>

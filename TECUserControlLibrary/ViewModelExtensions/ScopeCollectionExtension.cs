@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -28,7 +29,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         
-        public int TabIndex
+        public ScopeCollectionIndex TabIndex
         {
             get { return _tabIndex; }
             set
@@ -37,7 +38,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("TabIndex");
             }
         }
-        private int _tabIndex;
+        private ScopeCollectionIndex _tabIndex;
 
         public string TagName
         {
@@ -670,7 +671,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 switch (TabIndex)
                 {
-                    case 0:
+                    case ScopeCollectionIndex.System:
                         SystemItemsCollection = new ObservableCollection<TECSystem>();
                         foreach (TECSystem item in Templates.SystemTemplates)
                         {
@@ -687,7 +688,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case 1:
+                    case ScopeCollectionIndex.Equipment:
                         EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
                         foreach (TECEquipment item in Templates.EquipmentTemplates)
                         {
@@ -704,7 +705,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case 2:
+                    case ScopeCollectionIndex.SubScope:
                         SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
                         foreach (TECSubScope item in Templates.SubScopeTemplates)
                         {
