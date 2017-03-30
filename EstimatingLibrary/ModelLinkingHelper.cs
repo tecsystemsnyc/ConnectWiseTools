@@ -198,13 +198,17 @@ namespace EstimatingLibrary
                     {
                         foreach(TECController controller in controllers)
                         {
-                            foreach(TECSubScopeConnection connection in controller.ChildrenConnections)
+                            foreach(TECConnection connection in controller.ChildrenConnections)
                             {
-                                bool isCopy = (guidDictionary != null && guidDictionary[connection.SubScope.Guid] == guidDictionary[subScope.Guid]);
-                                if (connection.SubScope.Guid == subScope.Guid || isCopy)
+                                if (connection is TECSubScopeConnection)
                                 {
-                                    connection.SubScope = subScope;
-                                    subScope.Connection = connection;
+                                    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                                    bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
+                                    if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                                    {
+                                        ssConnect.SubScope = subScope;
+                                        subScope.Connection = ssConnect;
+                                    }
                                 }
                             }
                         }

@@ -131,7 +131,8 @@
                     Grid.ColumnSpan="5"
                     Grid.RowSpan="2"
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
-                
+                <TabItem Header="None"
+                         Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>

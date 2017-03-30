@@ -96,9 +96,12 @@ namespace Scope_Builder.ViewModel
 
             BidSet += () =>
             { refreshAll(); };
-            
+
+            LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        #endregion 
+
+        
+        #endregion
 
         #region Commands Methods
         private void ToggleTemplatesVisibilityExecute()
@@ -135,10 +138,49 @@ namespace Scope_Builder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
             else if (DGTabIndex == GridIndex.Location)
             {
+                if (LocationDataGrid.SelectedScopeType == LocationScopeType.System)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
 
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Equipment;
+                }
+                else if (LocationDataGrid.SelectedScopeType == LocationScopeType.Equipment)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.SubScope;
+                }
+                else if (LocationDataGrid.SelectedScopeType == LocationScopeType.SubScope)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
             }
             else if (DGTabIndex == GridIndex.Proposal)
             {
@@ -155,6 +197,8 @@ namespace Scope_Builder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
             }
             else if (DGTabIndex == GridIndex.Budget)
             {
@@ -171,6 +215,8 @@ namespace Scope_Builder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
             }
             else
             {
@@ -286,6 +332,18 @@ namespace Scope_Builder.ViewModel
                 ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
             }
         }
+        #endregion
+
+        #region Event Handlers
+
+        private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedScopeType")
+            {
+                updateVisibility();
+            }
+        }
+
         #endregion
     }
 }
