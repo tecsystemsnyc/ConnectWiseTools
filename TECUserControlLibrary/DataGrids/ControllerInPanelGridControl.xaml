@@ -32,6 +32,7 @@
                                         Header="Containing Panel"
                                         MinWidth="100"/>
                 <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto" MinWidth="75"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
