@@ -71,9 +71,10 @@
             <TabControl Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        SelectedIndex="{Binding DGTabIndex}"
+                        SelectedIndex="{Binding DGTabIndex, Converter={cnvt:TemplateGridIndexToIntegerConverter}}"
                         Background="{DynamicResource SectionBackgroundBrush}">
-                
+                <TabItem Header="None" Visibility="Collapsed">
+                </TabItem>
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
