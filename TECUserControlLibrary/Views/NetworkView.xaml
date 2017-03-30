@@ -142,6 +142,9 @@
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
                             <StackPanel>
+                                <i:Interaction.Behaviors>
+                                    <cLib:BubbleScrollEvent/>
+                                </i:Interaction.Behaviors>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="200"/>
@@ -187,6 +190,9 @@
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
                                             <StackPanel>
+                                                <i:Interaction.Behaviors>
+                                                    <cLib:BubbleScrollEvent/>
+                                                </i:Interaction.Behaviors>
                                                 <Label Content="Controllers" FontSize="10"/>
                                                 <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                                   AutoGenerateColumns="False"

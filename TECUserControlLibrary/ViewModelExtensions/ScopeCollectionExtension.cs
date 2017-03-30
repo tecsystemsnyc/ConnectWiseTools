@@ -641,7 +641,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
             AddDeviceCommand = new RelayCommand(AddDeviceExecute, CanAddDevice);
             AddControllerCommand = new RelayCommand(AddControllerExecute, CanAddController);
-            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
+            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, canAddIO);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
             AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
@@ -826,6 +826,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newIO.Quantity = ControllerIOQTY;
             ControllerIO.Add(newIO);
         }
+        private bool canAddIO()
+        {
+            bool hasIO = false;
+            if (ControllerIO != null)
+            {
+                foreach (TECIO io in ControllerIO)
+                {
+                    if (io.Type == ControllerIOType)
+                    {
+                        hasIO = true;
+                        break;
+                    }
+                }
+                return !hasIO;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddTagToDeviceExecute()
         {
             DeviceTags.Add(SelectedTag);
