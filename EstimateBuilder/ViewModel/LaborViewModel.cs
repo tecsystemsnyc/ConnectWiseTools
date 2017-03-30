@@ -25,7 +25,6 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("Bid");
             }
         }
-
         private TECTemplates _templates;
         public TECTemplates Templates
         {
@@ -36,8 +35,10 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("Templates");
             }
         }
-
         public bool TemplatesLoaded;
+        public ICommand ReloadCommand { get; private set; }
+
+        public Action LoadTemplates;
 
         /// <summary>
         /// Initializes a new instance of the LaborViewModel class.
@@ -50,10 +51,12 @@ namespace EstimateBuilder.ViewModel
 
             ReloadCommand = new RelayCommand(ReloadExecute);
         }
-
-        public ICommand ReloadCommand { get; private set; }
-
-        public Action LoadTemplates;
+        
+        public void Refresh(TECBid bid, TECTemplates templates)
+        {
+            Bid = bid;
+            Templates = templates;
+        }
 
         private void ReloadExecute()
         {

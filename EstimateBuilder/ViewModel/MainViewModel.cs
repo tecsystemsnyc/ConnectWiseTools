@@ -45,11 +45,8 @@ namespace EstimateBuilder.ViewModel
             setupAll();
 
             base.PropertyChanged += BidEditorBase_PropertyChanged;
-
         }
-
         
-
         #region Properties
 
         #region SettingsProperties
@@ -107,7 +104,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupDrawingVM(TECBid bid)
         {
-            DebugHandler.LogDebugMessage("Setting up drawing VM");
+            //DebugHandler.LogDebugMessage("Setting up drawing VM");
             DrawingVM = new DrawingViewModel();
             DrawingVM.Bid = bid;
             DrawingVM.Templates = Templates;
@@ -200,7 +197,6 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
-
         private void ToggleTemplatesExecute()
         {
             if (TemplatesHidden)
@@ -227,25 +223,22 @@ namespace EstimateBuilder.ViewModel
             setupMenuVM();
             setupNetworkVM();
         }
-
         private void refreshAllBids()
         {
-            ScopeEditorVM.Bid = Bid;
+            ScopeEditorVM.Refresh(Bid, Templates);
             DrawingVM.Bid = Bid;
-            LaborVM.Bid = Bid;
-            ReviewVM.Bid = Bid;
+            LaborVM.Refresh(Bid, Templates);
+            ReviewVM.Refresh(Bid);
             //SettingsVM.Bid = Bid;
-            ProposalVM.Bid = Bid;
-            ElectricalVM.refresh(Bid);
-            NetworkVM.Bid = Bid;
+            ProposalVM.Refresh(Bid);
+            ElectricalVM.Refresh(Bid);
+            NetworkVM.Refresh(Bid);
         }
-
         private void refreshAllTemplates()
         {
             ScopeEditorVM.Templates = Templates;
             LaborVM.Templates = Templates;
         }
-        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -312,7 +305,6 @@ namespace EstimateBuilder.ViewModel
                 TemplatesFilePath = SettingsVM.TemplatesLoadPath;
             }
         }
-
         private void ScopeEditorVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesVisibility")

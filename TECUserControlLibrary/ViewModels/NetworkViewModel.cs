@@ -110,6 +110,11 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+        }
+
         private void update()
         {
             //Reset Collections

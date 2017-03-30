@@ -648,8 +648,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
             AddPanelCommand = new RelayCommand(AddPanelExecute, AddPanelCanExecute);
 
-            ControllerIO = new ObservableCollection<TECIO>();
-
             populateItemsCollections();
 
             PanelTypeSelections = templates.PanelTypeCatalog;
@@ -658,10 +656,23 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ControllerTags = new ObservableCollection<TECTag>();
             PanelTags = new ObservableCollection<TECTag>();
             PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            ControllerIO = new ObservableCollection<TECIO>();
         }
         #endregion
 
         #region Methods
+
+        public void Refresh(TECTemplates templates)
+        {
+            Templates = templates;
+            PanelTypeSelections = templates.PanelTypeCatalog;
+            populateItemsCollections();
+            DeviceTags = new ObservableCollection<TECTag>();
+            ControllerTags = new ObservableCollection<TECTag>();
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            ControllerIO = new ObservableCollection<TECIO>();
+        }
 
         #region Commands
 
