@@ -136,11 +136,21 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
             ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupLocationDataGrid()
         {
             LocationDataGrid = new LocationDataGridExtension(Bid);
+            LocationDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
         }

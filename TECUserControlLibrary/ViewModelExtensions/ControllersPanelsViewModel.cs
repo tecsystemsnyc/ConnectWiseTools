@@ -108,6 +108,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ControllersPanelsViewModel(TECBid bid)
         {
             _bid = bid;
+            registerChanges();
             populateControllerCollection();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             updateCollections();
