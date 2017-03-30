@@ -840,7 +840,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private bool canAddIO()
         {
             bool hasIO = false;
-            if (ControllerIO != null)
+            if (ControllerIO != null && ControllerIOType != 0)
             {
                 foreach (TECIO io in ControllerIO)
                 {

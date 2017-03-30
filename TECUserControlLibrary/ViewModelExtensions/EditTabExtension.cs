@@ -343,7 +343,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private bool addIOCanExecute()
         {
             bool hasIO = false;
-            if (SelectedController != null)
+            if (SelectedController != null && ControllerIO != 0)
             {
                 foreach (TECIO io in SelectedController.IO)
                 {
@@ -469,6 +469,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SelectedController.IO.Add(newIO);
 
             ControllerIOQTY = 1;
+            ControllerIO = 0;
         }
         private void DeleteSelectedSystemExecute()
         {
