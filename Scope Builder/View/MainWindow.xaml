@@ -130,12 +130,15 @@
                     Grid.Column="1"
                     Grid.ColumnSpan="5"
                     Grid.RowSpan="2"
-                    SelectedIndex="{Binding DGTabIndex}">
-                
+                    SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
+                <TabItem Header="None"
+                         Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>
                 </TabItem>
+                <TabItem Header="DDC"
+                         Visibility="Collapsed"/>
                 <TabItem Header="By Location">
                     <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
                                             SystemsSource="{Binding LocationDataGrid.SystemsByLocation}"

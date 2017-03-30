@@ -38,14 +38,15 @@ namespace Scope_Builder.ViewModel
     {
         #region Properties
 
-        private int _dGTabIndex;
-        public int DGTabIndex
+        private GridIndex _dGTabIndex;
+        public GridIndex DGTabIndex
         {
             get { return _dGTabIndex; }
             set
             {
                 _dGTabIndex = value;
                 RaisePropertyChanged("DGTabIndex");
+                updateVisibility();
             }
         }
 
@@ -83,9 +84,7 @@ namespace Scope_Builder.ViewModel
             programName = "Scope Builder";
 
             setupAll();
-            DGTabIndex = 0;
-
-            setVisibility(0);
+            DGTabIndex = GridIndex.Scope;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
@@ -97,9 +96,12 @@ namespace Scope_Builder.ViewModel
 
             BidSet += () =>
             { refreshAll(); };
-            
+
+            LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        #endregion 
+
+        
+        #endregion
 
         #region Commands Methods
         private void ToggleTemplatesVisibilityExecute()
@@ -119,21 +121,106 @@ namespace Scope_Builder.ViewModel
         #endregion //Commands Methods
 
         #region Helper Functions
-        private void setVisibility(int tIndex)
+        private void updateVisibility()
         {
-            ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-            ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-            ScopeCollection.TagsVisibility = Visibility.Collapsed;
-            ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-
-            switch (tIndex)
+            if (DGTabIndex == GridIndex.Scope)
             {
-                case 0:
-                    ScopeDataGrid.DataGridVisibilty.ExpandSubScope = Visibility.Visible;
-                    break;
-                default:
-                    break;
+                ScopeCollection.SystemsVisibility = Visibility.Visible;
+                ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                ScopeCollection.DevicesVisibility = Visibility.Visible;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+            }
+            else if (DGTabIndex == GridIndex.Location)
+            {
+                if (LocationDataGrid.SelectedScopeType == LocationScopeType.System)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Equipment;
+                }
+                else if (LocationDataGrid.SelectedScopeType == LocationScopeType.Equipment)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.SubScope;
+                }
+                else if (LocationDataGrid.SelectedScopeType == LocationScopeType.SubScope)
+                {
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+            }
+            else if (DGTabIndex == GridIndex.Proposal)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+            }
+            else if (DGTabIndex == GridIndex.Budget)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
         private void setContextText(object selected)
@@ -245,6 +332,18 @@ namespace Scope_Builder.ViewModel
                 ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
             }
         }
+        #endregion
+
+        #region Event Handlers
+
+        private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedScopeType")
+            {
+                updateVisibility();
+            }
+        }
+
         #endregion
     }
 }
