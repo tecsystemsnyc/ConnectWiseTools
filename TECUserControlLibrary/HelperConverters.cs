@@ -527,6 +527,24 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class TemplateGridIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (TemplateGridIndex)value;
+        }
+
+        #endregion
+    }
+
     public class ScopeCollectionIndexToIntegerConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
