@@ -478,7 +478,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
@@ -498,6 +499,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
                     break;
@@ -515,6 +518,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
                     break;
                 case 4:
@@ -527,7 +532,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
                     ScopeCollection.ControllerVisibility = Visibility.Visible;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Visible;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
@@ -563,6 +568,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Collapsed;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
                     break;
                 case 7:
@@ -580,6 +587,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.TagsVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Visible;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -604,6 +612,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.TagsVisibility = Visibility.Visible;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -624,6 +634,10 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.ControllerVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                     break;
                 
 

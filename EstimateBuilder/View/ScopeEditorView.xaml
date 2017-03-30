@@ -54,8 +54,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Controllers"/>
-                    <grids:ControllerGridControl ControllersSource="{Binding Bid.Controllers}"
-                                            ViewModel="{Binding ScopeDataGrid}" Grid.Row="1"
+                    <grids:ControllerInPanelGridControl ViewModel="{Binding ScopeDataGrid}" Grid.Row="1"
                                                  Margin="5"/>
                     <Label Content="Panels" Grid.Column="1"/>
                     <grids:PanelsGrid PanelsSource="{Binding Bid.Panels}"

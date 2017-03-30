@@ -214,31 +214,31 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB = new SQLiteDatabase(tempPath);
 
-            foreach (StackItem change in changeStack.SaveStack)
+            foreach (StackItem item in changeStack.SaveStack)
             {
-                Change changeType = change.Change;
-                object targetObject = change.TargetObject;
-                object refObject = change.ReferenceObject;
+                Change changeType = item.Change;
+                object targetObject = item.TargetObject;
+                object refObject = item.ReferenceObject;
 
                 if (changeType == Change.Add)
                 {
-                    addObject(change);
+                    addObject(item);
                 }
                 else if (changeType == Change.Edit)
                 {
-                    editObject(change);
+                    editObject(item);
                 }
                 else if (changeType == Change.Remove)
                 {
-                    removeObject(change);
+                    removeObject(item);
                 }
                 else if (changeType == Change.AddRelationship)
                 {
-                    addRelationship(change);
+                    addRelationship(item);
                 }
                 else if (changeType == Change.RemoveRelationship)
                 {
-                    removeRelationship(change);
+                    removeRelationship(item);
                 }
             }
 

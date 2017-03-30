@@ -242,9 +242,7 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-
         public TECTemplates() : this(Guid.NewGuid()) {}
-
         public TECTemplates(Guid guid)
         {
             _guid = guid;
@@ -287,7 +285,6 @@ namespace EstimatingLibrary
 
             Labor.PropertyChanged += objectPropertyChanged;
         }
-
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
             if (_labor != null)
@@ -339,7 +336,6 @@ namespace EstimatingLibrary
                 IOModuleCatalog.Add(new TECIOModule(module));
             }
         }
-
         #endregion //Constructors
 
         #region Collection Changed

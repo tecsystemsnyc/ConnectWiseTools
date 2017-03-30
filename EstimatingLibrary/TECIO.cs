@@ -83,7 +83,7 @@ namespace EstimatingLibrary
             _quantity = ioSource.Quantity;
             _type = ioSource.Type;
             _ioModule = ioSource.IOModule;
-        }
+        }  
 
         public static IOType convertStringToType(string type)
         {

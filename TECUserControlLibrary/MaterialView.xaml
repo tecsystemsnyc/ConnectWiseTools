@@ -137,6 +137,48 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <TextBlock Text="Panel Types" Grid.Row="0"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center" Margin="5,7,0,7"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding PanelTypeName}"/>
+                        <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding PanelTypeCost}"/>
+
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="Add" Margin="2"
+                    Command="{Binding AddPanelTypeCommand}"/>
+                    </Grid>
+                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
+                                    Grid.Row="3" Margin="5"/>
+                </Grid>
+            </TabItem>
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="0"
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
@@ -176,48 +218,6 @@
                     <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
                                           Grid.Row="3"
                                           Margin="5"/>
-                </Grid>
-            </TabItem>
-            <TabItem Visibility="Collapsed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Panel Types" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                        <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding PanelTypeName}"/>
-                        <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                        <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding PanelTypeCost}"/>
-
-                    </Grid>
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddPanelTypeCommand}"/>
-                    </Grid>
-                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
-                                    Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">

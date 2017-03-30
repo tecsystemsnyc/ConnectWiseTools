@@ -62,12 +62,10 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
-
         #endregion
 
         #region Event Handlers
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
-
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;
@@ -411,23 +409,23 @@ namespace EstimatingUtilitiesLibrary
             Templates.PropertyChanged += Object_PropertyChanged;
             foreach (TECSystem system in Templates.SystemTemplates)
             { registerSystems(system); }
-            foreach(TECEquipment equipment in Templates.EquipmentTemplates)
+            foreach (TECEquipment equipment in Templates.EquipmentTemplates)
             { registerEquipment(equipment); }
-            foreach(TECSubScope subScope in Templates.SubScopeTemplates)
-            {  registerSubScope(subScope); }
-            foreach(TECDevice device in Templates.DeviceCatalog)
+            foreach (TECSubScope subScope in Templates.SubScopeTemplates)
+            { registerSubScope(subScope); }
+            foreach (TECDevice device in Templates.DeviceCatalog)
             { device.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECTag tag in Templates.Tags)
+            foreach (TECTag tag in Templates.Tags)
             { tag.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECManufacturer manufacturer in Templates.ManufacturerCatalog)
+            foreach (TECManufacturer manufacturer in Templates.ManufacturerCatalog)
             { manufacturer.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECController controller in Templates.ControllerTemplates)
+            foreach (TECController controller in Templates.ControllerTemplates)
             { registerController(controller); }
             foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
             { connectionType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
             { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECMiscCost addition in Templates.MiscCostTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
@@ -439,7 +437,7 @@ namespace EstimatingUtilitiesLibrary
             { panel.PropertyChanged += Object_PropertyChanged; }
             foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
             { registerControlledScope(scope); }
-            foreach(TECIOModule ioModule in Templates.IOModuleCatalog)
+            foreach (TECIOModule ioModule in Templates.IOModuleCatalog)
             {
                 ioModule.PropertyChanged += Object_PropertyChanged;
             }
@@ -835,8 +833,9 @@ namespace EstimatingUtilitiesLibrary
                 if(io.IOModule != null)
                 {
                     item = new StackItem(change, io, io.IOModule);
+                    SaveStack.Add(item);
                 }
-                SaveStack.Add(item);
+                
             }
         }
         private void handleScopeChildren(TECScope scope, Change change)

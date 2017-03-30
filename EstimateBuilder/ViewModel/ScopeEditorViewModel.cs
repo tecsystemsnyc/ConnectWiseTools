@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModelExtensions;
 
 namespace EstimateBuilder.ViewModel
@@ -38,6 +39,7 @@ namespace EstimateBuilder.ViewModel
             setupScopeCollection();
             setupScopeDataGrid();
             setupLocationDataGrid();
+            populateControllerCollection();
 
             setVisibility();
             
@@ -67,7 +69,6 @@ namespace EstimateBuilder.ViewModel
 
         #region Interface Properties
         
-
         #region Scope Properties
         public TECTemplates Templates
         {
@@ -91,6 +92,35 @@ namespace EstimateBuilder.ViewModel
         }
         private TECBid _bid;
         #endregion Scope Properties
+
+        private ObservableCollection<ControllerInPanel> _controllerCollection;
+        public ObservableCollection<ControllerInPanel> ControllerCollection
+        {
+            get
+            {
+                return _controllerCollection;
+            }
+            set
+            {
+                _controllerCollection = value;
+                RaisePropertyChanged("ControllerCollection");
+            }
+        }
+
+        private ControllerInPanel _selectedControllerInPanel;
+        public ControllerInPanel SelectedControllerInPanel
+        {
+            get { return _selectedControllerInPanel; }
+            set
+            {
+                _selectedControllerInPanel = value;
+                RaisePropertyChanged("SelectedControllerInPanel");
+                if(value != null)
+                {
+                    ScopeDataGrid.SelectedController = value.Controller;
+                }
+            }
+        }
 
         #endregion //Interface Properties
 
@@ -145,25 +175,39 @@ namespace EstimateBuilder.ViewModel
             var sourceItem = dropInfo.Data;
             var targetCollection = dropInfo.TargetCollection;
             Type sourceType = sourceItem.GetType();
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (sourceItem != null && sourceType == targetType || sourceItem is TECControlledScope)
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+                bool isControllerInPanel = sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel);
+
+                if (sourceItem != null && sourceType == targetType || sourceItem is TECControlledScope || isControllerInPanel)
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
             }
         }
 
         public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
-            if(dropInfo.Data is TECControlledScope)
+            Type sourceType = dropInfo.Data.GetType();
+            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+            
+            if (dropInfo.Data is TECControlledScope)
             {
                 Bid.addControlledScope(dropInfo.Data as TECControlledScope);
             }
             else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+
+                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+                {
+                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
+                    Bid.Controllers.Add(sourceItem as TECController);
+                    sourceItem = controllerInPanel;
+                }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     ((IList)dropInfo.TargetCollection).Add(sourceItem);
@@ -204,6 +248,24 @@ namespace EstimateBuilder.ViewModel
             ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
             ScopeCollection.TagsVisibility = Visibility.Collapsed;
             ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+        }
+        private void populateControllerCollection()
+        {
+            ControllerCollection = new ObservableCollection<ControllerInPanel>();
+            foreach(TECController controller in Bid.Controllers)
+            {
+                TECController controllerToAdd = controller;
+                TECPanel panelToAdd = null;
+                foreach(TECPanel panel in Bid.Panels)
+                {
+                    if (panel.Controllers.Contains(controller))
+                    {
+                        panelToAdd = panel;
+                        break;
+                    }
+                }
+                ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
+            }
         }
         #endregion //Helper Methods
         #endregion //Methods

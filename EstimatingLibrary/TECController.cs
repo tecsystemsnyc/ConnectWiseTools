@@ -143,9 +143,12 @@ namespace EstimatingLibrary
             get
             {
                 ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
-                foreach (TECNetworkConnection netConnect in ChildrenConnections)
+                foreach (TECConnection connection in ChildrenConnections)
                 {
-                    networkConnections.Add(netConnect);
+                    if(connection is TECNetworkConnection)
+                    {
+                        networkConnections.Add(connection as TECNetworkConnection);
+                    }
                 }
                 return networkConnections;
             }
@@ -200,9 +203,10 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(controllerSource);
             foreach (TECIO io in controllerSource.IO)
             {
+                TECIO ioToAdd = new TECIO(io);
                 _io.Add(new TECIO(io));
             }
-            foreach(TECConnection connection in controllerSource.ChildrenConnections)
+            foreach (TECConnection connection in controllerSource.ChildrenConnections)
             {
                 if (connection is TECSubScopeConnection)
                 {

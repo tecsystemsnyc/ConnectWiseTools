@@ -31,6 +31,7 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _controllers = value;
+                Controllers.CollectionChanged -= collectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
                 Controllers.CollectionChanged += collectionChanged;
             }
@@ -42,6 +43,7 @@ namespace EstimatingLibrary
         {
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
+            Controllers.CollectionChanged += collectionChanged;
         }
         public TECPanel() : this(Guid.NewGuid()) { }
         public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this()
