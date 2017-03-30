@@ -46,8 +46,7 @@ namespace EstimateBuilder.ViewModel
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-
-
+        
         #region Properties
 
         private GridIndex _dGTabIndex;
@@ -116,6 +115,20 @@ namespace EstimateBuilder.ViewModel
         #endregion //Properties
 
         #region Methods
+        public void Refresh(TECBid bid, TECTemplates templates)
+        {
+            Bid = bid;
+            Templates = templates;
+
+            EditTab.Refresh(Bid);
+            ScopeCollection.Refresh(Templates);
+            ScopeDataGrid.Refresh(Bid);
+            LocationDataGrid.Refresh(Bid);
+            ControllersPanelsTab.Refresh(Bid);
+            
+            LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
+        }
+
         #region Setup Extensions
         private void setupScopeDataGrid()
         {
@@ -166,7 +179,6 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             Object sourceItem;
@@ -216,7 +228,6 @@ namespace EstimateBuilder.ViewModel
                 ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
             }
         }
-
         #endregion
 
         #region Helper Methods
@@ -304,11 +315,9 @@ namespace EstimateBuilder.ViewModel
                 throw new NotImplementedException();
             }
         }
-        
         #endregion //Helper Methods
 
         #region Event Handlers
-
         private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedScopeType")

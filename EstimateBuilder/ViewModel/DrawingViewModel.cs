@@ -461,7 +461,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void populateDisplayed()
         {
-            DebugHandler.LogDebugMessage("Populating TECScope not on drawing.");
+            //DebugHandler.LogDebugMessage("Populating TECScope not on drawing.");
             foreach (TECSystem system in Bid.Systems)
             {
                 DisplaySystems.Add(system);

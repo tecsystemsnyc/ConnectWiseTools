@@ -152,7 +152,6 @@ namespace TECUserControlLibrary.ViewModels
                     registerChanges();
                 }
                 RaisePropertyChanged("SelectedControlledScope");
-
             }
         }
 
@@ -166,17 +165,34 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-        
+
         #endregion
 
+        #region Constructor
         public ControlledScopeViewModel(TECTemplates templates)
         {
             Templates = templates;
+            setupCollections();
+            DebugVisibility = Visibility.Collapsed;
+            setupVMs();
+        }
+        #endregion
+
+        #region Methods
+        public void Refresh(TECTemplates templates)
+        {
+            Templates = templates;
+            ScopeDataGrid.Refresh(Templates);
+            setupCollections();
+        }
+
+        private void setupCollections()
+        {
             ConduitTypeSelections = new ObservableCollection<TECConduitType>();
             var noneConduit = new TECConduitType();
             noneConduit.Name = "None";
             ConduitTypeSelections.Add(noneConduit);
-            foreach(TECConduitType type in Templates.ConduitTypeCatalog)
+            foreach (TECConduitType type in Templates.ConduitTypeCatalog)
             {
                 ConduitTypeSelections.Add(type);
             }
@@ -184,8 +200,6 @@ namespace TECUserControlLibrary.ViewModels
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             PanelsCollection = new ObservableCollection<TECPanel>();
-            DebugVisibility = Visibility.Visible;
-            setupVMs();
         }
 
         private void setupVMs()
@@ -358,5 +372,6 @@ namespace TECUserControlLibrary.ViewModels
             updatePanels();
             ControllerCollection.CollectionChanged += collectionChanged;
         }
+        #endregion
     }
 }

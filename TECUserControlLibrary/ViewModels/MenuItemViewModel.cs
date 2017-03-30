@@ -29,6 +29,7 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         public MenuItemViewModel()
         {
+
         }
     }
 }

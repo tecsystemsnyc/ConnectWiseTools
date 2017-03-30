@@ -104,12 +104,20 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the ControllersPanelsViewModel class.
-        /// </summary>
+        #region Constructor
         public ControllersPanelsViewModel(TECBid bid)
         {
             _bid = bid;
+            populateControllerCollection();
+            ControllerCollection = new ObservableCollection<ControllerInPanel>();
+            updateCollections();
+        }
+        #endregion
+
+        #region Methods
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
             populateControllerCollection();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             updateCollections();
@@ -133,60 +141,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
             }
         }
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
-            {
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
-
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            Object sourceItem;
-            sourceItem = dropInfo.Data;
-
-            var targetCollection = dropInfo.TargetCollection;
-
-            Type sourceType = sourceItem.GetType();
-            if (sourceItem is TECScope)
-            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-            if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-            {
-                var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                Bid.Controllers.Add(sourceItem as TECController);
-                sourceItem = controllerInPanel;
-            }
-
-            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-            {
-                ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
-            }
-            else
-            {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-
-            }
-        }
-        
         private void updateControllerCollection()
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
@@ -254,5 +208,59 @@ namespace TECUserControlLibrary.ViewModelExtensions
             updatePanels();
             ControllerCollection.CollectionChanged += collectionChanged;
         }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            var sourceItem = dropInfo.Data;
+            var targetCollection = dropInfo.TargetCollection;
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            {
+                Type sourceType = sourceItem.GetType();
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+
+                if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+            }
+
+        }
+        public void Drop(IDropInfo dropInfo)
+        {
+            Object sourceItem;
+            sourceItem = dropInfo.Data;
+
+            var targetCollection = dropInfo.TargetCollection;
+
+            Type sourceType = sourceItem.GetType();
+            if (sourceItem is TECScope)
+            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
+            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+            if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+            {
+                var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
+                Bid.Controllers.Add(sourceItem as TECController);
+                sourceItem = controllerInPanel;
+            }
+
+            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+            {
+                ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
+            }
+            else
+            {
+                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
+                else
+                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
+
+            }
+        }
+        #endregion
     }
 }

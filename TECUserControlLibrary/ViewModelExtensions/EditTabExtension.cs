@@ -306,7 +306,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             isBid = false;
             TabIndex = EditIndex.Nothing;
         }
-
         public EditTabExtension(TECBid bid)
         {
             Bid = bid;
@@ -317,7 +316,30 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
 
         #region Methods
-
+        public void Refresh(TECBid bid)
+        {
+            refresh(bid);
+        }
+        public void Refresh(TECTemplates templates)
+        {
+            refresh(templates);
+        }
+        private void refresh(object bidOrTemplates)
+        {
+            if(bidOrTemplates is TECBid)
+            {
+                var bid = bidOrTemplates as TECBid;
+                Bid = bid;
+                isBid = true;
+            } else if (bidOrTemplates is TECTemplates)
+            {
+                var templates = bidOrTemplates as TECTemplates;
+                Templates = templates;
+                isBid = false;
+            }
+            setCatalogs(bidOrTemplates);
+            TabIndex = EditIndex.Nothing;
+        }
         private bool addIOCanExecute()
         {
             bool hasIO = false;

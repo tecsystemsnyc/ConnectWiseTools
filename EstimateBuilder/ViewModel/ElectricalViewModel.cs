@@ -60,10 +60,10 @@ namespace EstimateBuilder.ViewModel
 
         public ElectricalViewModel(TECBid bid)
         {
-            refresh(bid);
+            Refresh(bid);
         }
 
-        public void refresh(TECBid bid)
+        public void Refresh(TECBid bid)
         {
             Bid = bid;
             ConduitTypeSelections = new ObservableCollection<TECConduitType>();

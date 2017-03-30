@@ -27,5 +27,10 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = new TECBid();
         }
+
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+        }
     }
 }

@@ -216,6 +216,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         
         #region Methods
+        public void Refresh(TECTemplates templates)
+        {
+            Templates = templates;
+            setupDefaultValues();
+        }
+        
         private void setupCommands()
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);

@@ -70,10 +70,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
 
         #endregion
-        public LocationDataGridExtension(TECBid bid) : base(bid)
-        {
 
-        }
+        public LocationDataGridExtension(TECBid bid) : base(bid) { }
         
         #region Methods
         
@@ -104,6 +102,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     }
                 }
             }
+        }
+
+        new public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+            SelectedLocation = null;
+            organizeByLocation();
         }
         #endregion
     }
