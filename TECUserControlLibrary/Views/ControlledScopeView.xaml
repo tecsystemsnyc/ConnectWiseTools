@@ -23,49 +23,70 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
         <Label Content="Controlled Scope"/>
         <Label Content="Systems in Selected" Grid.Column="1"/>
-        <Label Content="Panels in Selected" Grid.Column="2"/>
+        <Label Content="Panels in Selected" Grid.Column="3"/>
         <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Templates.ControlledScopeTemplates}"
                                        ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                       Grid.Row="1" Grid.RowSpan="3"
-                                       x:Name="CSGrid"/>
+                                       Grid.Row="1" Grid.RowSpan="4"
+                                       x:Name="CSGrid" Margin="5"/>
         <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   AllowAddingNew="False"
-                                  Grid.Row="1" Grid.Column="1"/>
-        <Grid Grid.Row="1" Grid.Column="2">
+                                  Grid.Row="1" Grid.Column="1"
+                                  Margin="5"/>
+        <GridSplitter Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                      HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
+        <Grid Grid.Row="1" Grid.Column="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                              Grid.Row="0"/>
-            <Label Content="Controllers in Selected" Grid.Row="1"/>
-            <grids:ControllerInPanelGridControl Grid.Row="2" Margin="5" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                              Grid.Row="0" Margin="5"/>
+            <GridSplitter Grid.Row="1" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Controllers in Selected" Grid.Row="0"/>
+                <grids:ControllerInPanelGridControl Grid.Row="1" Margin="5" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </Grid>
         </Grid>
-        <Label Content="Connections" Grid.Column="1" Grid.Row="2"/>
-        <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                             Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="2"/>
-        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" Background="{DynamicResource SectionBackgroundBrush}"
+        <GridSplitter Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+                      HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
+        <Grid Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Connections"/>
+            <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                             Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"/>
+        </Grid>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>
+        <!--<Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" Background="{DynamicResource SectionBackgroundBrush}"
                 Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
             <Label Content="Select a Controlled Scope to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-        </Canvas>
+        </Canvas>-->
 
     </Grid>
 </UserControl>
