@@ -152,6 +152,47 @@ namespace EstimatingLibrary
             return laborCost;
         }
         /// <summary>
+        /// Returns the electrical labor hours
+        /// </summary>
+        public static double GetSubcontractorLaborHours(TECBid bid)
+        {
+             double laborHours = 0;
+
+            foreach (TECController controller in bid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    var length = connection.Length;
+                    if (connection.ConduitType != null)
+                    { laborHours += connection.Length * connection.ConduitType.Labor; }
+
+                    if (connection is TECNetworkConnection)
+                    {
+                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
+                        laborHours += length * type.Labor;
+                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                        { laborHours += associatedCost.Labor; }
+                    }
+                    else if (connection is TECSubScopeConnection)
+                    {
+                        foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                        {
+                            laborHours += length * type.Labor;
+                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            { laborHours += associatedCost.Labor; }
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+
+            }
+            
+            return laborHours;
+        }
+        /// <summary>
         /// Returns the electrical material and labor costs with escalation 
         /// </summary>
         public static double GetSubcontractorCost(TECBid bid)
