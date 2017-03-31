@@ -153,18 +153,33 @@ namespace EstimatingLibrary
             }
         }
 
+
+        public double ElectricalLaborHours
+        {
+            get { return EstimateCalculator.GetElectricalLaborHours(this); }
+        }
+        public double ElectricalLaborCost
+        {
+            get { return EstimateCalculator.GetElectricalLaborHours(this); }
+        }
+        public double ElectricalSuperLaborHours
+        {
+            get { return EstimateCalculator.GetElectricalSuperLaborHours(this); }
+        }
+        public double ElectricalSuperLaborCost
+        {
+            get { return EstimateCalculator.GetElectricalSuperLaborCost(this); }
+        }
+
         public double SubcontractorLaborHours
         {
             get { return EstimateCalculator.GetSubcontractorLaborHours(this); }
         }
         public double SubcontractorLaborCost
         {
-            get
-            {
-                //Labor.ElectricalHours = SubcontractorLaborHours;
-                return Labor.SubcontractorSubTotal;
-            }
+            get { return EstimateCalculator.GetSubcontractorLaborCost(this); }
         }
+
         public double ElectricalMaterialCost
         {
             get

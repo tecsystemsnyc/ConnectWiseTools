@@ -106,57 +106,15 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+
+        #region Labor
+        
         /// <summary>
-        /// Returns the electrical labor cost of all wire, conduit, and their associated costs 
+        /// Returns the Journeyman electrical labor hours
         /// </summary>
-        public static double GetElectricalLaborCost(TECBid bid)
+        public static double GetElectricalLaborHours(TECBid bid)
         {
             double laborHours = 0;
-
-            foreach (TECController controller in bid.Controllers)
-            {
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    var length = connection.Length;
-                    if (connection.ConduitType != null)
-                    { laborHours += connection.Length * connection.ConduitType.Labor; }
-
-                    if (connection is TECNetworkConnection)
-                    {
-                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
-                        laborHours += length * type.Labor;
-                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                        { laborHours += associatedCost.Labor; }
-                    }
-                    else if (connection is TECSubScopeConnection)
-                    {
-                        foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
-                        {
-                            laborHours += length * type.Labor;
-                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                            {
-                                laborHours += associatedCost.Labor;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                    }
-                }
-
-            }
-            
-            double laborCost =  laborHours * bid.Labor.ElectricalEffectiveRate;
-            laborCost += bid.Labor.SubcontractorSubTotal;
-            return laborCost;
-        }
-        /// <summary>
-        /// Returns the electrical labor hours
-        /// </summary>
-        public static double GetSubcontractorLaborHours(TECBid bid)
-        {
-             double laborHours = 0;
 
             foreach (TECController controller in bid.Controllers)
             {
@@ -189,9 +147,70 @@ namespace EstimatingLibrary
                 }
 
             }
-            
+
             return laborHours;
         }
+        /// <summary>
+        /// Returns the Journeyman electrical labor cost
+        /// </summary>
+        public static double GetElectricalLaborCost(TECBid bid)
+        {
+            double laborHours = GetElectricalLaborHours(bid) * bid.Labor.ElectricalEffectiveRate;
+
+            return laborHours;
+        }
+        /// <summary>
+        /// Returns the electrical super labor hours
+        /// </summary>
+        public static double GetElectricalSuperLaborHours(TECBid bid)
+        {
+            double laborHours = GetElectricalLaborHours(bid);
+            
+            return laborHours / 7;
+        }
+        /// <summary>
+        /// Returns the electrical super labor cost
+        /// </summary>
+        public static double GetElectricalSuperLaborCost(TECBid bid)
+        {
+            double laborHours = GetElectricalLaborHours(bid);
+
+            return laborHours / 7;
+        }
+
+        /// <summary>
+        /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
+        /// </summary>
+        public static double GetTotalElectricalLaborHours(TECBid bid)
+        {
+            double laborCost = GetElectricalLaborHours(bid) + GetElectricalSuperLaborHours(bid);
+            return laborCost;
+        }
+        /// <summary>
+        /// Returns the electrical labor cost of all wire, conduit, and their associated costs 
+        /// </summary>
+        public static double GetTotalElectricalLaborCost(TECBid bid)
+        {
+            double laborCost = GetElectricalLaborCost(bid) + GetElectricalSuperLaborCost(bid);
+            return laborCost;
+        }
+        /// <summary>
+        /// Returns the subcontractor labor hours
+        /// </summary>
+        public static double GetSubcontractorLaborHours(TECBid bid)
+        {
+            double laborHours = GetTotalElectricalLaborHours(bid);
+            return laborHours;
+        }
+        /// <summary>
+        /// Returns the subcontractor labor cost
+        /// </summary>
+        public static double GetSubcontractorLaborCost(TECBid bid)
+        {
+            double laborHours = GetTotalElectricalLaborCost(bid);
+            return laborHours;
+        }
+        #endregion
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 
         /// </summary>
@@ -214,7 +233,6 @@ namespace EstimatingLibrary
             outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
             return outCost;
         }
-
         /// <summary>
         /// Returns the final sell price 
         /// </summary>
@@ -227,6 +245,7 @@ namespace EstimatingLibrary
 
             return outPrice;
         }
+
         #region Budgeting
         /// <summary>
         /// Returns the budget price based on the user-assigned values in systems
