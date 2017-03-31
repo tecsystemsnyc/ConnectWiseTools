@@ -14,18 +14,6 @@ namespace EstimatingLibrary
         private Guid _guid;
         public Guid Guid { get { return _guid; } }
 
-        private int _numPoints;
-        public int NumPoints
-        {
-            get { return _numPoints; }
-            set
-            {
-                _numPoints = value;
-                RaisePropertyChanged("NumPoints");
-                raiseLaborChanged();
-            }
-        }
-
         #region PM
         private double _pmCoef;
         public double PMCoef
@@ -36,15 +24,6 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _pmCoef = value;
                 NotifyPropertyChanged("PMCoef", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double PMPointHours
-        {
-            get
-            {
-                return (NumPoints * PMCoef);
             }
         }
 
@@ -57,15 +36,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _pmExtraHours = value;
                 NotifyPropertyChanged("PMExtaHours", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double PMTotalHours
-        {
-            get
-            {
-                return (PMPointHours + PMExtraHours);
+                
             }
         }
 
@@ -78,15 +49,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _pmRate = value;
                 NotifyPropertyChanged("PMRate", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double PMSubTotal
-        {
-            get
-            {
-                return (PMTotalHours * PMRate);
+                
             }
         }
 
@@ -102,16 +65,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _engCoef = value;
                     NotifyPropertyChanged("ENGCoef", temp, this);
-                    raiseLaborChanged();
+                    
               
-            }
-        }
-
-        public double ENGPointHours
-        {
-            get
-            {
-                return (NumPoints * ENGCoef);
             }
         }
 
@@ -125,15 +80,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _engExtraHours = value;
                 NotifyPropertyChanged("ENGExtaHours", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double ENGTotalHours
-        {
-            get
-            {
-                return (ENGPointHours + ENGExtraHours);
+                
             }
         }
 
@@ -147,16 +94,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _engRate = value;
                     NotifyPropertyChanged("ENGRate", temp, this);
-                    raiseLaborChanged();
+                    
                
-            }
-        }
-
-        public double ENGSubTotal
-        {
-            get
-            {
-                return (ENGTotalHours * ENGRate);
             }
         }
         #endregion ENG
@@ -172,16 +111,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _commCoef = value;
                     NotifyPropertyChanged("CommCoef", temp, this);
-                    raiseLaborChanged();
+                    
                
-            }
-        }
-
-        public double CommPointHours
-        {
-            get
-            {
-                return (NumPoints * CommCoef);
             }
         }
 
@@ -195,16 +126,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _commExtraHours = value;
                     NotifyPropertyChanged("CommExtaHours", temp, this);
-                    raiseLaborChanged();
+                    
               
-            }
-        }
-
-        public double CommTotalHours
-        {
-            get
-            {
-                return (CommPointHours + CommExtraHours);
             }
         }
 
@@ -218,16 +141,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _commRate = value;
                     NotifyPropertyChanged("CommRate", temp, this);
-                    raiseLaborChanged();
+                    
                
-            }
-        }
-
-        public double CommSubTotal
-        {
-            get
-            {
-                return (CommTotalHours * CommRate);
             }
         }
         #endregion Comm
@@ -243,16 +158,8 @@ namespace EstimatingLibrary
                     var temp = this.Copy();
                     _softCoef = value;
                     NotifyPropertyChanged("SoftCoef", temp, this);
-                    raiseLaborChanged();
+                    
                 
-            }
-        }
-
-        public double SoftPointHours
-        {
-            get
-            {
-                return (NumPoints * SoftCoef);
             }
         }
 
@@ -265,15 +172,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _softExtraHours = value;
                 NotifyPropertyChanged("SoftExtaHours", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double SoftTotalHours
-        {
-            get
-            {
-                return (SoftPointHours + SoftExtraHours);
+                
             }
         }
 
@@ -286,15 +185,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _softRate = value;
                 NotifyPropertyChanged("SoftRate", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double SoftSubTotal
-        {
-            get
-            {
-                return (SoftTotalHours * SoftRate);
+                
             }
         }
 
@@ -310,15 +201,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _graphCoef = value;
                 NotifyPropertyChanged("GraphCoef", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double GraphPointHours
-        {
-            get
-            {
-                return (NumPoints * GraphCoef);
+                
             }
         }
 
@@ -331,15 +214,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _graphExtraHours = value;
                 NotifyPropertyChanged("GraphExtaHours", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double GraphTotalHours
-        {
-            get
-            {
-                return (GraphPointHours + GraphExtraHours);
+                
             }
         }
 
@@ -352,40 +227,12 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _graphRate = value;
                 NotifyPropertyChanged("GraphRate", temp, this);
-                raiseLaborChanged();
-            }
-        }
-
-        public double GraphSubTotal
-        {
-            get
-            {
-                return (GraphTotalHours * GraphRate);
+                
             }
         }
         #endregion Graph
 
-        public double TECSubTotal
-        {
-            get
-            {
-                return (PMSubTotal + ENGSubTotal + CommSubTotal + SoftSubTotal + GraphSubTotal);
-            }
-        }
-
         #region Electrical
-        private double _electricalHours;
-        public double ElectricalHours
-        {
-            get { return _electricalHours; }
-            set
-            {
-                _electricalHours = value;
-                RaisePropertyChanged("ElectricalHours");
-                raiseLaborChanged();
-            }
-        }
-
         private double _electricalRate;
         public double ElectricalRate
         {
@@ -395,7 +242,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalRate = value;
                 NotifyPropertyChanged("ElectricalRate", temp, this);
-                raiseLaborChanged();
+                RaisePropertyChanged("ElectricalEffectiveRate");
             }
         }
 
@@ -408,7 +255,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalNonUnionRate = value;
                 NotifyPropertyChanged("ElectricalNonUnionRate", temp, this);
-                raiseLaborChanged();
+                RaisePropertyChanged("ElectricalEffectiveRate");
             }
         }
 
@@ -437,22 +284,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public double ElectricalSubTotal
-        {
-            get
-            {
-                return (ElectricalHours * ElectricalEffectiveRate);
-            }
-        }
-
-        public double ElectricalSuperHours
-        {
-            get
-            {
-                return (ElectricalHours / 7);
-            }
-        }
-
         private double _electricalSuperRate;
         public double ElectricalSuperRate
         {
@@ -462,7 +293,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalSuperRate = value;
                 NotifyPropertyChanged("ElectricalSuperRate", temp, this);
-                raiseLaborChanged();
+                RaisePropertyChanged("ElectricalSuperEffectiveRate");
             }
         }
 
@@ -475,7 +306,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalSuperNonUnionRate = value;
                 NotifyPropertyChanged("ElectricalSuperNonUnionRate", temp, this);
-                raiseLaborChanged();
+                RaisePropertyChanged("ElectricalSuperEffectiveRate");
             }
         }
 
@@ -504,14 +335,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public double ElectricalSuperSubTotal
-        {
-            get
-            {
-                return (ElectricalSuperHours * ElectricalSuperEffectiveRate);
-            }
-        }
-
         private bool _electricalIsOnOvertime;
         public bool ElectricalIsOnOvertime
         {
@@ -521,7 +344,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalIsOnOvertime = value;
                 NotifyPropertyChanged("ElectricalIsOnOvertime", temp, this);
-                raiseLaborChanged();
+                raiseEffectiveRateChanged();
             }
         }
 
@@ -534,26 +357,10 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _electricalIsUnion = value;
                 NotifyPropertyChanged("ElectricalIsUnion", temp, this);
-                raiseLaborChanged();
+                raiseEffectiveRateChanged();
             }
         }
         #endregion Electrical
-
-        public double SubcontractorSubTotal
-        {
-            get
-            {
-                return (ElectricalSubTotal + ElectricalSuperSubTotal);
-            }
-        }
-
-        public double TotalCost
-        {
-            get
-            {
-                return (TECSubTotal + SubcontractorSubTotal);
-            }
-        }
 
         #endregion
 
@@ -584,7 +391,6 @@ namespace EstimatingLibrary
             _graphExtraHours = 0;
             _graphRate = 0;
 
-            _electricalHours = 0;
             _electricalRate = 0;
             _electricalNonUnionRate = 0;
             _electricalSuperRate = 0;
@@ -616,7 +422,6 @@ namespace EstimatingLibrary
             _graphExtraHours = labor.GraphExtraHours;
             _graphRate = labor.GraphRate;
 
-            _electricalHours = labor.ElectricalHours;
             _electricalRate = labor.ElectricalRate;
             _electricalNonUnionRate = labor.ElectricalNonUnionRate;
             _electricalSuperRate = labor.ElectricalSuperRate;
@@ -651,40 +456,10 @@ namespace EstimatingLibrary
             ElectricalSuperNonUnionRate = labor.ElectricalSuperNonUnionRate;
         }
 
-        private void raiseLaborChanged()
+        private void raiseEffectiveRateChanged()
         {
-            RaisePropertyChanged("PMPointHours");
-            RaisePropertyChanged("PMTotalHours");
-            RaisePropertyChanged("PMSubTotal");
-            
-            RaisePropertyChanged("ENGPointHours");
-            RaisePropertyChanged("ENGTotalHours");
-            RaisePropertyChanged("ENGSubTotal");
-            
-            RaisePropertyChanged("SoftPointHours");
-            RaisePropertyChanged("SoftTotalHours");
-            RaisePropertyChanged("SoftSubTotal");
-            
-            RaisePropertyChanged("GraphPointHours");
-            RaisePropertyChanged("GraphTotalHours");
-            RaisePropertyChanged("GraphSubTotal");
-            
-            RaisePropertyChanged("CommPointHours");
-            RaisePropertyChanged("CommTotalHours");
-            RaisePropertyChanged("CommSubTotal");
-
-            RaisePropertyChanged("TECSubTotal");
-            
             RaisePropertyChanged("ElectricalEffectiveRate");
-            RaisePropertyChanged("ElectricalSubTotal");
-
-            RaisePropertyChanged("ElectricalSuperHours");
             RaisePropertyChanged("ElectricalSuperEffectiveRate");
-            RaisePropertyChanged("ElectricalSuperSubTotal");
-
-            RaisePropertyChanged("SubcontractorSubTotal");
-
-            RaisePropertyChanged("TotalCost");
         }
 
         public override Object Copy()
