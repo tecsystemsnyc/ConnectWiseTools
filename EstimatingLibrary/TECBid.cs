@@ -197,6 +197,15 @@ namespace EstimatingLibrary
             get { return EstimateCalculator.GetGraphLaborCost(this); }
         }
 
+        public double TECLaborHours
+        {
+            get { return EstimateCalculator.GetTECLaborHours(this); }
+        }
+        public double TECLaborCost
+        {
+            get { return EstimateCalculator.GetTECLaborCost(this); }
+        }
+        
         public double MaterialCost
         {
             get
