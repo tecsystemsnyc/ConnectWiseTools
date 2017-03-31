@@ -161,7 +161,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                Labor.ElectricalHours = SubcontractorLaborHours;
+                //Labor.ElectricalHours = SubcontractorLaborHours;
                 return Labor.SubcontractorSubTotal;
             }
         }
