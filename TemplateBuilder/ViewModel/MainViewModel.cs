@@ -29,6 +29,7 @@ namespace TemplateBuilder.ViewModel
         //Initializer
         public MainViewModel()
         {
+            _templates = new TECTemplates();
             if (ApplicationDeployment.IsNetworkDeployed)
             { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
@@ -36,13 +37,9 @@ namespace TemplateBuilder.ViewModel
 
             setupStatusBar();
 
-            getTemplates();
-
             TECLogo = Path.GetTempFileName();
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
-
-            Stack = new ChangeStack(Templates);
-
+            
             StatusBarVM.CurrentStatusText = "Done.";
             TitleString = "Template Builder";
             
@@ -52,6 +49,8 @@ namespace TemplateBuilder.ViewModel
             setupMaterialsTab();
             setupCommands();
             setupVMs();
+
+            getTemplates();
 
             DGTabIndex = TemplateGridIndex.Systems;
         }
@@ -83,6 +82,7 @@ namespace TemplateBuilder.ViewModel
                 _templates = value;
                 Stack = new ChangeStack(value);
                 RaisePropertyChanged("Templates");
+                refresh();
             }
         }
         private TECTemplates _templates;
@@ -135,6 +135,14 @@ namespace TemplateBuilder.ViewModel
         #endregion //Properties
 
         #region Methods
+        private void refresh()
+        {
+            ScopeCollection.Refresh(Templates);
+            ScopeDataGrid.Refresh(Templates);
+            EditTab.Refresh(Templates);
+            MaterialsTab.Refresh(Templates);
+            ControlledScopeVM.Refresh(Templates);
+        }
         #region Setup Methods
         private void setupCommands()
         {

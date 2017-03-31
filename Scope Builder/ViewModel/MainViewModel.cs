@@ -96,10 +96,11 @@ namespace Scope_Builder.ViewModel
 
             BidSet += () =>
             { refreshAll(); };
+            TemplatesLoadedSet += () =>
+            { refreshTemplates(); };
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-
         
         #endregion
 
@@ -261,9 +262,13 @@ namespace Scope_Builder.ViewModel
         }
         private void refreshAll()
         {
-            ScopeDataGrid.Bid = Bid;
-            LocationDataGrid.Bid = Bid;
-            BudgetVM.Bid = Bid;
+            ScopeDataGrid.Refresh(Bid);
+            LocationDataGrid.Refresh(Bid);
+            BudgetVM.Refresh(Bid);
+        }
+        private void refreshTemplates()
+        {
+            ScopeCollection.Refresh(Templates);
         }
         private void setupScopeDataGrid()
         {
