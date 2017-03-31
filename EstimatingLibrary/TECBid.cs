@@ -115,7 +115,6 @@ namespace EstimatingLibrary
                     _labor = value;
                     NotifyPropertyChanged("Labor", temp, this);
                     Labor.PropertyChanged += objectPropertyChanged;
-                    Labor.NumPoints = getPointNumber();
                 }
             }
         }
@@ -132,7 +131,20 @@ namespace EstimatingLibrary
                 Parameters.PropertyChanged += objectPropertyChanged;
             }
         }
-        
+
+        public double PMPointLaborHours
+        {
+            get { return EstimateCalculator.GetPMPointHours(this); }
+        }
+        public double PMLaborHours
+        {
+            get { return EstimateCalculator.GetPMTotalHours(this); }
+        }
+        public double PMLaborCost
+        {
+            get { return EstimateCalculator.GetPMLaborCost(this); }
+        }
+
         public double MaterialCost
         {
             get
@@ -152,8 +164,7 @@ namespace EstimatingLibrary
                 return EstimateCalculator.GetTECSubtotal(this);
             }
         }
-
-
+        
         public double ElectricalLaborHours
         {
             get { return EstimateCalculator.GetElectricalLaborHours(this); }
@@ -170,7 +181,6 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetElectricalSuperLaborCost(this); }
         }
-
         public double SubcontractorLaborHours
         {
             get { return EstimateCalculator.GetSubcontractorLaborHours(this); }
@@ -490,7 +500,6 @@ namespace EstimatingLibrary
             IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            Labor.NumPoints = getPointNumber();
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -876,7 +885,6 @@ namespace EstimatingLibrary
         
         private void updatePoints()
         {
-            Labor.NumPoints = getPointNumber();
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
             updateTotal();

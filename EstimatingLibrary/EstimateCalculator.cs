@@ -35,14 +35,14 @@ namespace EstimatingLibrary
 
             return outTax;
         }
-
+        
         /// <summary>
         /// Returns cost of all TEC material and labor with escalation, overhead, and tax
         /// </summary>
         public static double GetTECCost(TECBid bid)
         {
             double outCost = 0;
-            outCost += bid.Labor.TECSubTotal;
+            outCost += GetTECLaborCost(bid);
             outCost += bid.MaterialCost;
             outCost += outCost * bid.Parameters.Escalation / 100;
             outCost += outCost * bid.Parameters.Overhead / 100;
@@ -61,7 +61,6 @@ namespace EstimatingLibrary
 
             return outCost;
         }
-
         /// <summary>
         /// Returns the electrical material cost of all wire, conduit, and their associated costs 
         /// </summary>
@@ -108,7 +107,178 @@ namespace EstimatingLibrary
         }
 
         #region Labor
-        
+        /// <summary>
+        /// Returns PM labor hours based on points
+        /// </summary>
+        public static double GetPMPointHours(TECBid bid)
+        {
+            double hours = bid.TotalPointNumber * bid.Labor.PMCoef;
+           
+            return hours;
+        }
+        /// <summary>
+        /// Returns total PM labor hours
+        /// </summary>
+        public static double GetPMTotalHours(TECBid bid)
+        {
+            double hours = GetPMPointHours(bid);
+            hours += bid.Labor.PMExtraHours;
+            
+            return hours;
+        }
+        /// <summary>
+        /// Returns PM labor cost
+        /// </summary>
+        public static double GetPMLaborCost(TECBid bid)
+        {
+            double cost = GetPMTotalHours(bid) * bid.Labor.PMRate;
+
+            return cost;
+        }
+
+        /// <summary>
+        /// Returns ENG labor hours based on points
+        /// </summary>
+        public static double GetENGPointHours(TECBid bid)
+        {
+            double hours = bid.TotalPointNumber * bid.Labor.ENGCoef;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns total ENG labor hours
+        /// </summary>
+        public static double GetENGTotalHours(TECBid bid)
+        {
+            double hours = GetENGPointHours(bid);
+            hours += bid.Labor.ENGExtraHours;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns ENG labor cost
+        /// </summary>
+        public static double GetENGLaborCost(TECBid bid)
+        {
+            double cost = GetENGTotalHours(bid) * bid.Labor.ENGRate;
+
+            return cost;
+        }
+
+        /// <summary>
+        /// Returns PM labor hours based on points
+        /// </summary>
+        public static double GetCommPointHours(TECBid bid)
+        {
+            double hours = bid.TotalPointNumber * bid.Labor.CommCoef;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns total PM labor hours
+        /// </summary>
+        public static double GetCommTotalHours(TECBid bid)
+        {
+            double hours = GetCommPointHours(bid);
+            hours += bid.Labor.CommExtraHours;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns PM labor cost
+        /// </summary>
+        public static double GetCommLaborCost(TECBid bid)
+        {
+            double cost = GetCommTotalHours(bid) * bid.Labor.CommRate;
+
+            return cost;
+        }
+
+        /// <summary>
+        /// Returns Soft labor hours based on points
+        /// </summary>
+        public static double GetSoftPointHours(TECBid bid)
+        {
+            double hours = bid.TotalPointNumber * bid.Labor.SoftCoef;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns total Soft labor hours
+        /// </summary>
+        public static double GetSoftTotalHours(TECBid bid)
+        {
+            double hours = GetSoftPointHours(bid);
+            hours += bid.Labor.SoftExtraHours;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns Soft labor cost
+        /// </summary>
+        public static double GetSoftLaborCost(TECBid bid)
+        {
+            double cost = GetSoftTotalHours(bid) * bid.Labor.SoftRate;
+
+            return cost;
+        }
+
+        /// <summary>
+        /// Returns Graph labor hours based on points
+        /// </summary>
+        public static double GetGraphPointHours(TECBid bid)
+        {
+            double hours = bid.TotalPointNumber * bid.Labor.GraphCoef;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns total Graph labor hours
+        /// </summary>
+        public static double GetGraphTotalHours(TECBid bid)
+        {
+            double hours = GetGraphPointHours(bid);
+            hours += bid.Labor.GraphExtraHours;
+
+            return hours;
+        }
+        /// <summary>
+        /// Returns Graph labor cost
+        /// </summary>
+        public static double GetGraphLaborCost(TECBid bid)
+        {
+            double cost = GetGraphTotalHours(bid) * bid.Labor.GraphRate;
+
+            return cost;
+        }
+
+        /// <summary>
+        /// Returns all TEC labor hours
+        /// </summary>
+        public static double GetTECLaborHours(TECBid bid)
+        {
+            double outLabor = 0;
+            outLabor += GetPMTotalHours(bid);
+            outLabor += GetENGTotalHours(bid);
+            outLabor += GetCommTotalHours(bid);
+            outLabor += GetSoftTotalHours(bid);
+            outLabor += GetGraphTotalHours(bid);
+            return outLabor;
+        }
+        /// <summary>
+        /// Returns all TEC labor cost
+        /// </summary>
+        public static double GetTECLaborCost(TECBid bid)
+        {
+            double outCost = 0;
+            outCost += GetPMLaborCost(bid);
+            outCost += GetENGLaborCost(bid);
+            outCost += GetCommLaborCost(bid);
+            outCost += GetSoftLaborCost(bid);
+            outCost += GetGraphLaborCost(bid);
+            return outCost;
+        }
+
         /// <summary>
         /// Returns the Journeyman electrical labor hours
         /// </summary>
@@ -177,7 +347,6 @@ namespace EstimatingLibrary
 
             return laborHours / 7;
         }
-
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
         /// </summary>
@@ -194,6 +363,7 @@ namespace EstimatingLibrary
             double laborCost = GetElectricalLaborCost(bid) + GetElectricalSuperLaborCost(bid);
             return laborCost;
         }
+
         /// <summary>
         /// Returns the subcontractor labor hours
         /// </summary>
