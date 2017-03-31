@@ -67,7 +67,7 @@
         <!--Project Management Values-->
         <TextBlock Text="Project Management: "
                Grid.Row="1"/>
-        <TextBlock Text="{Binding Bid.Labor.NumPoints}"
+        <TextBlock Text="{Binding Bid.TotalPointNumber}"
                  Grid.Row="1" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.PMCoef}"
