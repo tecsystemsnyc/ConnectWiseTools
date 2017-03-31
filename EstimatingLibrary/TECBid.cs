@@ -956,9 +956,8 @@ namespace EstimatingLibrary
         
         private void updatePoints()
         {
-            RaisePropertyChanged("TECLaborCost");
-            RaisePropertyChanged("TECLaborHours");
-            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("TotalPointNumber");
+            updateTECLabor();
             updateTotal();
         }
         private void updateDevices()
@@ -974,8 +973,33 @@ namespace EstimatingLibrary
             RaisePropertyChanged("ElectricalMaterialCost");
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("TotalPrice");
+            updateTotal();
+        }
+        private void updateTECLabor()
+        {
+            RaisePropertyChanged("PMPointLaborHours");
+            RaisePropertyChanged("PMLaborHours");
+            RaisePropertyChanged("PMLaborCost");
+
+            RaisePropertyChanged("ENGPointLaborHours");
+            RaisePropertyChanged("ENGLaborHours");
+            RaisePropertyChanged("ENGLaborCost");
+
+            RaisePropertyChanged("SoftPointLaborHours");
+            RaisePropertyChanged("SoftLaborHours");
+            RaisePropertyChanged("SoftLaborCost");
+
+            RaisePropertyChanged("CommPointLaborHours");
+            RaisePropertyChanged("CommLaborHours");
+            RaisePropertyChanged("CommLaborCost");
+
+            RaisePropertyChanged("GraphPointLaborHours");
+            RaisePropertyChanged("GraphLaborHours");
+            RaisePropertyChanged("GraphLaborCost");
+
+            RaisePropertyChanged("TECLaborHours");
+            RaisePropertyChanged("TECLaborCost");
+            RaisePropertyChanged("TECSubtotal");
         }
         private void updateFromParameters()
         {
@@ -988,7 +1012,7 @@ namespace EstimatingLibrary
         private void updateFromLabor()
         {
             RaisePropertyChanged("Tax");
-            RaisePropertyChanged("TECSubtotal");
+            updateTECLabor();
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("PricePerPoint");
@@ -997,10 +1021,11 @@ namespace EstimatingLibrary
         private void updateAll()
         {
             RaisePropertyChanged("Tax");
-            RaisePropertyChanged("TECSubtotal");
+            updateTECLabor();
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("ElectricalMaterialCost");
+            updateTotal();
         }
         private void updateTotal()
         {
