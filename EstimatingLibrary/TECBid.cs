@@ -239,7 +239,7 @@ namespace EstimatingLibrary
         }
         public double ElectricalLaborCost
         {
-            get { return EstimateCalculator.GetElectricalLaborHours(this); }
+            get { return EstimateCalculator.GetElectricalLaborCost(this); }
         }
         public double ElectricalSuperLaborHours
         {
@@ -413,6 +413,7 @@ namespace EstimatingLibrary
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
+                registerControllers();
             }
         }
         public ObservableCollection<TECProposalScope> ProposalScope
@@ -571,6 +572,7 @@ namespace EstimatingLibrary
             IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
+            registerControllers();
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -719,6 +721,9 @@ namespace EstimatingLibrary
                             addProposalScope(sys);
                             sys.PropertyChanged += System_PropertyChanged;
                             checkForTotalsInSystem(sys);
+                        } else if (item is TECController)
+                        {
+                            registerController(item as TECController);
                         }
                     }
                 }
@@ -733,7 +738,6 @@ namespace EstimatingLibrary
                     }
                     else
                     {
-                        
                         NotifyPropertyChanged("Remove", this, item);
                         if (item is TECScope)
                         {
@@ -812,6 +816,10 @@ namespace EstimatingLibrary
             { updateFromParameters(); }
             else if (sender is TECCost)
             { updateElectricalMaterial(); }
+            else if (sender is TECConnection)
+            {
+                updateElectricalMaterial();
+            }
         }
         
         #endregion
@@ -973,7 +981,17 @@ namespace EstimatingLibrary
             RaisePropertyChanged("ElectricalMaterialCost");
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
+            updateElectricalLabor();
             updateTotal();
+        }
+        private void updateElectricalLabor()
+        {
+            RaisePropertyChanged("ElectricalLaborHours");
+            RaisePropertyChanged("ElectricalLaborCost");
+            RaisePropertyChanged("ElectricalSuperLaborHours");
+            RaisePropertyChanged("ElectricalSuperLaborCost");
+            RaisePropertyChanged("SubcontractorLaborHours");
+            RaisePropertyChanged("SubcontractorLaborCost");
         }
         private void updateTECLabor()
         {
@@ -1000,6 +1018,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("TECLaborHours");
             RaisePropertyChanged("TECLaborCost");
             RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("TotalLaborCost");
         }
         private void updateFromParameters()
         {
@@ -1086,6 +1105,45 @@ namespace EstimatingLibrary
             }
         }
         
+        private void registerControllers()
+        {
+            foreach(TECController controller in Controllers)
+            {
+                registerController(controller);
+            }
+        }
+        private void registerController(TECController controller)
+        {
+            controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                connection.PropertyChanged += objectPropertyChanged;
+            }
+            if(controller.ChildrenConnections.Count > 0)
+            {
+                updateElectricalMaterial();
+            }
+        }
+
+
+        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            updateElectricalMaterial();
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(TECConnection item in e.NewItems)
+                {
+                    item.PropertyChanged += objectPropertyChanged;
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECConnection item in e.OldItems)
+                {
+                    item.PropertyChanged -= objectPropertyChanged;
+                }
+            }
+        }
         #endregion
 
     }

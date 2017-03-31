@@ -188,12 +188,16 @@ namespace EstimatingLibrary
 
         private double getMaterialCost()
         {
-            double cost = 0;
+            double matCost = 0;
             foreach(TECEquipment equipment in this.Equipment)
             {
-                cost += equipment.MaterialCost;
+                matCost += equipment.MaterialCost;
             }
-            return cost;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
         }
         private double getLaborCost()
         {

@@ -19,6 +19,14 @@ namespace EstimatingLibrary
             {
                 cost += system.MaterialCost;
             }
+            foreach(TECController controller in bid.Controllers)
+            {
+                cost += controller.MaterialCost;
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                cost += panel.MaterialCost;
+            }
             return cost;
         }
         /// <summary>
@@ -326,9 +334,9 @@ namespace EstimatingLibrary
         /// </summary>
         public static double GetElectricalLaborCost(TECBid bid)
         {
-            double laborHours = GetElectricalLaborHours(bid) * bid.Labor.ElectricalEffectiveRate;
+            double cost = GetElectricalLaborHours(bid) * bid.Labor.ElectricalEffectiveRate;
 
-            return laborHours;
+            return cost;
         }
         /// <summary>
         /// Returns the electrical super labor hours
@@ -344,9 +352,9 @@ namespace EstimatingLibrary
         /// </summary>
         public static double GetElectricalSuperLaborCost(TECBid bid)
         {
-            double laborHours = GetElectricalLaborHours(bid);
+            double cost = GetElectricalSuperLaborHours(bid) * bid.Labor.ElectricalSuperEffectiveRate;
 
-            return laborHours / 7;
+            return cost;
         }
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
@@ -461,7 +469,7 @@ namespace EstimatingLibrary
             double tecCost = GetTECCost(bid);
             double subCost = GetSubcontractorCost(bid);
             margin = (totalPrice - tecCost - subCost) / totalPrice;
-            return margin;
+            return margin * 100;
         }
         #endregion
 

@@ -37,6 +37,11 @@ namespace EstimatingLibrary
             }
         }
 
+
+        public double MaterialCost
+        {
+            get { return getMaterialCost(); }
+        }
         #endregion
 
         public TECPanel(Guid guid) : base(guid)
@@ -90,5 +95,19 @@ namespace EstimatingLibrary
             }
         }
 
+
+        private double getMaterialCost()
+        {
+            double matCost = 0;
+
+            matCost += Type.Cost;
+
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+
+            return matCost;
+        }
     }
 }

@@ -96,6 +96,11 @@ namespace EstimatingLibrary
             }
         }
 
+        public double MaterialCost
+        {
+            get { return getMaterialCost(); }
+        }
+
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
         {
@@ -450,6 +455,17 @@ namespace EstimatingLibrary
                 }
             }
             return outList;
+        }
+
+        private double getMaterialCost()
+        {
+            double matCost = 0;
+            matCost += this.Cost * this.Manufacturer.Multiplier;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
         }
         #endregion
     }

@@ -139,12 +139,16 @@ namespace EstimatingLibrary
 
         private double getMaterialCost()
         {
-            double cost = 0;
+            double matCost = 0;
             foreach(TECSubScope sub in this.SubScope)
             {
-                cost += sub.MaterialCost;
+                matCost += sub.MaterialCost;
             }
-            return cost;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
         }
         private double getLaborCost()
         {
