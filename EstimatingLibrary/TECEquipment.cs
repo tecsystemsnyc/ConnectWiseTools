@@ -70,7 +70,17 @@ namespace EstimatingLibrary
 
         public double TotalBudgetPrice
         {
-            get { return (Quantity * BudgetUnitPrice); }
+            get
+            {
+                if (Quantity > 0)
+                {
+                    return (Quantity * BudgetUnitPrice);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
 
         public double MaterialCost
