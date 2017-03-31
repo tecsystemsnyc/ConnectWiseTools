@@ -205,26 +205,26 @@
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
                Grid.Row="8"/>
-        <TextBlock Text="{Binding Bid.Labor.ElectricalHours}"
+        <TextBlock Text="{Binding Bid.ElectricalLaborHours}"
                  Grid.Row="8" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.ElectricalSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.ElectricalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="7"
                  />
 
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
                Grid.Row="9"/>
-        <TextBlock Text="{Binding Bid.Labor.ElectricalSuperHours}"
+        <TextBlock Text="{Binding Bid.ElectricalSuperLaborHours}"
                  Grid.Row="9" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalSuperEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="9" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.ElectricalSuperSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="9" Grid.Column="7"
                  />
 
