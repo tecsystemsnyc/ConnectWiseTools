@@ -61,6 +61,7 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+
         /// <summary>
         /// Returns the electrical material cost of all wire, conduit, and their associated costs 
         /// </summary>

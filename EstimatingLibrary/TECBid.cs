@@ -132,6 +132,8 @@ namespace EstimatingLibrary
             }
         }
 
+        #region Cost and Labor
+
         public double PMPointLaborHours
         {
             get { return EstimateCalculator.GetPMPointHours(this); }
@@ -242,6 +244,7 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetElectricalSuperLaborCost(this); }
         }
+
         public double SubcontractorLaborHours
         {
             get { return EstimateCalculator.GetSubcontractorLaborHours(this); }
@@ -291,6 +294,8 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetMargin(this); }
         }
+
+        #endregion
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
