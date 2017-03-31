@@ -115,7 +115,6 @@ namespace EstimatingLibrary
                     _labor = value;
                     NotifyPropertyChanged("Labor", temp, this);
                     Labor.PropertyChanged += objectPropertyChanged;
-                    Labor.NumPoints = getPointNumber();
                 }
             }
         }
@@ -131,6 +130,82 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Parameters", temp, this);
                 Parameters.PropertyChanged += objectPropertyChanged;
             }
+        }
+
+        #region Cost and Labor
+
+        public double PMPointLaborHours
+        {
+            get { return EstimateCalculator.GetPMPointHours(this); }
+        }
+        public double PMLaborHours
+        {
+            get { return EstimateCalculator.GetPMTotalHours(this); }
+        }
+        public double PMLaborCost
+        {
+            get { return EstimateCalculator.GetPMLaborCost(this); }
+        }
+
+        public double ENGPointLaborHours
+        {
+            get { return EstimateCalculator.GetENGPointHours(this); }
+        }
+        public double ENGLaborHours
+        {
+            get { return EstimateCalculator.GetENGTotalHours(this); }
+        }
+        public double ENGLaborCost
+        {
+            get { return EstimateCalculator.GetENGLaborCost(this); }
+        }
+
+        public double SoftPointLaborHours
+        {
+            get { return EstimateCalculator.GetSoftPointHours(this); }
+        }
+        public double SoftLaborHours
+        {
+            get { return EstimateCalculator.GetSoftTotalHours(this); }
+        }
+        public double SoftLaborCost
+        {
+            get { return EstimateCalculator.GetSoftLaborCost(this); }
+        }
+
+        public double CommPointLaborHours
+        {
+            get { return EstimateCalculator.GetCommPointHours(this); }
+        }
+        public double CommLaborHours
+        {
+            get { return EstimateCalculator.GetCommTotalHours(this); }
+        }
+        public double CommLaborCost
+        {
+            get { return EstimateCalculator.GetCommLaborCost(this); }
+        }
+
+        public double GraphPointLaborHours
+        {
+            get { return EstimateCalculator.GetGraphPointHours(this); }
+        }
+        public double GraphLaborHours
+        {
+            get { return EstimateCalculator.GetGraphTotalHours(this); }
+        }
+        public double GraphLaborCost
+        {
+            get { return EstimateCalculator.GetGraphLaborCost(this); }
+        }
+
+        public double TECLaborHours
+        {
+            get { return EstimateCalculator.GetTECLaborHours(this); }
+        }
+        public double TECLaborCost
+        {
+            get { return EstimateCalculator.GetTECLaborCost(this); }
         }
         
         public double MaterialCost
@@ -152,8 +227,7 @@ namespace EstimatingLibrary
                 return EstimateCalculator.GetTECSubtotal(this);
             }
         }
-
-
+        
         public double ElectricalLaborHours
         {
             get { return EstimateCalculator.GetElectricalLaborHours(this); }
@@ -220,6 +294,8 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetMargin(this); }
         }
+
+        #endregion
 
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
@@ -490,7 +566,6 @@ namespace EstimatingLibrary
             IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            Labor.NumPoints = getPointNumber();
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -876,7 +951,6 @@ namespace EstimatingLibrary
         
         private void updatePoints()
         {
-            Labor.NumPoints = getPointNumber();
             RaisePropertyChanged("TECSubtotal");
             RaisePropertyChanged("SubcontractorSubtotal");
             updateTotal();
