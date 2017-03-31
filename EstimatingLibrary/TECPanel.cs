@@ -100,8 +100,11 @@ namespace EstimatingLibrary
         {
             double matCost = 0;
 
-            matCost += Type.Cost;
-
+            if(Type != null)
+            {
+                matCost += Type.Cost;
+            }
+            
             foreach (TECAssociatedCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
