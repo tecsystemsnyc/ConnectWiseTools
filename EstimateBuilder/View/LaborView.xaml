@@ -73,119 +73,119 @@
         <TextBlock Text="{Binding Bid.Labor.PMCoef}"
                  Grid.Row="1" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.Labor.PMPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.PMPointLaborHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.PMExtraHours}"
                  Grid.Row="1" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.Labor.PMTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.PMLaborHours, Mode=OneWay}"
                  Grid.Row="1" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.PMRate, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.PMSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="7"
                  />
 
         <!--Engineering Values-->
         <TextBlock Text="Engineering: "
                Grid.Row="2"/>
-        <TextBlock Text="{Binding Bid.Labor.NumPoints}"
+        <TextBlock Text="{Binding Bid.TotalPointNumber}"
                  Grid.Row="2" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.ENGCoef}"
                  Grid.Row="2" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.Labor.ENGPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.ENGPointLaborHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.ENGExtraHours}"
                  Grid.Row="2" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.Labor.ENGTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.ENGLaborHours, Mode=OneWay}"
                  Grid.Row="2" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ENGRate, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.ENGSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="7"
                  />
 
         <!--Software Values-->
         <TextBlock Text="Software: "
                Grid.Row="3"/>
-        <TextBlock Text="{Binding Bid.Labor.NumPoints}"
+        <TextBlock Text="{Binding Bid.TotalPointNumber}"
                  Grid.Row="3" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.SoftCoef}"
                  Grid.Row="3" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.Labor.SoftPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.SoftPointLaborHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.SoftExtraHours}"
                  Grid.Row="3" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.Labor.SoftTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.SoftLaborHours, Mode=OneWay}"
                  Grid.Row="3" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.SoftSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="7"
                  />
 
         <!--Graphics Values-->
         <TextBlock Text="Graphics: "
                Grid.Row="4"/>
-        <TextBlock Text="{Binding Bid.Labor.NumPoints}"
+        <TextBlock Text="{Binding Bid.TotalPointNumber}"
                  Grid.Row="4" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.GraphCoef}"
                  Grid.Row="4" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.Labor.GraphPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.GraphPointLaborHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.GraphExtraHours}"
                  Grid.Row="4" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.Labor.GraphTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.GraphLaborHours, Mode=OneWay}"
                  Grid.Row="4" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.GraphSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="7"
                  />
         
         <!--Commisioning Values-->
         <TextBlock Text="Commisioning: "
                Grid.Row="5"/>
-        <TextBlock Text="{Binding Bid.Labor.NumPoints}"
+        <TextBlock Text="{Binding Bid.TotalPointNumber}"
                  Grid.Row="5" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.CommCoef}"
                  Grid.Row="5" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.Labor.CommPointHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.CommPointLaborHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.CommExtraHours}"
                  Grid.Row="5" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.Labor.CommTotalHours, Mode=OneWay}"
+        <TextBlock Text="{Binding Bid.CommLaborHours, Mode=OneWay}"
                  Grid.Row="5" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.Labor.CommSubTotal, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="7"
                  />
 
@@ -232,7 +232,7 @@
         <!--Total Values-->
         <TextBlock Text="Total"
                Grid.Row="10" Grid.Column="7"/>
-        <TextBlock Text="{Binding Bid.Labor.TotalCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="11" Grid.Column="7"
                  />
         
