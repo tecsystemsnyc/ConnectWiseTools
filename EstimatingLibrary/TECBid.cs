@@ -145,6 +145,58 @@ namespace EstimatingLibrary
             get { return EstimateCalculator.GetPMLaborCost(this); }
         }
 
+        public double ENGPointLaborHours
+        {
+            get { return EstimateCalculator.GetENGPointHours(this); }
+        }
+        public double ENGLaborHours
+        {
+            get { return EstimateCalculator.GetENGTotalHours(this); }
+        }
+        public double ENGLaborCost
+        {
+            get { return EstimateCalculator.GetENGLaborCost(this); }
+        }
+
+        public double SoftPointLaborHours
+        {
+            get { return EstimateCalculator.GetSoftPointHours(this); }
+        }
+        public double SoftLaborHours
+        {
+            get { return EstimateCalculator.GetSoftTotalHours(this); }
+        }
+        public double SoftLaborCost
+        {
+            get { return EstimateCalculator.GetSoftLaborCost(this); }
+        }
+
+        public double CommPointLaborHours
+        {
+            get { return EstimateCalculator.GetCommPointHours(this); }
+        }
+        public double CommLaborHours
+        {
+            get { return EstimateCalculator.GetCommTotalHours(this); }
+        }
+        public double CommLaborCost
+        {
+            get { return EstimateCalculator.GetCommLaborCost(this); }
+        }
+
+        public double GraphPointLaborHours
+        {
+            get { return EstimateCalculator.GetGraphPointHours(this); }
+        }
+        public double GraphLaborHours
+        {
+            get { return EstimateCalculator.GetGraphTotalHours(this); }
+        }
+        public double GraphLaborCost
+        {
+            get { return EstimateCalculator.GetGraphLaborCost(this); }
+        }
+
         public double MaterialCost
         {
             get
