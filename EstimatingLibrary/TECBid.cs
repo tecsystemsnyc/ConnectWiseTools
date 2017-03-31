@@ -207,6 +207,11 @@ namespace EstimatingLibrary
         {
             get { return EstimateCalculator.GetTECLaborCost(this); }
         }
+
+        public double TotalLaborCost
+        {
+            get { return EstimateCalculator.GetTotalLaborCost(this); }
+        }
         
         public double MaterialCost
         {
@@ -951,7 +956,8 @@ namespace EstimatingLibrary
         
         private void updatePoints()
         {
-            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("TECLaborCost");
+            RaisePropertyChanged("TECLaborHours");
             RaisePropertyChanged("SubcontractorSubtotal");
             updateTotal();
         }

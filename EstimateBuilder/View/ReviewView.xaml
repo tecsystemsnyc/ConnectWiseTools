@@ -83,7 +83,7 @@
                Grid.Row="8" Grid.Column="1"
                TextAlignment="Right"/>
         <Label Content="Labor:" Grid.Row="9"/>
-        <TextBlock Text="{Binding Bid.Labor.TECSubTotal, StringFormat= {} {0:C}}" 
+        <TextBlock Text="{Binding Bid.TECLaborCost, StringFormat= {} {0:C}}" 
                Grid.Row="9" Grid.Column="1"
                TextAlignment="Right"/>
 

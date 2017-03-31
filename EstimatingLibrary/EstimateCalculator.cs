@@ -381,6 +381,15 @@ namespace EstimatingLibrary
             double laborHours = GetTotalElectricalLaborCost(bid);
             return laborHours;
         }
+
+        /// <summary>
+        /// Returns the total labor cost
+        /// </summary>
+        public static double GetTotalLaborCost(TECBid bid)
+        {
+            double cost = GetSubcontractorLaborCost(bid) + GetTECLaborCost(bid);
+            return cost;
+        }
         #endregion
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 
