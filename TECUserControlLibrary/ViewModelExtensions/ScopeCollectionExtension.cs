@@ -24,7 +24,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             get { return _templates; }
             set
             {
+                unsubscribeTemplatesCollections();
                 _templates = value;
+                subscribeTemplatesCollections();
                 RaisePropertyChanged("Templates");
             }
         }
@@ -909,14 +911,74 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         public void populateItemsCollections()
         {
-            SystemItemsCollection = Templates.SystemTemplates;
-            EquipmentItemsCollection = Templates.EquipmentTemplates;
-            SubScopeItemsCollection = Templates.SubScopeTemplates;
-            DevicesItemsCollection = Templates.DeviceCatalog;
-            ControllersItemsCollection = Templates.ControllerTemplates;
-            AssociatedCostsItemsCollection = Templates.AssociatedCostsCatalog;
-            ControlledScopeItemsCollection = Templates.ControlledScopeTemplates;
-            PanelsItemsCollection = Templates.PanelTemplates;
+            SystemItemsCollection = new ObservableCollection<TECSystem>();
+            EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
+            SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
+            DevicesItemsCollection = new ObservableCollection<TECDevice>();
+            ControllersItemsCollection = new ObservableCollection<TECController>();
+            AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
+            ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
+            PanelsItemsCollection = new ObservableCollection<TECPanel>();
+
+            foreach (TECSystem sys in Templates.SystemTemplates)
+            {
+                SystemItemsCollection.Add(sys);
+            }
+            foreach (TECEquipment equip in Templates.EquipmentTemplates)
+            {
+                EquipmentItemsCollection.Add(equip);
+            }
+            foreach(TECSubScope ss in Templates.SubScopeTemplates)
+            {
+                SubScopeItemsCollection.Add(ss);
+            }
+            foreach(TECDevice dev in Templates.DeviceCatalog)
+            {
+                DevicesItemsCollection.Add(dev);
+            }
+            foreach(TECController control in Templates.ControllerTemplates)
+            {
+                ControllersItemsCollection.Add(control);
+            }
+            foreach(TECAssociatedCost assCost in Templates.AssociatedCostsCatalog)
+            {
+                AssociatedCostsItemsCollection.Add(assCost);
+            }
+            foreach(TECControlledScope controlScope in Templates.ControlledScopeTemplates)
+            {
+                ControlledScopeItemsCollection.Add(controlScope);
+            }
+            foreach(TECPanel panel in Templates.PanelTemplates)
+            {
+                PanelsItemsCollection.Add(panel);
+            }
+        }
+
+        private void unsubscribeTemplatesCollections()
+        {
+            if (Templates != null)
+            {
+                Templates.SystemTemplates.CollectionChanged -= SystemTemplates_CollectionChanged;
+                Templates.EquipmentTemplates.CollectionChanged -= EquipmentTemplates_CollectionChanged;
+                Templates.SubScopeTemplates.CollectionChanged -= SubScopeTemplates_CollectionChanged;
+                Templates.DeviceCatalog.CollectionChanged -= DeviceCatalog_CollectionChanged;
+                Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
+                Templates.AssociatedCostsCatalog.CollectionChanged -= AssociatedCostsCatalog_CollectionChanged;
+                Templates.ControlledScopeTemplates.CollectionChanged -= ControlledScopeTemplates_CollectionChanged;
+                Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
+            }
+        }
+
+        private void subscribeTemplatesCollections()
+        {
+            Templates.SystemTemplates.CollectionChanged += SystemTemplates_CollectionChanged;
+            Templates.EquipmentTemplates.CollectionChanged += EquipmentTemplates_CollectionChanged;
+            Templates.SubScopeTemplates.CollectionChanged += SubScopeTemplates_CollectionChanged;
+            Templates.DeviceCatalog.CollectionChanged += DeviceCatalog_CollectionChanged;
+            Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
+            Templates.AssociatedCostsCatalog.CollectionChanged += AssociatedCostsCatalog_CollectionChanged;
+            Templates.ControlledScopeTemplates.CollectionChanged += ControlledScopeTemplates_CollectionChanged;
+            Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -929,6 +991,152 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DropHandler(dropInfo);
         }
 
+        #endregion
+
+        #region Event Handlers
+        private void SystemTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    SystemItemsCollection.Add(item as TECSystem);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach(object item in e.OldItems)
+                {
+                    SystemItemsCollection.Remove(item as TECSystem);
+                }
+            }
+        }
+
+        private void EquipmentTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    EquipmentItemsCollection.Add(item as TECEquipment);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    EquipmentItemsCollection.Remove(item as TECEquipment);
+                }
+            }
+        }
+
+        private void SubScopeTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    SubScopeItemsCollection.Add(item as TECSubScope);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    SubScopeItemsCollection.Remove(item as TECSubScope);
+                }
+            }
+        }
+
+        private void DeviceCatalog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    DevicesItemsCollection.Add(item as TECDevice);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    DevicesItemsCollection.Remove(item as TECDevice);
+                }
+            }
+        }
+
+        private void ControllerTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    ControllersItemsCollection.Add(item as TECController);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    ControllersItemsCollection.Remove(item as TECController);
+                }
+            }
+        }
+
+        private void AssociatedCostsCatalog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    AssociatedCostsItemsCollection.Add(item as TECAssociatedCost);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    AssociatedCostsItemsCollection.Remove(item as TECAssociatedCost);
+                }
+            }
+        }
+
+        private void ControlledScopeTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    ControlledScopeItemsCollection.Add(item as TECControlledScope);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    ControlledScopeItemsCollection.Remove(item as TECControlledScope);
+                }
+            }
+        }
+
+        private void PanelTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    PanelsItemsCollection.Add(item as TECPanel);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    PanelsItemsCollection.Remove(item as TECPanel);
+                }
+            }
+        }
         #endregion
     }
 }
