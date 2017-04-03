@@ -145,12 +145,12 @@ namespace TECUserControlLibrary.ViewModels
             get { return _selectedControlledScope; }
             set
             {
+                unregisterChanges();
                 _selectedControlledScope = value;
-                if(value != null)
-                {
-                    updateCollections();
-                    registerChanges();
-                }
+                
+                updateCollections();
+                registerChanges();
+               
                 RaisePropertyChanged("SelectedControlledScope");
             }
         }
@@ -182,6 +182,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
+            SelectedControlledScope = null;
             ScopeDataGrid.Refresh(Templates);
             setupCollections();
         }
@@ -196,9 +197,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 ConduitTypeSelections.Add(type);
             }
+            SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             ControllerSelections = new ObservableCollection<TECController>();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             PanelsCollection = new ObservableCollection<TECPanel>();
         }
 
@@ -270,59 +271,72 @@ namespace TECUserControlLibrary.ViewModels
         private void updateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
-            var noneController = new TECController();
-            noneController.Name = "None";
-            ControllerSelections.Add(noneController);
-            foreach(TECController controller in SelectedControlledScope.Controllers)
+            if(SelectedControlledScope != null)
             {
-                ControllerSelections.Add(controller);
+                var noneController = new TECController();
+                noneController.Name = "None";
+                ControllerSelections.Add(noneController);
+                foreach (TECController controller in SelectedControlledScope.Controllers)
+                {
+                    ControllerSelections.Add(controller);
+                }
             }
         }
         private void updateControllerCollection()
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            foreach (TECController controller in SelectedControlledScope.Controllers)
+            if(SelectedControlledScope != null)
             {
-                TECPanel panelToAdd = null;
-                foreach (TECPanel panel in SelectedControlledScope.Panels)
+                foreach (TECController controller in SelectedControlledScope.Controllers)
                 {
-                    if (panel.Controllers.Contains(controller))
+                    TECPanel panelToAdd = null;
+                    foreach (TECPanel panel in SelectedControlledScope.Panels)
                     {
-                        panelToAdd = panel;
+                        if (panel.Controllers.Contains(controller))
+                        {
+                            panelToAdd = panel;
+                        }
                     }
+                    ControllerInPanel controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
+                    ControllerCollection.Add(controllerInPanelToAdd);
                 }
-                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
-                ControllerCollection.Add(controllerInPanelToAdd);
             }
         }
         private void updatePanels()
         {
-            PanelsCollection = SelectedControlledScope.Panels;
+            PanelsCollection = new ObservableCollection<TECPanel>();
             PanelSelections = new ObservableCollection<TECPanel>();
-            var nonePanel = new TECPanel();
-            nonePanel.Name = "None";
-            PanelSelections.Add(nonePanel);
-            foreach(TECPanel panel in SelectedControlledScope.Panels)
+            if (SelectedControlledScope != null)
             {
-                PanelSelections.Add(panel);
+                PanelsCollection = SelectedControlledScope.Panels;
+                var nonePanel = new TECPanel();
+                nonePanel.Name = "None";
+                PanelSelections.Add(nonePanel);
+                foreach (TECPanel panel in SelectedControlledScope.Panels)
+                {
+                    PanelSelections.Add(panel);
+                }
             }
         }
         private void updateSubScopeConnections()
         {
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
-            foreach (TECSystem system in SelectedControlledScope.Systems)
+            if(SelectedControlledScope != null)
             {
-                foreach(TECEquipment equipment in system.Equipment)
+                foreach (TECSystem system in SelectedControlledScope.Systems)
                 {
-                    foreach(TECSubScope subScope in equipment.SubScope)
+                    foreach (TECEquipment equipment in system.Equipment)
                     {
-                        
-                        var subConnectionToAdd = new SubScopeConnection(subScope);
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
 
-                        subConnectionToAdd.ParentSystem = system;
-                        subConnectionToAdd.ParentEquipment = equipment;
+                            var subConnectionToAdd = new SubScopeConnection(subScope);
 
-                        SubScopeConnectionCollection.Add(subConnectionToAdd);
+                            subConnectionToAdd.ParentSystem = system;
+                            subConnectionToAdd.ParentEquipment = equipment;
+
+                            SubScopeConnectionCollection.Add(subConnectionToAdd);
+                        }
                     }
                 }
             }
@@ -330,9 +344,38 @@ namespace TECUserControlLibrary.ViewModels
         
         private void registerChanges()
         {
-            SelectedControlledScope.Systems.CollectionChanged += collectionChanged;
-            SelectedControlledScope.Controllers.CollectionChanged += collectionChanged;
-            SelectedControlledScope.Panels.CollectionChanged += collectionChanged;
+            if(SelectedControlledScope != null)
+            {
+                SelectedControlledScope.Systems.CollectionChanged += collectionChanged;
+                SelectedControlledScope.Controllers.CollectionChanged += collectionChanged;
+                SelectedControlledScope.Panels.CollectionChanged += collectionChanged;
+                foreach(TECSystem system in SelectedControlledScope.Systems)
+                {
+                    system.PropertyChanged += System_PropertyChanged;
+                }
+            }
+        }
+
+        private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RemovedSubScope")
+            {
+                updateSubScopeConnections();
+            }
+        }
+
+        private void unregisterChanges()
+        {
+            if (SelectedControlledScope != null)
+            {
+                SelectedControlledScope.Systems.CollectionChanged -= collectionChanged;
+                SelectedControlledScope.Controllers.CollectionChanged -= collectionChanged;
+                SelectedControlledScope.Panels.CollectionChanged -= collectionChanged;
+                foreach (TECSystem system in SelectedControlledScope.Systems)
+                {
+                    system.PropertyChanged -= System_PropertyChanged;
+                }
+            }
         }
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -340,9 +383,7 @@ namespace TECUserControlLibrary.ViewModels
             updateCollections();
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                //foreach(object item in e.NewItems)
-                //{
-                //}
+                
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {

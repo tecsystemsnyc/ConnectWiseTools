@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 Systems.CollectionChanged -= CollectionChanged;
                 _systems = value;
+                registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
             }
@@ -59,6 +61,7 @@ namespace EstimatingLibrary
             Systems.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
+            registerSystems();
         }
         public TECControlledScope() : this(Guid.NewGuid()) { }
         public TECControlledScope(TECControlledScope source) : this()
@@ -87,6 +90,10 @@ namespace EstimatingLibrary
                     if(item != null)
                     {
                         NotifyPropertyChanged("Add", this, item);
+                        if(item is TECSystem)
+                        {
+                            (item as TECSystem).PropertyChanged += System_PropertyChanged;
+                        }
                     }
                 }
             }
@@ -94,11 +101,42 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item != null) { NotifyPropertyChanged("Remove", this, item); }
+                    if (item != null)
+                    {
+                        NotifyPropertyChanged("Remove", this, item);
+                        if (item is TECSystem)
+                        {
+                            (item as TECSystem).PropertyChanged -= System_PropertyChanged;
+                        }
+                    }
                 }
             }
         }
-        
+
+        private void registerSystems()
+        {
+            foreach (TECSystem system in Systems)
+            {
+                system.PropertyChanged += System_PropertyChanged;
+            }
+        }
+        private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "RemovedSubScope")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                if (args.NewValue is TECEquipment)
+                {
+                    handleEquipmentSubScopeRemoval(args.NewValue as TECEquipment);
+                }
+                else
+                {
+                    handleSubScopeRemovalInConnections(args.NewValue as TECSubScope);
+                }
+            }
+        }
+
+
         public override object Copy()
         {
             var outScope = new TECControlledScope(_guid);
@@ -123,6 +161,39 @@ namespace EstimatingLibrary
             var outScope = new TECControlledScope(this);
             return outScope;
         }
-        
+
+        private void handleSystemSubScopeRemoval(TECSystem system)
+        {
+            foreach (TECEquipment equipment in system.Equipment)
+            {
+                handleEquipmentSubScopeRemoval(equipment);
+            }
+        }
+        private void handleEquipmentSubScopeRemoval(TECEquipment equipment)
+        {
+            foreach (TECSubScope subScope in equipment.SubScope)
+            {
+                handleSubScopeRemovalInConnections(subScope);
+            }
+        }
+        private void handleSubScopeRemovalInConnections(TECSubScope subScope)
+        {
+            foreach (TECController controller in Controllers)
+            {
+                ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
+                foreach (TECSubScopeConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.SubScope == subScope)
+                    {
+                        subScopeToRemove.Add(subScope as TECSubScope);
+                    }
+                }
+                foreach (TECSubScope sub in subScopeToRemove)
+                {
+                    controller.RemoveSubScope(sub);
+                }
+            }
+        }
+
     }
 }

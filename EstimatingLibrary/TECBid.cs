@@ -320,6 +320,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 Systems.CollectionChanged -= CollectionChanged;
                 _systems = value;
+                registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
                 updatePoints();

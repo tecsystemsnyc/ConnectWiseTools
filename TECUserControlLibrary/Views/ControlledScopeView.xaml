@@ -79,14 +79,14 @@
                              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"/>
         </Grid>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>
-        <!--<Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="2" Background="{DynamicResource SectionBackgroundBrush}"
+        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
                 Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
             <Label Content="Select a Controlled Scope to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-        </Canvas>-->
+        </Canvas>
 
     </Grid>
 </UserControl>
