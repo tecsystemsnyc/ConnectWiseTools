@@ -288,7 +288,7 @@ namespace EstimatingLibrary
             } else if (name == "RemovedSubScope")
             {
                 var args = e as PropertyChangedExtendedEventArgs<object>;
-                NotifyPropertyChanged("SubScopeRemoved", this, args.NewValue);
+                NotifyPropertyChanged("RemovedSubScope", this, args.NewValue);
             }
           
         }
