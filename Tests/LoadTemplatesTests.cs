@@ -22,6 +22,7 @@ namespace Tests
         static TECController actualController;
         static TECConduitType actualConduitType;
         static TECAssociatedCost actualAssociatedCost;
+        static TECIOModule actualIOModule;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -82,6 +83,11 @@ namespace Tests
             foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
             {
                 if (cost.Name == "Test Cost") actualAssociatedCost = cost;
+            }
+            actualIOModule = null;
+            foreach (TECIOModule ioModule in actualTemplates.IOModuleCatalog)
+            {
+                if (ioModule.Name == "Test IO Module") actualIOModule = ioModule;
             }
         }
 
@@ -320,6 +326,18 @@ namespace Tests
             Assert.AreEqual(19, actualCost.Quantity);
         }
 
+
+        [TestMethod]
+        public void Load_Templates_IOModules()
+        {
+            //Arrange
+            TECIOModule actualIOModule = actualTemplates.IOModuleCatalog[0];
+
+            //Assert
+            Assert.AreEqual("Test IO Module", actualIOModule.Name);
+            Assert.AreEqual(42, actualIOModule.Cost);
+            Assert.AreEqual(2, actualIOModule.IOPerModule);
+        }
 
         [TestMethod]
         public void Load_Templates_PanelType()
@@ -689,5 +707,7 @@ namespace Tests
 
             Assert.IsTrue(true, "All Connection types linked");
         }
+
+        
     }
 }
