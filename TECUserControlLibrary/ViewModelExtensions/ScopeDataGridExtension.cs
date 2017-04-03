@@ -214,13 +214,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             populateLocationSelections();
             DataGridVisibilty = new VisibilityModel();
             setupCommands();
+
+            PointName = "";
+            PointDescription = "";
         }
         public ScopeDataGridExtension(TECTemplates templates)
         {
             Templates = templates;
             DataGridVisibilty = new VisibilityModel();
-
             setupCommands();
+
+            PointName = "";
+            PointDescription = "";
         }
         #endregion
 
