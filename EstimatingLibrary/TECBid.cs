@@ -552,6 +552,26 @@ namespace EstimatingLibrary
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
+            Systems.CollectionChanged += CollectionChanged;
+            ScopeTree.CollectionChanged += CollectionChanged;
+            DeviceCatalog.CollectionChanged += CollectionChanged;
+            ManufacturerCatalog.CollectionChanged += CollectionChanged;
+            Notes.CollectionChanged += CollectionChanged;
+            Exclusions.CollectionChanged += CollectionChanged;
+            Tags.CollectionChanged += CollectionChanged;
+            Drawings.CollectionChanged += CollectionChanged;
+            Locations.CollectionChanged += CollectionChanged;
+            Controllers.CollectionChanged += CollectionChanged;
+            ProposalScope.CollectionChanged += CollectionChanged;
+            ConnectionTypes.CollectionChanged += CollectionChanged;
+            ConduitTypes.CollectionChanged += CollectionChanged;
+            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+            MiscCosts.CollectionChanged += CollectionChanged;
+            MiscWiring.CollectionChanged += CollectionChanged;
+            Panels.CollectionChanged += CollectionChanged;
+            PanelTypeCatalog.CollectionChanged += CollectionChanged;
+            IOModuleCatalog.CollectionChanged += CollectionChanged;
+
             registerSystems();
             registerControllers();
         }

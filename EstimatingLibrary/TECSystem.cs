@@ -158,6 +158,7 @@ namespace EstimatingLibrary
         {
             _budgetPriceModifier = -1;
             _equipment = new ObservableCollection<TECEquipment>();
+            Equipment.CollectionChanged += Equipment_CollectionChanged;
         }
         
         public TECSystem() : this(Guid.NewGuid()) { }

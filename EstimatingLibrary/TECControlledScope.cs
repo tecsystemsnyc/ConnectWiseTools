@@ -68,6 +68,9 @@ namespace EstimatingLibrary
             _systems = new ObservableCollection<TECSystem>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
+            Systems.CollectionChanged += CollectionChanged;
+            Controllers.CollectionChanged += CollectionChanged;
+            Panels.CollectionChanged += CollectionChanged;
             registerSystems();
         }
         public TECControlledScope() : this(Guid.NewGuid()) { }
