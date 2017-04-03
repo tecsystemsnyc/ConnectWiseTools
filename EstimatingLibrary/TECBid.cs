@@ -789,7 +789,6 @@ namespace EstimatingLibrary
                 } else
                 {
                     handleSubScopeRemovalInConnections(args.NewValue as TECSubScope);
-
                 }
             }
         }

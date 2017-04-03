@@ -358,7 +358,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "RemovedSubScope")
+            if (e.PropertyName == "RemovedSubScope" || e.PropertyName == "SubScopeQuantity")
             {
                 updateSubScopeConnections();
             }
