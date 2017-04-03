@@ -17,7 +17,12 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                if (SubScope != null)
+                {
+                    SubScope.CollectionChanged -= SubScope_CollectionChanged;
+                }
                 _subScope = value;
+                SubScope.CollectionChanged += SubScope_CollectionChanged;
                 NotifyPropertyChanged("SubScope", temp, this);
                 RaisePropertyChanged("SubScopeQuantity");
                 subscribeToSubScope();
@@ -99,8 +104,6 @@ namespace EstimatingLibrary
         {
             _budgetUnitPrice = -1;
             _subScope = new ObservableCollection<TECSubScope>();
-
-            SubScope.CollectionChanged += SubScope_CollectionChanged;
         }
         public TECEquipment() : this(Guid.NewGuid()) { }
 

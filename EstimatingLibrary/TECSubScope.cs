@@ -17,7 +17,10 @@ namespace EstimatingLibrary
             get { return _devices; }
             set
             {
-                Devices.CollectionChanged -= Devices_CollectionChanged;
+                if (Devices != null)
+                {
+                    Devices.CollectionChanged -= Devices_CollectionChanged;
+                }
                 var temp = this.Copy();
                 _devices = value;
                 NotifyPropertyChanged("Devices", temp, this);
@@ -31,8 +34,13 @@ namespace EstimatingLibrary
             get { return _points; }
             set
             {
+                if (Points != null)
+                {
+                    Points.CollectionChanged -= PointsCollectionChanged;
+                }
                 var temp = this.Copy();
                 _points = value;
+                Points.CollectionChanged += PointsCollectionChanged;
                 NotifyPropertyChanged("Points", temp, this);
             }
         }
@@ -80,9 +88,7 @@ namespace EstimatingLibrary
         {
             _devices = new ObservableCollection<TECDevice>();
             _points = new ObservableCollection<TECPoint>();
-            Points.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PointsCollectionChanged);
             subscribeToDevices();
-            Devices.CollectionChanged += Devices_CollectionChanged;
         }
         
         public TECSubScope() : this(Guid.NewGuid()) { }

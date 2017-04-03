@@ -91,7 +91,6 @@ namespace EstimatingLibrary
         public TECNetworkConnection(Guid guid) : base(guid)
         {
             _childrenControllers = new ObservableCollection<TECController>();
-            ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
         }
         public TECNetworkConnection() : this(Guid.NewGuid()) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)

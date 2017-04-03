@@ -17,7 +17,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                Systems.CollectionChanged -= CollectionChanged;
+                if (Systems != null)
+                {
+                    Systems.CollectionChanged -= CollectionChanged;
+                }
                 _systems = value;
                 registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
@@ -32,7 +35,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                Controllers.CollectionChanged -= CollectionChanged;
+                if (Controllers != null)
+                {
+                    Controllers.CollectionChanged -= CollectionChanged;
+                }
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
@@ -46,7 +52,11 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                Panels.CollectionChanged -= CollectionChanged;
+                if (Panels != null)
+                {
+                    Panels.CollectionChanged -= CollectionChanged;
+                }
+                
                 _panels = value;
                 Panels.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Panels", temp, this);
@@ -58,9 +68,6 @@ namespace EstimatingLibrary
             _systems = new ObservableCollection<TECSystem>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
-            Systems.CollectionChanged += CollectionChanged;
-            Controllers.CollectionChanged += CollectionChanged;
-            Panels.CollectionChanged += CollectionChanged;
             registerSystems();
         }
         public TECControlledScope() : this(Guid.NewGuid()) { }

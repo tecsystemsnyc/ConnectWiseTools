@@ -16,11 +16,21 @@ namespace EstimatingLibrary
             get { return _equipment; }
             set
             {
-                    var temp = this.Copy();
+                var temp = this.Copy();
+                if (Equipment != null)
+                {
+                    Equipment.CollectionChanged -= Equipment_CollectionChanged;
+                }
                     _equipment = value;
                     NotifyPropertyChanged("Equipment", temp, this);
                     subscribeToEquipment();
+                Equipment.CollectionChanged += Equipment_CollectionChanged;
             }
+        }
+
+        private void Equipment_CollectionChanged1(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public double BudgetPriceModifier
@@ -148,8 +158,6 @@ namespace EstimatingLibrary
         {
             _budgetPriceModifier = -1;
             _equipment = new ObservableCollection<TECEquipment>();
-
-            Equipment.CollectionChanged += Equipment_CollectionChanged;
         }
         
         public TECSystem() : this(Guid.NewGuid()) { }

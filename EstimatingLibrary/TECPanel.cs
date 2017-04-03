@@ -48,7 +48,6 @@ namespace EstimatingLibrary
         {
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
-            Controllers.CollectionChanged += collectionChanged;
         }
         public TECPanel() : this(Guid.NewGuid()) { }
         public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this()

@@ -65,6 +65,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                Tags.CollectionChanged -= collectionChanged;
                 _tags = value;
                 NotifyPropertyChanged("Tags", temp, this);
                 Tags.CollectionChanged += collectionChanged;
@@ -76,6 +77,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                AssociatedCosts.CollectionChanged -= collectionChanged;
                 _associatedCosts = value;
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
                 AssociatedCosts.CollectionChanged += collectionChanged;
@@ -107,8 +109,6 @@ namespace EstimatingLibrary
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
             _associatedCosts = new ObservableCollection<TECAssociatedCost>();
-            Tags.CollectionChanged += collectionChanged;
-            AssociatedCosts.CollectionChanged += collectionChanged;
         }
 
 
