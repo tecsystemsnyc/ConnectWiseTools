@@ -60,6 +60,7 @@ namespace EstimatingLibrary
         }
         #endregion//Properties
 
+
         #region Constructors
         public TECDevice(Guid guid) : base(guid)
         {

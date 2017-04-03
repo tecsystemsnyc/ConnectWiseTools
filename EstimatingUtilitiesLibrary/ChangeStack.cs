@@ -902,7 +902,7 @@ namespace EstimatingUtilitiesLibrary
             StackItem item;
             if(ioModule.Manufacturer != null)
             {
-                item = new StackItem(change, (object)ioModule, (object)ioModule.Manufacturer);
+                item = new StackItem(change, ioModule, ioModule.Manufacturer);
                 SaveStack.Add(item);
             }
         }
