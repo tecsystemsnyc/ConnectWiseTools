@@ -502,10 +502,10 @@ namespace Tests
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
-            TECTemplates expectedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECEquipment Equipment in templates.EquipmentTemplates)
+            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
             {
                 if (Equipment.Guid == EquipmentToRemove.Guid)
                 {
@@ -513,7 +513,102 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual((oldNumEquipments - 1), templates.EquipmentTemplates.Count);
+            Assert.AreEqual((oldNumEquipments - 1), actualTemplates.EquipmentTemplates.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Add_Equipment_InSystem()
+        {
+            //Act
+            TECEquipment expectedEquipment = new TECEquipment();
+            expectedEquipment.Name = "New System Equipment";
+            expectedEquipment.Description = "System equipment description";
+            expectedEquipment.BudgetUnitPrice = 468.3;
+            expectedEquipment.Quantity = 5;
+
+            TECSystem sysToModify = templates.SystemTemplates[0];
+
+            sysToModify.Equipment.Add(expectedEquipment);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            TECSystem actualSystem = null;
+            foreach(TECSystem sys in actualTemplates.SystemTemplates)
+            {
+                if (sys.Guid == sysToModify.Guid)
+                {
+                    actualSystem = sys;
+                    break;
+                }
+            }
+
+            TECEquipment actualEquipment = null;
+            foreach (TECEquipment equip in actualSystem.Equipment)
+            {
+                if (equip.Guid == expectedEquipment.Guid)
+                {
+                    actualEquipment = equip;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.IsNotNull(actualEquipment);
+            Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
+            Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
+            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
+            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
+            {
+                if (equip.Guid == actualEquipment.Guid) Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void Save_Templates_Remove_Equipment_FromSystem()
+        {
+            //Act
+            TECSystem sysToModify = null;
+            TECEquipment equipToRemove = null;
+            int oldNumEquip = 0;
+            foreach (TECSystem sys in templates.SystemTemplates)
+            {
+                if (sys.Equipment.Count > 0)
+                {
+                    sysToModify = sys;
+                    equipToRemove = sysToModify.Equipment[0];
+                    oldNumEquip = sysToModify.Equipment.Count;
+                    break;
+                }
+            }
+
+            sysToModify.Equipment.Remove(equipToRemove);
+
+            EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
+
+            TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+
+            //Assert
+            TECSystem actualSystem = null;
+            foreach(TECSystem sys in actualTemplates.SystemTemplates)
+            {
+                if (sys.Guid == sysToModify.Guid)
+                {
+                    actualSystem = sys;
+                    foreach(TECEquipment equip in actualSystem.Equipment)
+                    {
+                        if (equip.Guid == equipToRemove.Guid)
+                        {
+                            Assert.Fail();
+                        }
+                    }
+                    break;
+                }
+            }
+
+            Assert.AreEqual((oldNumEquip - 1), actualSystem.Equipment.Count);
         }
 
         [TestMethod]
