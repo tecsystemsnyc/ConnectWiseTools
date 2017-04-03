@@ -475,6 +475,17 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SaveAs_Templates_IOModule()
+        {
+            //Arrange
+            TECIOModule expectedIOModule = expectedTemplates.IOModuleCatalog[0];
+            TECIOModule actualIOModule = actualTemplates.IOModuleCatalog[0];
+
+            Assert.AreEqual(expectedIOModule.Name, actualIOModule.Name);
+            Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost);
+        }
+
+        [TestMethod]
         public void SaveAs_Templates_ControlledScope()
         {
             //Arrange

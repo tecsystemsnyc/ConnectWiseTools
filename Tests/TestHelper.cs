@@ -433,6 +433,13 @@ namespace Tests
             testCost2.Name = "Other Cost";
             templates.AssociatedCostsCatalog.Add(testCost2);
 
+            //IO Modules
+            TECIOModule testIOModule = new TECIOModule();
+            testIOModule.Name = "Test IO Module";
+            testIOModule.Cost = 42;
+            testIOModule.Manufacturer = testMan;
+            templates.IOModuleCatalog.Add(testIOModule);
+
             //Devices
             TECDevice testDev = new TECDevice(Guid.NewGuid());
             testDev.Name = "Test Device";

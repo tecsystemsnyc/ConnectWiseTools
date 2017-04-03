@@ -899,6 +899,31 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Undo_Template_IOModule()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            ObservableCollection<TECIOModule> expected = new ObservableCollection<TECIOModule>();
+            foreach (TECIOModule item in Template.IOModuleCatalog)
+            {
+                expected.Add(item);
+            }
+            TECIOModule edit = new TECIOModule();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            int beforeCount = testStack.UndoStack.Count;
+            Template.IOModuleCatalog.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECIOModule> actual = Template.IOModuleCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
         #endregion
 
         #region Redo
@@ -1603,6 +1628,30 @@ namespace Tests
 
             //assert
             ObservableCollection<TECPanelType> actual = Template.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Template_IOModule()
+        {
+            //Arrange
+            var Template = TestHelper.CreateTestTemplates();
+            TECIOModule edit = new TECIOModule();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Template);
+            Template.IOModuleCatalog.Add(edit);
+            var expected = new ObservableCollection<TECIOModule>();
+            foreach (TECIOModule item in Template.IOModuleCatalog)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECIOModule> actual = Template.IOModuleCatalog;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
