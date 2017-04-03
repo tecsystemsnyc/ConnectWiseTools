@@ -35,7 +35,7 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _pmExtraHours = value;
-                NotifyPropertyChanged("PMExtaHours", temp, this);
+                NotifyPropertyChanged("PMExtraHours", temp, this);
                 
             }
         }
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
 
                 var temp = this.Copy();
                 _engExtraHours = value;
-                NotifyPropertyChanged("ENGExtaHours", temp, this);
+                NotifyPropertyChanged("ENGExtraHours", temp, this);
                 
             }
         }
@@ -125,7 +125,7 @@ namespace EstimatingLibrary
                
                     var temp = this.Copy();
                     _commExtraHours = value;
-                    NotifyPropertyChanged("CommExtaHours", temp, this);
+                    NotifyPropertyChanged("CommExtraHours", temp, this);
                     
               
             }
@@ -171,7 +171,7 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _softExtraHours = value;
-                NotifyPropertyChanged("SoftExtaHours", temp, this);
+                NotifyPropertyChanged("SoftExtraHours", temp, this);
                 
             }
         }
@@ -213,7 +213,7 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 _graphExtraHours = value;
-                NotifyPropertyChanged("GraphExtaHours", temp, this);
+                NotifyPropertyChanged("GraphExtraHours", temp, this);
                 
             }
         }
