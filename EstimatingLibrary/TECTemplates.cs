@@ -266,6 +266,23 @@ namespace EstimatingLibrary
             _panelTemplates = new ObservableCollection<TECPanel>();
             _ioModuleCatalog = new ObservableCollection<TECIOModule>();
 
+            SystemTemplates.CollectionChanged += CollectionChanged;
+            EquipmentTemplates.CollectionChanged += CollectionChanged;
+            SubScopeTemplates.CollectionChanged += CollectionChanged;
+            DeviceCatalog.CollectionChanged += CollectionChanged;
+            Tags.CollectionChanged += CollectionChanged;
+            ManufacturerCatalog.CollectionChanged += CollectionChanged;
+            ControllerTemplates.CollectionChanged += CollectionChanged;
+            ConnectionTypeCatalog.CollectionChanged += CollectionChanged;
+            ConduitTypeCatalog.CollectionChanged += CollectionChanged;
+            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
+            MiscWiringTemplates.CollectionChanged += CollectionChanged;
+            MiscCostTemplates.CollectionChanged += CollectionChanged;
+            PanelTemplates.CollectionChanged += CollectionChanged;
+            PanelTypeCatalog.CollectionChanged += CollectionChanged;
+            ControlledScopeTemplates.CollectionChanged += CollectionChanged;
+            IOModuleCatalog.CollectionChanged += CollectionChanged;
+
             Labor.PropertyChanged += objectPropertyChanged;
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)

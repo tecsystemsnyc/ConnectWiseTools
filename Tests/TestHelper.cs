@@ -297,6 +297,7 @@ namespace Tests
                 if (pS.Scope.Guid == propSystem.Guid)
                 {
                     propScope = pS;
+                    break;
                 }
             }
             propScope.IsProposed = true;

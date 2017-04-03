@@ -109,6 +109,8 @@ namespace EstimatingLibrary
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
             _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            Tags.CollectionChanged += collectionChanged;
+            AssociatedCosts.CollectionChanged += collectionChanged;
         }
 
 

@@ -89,6 +89,8 @@ namespace EstimatingLibrary
             _devices = new ObservableCollection<TECDevice>();
             _points = new ObservableCollection<TECPoint>();
             subscribeToDevices();
+            Devices.CollectionChanged += Devices_CollectionChanged;
+            Points.CollectionChanged += PointsCollectionChanged;
         }
         
         public TECSubScope() : this(Guid.NewGuid()) { }
