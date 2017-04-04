@@ -1934,11 +1934,12 @@ namespace Tests
         public void Save_Templates_Add_IOModule()
         {
             //Act
-            TECIOModule expectedCost = new TECIOModule();
-            expectedCost.Name = "Add IO Module";
-            expectedCost.Cost = 978.3;
+            TECIOModule expectedModule = new TECIOModule();
+            expectedModule.Name = "Add IO Module";
+            expectedModule.Cost = 978.3;
+            expectedModule.Manufacturer = templates.ManufacturerCatalog[0];
 
-            templates.IOModuleCatalog.Add(expectedCost);
+            templates.IOModuleCatalog.Add(expectedModule);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
@@ -1947,7 +1948,7 @@ namespace Tests
             TECIOModule actualCost = null;
             foreach (TECIOModule cost in actualTemplates.IOModuleCatalog)
             {
-                if (cost.Guid == expectedCost.Guid)
+                if (cost.Guid == expectedModule.Guid)
                 {
                     actualCost = cost;
                     break;
@@ -1955,8 +1956,8 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedModule.Name, actualCost.Name);
+            Assert.AreEqual(expectedModule.Cost, actualCost.Cost);
         }
 
         [TestMethod]
