@@ -22,7 +22,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Constants
 
-        string DEFAULT_STATUS_TEXT = "Ready :)";
+        string DEFAULT_STATUS_TEXT = "Ready";
 
         #endregion
 

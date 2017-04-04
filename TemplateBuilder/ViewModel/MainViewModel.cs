@@ -26,6 +26,10 @@ namespace TemplateBuilder.ViewModel
 {
     public class MainViewModel : ViewModelBase, IDropTarget
     {
+        #region Constants
+        string DEFAULT_STATUS_TEXT = "Ready";
+        #endregion
+
         //Initializer
         public MainViewModel()
         {
@@ -39,8 +43,7 @@ namespace TemplateBuilder.ViewModel
 
             TECLogo = Path.GetTempFileName();
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
-            
-            StatusBarVM.CurrentStatusText = "Done.";
+
             TitleString = "Template Builder";
             
             setupScopeCollecion();
@@ -99,6 +102,12 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private string _titleString;
+
+        protected bool isReady
+        {
+            get;
+            private set;
+        }
 
         #region Interface Properties
 
@@ -239,19 +248,30 @@ namespace TemplateBuilder.ViewModel
         private void setupStatusBar()
         {
             StatusBarVM = new StatusBarExtension();
-            StatusBarVM.CurrentStatusText = "Ready";
-            StatusBarVM.Version = Version;
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            else
+            { StatusBarVM.Version = "Undeployed Version"; }
+
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
         }
         #endregion
 
         #region Commands Methods
         private void LoadExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             //User choose path
             string path = getLoadPath();
 
             if (path != null)
             {
+                SetBusyStatus("Loading File: " + path);
                 //Properties.Settings.Default.TemplateDirectoryPath = path;
 
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -264,14 +284,26 @@ namespace TemplateBuilder.ViewModel
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
+                ResetStatus();
             }
         }
         private void SaveExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
             saveTemplates();
         }
         private void SaveToExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             saveTemplatesAs();
         }
         
@@ -322,9 +354,15 @@ namespace TemplateBuilder.ViewModel
 
         private void RefreshTemplatesExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
             string path = Properties.Settings.Default.TemplatesFilePath;
             if (path != null)
             {
+                SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
@@ -334,6 +372,7 @@ namespace TemplateBuilder.ViewModel
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
+            ResetStatus();
         }
         #endregion //Commands Methods
 
@@ -650,7 +689,7 @@ namespace TemplateBuilder.ViewModel
             string path = Properties.Settings.Default.TemplatesFilePath;
             if (path != null)
             {
-                //SetBusyStatus("Saving to path: " + path);
+                SetBusyStatus("Saving to path: " + path);
                 ChangeStack stackToSave = Stack.Copy();
                 Stack.ClearStacks();
 
@@ -669,7 +708,7 @@ namespace TemplateBuilder.ViewModel
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
-                    //ResetStatus();
+                    ResetStatus();
                 };
                 worker.RunWorkerAsync();
             }
@@ -688,7 +727,7 @@ namespace TemplateBuilder.ViewModel
                 Properties.Settings.Default.TemplatesFilePath = path;
                 
                 Stack.ClearStacks();
-                //SetBusyStatus("Saving file: " + path);
+                SetBusyStatus("Saving file: " + path);
 
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += (s, e) =>
@@ -709,7 +748,7 @@ namespace TemplateBuilder.ViewModel
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
-                    //ResetStatus();
+                    ResetStatus();
                 };
 
                 worker.RunWorkerAsync();
@@ -717,6 +756,21 @@ namespace TemplateBuilder.ViewModel
             }
         }
 
+        private void SetBusyStatus(string statusText)
+        {
+            StatusBarVM.CurrentStatusText = statusText;
+            isReady = false;
+        }
+        protected void ResetStatus()
+        {
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+            isReady = true;
+        }
+
+        protected bool IsReady()
+        {
+            return isReady;
+        }
         #endregion //Helper Methods
         #endregion //Methods
     }
