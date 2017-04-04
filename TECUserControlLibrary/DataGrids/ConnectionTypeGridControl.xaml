@@ -22,7 +22,8 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"
+                <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
+                                    Header="Cost" Width="Auto" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding Labor}" Header="Labor" Width="Auto" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>

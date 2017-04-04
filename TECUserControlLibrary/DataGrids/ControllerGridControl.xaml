@@ -25,8 +25,8 @@
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70"/>
                 <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" MinWidth="80"/>
-                <DataGridTextColumn Binding="{Binding IO.Count}" Header="IO" Width="Auto" MinWidth="30"/>
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
+                                    ElementStyle="{StaticResource RightCell}" Header="Cost" Width="Auto" MinWidth="40"/>
             </DataGrid.Columns>
             
         </DataGrid>

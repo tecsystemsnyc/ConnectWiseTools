@@ -26,7 +26,8 @@
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
                 <!--<DataGridTextColumn Binding="{Binding Quantity}" Header="Qty." Width="Auto"/>-->
-                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
+                <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
+                                    Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>
                 <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
