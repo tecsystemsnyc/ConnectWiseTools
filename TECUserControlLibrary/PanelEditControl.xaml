@@ -68,7 +68,7 @@
                             Command="{Binding AddTagToPanelCommand}"
                             Margin="5"/>
         <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
-                                           TagsSource="{Binding SelectedController.Tags}"/>
+                                           TagsSource="{Binding SelectedPanel.Tags}"/>
         <ComboBox Grid.Row="3" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
                                SelectedItem="{Binding SelectedAssociatedCost}"
                                DisplayMemberPath="Name"/>
@@ -76,7 +76,8 @@
                             Command="{Binding AddAssociatedCostToPanelCommand}"
                             Margin="5"/>
         <local:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
-                                          CostsSource="{Binding SelectedController.AssociatedCosts}"/>
+                                          CostsSource="{Binding SelectedPanel.AssociatedCosts}"
+                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <Button Grid.ColumnSpan="2" Grid.Row="6" Content="Delete"
                             Command="{Binding DeleteSelectedPanelCommand}"
                             Background="{DynamicResource AlertActionBrush}"
