@@ -40,7 +40,8 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Label Content="Associated Costs"/>
-                        <cLib:AssociatedCostsGridControl Grid.Row="1" MinHeight="60" CostsSource="{Binding AssociatedCosts}"/>
+                        <cLib:AssociatedCostsGridControl Grid.Row="1" MinHeight="60" CostsSource="{Binding AssociatedCosts}"
+                                                         ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
