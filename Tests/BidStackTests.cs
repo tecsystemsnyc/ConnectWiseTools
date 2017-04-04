@@ -1153,6 +1153,29 @@ namespace Tests
         }
         #endregion
 
+        #region Controller Properties
+        [TestMethod]
+        public void Undo_Controller_IOModule()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECIOModule expected = Bid.Controllers[0].IO[0].IOModule;
+            TECIOModule edit = new TECIOModule();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.Controllers[0].IO[0].IOModule = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
+            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
+        }
+
+        #endregion
+
         #endregion
 
         #region Redo
