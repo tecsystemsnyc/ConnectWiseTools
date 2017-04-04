@@ -768,7 +768,14 @@ namespace EstimatingUtilitiesLibrary
             DataTable DT = SQLiteDB.getDataFromCommand(command);
             var associatedCosts = new ObservableCollection<TECAssociatedCost>();
             foreach(DataRow row in DT.Rows)
-            { associatedCosts.Add(getAssociatedCostFromRow(row)); }
+            {
+                TECAssociatedCost costToAdd = getAssociatedCostFromRow(row);
+                string quantityCommand = "select " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where " + ScopeAssociatedCostTable.ScopeID.Name + " = '";
+                quantityCommand += (scopeID + "' and " + ScopeAssociatedCostTable.AssociatedCostID.Name + " = '" + costToAdd.Guid + "'");
+                DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
+                int quantity = quantityDT.Rows[0][0].ToString().ToInt();
+                for(int x = 0; x < quantity; x++) { associatedCosts.Add(costToAdd); }
+            }
             return associatedCosts;
         }
         static private ObservableCollection<TECNote> getNotes()
