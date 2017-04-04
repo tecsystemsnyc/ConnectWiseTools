@@ -400,6 +400,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ManufacturerSelections = Bid.ManufacturerCatalog;
                 ConnectionTypeSelections = Bid.ConnectionTypes;
                 IOModuleSelections = Bid.IOModuleCatalog;
+                PanelTypeSelections = Bid.PanelTypeCatalog;
             } else if (type is TECTemplates)
             {
                 TagSelections = Templates.Tags;
@@ -408,6 +409,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ManufacturerSelections = Templates.ManufacturerCatalog;
                 ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
                 IOModuleSelections = Templates.IOModuleCatalog;
+                PanelTypeSelections = Templates.PanelTypeCatalog;
             }
 
         }
