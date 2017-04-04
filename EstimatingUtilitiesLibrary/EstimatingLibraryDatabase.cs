@@ -1817,6 +1817,7 @@ namespace EstimatingUtilitiesLibrary
             panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
             panel.Type = getPanelTypeInPanel(guid);
             panel.Controllers = getControllersInPanel(guid);
+            panel.AssociatedCosts = getAssociatedCostsInScope(panel.Guid);
 
             return panel;
         }
