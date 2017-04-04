@@ -659,6 +659,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelTags = new ObservableCollection<TECTag>();
             PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
             ControllerIO = new ObservableCollection<TECIO>();
+
+            ControllerName = "";
+            ControllerDescription = "";
         }
         #endregion
 
