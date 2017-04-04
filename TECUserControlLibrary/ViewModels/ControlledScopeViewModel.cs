@@ -21,7 +21,18 @@ namespace TECUserControlLibrary.ViewModels
     public class ControlledScopeViewModel : ViewModelBase, IDropTarget
     {
         #region Properties
-        
+
+        private VisibilityModel _dataGridVisibilty;
+        public VisibilityModel DataGridVisibilty
+        {
+            get { return _dataGridVisibilty; }
+            set
+            {
+                _dataGridVisibilty = value;
+                RaisePropertyChanged("DataGridVisibilty");
+            }
+        }
+
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         #endregion
