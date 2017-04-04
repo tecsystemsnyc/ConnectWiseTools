@@ -56,6 +56,8 @@ namespace TemplateBuilder.ViewModel
             getTemplates();
 
             DGTabIndex = TemplateGridIndex.Systems;
+
+            ResetStatus();
         }
 
         #region Resources Paths
@@ -268,6 +270,25 @@ namespace TemplateBuilder.ViewModel
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
+
+            if (Stack.SaveStack.Count > 0)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             //User choose path
             string path = getLoadPath();
 
@@ -317,7 +338,11 @@ namespace TemplateBuilder.ViewModel
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SaveExecute();
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
                 }
                 else if (result == MessageBoxResult.Cancel)
                 {
@@ -361,6 +386,24 @@ namespace TemplateBuilder.ViewModel
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
+            if (Stack.SaveStack.Count > 0)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             string path = Properties.Settings.Default.TemplatesFilePath;
             if (path != null)
             {
@@ -772,6 +815,83 @@ namespace TemplateBuilder.ViewModel
         protected bool IsReady()
         {
             return isReady;
+        }
+
+        private bool saveAsSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                Stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    //Create new database
+                    EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    saveSuccessful = false;
+                }
+
+
+            }
+
+            return saveSuccessful;
+        }
+
+        private bool saveSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            if (Properties.Settings.Default.TemplatesFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + Properties.Settings.Default.TemplatesFilePath);
+                ChangeStack stackToSave = Stack.Copy();
+                Stack.ClearStacks();
+
+                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                {
+                    try
+                    {
+                        EstimatingLibraryDatabase.UpdateTemplatesToDB(Properties.Settings.Default.TemplatesFilePath, stackToSave);
+                        saveSuccessful = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(Properties.Settings.Default.TemplatesFilePath, Templates);
+                    }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
+                }
+
+            }
+            else
+            {
+                if (saveAsSynchronously())
+                {
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    saveSuccessful = false;
+                }
+            }
+
+            return saveSuccessful;
         }
         #endregion //Helper Methods
         #endregion //Methods
