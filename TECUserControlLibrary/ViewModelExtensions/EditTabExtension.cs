@@ -331,7 +331,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void refresh(object bidOrTemplates)
         {
-            if(bidOrTemplates is TECBid)
+            TabIndex = EditIndex.Nothing;
+            if (bidOrTemplates is TECBid)
             {
                 var bid = bidOrTemplates as TECBid;
                 Bid = bid;
@@ -343,7 +344,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 isBid = false;
             }
             setCatalogs(bidOrTemplates);
-            TabIndex = EditIndex.Nothing;
         }
         private bool addIOCanExecute()
         {
@@ -401,7 +401,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ConnectionTypeSelections = Bid.ConnectionTypes;
                 IOModuleSelections = Bid.IOModuleCatalog;
                 PanelTypeSelections = Bid.PanelTypeCatalog;
-            } else if (type is TECTemplates)
+            }
+            else if (type is TECTemplates)
             {
                 TagSelections = Templates.Tags;
                 AssociatedCostSelections = Templates.AssociatedCostsCatalog;

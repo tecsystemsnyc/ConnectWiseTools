@@ -30,6 +30,27 @@ namespace EstimatingLibrary
             return cost;
         }
         /// <summary>
+        /// Returns TEC labor costs of associated costs
+        /// </summary>
+        public static double GetMaterialLabor(TECBid bid)
+        {
+            double cost = 0;
+            foreach (TECSystem system in bid.Systems)
+            {
+                cost += system.LaborCost;
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                cost += controller.LaborCost;
+            }
+            foreach (TECPanel panel in bid.Panels)
+            {
+                cost += panel.LaborCost;
+            }
+            cost *= bid.Labor.CommRate;
+            return cost;
+        }
+        /// <summary>
         /// Returns tax from the TEC materials cost at 8.75% if tax is not exempt
         /// </summary>
         public static double GetTax(TECBid bid)
@@ -285,6 +306,7 @@ namespace EstimatingLibrary
             outCost += GetCommLaborCost(bid);
             outCost += GetSoftLaborCost(bid);
             outCost += GetGraphLaborCost(bid);
+            outCost += GetMaterialLabor(bid);
             return outCost;
         }
 

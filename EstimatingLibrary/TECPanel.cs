@@ -36,11 +36,14 @@ namespace EstimatingLibrary
                 Controllers.CollectionChanged += collectionChanged;
             }
         }
-
-
+        
         public double MaterialCost
         {
             get { return getMaterialCost(); }
+        }
+        public double LaborCost
+        {
+            get { return getLaborCost(); }
         }
         #endregion
 
@@ -74,7 +77,6 @@ namespace EstimatingLibrary
         {
             var outPanel = new TECPanel(this);
             return outPanel;
-
         }
         
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -94,8 +96,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         private double getMaterialCost()
         {
             double matCost = 0;
@@ -112,5 +113,18 @@ namespace EstimatingLibrary
 
             return matCost;
         }
+        private double getLaborCost()
+        {
+            double lCost = 0;
+            
+
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                lCost += cost.Labor;
+            }
+
+            return lCost;
+        }
+
     }
 }

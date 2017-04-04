@@ -58,6 +58,14 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
+        public double MaterialCost
+        {
+            get { return getMaterialCost(); }
+        }
+        public double LaborCost
+        {
+            get { return getLaborCost(); }
+        }
         #endregion//Properties
 
 
@@ -93,6 +101,25 @@ namespace EstimatingLibrary
         {
             TECDevice outDevice = new TECDevice(this);
             return outDevice;
+        }
+
+        private double getMaterialCost()
+        {
+            double matCost = 0;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
+        }
+        private double getLaborCost()
+        {
+            double cost = 0;
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
+            return cost;
         }
         #endregion
     }

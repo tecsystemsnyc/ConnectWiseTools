@@ -100,6 +100,10 @@ namespace EstimatingLibrary
         {
             get { return getMaterialCost(); }
         }
+        public double LaborCost
+        {
+            get { return getLaborCost(); }
+        }
 
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
@@ -466,6 +470,15 @@ namespace EstimatingLibrary
                 matCost += cost.Cost;
             }
             return matCost;
+        }
+        private double getLaborCost()
+        {
+            double cost = 0;
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
+            return cost;
         }
         #endregion
     }

@@ -215,6 +215,10 @@ namespace EstimatingLibrary
             {
                 cost += equipment.LaborCost;
             }
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
             return cost;
         }
         

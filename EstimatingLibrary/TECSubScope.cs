@@ -257,9 +257,13 @@ namespace EstimatingLibrary
         {
             double labCost = 0;
 
-            foreach (TECPoint point in this.Points)
+            foreach (TECDevice device in this.Devices)
             {
-                labCost += 1 * point.Quantity;
+                labCost += device.LaborCost;
+            }
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                labCost += assCost.Labor;
             }
 
             return labCost;
