@@ -2,6 +2,8 @@
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -13,7 +15,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class EditTabExtension : ViewModelBase
+    public class EditTabExtension : ViewModelBase, IDropTarget
     {
         #region Properties
         private bool isBid;
@@ -293,6 +295,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddAssociatedCostToPanelCommand { get; private set; }
 
         #endregion
+
+        public Action<IDropInfo> DragHandler;
+        public Action<IDropInfo> DropHandler;
         #endregion
 
         /// <summary>
@@ -637,6 +642,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         #endregion
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DragHandler(dropInfo);
+        }
+        public void Drop(IDropInfo dropInfo)
+        {
+            DropHandler(dropInfo);
+        }
 
         #endregion
     }

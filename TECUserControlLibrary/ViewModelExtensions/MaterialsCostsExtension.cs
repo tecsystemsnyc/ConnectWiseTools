@@ -212,14 +212,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             Templates = templates;
             setupCommands();
-            setupDefaultValues();
+            setupInterfaceDefaults();
         }
         
         #region Methods
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
-            setupDefaultValues();
+            setupInterfaceDefaults();
         }
         
         private void setupCommands()
@@ -334,7 +334,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DropHandler(dropInfo);
         }
 
-        private void setupDefaultValues()
+        private void setupInterfaceDefaults()
         {
             ConnectionTypeName = "";
             ConnectionTypeCost = 0;

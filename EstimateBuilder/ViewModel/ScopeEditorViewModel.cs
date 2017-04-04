@@ -163,6 +163,8 @@ namespace EstimateBuilder.ViewModel
         private void setupEditTab()
         {
             EditTab = new EditTabExtension(Bid);
+            EditTab.DragHandler += DragOver;
+            EditTab.DropHandler += Drop;
         }
         private void setupControllersPanelsTab()
         {

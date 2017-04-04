@@ -220,6 +220,8 @@ namespace TemplateBuilder.ViewModel
         private void setupEditTab()
         {
             EditTab = new EditTabExtension(Templates);
+            EditTab.DragHandler += DragOver;
+            EditTab.DropHandler += Drop;
         }
         private void setupMaterialsTab()
         {

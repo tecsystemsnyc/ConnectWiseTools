@@ -108,7 +108,8 @@
                             Command="{Binding AddAssociatedCostToControllerCommand}"
                             Margin="5"/>
         <local:AssociatedCostsGridControl Grid.Row="5" Grid.ColumnSpan="2"
-                                          CostsSource="{Binding SelectedController.AssociatedCosts}"/>
+                                          CostsSource="{Binding SelectedController.AssociatedCosts}"
+                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <Button Grid.ColumnSpan="2" Grid.Row="6" Content="Delete"
                             Command="{Binding DeleteSelectedControllerCommand}"
                             Background="{DynamicResource AlertActionBrush}"

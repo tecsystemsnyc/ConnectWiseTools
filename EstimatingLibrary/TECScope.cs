@@ -150,6 +150,5 @@ namespace EstimatingLibrary
         }
 
         #endregion Methods
-
     }
 }
