@@ -350,17 +350,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private TECManufacturer _deviceManufacturer;
 
-        public double DeviceMultiplier
-        {
-            get { return _deviceMultiplier; }
-            set
-            {
-                _deviceMultiplier = value;
-                RaisePropertyChanged("DeviceMultiplier");
-            }
-        }
-        private double _deviceMultiplier;
-
         public ObservableCollection<TECTag> DeviceTags
         {
             get { return _deviceTags; }
@@ -660,8 +649,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
             ControllerIO = new ObservableCollection<TECIO>();
 
-            ControllerName = "";
-            ControllerDescription = "";
+            setupInterfaceDefaults();
         }
         #endregion
 
@@ -911,6 +899,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
 
         #endregion
+
+        private void setupInterfaceDefaults()
+        {
+            _deviceName = "";
+            _deviceDescription = "";
+            _deviceCost = 0;
+
+            _controllerName = "";
+            _controllerDescription = "";
+            _controllerCost = 0;
+            _controllerIOQTY = 0;
+
+            _panelName = "";
+            _panelDescription = "";
+        }
 
         public void populateItemsCollections()
         {
