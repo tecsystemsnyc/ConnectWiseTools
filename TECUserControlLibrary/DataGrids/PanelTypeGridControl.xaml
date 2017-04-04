@@ -19,9 +19,9 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" />
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
-                                    Header="Cost" Width="Auto" MinWidth="40" IsReadOnly="True"
+                                    Header="Cost" Width="Auto" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
         </DataGrid>
