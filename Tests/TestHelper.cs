@@ -338,7 +338,15 @@ namespace Tests
             TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = conduitType1;
             testConnection.Length = 42;
-            
+
+            //IO Modules
+            TECIOModule testIOModule = new TECIOModule();
+            testIOModule.Name = "Test IO Module";
+            testIOModule.Cost = 42;
+            testIOModule.Manufacturer = manufacturer1;
+            bid.IOModuleCatalog.Add(testIOModule);
+            ioToAdd.IOModule = testIOModule;
+
             //Bid
             return bid;
         }
