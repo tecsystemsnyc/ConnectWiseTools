@@ -700,6 +700,7 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            updateAll();
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
@@ -1124,8 +1125,7 @@ namespace EstimatingLibrary
                 updateElectricalMaterial();
             }
         }
-
-
+        
         private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             updateElectricalMaterial();
