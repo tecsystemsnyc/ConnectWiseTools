@@ -52,6 +52,7 @@ namespace EstimatingLibrary
             var outObject = new TECIOModule(this.Guid);
             outObject.copyPropertiesFromCost(this);
             outObject._ioPerModule = this.IOPerModule;
+            outObject._manufacturer = this.Manufacturer;
             return outObject;
         }
     }
