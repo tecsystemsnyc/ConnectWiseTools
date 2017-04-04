@@ -56,6 +56,8 @@ namespace TemplateBuilder.ViewModel
             getTemplates();
 
             DGTabIndex = TemplateGridIndex.Systems;
+
+            ResetStatus();
         }
 
         #region Resources Paths
