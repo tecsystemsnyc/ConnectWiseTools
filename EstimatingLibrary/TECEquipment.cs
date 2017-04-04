@@ -129,7 +129,7 @@ namespace EstimatingLibrary
             outEquip._guid = this.Guid;
             foreach (TECSubScope subScope in this.SubScope)
             { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
-            _budgetUnitPrice = this.BudgetUnitPrice;
+            outEquip._budgetUnitPrice = this.BudgetUnitPrice;
 
             outEquip.copyPropertiesFromScope(this);
             return outEquip;
