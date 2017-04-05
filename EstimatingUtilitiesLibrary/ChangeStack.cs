@@ -210,7 +210,7 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
-                else if (e.PropertyName == "RemoveRelationShip")
+                else if (e.PropertyName == "RemoveRelationship")
                 {
                     message = "Remove relationship change: " + oldValue;
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
@@ -738,18 +738,18 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(new StackItem(change, connection, connection.ConduitType));
             }
 
-            //Parent Controller
-            if (connection.ParentController != null)
-            {
-                if (change == Change.Add)
-                {
-                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ParentController));
-                }
-                else if (change == Change.Remove)
-                {
-                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ParentController));
-                }
-            }
+            ////Parent Controller
+            //if (connection.ParentController != null)
+            //{
+            //    if (change == Change.Add)
+            //    {
+            //        SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ParentController));
+            //    }
+            //    else if (change == Change.Remove)
+            //    {
+            //        SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ParentController));
+            //    }
+            //}
 
             #region If Connection is NetworkConnection
             if (connection is TECNetworkConnection)
