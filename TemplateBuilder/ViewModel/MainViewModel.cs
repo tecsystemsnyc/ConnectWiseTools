@@ -545,6 +545,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -570,7 +572,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
@@ -594,6 +597,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
@@ -615,6 +620,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
 
@@ -634,6 +641,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Visible;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Visible;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
 
@@ -652,6 +661,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Visible;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.AssociatedCosts;
                     break;
@@ -669,6 +680,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 
@@ -688,6 +701,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Visible;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -715,6 +730,8 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 

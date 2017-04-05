@@ -260,6 +260,8 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
@@ -278,6 +280,8 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                 ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
             }
@@ -321,6 +325,8 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
             }
             else
             {

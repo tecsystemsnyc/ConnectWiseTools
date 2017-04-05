@@ -111,10 +111,13 @@ namespace EstimatingLibrary
 
                     if (connection is TECNetworkConnection)
                     {
-                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
-                        cost += length * type.Cost;
-                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                        { cost += associatedCost.Cost; }
+                        if ((connection as TECNetworkConnection).ConnectionType != null)
+                        {
+                            TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
+                            cost += length * type.Cost;
+                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            { cost += associatedCost.Cost; }
+                        }
                     }
                     else if (connection is TECSubScopeConnection)
                     {
