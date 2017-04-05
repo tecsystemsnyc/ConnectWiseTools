@@ -223,6 +223,30 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
+                else if (e.PropertyName == "AddCatalog")
+                {
+                    message = "Add change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Add, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
+                else if (e.PropertyName == "RemoveCatalog")
+                {
+                    message = "Remove change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+
+                    item = new StackItem(Change.Remove, args);
+                    UndoStack.Add(item);
+                    SaveStack.Add(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                }
                 else
                 {
                     message = "Edit change: " + oldValue;
@@ -235,6 +259,7 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
+                
 
             }
             else
@@ -446,11 +471,6 @@ namespace EstimatingUtilitiesLibrary
         {
             //Subscope Changed
             subScope.PropertyChanged += Object_PropertyChanged;
-            foreach (TECDevice device in subScope.Devices)
-            {
-                //Device Changed
-                device.PropertyChanged += Object_PropertyChanged;
-            }
             foreach (TECPoint point in subScope.Points)
             {
                 //Point Changed

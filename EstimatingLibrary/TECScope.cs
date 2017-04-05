@@ -137,14 +137,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item, typeof(TECScope), item.GetType());
+                    NotifyPropertyChanged("AddCatalog", this, item, typeof(TECScope), item.GetType());
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item, typeof(TECScope), item.GetType());
+                    NotifyPropertyChanged("RemoveCatalog", this, item, typeof(TECScope), item.GetType());
                 }
             }
         }
