@@ -1164,6 +1164,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
             ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
             PanelsItemsCollection = new ObservableCollection<TECPanel>();
+            MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
+            MiscCostsCollection = new ObservableCollection<TECMiscCost>();
 
             foreach (TECSystem sys in Templates.SystemTemplates)
             {
