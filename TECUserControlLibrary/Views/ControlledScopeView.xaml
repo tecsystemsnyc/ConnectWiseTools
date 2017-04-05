@@ -29,6 +29,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="320"/>
@@ -40,14 +41,18 @@
                                        ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                        Grid.Row="1" Grid.RowSpan="4"
                                        x:Name="CSGrid" Margin="5"/>
+        <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="1" BorderBrush="Black" BorderThickness="2"/>
+
+        <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="5"
+                      HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
         <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   AllowAddingNew="False"
-                                  Grid.Row="1" Grid.Column="1"
+                                  Grid.Row="1" Grid.Column="2"
                                   Margin="5"/>
-        <GridSplitter Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+        <GridSplitter Grid.Row="0" Grid.Column="3" Grid.RowSpan="2"
                       HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
-        <Grid Grid.Row="1" Grid.Column="3">
+        <Grid Grid.Row="1" Grid.Column="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
@@ -69,7 +74,7 @@
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
                       HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
-        <Grid Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2">
+        <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
@@ -78,8 +83,8 @@
             <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"/>
         </Grid>
-        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>
-        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
+        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>
+        <Canvas Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
                 Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 

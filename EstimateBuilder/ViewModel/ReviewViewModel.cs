@@ -24,24 +24,17 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private double _marginSliderValue;
-        //public double MarginSliderValue
-        //{
-        //    get { return _marginSliderValue; }
-        //    set
-        //    {
-        //        _marginSliderValue = value;
-        //        RaisePropertyChanged("MarginSliderValue");
-        //    }
-        //}
-        public double MarginSliderValue
+        private double _userPrice;
+        public double UserPrice
         {
-            get { return Bid.Margin; }
+            get { return _userPrice; }
             set
             {
-                var profit = (value / 100) / Bid.TotalCost - Bid.Parameters.Overhead / 100;
-                Bid.Parameters.Profit = profit * 100; 
-                RaisePropertyChanged("MarginSliderValue");
+                _userPrice = value;
+                var oldProfit = Bid.Parameters.Profit;
+                var oldPrice = Bid.TotalPrice;
+                Bid.Parameters.Profit = oldProfit * oldPrice / value;
+                RaisePropertyChanged("UserPrice");
             }
         }
 

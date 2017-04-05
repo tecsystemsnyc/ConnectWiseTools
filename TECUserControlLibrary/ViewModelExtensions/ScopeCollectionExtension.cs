@@ -670,7 +670,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ScopeCollectionExtension(TECTemplates templates)
         {
             Templates = templates;
-            SearchCollectionCommand = new RelayCommand(SearchCollectionExecute);
+            SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             AddTagCommand = new RelayCommand(AddTagExecute);
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
@@ -770,11 +770,170 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
+                    case ScopeCollectionIndex.Devices:
+                        DevicesItemsCollection = new ObservableCollection<TECDevice>();
+                        foreach (TECDevice item in Templates.DeviceCatalog)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                DevicesItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    DevicesItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.Controllers:
+                        ControllersItemsCollection = new ObservableCollection<TECController>();
+                        foreach (TECController item in Templates.ControllerTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                ControllersItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    ControllersItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.AssociatedCosts:
+                        AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
+                        foreach (TECAssociatedCost item in Templates.AssociatedCostsCatalog)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                AssociatedCostsItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    AssociatedCostsItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.ControlledScope:
+                        ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
+                        foreach (TECControlledScope item in Templates.ControlledScopeTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                ControlledScopeItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    ControlledScopeItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.Panels:
+                        PanelsItemsCollection = new ObservableCollection<TECPanel>();
+                        foreach (TECPanel item in Templates.PanelTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                PanelsItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    PanelsItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.MiscCosts:
+                        MiscCostsCollection = new ObservableCollection<TECMiscCost>();
+                        foreach (TECMiscCost item in Templates.MiscCostTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                MiscCostsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    MiscCostsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.MiscWiring:
+                        MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
+                        foreach (TECMiscWiring item in Templates.MiscWiringTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                MiscWiringCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    MiscWiringCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
                     default:
                         break;
 
                 }
             }
+        }
+        private bool SearchCanExecute()
+        {
+            bool canSearch = false;
+            switch (TabIndex)
+            {
+                case ScopeCollectionIndex.System:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Equipment:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.SubScope:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Devices:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Controllers:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.AssociatedCosts:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.ControlledScope:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Panels:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.MiscCosts:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.MiscWiring:
+                    canSearch = true;
+                    break;
+                default:
+                    break;
+            }
+            return canSearch;
         }
         private void EndSearchExecute()
         {

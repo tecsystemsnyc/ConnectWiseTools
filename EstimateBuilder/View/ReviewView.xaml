@@ -6,7 +6,8 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
         x:Name="parent"
-         d:DesignWidth="960" d:DesignHeight="660">
+         d:DesignWidth="1024
+             " d:DesignHeight="660">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -40,6 +41,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="150"/>
@@ -137,7 +140,7 @@
                  Margin="5"
                  HorizontalContentAlignment="Right"/>
 
-        <Label Content="Tax Emexpt?:"  Grid.Column="3" Grid.Row="1"/>
+        <Label Content="Tax Exempt?:"  Grid.Column="3" Grid.Row="1"/>
         <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
                   HorizontalAlignment="Right"
                  Grid.Column="4"
@@ -191,11 +194,11 @@
         <TextBlock Text="{Binding Bid.PricePerPoint, StringFormat= {} {0:C}}" 
                Grid.Row="17" Grid.Column="4"
                TextAlignment="Right"/>
-        <Slider x:Name="slider" Grid.Column="4" Grid.Row="14" VerticalAlignment="Center" Maximum="100"
-                TickFrequency="5" TickPlacement="BottomRight" Value="{Binding MarginSliderValue}"/>
-        <TextBox x:Name="textBox" Grid.Column="5" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
-                 Text="{Binding MarginSliderValue}"/>
-
-
+        <Label Content="Set Price:" 
+            Grid.Row="16"  Grid.Column="5"/>
+        <TextBox Text="{Binding UserPrice, StringFormat= {} {0:C}}"
+            Grid.Row="16"
+            Grid.Column="6" Margin="5"
+            HorizontalContentAlignment="Right"/>
     </Grid>
 </UserControl>
