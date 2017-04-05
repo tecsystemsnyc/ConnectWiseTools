@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         mc:Ignorable="d ignore"
         x:Name="parent"
          d:DesignWidth="1024
@@ -102,7 +103,7 @@
                TextAlignment="Right"/>
         <Label Content="Escalation:" 
                Grid.Row="10"/>
-        <TextBox Text="{Binding Bid.Parameters.Escalation, StringFormat={}{0}%}"
+        <TextBox Text="{Binding Bid.Parameters.Escalation, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
                  Grid.Row="10"
                  Grid.Column="1"
                  Margin="5"
@@ -110,7 +111,7 @@
 
         <Label Content="Overhead:" 
                Grid.Row="11"/>
-        <TextBox Text="{Binding Bid.Parameters.Overhead, StringFormat={}{0}%}"
+        <TextBox Text="{Binding Bid.Parameters.Overhead, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
                  Grid.Row="11"
                  Grid.Column="1"
                  Margin="5"
@@ -118,7 +119,7 @@
 
         <Label Content="Profit:" 
                Grid.Row="12"/>
-        <TextBox Text="{Binding Bid.Parameters.Profit, StringFormat={}{0}%}"
+        <TextBox Text="{Binding Bid.Parameters.Profit, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
                  Grid.Row="12"
                  Grid.Column="1"
                  Margin="5"
@@ -126,7 +127,7 @@
 
         <Label Content="Escalation:" 
                Grid.Row="9"  Grid.Column="3"/>
-        <TextBox Text="{Binding Bid.Parameters.SubcontractorEscalation, StringFormat={}{0}%}"
+        <TextBox Text="{Binding Bid.Parameters.SubcontractorEscalation, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
                  Grid.Row="9"
                  Grid.Column="4"
                  Margin="5"
@@ -134,7 +135,7 @@
 
         <Label Content="Markup:" 
                Grid.Row="10"  Grid.Column="3"/>
-        <TextBox Text="{Binding Bid.Parameters.SubcontractorMarkup, StringFormat={}{0}%}"
+        <TextBox Text="{Binding Bid.Parameters.SubcontractorMarkup, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
                  Grid.Row="10"
                  Grid.Column="4"
                  Margin="5"

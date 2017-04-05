@@ -142,6 +142,25 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class PercentageToNumberConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+        
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string inString = (string)value;
+            inString = inString.Trim(new Char[] { '%' });
+
+            return inString.ToDouble(0);
+        }
+
+        #endregion
+    }
+
     public class ManufacturerConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
