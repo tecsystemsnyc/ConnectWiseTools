@@ -186,13 +186,16 @@
                 BorderBrush="Black">
             <TextBlock Text="{Binding Bid.TotalPrice, StringFormat= {} {0:C}}" TextAlignment="Right"/>
         </Border>
-        
+
         <Label Content="Price per Point:" Grid.Row="17" Grid.Column="3"/>
         <TextBlock Text="{Binding Bid.PricePerPoint, StringFormat= {} {0:C}}" 
                Grid.Row="17" Grid.Column="4"
                TextAlignment="Right"/>
-        
-        
+        <Slider x:Name="slider" Grid.Column="4" Grid.Row="14" VerticalAlignment="Center" Maximum="100"
+                TickFrequency="5" TickPlacement="BottomRight" Value="{Binding MarginSliderValue}"/>
+        <TextBox x:Name="textBox" Grid.Column="5" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
+                 Text="{Binding MarginSliderValue}"/>
+
 
     </Grid>
 </UserControl>

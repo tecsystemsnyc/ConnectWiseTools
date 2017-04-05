@@ -300,6 +300,10 @@ namespace EstimatingLibrary
             get { return EstimateCalculator.GetMargin(this); }
         }
 
+        public double TotalCost
+        {
+            get { return EstimateCalculator.GetTotalCost(this); }
+        }
         #endregion
 
         public ObservableCollection<TECScopeBranch> ScopeTree {

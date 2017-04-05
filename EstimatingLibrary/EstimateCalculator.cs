@@ -444,6 +444,13 @@ namespace EstimatingLibrary
             return outCost;
         }
         /// <summary>
+        /// Returns the total cost
+        /// </summary>
+        public static double GetTotalCost(TECBid bid)
+        {
+            return GetSubcontractorCost(bid) + GetTECCost(bid);
+        }
+        /// <summary>
         /// Returns the final sell price 
         /// </summary>
         public static double GetTotalPrice(TECBid bid)
