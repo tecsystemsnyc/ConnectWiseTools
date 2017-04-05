@@ -473,7 +473,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private void AddTagToDeviceExecute()
         {
             SelectedDevice.Tags.Add(SelectedTag);
-            
         }
         private bool CanAddTagToDevice()
         {
