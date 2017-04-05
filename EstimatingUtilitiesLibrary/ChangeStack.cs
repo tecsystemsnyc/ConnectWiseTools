@@ -427,6 +427,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 ioModule.PropertyChanged += Object_PropertyChanged;
             }
+            foreach (TECDevice device in Bid.DeviceCatalog)
+            { device.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
