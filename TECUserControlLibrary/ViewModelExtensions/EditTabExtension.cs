@@ -368,14 +368,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void setupCommands()
         {
-            AddTagToSystemCommand = new RelayCommand(AddTagToSystemExecute);
-            AddTagToEquipmentCommand = new RelayCommand(AddTagToEquipmentExecute);
-            AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute);
-            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
-            AddTagToPointCommand = new RelayCommand(AddTagToPointExecute);
-            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
-            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
+            AddTagToSystemCommand = new RelayCommand(AddTagToSystemExecute, CanAddTagToSystem);
+            AddTagToEquipmentCommand = new RelayCommand(AddTagToEquipmentExecute, CanAddTagToEquipment);
+            AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute, CanAddTagToSubScope);
+            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute, CanAddTagToDevice);
+            AddTagToPointCommand = new RelayCommand(AddTagToPointExecute, CanAddTagToPoint);
+            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute, CanAddTagToController);
+            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
+
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, addIOCanExecute);
+
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
             DeleteSelectedSubScopeCommand = new RelayCommand(DeleteSelectedSubScopeExecute);
@@ -383,6 +385,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
             DeleteSelectedPanelCommand = new RelayCommand(DeleteSelectedPanelExecute);
+
             AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute);
             AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute);
             AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
@@ -418,55 +421,124 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Commands
         private void AddTagToSystemExecute()
         {
-            if (SelectedTag != null && SelectedSystem != null)
+            SelectedSystem.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToSystem()
+        {
+            if (SelectedTag != null 
+                && SelectedSystem != null 
+                && !SelectedSystem.Tags.Contains(SelectedTag))
             {
-                SelectedSystem.Tags.Add(SelectedTag);
+                return true; 
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddTagToEquipmentExecute()
         {
-            if (SelectedTag != null && SelectedEquipment != null)
+             SelectedEquipment.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToEquipment()
+        {
+            if (SelectedTag != null
+                && SelectedEquipment != null
+                && !SelectedEquipment.Tags.Contains(SelectedTag))
             {
-                SelectedEquipment.Tags.Add(SelectedTag);
+                return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
         private void AddTagToSubScopeExecute()
         {
-            if (SelectedTag != null && SelectedSubScope != null)
+            SelectedSubScope.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToSubScope()
+        {
+            if (SelectedTag != null
+                && SelectedSubScope != null
+                && !SelectedSubScope.Tags.Contains(SelectedTag))
             {
-                SelectedSubScope.Tags.Add(SelectedTag);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddTagToDeviceExecute()
         {
-            if (SelectedTag != null && SelectedDevice != null)
+            SelectedDevice.Tags.Add(SelectedTag);
+            
+        }
+        private bool CanAddTagToDevice()
+        {
+            if (SelectedTag != null
+                && SelectedDevice != null
+                && !SelectedDevice.Tags.Contains(SelectedTag))
             {
-                SelectedDevice.Tags.Add(SelectedTag);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddTagToPointExecute()
         {
-            if (SelectedTag != null && SelectedPoint != null)
+            SelectedPoint.Tags.Add(SelectedTag);
+            
+        }
+        private bool CanAddTagToPoint()
+        {
+            if (SelectedTag != null
+                && SelectedPoint != null
+                && !SelectedPoint.Tags.Contains(SelectedTag))
             {
-                SelectedPoint.Tags.Add(SelectedTag);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddTagToControllerExecute()
         {
-            if (SelectedTag != null && SelectedController != null)
+            SelectedController.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToController()
+        {
+            if (SelectedTag != null
+                && SelectedController != null
+                && !SelectedController.Tags.Contains(SelectedTag))
             {
-                SelectedController.Tags.Add(SelectedTag);
+                return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
         private void AddTagToPanelExecute()
         {
-            if (SelectedTag != null && SelectedPanel != null)
+            SelectedPanel.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToPanel()
+        {
+            if (SelectedTag != null
+                && SelectedPanel != null
+                && !SelectedPanel.Tags.Contains(SelectedTag))
             {
-                SelectedPanel.Tags.Add(SelectedTag);
+                return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
 
         private void AddIOToControllerExecute()

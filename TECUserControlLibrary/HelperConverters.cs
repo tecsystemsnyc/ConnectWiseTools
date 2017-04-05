@@ -181,14 +181,20 @@ namespace TECUserControlLibrary.HelperConverters
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-
-            if (((TECLocation)value).Name == "None")
+            if (value == null)
             {
-                return null;
+                return value;
             }
             else
             {
-                return value;
+                if (((TECLocation)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
             }
         }
 
@@ -342,13 +348,20 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (((TECController)value).Name == "None")
+            if (value == null)
             {
-                return null;
+                return value;
             }
             else
             {
-                return value;
+                if (((TECController)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
             }
         }
         #endregion
@@ -373,14 +386,20 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-
-            if (((TECPanel)value).Name == "None")
+            if (value == null)
             {
-                return null;
+                return value;
             }
             else
             {
-                return value;
+                if (((TECPanel)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
             }
         }
 
@@ -475,14 +494,22 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (((TECIOModule)value).Name == "None")
-            {
-                return null;
-            }
-            else
+            if(value == null)
             {
                 return value;
             }
+            else
+            {
+                if (((TECIOModule)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+            
         }
         #endregion
     }

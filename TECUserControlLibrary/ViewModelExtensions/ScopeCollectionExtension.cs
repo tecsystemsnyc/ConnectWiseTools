@@ -633,9 +633,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddDeviceCommand = new RelayCommand(AddDeviceExecute, CanAddDevice);
             AddControllerCommand = new RelayCommand(AddControllerExecute, CanAddController);
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, canAddIO);
-            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
-            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
-            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute);
+            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute, CanAddTagToDevice);
+            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute, CanAddTagToController);
+            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
             AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
             AddPanelCommand = new RelayCommand(AddPanelExecute, AddPanelCanExecute);
 
@@ -856,15 +856,51 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceTags.Add(SelectedTag);
             SelectedTag = null;
         }
+        private bool CanAddTagToDevice()
+        {
+            if (SelectedTag != null
+                && !DeviceTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void AddTagToControllerExecute()
         {
             ControllerTags.Add(SelectedTag);
             SelectedTag = null;
         }
+        private bool CanAddTagToController()
+        {
+            if (SelectedTag != null
+                && !ControllerTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void AddTagToPanelExecute()
         {
             PanelTags.Add(SelectedTag);
             SelectedTag = null;
+        }
+        private bool CanAddTagToPanel()
+        {
+            if (SelectedTag != null
+                && !PanelTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         private void AddAssociatedCostToPanelExecute()
         {
@@ -991,7 +1027,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             DragHandler(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);
