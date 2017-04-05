@@ -328,6 +328,26 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
             }
+            else if (DGTabIndex == GridIndex.Misc)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Visible;
+                ScopeCollection.MiscWiringVisibility = Visibility.Visible;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
+            }
             else
             {
                 throw new NotImplementedException();
