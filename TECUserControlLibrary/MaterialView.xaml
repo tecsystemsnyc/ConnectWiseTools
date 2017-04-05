@@ -282,6 +282,48 @@
                                                Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Misc. Wiring" Grid.Row="0"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center" Margin="5,7,0,7"/>
+                    <DataGrid ItemsSource="{Binding Templates.MiscWiringTemplates}"
+                  Grid.Row="1" Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  Margin="5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                            <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
+                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Misc. Costs" Grid.Row="0"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center" Margin="5,7,0,7"/>
+                    <DataGrid ItemsSource="{Binding Templates.MiscCostTemplates}"
+                  Grid.Row="1" Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  Margin="5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                            <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
+                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
         </TabControl>
         
     </Grid>

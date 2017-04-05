@@ -220,5 +220,5 @@ namespace EstimatingUtilitiesLibrary
     public enum TemplateGridIndex { None, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants, ControlledScope };
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, ControlledScope, Panels, AddPanel };
     public enum LocationScopeType { System, Equipment, SubScope};
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules};
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts};
 }

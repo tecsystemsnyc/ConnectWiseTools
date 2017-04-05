@@ -676,9 +676,9 @@ namespace TemplateBuilder.ViewModel
                 case TemplateGridIndex.ControlledScope:
 
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;

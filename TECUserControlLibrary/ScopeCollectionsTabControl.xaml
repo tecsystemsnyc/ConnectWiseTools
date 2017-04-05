@@ -317,7 +317,14 @@
                      Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
                 <local:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
             </TabItem>
-            
+            <TabItem Header="Misc. Wiring"
+                     Visibility="{Binding Path=ViewModel.MiscWiringVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscWiringCollection}"/>
+            </TabItem>
+            <TabItem Header="Misc. Costs"
+                     Visibility="{Binding Path=ViewModel.MiscCostVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscCostsCollection}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

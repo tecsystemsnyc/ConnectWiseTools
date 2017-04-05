@@ -281,6 +281,28 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _addPanelVisibility;
+
+        public Visibility MiscCostVisibility
+        {
+            get { return _miscCostVisibility; }
+            set
+            {
+                _miscCostVisibility = value;
+                RaisePropertyChanged("MiscCostVisibility");
+            }
+        }
+        private Visibility _miscCostVisibility;
+
+        public Visibility MiscWiringVisibility
+        {
+            get { return _miscWiringVisibility; }
+            set
+            {
+                _miscWiringVisibility = value;
+                RaisePropertyChanged("MiscWiringVisibility");
+            }
+        }
+        private Visibility _miscWiringVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -604,6 +626,28 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _panelsItemsCollection = value;
                 RaisePropertyChanged("PanelsItemsCollection");
+            }
+        }
+
+        private ObservableCollection<TECMiscWiring> _miscWiringCollection;
+        public ObservableCollection<TECMiscWiring> MiscWiringCollection
+        {
+            get { return _miscWiringCollection; }
+            set
+            {
+                _miscWiringCollection = value;
+                RaisePropertyChanged("MiscWiringCollection");
+            }
+        }
+
+        private ObservableCollection<TECMiscCost> _miscCostsCollection;
+        public ObservableCollection<TECMiscCost> MiscCostsCollection
+        {
+            get { return _miscCostsCollection; }
+            set
+            {
+                _miscCostsCollection = value;
+                RaisePropertyChanged("MiscCostsCollection");
             }
         }
         #endregion
@@ -994,6 +1038,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 PanelsItemsCollection.Add(panel);
             }
+            foreach(TECMiscWiring wiring in Templates.MiscWiringTemplates)
+            {
+                MiscWiringCollection.Add(wiring);
+            }
+            foreach (TECMiscCost cost in Templates.MiscCostTemplates)
+            {
+                MiscCostsCollection.Add(cost);
+            }
         }
 
         private void unsubscribeTemplatesCollections()
@@ -1008,6 +1060,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.AssociatedCostsCatalog.CollectionChanged -= AssociatedCostsCatalog_CollectionChanged;
                 Templates.ControlledScopeTemplates.CollectionChanged -= ControlledScopeTemplates_CollectionChanged;
                 Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
+                Templates.MiscWiringTemplates.CollectionChanged -= MiscWiringTemplates_CollectionChanged;
+                Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
             }
         }
 
@@ -1021,8 +1075,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.AssociatedCostsCatalog.CollectionChanged += AssociatedCostsCatalog_CollectionChanged;
             Templates.ControlledScopeTemplates.CollectionChanged += ControlledScopeTemplates_CollectionChanged;
             Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
+            Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
+            Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
         }
-
+        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
@@ -1176,6 +1232,42 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 foreach (object item in e.OldItems)
                 {
                     PanelsItemsCollection.Remove(item as TECPanel);
+                }
+            }
+        }
+
+        private void MiscCostTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    MiscCostsCollection.Add(item as TECMiscCost);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    MiscCostsCollection.Remove(item as TECMiscCost);
+                }
+            }
+        }
+
+        private void MiscWiringTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    MiscWiringCollection.Add(item as TECMiscWiring);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    MiscWiringCollection.Remove(item as TECMiscWiring);
                 }
             }
         }
