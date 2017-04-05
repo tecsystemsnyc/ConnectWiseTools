@@ -330,10 +330,13 @@ namespace EstimatingLibrary
 
                     if (connection is TECNetworkConnection)
                     {
-                        TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
-                        laborHours += length * type.Labor;
-                        foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                        { laborHours += associatedCost.Labor; }
+                        if ((connection as TECNetworkConnection).ConnectionType != null)
+                        {
+                            TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
+                            laborHours += length * type.Labor;
+                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            { laborHours += associatedCost.Labor; }
+                        }
                     }
                     else if (connection is TECSubScopeConnection)
                     {
