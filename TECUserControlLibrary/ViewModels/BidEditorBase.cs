@@ -376,7 +376,7 @@ namespace TECUserControlLibrary.ViewModels
                 openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            openFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb";
+            openFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
             openFileDialog.DefaultExt = "bdb";
             openFileDialog.AddExtension = true;
 
