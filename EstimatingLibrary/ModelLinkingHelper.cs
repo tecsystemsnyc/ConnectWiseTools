@@ -322,17 +322,14 @@ namespace EstimatingLibrary
                     if (connection is TECNetworkConnection)
                     {
                         TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                        bool typeFound = false;
                         foreach (TECConnectionType type in connectionTypes)
                         {
                             if (netConnect.ConnectionType.Guid == type.Guid)
                             {
                                 netConnect.ConnectionType = type;
-                                typeFound = true;
                                 break;
                             }
                         }
-                        if (typeFound) break;
                     }
                 }
             }
