@@ -1097,12 +1097,16 @@ namespace EstimatingLibrary
             foreach (TECController controller in Controllers)
             {
                 ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
-                foreach (TECSubScopeConnection connection in controller.ChildrenConnections)
+                foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (connection.SubScope == subScope)
+                    if (connection is TECSubScopeConnection)
                     {
-                        subScopeToRemove.Add(subScope as TECSubScope);
+                        if ((connection as TECSubScopeConnection).SubScope == subScope)
+                        {
+                            subScopeToRemove.Add(subScope as TECSubScope);
+                        }
                     }
+                    
                 }
                 foreach (TECSubScope sub in subScopeToRemove)
                 {
