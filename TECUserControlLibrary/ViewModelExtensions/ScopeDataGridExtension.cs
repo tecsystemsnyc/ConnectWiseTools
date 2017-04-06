@@ -67,8 +67,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
-
             }
         }
         private TECEquipment _selectedEquipment;
@@ -79,6 +79,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -90,6 +91,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSubScope = value;
                 RaisePropertyChanged("SelectedSubScope");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -104,6 +106,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedDevice = value;
                 RaisePropertyChanged("SelectedDevice");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -115,6 +118,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedPoint = value;
                 RaisePropertyChanged("SelectedPoint");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -126,6 +130,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedController = value;
                 RaisePropertyChanged("SelectedController");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -137,6 +142,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedPanel = value;
                 RaisePropertyChanged("SelectedPanel");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -293,6 +299,42 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         #endregion //Commands
 
+        private void NullifySelections(object obj)
+        {
+            //if(obj != null)
+            //{
+            //    if (!(obj is TECSystem))
+            //    {
+            //        SelectedSystem = null;
+            //    }
+            //    if (!(obj is TECEquipment))
+            //    {
+            //        SelectedEquipment = null;
+            //    }
+            //    if (!(obj is TECSubScope))
+            //    {
+            //        SelectedSubScope = null;
+            //    }
+            //    if (!(obj is TECDevice))
+            //    {
+            //        SelectedDevice = null;
+            //    }
+            //    if (!(obj is TECPoint))
+            //    {
+            //        SelectedPoint = null;
+            //    }
+            //    if (!(obj is TECController))
+            //    {
+            //        SelectedController = null;
+            //    }
+            //    if (!(obj is TECPanel))
+            //    {
+            //        SelectedPanel = null;
+            //    }
+            //}
+            
+        }
+
         private void populateLocationSelections()
         {
             Bid.Locations.CollectionChanged += Locations_CollectionChanged;
@@ -315,6 +357,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DropHandler(dropInfo);
         }
         #endregion
+
         private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

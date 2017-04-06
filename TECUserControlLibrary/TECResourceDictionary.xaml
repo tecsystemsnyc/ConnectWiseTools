@@ -86,6 +86,9 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SelectRowDetails"/>
+    </Style>
     <Style TargetType="Menu">
         <Setter Property="Background" Value="{StaticResource EBWindowBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>

@@ -14,6 +14,7 @@ namespace TECUserControlLibrary
     {
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine(sender);
             DataGridCell cell = sender as DataGridCell;
             if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {
@@ -39,6 +40,25 @@ namespace TECUserControlLibrary
                         }
                     }
                 }
+            }
+        }
+
+        private void SelectRowDetails(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row == null)
+            {
+                return;
+            }
+            row.Focusable = true;
+            row.Focus();
+
+            var focusDirection = FocusNavigationDirection.Next;
+            var request = new TraversalRequest(focusDirection);
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+            if (elementWithFocus != null)
+            {
+                elementWithFocus.MoveFocus(request);
             }
         }
 

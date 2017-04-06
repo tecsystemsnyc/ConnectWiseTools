@@ -51,7 +51,7 @@
                                  VerticalAlignment="Top"
                              Margin="5"/>
             <Label Content="Budget Price:" Grid.Row="2"/>
-            <TextBox Text="{Binding SelectedSystem.BudgetPrice}" 
+            <TextBox Text="{Binding SelectedSystem.BudgetPriceModifier}" 
                                  Grid.Column="1" Grid.Row="2" 
                                  VerticalAlignment="Top"
                              Margin="5"/>

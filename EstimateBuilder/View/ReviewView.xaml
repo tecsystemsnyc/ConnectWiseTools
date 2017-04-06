@@ -115,7 +115,7 @@
                  Grid.Row="11"
                  Grid.Column="1"
                  Margin="5"
-                 HorizontalContentAlignment="Right"/>
+                 HorizontalContentAlignment="Right"/> 
 
         <Label Content="Profit:" 
                Grid.Row="12"/>
