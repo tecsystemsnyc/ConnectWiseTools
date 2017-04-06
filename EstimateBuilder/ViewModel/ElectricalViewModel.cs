@@ -23,6 +23,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 _bid = value;
+                registerSubScope();
                 RaisePropertyChanged("Bid");
             }
         }
@@ -76,7 +77,6 @@ namespace EstimateBuilder.ViewModel
             }
             Bid.Controllers.CollectionChanged += collectionChanged;
             updateCollections();
-            registerSubScope();
         }
         private void registerSubScope()
         {
@@ -100,6 +100,10 @@ namespace EstimateBuilder.ViewModel
                     if(item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged += collectionChanged;
+                        foreach(TECEquipment equip in (item as TECSystem).Equipment)
+                        {
+                            equip.SubScope.CollectionChanged += collectionChanged;
+                        }
                     }
                     else if (item is TECEquipment)
                     {
@@ -156,7 +160,6 @@ namespace EstimateBuilder.ViewModel
                         subConnectionToAdd.ParentEquipment = equipment;
 
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
-
                     }
                 }
             }

@@ -23,7 +23,6 @@
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                   CanUserAddRows="False">
-
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
@@ -39,7 +38,6 @@
                                         Header="Conduit" Width="Auto"
                                         DisplayMemberPath="Name"/>
             </DataGrid.Columns>
-           
         </DataGrid>
     </Grid>
 </UserControl>

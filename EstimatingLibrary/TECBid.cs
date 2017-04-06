@@ -1142,7 +1142,6 @@ namespace EstimatingLibrary
         
         private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateElectricalMaterial();
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach(TECConnection item in e.NewItems)
@@ -1157,6 +1156,7 @@ namespace EstimatingLibrary
                     item.PropertyChanged -= objectPropertyChanged;
                 }
             }
+            updateElectricalMaterial();
         }
         #endregion
 
