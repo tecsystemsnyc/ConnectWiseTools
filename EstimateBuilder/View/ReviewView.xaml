@@ -196,7 +196,7 @@
                Grid.Row="4"  Grid.Column="4"
                FontWeight="Bold"
                FontStyle="Italic" />
-        <Border Grid.Row="8"
+        <Border Grid.Row="9"
                  Grid.Column="4"
                 BorderThickness="2"
                 BorderBrush="Black">
