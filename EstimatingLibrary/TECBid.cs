@@ -823,7 +823,12 @@ namespace EstimatingLibrary
             { updateElectricalMaterial(); }
             else if (sender is TECConnection)
             {
-                updateElectricalMaterial();
+                if(e.PropertyName == "Length" ||
+                    e.PropertyName == "ConduitType" ||
+                    e.PropertyName == "ConnectionType")
+                {
+                    updateElectricalMaterial();
+                }
             }
         }
         
