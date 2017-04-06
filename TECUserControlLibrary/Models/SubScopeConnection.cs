@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.Models
         {
             if (controller != null)
             {
-                Controller.AddSubScope(SubScope);
+                controller.AddSubScope(SubScope);
             }
             else
             {
