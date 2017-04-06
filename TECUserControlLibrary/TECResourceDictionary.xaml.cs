@@ -14,7 +14,6 @@ namespace TECUserControlLibrary
     {
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine(sender);
             DataGridCell cell = sender as DataGridCell;
             if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {
