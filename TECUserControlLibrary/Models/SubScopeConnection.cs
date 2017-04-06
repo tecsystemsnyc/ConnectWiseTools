@@ -26,8 +26,8 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
-                _controller = value;
                 handleControllerSelection(value);
+                _controller = value;
                 RaisePropertyChanged("Controller");
             }
         }
