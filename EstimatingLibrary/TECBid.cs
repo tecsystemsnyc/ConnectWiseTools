@@ -1054,6 +1054,7 @@ namespace EstimatingLibrary
         private void updateTotal()
         {
             RaisePropertyChanged("TotalPrice");
+            RaisePropertyChanged("TotalCost");
             RaisePropertyChanged("PricePerPoint");
             RaisePropertyChanged("Margin");
         }

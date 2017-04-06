@@ -85,8 +85,8 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetTECCost(bid);
-            outCost += outCost * bid.Parameters.Profit / 100;
             outCost += outCost * bid.Parameters.Overhead / 100;
+            outCost += outCost * bid.Parameters.Profit / 100;
             
             return outCost;
         }
