@@ -333,14 +333,19 @@ namespace EstimatingLibrary
         public void RemoveController(TECController controller)
         {
             bool exists = false;
-            foreach (TECNetworkConnection connection in ChildrenConnections)
+            foreach (TECConnection connection in ChildrenConnections)
             {
-                if (connection.ChildrenControllers.Contains(controller))
+                if(connection is TECNetworkConnection)
                 {
-                    exists = true;
-                    controller.ParentConnection = null;
-                    connection.ChildrenControllers.Remove(controller);
+                    var netConnect = connection as TECNetworkConnection;
+                    if (netConnect.ChildrenControllers.Contains(controller))
+                    {
+                        exists = true;
+                        controller.ParentConnection = null;
+                        netConnect.ChildrenControllers.Remove(controller);
+                    }
                 }
+                
             }
             if (!exists)
             {
@@ -350,14 +355,18 @@ namespace EstimatingLibrary
         public void RemoveSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connectionToRemove = null;
-            foreach (TECSubScopeConnection connection in ChildrenConnections)
+            foreach (TECConnection connection in ChildrenConnections)
             {
-                if (connection.SubScope == subScope)
+                if(connection is TECSubScopeConnection)
                 {
-                    subScope.Connection = null;
-                    connection.SubScope = null;
-                    connection.ParentController = null;
-                    connectionToRemove = connection;
+                    var subConnect = connection as TECSubScopeConnection;
+                    if (subConnect.SubScope == subScope)
+                    {
+                        subScope.Connection = null;
+                        subConnect.SubScope = null;
+                        connection.ParentController = null;
+                        connectionToRemove = subConnect;
+                    }
                 }
             }
             if (connectionToRemove != null)
