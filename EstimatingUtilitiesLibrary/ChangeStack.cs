@@ -377,6 +377,7 @@ namespace EstimatingUtilitiesLibrary
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
+            Bid.Parameters.PropertyChanged += Object_PropertyChanged;
             //System Changed
             foreach (TECScopeBranch branch in Bid.ScopeTree)
             { registerScope(branch); }
@@ -753,26 +754,20 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
-
             //Conduit Type
             if (connection.ConduitType != null)
             {
-                SaveStack.Add(new StackItem(change, connection, connection.ConduitType));
+                if(change == Change.Add)
+                {
+                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+
+                } else if (change == Change.Remove)
+                {
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+
+                }
             }
-
-            ////Parent Controller
-            //if (connection.ParentController != null)
-            //{
-            //    if (change == Change.Add)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ParentController));
-            //    }
-            //    else if (change == Change.Remove)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ParentController));
-            //    }
-            //}
-
+            
             #region If Connection is NetworkConnection
             if (connection is TECNetworkConnection)
             {

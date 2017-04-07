@@ -158,39 +158,45 @@ namespace EstimateBuilder.ViewModel
         {
             if(e.PropertyName == "TotalPrice")
             {
-                RaisePropertyChanged("MarginM8");
-                RaisePropertyChanged("MarginM6");
-                RaisePropertyChanged("MarginM4");
-                RaisePropertyChanged("MarginM2");
-                RaisePropertyChanged("MarginP2");
-                RaisePropertyChanged("MarginP4");
-                RaisePropertyChanged("MarginP6");
-                RaisePropertyChanged("MarginP8");
-
-                RaisePropertyChanged("TotalPriceM8");
-                RaisePropertyChanged("TotalPriceM6");
-                RaisePropertyChanged("TotalPriceM4");
-                RaisePropertyChanged("TotalPriceM2");
-                RaisePropertyChanged("TotalPriceP2");
-                RaisePropertyChanged("TotalPriceP4");
-                RaisePropertyChanged("TotalPriceP6");
-                RaisePropertyChanged("TotalPriceP8");
-
-                RaisePropertyChanged("Markup");
-                RaisePropertyChanged("MarkupM8");
-                RaisePropertyChanged("MarkupM6");
-                RaisePropertyChanged("MarkupM4");
-                RaisePropertyChanged("MarkupM2");
-                RaisePropertyChanged("MarkupP2");
-                RaisePropertyChanged("MarkupP4");
-                RaisePropertyChanged("MarkupP6");
-                RaisePropertyChanged("MarkupP8");
+                raiseTable();
             }
         }
 
         public void Refresh(TECBid bid)
         {
             Bid = bid;
+            raiseTable();
+        }
+
+        private void raiseTable()
+        {
+            RaisePropertyChanged("MarginM8");
+            RaisePropertyChanged("MarginM6");
+            RaisePropertyChanged("MarginM4");
+            RaisePropertyChanged("MarginM2");
+            RaisePropertyChanged("MarginP2");
+            RaisePropertyChanged("MarginP4");
+            RaisePropertyChanged("MarginP6");
+            RaisePropertyChanged("MarginP8");
+
+            RaisePropertyChanged("TotalPriceM8");
+            RaisePropertyChanged("TotalPriceM6");
+            RaisePropertyChanged("TotalPriceM4");
+            RaisePropertyChanged("TotalPriceM2");
+            RaisePropertyChanged("TotalPriceP2");
+            RaisePropertyChanged("TotalPriceP4");
+            RaisePropertyChanged("TotalPriceP6");
+            RaisePropertyChanged("TotalPriceP8");
+
+            RaisePropertyChanged("Markup");
+            RaisePropertyChanged("MarkupM8");
+            RaisePropertyChanged("MarkupM6");
+            RaisePropertyChanged("MarkupM4");
+            RaisePropertyChanged("MarkupM2");
+            RaisePropertyChanged("MarkupP2");
+            RaisePropertyChanged("MarkupP4");
+            RaisePropertyChanged("MarkupP6");
+            RaisePropertyChanged("MarkupP8");
         }
     }
 }
