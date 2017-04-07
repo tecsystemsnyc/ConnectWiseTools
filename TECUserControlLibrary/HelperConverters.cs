@@ -424,6 +424,45 @@ namespace TECUserControlLibrary.HelperConverters
 
         #endregion
     }
+    public class SelectedItemToConduitTypeConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var conduitType = new TECConduitType();
+                conduitType.Name = "None";
+                return conduitType;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return value;
+            }
+            else
+            {
+                if (((TECConduitType)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+        }
+        #endregion
+    }
+
     public class ConnectionIOConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
