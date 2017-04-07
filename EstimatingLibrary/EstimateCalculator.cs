@@ -17,6 +17,10 @@ namespace EstimatingLibrary
             double shipping = 0.03;
             double warranty = 0.06;
             double cost = 0;
+            foreach(TECMiscCost miscCost in bid.MiscCosts)
+            {
+                cost += miscCost.Cost;
+            }
             foreach (TECSystem system in bid.Systems)
             {
                 cost += system.MaterialCost;
