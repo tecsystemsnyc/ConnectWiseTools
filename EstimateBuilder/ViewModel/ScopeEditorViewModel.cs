@@ -191,7 +191,7 @@ namespace EstimateBuilder.ViewModel
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
                 bool isControllerInPanel = sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel);
 
-                if (sourceItem != null && sourceType == targetType || sourceItem is TECControlledScope || isControllerInPanel)
+                if (sourceItem != null && sourceType == targetType || isControllerInPanel)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
@@ -204,11 +204,6 @@ namespace EstimateBuilder.ViewModel
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             
-            //if (dropInfo.Data is TECControlledScope)
-            //{
-            //    Bid.addControlledScope(dropInfo.Data as TECControlledScope);
-            //}
-            //else
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
@@ -265,7 +260,7 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
                 ScopeCollection.ControllerVisibility = Visibility.Collapsed;
                 ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-                ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
@@ -358,18 +353,18 @@ namespace EstimateBuilder.ViewModel
             }
             else if (DGTabIndex == GridIndex.AddControlledScope)
             {
-                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.SystemsVisibility = Visibility.Visible;
+                ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                ScopeCollection.DevicesVisibility = Visibility.Visible;
                 ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                 ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                 ScopeCollection.TagsVisibility = Visibility.Collapsed;
                 ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Visible;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
                 ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
-                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;

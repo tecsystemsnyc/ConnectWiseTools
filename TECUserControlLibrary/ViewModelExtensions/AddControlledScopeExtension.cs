@@ -7,6 +7,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace TECUserControlLibrary.ViewModelExtensions
 {
@@ -52,6 +53,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private ObservableCollection<TECControlledScope> _scopeSource;
+        public ObservableCollection<TECControlledScope> ScopeSource
+        {
+            get { return _scopeSource; }
+            set
+            {
+                _scopeSource = value;
+                RaisePropertyChanged("ScopeSource");
+            }
+        }
+
         public ICommand AddControlledScopeCommand { get; private set; }
 
         /// <summary>
@@ -66,6 +78,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Refresh(TECBid bid)
         {
             Bid = bid;
+            ScopeSource = new ObservableCollection<TECControlledScope>();
         }
 
         private void addControlledScopeExecute()
@@ -102,7 +115,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Drop(IDropInfo dropInfo)
         {
             Type sourceType = dropInfo.Data.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
             if (dropInfo.Data is TECControlledScope)
             {

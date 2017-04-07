@@ -24,16 +24,28 @@
                 <Label Content="Drag a Controlled Scope Here" VerticalAlignment="Center"/>
             </Grid>
         </Border>
-        <ItemsControl dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"/>
-        <grids:SystemsGridControl SystemsSource="{Binding ControlledScope.Systems}"
+        <ItemsControl ItemsSource="{Binding ScopeSource}" dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                      dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True"
+                          Background="{StaticResource SectionBackgroundBrush}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+            <grids:SystemsGridControl SystemsSource="{Binding ControlledScope.Systems}"
+                                  ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                   dd:DragDrop.IsDropTarget="False"
                                   Grid.Column="1"
                                   Margin="5"/>
         <grids:ControllerGridControl ControllersSource="{Binding ControlledScope.Controllers}"
+                                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                      Grid.Column="1" Grid.Row="1"
                                      dd:DragDrop.IsDropTarget="False"
                                      Margin="5"/>
         <grids:PanelsGrid PanelsSource="{Binding ControlledScope.Panels}"
+                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                           Grid.Column="1" Grid.Row="2"
                           dd:DragDrop.IsDropTarget="False"
                           Margin="5"/>
