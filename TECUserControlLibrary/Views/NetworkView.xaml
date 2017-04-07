@@ -186,6 +186,8 @@
                                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"
                                                             IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Length}" Header="Length"
+                                                            />
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
