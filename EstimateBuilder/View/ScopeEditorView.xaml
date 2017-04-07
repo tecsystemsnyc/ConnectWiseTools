@@ -112,6 +112,9 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Controlled Scope">
+                <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
+            </TabItem>
         </TabControl>
 
         
