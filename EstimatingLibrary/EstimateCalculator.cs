@@ -340,7 +340,14 @@ namespace EstimatingLibrary
                     var length = connection.Length;
                     if (connection.ConduitType != null)
                     { laborHours += connection.Length * connection.ConduitType.Labor; }
-
+                    if (connection.ConduitType != null)
+                    {
+                        laborHours += length * connection.ConduitType.Labor;
+                        foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+                        {
+                            laborHours += associatedCost.Labor;
+                        }
+                    }
                     if (connection is TECNetworkConnection)
                     {
                         if ((connection as TECNetworkConnection).ConnectionType != null)
