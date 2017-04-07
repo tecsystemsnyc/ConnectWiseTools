@@ -723,7 +723,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         SystemItemsCollection = new ObservableCollection<TECSystem>();
                         foreach (TECSystem item in Templates.SystemTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) || 
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 SystemItemsCollection.Add(item);
                             }
@@ -740,7 +741,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
                         foreach (TECEquipment item in Templates.EquipmentTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 EquipmentItemsCollection.Add(item);
                             }
@@ -757,7 +759,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
                         foreach (TECSubScope item in Templates.SubScopeTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 SubScopeItemsCollection.Add(item);
                             }
@@ -774,7 +777,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         DevicesItemsCollection = new ObservableCollection<TECDevice>();
                         foreach (TECDevice item in Templates.DeviceCatalog)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 DevicesItemsCollection.Add(item);
                             }
@@ -791,7 +795,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         ControllersItemsCollection = new ObservableCollection<TECController>();
                         foreach (TECController item in Templates.ControllerTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 ControllersItemsCollection.Add(item);
                             }
@@ -808,7 +813,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
                         foreach (TECAssociatedCost item in Templates.AssociatedCostsCatalog)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 AssociatedCostsItemsCollection.Add(item);
                             }
@@ -825,7 +831,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
                         foreach (TECControlledScope item in Templates.ControlledScopeTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 ControlledScopeItemsCollection.Add(item);
                             }
@@ -842,7 +849,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         PanelsItemsCollection = new ObservableCollection<TECPanel>();
                         foreach (TECPanel item in Templates.PanelTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 PanelsItemsCollection.Add(item);
                             }
@@ -859,7 +867,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         MiscCostsCollection = new ObservableCollection<TECMiscCost>();
                         foreach (TECMiscCost item in Templates.MiscCostTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 MiscCostsCollection.Add(item);
                             }
@@ -876,7 +885,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
                         foreach (TECMiscWiring item in Templates.MiscWiringTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
                                 MiscWiringCollection.Add(item);
                             }
