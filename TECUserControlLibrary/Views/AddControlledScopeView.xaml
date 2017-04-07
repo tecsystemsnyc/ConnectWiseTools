@@ -16,56 +16,99 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="2" BorderBrush="Black">
-            <Grid Background="{StaticResource SectionBackgroundBrush}">
-                <Label Content="Drag a Controlled Scope Here" VerticalAlignment="Center"/>
-            </Grid>
-        </Border>
-        <ItemsControl ItemsSource="{Binding ScopeSource}" dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+        <Grid Grid.RowSpan="7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="90"/>
+            </Grid.RowDefinitions>
+            <Label Content="Drag Controlled Scope Here"/>
+            <ItemsControl ItemsSource="{Binding ScopeSource}" dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                       dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.IsDropTarget="True"
+                          Grid.Row="1"
                           Background="{StaticResource SectionBackgroundBrush}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-            <grids:SystemsGridControl SystemsSource="{Binding ControlledScope.Systems}"
-                                  ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                  dd:DragDrop.IsDropTarget="False"
-                                  Grid.Column="1"
-                                  Margin="5"/>
-        <grids:ControllerGridControl ControllersSource="{Binding ControlledScope.Controllers}"
-                                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                     Grid.Column="1" Grid.Row="1"
-                                     dd:DragDrop.IsDropTarget="False"
-                                     Margin="5"/>
-        <grids:PanelsGrid PanelsSource="{Binding ControlledScope.Panels}"
-                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                          Grid.Column="1" Grid.Row="2"
-                          dd:DragDrop.IsDropTarget="False"
-                          Margin="5"/>
-        <Grid Grid.Row="1" Grid.RowSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="Quantity: "
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Quantity: "
                    Grid.Row="1"/>
-            <TextBox Text="{Binding ControlledScopeQuantity}"
+                <TextBox Text="{Binding ControlledScopeQuantity}"
                      Grid.Row="1" Grid.Column="1" Margin="2"/>
-            <Button Content="Add" Grid.Row="3" Grid.ColumnSpan="2"
+                <Button Content="Add" Grid.Row="3" Grid.ColumnSpan="2"
                     Margin="2" Command="{Binding AddControlledScopeCommand}"/>
+            </Grid>
         </Grid>
+        
+
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Panels"/>
+            <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
+                              ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                               Margin="5" Grid.Row="1"/>
+        </Grid>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+        <Grid Grid.Row="2" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Controllers"/>
+            <grids:ControllerInPanelGridControl Grid.Row="1" Margin="5" 
+                                            ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+        </Grid>
+        <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Systems"/>
+            <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.ControlledScope.Systems}"
+                                  ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                  AllowAddingNew="False"
+                                  Grid.Row="1"
+                                  Margin="5"/>
+        </Grid>
+        <GridSplitter Grid.Row="5" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Connections"/>
+            <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                  Grid.Row="1" Margin="5"/>
+        </Grid>
+        
+        
+        
     </Grid>
 </UserControl>
