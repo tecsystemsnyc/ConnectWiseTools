@@ -14,6 +14,8 @@ namespace EstimatingLibrary
         /// </summary>
         public static double GetMaterialCost(TECBid bid)
         {
+            double shipping = 0.03;
+            double warranty = 0.06;
             double cost = 0;
             foreach (TECSystem system in bid.Systems)
             {
@@ -27,6 +29,7 @@ namespace EstimatingLibrary
             {
                 cost += panel.MaterialCost;
             }
+            cost += cost * shipping + cost * warranty;
             return cost;
         }
         /// <summary>
@@ -97,6 +100,8 @@ namespace EstimatingLibrary
         public static double GetElectricalMaterialCost(TECBid bid)
         {
             double cost = 0;
+            double shipping = 0.03;
+            double warranty = 0.05;
 
             foreach(TECMiscWiring wiring in bid.MiscWiring)
             {
@@ -143,6 +148,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            cost += cost * shipping + cost * warranty;
             return cost;
         }
 
