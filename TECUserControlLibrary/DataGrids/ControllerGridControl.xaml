@@ -20,12 +20,13 @@
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedController}"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                  IsReadOnly="True">
+                  IsReadOnly="False"
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70"/>
-                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" MinWidth="80"/>
-                <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
+                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" MinWidth="80" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}" Header="Cost" Width="Auto" MinWidth="40"/>
             </DataGrid.Columns>
             
