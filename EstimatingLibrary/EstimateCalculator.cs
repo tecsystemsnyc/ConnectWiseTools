@@ -108,7 +108,14 @@ namespace EstimatingLibrary
                 foreach(TECConnection connection in controller.ChildrenConnections)
                 {
                     var length = connection.Length;
-
+                    if (connection.ConduitType != null)
+                    {
+                        cost += length * connection.ConduitType.Cost;
+                        foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+                        {
+                            cost += associatedCost.Cost;
+                        }
+                    }
                     if (connection is TECNetworkConnection)
                     {
                         if ((connection as TECNetworkConnection).ConnectionType != null)

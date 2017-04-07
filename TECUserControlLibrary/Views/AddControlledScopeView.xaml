@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.AddControlledScopeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             x:Name="parent"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="640">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border BorderThickness="2" BorderBrush="Black">
+            <Grid Background="{StaticResource SectionBackgroundBrush}">
+                <Label Content="Drag a Controlled Scope Here" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <ItemsControl dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"/>
+        <grids:SystemsGridControl SystemsSource="{Binding ControlledScope.Systems}"
+                                  dd:DragDrop.IsDropTarget="False"
+                                  Grid.Column="1"
+                                  Margin="5"/>
+        <grids:ControllerGridControl ControllersSource="{Binding ControlledScope.Controllers}"
+                                     Grid.Column="1" Grid.Row="1"
+                                     dd:DragDrop.IsDropTarget="False"
+                                     Margin="5"/>
+        <grids:PanelsGrid PanelsSource="{Binding ControlledScope.Panels}"
+                          Grid.Column="1" Grid.Row="2"
+                          dd:DragDrop.IsDropTarget="False"
+                          Margin="5"/>
+        <Grid Grid.Row="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Quantity: "
+                   Grid.Row="1"/>
+            <TextBox Text="{Binding ControlledScopeQuantity}"
+                     Grid.Row="1" Grid.Column="1" Margin="2"/>
+            <Button Content="Add" Grid.Row="3" Grid.ColumnSpan="2"
+                    Margin="2" Command="{Binding AddControlledScopeCommand}"/>
+        </Grid>
+    </Grid>
+</UserControl>

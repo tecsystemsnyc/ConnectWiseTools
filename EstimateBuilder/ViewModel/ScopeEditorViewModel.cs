@@ -39,6 +39,7 @@ namespace EstimateBuilder.ViewModel
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupControllersPanelsTab();
+            setupAddControlledScope();
 
             DGTabIndex = GridIndex.Scope;
 
@@ -67,6 +68,7 @@ namespace EstimateBuilder.ViewModel
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public EditTabExtension EditTab { get; set; }
         public ControllersPanelsViewModel ControllersPanelsTab { get; set; } 
+        public AddControlledScopeExtension AddControlledScopeTab { get; set; }
         #endregion
 
         #region Interface Properties
@@ -125,6 +127,7 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid.Refresh(Bid);
             LocationDataGrid.Refresh(Bid);
             ControllersPanelsTab.Refresh(Bid);
+            AddControlledScopeTab.Refresh(Bid);
             
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
@@ -171,6 +174,10 @@ namespace EstimateBuilder.ViewModel
             ControllersPanelsTab = new ControllersPanelsViewModel(Bid);
             ControllersPanelsTab.SelectionChanged += EditTab.updateSelection;
         }
+        private void setupAddControlledScope()
+        {
+            AddControlledScopeTab = new AddControlledScopeExtension(Bid);
+        }
         #endregion
         
         #region Drag Drop
@@ -197,11 +204,12 @@ namespace EstimateBuilder.ViewModel
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             
-            if (dropInfo.Data is TECControlledScope)
-            {
-                Bid.addControlledScope(dropInfo.Data as TECControlledScope);
-            }
-            else if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            //if (dropInfo.Data is TECControlledScope)
+            //{
+            //    Bid.addControlledScope(dropInfo.Data as TECControlledScope);
+            //}
+            //else
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
 
@@ -347,6 +355,26 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
+            }
+            else if (DGTabIndex == GridIndex.AddControlledScope)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.ControlledScope;
             }
             else
             {

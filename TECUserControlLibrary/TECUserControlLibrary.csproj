@@ -220,6 +220,7 @@
     <Compile Include="UserControls\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModelExtensions\AddControlledScopeExtension.cs" />
     <Compile Include="ViewModelExtensions\ControllersPanelsViewModel.cs" />
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
@@ -238,6 +239,9 @@
     </Compile>
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\AddControlledScopeView.xaml.cs">
+      <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ControlledScopeView.xaml.cs">
       <DependentUpon>ControlledScopeView.xaml</DependentUpon>
     </Compile>
@@ -473,6 +477,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\MenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddControlledScopeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
