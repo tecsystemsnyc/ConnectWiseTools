@@ -132,7 +132,7 @@
                                     Binding="{Binding Path=Controller.ParentConnection.Length, Mode=TwoWay}"
                                     Width="Auto" MinWidth="50"/>
                         <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.Bid.ConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConduitType}"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="60"/>
                         <DataGridCheckBoxColumn Header="Connected"
@@ -191,6 +191,10 @@
                                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Binding="{Binding Length}" Header="Length"
                                                             />
+                                        <DataGridComboBoxColumn Header="Conduit"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto" MinWidth="60"/>
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>

@@ -89,6 +89,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private ObservableCollection<TECConduitType> _possibleConduitTypes;
+        public ObservableCollection<TECConduitType> PossibleConduitTypes
+        {
+            get { return _possibleConduitTypes; }
+            set
+            {
+                _possibleConduitTypes = value;
+                RaisePropertyChanged("PossibleConduitTypes");
+            }
+        }
+
         public IOType SelectedIO { get; set; }
         public TECConnectionType SelectedWire { get; set; }
         #endregion
@@ -122,8 +133,10 @@ namespace TECUserControlLibrary.ViewModels
             BMSControllers = new ObservableCollection<BMSController>();
             StandaloneControllers = new ObservableCollection<TECController>();
             NetworkControllers = new ObservableCollection<TECController>();
+            PossibleConduitTypes = new ObservableCollection<TECConduitType>();
 
             Bid.Controllers.CollectionChanged += Controllers_CollectionChanged;
+            Bid.ConduitTypes.CollectionChanged += ConduitTypes_CollectionChanged;
             ServerControllers.CollectionChanged += ServerControllers_CollectionChanged;
             BMSControllers.CollectionChanged += BMSControllers_CollectionChanged;
 
@@ -134,7 +147,17 @@ namespace TECUserControlLibrary.ViewModels
             {
                 sortAndAddController(controller);
             }
+
+            TECConduitType noneConduit = new TECConduitType();
+            noneConduit.Name = "None";
+            PossibleConduitTypes.Add(noneConduit);
+            foreach (TECConduitType type in Bid.ConduitTypes)
+            {
+                PossibleConduitTypes.Add(type);
+            }
         }
+
+        
 
         private void sortAndAddController(TECController controller)
         {
@@ -225,6 +248,30 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is TECController)
                     {
                         removeController(item as TECController);
+                    }
+                }
+            }
+        }
+
+        private void ConduitTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    if (item is TECConduitType)
+                    {
+                        PossibleConduitTypes.Add(item as TECConduitType);
+                    }
+                }
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item is TECController)
+                    {
+                        PossibleConduitTypes.Remove(item as TECConduitType);
                     }
                 }
             }
