@@ -191,6 +191,10 @@
                                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Binding="{Binding Length}" Header="Length"
                                                             />
+                                        <DataGridComboBoxColumn Header="Conduit"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto" MinWidth="60"/>
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>
