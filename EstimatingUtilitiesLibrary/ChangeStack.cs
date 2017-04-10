@@ -898,9 +898,12 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handlePanelChildren(TECPanel panel, Change change)
         {
-            foreach(TECController controller in panel.Controllers)
+            handleScopeChildren(panel as TECScope, change);
+            StackItem item;
+            item = new StackItem(change, panel, panel.Type);
+            SaveStack.Add(item);
+            foreach (TECController controller in panel.Controllers)
             {
-                StackItem item;
                 if (change == Change.Add)
                 {
                     item = new StackItem(Change.AddRelationship, (object)controller, (object)panel);
