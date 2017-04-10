@@ -45,7 +45,9 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
 
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
-
+            <TabItem Header="Controlled Scope">
+                <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
+            </TabItem>
             <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
                 <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>
@@ -112,9 +114,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Controlled Scope">
-                <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
-            </TabItem>
+            
         </TabControl>
 
         

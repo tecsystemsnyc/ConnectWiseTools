@@ -41,7 +41,7 @@ namespace EstimateBuilder.ViewModel
             setupControllersPanelsTab();
             setupAddControlledScope();
 
-            DGTabIndex = GridIndex.Scope;
+            DGTabIndex = GridIndex.AddControlledScope;
 
             TemplatesVisibility = Visibility.Visible;
 

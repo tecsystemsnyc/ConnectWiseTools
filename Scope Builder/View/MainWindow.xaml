@@ -133,6 +133,8 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
                 <TabItem Header="None"
                          Visibility="Collapsed"/>
+                <TabItem Header="Controlled Scope"
+                         Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>

@@ -55,7 +55,7 @@ namespace TemplateBuilder.ViewModel
 
             getTemplates();
 
-            DGTabIndex = TemplateGridIndex.Systems;
+            DGTabIndex = TemplateGridIndex.ControlledScope;
 
             ResetStatus();
         }
