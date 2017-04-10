@@ -122,8 +122,7 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += collectionChanged;
             AssociatedCosts.CollectionChanged += collectionChanged;
         }
-
-
+        
         abstract public Object DragDropCopy();
         #endregion //Constructors
 

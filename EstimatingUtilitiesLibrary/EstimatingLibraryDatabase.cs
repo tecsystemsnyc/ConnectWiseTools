@@ -2873,11 +2873,13 @@ namespace EstimatingUtilitiesLibrary
         private static bool isFieldType(TableInfo table, TableField field, Object consideredObject)
         {
             var type = consideredObject.GetType();
-            if(field.Property == null)
+            if (field.Property == null)
                 return false;
-            else if(field.Property.ReflectedType == type)
+            else if (field.Property.ReflectedType == type)
                 return true;
             else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
+                return true;
+            else if (field.Property.ReflectedType == typeof(TECScope) && isScope(type))
                 return true;
             else
                 return false;
@@ -2926,6 +2928,20 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
             return quantity;
+        }
+        private static bool isScope(Type type)
+        {
+            if (type == typeof(Object))
+            {
+                return false;
+            }
+            else if (type == typeof(TECScope))
+            {
+                return true;
+            } else
+            {
+                return (isScope(type.BaseType));
+            }
         }
         #endregion
     }
