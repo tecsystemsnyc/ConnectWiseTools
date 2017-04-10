@@ -386,12 +386,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
             DeleteSelectedPanelCommand = new RelayCommand(DeleteSelectedPanelExecute);
 
-            AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute);
-            AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute);
-            AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute);
-            AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute);
-            AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute);
-            AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
+            AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute, CanAddAssociatedCostToSystem);
+            AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute, CanAddAssociatedCostToEquipment);
+            AddAssociatedCostToSubScopeCommand = new RelayCommand(AddAssociatedCostToSubScopeExecute, CanAddAssociatedCostToSubScope);
+            AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute, CanAddAssociatedCostToDevice);
+            AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute, CanAddAssociatedCostToController);
+            AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute, CanAddAssociatedCostToPanel);
         }
         private void setCatalogs(object type)
         {
@@ -633,45 +633,94 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void AddAssociatedCostToSystemExecute()
         {
+           
+            SelectedSystem.AssociatedCosts.Add(SelectedAssociatedCost);
+            
+        }
+        private bool CanAddAssociatedCostToSystem()
+        {
             if (SelectedAssociatedCost != null && SelectedSystem != null)
             {
-                SelectedSystem.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddAssociatedCostToEquipmentExecute()
         {
+            SelectedEquipment.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToEquipment()
+        {
             if (SelectedAssociatedCost != null && SelectedEquipment != null)
             {
-                SelectedEquipment.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
         private void AddAssociatedCostToSubScopeExecute()
         {
+            SelectedSubScope.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToSubScope()
+        {
             if (SelectedAssociatedCost != null && SelectedSubScope != null)
             {
-                SelectedSubScope.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddAssociatedCostToDeviceExecute()
         {
+            SelectedDevice.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToDevice()
+        {
             if (SelectedAssociatedCost != null && SelectedDevice != null)
             {
-                SelectedDevice.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddAssociatedCostToControllerExecute()
         {
+            SelectedController.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToController()
+        {
             if (SelectedAssociatedCost != null && SelectedController != null)
             {
-                SelectedController.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         private void AddAssociatedCostToPanelExecute()
         {
+            SelectedPanel.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToPanel()
+        {
             if (SelectedAssociatedCost != null && SelectedPanel != null)
             {
-                SelectedPanel.AssociatedCosts.Add(SelectedAssociatedCost);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
