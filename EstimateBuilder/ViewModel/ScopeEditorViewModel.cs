@@ -144,6 +144,9 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
             ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupLocationDataGrid()

@@ -385,6 +385,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
         }
        
         private void addControlledScopeExecute()

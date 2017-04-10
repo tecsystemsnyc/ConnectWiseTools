@@ -225,6 +225,9 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
         }
 
         public void DragOver(IDropInfo dropInfo)
