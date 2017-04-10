@@ -67,20 +67,20 @@
                  Grid.Column="1"
                  Margin="5"/>
 
-        <Label Content="Estimator:" Grid.Row="1" Grid.ColumnSpan="2" 
+        <Label Content="Estimator:" Grid.Row="1" 
                Grid.Column="2" />
         <TextBox Text="{Binding Bid.Estimator}"
                  Grid.Row="1"
                  Grid.Column="3"
                  Margin="5"/>
 
-        <Label Content="Salesperson:" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="2" Margin="1,1,149,29" Grid.RowSpan="2"/>
+        <Label Content="Salesperson:" Grid.Row="2" Grid.Column="2"/>
         <TextBox Text="{Binding Bid.Salesperson}"
                  Grid.Row="2"
                  Grid.Column="3"
                  Margin="5"/>
         <Label Content="TEC Cost" FontWeight="Bold"
-               Grid.Row="4" Margin="0,2,0,28" Grid.RowSpan="2"/>
+               Grid.Row="4"/>
         <Label Content="Material:" Grid.Row="5" />
         <TextBlock Text="{Binding Bid.MaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="5" Grid.Column="1"
