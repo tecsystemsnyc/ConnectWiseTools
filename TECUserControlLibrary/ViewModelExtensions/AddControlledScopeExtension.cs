@@ -41,10 +41,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 unregisterChanges();
                 _controlledScope = value;
-
                 updateCollections();
                 registerChanges();
-
                 RaisePropertyChanged("ControlledScope");
             }
         }
@@ -388,19 +386,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
         }
-
-        private void nullifySelections(object item)
-        {
-            if(!(item is TECPanel))
-            {
-                SelectedPanel = null;
-            }
-            if (!(item is ControllerInPanel))
-            {
-                SelectedControllerInPanel = null;
-            }
-        }
-
+       
         private void addControlledScopeExecute()
         {
             for(int x = 0; x < ControlledScopeQuantity; x++)

@@ -49,11 +49,11 @@ namespace TECUserControlLibrary
             var source = e.Source;
             var row = sender as DataGridRow;
             bool isKeyboardFocused = row.IsKeyboardFocused;
-            //if (!isKeyboardFocused)
-            //{
-            //    row.IsSelected = false;
-            //    row.IsSelected = true;
-            //}
+            if (!isKeyboardFocused)
+            {
+                row.IsSelected = false;
+                row.IsSelected = true;
+            }
             bool sourceIsRowDetails = source is DataGridDetailsPresenter;
             bool ogSourceIsBorderOrTextBlock = (ogSource.GetType() == typeof(Border)) || (ogSource is TextBlock);
 
