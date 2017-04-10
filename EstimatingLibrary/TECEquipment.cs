@@ -105,7 +105,9 @@ namespace EstimatingLibrary
             _budgetUnitPrice = -1;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
+            base.PropertyChanged += TECEquipment_PropertyChanged;
         }
+        
         public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
@@ -177,6 +179,10 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Add", this, item);
                     checkForTotalsInSubScope(item as TECSubScope);
+                    if ((item as TECSubScope).Location == null)
+                    {
+                        (item as TECSubScope).Location = this.Location;
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -233,7 +239,22 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalDevices");
             }
         }
-
+        
+        private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ObjectPropertyChanged")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var oldNew = args.NewValue as Tuple<object, object>;
+                foreach (TECSubScope subScope in this.SubScope)
+                {
+                    if (subScope.Location == oldNew.Item1)
+                    {
+                        subScope.Location = this.Location;
+                    }
+                }
+            }
+        }
         #endregion
 
     }

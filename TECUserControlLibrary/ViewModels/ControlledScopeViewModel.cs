@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
@@ -258,8 +259,19 @@ namespace TECUserControlLibrary.ViewModels
 
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-
+                if(dropInfo.Data is TECControlledScope)
+                {
+                    Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+                    sourceItem = new TECControlledScope((dropInfo.Data as TECControlledScope), guidDictionary);
+                    var newControlledScope = sourceItem as TECControlledScope;
+                    ModelLinkingHelper.LinkControlledScopeObjects(newControlledScope.Systems,
+                        newControlledScope.Controllers, newControlledScope.Panels, Templates, guidDictionary);
+                }
+                else
+                {
+                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                }
+                
                 if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                 {
                     var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
