@@ -159,8 +159,9 @@ namespace EstimatingLibrary
             _budgetPriceModifier = -1;
             _equipment = new ObservableCollection<TECEquipment>();
             Equipment.CollectionChanged += Equipment_CollectionChanged;
+            base.PropertyChanged += TECSystem_PropertyChanged;
         }
-        
+
         public TECSystem() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
@@ -233,6 +234,10 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Add", this, item);
                     checkForTotalsInEquipment(item as TECEquipment);
+                    if((item as TECEquipment).Location == null)
+                    {
+                        (item as TECEquipment).Location = this.Location;
+                    }
                 }
 
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -296,6 +301,22 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("RemovedSubScope", this, args.NewValue);
             }
           
+        }
+        
+        private void TECSystem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "ObjectPropertyChanged")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var oldNew = args.NewValue as Tuple<object, object>;
+                foreach(TECEquipment equipment in this.Equipment)
+                {
+                    if(equipment.Location == oldNew.Item1)
+                    {
+                        equipment.Location = this.Location;
+                    }
+                }
+            }
         }
 
         private void checkForTotalsInEquipment(TECEquipment equipment)
