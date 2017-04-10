@@ -34,8 +34,6 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
-
-            scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             
             BidSet += () =>
             {
@@ -65,6 +63,15 @@ namespace EstimateBuilder.ViewModel
                     TemplatesHiddenChanged();
                     Properties.Settings.Default.Save();
                 }
+            }
+        }
+        override protected string ScopeDirectoryPath
+        {
+            get { return Properties.Settings.Default.ScopeDirectoryPath; }
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
             }
         }
         #endregion
@@ -165,7 +172,6 @@ namespace EstimateBuilder.ViewModel
                     MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                     return;
                 }
-                Properties.Settings.Default.ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
@@ -242,14 +248,7 @@ namespace EstimateBuilder.ViewModel
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (Properties.Settings.Default.ScopeDirectoryPath != null)
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.ScopeDirectoryPath;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             openFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
             openFileDialog.DefaultExt = "pdf";

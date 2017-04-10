@@ -50,6 +50,20 @@ namespace Scope_Builder.ViewModel
             }
         }
 
+        protected override string ScopeDirectoryPath
+        {
+            get
+            {
+                return Properties.Settings.Default.ScopeDirectoryPath;
+            }
+
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         #region VMExtensions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public LocationDataGridExtension LocationDataGrid { get; set; }
@@ -90,7 +104,6 @@ namespace Scope_Builder.ViewModel
             TemplatesVisibility = Visibility.Visible;
 
             startupFile = Properties.Settings.Default.StartupFile;
-            scopeDirectoryPath = Properties.Settings.Default.ScopeDirectoryPath;
             checkForOpenWith(Properties.Settings.Default.StartupFile);
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 

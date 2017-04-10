@@ -18,7 +18,7 @@ using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class BidEditorBase : ViewModelBase
+    abstract public class BidEditorBase : ViewModelBase
     {
 
         #region Constants
@@ -118,6 +118,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public string TECLogo { get; set; }
 
+        private bool isNew;
+
         #region Settings Properties
         public string TemplatesFilePath
         {
@@ -131,6 +133,12 @@ namespace TECUserControlLibrary.ViewModels
                     Properties.Settings.Default.Save();
                 }
             }
+        }
+
+        abstract protected string ScopeDirectoryPath
+        {
+            get;
+            set;
         }
         #endregion
 
@@ -156,7 +164,6 @@ namespace TECUserControlLibrary.ViewModels
         private ChangeStack stack;
         private string bidDBFilePath;
         public string startupFile;
-        public string scopeDirectoryPath;
         #endregion
 
         #region Delgates
@@ -172,6 +179,8 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
         public BidEditorBase()
         {
+            isNew = true;
+
             setupStatusBar();
             SetBusyStatus("Initializing Program...");
 
@@ -316,9 +325,9 @@ namespace TECUserControlLibrary.ViewModels
         private string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null && !isNew)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -342,9 +351,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -367,9 +376,9 @@ namespace TECUserControlLibrary.ViewModels
         private string getCSVSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -392,9 +401,9 @@ namespace TECUserControlLibrary.ViewModels
         private string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                openFileDialog.InitialDirectory = scopeDirectoryPath;
+                openFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -429,7 +438,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 path = openFileDialog.FileName;
                 TemplatesFilePath = path;
-                Properties.Settings.Default.Save();
             }
 
             return path;
@@ -444,7 +452,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SetBusyStatus("Loading " + path);
                 bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
@@ -510,6 +518,7 @@ namespace TECUserControlLibrary.ViewModels
                     DebugHandler.LogDebugMessage("Creating new bid.");
                     bidDBFilePath = null;
                     Bid = new TECBid();
+                    isNew = true;
                 }
             }
             else
@@ -517,6 +526,7 @@ namespace TECUserControlLibrary.ViewModels
                 DebugHandler.LogDebugMessage("Creating new bid.");
                 bidDBFilePath = null;
                 Bid = new TECBid();
+                isNew = true;
             }
             
         }
@@ -538,7 +548,7 @@ namespace TECUserControlLibrary.ViewModels
                 worker.DoWork += (s, e) =>
                 {
                     bidDBFilePath = path;
-                    scopeDirectoryPath = Path.GetDirectoryName(path);
+                    ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                     if (!UtilitiesMethods.IsFileLocked(path))
                     {
@@ -553,6 +563,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     ResetStatus();
                     Bid = loadingBid;
+                    isNew = false;
                 };
                 
                 worker.RunWorkerAsync();
@@ -584,8 +595,6 @@ namespace TECUserControlLibrary.ViewModels
 
             if (path != null)
             {
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
@@ -603,8 +612,6 @@ namespace TECUserControlLibrary.ViewModels
             string path = getCSVSavePath();
             if (path != null)
             {
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     CSVWriter writer = new CSVWriter(path);
@@ -810,7 +817,7 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
@@ -835,6 +842,7 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     ResetStatus();
+                    isNew = false;
                 };
 
                 worker.RunWorkerAsync();
@@ -852,7 +860,7 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
