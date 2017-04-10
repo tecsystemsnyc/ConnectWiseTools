@@ -459,9 +459,7 @@ namespace TECUserControlLibrary.ViewModels
             IsReady = true;
             UserCanInteract = true;
         }
-
         
-
         #region Event Handlers
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -527,7 +525,7 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 SetBusyStatus("Loading File: " + path, false);
-
+                TECBid loadingBid = new TECBid();
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += (s, e) =>
                 {
@@ -536,7 +534,7 @@ namespace TECUserControlLibrary.ViewModels
 
                     if (!UtilitiesMethods.IsFileLocked(path))
                     {
-                        Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
                     }
                     else
                     {
@@ -546,6 +544,7 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     ResetStatus();
+                    Bid = loadingBid;
                 };
                 
                 worker.RunWorkerAsync();
@@ -916,7 +915,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         
-
         #endregion
     }
 }
