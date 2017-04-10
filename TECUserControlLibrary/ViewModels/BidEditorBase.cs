@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
@@ -27,10 +28,26 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
-        protected bool isReady
+        private bool _isReady;
+        public bool IsReady
         {
-            get;
-            private set;
+            get { return _isReady; }
+            set
+            {
+                _isReady = value;
+                RaisePropertyChanged("IsReady");
+            }
+        }
+
+        private bool _userCanInteract;
+        public bool UserCanInteract
+        {
+            get { return _userCanInteract; }
+            set
+            {
+                _userCanInteract = value;
+                RaisePropertyChanged("UserCanInteract");
+            }
         }
 
         private bool _templatesLoaded;
@@ -430,21 +447,20 @@ namespace TECUserControlLibrary.ViewModels
                 ResetStatus();
             }
         }
-        protected void SetBusyStatus(string statusText)
+        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
         {
             StatusBarVM.CurrentStatusText = statusText;
-            isReady = false;
+            IsReady = false;
+            UserCanInteract = userCanInteract;
         }
         protected void ResetStatus()
         {
             StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-            isReady = true;
+            IsReady = true;
+            UserCanInteract = true;
         }
 
-        protected bool IsReady()
-        {
-            return isReady;
-        }
+        
 
         #region Event Handlers
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -461,7 +477,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
         private void NewExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -500,7 +516,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void LoadExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -510,24 +526,34 @@ namespace TECUserControlLibrary.ViewModels
             string path = getLoadPath();
             if (path != null)
             {
-                SetBusyStatus("Loading File: " + path);
-                bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                SetBusyStatus("Loading File: " + path, false);
 
-                if (!UtilitiesMethods.IsFileLocked(path))
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
                 {
-                    Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
-                }
-                else
+                    bidDBFilePath = path;
+                    scopeDirectoryPath = Path.GetDirectoryName(path);
+
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
                 {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                }
-                ResetStatus();
+                    ResetStatus();
+                };
+                
+                worker.RunWorkerAsync();
             }
         }
         private void SaveExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -538,7 +564,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void SaveAsExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -591,7 +617,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected void LoadTemplatesExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -605,26 +631,35 @@ namespace TECUserControlLibrary.ViewModels
 
             if (TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath);
-                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
                 {
-                    
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                    Bid.DeviceCatalog = Templates.DeviceCatalog;
-                    Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                    Bid.Tags = Templates.Tags;
-                    Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
-                    Bid.ConduitTypes = Templates.ConduitTypeCatalog;
-                    Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
-                    templatesLoaded = true;
-                }
-                else
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        Bid.DeviceCatalog = Templates.DeviceCatalog;
+                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
+                        Bid.Tags = Templates.Tags;
+                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                        templatesLoaded = true;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished loading templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
                 {
-                    DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                }
-                DebugHandler.LogDebugMessage("Finished loading templates");
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
             }
-            ResetStatus();
         }
 
         private void UndoExecute()
@@ -653,38 +688,49 @@ namespace TECUserControlLibrary.ViewModels
 
         private void RefreshTemplatesExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
             if (TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath);
-                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
 
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                    Bid.DeviceCatalog = Templates.DeviceCatalog;
-                    Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                    Bid.Tags = Templates.Tags;
-                    Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
-                    Bid.ConduitTypes = Templates.ConduitTypeCatalog;
-                    Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
-                    templatesLoaded = true;
-                }
-                else
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
                 {
-                    DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                }
-                DebugHandler.LogDebugMessage("Finished loading templates");
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        Bid.DeviceCatalog = Templates.DeviceCatalog;
+                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
+                        Bid.Tags = Templates.Tags;
+                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                        templatesLoaded = true;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished refreshing templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+
+                worker.RunWorkerAsync();
+                
             }
-            ResetStatus();
         }
 
         private void ClosingExecute(CancelEventArgs e)
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 e.Cancel = true;
@@ -803,7 +849,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
-                
+
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     if (File.Exists(path))
@@ -869,6 +915,7 @@ namespace TECUserControlLibrary.ViewModels
             return saveSuccessful;
         }
         #endregion
+        
 
         #endregion
     }
