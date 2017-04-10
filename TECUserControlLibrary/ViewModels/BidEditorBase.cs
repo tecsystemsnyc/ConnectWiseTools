@@ -47,6 +47,14 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _userCanInteract = value;
                 RaisePropertyChanged("UserCanInteract");
+                if (UserCanInteract)
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
+                else
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                }
             }
         }
 
