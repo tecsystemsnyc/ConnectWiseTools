@@ -46,7 +46,7 @@
             <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
+    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}" IsEnabled="{Binding IsReady}">
         <cLibControls:MenuControl ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
         <Grid>
