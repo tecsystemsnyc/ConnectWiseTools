@@ -49,7 +49,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("UserCanInteract");
                 if (UserCanInteract)
                 {
-                    Mouse.OverrideCursor = Cursors.Arrow;
+                    Mouse.OverrideCursor = null;
                 }
                 else
                 {
