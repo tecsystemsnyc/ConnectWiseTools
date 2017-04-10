@@ -2529,6 +2529,11 @@ namespace EstimatingUtilitiesLibrary
                     var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                     data.Add(field.Name, dataString);
                 }
+                else if (field.Property.Name == "DBVersion" && field.Property.ReflectedType == typeof(HelperProperties))
+                {
+                    var dataString = objectToDBString(Properties.Settings.Default.Version);
+                    data.Add(field.Name, dataString);
+                }
                 assembleDataWithObjects(data, relevantObjects, tableInfo, field);
             }
 
