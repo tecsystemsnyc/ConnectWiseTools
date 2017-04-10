@@ -2651,7 +2651,7 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(Properties.Settings.Default.Version);
                         data.Add(field.Name, dataString);
                     }
-                    assembleDataWithObjects(data, relevantObjects, tableInfo, field);
+                    assembleDataWithItem(data, item, tableInfo, field);
                 }
                 currentField++;
             }
@@ -2669,6 +2669,24 @@ namespace EstimatingUtilitiesLibrary
                     var dataString = objectToDBString(field.Property.GetValue(item, null));
                     data.Add(field.Name, dataString);
                 }
+            }
+            return data;
+        }
+        private static Dictionary<string, string> assembleDataWithItem(Dictionary<string, string> data, StackItem item, TableInfo tableInfo, TableField field)
+        {
+            if (isFieldType(tableInfo, field, item.TargetObject, item.TargetType))
+            {
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.TargetType, DEBUG_GENERIC);
+
+                var dataString = objectToDBString(field.Property.GetValue(item.TargetObject, null));
+                data.Add(field.Name, dataString);
+            }
+            else if (isFieldType(tableInfo, field, item.ReferenceObject, item.ReferenceType))
+            {
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.ReferenceType, DEBUG_GENERIC);
+
+                var dataString = objectToDBString(field.Property.GetValue(item.ReferenceObject, null));
+                data.Add(field.Name, dataString);
             }
             return data;
         }
@@ -2879,7 +2897,16 @@ namespace EstimatingUtilitiesLibrary
                 return true;
             else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
                 return true;
-            else if (field.Property.ReflectedType == typeof(TECScope) && isScope(type))
+            else
+                return false;
+        }
+        private static bool isFieldType(TableInfo table, TableField field, Object consideredObject, Type consideredType)
+        {
+            if (field.Property == null)
+                return false;
+            else if (field.Property.ReflectedType == consideredType)
+                return true;
+            else if (field.Property.ReflectedType == consideredObject.GetType())
                 return true;
             else
                 return false;
