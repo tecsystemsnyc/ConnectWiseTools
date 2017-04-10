@@ -42,6 +42,8 @@
                             <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="100"/>
                             <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="100"/>
                             <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>
+                            <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </HierarchicalDataTemplate>
