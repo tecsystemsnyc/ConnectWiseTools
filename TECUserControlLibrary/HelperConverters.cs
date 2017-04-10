@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Windows.Media;
 using TECUserControlLibrary.UserControls;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
 
 namespace TECUserControlLibrary.HelperConverters
 {
