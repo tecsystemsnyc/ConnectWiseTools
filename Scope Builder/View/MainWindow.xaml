@@ -46,7 +46,7 @@
             <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}">
+    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}" IsEnabled="{Binding IsReady}">
         <cLibControls:MenuControl ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
         <Grid>
@@ -132,6 +132,8 @@
                     Grid.RowSpan="2"
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
                 <TabItem Header="None"
+                         Visibility="Collapsed"/>
+                <TabItem Header="Controlled Scope"
                          Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"

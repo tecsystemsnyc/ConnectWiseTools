@@ -20,7 +20,7 @@
         <DataGrid  ItemsSource="{Binding Path=ScopeTreeSource}"
                            AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
+                <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True" />
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto"  MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto"  MinWidth="70"/>
                 <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="70" IsReadOnly="True"
@@ -38,7 +38,7 @@
                               VirtualizingPanel.ScrollUnit="Pixel"
                               Margin="20,5,5,5">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
+                            <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True"/>
                             <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="100"/>
                             <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="100"/>
                             <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>

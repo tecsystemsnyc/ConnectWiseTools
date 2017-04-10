@@ -24,6 +24,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -94,14 +95,14 @@
                TextAlignment="Right" />
 
         <Label Content="Subcontractor Cost" FontWeight="Bold"
-               Grid.Row="13" />
-        <Label Content="Material:" Grid.Row="14" />
+               Grid.Row="14" />
+        <Label Content="Material:" Grid.Row="15" />
         <TextBlock Text="{Binding Bid.ElectricalMaterialCost, StringFormat= {} {0:C}}" 
-               Grid.Row="14" Grid.Column="1"
-               TextAlignment="Right"/>
-        <Label Content="Labor:" Grid.Row="15" />
-        <TextBlock Text="{Binding Bid.SubcontractorLaborCost, StringFormat= {} {0:C}}" 
                Grid.Row="15" Grid.Column="1"
+               TextAlignment="Right"/>
+        <Label Content="Labor:" Grid.Row="16" />
+        <TextBlock Text="{Binding Bid.SubcontractorLaborCost, StringFormat= {} {0:C}}" 
+               Grid.Row="16" Grid.Column="1"
                TextAlignment="Right" />
         <Label Content="Escalation:" 
                Grid.Row="8"/>
@@ -128,17 +129,17 @@
                  HorizontalContentAlignment="Right"/>
 
         <Label Content="Escalation:" 
-               Grid.Row="16" />
+               Grid.Row="17" />
         <TextBox Text="{Binding Bid.Parameters.SubcontractorEscalation, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
-                 Grid.Row="16"
+                 Grid.Row="17"
                  Grid.Column="1"
                  Margin="5"
                  HorizontalContentAlignment="Right"/>
 
         <Label Content="Markup:" 
-               Grid.Row="17" />
+               Grid.Row="18" />
         <TextBox Text="{Binding Bid.Parameters.SubcontractorMarkup, StringFormat={}{0}%, Converter={cnvt:PercentageToNumberConverter}}"
-                 Grid.Row="17"
+                 Grid.Row="18"
                  Grid.Column="1"
                  Margin="5"
                  HorizontalContentAlignment="Right"/>
@@ -176,9 +177,9 @@
         </Grid>
 
         <Label Content="Subtotal" 
-               Grid.Row="18" />
+               Grid.Row="19" />
         <TextBlock Text="{Binding Bid.SubcontractorSubtotal, StringFormat= {} {0:C}}"
-                 Grid.Row="18"
+                 Grid.Row="19"
                  Grid.Column="1"
                TextAlignment="Right"/>
 
@@ -297,39 +298,46 @@
             Grid.Column="5"
             TextAlignment="Right"/>
 
+        <Border BorderThickness="1" BorderBrush="Black"
+                Grid.Column="3" Grid.Row="4"
+                Grid.ColumnSpan="3" Grid.RowSpan="10"/>
+
+        <Label Content="Totals" FontWeight="Bold"
+               Grid.Row="14" Grid.Column="3" />
+        
         <Label Content="Total Price:" 
-               Grid.Row="15"
+               Grid.Row="16"
                FontWeight="Bold"
-               FontStyle="Italic" Grid.Column="4"/>
-        <Border Grid.Row="15"
-            Grid.Column="5"
+               FontStyle="Italic" Grid.Column="3"/>
+        <Border Grid.Row="16"
+            Grid.Column="4"
             BorderThickness="2"
             BorderBrush="Black">
             <TextBlock Text="{Binding Bid.TotalPrice, StringFormat=' \{0:C\}'}" TextAlignment="Right"/>
         </Border>
 
         <Label Content="Total Cost:" 
-            Grid.Row="14" Grid.Column="4"/>
+            Grid.Row="15" Grid.Column="3"/>
         <TextBlock Text="{Binding Bid.TotalCost, StringFormat=' \{0:C\}'}"
-            Grid.Row="14"
-            Grid.Column="5"
+            Grid.Row="15"
+            Grid.Column="4"
             TextAlignment="Right"/>
         <Label Content="Total Markup:" 
-            Grid.Row="16" Grid.Column="4"/>
+            Grid.Row="17" Grid.Column="3"/>
         <TextBlock Text="{Binding Markup, StringFormat=' \{0:C\}'}"
-            Grid.Row="16"
-            Grid.Column="5"
+            Grid.Row="17"
+            Grid.Column="4"
             TextAlignment="Right"/>
 
-        <Label Content="Price per Point:" Grid.Row="16" Margin="0,25,0,5" Grid.RowSpan="2" Grid.Column="4"/>
+        <Label Content="Price per Point:" Grid.Row="18" Grid.Column="3"/>
         <TextBlock Text="{Binding Bid.PricePerPoint, StringFormat= {} {0:C}}" 
-               Grid.Row="17" Grid.Column="5"
+               Grid.Row="18" Grid.Column="4"
                TextAlignment="Right"/>
         <Label Content="Set Price:" 
-            Grid.Row="17" Margin="0,25,0,5" Grid.RowSpan="2" Grid.Column="4"/>
+            Grid.Row="19" Grid.Column="3"/>
         <TextBox Text="{Binding UserPrice, StringFormat= {} {0:C}}"
-            Grid.Row="18"
-            Grid.Column="5" Margin="5"
+            Grid.Row="19"
+            Grid.Column="4" Margin="5"
             HorizontalContentAlignment="Right"/>
     </Grid>
 </UserControl>

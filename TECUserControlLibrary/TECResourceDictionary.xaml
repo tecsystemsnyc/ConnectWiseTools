@@ -133,6 +133,9 @@
     <!--Expand Grid Detail-->
     <DataTemplate x:Key="ExpandDetails">
         <ToggleButton Name="ShowDetails" 
+                      IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                                        Path=DataContext, 
+                                        Converter={cnvt:DataContextToEnableConverter}}"
                     IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
                                         Converter={cnvt:VisbilityToBooleanConverter}, 

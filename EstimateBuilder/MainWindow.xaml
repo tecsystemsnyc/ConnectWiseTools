@@ -47,11 +47,10 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
+    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding IsReady}">
 
         <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
-
 
         <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>

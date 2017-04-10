@@ -41,7 +41,7 @@ namespace EstimateBuilder.ViewModel
             setupControllersPanelsTab();
             setupAddControlledScope();
 
-            DGTabIndex = GridIndex.Scope;
+            DGTabIndex = GridIndex.AddControlledScope;
 
             TemplatesVisibility = Visibility.Visible;
 
@@ -177,6 +177,8 @@ namespace EstimateBuilder.ViewModel
         private void setupAddControlledScope()
         {
             AddControlledScopeTab = new AddControlledScopeExtension(Bid);
+            AddControlledScopeTab.SelectionChanged += EditTab.updateSelection;
+            AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         #endregion
         

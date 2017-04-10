@@ -69,6 +69,11 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             var outPanel = new TECPanel(this);
+            outPanel._controllers = new ObservableCollection<TECController>();
+            foreach(TECController controller in this.Controllers)
+            {
+                outPanel.Controllers.Add(controller.Copy() as TECController);
+            }
             outPanel._guid = _guid;
             return outPanel;
         }

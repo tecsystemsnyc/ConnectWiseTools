@@ -95,6 +95,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private VisibilityModel _dataGridVisibilty;
+        public VisibilityModel DataGridVisibilty
+        {
+            get { return _dataGridVisibilty; }
+            set
+            {
+                _dataGridVisibilty = value;
+                RaisePropertyChanged("DataGridVisibilty");
+            }
+        }
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;

@@ -377,6 +377,7 @@ namespace EstimatingUtilitiesLibrary
             //Bid Changed
             Bid.PropertyChanged += Object_PropertyChanged;
             Bid.Labor.PropertyChanged += Object_PropertyChanged;
+            Bid.Parameters.PropertyChanged += Object_PropertyChanged;
             //System Changed
             foreach (TECScopeBranch branch in Bid.ScopeTree)
             { registerScope(branch); }
@@ -753,26 +754,20 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
         {
-
             //Conduit Type
             if (connection.ConduitType != null)
             {
-                SaveStack.Add(new StackItem(change, connection, connection.ConduitType));
+                if(change == Change.Add)
+                {
+                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+
+                } else if (change == Change.Remove)
+                {
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+
+                }
             }
-
-            ////Parent Controller
-            //if (connection.ParentController != null)
-            //{
-            //    if (change == Change.Add)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ParentController));
-            //    }
-            //    else if (change == Change.Remove)
-            //    {
-            //        SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ParentController));
-            //    }
-            //}
-
+            
             #region If Connection is NetworkConnection
             if (connection is TECNetworkConnection)
             {
@@ -903,9 +898,12 @@ namespace EstimatingUtilitiesLibrary
         }
         private void handlePanelChildren(TECPanel panel, Change change)
         {
-            foreach(TECController controller in panel.Controllers)
+            handleScopeChildren(panel as TECScope, change);
+            StackItem item;
+            item = new StackItem(change, panel, panel.Type);
+            SaveStack.Add(item);
+            foreach (TECController controller in panel.Controllers)
             {
-                StackItem item;
                 if (change == Change.Add)
                 {
                     item = new StackItem(Change.AddRelationship, (object)controller, (object)panel);

@@ -21,7 +21,7 @@
         <DataGrid ItemsSource="{Binding Path=ProposalScopeSource}"
             AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Scope.Name}"
                                     Header="Name"
                                     Width="Auto"
