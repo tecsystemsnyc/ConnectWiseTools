@@ -47,26 +47,54 @@ namespace EstimatingLibrary
             linkManufacturersWithIOModules(templates.ManufacturerCatalog, templates.IOModuleCatalog);
         }
         public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
-            ObservableCollection<TECPanel> panels, TECBid bid, Dictionary<Guid, Guid> guidDictionary = null)
+            ObservableCollection<TECPanel> panels, object bidOrTemplates, Dictionary<Guid, Guid> guidDictionary = null)
         {
+            ObservableCollection<TECDevice> deviceCatalog = new ObservableCollection<TECDevice>();
+            ObservableCollection<TECPanelType> panelTypes = new ObservableCollection<TECPanelType>();
+            ObservableCollection<TECConduitType> conduitTypes = new ObservableCollection<TECConduitType>();
+            ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
+            ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
 
-            linkAllDevicesFromSystems(systems, bid.DeviceCatalog);
-            linkPanelTypesInPanel(bid.PanelTypeCatalog, panels);
-            linkConduitTypeWithConnections(bid.ConduitTypes, controllers);
-            linkManufacturersWithControllers(bid.ManufacturerCatalog, controllers);
-            linkIOModules(controllers, bid.IOModuleCatalog);
+            if(bidOrTemplates is TECBid)
+            {
+                var bid = bidOrTemplates as TECBid;
+                deviceCatalog = bid.DeviceCatalog;
+                panelTypes = bid.PanelTypeCatalog;
+                conduitTypes = bid.ConduitTypes;
+                manufacturers = bid.ManufacturerCatalog;
+                ioModules = bid.IOModuleCatalog;
+            }
+            else if(bidOrTemplates is TECTemplates)
+            {
+                var templates = bidOrTemplates as TECTemplates;
+                deviceCatalog = templates.DeviceCatalog;
+                panelTypes = templates.PanelTypeCatalog;
+                conduitTypes = templates.ConduitTypeCatalog;
+                manufacturers = templates.ManufacturerCatalog;
+                ioModules = templates.IOModuleCatalog;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            linkAllDevicesFromSystems(systems, deviceCatalog);
+            linkPanelTypesInPanel(panelTypes, panels);
+            linkConduitTypeWithConnections(conduitTypes, controllers);
+            linkManufacturersWithControllers(manufacturers, controllers);
+            linkIOModules(controllers, ioModules);
             foreach (TECSystem sys in systems)
             {
-                linkScopeChildrenInSystem(sys, bid);
+                linkScopeChildrenInSystem(sys, bidOrTemplates);
             }
             linkControllersInPanels(controllers, panels, guidDictionary);
             foreach (TECController control in controllers)
             {
-                linkScopeChildren(control, bid);
+                linkScopeChildren(control, bidOrTemplates);
             }
             foreach (TECPanel panel in panels)
             {
-                linkScopeChildren(panel, bid);
+                linkScopeChildren(panel, bidOrTemplates);
             }
             linkAllConnections(controllers, systems, guidDictionary);
         }

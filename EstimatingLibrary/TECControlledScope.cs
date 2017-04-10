@@ -74,20 +74,20 @@ namespace EstimatingLibrary
             registerSystems();
         }
         public TECControlledScope() : this(Guid.NewGuid()) { }
-        public TECControlledScope(TECControlledScope source) : this()
+        public TECControlledScope(TECControlledScope source, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             copyPropertiesFromScope(source);
             foreach (TECSystem system in source._systems)
             {
-                _systems.Add(new TECSystem(system));
+                _systems.Add(new TECSystem(system, guidDictionary));
             }
             foreach (TECController controller in source._controllers)
             {
-                _controllers.Add(new TECController(controller));
+                _controllers.Add(new TECController(controller, guidDictionary));
             }
             foreach (TECPanel panel in source._panels)
             {
-                _panels.Add(new TECPanel(panel));
+                _panels.Add(new TECPanel(panel, guidDictionary));
             }
         }
         
@@ -145,8 +145,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         public override object Copy()
         {
             var outScope = new TECControlledScope(_guid);
