@@ -37,6 +37,8 @@
                                         SelectedItemBinding="{Binding SubScope.Connection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         Header="Conduit" Width="Auto"
                                         DisplayMemberPath="Name"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

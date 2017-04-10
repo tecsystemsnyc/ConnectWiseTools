@@ -43,6 +43,8 @@
                 <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto" MinWidth="60"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeQuantity, 
                                     Source={StaticResource proxy}}"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>

@@ -27,6 +27,8 @@
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" MinWidth="70" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Type}" Header="Type" MinWidth="40" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" MinWidth="70" Width="Auto"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

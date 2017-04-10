@@ -12,6 +12,8 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

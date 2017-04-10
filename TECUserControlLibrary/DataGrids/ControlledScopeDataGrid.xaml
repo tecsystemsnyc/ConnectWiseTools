@@ -37,6 +37,8 @@
                                     IsReadOnly="True"
                                     Visibility="{Binding Data.DebugVisibility,
                                     Source={StaticResource proxy}}"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

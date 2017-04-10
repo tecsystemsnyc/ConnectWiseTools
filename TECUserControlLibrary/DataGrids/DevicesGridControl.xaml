@@ -31,6 +31,8 @@
                                     ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>
                 <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                <DataGridTextColumn IsReadOnly="True"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
