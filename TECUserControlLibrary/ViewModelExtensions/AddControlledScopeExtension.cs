@@ -412,7 +412,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
             var targetCollection = dropInfo.TargetCollection;
 
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            if ((targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0) && sourceType != typeof(ControllerInPanel))
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
@@ -444,31 +444,45 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else
             {
                 var targetCollection = dropInfo.TargetCollection;
+                Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-                if (sourceItem is TECScope)
-                { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+                if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
                 {
-                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                    ControlledScope.Controllers.Add(sourceItem as TECController);
-                    sourceItem = controllerInPanel;
-                }
+                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
 
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                    if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                    { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
+                    if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+                    {
+                        var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
+                        Bid.Controllers.Add(sourceItem as TECController);
+                        sourceItem = controllerInPanel;
+                    }
+                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                    }
                 }
                 else
                 {
-                    if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                    { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
+                    sourceItem = dropInfo.Data;
+                    int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
+                    int removeIndex = currentIndex;
+                    if (dropInfo.InsertIndex < currentIndex)
+                    {
+                        removeIndex += 1;
+                    }
                     if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                    { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
                     else
-                    { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                    }
+                    ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
                 }
             }
             
