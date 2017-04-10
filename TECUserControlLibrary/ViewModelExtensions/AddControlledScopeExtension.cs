@@ -396,6 +396,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 Bid.addControlledScope(ControlledScope);
             }
+            ControlledScopeQuantity = 0;
         }
         private bool addControlledScopeCanExecute()
         {
