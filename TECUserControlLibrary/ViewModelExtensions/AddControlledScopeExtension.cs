@@ -49,6 +49,41 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanel _selectedPanel;
+        public TECPanel SelectedPanel
+        {
+            get
+            {
+                return _selectedPanel;
+            }
+            set
+            {
+                _selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+
+        private ControllerInPanel _selectedControllerInPanel;
+        public ControllerInPanel SelectedControllerInPanel
+        {
+            get
+            {
+                return _selectedControllerInPanel;
+            }
+            set
+            {
+                _selectedControllerInPanel = value;
+                RaisePropertyChanged("SelectedControllerInPanel");
+                TECController senderObject = null;
+                if (_selectedControllerInPanel != null)
+                {
+                    senderObject = _selectedControllerInPanel.Controller;
+                }
+                SelectionChanged?.Invoke(senderObject);
+            }
+        }
+
         private int _controlledScopeQuantity;
         public int ControlledScopeQuantity
         {
@@ -70,8 +105,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ScopeSource");
             }
         }
-
-
+        
         private ObservableCollection<TECController> _controllerSelections;
         public ObservableCollection<TECController> ControllerSelections
         {
@@ -130,6 +164,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _conduitTypeSelections = value;
                 RaisePropertyChanged("ConduitTypeSelections");
+            }
+        }
+
+        private VisibilityModel _dataGridVisibilty;
+        public VisibilityModel DataGridVisibilty
+        {
+            get { return _dataGridVisibilty; }
+            set
+            {
+                _dataGridVisibilty = value;
+                RaisePropertyChanged("DataGridVisibilty");
             }
         }
 
@@ -337,6 +382,23 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+        }
+
+        private void nullifySelections(object item)
+        {
+            if(!(item is TECPanel))
+            {
+                SelectedPanel = null;
+            }
+            if (!(item is ControllerInPanel))
+            {
+                SelectedControllerInPanel = null;
+            }
         }
 
         private void addControlledScopeExecute()
