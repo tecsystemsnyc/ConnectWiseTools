@@ -247,6 +247,10 @@ namespace EstimatingUtilitiesLibrary
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
+                //else if (e.PropertyName == "Index Changed")
+                //{
+
+                //}
                 else
                 {
                     message = "Edit change: " + oldValue;
@@ -260,7 +264,6 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
                 }
                 
-
             }
             else
             {
@@ -561,7 +564,7 @@ namespace EstimatingUtilitiesLibrary
         {
             try
             {
-                var parentCollection = UtilitiesMethods.GetChildCollection(item.TargetObject, item.ReferenceObject);
+                var parentCollection = UtilitiesMethods.GetChildCollection(item.TargetType, item.ReferenceObject);
                 ((IList)parentCollection).Remove(item.TargetObject);
             }
             catch
@@ -574,7 +577,7 @@ namespace EstimatingUtilitiesLibrary
         {
             try
             {
-                var parentCollection = UtilitiesMethods.GetChildCollection(item.TargetObject, item.ReferenceObject);
+                var parentCollection = UtilitiesMethods.GetChildCollection(item.TargetType, item.ReferenceObject);
                 ((IList)parentCollection).Add(item.TargetObject);
             }
             catch

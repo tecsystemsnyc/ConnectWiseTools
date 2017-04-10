@@ -2405,7 +2405,7 @@ namespace EstimatingUtilitiesLibrary
         {
             var tableInfo = new TableInfo(table);
 
-            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetObject, item.ReferenceObject);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, item.ReferenceObject);
             
             foreach(TECObject child in (IList)childrenCollection)
             {
@@ -2949,7 +2949,7 @@ namespace EstimatingUtilitiesLibrary
             parent = (parentObject as TECScope);
 
             int quantity = 0;
-            var childCollection = UtilitiesMethods.GetChildCollection(childObject, parentObject);
+            var childCollection = UtilitiesMethods.GetChildCollection(childObject.GetType(), parentObject);
 
             foreach(TECScope item in (IList)childCollection)
             {
