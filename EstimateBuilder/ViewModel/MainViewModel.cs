@@ -160,7 +160,7 @@ namespace EstimateBuilder.ViewModel
 
             if (path != null)
             {
-                if (!isReady)
+                if (!IsReady)
                 {
                     MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                     return;
