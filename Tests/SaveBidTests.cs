@@ -3201,7 +3201,7 @@ namespace Tests
             TECPanel expectedPanel = new TECPanel();
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-
+            expectedPanel.Type = bid.PanelTypeCatalog[0];
             bid.Panels.Add(expectedPanel);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
@@ -3291,6 +3291,7 @@ namespace Tests
             
             var expectedPanel = new TECPanel();
             expectedPanel.Name = "CSPANEL";
+            expectedPanel.Type = bid.PanelTypeCatalog[0];
             var expectedController = new TECController();
             expectedController.Name = "CSCONTROLLER";
             expectedController.Manufacturer = bid.ManufacturerCatalog[0];

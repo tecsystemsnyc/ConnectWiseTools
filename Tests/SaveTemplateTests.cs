@@ -2037,7 +2037,7 @@ namespace Tests
             TECPanel expectedPanel = new TECPanel();
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-
+            expectedPanel.Type = templates.PanelTypeCatalog[0];
             templates.PanelTemplates.Add(expectedPanel);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
@@ -2130,6 +2130,7 @@ namespace Tests
 
             var scopePanel = new TECPanel();
             scopePanel.Name = "Test Scope Name";
+            scopePanel.Type = templates.PanelTypeCatalog[0];
             expectedScope.Panels.Add(scopePanel);
             
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);

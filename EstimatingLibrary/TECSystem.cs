@@ -236,7 +236,7 @@ namespace EstimatingLibrary
                     checkForTotalsInEquipment(item as TECEquipment);
                     if((item as TECEquipment).Location == null)
                     {
-                        (item as TECEquipment).Location = this.Location;
+                        (item as TECEquipment).SetLocationFromParent(this.Location);
                     }
                 }
 
@@ -313,7 +313,7 @@ namespace EstimatingLibrary
                 {
                     if(equipment.Location == oldNew.Item1)
                     {
-                        equipment.Location = this.Location;
+                        equipment.SetLocationFromParent(this.Location);
                     }
                 }
             }

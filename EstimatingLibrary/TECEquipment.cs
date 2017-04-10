@@ -181,7 +181,7 @@ namespace EstimatingLibrary
                     checkForTotalsInSubScope(item as TECSubScope);
                     if ((item as TECSubScope).Location == null)
                     {
-                        (item as TECSubScope).Location = this.Location;
+                        (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
                 }
             }
@@ -250,7 +250,7 @@ namespace EstimatingLibrary
                 {
                     if (subScope.Location == oldNew.Item1)
                     {
-                        subScope.Location = this.Location;
+                        subScope.SetLocationFromParent(this.Location);
                     }
                 }
             }

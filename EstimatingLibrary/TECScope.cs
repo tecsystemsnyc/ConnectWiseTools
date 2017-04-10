@@ -97,6 +97,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
             }
         }
+
+        public void SetLocationFromParent(TECLocation location)
+        {
+            var oldNew = Tuple.Create<Object, Object>(_location, location);
+            _location = location;
+            RaisePropertyChanged("Location");
+            var temp = Copy();
+            NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
+        }
+
         #endregion //Properties
 
         #region Constructors
