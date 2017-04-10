@@ -508,18 +508,20 @@ namespace TemplateBuilder.ViewModel
             }
             else
             {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                sourceItem = dropInfo.Data;
+
+                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
+                int finalIndex = dropInfo.InsertIndex;
+                if (dropInfo.InsertIndex > currentIndex)
                 {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                    finalIndex -= 1;
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
                 }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+
+                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
             }
         }
         #endregion

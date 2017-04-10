@@ -767,7 +767,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged("Edit", this, sender, typeof(TECBid), typeof(TECSystem));
             }
         }
 

@@ -231,21 +231,19 @@ namespace EstimateBuilder.ViewModel
             else
             {
                 sourceItem = dropInfo.Data;
+                
                 int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int removeIndex = currentIndex;
-                if (dropInfo.InsertIndex < currentIndex)
+                int finalIndex = dropInfo.InsertIndex;
+                if (dropInfo.InsertIndex > currentIndex)
                 {
-                    removeIndex += 1;
+                    finalIndex -= 1;
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
                 }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
-                ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
+                
+                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
             }
         }
         #endregion
