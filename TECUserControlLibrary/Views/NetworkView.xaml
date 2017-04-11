@@ -97,7 +97,7 @@
                                 <Button Grid.Column="5"
                                     Content="Add"
                                     Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
-                                    CommandParameter="{Binding Controller}"
+                                    CommandParameter="{Binding}"
                                     Margin="5"/>
                             </Grid>
                             <DataGrid ItemsSource="{Binding ChildNetworkConnections}"
