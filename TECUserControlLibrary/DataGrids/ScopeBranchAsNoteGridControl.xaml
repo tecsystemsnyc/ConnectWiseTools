@@ -37,8 +37,6 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
                             <DataGridTextColumn Binding="{Binding Name}" Header="Text" Width="Auto" MinWidth="100"/>
-                            <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </HierarchicalDataTemplate>

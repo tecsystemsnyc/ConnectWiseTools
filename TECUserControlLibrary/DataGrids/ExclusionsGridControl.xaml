@@ -13,8 +13,6 @@
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Text}" Header="Exclusion" Width="*"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

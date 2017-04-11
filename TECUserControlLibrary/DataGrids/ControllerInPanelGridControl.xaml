@@ -33,8 +33,6 @@
                                         MinWidth="100"/>
                 <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto" MinWidth="75"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

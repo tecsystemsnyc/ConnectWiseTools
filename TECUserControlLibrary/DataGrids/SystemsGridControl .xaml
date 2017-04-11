@@ -77,8 +77,6 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemTotalPrice,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>

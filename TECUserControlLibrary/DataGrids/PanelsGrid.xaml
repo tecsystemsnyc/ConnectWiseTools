@@ -31,8 +31,6 @@
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" MinWidth="40" />
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto" MinWidth="70" />
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>

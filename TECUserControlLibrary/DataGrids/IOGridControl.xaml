@@ -32,8 +32,6 @@
                                         Converter={cnvt:SelectedItemToIOModuleConverter}}"
                                         Header="IO Module" Width="Auto" MinWidth="70"
                                         DisplayMemberPath="Name"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
 
         </DataGrid>

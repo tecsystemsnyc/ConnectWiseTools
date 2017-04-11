@@ -190,7 +190,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
-                    NotifyPropertyChanged("RemovedSubScope", this, item);
+                    NotifyPropertyChanged("RemovedSubScope", this, item); 
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)

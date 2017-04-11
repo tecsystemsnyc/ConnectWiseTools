@@ -29,8 +29,6 @@
                 <DataGridCheckBoxColumn Binding="{Binding IsProposed, UpdateSourceTrigger=PropertyChanged}"
                     Header="Include"
                     Width="60"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
