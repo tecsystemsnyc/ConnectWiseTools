@@ -30,6 +30,7 @@ namespace EstimateBuilder.ViewModel
     {
         public MainViewModel()
         {
+            isEstimate = true;
             programName = "Estimate Builder";
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);

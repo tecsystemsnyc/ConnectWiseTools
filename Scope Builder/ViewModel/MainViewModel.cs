@@ -95,6 +95,7 @@ namespace Scope_Builder.ViewModel
         #region Intitializer
         public MainViewModel()
         {
+            isEstimate = false;
             programName = "Scope Builder";
 
             setupAll();

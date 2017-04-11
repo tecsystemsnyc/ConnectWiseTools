@@ -120,6 +120,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool isNew;
 
+        protected bool isEstimate;
+
         #region Settings Properties
         public string TemplatesFilePath
         {
@@ -597,7 +599,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
+                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
