@@ -88,8 +88,8 @@
                               SelectedValue="{Binding SelectedDevice.ConnectionType}"
                              Margin="5"/>
                 <Label Grid.Column="0"
-                           Grid.Row="4"
-                           Content="Manufacturer:"/>
+                       Grid.Row="4"
+                       Content="Manufacturer:"/>
                 <ComboBox ItemsSource="{Binding ManufacturerSelections}"
                           DisplayMemberPath="Name"
                           Grid.Row="4" Grid.Column="1" Margin="5"
