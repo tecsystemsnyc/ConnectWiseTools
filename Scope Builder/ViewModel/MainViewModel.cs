@@ -106,6 +106,8 @@ namespace Scope_Builder.ViewModel
 
             startupFile = Properties.Settings.Default.StartupFile;
             checkForOpenWith(Properties.Settings.Default.StartupFile);
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             BidSet += () =>
