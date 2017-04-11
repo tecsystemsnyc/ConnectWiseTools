@@ -628,6 +628,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected void LoadTemplatesExecute()
         {
+            var loadedTemplates = new TECTemplates();
             if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
@@ -650,14 +651,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
 
-                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                        Bid.DeviceCatalog = Templates.DeviceCatalog;
-                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                        Bid.Tags = Templates.Tags;
-                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
-                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
-                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
-                        templatesLoaded = true;
+                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                     }
                     else
                     {
@@ -667,6 +661,9 @@ namespace TECUserControlLibrary.ViewModels
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
+                    Templates = loadedTemplates;
+                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                    templatesLoaded = true;
                     ResetStatus();
                 };
                 worker.RunWorkerAsync();

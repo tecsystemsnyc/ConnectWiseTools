@@ -222,7 +222,6 @@ namespace EstimatingLibrary
                     TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, guidDictionary);
                     connectionToAdd.ParentController = this;
                     _childrenConnections.Add(connectionToAdd);
-
                 }
                 else if (connection is TECNetworkConnection)
                 {
@@ -230,7 +229,6 @@ namespace EstimatingLibrary
                     TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, guidDictionary);
                     connectionToAdd.ParentController = this;
                     _childrenConnections.Add(connectionToAdd);
-
                 }
             }
             _manufacturer = controllerSource.Manufacturer;
