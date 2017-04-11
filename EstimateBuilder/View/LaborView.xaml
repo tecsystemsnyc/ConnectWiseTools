@@ -242,9 +242,10 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Overtime:"/>
+            <TextBlock Text="Overtime:" Margin="2,0,0,0"/>
             <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsOnOvertime}"
                       HorizontalAlignment="Center" Margin="2"/>
+            <Border Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="Black"/>
         </Grid>
 
         <Grid Grid.Column="9" Grid.Row="7">
@@ -252,9 +253,10 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Union:"/>
+            <TextBlock Text="Union:" Margin="2,0,0,0"/>
             <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsUnion}"
                       HorizontalAlignment="Center" Margin="2"/>
+            <Border Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="Black"/>
         </Grid>
         
         
