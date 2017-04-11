@@ -541,6 +541,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField IncludeStubUp = new TableField("IncludeStubUp", "TEXT", ObjectType.GetProperty("IncludeStubUp"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ConnectionID

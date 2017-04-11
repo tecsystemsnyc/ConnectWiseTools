@@ -35,10 +35,9 @@
                 <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Length" Width="Auto" MinWidth="50"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding SubScope.Connection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
-                                        Header="Conduit" Width="Auto"
+                                        Header="Conduit" Width="Auto" MinWidth="50"
                                         DisplayMemberPath="Name"/>
-                <DataGridTextColumn IsReadOnly="True"
-                                    Width="*"/>
+                <DataGridCheckBoxColumn Header="Stub Up" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

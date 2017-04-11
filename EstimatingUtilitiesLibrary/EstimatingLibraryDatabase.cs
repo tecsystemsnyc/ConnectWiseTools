@@ -1860,6 +1860,7 @@ namespace EstimatingUtilitiesLibrary
             connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
+            connection.IncludeStubUp = row[SubScopeConnectionTable.IncludeStubUp.Name].ToString().ToInt(0).ToBool();
             return connection;
         }
         private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row)
@@ -2320,7 +2321,6 @@ namespace EstimatingUtilitiesLibrary
                 if(IO.IOModule != null)
                 {
                     addObject(new StackItem(Change.Add, IO, IO.IOModule));
-
                 }
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
@@ -2422,7 +2422,8 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                         data.Add(field.Name, dataString);
                     }
-                    assembleDataWithObjects(data, item.Objects(), tableInfo, field);
+                    object[] childObject = { child, item.ReferenceObject }; 
+                    assembleDataWithObjects(data, childObject, tableInfo, field);
                 }
                 if (data.Count > 0)
                 {
@@ -2556,7 +2557,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
                 bool allTypesMatch = sharesAllTypesForEdit(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                bool tableHasOnlyType = false;
+                if (item.TargetObject != null){
+                    tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                }
+                
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
                 if ((allTypesMatch || tableHasOnlyType) && (shouldIncludeCatalog))

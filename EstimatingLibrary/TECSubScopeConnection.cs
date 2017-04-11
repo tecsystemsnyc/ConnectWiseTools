@@ -12,7 +12,6 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private TECSubScope _subScope;
-        
         public TECSubScope SubScope
         {
             get { return _subScope; }
@@ -23,6 +22,18 @@ namespace EstimatingLibrary
                 _subScope = value;
                 RaisePropertyChanged("SubScope");
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
+            }
+        }
+
+        private bool _includeStubUp;
+        public bool IncludeStubUp
+        {
+            get { return _includeStubUp; }
+            set
+            {
+                var temp = Copy();
+                _includeStubUp = value;
+                NotifyPropertyChanged("IncludeStubUp", temp, this);
             }
         }
 
