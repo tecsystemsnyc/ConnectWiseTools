@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if ((Visibility)value == Visibility.Visible)
             {
-                return 200;
+                return 250;
             }
             else if ((Visibility)value == Visibility.Hidden)
             {
@@ -38,7 +38,7 @@ namespace TECUserControlLibrary.HelperConverters
             }
             else
             {
-                return 200;
+                return 250;
             }
         }
 
