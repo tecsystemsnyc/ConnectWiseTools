@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
@@ -165,14 +166,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 ServerControllers.Add(controller);
             }
-            else if (controller.IsBMS)
+            else if (controller.IsBMS || controller.ChildNetworkConnections.Count > 0)
             {
+                controller.Type = ControllerType.IsBMS;
                 BMSController newBMSController = new BMSController(controller, NetworkControllers);
                 BMSControllers.Add(newBMSController);
             }
             else if (controller.ParentConnection == null)
             {
                 StandaloneControllers.Add(controller);
+                controller.Type = ControllerType.IsStandalone;
+            }
+            else
+            {
+                controller.Type = ControllerType.IsNetworked;
             }
         }
 
@@ -195,6 +202,23 @@ namespace TECUserControlLibrary.ViewModels
                 if (bmsController.Controller == controller)
                 {
                     controllerToRemove = bmsController;
+                    List<TECController> childrenToRemove = new List<TECController>();
+                    foreach (TECNetworkConnection netConnect in controller.ChildNetworkConnections)
+                    {
+                        foreach (TECController control in netConnect.ChildrenControllers)
+                        {
+                            if (control.Type == ControllerType.IsNetworked)
+                            {
+                                childrenToRemove.Add(control);
+                            }
+                        }
+                    }
+                    foreach (TECController control in childrenToRemove)
+                    {
+                        controller.RemoveController(control);
+                        sortAndAddController(control);
+                    }
+
                     break;
                 }
             }
@@ -430,13 +454,17 @@ namespace TECUserControlLibrary.ViewModels
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
                 //Handle removal from source collection
-                if (sourceType == typeof(TECController))
+                if (sourceCollection == ServerControllers)
                 {
-                    removeController(sourceItem as TECController);
+                    ServerControllers.Remove(sourceItem as TECController);
                 }
-                else if (sourceType == typeof(BMSController))
+                else if (sourceCollection == BMSControllers)
                 {
-                    removeController((sourceItem as BMSController).Controller);
+                    BMSControllers.Remove(sourceItem as BMSController);
+                }
+                else if (sourceCollection == StandaloneControllers)
+                {
+                    StandaloneControllers.Remove(sourceItem as TECController);
                 }
                 else if (sourceType == typeof(TECConnection))
                 {
@@ -444,7 +472,34 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    bool foundCollection = false;
+                    List<TECController> parentControllers = new List<TECController>();
+                    foreach (TECController control in ServerControllers)
+                    {
+                        parentControllers.Add(control);
+                    }
+                    foreach (BMSController control in BMSControllers)
+                    {
+                        parentControllers.Add(control.Controller);
+                    }
+                    //See if source collection is a child controller connection
+                    foreach (TECController parent in parentControllers)
+                    {
+                        foreach (TECNetworkConnection connection in parent.ChildrenConnections)
+                        {
+                            if (sourceCollection == connection.ChildrenControllers)
+                            {
+                                foundCollection = true;
+                                parent.RemoveController(sourceItem as TECController);
+                                break;
+                            }
+                        }
+                        if (foundCollection) break;
+                    }
+                    if (!foundCollection)
+                    {
+                        throw new NotImplementedException();
+                    }
                 }
 
                 //Handle addition to target collection

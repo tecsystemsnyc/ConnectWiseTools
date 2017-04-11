@@ -333,6 +333,7 @@ namespace EstimatingLibrary
         public void RemoveController(TECController controller)
         {
             bool exists = false;
+            TECNetworkConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
             {
                 if(connection is TECNetworkConnection)
@@ -344,8 +345,16 @@ namespace EstimatingLibrary
                         controller.ParentConnection = null;
                         netConnect.ChildrenControllers.Remove(controller);
                     }
+                    if (netConnect.ChildrenControllers.Count < 1)
+                    {
+                        connectionToRemove = netConnect;
+                    }
                 }
                 
+            }
+            if (connectionToRemove != null)
+            {
+                ChildrenConnections.Remove(connectionToRemove);
             }
             if (!exists)
             {
