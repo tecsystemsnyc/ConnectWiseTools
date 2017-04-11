@@ -37,7 +37,7 @@
                                         SelectedItemBinding="{Binding SubScope.Connection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         Header="Conduit" Width="Auto" MinWidth="50"
                                         DisplayMemberPath="Name"/>
-                <DataGridCheckBoxColumn Header="Stub Up" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridCheckBoxColumn Header="Stub Up Conduit Only" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
