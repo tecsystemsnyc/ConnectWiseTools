@@ -780,15 +780,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
                     {
-                        //try
-                        //{
+                        try
+                        {
                             EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                        //    EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        //}
+                        }
+                            catch (Exception ex)
+                        {
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
                     }
                     else
                     {
