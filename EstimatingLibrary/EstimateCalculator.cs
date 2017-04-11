@@ -504,7 +504,10 @@ namespace EstimatingLibrary
 
             outPrice += GetTECSubtotal(bid);
             outPrice += GetSubcontractorSubtotal(bid);
-
+            if(bid.Parameters.RequiresBond)
+            {
+                outPrice *= .013;
+            }
             return outPrice;
         }
 
