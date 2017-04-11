@@ -506,7 +506,7 @@ namespace EstimatingLibrary
             outPrice += GetSubcontractorSubtotal(bid);
             if(bid.Parameters.RequiresBond)
             {
-                outPrice *= .013;
+                outPrice *= 1.013;
             }
             return outPrice;
         }
