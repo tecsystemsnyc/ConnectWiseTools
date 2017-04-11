@@ -825,7 +825,8 @@ namespace EstimatingLibrary
             {
                 if(e.PropertyName == "Length" ||
                     e.PropertyName == "ConduitType" ||
-                    e.PropertyName == "ConnectionType")
+                    e.PropertyName == "ConnectionType" ||
+                    e.PropertyName == "IncludeStubUp")
                 {
                     updateElectricalMaterial();
                 }
