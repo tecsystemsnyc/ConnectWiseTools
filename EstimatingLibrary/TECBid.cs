@@ -1043,6 +1043,7 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("Tax");
             updateTECLabor();
+            updateElectricalLabor();
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("PricePerPoint");
