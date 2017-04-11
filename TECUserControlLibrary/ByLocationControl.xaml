@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:uLib="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent">
@@ -21,7 +22,7 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <local:LocationGridControl LocationSource="{Binding Path=LocationSource}"
+        <grids:LocationGridControl LocationSource="{Binding Path=LocationSource}"
                                    ViewModel="{Binding Path=ViewModel}"/>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -29,22 +30,22 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type uLib:LocationScopeType}}}"
-                      SelectedItem="{Binding Path=SelectedScopeType}"
+                      SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType}"
                       Margin="5"/>
             <TabControl Grid.Row="1"
-                        SelectedIndex="{Binding Path=SelectedScopeType, Converter={cnvt:EnumerationToIntegerConverter}}">
+                        SelectedIndex="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType, Converter={cnvt:LocationScopeTypeToIntegerConverter}}">
                 <TabItem Visibility="Collapsed">
-                    <local:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=SystemsSource}"
+                    <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=SystemsSource}"
                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                               AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
-                    <local:EquipmentGridControl EquipmentSource="{Binding ElementName=parent, Path=EquipmentSource}"
+                    <grids:EquipmentGridControl EquipmentSource="{Binding ElementName=parent, Path=EquipmentSource}"
                                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                 AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
-                    <local:SubScopeGridControl SubScopeSource="{Binding ElementName=parent, Path=SubScopeSource}"
+                    <grids:SubScopeGridControl SubScopeSource="{Binding ElementName=parent, Path=SubScopeSource}"
                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                AllowAddingNew="False"/>
                 </TabItem>

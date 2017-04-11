@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -49,9 +51,7 @@ namespace EstimatingUtilitiesLibrary
             //file is not locked
             return false;
         }
-
         
-
         public static string CommaSeparatedString(List<string> strings)
         {
             int i = 0;
@@ -114,12 +114,19 @@ namespace EstimatingUtilitiesLibrary
 
         #region String Extensions
 
-        public static int ToInt(this string str)
+        public static int ToInt(this string str, int? def = null)
         {
             int i;
             if (!int.TryParse(str, out i))
             {
-                throw new InvalidCastException("StringToInt() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(int));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToInt() failed. String: " + str);
+                }
             }
             else
             {
@@ -127,12 +134,19 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public static double ToDouble(this string str)
+        public static double ToDouble(this string str, double? def = null)
         {
             double d;
             if (!double.TryParse(str, out d))
             {
-                throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                if (def != null)
+                {
+                    return (def ?? default(double));
+                }
+                else
+                {
+                    throw new InvalidCastException("StringToDouble() failed. String: " + str);
+                }
             }
             else
             {
@@ -155,11 +169,54 @@ namespace EstimatingUtilitiesLibrary
             else { throw new InvalidCastException("Int to Bool cast failed. Int: " + i); }
         }
 
+        #region Enum Conversions
+        public static T StringToEnum<T>(string str)
+        {
+            return (T)Enum.Parse(typeof(T), str);
+        }
+        public static T StringToEnum<T>(string str, T def)
+        {
+            try
+            {
+                return (T)Enum.Parse(typeof(T), str);
+            }
+            catch
+            {
+                return def;
+            }
+        }
+        #endregion
+
         #endregion Cast Conversions
+
+        public static object GetChildCollection(Type childType, object parentObject)
+        {
+            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
+            {
+                if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
+                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
+            }
+            return null;
+        }
+
+        public static void AddCatalogsToBid(TECBid bid, TECTemplates templates)
+        {
+            bid.DeviceCatalog = templates.DeviceCatalog;
+            bid.ManufacturerCatalog = templates.ManufacturerCatalog;
+            bid.PanelTypeCatalog = templates.PanelTypeCatalog;
+            bid.ConduitTypes = templates.ConduitTypeCatalog;
+            bid.ConnectionTypes = templates.ConnectionTypeCatalog;
+            bid.Tags = templates.Tags;
+            bid.IOModuleCatalog = templates.IOModuleCatalog;
+            bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
+        }
+
     }
 
-    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Nothing };
-    public enum GridIndex { Systems, Scope, Notes, Exclusions};
-    public enum AddIndex { System, Equipment, SubScope, Devices, Tags};
+    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, Nothing };
+    public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc };
+    public enum TemplateGridIndex { None, ControlledScope, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
+    public enum ScopeCollectionIndex { None, ControlledScope, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope};
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts};
 }

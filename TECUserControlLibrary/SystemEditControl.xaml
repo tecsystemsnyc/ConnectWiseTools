@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
+             x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
@@ -25,6 +27,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -37,29 +41,39 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label Content="Name:"/>
-            <TextBox Text="{Binding SelectedSystem.Name}" Grid.Column="1"
-                                 VerticalAlignment="Top"
-                             Margin="5"/>
+            <TextBox Text="{Binding SelectedSystem.Name}" 
+                     Grid.Column="1"
+                     VerticalAlignment="Top"
+                     Margin="5"/>
             <Label Content="Description:" Grid.Row="1"/>
             <TextBox Text="{Binding SelectedSystem.Description}"
                                  Grid.Column="1" Grid.Row="1" 
                                  VerticalAlignment="Top"
                              Margin="5"/>
             <Label Content="Budget Price:" Grid.Row="2"/>
-            <TextBox Text="{Binding SelectedSystem.BudgetPrice}" 
+            <TextBox Text="{Binding SelectedSystem.BudgetPriceModifier}" 
                                  Grid.Column="1" Grid.Row="2" 
                                  VerticalAlignment="Top"
                              Margin="5"/>
         </Grid>
-        <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding Templates.Tags}"
+        <ComboBox Grid.Row="1" Margin="5" ItemsSource="{Binding TagSelections}"
                               SelectedItem="{Binding SelectedTag}"
                   DisplayMemberPath="Text"/>
         <Button Grid.Row="1" Grid.Column="1" Content="Add Tag"
                             Command="{Binding AddTagToSystemCommand}"
                             Margin="5"/>
-        <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
+        <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
                                TagsSource="{Binding SelectedSystem.Tags}"/>
-        <Button Grid.ColumnSpan="2" Grid.Row="3" Content="Delete"
+        <ComboBox Grid.Row="3" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
+                               SelectedItem="{Binding SelectedAssociatedCost}"
+                               DisplayMemberPath="Name"/>
+        <Button Grid.Row="3" Grid.Column="1" Content="Associate Cost"
+                            Command="{Binding AddAssociatedCostToSystemCommand}"
+                            Margin="5"/>
+        <local:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
+                                          CostsSource="{Binding SelectedSystem.AssociatedCosts}"
+                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+        <Button Grid.ColumnSpan="2" Grid.Row="5" Content="Delete"
                 Command="{Binding DeleteSelectedSystemCommand}"
                 Background="{DynamicResource AlertActionBrush}"
                 Margin="5"/>

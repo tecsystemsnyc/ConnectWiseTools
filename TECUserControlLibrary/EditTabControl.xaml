@@ -21,7 +21,7 @@
         <TabControl Grid.Column="4"
                     Grid.Row="0"
                     Grid.RowSpan="2"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:EnumerationToIntegerConverter}}"
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:EditIndexToIntegerConverter}}"
                     Background="{DynamicResource SectionBackgroundBrush}">
             <!--System Edit-->
             <TabItem Visibility="Collapsed">
@@ -53,12 +53,18 @@
                 <local:ControllerEditControl
                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </TabItem>
+            <!--Panel Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:PanelEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
             <!--Choose Message-->
             <TabItem Visibility="Collapsed">
                 <Grid>
-                    <Label Content="Select an item to edit its properties."
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                    <TextBlock Text="Select an item to edit its properties."
+                         TextWrapping="Wrap" Foreground="Black"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
         </TabControl>

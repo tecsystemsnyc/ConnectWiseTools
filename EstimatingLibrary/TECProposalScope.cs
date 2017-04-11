@@ -9,6 +9,7 @@ namespace EstimatingLibrary
 {
     public class TECProposalScope : TECObject
     {
+        #region Properties
         public TECScope Scope { get; set; }
         public ObservableCollection<TECProposalScope> Children { get; set; }
         public ObservableCollection<TECScopeBranch> Notes { get; set; }
@@ -24,6 +25,10 @@ namespace EstimatingLibrary
         }
         private bool _isProposed;
 
+        public Guid Guid { get { return Scope.Guid; } }
+        #endregion
+
+        #region Constructors
         public TECProposalScope(TECScope scope)
         {
             Scope = scope;
@@ -59,7 +64,6 @@ namespace EstimatingLibrary
                  throw new NotImplementedException();
             }
         }
-
         public TECProposalScope(TECScope scope, bool isProposed, ObservableCollection<TECScopeBranch> notes)
         {
             Scope = scope;
@@ -70,7 +74,15 @@ namespace EstimatingLibrary
             Notes.CollectionChanged += CollectionChanged;
             Children.CollectionChanged += CollectionChanged;
         }
+        public TECProposalScope(TECProposalScope scopeSource) : this(scopeSource.Scope, scopeSource.IsProposed, scopeSource.Notes)
+        {
+            Children.CollectionChanged -= CollectionChanged;
+            Children = scopeSource.Children;
+            Children.CollectionChanged += CollectionChanged;
+        }
+        #endregion
 
+        #region Event handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -84,9 +96,12 @@ namespace EstimatingLibrary
                     else if (item is TECScope)
                     {
                         addProposalScope(item as TECScope);
+                    }
+                    else if (item is TECProposalScope)
+                    {
                         NotifyPropertyChanged("MetaAdd", this, item);
                     }
-                   
+
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -100,12 +115,17 @@ namespace EstimatingLibrary
                     else if (item is TECScope)
                     {
                         removeProposalScope(item as TECScope);
+                    }
+                    else if(item is TECProposalScope)
+                    {
                         NotifyPropertyChanged("MetaRemove", this, item);
                     }
                 }
             }
         }
+        #endregion
 
+        #region Methods
         public override object Copy()
         {
             TECProposalScope pScopeToReturn = new TECProposalScope(this.Scope);
@@ -122,8 +142,7 @@ namespace EstimatingLibrary
 
             return pScopeToReturn;
         }
-
-
+        
         private void addProposalScope(TECScope scope)
         {
             this.Children.Add(new TECProposalScope(scope));
@@ -144,5 +163,6 @@ namespace EstimatingLibrary
             }
 
         }
+        #endregion
     }
 }

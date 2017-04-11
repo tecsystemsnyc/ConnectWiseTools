@@ -17,33 +17,37 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                if (SubScope != null)
+                {
+                    SubScope.CollectionChanged -= SubScope_CollectionChanged;
+                }
                 _subScope = value;
+                SubScope.CollectionChanged += SubScope_CollectionChanged;
                 NotifyPropertyChanged("SubScope", temp, this);
                 RaisePropertyChanged("SubScopeQuantity");
                 subscribeToSubScope();
             }
         }
 
-        public double BudgetPrice
+        public double BudgetUnitPrice
         {
-            get { return _budgetPrice; }
+            get { return _budgetUnitPrice; }
             set
             {
                 var temp = this.Copy();
                 if (value < 0)
                 {
-                    _budgetPrice = -1;
+                    _budgetUnitPrice = -1;
                 }
                 else
                 {
-                    _budgetPrice = value;
+                    _budgetUnitPrice = value;
                 }
-                NotifyPropertyChanged("BudgetPrice", temp, this);
-                Console.WriteLine("Budget price changed in equipment");
+                NotifyPropertyChanged("BudgetUnitPrice", temp, this);
                 RaisePropertyChanged("TotalBudgetPrice");
             }
         }
-        private double _budgetPrice;
+        private double _budgetUnitPrice;
 
         new public int Quantity
         {
@@ -71,7 +75,17 @@ namespace EstimatingLibrary
 
         public double TotalBudgetPrice
         {
-            get { return (Quantity * BudgetPrice); }
+            get
+            {
+                if (Quantity > 0)
+                {
+                    return (Quantity * BudgetUnitPrice);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
 
         public double MaterialCost
@@ -86,37 +100,40 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(string name, string description, double budgetPrice, ObservableCollection<TECSubScope> subScope, Guid guid) : base(name, description, guid)
+        public TECEquipment(Guid guid) : base(guid)
         {
-            _budgetPrice = budgetPrice;
-            _subScope = subScope;
-
+            _budgetUnitPrice = -1;
+            _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
+            base.PropertyChanged += TECEquipment_PropertyChanged;
         }
-
-
-        public TECEquipment(string name, string description, double budgetPrice, ObservableCollection<TECSubScope> subScope) : this(name, description, budgetPrice, subScope, Guid.NewGuid()) { }
-        public TECEquipment() : this("", "", -1, new ObservableCollection<TECSubScope>()) { }
+        
+        public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource) : this(equipmentSource.Name, equipmentSource.Description, equipmentSource.BudgetPrice, new ObservableCollection<TECSubScope>())
+        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
-            foreach(TECSubScope subScope in equipmentSource.SubScope)
-            {
-                SubScope.Add(new TECSubScope(subScope));
-            }
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = equipmentSource.Guid; }
 
-            _location = equipmentSource.Location;
-            _quantity = equipmentSource.Quantity;
-            _tags = new ObservableCollection<TECTag>(equipmentSource.Tags);
+            foreach (TECSubScope subScope in equipmentSource.SubScope)
+            { SubScope.Add(new TECSubScope(subScope, guidDictionary)); }
+            _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
+
+            this.copyPropertiesFromScope(equipmentSource);
         }
         #endregion //Constructors
 
         #region Methods
         public override Object Copy()
         {
-            TECEquipment outEquip = new TECEquipment(this);
+            TECEquipment outEquip = new TECEquipment();
             outEquip._guid = this.Guid;
+            foreach (TECSubScope subScope in this.SubScope)
+            { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
+            outEquip._budgetUnitPrice = this.BudgetUnitPrice;
+
+            outEquip.copyPropertiesFromScope(this);
             return outEquip;
         }
 
@@ -128,12 +145,16 @@ namespace EstimatingLibrary
 
         private double getMaterialCost()
         {
-            double cost = 0;
+            double matCost = 0;
             foreach(TECSubScope sub in this.SubScope)
             {
-                cost += sub.MaterialCost;
+                matCost += sub.MaterialCost;
             }
-            return cost;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
         }
         private double getLaborCost()
         {
@@ -142,10 +163,13 @@ namespace EstimatingLibrary
             {
                 cost += sub.LaborCost;
             }
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
             return cost;
         }
-
-
+        
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("SubScopeQuantity");
@@ -154,6 +178,11 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
+                    checkForTotalsInSubScope(item as TECSubScope);
+                    if ((item as TECSubScope).Location == null)
+                    {
+                        (item as TECSubScope).SetLocationFromParent(this.Location);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -161,11 +190,12 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged("RemovedSubScope", this, item); 
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged("Edit", this, sender, typeof(TECEquipment), typeof(TECSubScope));
             }
             subscribeToSubScope();
         }
@@ -175,6 +205,18 @@ namespace EstimatingLibrary
             if (name == "Quantity")
             {
                 RaisePropertyChanged("SubScopeQuantity");
+            }
+            else if(name == "TotalPoints")
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            else if (name == "TotalDevices")
+            {
+                RaisePropertyChanged("TotalDevices");
+            } 
+            else if (name == "Length")
+            {
+                RaisePropertyChanged("SubLength");
             }
         }
 
@@ -186,8 +228,34 @@ namespace EstimatingLibrary
             }
         }
 
-
-        #endregion
+        private void checkForTotalsInSubScope(TECSubScope subScope)
+        {
+            if (subScope.Points.Count > 0)
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            if (subScope.Devices.Count > 0)
+            {
+                RaisePropertyChanged("TotalDevices");
+            }
+        }
         
+        private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ObjectPropertyChanged")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var oldNew = args.NewValue as Tuple<object, object>;
+                foreach (TECSubScope subScope in this.SubScope)
+                {
+                    if (subScope.Location == oldNew.Item1)
+                    {
+                        subScope.SetLocationFromParent(this.Location);
+                    }
+                }
+            }
+        }
+        #endregion
+
     }
 }

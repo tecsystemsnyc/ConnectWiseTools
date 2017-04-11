@@ -14,6 +14,9 @@ namespace Tests
     [TestClass]
     public class SaveAsBidTests
     {
+        private const bool DEBUG = true;
+
+
         static TECBid expectedBid;
         static TECLabor expectedLabor;
         static TECSystem expectedSystem;
@@ -79,6 +82,7 @@ namespace Tests
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
+
             expectedManufacturer = expectedBid.ManufacturerCatalog[0];
             expectedPoint = expectedSubScope.Points[0];
 
@@ -116,9 +120,7 @@ namespace Tests
 
             //Act
             EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
-
             actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
-
             actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
@@ -270,8 +272,16 @@ namespace Tests
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            //File.Delete(path);
-            Console.WriteLine("SaveAs test bid saved to: " + path);
+            if (DEBUG)
+            {
+                Console.WriteLine("SaveAs test bid saved to: " + path);
+            }
+            else
+            {
+                File.Delete(path);
+            }
+
+
         }
 
         [TestMethod]
@@ -286,15 +296,53 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_Labor()
+        public void SaveAs_Bid_LaborConstants()
         {
             //Assert
             Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+
             Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+
             Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+
             Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+
             Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_SubContracterConstants()
+        {
+            //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
+
+            Assert.AreEqual(expectedLabor.ElectricalIsOnOvertime, actualLabor.ElectricalIsOnOvertime);
+            Assert.AreEqual(expectedLabor.ElectricalIsUnion, actualLabor.ElectricalIsUnion);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_UserAdjustments()
+        {
+            //Assert
+            Assert.AreEqual(expectedLabor.PMExtraHours, actualLabor.PMExtraHours);
+            Assert.AreEqual(expectedLabor.ENGExtraHours, actualLabor.ENGExtraHours);
+            Assert.AreEqual(expectedLabor.CommExtraHours, actualLabor.CommExtraHours);
+            Assert.AreEqual(expectedLabor.SoftExtraHours, actualLabor.SoftExtraHours);
+            Assert.AreEqual(expectedLabor.GraphExtraHours, actualLabor.GraphExtraHours);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Parameters()
+        {
+            Assert.AreEqual(expectedBid.Parameters.IsTaxExempt, actualBid.Parameters.IsTaxExempt);
         }
 
         [TestMethod]
@@ -304,7 +352,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPrice, actualSystem.BudgetPrice);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -314,7 +362,7 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetPrice, actualEquipment.BudgetPrice);
+            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -340,9 +388,17 @@ namespace Tests
                     actualQuantity++;
                 }
             }
-            Assert.AreEqual(expectedDevice.Quantity, actualQuantity);
+            int expectedQuantity = 0;
+            foreach (TECDevice device in expectedSubScope.Devices)
+            {
+                if (device.Guid == expectedDevice.Guid)
+                {
+                    expectedQuantity++;
+                }
+            }
+            Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType, actualDevice.ConnectionType);
+            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
@@ -373,6 +429,7 @@ namespace Tests
         public void SaveAs_Bid_Location()
         {
             //Assert
+            Assert.AreEqual(expectedBid.Locations.Count, actualBid.Locations.Count);
             Assert.AreEqual(expectedSystem.Location.Guid, actualSystem.Location.Guid);
             Assert.AreEqual(expectedSystem1.Location.Guid, actualSystem1.Location.Guid);
             Assert.AreEqual(expectedEquipment.Location.Guid, actualEquipment.Location.Guid);
@@ -438,30 +495,30 @@ namespace Tests
             Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
         }
 
-        [TestMethod]
-        public void SaveAs_Bid_Drawing()
-        {
-            //Assert
-            Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
-            Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
-        }
+        //[TestMethod]
+        //public void SaveAs_Bid_Drawing()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
+        //}
 
-        [TestMethod]
-        public void SaveAs_Bid_Page()
-        {
-            //Assert
-            Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
-        }
+        //[TestMethod]
+        //public void SaveAs_Bid_Page()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedPage.PageNum, actualPage.PageNum);
+        //}
 
-        [TestMethod]
-        public void SaveAs_Bid_VisScope()
-        {
-            //Assert
-            Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
-            Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
+        //[TestMethod]
+        //public void SaveAs_Bid_VisScope()
+        //{
+        //    //Assert
+        //    Assert.AreEqual(expectedVisualScope.X, actualVisualScope.X);
+        //    Assert.AreEqual(expectedVisualScope.Y, actualVisualScope.Y);
 
-            Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
-        }
+        //    Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
+        //}
 
         [TestMethod]
         public void SaveAs_Bid_PropScope()
@@ -493,6 +550,70 @@ namespace Tests
                 }
                 Assert.IsTrue(ioExists);
             }
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_SubScopeConnection()
+        {
+            //Arrange
+            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            TECSubScopeConnection expectedConnection = expectedBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+
+            //Assert
+            Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
+            Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
+            Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
+            Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
+            Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
+            
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_MiscCost()
+        {
+            //Arrange
+            TECMiscCost expectedCost = expectedBid.MiscCosts[0];
+            TECMiscCost actualCost = actualBid.MiscCosts[0];
+
+            Assert.AreEqual(expectedCost.Name, actualBid.MiscCosts[0].Name);
+            Assert.AreEqual(expectedCost.Cost, actualBid.MiscCosts[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscCosts[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_MiscWiring()
+        {
+            //Arrange
+            TECMiscWiring expectedCost = expectedBid.MiscWiring[0];
+            TECMiscWiring actualCost = actualBid.MiscWiring[0];
+
+            Assert.AreEqual(expectedCost.Name, actualBid.MiscWiring[0].Name);
+            Assert.AreEqual(expectedCost.Cost, actualBid.MiscWiring[0].Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscWiring[0].Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_Panel()
+        {
+            //Arrange
+            TECPanel expectedPanel = expectedBid.Panels[0];
+            TECPanel actualPanel = actualBid.Panels[0];
+
+            Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
+            Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
+            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_PanelType()
+        {
+            //Arrange
+            TECPanelType expectedCost = expectedBid.PanelTypeCatalog[0];
+            TECPanelType actualCost = expectedBid.PanelTypeCatalog[0];
+
+            Assert.AreEqual(expectedCost.Guid, expectedBid.PanelTypeCatalog[0].Guid);
+            Assert.AreEqual(expectedCost.Name, expectedBid.PanelTypeCatalog[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedBid.PanelTypeCatalog[0].Cost);
         }
     }
 }

@@ -17,6 +17,7 @@ using System.Windows;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.ObjectModel;
+using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -33,7 +34,7 @@ namespace EstimatingUtilitiesLibrary
             "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"
         });
 
-        public static void CreateScopeDocument(TECBid bid, string path)
+        public static void CreateScopeDocument(TECBid bid, string path, bool isEstimate)
         {
             Document scopeDocument = new Document();
             defineStyles(scopeDocument);
@@ -44,7 +45,11 @@ namespace EstimatingUtilitiesLibrary
             createIntroduction(scopeDocument);
             createDocumentList(scopeDocument, bid);
             createScope(scopeDocument, bid);
-            createPricing(scopeDocument, bid.BudgetPrice);
+            if (isEstimate)
+            { createPricing(scopeDocument, bid.TotalPrice); }
+            else
+            { createPricing(scopeDocument, bid.BudgetPrice); }
+            
             createNotesAndExclusions(scopeDocument, bid.Notes.ToList(), bid.Exclusions.ToList());
             createSignature(scopeDocument, bid.Salesperson);
             createFooter(scopeDocument);
@@ -90,10 +95,9 @@ namespace EstimatingUtilitiesLibrary
                 image.Left = ShapePosition.Left;
                 image.WrapFormat.Style = WrapStyle.Through;
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECLogo.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not load TECLogo. Exception: " + e.Message);
             }
 
 
@@ -112,10 +116,9 @@ namespace EstimatingUtilitiesLibrary
                 Paragraph addressParagraph = addressFrame.AddParagraph();
                 addressParagraph.AddText(address);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECAddress.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
             }
         }
 
@@ -137,11 +140,11 @@ namespace EstimatingUtilitiesLibrary
         private static void createIntroduction(Document document)
         {
             Paragraph paragraph = document.LastSection.AddParagraph();
-            paragraph.AddLineBreak();
             paragraph.AddFormattedText("To All Bidders:");
+            paragraph = document.LastSection.AddParagraph();
             paragraph.AddLineBreak();
             paragraph.AddLineBreak();
-            paragraph.AddFormattedText("As an authorized representative of Honeywell, " +
+            paragraph.AddFormattedText("    As an authorized representative of Honeywell, " +
                 "Inc., T.E.C. Systems, Inc. is pleased to provide this quotation for" +
                 " the Automatic Temperature Controls and Building Automation Systems as Specified." +
                 " This proposal is based upon our review of the following documents:");
@@ -178,26 +181,25 @@ namespace EstimatingUtilitiesLibrary
             Paragraph paragraph = document.LastSection.AddParagraph("Scope of Work:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            paragraph = document.LastSection.AddParagraph();
             paragraph.AddLineBreak();
 
             int i = 0;
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {
-                addScopeBranch(branch, paragraph, 0, (itemLetters[i] + "."));
+                paragraph = document.LastSection.AddParagraph();
+                addScopeBranch(branch, document, paragraph, 0, (itemLetters[i] + "."));
                 i++;
-                paragraph.AddLineBreak();
             }
+
+            paragraph = document.LastSection.AddParagraph();
             paragraph.AddFormattedText(itemLetters[i] + ".");
-            paragraph.AddTab();
+            paragraph.AddSpace(2);
             paragraph.AddFormattedText("Provide a BMS and Automatic Temperature functions for the following mechanical systems:");
             paragraph.AddLineBreak();
-            paragraph.AddLineBreak();
-            createSystemTree(paragraph, bid);
-            
+            createSystemTree(document, bid);
         }
 
-        private static void addScopeBranch(TECScopeBranch branch, Paragraph paragraph, int tabs, string tabChar = "• ")
+        private static void addScopeBranch(TECScopeBranch branch, Document document, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
             string scopeString = branch.Name;
             if (branch.Description != "")
@@ -211,24 +213,26 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddFormattedText(tabChar);
             if (tabChar != "• ")
             {
-                paragraph.AddTab();
+                paragraph.AddSpace(2);
             }
             paragraph.AddFormattedText(scopeString);
-            paragraph.AddLineBreak();
             
             foreach (TECScopeBranch childBranch in branch.Branches)
             {
-                addScopeBranch(childBranch, paragraph, (tabs + 1));
+                paragraph = document.LastSection.AddParagraph();
+                addScopeBranch(childBranch, document, paragraph, (tabs + 1));
             }
         }
 
-        private static void createSystemTree(Paragraph paragraph, TECBid bid)
+        private static void createSystemTree(Document document, TECBid bid)
         {
+            Paragraph paragraph = new Paragraph();
             int sysNum = 1;
             foreach (TECProposalScope systemProp in bid.ProposalScope)
             {
                 if (systemProp.IsProposed)
                 {
+                    paragraph = document.LastSection.AddParagraph();
                     TECScope system = systemProp.Scope;
                     paragraph.AddTab();
                     string systemString = system.Name;
@@ -243,11 +247,11 @@ namespace EstimatingUtilitiesLibrary
 
                     paragraph.AddFormattedText(sysNum.ToString() + ". ");
                     paragraph.AddFormattedText(systemString);
-                    paragraph.AddLineBreak();
 
                     foreach (TECScopeBranch branch in systemProp.Notes)
                     {
-                        addScopeBranch(branch, paragraph, 2);
+                        paragraph = document.LastSection.AddParagraph();
+                        addScopeBranch(branch, document, paragraph, 2);
                     }
 
                     int equipIndex = 0;
@@ -255,7 +259,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         if (equipProp.IsProposed)
                         {
-                            paragraph.AddLineBreak();
+                            paragraph = document.LastSection.AddParagraph();
                             TECScope equipment = equipProp.Scope;
                             paragraph.AddTab();
                             string equipmentString = equipment.Name;
@@ -271,21 +275,19 @@ namespace EstimatingUtilitiesLibrary
                             paragraph.AddTab();
                             paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
                             paragraph.AddFormattedText(equipmentString);
-                            paragraph.AddLineBreak();
 
                             foreach(TECScopeBranch branch in equipProp.Notes)
                             {
-                                addScopeBranch(branch, paragraph, 3);
+                                paragraph = document.LastSection.AddParagraph();
+                                addScopeBranch(branch, document, paragraph, 3);
                             }
-
                             
-
                             int ssIndex = 0;
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
                                 if (ssProp.IsProposed)
                                 {
-                                    paragraph.AddLineBreak();
+                                    paragraph = document.LastSection.AddParagraph();
                                     TECScope subScope = ssProp.Scope;
                                     paragraph.AddTab();
                                     string subScopeString = subScope.Name;
@@ -294,11 +296,11 @@ namespace EstimatingUtilitiesLibrary
                                     paragraph.AddTab();
                                     paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
                                     paragraph.AddFormattedText(subScopeString);
-                                    paragraph.AddLineBreak();
 
                                     foreach(TECScopeBranch branch in ssProp.Notes)
                                     {
-                                        addScopeBranch(branch, paragraph, 4);
+                                        paragraph = document.LastSection.AddParagraph();
+                                        addScopeBranch(branch, document, paragraph, 4);
                                     }
                                     ssIndex++;
                                 }
@@ -319,12 +321,25 @@ namespace EstimatingUtilitiesLibrary
             Paragraph paragraph = document.LastSection.AddParagraph("Pricing:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
+            
+            Table table = new Table();
+            table.Borders.Width = 0;
 
-            paragraph = document.LastSection.AddParagraph();
+            table.Format.SpaceBefore = "0.3cm";
+
+            table.AddColumn(Unit.FromCentimeter(8));
+            table.AddColumn(Unit.FromCentimeter(8));
+            Row row = table.AddRow();
+            Cell cell = row.Cells[0];
+            paragraph = new Paragraph();
             paragraph.AddFormattedText("Base Scope", TextFormat.Bold);
-            paragraph.AddTab();
-            paragraph.AddFormattedText("$" + price, TextFormat.Bold);
-
+            cell.Add(paragraph);
+            cell = row.Cells[1];
+            paragraph = new Paragraph();
+            paragraph.AddFormattedText(string.Format("{0:C}", price));
+            paragraph.Format.Alignment = ParagraphAlignment.Right;
+            cell.Add(paragraph);
+            document.LastSection.Add(table);
         }
 
         private static void createNotesAndExclusions(Document document, List<TECNote> notes, List<TECExclusion> exclusions)
@@ -332,23 +347,19 @@ namespace EstimatingUtilitiesLibrary
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-
-            paragraph = document.LastSection.AddParagraph();
-            paragraph.AddLineBreak();
+            
             foreach (TECNote note in notes)
             {
+                paragraph = document.LastSection.AddParagraph();
                 paragraph.AddFormattedText("•   " + note.Text);
-                paragraph.AddLineBreak();
             }
-            paragraph.AddLineBreak();
             paragraph=document.LastSection.AddParagraph("Exclusions:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-
-            paragraph = document.LastSection.AddParagraph();
-            paragraph.AddLineBreak();
+            
             foreach (TECExclusion exclusion in exclusions)
             {
+                paragraph = document.LastSection.AddParagraph();
                 paragraph.AddFormattedText("•   " + exclusion.Text);
                 paragraph.AddLineBreak();
             }
@@ -379,10 +390,9 @@ namespace EstimatingUtilitiesLibrary
                 footerParagraph.Format.Font.Size = 9;
                 footerParagraph.Format.Alignment = ParagraphAlignment.Center;
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                string message = "Could not find TECFooter.";
-                MessageBox.Show(message);
+                DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
             }
         }
 

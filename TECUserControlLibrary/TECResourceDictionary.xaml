@@ -3,6 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TECUserControlLibrary"
                     xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:dd="urn:gong-wpf-dragdrop">
     
     <!--Colors-->
@@ -19,11 +20,18 @@
     <Color x:Key="TECFlatDarkBlue">#2C3E50</Color>
     <Color x:Key="TECFlatRed">#E74C3C</Color>
     <Color x:Key="TECFlatWhite">#ECF0F1</Color>
+    <Color x:Key="TEInputWhite">#fbfcfc</Color>
     <Color x:Key="TECFlatBlue">#3498DB</Color>
     <Color x:Key="TECFlatShadedBlue">#2980B9</Color>
 
+    <Color x:Key="TECFlatGreen">#7B833B</Color>
+    <Color x:Key="TECFlatMagenta">#5D3E3C</Color>
+
     <!--Brushes-->
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource TECFlatDarkBlue}"/>
+    <SolidColorBrush x:Key="EBWindowBackgroundBrush" Color="{StaticResource TECFlatDarkBlue}"/>
+    <SolidColorBrush x:Key="TBWindowBackgroundBrush" Color="{StaticResource TECFlatGreen}"/>
+    <SolidColorBrush x:Key="SBWindowBackgroundBrush" Color="{StaticResource TECFlatMagenta}"/>
+    
     <SolidColorBrush x:Key="SectionBackgroundBrush" Color="{StaticResource TECFlatWhite}"/>
     <SolidColorBrush x:Key="ActionBackgroundBrush" Color="{StaticResource TECFlatBlue}"/>
     <SolidColorBrush x:Key="LightTextBrush" Color="{StaticResource TECFlatWhite}"/>
@@ -32,6 +40,7 @@
     <SolidColorBrush x:Key="ItemBrush" Color="{StaticResource TECFlatBlue}"/>
     <SolidColorBrush x:Key="TextBackgroundBrush" Color="{StaticResource TECFlatWhite}"/>
     <SolidColorBrush x:Key="AlertActionBrush" Color="{StaticResource TECFlatRed}"/>
+    <SolidColorBrush x:Key="TextInputBrush" Color="{StaticResource TEInputWhite}"/>
 
     <!--GlobalStyles-->
     <Style TargetType="Button">
@@ -40,11 +49,14 @@
         <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
     <Style TargetType="TextBox">
-        <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="local:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="RowHeaderWidth" Value="15"/>
         <Setter Property="dd:DragDrop.IsDropTarget" Value="True"/>
         <Setter Property="dd:DragDrop.IsDragSource" Value="True"/>
         <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>
@@ -63,19 +75,22 @@
     </Style>
     <Style TargetType="DataGridCell">
         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"/>
-        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource EBWindowBackgroundBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
                 <Setter Property="Foreground" Value="{DynamicResource LightTextBrush}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="False">
-                <Setter Property="Background" Value="{DynamicResource TextBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource TextInputBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SelectRowDetails"/>
+    </Style>
     <Style TargetType="Menu">
-        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource EBWindowBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
     </Style>
     <Style TargetType="TabItem">
@@ -103,7 +118,7 @@
         </Setter>
     </Style>
     <Style TargetType="ComboBox">
-        <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
     </Style>
     <Style TargetType="ToggleButton">
         <Setter Property="Background" Value="{StaticResource ItemBrush}"/>
@@ -118,6 +133,9 @@
     <!--Expand Grid Detail-->
     <DataTemplate x:Key="ExpandDetails">
         <ToggleButton Name="ShowDetails" 
+                      IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                                        Path=DataContext, 
+                                        Converter={cnvt:DataContextToEnableConverter}}"
                     IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
                                         Converter={cnvt:VisbilityToBooleanConverter}, 

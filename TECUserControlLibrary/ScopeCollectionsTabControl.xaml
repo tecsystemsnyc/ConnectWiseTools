@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              x:Name="parent"
              d:DesignHeight="720 " d:DesignWidth="300">
     <UserControl.Resources>
@@ -41,7 +43,17 @@
         </Grid>
         <TabControl Grid.Row="1"
                     Background="{DynamicResource SectionBackgroundBrush}"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex}">
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:ScopeCollectionIndexToIntegerConverter}}">
+            <TabItem Visibility="Collapsed">
+                <TextBlock Text="Choose another tab to display relevant templates."
+                         TextWrapping="Wrap" Foreground="Black"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Controlled Scope"
+                     Visibility="{Binding Path=ViewModel.ControlledScopeVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControlledScopeItemsCollection}"/>
+            </TabItem>
             <TabItem Header="Sys"
                 Visibility="{Binding Path=ViewModel.SystemsVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
@@ -80,7 +92,7 @@
                             Grid.Row="1"
                             Command="{Binding Path=ViewModel.AddTagCommand}"
                                 Margin="5"/>
-                    <local:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <grids:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
                                            Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
@@ -115,7 +127,7 @@
                             Margin="5"
                         Command="{Binding Path=ViewModel.AddManufacturerCommand}"/>
 
-                    <local:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                    <grids:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
                                         Grid.Row="3" Grid.ColumnSpan="2"/>
 
                 </Grid>
@@ -165,7 +177,8 @@
                         Content="Wire Type:"/>
                     <ComboBox Grid.Column="1"
                             Grid.Row="3"
-                              ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:ConnectionType}}}"
+                              ItemsSource="{Binding Path=ViewModel.Templates.ConnectionTypeCatalog}"
+                              DisplayMemberPath="Name"
                               SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
@@ -184,7 +197,7 @@
                     <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
                             Margin="5"/>
-                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
                                            TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
                         Grid.Row="7"
@@ -198,6 +211,7 @@
                      Visibility="{Binding Path=ViewModel.ControllerEditVisibility}">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
@@ -229,33 +243,33 @@
                              Grid.Column="1"
                              Grid.Row="2"
                              Margin="5"/>
-                    <Grid Grid.Row="3">
+                    <Label Grid.Column="0"
+                           Grid.Row="3"
+                           Content="Manufacturer:"/>
+                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                              DisplayMemberPath="Name"
+                          Grid.Row="3" Grid.Column="1" Margin="5"
+                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={cnvt:ManufacturerConverter}}"/>
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="IO"/>
-                        <TextBox Grid.Column="1" Text="{Binding Path=ViewModel.ControllerIOQTY}"
-                                 Margin="5"/>
-                    </Grid>
-
-                    
-                    <Grid Grid.Column="1"
-                          Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <Label Content="IO:"/>
                         <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:IOType}}}"
                                   SelectedValue="{Binding Path=ViewModel.ControllerIOType}"
-                                  Margin="5"/>
-                        <Button Content="Add IO"
+                                  Margin="5" Grid.Column="1"/>
+                        <TextBox Grid.Column="2" Text="{Binding Path=ViewModel.ControllerIOQTY}"
+                                 Margin="5"/>
+                        <Button Content="Add"
                                 Command="{Binding Path=ViewModel.AddIOToControllerCommand}"
-                                Grid.Column="1"
+                                Grid.Column="3"
                                 Margin="5"/>
                     </Grid>
                     <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerIO}"
-                              Grid.Row="4"
+                              Grid.Row="5"
                               Grid.ColumnSpan="2"
                               CanUserAddRows="False"
                               AutoGenerateColumns="False">
@@ -265,17 +279,17 @@
                             <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
                               SelectedItem="{Binding Path=ViewModel.SelectedTag}"
                               DisplayMemberPath="Text"/>
-                    <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
+                    <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
                             Margin="5"/>
-                    <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
                                            TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
                     <Button Content="Add Controller"
                             Command="{Binding Path=ViewModel.AddControllerCommand}"
-                            Grid.Row="7"
+                            Grid.Row="8"
                             Grid.ColumnSpan="2"
                             Margin="2"/>
                 </Grid>
@@ -283,6 +297,26 @@
             <TabItem Header="Controllers"
                      Visibility="{Binding Path=ViewModel.ControllerVisibility}">
                 <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Asociated Costs"
+                     Visibility="{Binding Path=ViewModel.AssociatedCostsVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Panels"
+                     Visibility="{Binding Path=ViewModel.PanelsVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.PanelsItemsCollection}"/>
+            </TabItem>
+            <TabItem Header="Add Panel"
+                     Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
+                <local:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
+            </TabItem>
+            <TabItem Header="Misc. Costs"
+                     Visibility="{Binding Path=ViewModel.MiscCostVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscCostsCollection}"/>
+            </TabItem>
+            <TabItem Header="Misc. Wiring"
+                     Visibility="{Binding Path=ViewModel.MiscWiringVisibility}">
+                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscWiringCollection}"/>
             </TabItem>
         </TabControl>
     </Grid>

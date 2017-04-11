@@ -169,30 +169,30 @@ namespace Tests
 
         }
 
-        [TestMethod]
-        public void Undo_Bid_VisualScope()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECVisualScope> expected = new ObservableCollection<TECVisualScope>();
-            foreach (TECVisualScope item in Bid.Drawings[0].Pages[0].PageScope)
-            {
-                expected.Add(item);
-            }
-            TECVisualScope edit = new TECVisualScope(new TECSystem(), 1.0, 1.0);
+        //[TestMethod]
+        //public void Undo_Bid_VisualScope()
+        //{
+        //    //Arrange
+        //    var Bid = TestHelper.CreateTestBid();
+        //    ObservableCollection<TECVisualScope> expected = new ObservableCollection<TECVisualScope>();
+        //    foreach (TECVisualScope item in Bid.Drawings[0].Pages[0].PageScope)
+        //    {
+        //        expected.Add(item);
+        //    }
+        //    TECVisualScope edit = new TECVisualScope(new TECSystem(), 1.0, 1.0);
 
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Drawings[0].Pages[0].PageScope.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
+        //    //Act
+        //    ChangeStack testStack = new ChangeStack(Bid);
+        //    int beforeCount = testStack.UndoStack.Count;
+        //    Bid.Drawings[0].Pages[0].PageScope.Add(edit);
+        //    Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+        //    testStack.Undo();
 
-            //assert
-            ObservableCollection<TECVisualScope> actual = Bid.Drawings[0].Pages[0].PageScope;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+        //    //assert
+        //    ObservableCollection<TECVisualScope> actual = Bid.Drawings[0].Pages[0].PageScope;
+        //    Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
-        }
+        //}
 
         [TestMethod]
         public void Undo_Bid_DeviceCatalog()
@@ -356,7 +356,8 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECLocation edit = new TECLocation("Edit");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -371,8 +372,107 @@ namespace Tests
 
         }
 
-        #endregion
+        [TestMethod]
+        public void Undo_Bid_MiscCost()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Bid.MiscCosts)
+            {
+                expected.Add(item);
+            }
+            TECMiscCost edit = new TECMiscCost();
 
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.MiscCosts.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Bid_MiscWiring()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECMiscWiring> expected = new ObservableCollection<TECMiscWiring>();
+            foreach (TECMiscWiring item in Bid.MiscWiring)
+            {
+                expected.Add(item);
+            }
+            TECMiscWiring edit = new TECMiscWiring();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.MiscWiring.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECMiscWiring> actual = Bid.MiscWiring;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Bid_PanelType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.PanelTypeCatalog.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Bid_Panel()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
+            foreach (TECPanel item in Bid.Panels)
+            {
+                expected.Add(item);
+            }
+            TECPanel edit = new TECPanel();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.Panels.Add(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            ObservableCollection<TECPanel> actual = Bid.Panels;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        #endregion
 
         #region Labor Properties
         [TestMethod]
@@ -486,6 +586,25 @@ namespace Tests
 
             //assert
             double actual = Bid.Labor.ElectricalRate;
+            Assert.AreEqual(expected, actual, "Not Undone");
+        }
+
+        [TestMethod]
+        public void Undo_Labor_ElectricalModifier()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            bool actual = Bid.Labor.ElectricalIsOnOvertime;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -612,7 +731,8 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             Guid expected = new Guid(Bid.Systems[0].Location.Guid.ToString());
-            TECLocation edit = new TECLocation("Floor 42");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -837,111 +957,40 @@ namespace Tests
 
         }
 
-        #endregion
-
-        #region Device Properties
-
         [TestMethod]
-        public void Undo_Device_Name()
+        public void Undo_Bid_Connection_ConduitType()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
-            string edit = "Edit";
+            TECConduitType expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            TECConduitType edit = Bid.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Bid.Controllers[0].ChildrenConnections[0].ConduitType = edit;
             testStack.Undo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            TECConduitType actual = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
 
         }
 
         [TestMethod]
-        public void Undo_Device_Description()
+        public void Undo_Bid_SubScope_AssociatedCost()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
-            string edit = "Edit";
+            int expected = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
+            TECAssociatedCost edit = new TECAssociatedCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Add(edit);
             testStack.Undo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
-        [TestMethod]
-        public void Undo_Device_Cost()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
-            double edit = 123;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            double actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
-        [TestMethod]
-        public void Undo_Device_Manufacturer()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            Guid expected = new Guid(Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
-            TECManufacturer edit = new TECManufacturer();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            Guid actual = new Guid(Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
-        [TestMethod]
-        public void Undo_Device_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            int expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
-            int edit = 123;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            int actual = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -1057,6 +1106,72 @@ namespace Tests
             string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
+        }
+
+        #endregion
+
+        #region Cost Properties
+        [TestMethod]
+        public void Undo_MiscCost_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.MiscCosts[0].Name;
+            string edit = "changedName";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.MiscCosts[0].Name = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.MiscCosts[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+        [TestMethod]
+        public void Undo_MiscWiring_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string expected = Bid.MiscWiring[0].Name;
+            string edit = "changedName";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.MiscWiring[0].Name = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            string actual = Bid.MiscWiring[0].Name;
+            Assert.AreEqual(expected, actual, "Not Undone");
+
+        }
+        #endregion
+
+        #region Controller Properties
+        [TestMethod]
+        public void Undo_Controller_IOModule()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECIOModule expected = Bid.Controllers[0].IO[0].IOModule;
+            TECIOModule edit = new TECIOModule();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            int beforeCount = testStack.UndoStack.Count;
+            Bid.Controllers[0].IO[0].IOModule = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
+            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
         }
 
         #endregion
@@ -1305,6 +1420,78 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Redo_Bid_MiscCost()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECMiscCost edit = new TECMiscCost();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.MiscCosts.Add(edit);
+            var expected = new ObservableCollection<TECMiscCost>();
+            foreach (TECMiscCost item in Bid.MiscCosts)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_MiscWiring()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECMiscWiring edit = new TECMiscWiring();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.MiscWiring.Add(edit);
+            var expected = new ObservableCollection<TECMiscWiring>();
+            foreach (TECMiscWiring item in Bid.MiscWiring)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECMiscWiring> actual = Bid.MiscWiring;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_PanelType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.PanelTypeCatalog.Add(edit);
+            var expected = new ObservableCollection<TECPanelType>();
+            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            {
+                expected.Add(item);
+            }
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
         public void Redo_Bid_Tags()
         {
             //Arrange
@@ -1357,7 +1544,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation("This");
+            TECLocation edit = new TECLocation();
+            edit.Name = "This";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1510,6 +1698,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Redo_Labor_ElectricalModifier()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
+            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+
+            //Act
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            bool actual = Bid.Labor.ElectricalIsOnOvertime;
+            Assert.AreEqual(expected, actual, "Not Redone");
+        }
+
+        #region System
+        [TestMethod]
         public void Redo_System_Name()
         {
             //Arrange
@@ -1595,7 +1802,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation("Floor 42");
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1609,6 +1817,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Equipment
         [TestMethod]
         public void Redo_Equipment_Name()
         {
@@ -1689,7 +1900,9 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
+        #endregion
 
+        #region Subscope
         [TestMethod]
         public void Redo_SubScope_Name()
         {
@@ -1796,6 +2009,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Device
         [TestMethod]
         public void Redo_Device_Name()
         {
@@ -1891,6 +2107,9 @@ namespace Tests
 
         }
 
+        #endregion
+
+        #region Point
         [TestMethod]
         public void Redo_Point_Name()
         {
@@ -1968,6 +2187,48 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
+
+        #endregion
+
+        #region Panel
+        [TestMethod]
+        public void Redo_Panel_Name()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            string edit = "Edit";
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Panels[0].Name = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            string actual = Bid.Panels[0].Name;
+            Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Panel_PanelType()
+        {
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECPanelType edit = new TECPanelType();
+
+            //Act
+            ChangeStack testStack = new ChangeStack(Bid);
+            Bid.Panels[0].Type = edit;
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            TECPanelType actual = Bid.Panels[0].Type;
+            Assert.AreEqual(edit.Guid, actual.Guid, "Not Redone");
+
+        }
+        #endregion
         #endregion
     }
 }

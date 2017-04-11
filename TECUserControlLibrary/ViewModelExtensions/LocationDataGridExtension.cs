@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,11 +58,20 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        #endregion
-        public LocationDataGridExtension(TECBid bid) : base(bid)
+        private LocationScopeType _selectedScopeType;
+        public LocationScopeType SelectedScopeType
         {
-
+            get { return _selectedScopeType; }
+            set
+            {
+                _selectedScopeType = value;
+                RaisePropertyChanged("SelectedScopeType");
+            }
         }
+
+        #endregion
+
+        public LocationDataGridExtension(TECBid bid) : base(bid) { }
         
         #region Methods
         
@@ -92,6 +102,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     }
                 }
             }
+        }
+
+        new public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+            SelectedLocation = null;
+            organizeByLocation();
         }
         #endregion
     }

@@ -11,6 +11,12 @@ using EstimatingUtilitiesLibrary;
 using System.Globalization;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Windows.Controls;
+using System.Drawing;
+using System.Windows.Media;
+using TECUserControlLibrary.UserControls;
+using System.Collections.ObjectModel;
+using System.Windows.Forms;
 
 namespace TECUserControlLibrary.HelperConverters
 {
@@ -24,7 +30,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if ((Visibility)value == Visibility.Visible)
             {
-                return 200;
+                return 250;
             }
             else if ((Visibility)value == Visibility.Hidden)
             {
@@ -32,7 +38,7 @@ namespace TECUserControlLibrary.HelperConverters
             }
             else
             {
-                return 200;
+                return 250;
             }
         }
 
@@ -56,6 +62,30 @@ namespace TECUserControlLibrary.HelperConverters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        #endregion
+    }
+
+    public class BooleanToVisibilityConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NullReferenceException();
         }
 
         #endregion
@@ -104,19 +134,29 @@ namespace TECUserControlLibrary.HelperConverters
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            double returnValue;
-
             string inString = (string)value;
             inString = inString.Trim(new Char[] { ' ','$', ',', '.' });
 
-            bool parsed = double.TryParse(inString, out returnValue);
-            Console.WriteLine("ConvertBack value passed: " + value);
-            if (!parsed)
-            {
-                Console.WriteLine("Cast to double failed in budgetPrice ConvertBack()");
-                returnValue = -1;
-            }
-            return returnValue;
+            return inString.ToDouble(-1);
+        }
+
+        #endregion
+    }
+
+    public class PercentageToNumberConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+        
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string inString = (string)value;
+            inString = inString.Trim(new Char[] { '%' });
+
+            return inString.ToDouble(0);
         }
 
         #endregion
@@ -128,26 +168,14 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (((TECManufacturer)value).Name == "")
-            {
-                return null;
-            }
-            else
-            {
-                return value;
-            }
+            
+            return value;
+
         }
-
-
+        
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
-            {
-                return new TECManufacturer();
-            } else
-            {
-                return value;
-            }
+             return value;
         }
 
         #endregion
@@ -161,7 +189,9 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return new TECLocation("None");
+                var location = new TECLocation();
+                location.Name = "None";
+                return location;
             }
             else
             {
@@ -171,14 +201,20 @@ namespace TECUserControlLibrary.HelperConverters
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-
-            if (((TECLocation)value).Name == "None")
+            if (value == null)
             {
-                return null;
+                return value;
             }
             else
             {
-                return value;
+                if (((TECLocation)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
             }
         }
 
@@ -219,25 +255,7 @@ namespace TECUserControlLibrary.HelperConverters
             return value;
         }
     }
-
-    public class EnumerationToIntegerConverter : BaseConverter, IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            int outInt = System.Convert.ToInt32(value);
-            return outInt;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (EditIndex)value; 
-        }
-
-        #endregion
-    }
-
+    
     public class PercentageConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
@@ -280,6 +298,395 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class NullToVisibilityConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if(value == null)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+            
+        }
 
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public class NullToBoolConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            Console.WriteLine("Converting");
+            if(value == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public class SelectedItemToControllerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var controller = new TECController();
+                controller.Name = "None";
+                return controller;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return value;
+            }
+            else
+            {
+                if (((TECController)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+        }
+        #endregion
+    }
+    public class SelectedItemToPanelConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var panel = new TECPanel();
+                panel.Name = "None";
+                return panel;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return value;
+            }
+            else
+            {
+                if (((TECPanel)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+        }
+
+        #endregion
+    }
+    public class SelectedItemToConduitTypeConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var conduitType = new TECConduitType();
+                conduitType.Name = "None";
+                return conduitType;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return value;
+            }
+            else
+            {
+                if (((TECConduitType)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+        }
+        #endregion
+    }
+
+    public class ConnectionIOConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            List<IOType> val = (List<IOType>)value;
+            if (val.Count > 0)
+            {
+                return val[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            List<IOType> io = new List<IOType>();
+            io.Add((IOType)value);
+            return io;
+        }
+
+        #endregion
+    }
+
+    public class IOTypeConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ObservableCollection<IOType>)
+            {
+                ObservableCollection<IOType> ioTypes = value as ObservableCollection<IOType>;
+                ObservableCollection<string> stringTypes = new ObservableCollection<string>();
+
+                foreach (IOType type in ioTypes)
+                {
+                    stringTypes.Add(TECIO.convertTypeToString(type));
+                }
+
+                return stringTypes;
+            }
+            else if (value is IOType)
+            {
+                return (TECIO.convertTypeToString((IOType)value));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string)
+            {
+                return (TECIO.convertStringToType((string)value));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+    }
+    public class SelectedItemToIOModuleConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                var module = new TECIOModule();
+                module.Name = "None";
+                return module;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if(value == null)
+            {
+                return value;
+            }
+            else
+            {
+                if (((TECIOModule)value).Name == "None")
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+            
+        }
+        #endregion
+    }
+    public class DataContextToEnableConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if(value.ToString() == "{NewItemPlaceholder}")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+
+        }
+        #endregion
+    }
+
+    #region Enumeration Converters
+
+    public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (EditIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class GridIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (GridIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class TemplateGridIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (TemplateGridIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class ScopeCollectionIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (ScopeCollectionIndex)value;
+        }
+
+        #endregion
+    }
+
+    public class LocationScopeTypeToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (LocationScopeType)value;
+        }
+
+        #endregion
+    }
+
+    #endregion
 }

@@ -19,34 +19,45 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
 using TECUserControlLibrary.ViewModelExtensions;
+using DebugLibrary;
+using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.ViewModel
 {
     public class MainViewModel : ViewModelBase, IDropTarget
     {
+        #region Constants
+        string DEFAULT_STATUS_TEXT = "Ready";
+        #endregion
+
         //Initializer
         public MainViewModel()
         {
+            _templates = new TECTemplates();
             if (ApplicationDeployment.IsNetworkDeployed)
             { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
             else
             { Version = "Undeployed Version"; }
-            getTemplates();
+
+            setupStatusBar();
 
             TECLogo = Path.GetTempFileName();
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
 
-            Stack = new ChangeStack(Templates);
-
-            CurrentStatusText = "Done.";
             TitleString = "Template Builder";
-
-            setupCommands();
+            
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
+            setupMaterialsTab();
+            setupCommands();
+            setupVMs();
 
-            setVisibility(0);
+            getTemplates();
+
+            DGTabIndex = TemplateGridIndex.ControlledScope;
+
+            ResetStatus();
         }
 
         #region Resources Paths
@@ -59,7 +70,15 @@ namespace TemplateBuilder.ViewModel
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public EditTabExtension EditTab { get; set; }
+        public MaterialsCostsExtension MaterialsTab { get; set; }
+        public ControlledScopeViewModel ControlledScopeVM { get; set; }
         #endregion
+
+        #region ViewModels
+        public MenuViewModel MenuVM { get; set; }
+        public StatusBarExtension StatusBarVM { get; set; }
+        #endregion
+
         public TECTemplates Templates
         {
             get { return _templates; }
@@ -68,23 +87,13 @@ namespace TemplateBuilder.ViewModel
                 _templates = value;
                 Stack = new ChangeStack(value);
                 RaisePropertyChanged("Templates");
+                refresh();
             }
         }
         private TECTemplates _templates;
         public ChangeStack Stack { get; set; }
         public string TECLogo { get; set; }
         public string Version { get; set; }
-
-        public string CurrentStatusText
-        {
-            get { return _currentStatusText; }
-            set
-            {
-                _currentStatusText = value;
-                RaisePropertyChanged("CurrentStatusText");
-            }
-        }
-        private string _currentStatusText;
         public string TitleString
         {
             get { return _titleString; }
@@ -96,10 +105,16 @@ namespace TemplateBuilder.ViewModel
         }
         private string _titleString;
 
+        protected bool isReady
+        {
+            get;
+            private set;
+        }
+
         #region Interface Properties
 
         #region Tab Indexes
-        public int DGTabIndex
+        public TemplateGridIndex DGTabIndex
         {
             get
             {
@@ -112,7 +127,7 @@ namespace TemplateBuilder.ViewModel
                 RaisePropertyChanged("DGTabIndex");
             }
         }
-        private int _DGTabIndex;
+        private TemplateGridIndex _DGTabIndex;
         
         #endregion //Tab Indexes
 
@@ -124,14 +139,21 @@ namespace TemplateBuilder.ViewModel
         public ICommand SaveToCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion //Commands Properties
-
-        string defaultTemplatesPath;
         #endregion //Properties
 
         #region Methods
+        private void refresh()
+        {
+            ScopeCollection.Refresh(Templates);
+            ScopeDataGrid.Refresh(Templates);
+            EditTab.Refresh(Templates);
+            MaterialsTab.Refresh(Templates);
+            ControlledScopeVM.Refresh(Templates);
+        }
         #region Setup Methods
         private void setupCommands()
         {
@@ -142,6 +164,8 @@ namespace TemplateBuilder.ViewModel
 
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+
+            RefreshCommand = new RelayCommand(RefreshTemplatesExecute);
         }
 
         private void getTemplates()
@@ -154,8 +178,7 @@ namespace TemplateBuilder.ViewModel
                 { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                 }
             }
             else
@@ -175,10 +198,9 @@ namespace TemplateBuilder.ViewModel
                         }
                         else
                         {
-                            message = "File is open elsewhere";
-                            MessageBox.Show(message);
+                            DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
                         }
-                        Console.WriteLine("Finished loading templates");
+                        DebugHandler.LogDebugMessage("Finished loading templates");
                     }
                 }
             }
@@ -200,17 +222,79 @@ namespace TemplateBuilder.ViewModel
         private void setupEditTab()
         {
             EditTab = new EditTabExtension(Templates);
+            EditTab.DragHandler += DragOver;
+            EditTab.DropHandler += Drop;
+        }
+        private void setupMaterialsTab()
+        {
+            MaterialsTab = new MaterialsCostsExtension(Templates);
+            MaterialsTab.DragHandler += DragOver;
+            MaterialsTab.DropHandler += Drop;
+        }
+        private void setupVMs()
+        {
+            MenuVM = new MenuViewModel(MenuType.TB);
+
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveToCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+            MenuVM.RefreshTemplatesCommand = RefreshCommand;
+
+            ControlledScopeVM = new ControlledScopeViewModel(Templates);
+            ControlledScopeVM.DragHandler += DragOver;
+            ControlledScopeVM.DropHandler += Drop;
+            ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
+            ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+        }
+
+        private void setupStatusBar()
+        {
+            StatusBarVM = new StatusBarExtension();
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            else
+            { StatusBarVM.Version = "Undeployed Version"; }
+
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
         }
         #endregion
 
         #region Commands Methods
         private void LoadExecute()
         {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
+            if (Stack.SaveStack.Count > 0)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             //User choose path
             string path = getLoadPath();
 
             if (path != null)
             {
+                SetBusyStatus("Loading File: " + path);
                 //Properties.Settings.Default.TemplateDirectoryPath = path;
 
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -221,54 +305,29 @@ namespace TemplateBuilder.ViewModel
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished loading SQL Database.");
+                ResetStatus();
             }
         }
         private void SaveExecute()
         {
-
-            string path = Properties.Settings.Default.TemplatesFilePath;
-
-            if (!UtilitiesMethods.IsFileLocked(defaultTemplatesPath))
+            if (!isReady)
             {
-                EstimatingLibraryDatabase.UpdateTemplatesToDB(path, Stack);
-                //EstimatingLibraryDatabase.UpdateTemplatesToDB(defaultTemplatesPath, Stack);
-
-                Stack.ClearStacks();
-
-                Console.WriteLine("Finished saving SQL Database.");
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
             }
-            else
-            {
-                string message = "File is open elsewhere";
-                MessageBox.Show(message);
-            }
+
+            saveTemplates();
         }
         private void SaveToExecute()
         {
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
+            if (!isReady)
             {
-                Properties.Settings.Default.TemplatesFilePath = path;
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
-
-                    Stack.ClearStacks();
-
-                    Console.WriteLine("Finished saving SQL Database.");
-                }
-                else
-                {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
-                }
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
             }
+            saveTemplatesAs();
         }
         
         private void ClosingExecute(CancelEventArgs e)
@@ -279,12 +338,15 @@ namespace TemplateBuilder.ViewModel
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SaveExecute();
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
                 }
                 else if (result == MessageBoxResult.Cancel)
                 {
                     e.Cancel = true;
-                    Console.WriteLine("Closing");
                 }
             }
             if (!e.Cancel)
@@ -316,6 +378,47 @@ namespace TemplateBuilder.ViewModel
             else
                 return false;
         }
+
+        private void RefreshTemplatesExecute()
+        {
+            if (!isReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            if (Stack.SaveStack.Count > 0)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+
+            string path = Properties.Settings.Default.TemplatesFilePath;
+            if (path != null)
+            {
+                SetBusyStatus("Loading templates from file: " + path);
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
+            ResetStatus();
+        }
         #endregion //Commands Methods
 
         #region Get Path Methods
@@ -339,16 +442,9 @@ namespace TemplateBuilder.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplatesFilePath = path;
-                    Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
+                Properties.Settings.Default.TemplatesFilePath = path;
+                Properties.Settings.Default.Save();
             }
 
             return path;
@@ -372,14 +468,7 @@ namespace TemplateBuilder.ViewModel
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
@@ -402,6 +491,7 @@ namespace TemplateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
+            Console.WriteLine("Main Drop");
             Object sourceItem;
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
@@ -418,32 +508,32 @@ namespace TemplateBuilder.ViewModel
             }
             else
             {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                sourceItem = dropInfo.Data;
+
+                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
+                int finalIndex = dropInfo.InsertIndex;
+                if (dropInfo.InsertIndex > currentIndex)
                 {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                    finalIndex -= 1;
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
                 }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+
+                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
             }
         }
         #endregion
 
         #region Helper Methods
-        private void setVisibility(int gridIndex)
+        private void setVisibility(TemplateGridIndex gridIndex)
         {
             nullifySelected();
 
             switch (gridIndex)
             {
-                case 0:
-                    ScopeCollection.TabIndex = 0;
-
+                case TemplateGridIndex.Systems:
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -451,6 +541,14 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -459,10 +557,10 @@ namespace TemplateBuilder.ViewModel
                     ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
-                    break;
-                case 1:
-                    ScopeCollection.TabIndex = 1;
 
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+                    break;
+                case TemplateGridIndex.Equipment:
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -470,13 +568,23 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Equipment;
+
                     break;
-                case 2:
-                    ScopeCollection.TabIndex = 2;
+                case TemplateGridIndex.SubScope:
+
 
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
@@ -485,35 +593,102 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.SubScope;
+
                     break;
-                case 3:
-                    ScopeCollection.TabIndex = 6;
+                case TemplateGridIndex.Devices:
 
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
                     ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Visible;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
                     ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
+
 
                     break;
-                case 4:
-                    ScopeCollection.TabIndex = 7;
+                case TemplateGridIndex.DDC:
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
                     ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.DevicesVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Visible;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
-                    
+                    ScopeCollection.ControllerVisibility = Visibility.Visible;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Visible;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
+
                     break;
-                default:
-                    ScopeCollection.TabIndex = 0;
+                case TemplateGridIndex.Materials:
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Visible;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Visible;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.AssociatedCosts;
+                    break;
+                case TemplateGridIndex.Constants:
+                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+
+                    break;
+                case TemplateGridIndex.ControlledScope:
 
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
@@ -521,8 +696,48 @@ namespace TemplateBuilder.ViewModel
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    break;
+                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Visible;
+                    ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Visible;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
+                    ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
+                    ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+                    ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.ControlledScope;
+
+                    break;
+                default:
+
+
+                    ScopeCollection.SystemsVisibility = Visibility.Visible;
+                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
+                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesVisibility = Visibility.Visible;
+                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    ScopeCollection.TagsVisibility = Visibility.Visible;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+
+                    break;
             }
         }
         private void nullifySelected()
@@ -533,7 +748,170 @@ namespace TemplateBuilder.ViewModel
             ScopeDataGrid.SelectedEquipment = null;
             ScopeDataGrid.SelectedSystem = null;
         }
+        private void saveTemplates()
+        {
+            string path = Properties.Settings.Default.TemplatesFilePath;
+            if (path != null)
+            {
+                SetBusyStatus("Saving to path: " + path);
+                ChangeStack stackToSave = Stack.Copy();
+                Stack.ClearStacks();
 
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                    {
+                        EstimatingLibraryDatabase.UpdateTemplatesToDB(path, stackToSave);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                saveTemplatesAs();
+            }
+        }
+        private void saveTemplatesAs()
+        {
+            //User choose path
+            string path = getSavePath();
+
+            if (path != null)
+            {
+                Properties.Settings.Default.TemplatesFilePath = path;
+                
+                Stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+
+                worker.RunWorkerAsync();
+
+            }
+        }
+
+        private void SetBusyStatus(string statusText)
+        {
+            StatusBarVM.CurrentStatusText = statusText;
+            isReady = false;
+        }
+        protected void ResetStatus()
+        {
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+            isReady = true;
+        }
+
+        protected bool IsReady()
+        {
+            return isReady;
+        }
+
+        private bool saveAsSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                Stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    //Create new database
+                    EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    saveSuccessful = false;
+                }
+
+
+            }
+
+            return saveSuccessful;
+        }
+
+        private bool saveSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            if (Properties.Settings.Default.TemplatesFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + Properties.Settings.Default.TemplatesFilePath);
+                ChangeStack stackToSave = Stack.Copy();
+                Stack.ClearStacks();
+
+                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                {
+                    try
+                    {
+                        EstimatingLibraryDatabase.UpdateTemplatesToDB(Properties.Settings.Default.TemplatesFilePath, stackToSave);
+                        saveSuccessful = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(Properties.Settings.Default.TemplatesFilePath, Templates);
+                    }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
+                }
+
+            }
+            else
+            {
+                if (saveAsSynchronously())
+                {
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    saveSuccessful = false;
+                }
+            }
+
+            return saveSuccessful;
+        }
         #endregion //Helper Methods
         #endregion //Methods
     }

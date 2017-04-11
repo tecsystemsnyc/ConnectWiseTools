@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private ConnectionType _connectionType;
+        private TECConnectionType _connectionType;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
 
@@ -25,7 +25,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public ConnectionType ConnectionType
+        public TECConnectionType ConnectionType
         {
             get { return _connectionType; }
             set
@@ -33,6 +33,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _connectionType = value;
                 NotifyPropertyChanged("ConnectionType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -43,6 +44,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _ioType = value;
                 NotifyPropertyChanged("IOType", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public TECManufacturer Manufacturer
@@ -56,27 +58,35 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
+        public double MaterialCost
+        {
+            get { return getMaterialCost(); }
+        }
+        public double LaborCost
+        {
+            get { return getLaborCost(); }
+        }
         #endregion//Properties
 
+
         #region Constructors
-        public TECDevice(string name, string description, double cost, ConnectionType connectiontype, TECManufacturer manufacturer, Guid guid) : base(name, description, guid)
+        public TECDevice(Guid guid) : base(guid)
         {
-            _cost = cost;
-            _connectionType = connectiontype;
-            _manufacturer = manufacturer;
+            _cost = 0;
+            _connectionType = new TECConnectionType();
         }
-        public TECDevice(string name, string description, double cost, ConnectionType connectionType, TECManufacturer manufacturer)
-            : this(name, description, cost, connectionType, manufacturer, Guid.NewGuid()) { }
-        public TECDevice() : this("", "", 0, 0, new TECManufacturer()) { }
+        public TECDevice() : this(Guid.NewGuid()) { }
         
         //Copy Constructor
         public TECDevice(TECDevice deviceSource) 
-            : this(deviceSource.Name, deviceSource.Description, deviceSource.Cost, deviceSource.ConnectionType, deviceSource.Manufacturer, deviceSource.Guid)
+            : this(deviceSource.Guid)
         {
+            this.copyPropertiesFromScope(deviceSource);
+            _cost = deviceSource.Cost;
+            _manufacturer = deviceSource.Manufacturer;
             _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
-            _quantity = deviceSource.Quantity;
-            _tags = new ObservableCollection<TECTag>(deviceSource.Tags);
+            
         }
         #endregion //Constructors
 
@@ -91,6 +101,25 @@ namespace EstimatingLibrary
         {
             TECDevice outDevice = new TECDevice(this);
             return outDevice;
+        }
+
+        private double getMaterialCost()
+        {
+            double matCost = 0;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
+        }
+        private double getLaborCost()
+        {
+            double cost = 0;
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
+            return cost;
         }
         #endregion
     }

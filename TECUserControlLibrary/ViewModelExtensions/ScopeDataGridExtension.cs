@@ -35,21 +35,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _bid = value;
-                // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
                 populateLocationSelections();
-                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
-            }
-        }
-        
-        private ObservableCollection<TECLocation> _locationSelections;
-        public ObservableCollection<TECLocation> LocationSelections
-        {
-            get { return _locationSelections; }
-            set
-            {
-                _locationSelections = value;
-                RaisePropertyChanged("LocationSelections");
             }
         }
 
@@ -80,8 +67,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
-
             }
         }
         private TECEquipment _selectedEquipment;
@@ -92,6 +79,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -103,6 +91,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedSubScope = value;
                 RaisePropertyChanged("SelectedSubScope");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -117,6 +106,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedDevice = value;
                 RaisePropertyChanged("SelectedDevice");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -128,6 +118,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedPoint = value;
                 RaisePropertyChanged("SelectedPoint");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -139,10 +130,32 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 _selectedController = value;
                 RaisePropertyChanged("SelectedController");
+                NullifySelections(value);
                 SelectionChanged?.Invoke(value);
             }
         }
-
+        private TECPanel _selectedPanel;
+        public TECPanel SelectedPanel
+        {
+            get { return _selectedPanel; }
+            set
+            {
+                _selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                NullifySelections(value);
+                SelectionChanged?.Invoke(value);
+            }
+        }
+        private ObservableCollection<TECLocation> _locationSelections;
+        public ObservableCollection<TECLocation> LocationSelections
+        {
+            get { return _locationSelections; }
+            set
+            {
+                _locationSelections = value;
+                RaisePropertyChanged("LocationSelections");
+            }
+        }
         #endregion
 
         #region Point Interface Properties
@@ -203,21 +216,50 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Intializers
         public ScopeDataGridExtension(TECBid bid)
         {
-            Bid = bid;
+            _bid = bid;
+            populateLocationSelections();
             DataGridVisibilty = new VisibilityModel();
-
             setupCommands();
+
+            PointName = "";
+            PointDescription = "";
         }
         public ScopeDataGridExtension(TECTemplates templates)
         {
             Templates = templates;
             DataGridVisibilty = new VisibilityModel();
-
             setupCommands();
+
+            PointName = "";
+            PointDescription = "";
         }
         #endregion
 
         #region Methods
+
+        public void Refresh(TECBid bid)
+        {
+            refresh(bid);
+        }
+
+        public void Refresh(TECTemplates templates)
+        {
+            refresh(templates);
+        }
+
+        private void refresh(object bidOrTemplates)
+        {
+            if(bidOrTemplates is TECBid)
+            {
+                var bid = bidOrTemplates as TECBid;
+                Bid = bid;
+            }
+            else if (bidOrTemplates is TECTemplates)
+            {
+                var templates = bidOrTemplates as TECTemplates;
+                Templates = templates;
+            }
+        }
 
         #region Commands
         private void setupCommands()
@@ -257,44 +299,77 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         #endregion //Commands
 
-        public void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void NullifySelections(object obj)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(TECLocation location in e.NewItems)
-                {
-                    LocationSelections.Add(location);
-                }
-                
-            } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach(TECLocation location in e.OldItems)
-                {
-                    LocationSelections.Remove(location);
-                }
-            }
+            //if(obj != null)
+            //{
+            //    if (!(obj is TECSystem))
+            //    {
+            //        SelectedSystem = null;
+            //    }
+            //    if (!(obj is TECEquipment))
+            //    {
+            //        SelectedEquipment = null;
+            //    }
+            //    if (!(obj is TECSubScope))
+            //    {
+            //        SelectedSubScope = null;
+            //    }
+            //    if (!(obj is TECDevice))
+            //    {
+            //        SelectedDevice = null;
+            //    }
+            //    if (!(obj is TECPoint))
+            //    {
+            //        SelectedPoint = null;
+            //    }
+            //    if (!(obj is TECController))
+            //    {
+            //        SelectedController = null;
+            //    }
+            //    if (!(obj is TECPanel))
+            //    {
+            //        SelectedPanel = null;
+            //    }
+            //}
+            
         }
-        
-        public void populateLocationSelections()
-        {
-            LocationSelections = new ObservableCollection<TECLocation>();
 
-            LocationSelections.Add(new TECLocation("None"));
-            foreach (TECLocation location in Bid.Locations)
+        private void populateLocationSelections()
+        {
+            Bid.Locations.CollectionChanged += Locations_CollectionChanged;
+            LocationSelections = new ObservableCollection<TECLocation>();
+            var noneLocation = new TECLocation();
+            noneLocation.Name = "None";
+            LocationSelections.Add(noneLocation);
+            foreach(TECLocation location in Bid.Locations)
             {
                 LocationSelections.Add(location);
             }
         }
-
+        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);
         }
         #endregion
+
+        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object location in e.NewItems)
+                { LocationSelections.Add(location as TECLocation); }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object location in e.OldItems)
+                { LocationSelections.Remove(location as TECLocation); }
+            }
+        }
     }
 }

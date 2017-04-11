@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="TECUserControlLibrary.DataGrids.ConnectionGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <DataGrid ItemsSource="{Binding SubScopeConnectionCollection}"
+                  AutoGenerateColumns="False"
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={cnvt:SelectedItemToControllerConverter}}"
+                                        Header="Controller" Width="Auto" MinWidth="60"
+                                        DisplayMemberPath="Name"/>
+                <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" MinWidth="50" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding ParentEquipment.Name}" Header="Equipment" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Point" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Length" Width="Auto" MinWidth="50"/>
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
+                                        SelectedItemBinding="{Binding SubScope.Connection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        Header="Conduit" Width="Auto" MinWidth="50"
+                                        DisplayMemberPath="Name"/>
+                <DataGridCheckBoxColumn Header="Stub Up Conduit Only" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

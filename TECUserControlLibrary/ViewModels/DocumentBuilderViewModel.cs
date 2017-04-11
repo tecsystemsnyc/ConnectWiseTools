@@ -26,5 +26,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
         }
+
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+        }
     }
 }

@@ -10,35 +10,52 @@ namespace EstimatingLibrary
     public class TECScopeBranch : TECScope
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
-        public ObservableCollection<TECScopeBranch> Branches { get; set; }
+        private ObservableCollection<TECScopeBranch> _branches;
+        public ObservableCollection<TECScopeBranch> Branches
+        {
+            get { return _branches; }
+            set
+            {
+                var temp = this.Copy();
+                _branches = value;
+                NotifyPropertyChanged("Branches", temp, this);
+                Branches.CollectionChanged += Branches_CollectionChanged;
+            }
+        }
 
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(string name, string description, ObservableCollection<TECScopeBranch> branches, Guid guid) : base(name, description, guid)
+        public TECScopeBranch(Guid guid) : base(guid)
         {
-            Branches = branches;
+            _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
         
-        public TECScopeBranch(string name, string description, ObservableCollection<TECScopeBranch> branches) : this(name, description, branches, Guid.NewGuid()) { }
-        public TECScopeBranch() : this("", "", new ObservableCollection<TECScopeBranch>()) { }
+        public TECScopeBranch() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this(scopeBranchSource.Name, scopeBranchSource.Description, new ObservableCollection<TECScopeBranch>())
+        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
                 Branches.Add(new TECScopeBranch(branch));
             }
-            _tags = scopeBranchSource.Tags;
+            this.copyPropertiesFromScope(scopeBranchSource);
         }
         #endregion //Constructors
 
         public override Object Copy()
         {
-            TECScopeBranch outScope = new TECScopeBranch(this);
+            TECScopeBranch outScope = new TECScopeBranch();
             outScope._guid = Guid;
+
+            foreach (TECScopeBranch branch in this.Branches)
+            {
+                outScope.Branches.Add(branch.Copy() as TECScopeBranch);
+            }
+            this.copyPropertiesFromScope(this);
+
             return outScope;
         }
 

@@ -22,6 +22,13 @@ namespace EstimatingLibrary
     }
     public class TECIO : TECObject
     {
+        #region Properties
+        private Guid _guid;
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+
         private IOType _type;
         public IOType Type
         {
@@ -46,17 +53,37 @@ namespace EstimatingLibrary
             }
         }
 
-
-        public TECIO()
+        private TECIOModule _ioModule;
+        public TECIOModule IOModule
         {
-
+            get { return _ioModule; }
+            set
+            {
+                var oldNew = Tuple.Create<Object, Object>(_ioModule, value);
+                var temp = Copy();
+                _ioModule = value;
+                NotifyPropertyChanged("IOModule", temp, this);
+                temp = Copy();
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
+            }
         }
 
-        public TECIO(IOType type)
+        #endregion
+        
+        public TECIO(Guid guid)
         {
-            _type = type;
+            _guid = guid;
             _quantity = 1;
         }
+
+        public TECIO() : this(Guid.NewGuid()) { }
+
+        public TECIO(TECIO ioSource) : this()
+        {
+            _quantity = ioSource.Quantity;
+            _type = ioSource.Type;
+            _ioModule = ioSource.IOModule;
+        }  
 
         public static IOType convertStringToType(string type)
         {
@@ -100,9 +127,10 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            var outIO = new TECIO();
+            var outIO = new TECIO(Guid);
             outIO._type = Type;
             outIO._quantity = Quantity;
+            outIO._ioModule = IOModule;
             return outIO;
         }
     }

@@ -7,11 +7,21 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
+    public enum ControllerType
+    {
+        IsServer = 1, IsBMS, IsNetworked, IsStandalone
+    };
+
     public class TECController : TECScope
     {
+        #region Properties
+        //---Stored---
         private double _cost;
-        private ObservableCollection<TECConnection> _connections;
+        private TECNetworkConnection _parentConnection;
+        private ObservableCollection<TECConnection> _childrenConnections;
         private ObservableCollection<TECIO> _io;
+        private TECManufacturer _manufacturer;
+        private ControllerType _type;
 
         public double Cost
         {
@@ -23,14 +33,29 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public ObservableCollection<TECConnection> Connections
+        public TECNetworkConnection ParentConnection
         {
-            get { return _connections; }
+            get { return _parentConnection; }
+            set
+            {
+                var temp = Copy();
+                _parentConnection = value;
+                NotifyPropertyChanged("ParentConnection", temp, this);
+                RaisePropertyChanged("ParentController");
+                RaisePropertyChanged("NetworkIO");
+            }
+        }
+        public ObservableCollection<TECConnection> ChildrenConnections
+        {
+            get { return _childrenConnections; }
             set
             {
                 var temp = this.Copy();
-                _connections = value;
-                NotifyPropertyChanged("Connections", temp, this);
+                ChildrenConnections.CollectionChanged -= collectionChanged;
+                _childrenConnections = value;
+                ChildrenConnections.CollectionChanged += collectionChanged;
+                NotifyPropertyChanged("ChildrenConnections", temp, this);
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
         public ObservableCollection<TECIO> IO
@@ -39,98 +64,359 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
+                IO.CollectionChanged -= IO_CollectionChanged;
                 _io = value;
                 NotifyPropertyChanged("IO", temp, this);
+                IO.CollectionChanged += IO_CollectionChanged;
+            }
+        }
+        public TECManufacturer Manufacturer
+        {
+            get { return _manufacturer; }
+            set
+            {
+                var temp = this.Copy();
+                _manufacturer = value;
+                NotifyPropertyChanged("Manufacturer", temp, this);
+                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+            }
+        }
+        public ControllerType Type
+        {
+            get { return _type; }
+            set
+            {
+                var temp = Copy();
+                _type = value;
+                NotifyPropertyChanged("Type", temp, this);
+                RaisePropertyChanged("IsServer");
+                RaisePropertyChanged("IsBMS");
+                RaisePropertyChanged("IsNetworked");
+                RaisePropertyChanged("IsStandalone");
             }
         }
 
-        public List<IOType> AvailableIO
+        public double MaterialCost
+        {
+            get { return getMaterialCost(); }
+        }
+        public double LaborCost
+        {
+            get { return getLaborCost(); }
+        }
+
+        //---Derived---
+        public ObservableCollection<IOType> AvailableIO
         {
             get { return getAvailableIO(); }
         }
-        public List<IOType> NetworkIO
+        
+        public ObservableCollection<IOType> NetworkIO
         {
-            get { return getNetworkIO(); }
+            get
+            { return getNetworkIO(); }
+            private set { }
         }
 
-        public TECController(string name, string desciption, Guid guid, double cost) : base(name, desciption, guid)
+        public TECController ParentController
         {
-            _cost = cost;
+            get
+            { 
+                if (ParentConnection == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return ParentConnection.ParentController;
+                }
+            }
+            set
+            {
+                if (ParentConnection != null)
+                {
+                    ParentController.RemoveController(this);
+                }
+
+                if (value != null)
+                {
+                    value.AddController(this);
+                }
+
+                RaisePropertyChanged("ParentController");
+            }
+        }
+
+        public ObservableCollection<TECNetworkConnection> ChildNetworkConnections
+        {
+            get
+            {
+                ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
+                foreach (TECConnection connection in ChildrenConnections)
+                {
+                    if(connection is TECNetworkConnection)
+                    {
+                        networkConnections.Add(connection as TECNetworkConnection);
+                    }
+                }
+                return networkConnections;
+            }
+        }
+
+        public bool IsServer
+        {
+            get
+            {
+                return (Type == ControllerType.IsServer);
+            }
+        }
+        public bool IsBMS
+        {
+            get
+            {
+                return ((Type == ControllerType.IsServer) || (Type == ControllerType.IsBMS));
+            }
+        }
+        public bool IsNetworked
+        {
+            get
+            {
+                return ((Type == ControllerType.IsServer) || (Type == ControllerType.IsBMS) || (Type == ControllerType.IsNetworked));
+            }
+        }
+        public bool IsStandalone
+        {
+            get
+            {
+                return (Type == ControllerType.IsStandalone);
+            }
+        }
+
+        #endregion
+        
+        #region Constructors
+        public TECController(Guid guid) : base(guid)
+        {
+            _cost = 0;
             _io = new ObservableCollection<TECIO>();
-            _connections = new ObservableCollection<TECConnection>();
-
-            IO.CollectionChanged += CollectionChanged;
+            _childrenConnections = new ObservableCollection<TECConnection>();
+            ChildrenConnections.CollectionChanged += collectionChanged;
+            IO.CollectionChanged += IO_CollectionChanged;
         }
+        
+        public TECController() : this(Guid.NewGuid()) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        {
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = controllerSource.Guid; }
+            copyPropertiesFromScope(controllerSource);
+            foreach (TECIO io in controllerSource.IO)
+            {
+                TECIO ioToAdd = new TECIO(io);
+                _io.Add(new TECIO(io));
+            }
+            foreach (TECConnection connection in controllerSource.ChildrenConnections)
+            {
+                if (connection is TECSubScopeConnection)
+                {
+                    TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, guidDictionary);
+                    connectionToAdd.ParentController = this;
+                    _childrenConnections.Add(connectionToAdd);
 
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+                }
+                else if (connection is TECNetworkConnection)
+                {
+
+                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, guidDictionary);
+                    connectionToAdd.ParentController = this;
+                    _childrenConnections.Add(connectionToAdd);
+
+                }
+            }
+            _manufacturer = controllerSource.Manufacturer;
+            _cost = controllerSource.Cost;
+        }
+        
+        #endregion 
+
+        #region Event Handlers
+        private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach(Object item in e.NewItems)
                 {
-                    (item as TECIO).PropertyChanged += ObjectPropertyChanged;
-                    NotifyPropertyChanged("Add", this, item);
+                    if(item is TECIO)
+                    {
+                        NotifyPropertyChanged("Add", this, item);
+                    } 
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (Object item in e.OldItems)
                 {
-                    (item as TECIO).PropertyChanged -= ObjectPropertyChanged;
-                    NotifyPropertyChanged("Remove", this, item);
+                    if (item is TECIO)
+                    {
+                        NotifyPropertyChanged("Remove", this, item);
+                    }
                 }
             }
         }
 
-        private void ObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-            if (e.PropertyName == "Quantity")
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
+                foreach (object item in e.NewItems)
+                {
+                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
+                }
+            }
+            if (sender == ChildrenConnections)
+            {
+                RaisePropertyChanged("ChildNetworkConnections");
             }
         }
+        #endregion
 
-        public TECController() : this("", "", Guid.NewGuid(), 0)
+        #region Connection Methods
+
+        public TECNetworkConnection AddController(TECController controller, TECConnection connection = null)
         {
+            if (controller != this)
+            {
+                if (connection != null)
+                {
+                    foreach (TECNetworkConnection conn in ChildrenConnections)
+                    {
+                        if (connection == conn)
+                        {
+                            conn.ChildrenControllers.Add(controller);
+                            controller.ParentConnection = conn;
+                            return conn;
+                        }
+                    }
+                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+                }
+                else
+                {
+                    TECNetworkConnection netConnect = new TECNetworkConnection();
+                    netConnect.ParentController = this;
+                    netConnect.ChildrenControllers.Add(controller);
+                    ChildrenConnections.Add(netConnect);
+                    controller.ParentConnection = netConnect;
+                    return netConnect;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
+        public TECSubScopeConnection AddSubScope(TECSubScope subScope)
+        {
+            TECSubScopeConnection connection = new TECSubScopeConnection();
+            connection.ParentController = this;
+            connection.SubScope = subScope;
+            ChildrenConnections.Add(connection);
+            subScope.Connection = connection;
+            return connection;
+        }
+        public void RemoveController(TECController controller)
+        {
+            bool exists = false;
+            TECNetworkConnection connectionToRemove = null;
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                if(connection is TECNetworkConnection)
+                {
+                    var netConnect = connection as TECNetworkConnection;
+                    if (netConnect.ChildrenControllers.Contains(controller))
+                    {
+                        exists = true;
+                        controller.ParentConnection = null;
+                        netConnect.ChildrenControllers.Remove(controller);
+                    }
+                    if (netConnect.ChildrenControllers.Count < 1)
+                    {
+                        connectionToRemove = netConnect;
+                    }
+                }
+                
+            }
+            if (connectionToRemove != null)
+            {
+                ChildrenConnections.Remove(connectionToRemove);
+            }
+            if (!exists)
+            {
+                throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
+            }
+        }
+        public void RemoveSubScope(TECSubScope subScope)
+        {
+            TECSubScopeConnection connectionToRemove = null;
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                if(connection is TECSubScopeConnection)
+                {
+                    var subConnect = connection as TECSubScopeConnection;
+                    if (subConnect.SubScope == subScope)
+                    {
+                        subScope.Connection = null;
+                        subConnect.SubScope = null;
+                        connection.ParentController = null;
+                        connectionToRemove = subConnect;
+                    }
+                }
+            }
+            if (connectionToRemove != null)
+            {
+                ChildrenConnections.Remove(connectionToRemove);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Passed subscope does not exist in any connection in controller.");
+            }
+        }
+        #endregion
 
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Name,
-                this.Description,
-                this.Guid,
-                this.Cost);
-
+            TECController outController = new TECController(this.Guid);
+            outController.copyPropertiesFromScope(this);
+            outController._cost = Cost;
+            outController._manufacturer = Manufacturer;
             foreach (TECIO io in this.IO)
             {
-                outController.IO.Add(io);
+                outController.IO.Add(io.Copy() as TECIO);
+            }
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                var outConnection = connection.Copy() as TECConnection;
+                outConnection.ParentController = outController;
+                outController.ChildrenConnections.Add(outConnection);
             }
 
-            foreach (TECConnection conn in this.Connections)
-            {
-                outController.Connections.Add(conn);
-            }
-            
             return outController;
         }
-
         public override Object DragDropCopy()
         {
-            var outController = new TECController();
-            outController.Name = Name;
-            outController.Description = Description;
-            outController.Cost = Cost;
-            outController.IO = IO;
-            outController.Tags = Tags;
-
+            var outController = new TECController(this);
             return outController;
         }
-
-        private List<IOType> getAvailableIO()
+        private ObservableCollection<IOType> getAvailableIO()
         {
-            var availableIO = new List<IOType>();
+            var availableIO = new ObservableCollection<IOType>();
             foreach (TECIO type in this.IO)
             {
                 for(var x = 0; x < type.Quantity; x++)
@@ -139,25 +425,18 @@ namespace EstimatingLibrary
                 }
             }
 
-            foreach (TECConnection connected in this.Connections)
+            foreach (TECSubScopeConnection connected in ChildrenConnections)
             {
-                foreach(TECScope scope in connected.Scope)
+                foreach(TECDevice device in connected.SubScope.Devices)
                 {
-                    if(scope is TECSubScope)
-                    {
-                        foreach(TECDevice device in ((TECSubScope)scope).Devices)
-                        {
-                            availableIO.Remove(device.IOType);
-                        }
-                    }
+                    availableIO.Remove(device.IOType);
                 }
             }
             return availableIO;
         }
-
-        private List<IOType> getNetworkIO()
+        private ObservableCollection<IOType> getNetworkIO()
         {
-            var outIO = new List<IOType>();
+            var outIO = new ObservableCollection<IOType>();
             foreach (TECIO io in this.IO)
             {
                 var type = io.Type;
@@ -172,7 +451,6 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-
         public int NumberOfIOType(IOType ioType)
         {
             int outNum = 0;
@@ -187,7 +465,6 @@ namespace EstimatingLibrary
 
             return outNum;
         }
-
         public List<IOType> getUniqueIO()
         {
             var outList = new List<IOType>();
@@ -199,11 +476,28 @@ namespace EstimatingLibrary
                     outList.Add(io.Type);
                 }
             }
-            Console.WriteLine("IO: " + outList.Count);
             return outList;
         }
 
-
+        private double getMaterialCost()
+        {
+            double matCost = 0;
+            matCost += this.Cost * this.Manufacturer.Multiplier;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
+        }
+        private double getLaborCost()
+        {
+            double cost = 0;
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
+            return cost;
+        }
         #endregion
     }
 }

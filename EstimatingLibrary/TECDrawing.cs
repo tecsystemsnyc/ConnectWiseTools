@@ -93,6 +93,16 @@ namespace EstimatingLibrary
             Guid = guid;
             _pages = pages;
         }
+        public TECDrawing(TECDrawing drawingSource) : this(drawingSource.Name)
+        {
+            _description = drawingSource.Description;
+            Guid = drawingSource.Guid;
+            foreach(TECPage page in drawingSource.Pages)
+            {
+                _pages.Add(new TECPage(page));
+            }
+        }
+
 
         public override object Copy()
         {

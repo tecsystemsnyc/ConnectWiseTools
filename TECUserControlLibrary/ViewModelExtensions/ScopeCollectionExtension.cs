@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -23,12 +24,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             get { return _templates; }
             set
             {
+                unsubscribeTemplatesCollections();
                 _templates = value;
+                subscribeTemplatesCollections();
                 RaisePropertyChanged("Templates");
             }
         }
         
-        public int TabIndex
+        public ScopeCollectionIndex TabIndex
         {
             get { return _tabIndex; }
             set
@@ -37,7 +40,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("TabIndex");
             }
         }
-        private int _tabIndex;
+        private ScopeCollectionIndex _tabIndex;
 
         public string TagName
         {
@@ -82,6 +85,39 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("SelectedTag");
             }
         }
+
+        private TECAssociatedCost _selectedAssociatedCost;
+        public TECAssociatedCost SelectedAssociatedCost
+        {
+            get { return _selectedAssociatedCost; }
+            set
+            {
+                _selectedAssociatedCost = value;
+                RaisePropertyChanged("SelectedAssociatedCost");
+            }
+        }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        {
+            get { return _associatedCostSelections; }
+            set
+            {
+                _associatedCostSelections = value;
+                RaisePropertyChanged("AssociatedCostSelections");
+            }
+        }
+
+        private ObservableCollection<TECTag> _tagSelections;
+        public ObservableCollection<TECTag> TagSelections
+        {
+            get { return _tagSelections; }
+            set
+            {
+                _tagSelections = value;
+                RaisePropertyChanged("TagSelections");
+            }
+        }
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -97,7 +133,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand AddTagToDeviceCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
-
+        public ICommand AddTagToPanelCommand { get; private set; }
+        public ICommand AddAssociatedCostToPanelCommand { get; private set; }
+        public ICommand AddPanelCommand { get; private set; }
         #endregion
 
         #region Visibility Properties
@@ -199,6 +237,72 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _controllerVisibility;
+
+        public Visibility AssociatedCostsVisibility
+        {
+            get { return _associatedCostsVisibility; }
+            set
+            {
+                _associatedCostsVisibility = value;
+                RaisePropertyChanged("AssociatedCostsVisibility");
+            }
+        }
+        private Visibility _associatedCostsVisibility;
+
+        public Visibility ControlledScopeVisibility
+        {
+            get { return _controlledScopeVisibility; }
+            set
+            {
+                _controlledScopeVisibility = value;
+                RaisePropertyChanged("ControlledScopeVisibility");
+            }
+        }
+        private Visibility _controlledScopeVisibility;
+
+        public Visibility PanelsVisibility
+        {
+            get { return _panelsVisibility; }
+            set
+            {
+                _panelsVisibility = value;
+                RaisePropertyChanged("PanelsVisibility");
+            }
+        }
+        private Visibility _panelsVisibility;
+
+        public Visibility AddPanelVisibility
+        {
+            get { return _addPanelVisibility; }
+            set
+            {
+                _addPanelVisibility = value;
+                RaisePropertyChanged("AddPanelVisibility");
+            }
+        }
+        private Visibility _addPanelVisibility;
+
+        public Visibility MiscCostVisibility
+        {
+            get { return _miscCostVisibility; }
+            set
+            {
+                _miscCostVisibility = value;
+                RaisePropertyChanged("MiscCostVisibility");
+            }
+        }
+        private Visibility _miscCostVisibility;
+
+        public Visibility MiscWiringVisibility
+        {
+            get { return _miscWiringVisibility; }
+            set
+            {
+                _miscWiringVisibility = value;
+                RaisePropertyChanged("MiscWiringVisibility");
+            }
+        }
+        private Visibility _miscWiringVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -235,7 +339,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private double _deviceCost;
 
-        public ConnectionType DeviceConnectionType
+        public TECConnectionType DeviceConnectionType
         {
             get { return _deviceConnectionType; }
             set
@@ -244,7 +348,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("DeviceConnectionType");
             }
         }
-        private ConnectionType _deviceConnectionType;
+        private TECConnectionType _deviceConnectionType;
 
         public string DeviceButtonContent
         {
@@ -267,17 +371,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECManufacturer _deviceManufacturer;
-
-        public double DeviceMultiplier
-        {
-            get { return _deviceMultiplier; }
-            set
-            {
-                _deviceMultiplier = value;
-                RaisePropertyChanged("DeviceMultiplier");
-            }
-        }
-        private double _deviceMultiplier;
 
         public ObservableCollection<TECTag> DeviceTags
         {
@@ -367,8 +460,84 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private ObservableCollection<TECTag> _controllerTags;
-        
+
+        public TECManufacturer ControllerManufacturer
+        {
+            get { return _controllerManufacturer; }
+            set
+            {
+                _controllerManufacturer = value;
+                RaisePropertyChanged("ControllerManufacturer");
+            }
+        }
+        private TECManufacturer _controllerManufacturer;
+
         #endregion //Device Interface Properties
+
+        #region Panel Interface Properties
+
+        private TECPanelType _selectedPanelType;
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+            }
+        }
+        private string _panelName;
+        public string PanelName
+        {
+            get { return _panelName; }
+            set
+            {
+                _panelName = value;
+                RaisePropertyChanged("PanelName");
+            }
+        }
+        private string _panelDescription;
+        public string PanelDescription
+        {
+            get { return _panelDescription; }
+            set
+            {
+                _panelDescription = value;
+                RaisePropertyChanged("PanelDescription");
+            }
+        }
+        private ObservableCollection<TECAssociatedCost> _panelAssociatedCosts;
+        public ObservableCollection<TECAssociatedCost> PanelAssociatedCosts
+        {
+            get { return _panelAssociatedCosts; }
+            set
+            {
+                _panelAssociatedCosts = value;
+                RaisePropertyChanged("PanelAssociatedCosts");
+            }
+        }
+        private ObservableCollection<TECTag> _panelTags;
+        public ObservableCollection<TECTag> PanelTags
+        {
+            get { return _panelTags; }
+            set
+            {
+                _panelTags = value;
+                RaisePropertyChanged("PanelTags");
+            }
+        }
+        private ObservableCollection<TECPanelType> _panelTypeSelections;
+        public ObservableCollection<TECPanelType> PanelTypeSelections
+        {
+            get { return _panelTypeSelections; }
+            set
+            {
+                _panelTypeSelections = value;
+                RaisePropertyChanged("PanelTypeSelections");
+            }
+        }
+
+        #endregion
 
         #region Scope Collections
         private ObservableCollection<TECSystem> _systemItemsCollection;
@@ -426,6 +595,61 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllersItemsCollection");
             }
         }
+
+        private ObservableCollection<TECAssociatedCost> _associatedCostsItemsCollection;
+        public ObservableCollection<TECAssociatedCost> AssociatedCostsItemsCollection
+        {
+            get { return _associatedCostsItemsCollection; }
+            set
+            {
+                _associatedCostsItemsCollection = value;
+                RaisePropertyChanged("AssociatedCostsItemsCollection");
+            }
+        }
+
+        private ObservableCollection<TECControlledScope> _controlledScopeItemsCollection;
+        public ObservableCollection<TECControlledScope> ControlledScopeItemsCollection
+        {
+            get { return _controlledScopeItemsCollection; }
+            set
+            {
+                _controlledScopeItemsCollection = value;
+                RaisePropertyChanged("ControlledScopeItemsCollection");
+            }
+        }
+
+        private ObservableCollection<TECPanel> _panelsItemsCollection;
+        public ObservableCollection<TECPanel> PanelsItemsCollection
+        {
+            get { return _panelsItemsCollection; }
+            set
+            {
+                _panelsItemsCollection = value;
+                RaisePropertyChanged("PanelsItemsCollection");
+            }
+        }
+
+        private ObservableCollection<TECMiscWiring> _miscWiringCollection;
+        public ObservableCollection<TECMiscWiring> MiscWiringCollection
+        {
+            get { return _miscWiringCollection; }
+            set
+            {
+                _miscWiringCollection = value;
+                RaisePropertyChanged("MiscWiringCollection");
+            }
+        }
+
+        private ObservableCollection<TECMiscCost> _miscCostsCollection;
+        public ObservableCollection<TECMiscCost> MiscCostsCollection
+        {
+            get { return _miscCostsCollection; }
+            set
+            {
+                _miscCostsCollection = value;
+                RaisePropertyChanged("MiscCostsCollection");
+            }
+        }
         #endregion
 
         #region Search
@@ -446,26 +670,46 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ScopeCollectionExtension(TECTemplates templates)
         {
             Templates = templates;
-            SearchCollectionCommand = new RelayCommand(SearchCollectionExecute);
+            SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             AddTagCommand = new RelayCommand(AddTagExecute);
             AddManufacturerCommand = new RelayCommand(AddManufacturerExecute);
-            AddDeviceCommand = new RelayCommand(AddDeviceExecute);
-            AddControllerCommand = new RelayCommand(AddControllerExecute);
-            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute);
-            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute);
-            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute);
-
-            ControllerIO = new ObservableCollection<TECIO>();
+            AddDeviceCommand = new RelayCommand(AddDeviceExecute, CanAddDevice);
+            AddControllerCommand = new RelayCommand(AddControllerExecute, CanAddController);
+            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, canAddIO);
+            AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute, CanAddTagToDevice);
+            AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute, CanAddTagToController);
+            AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
+            AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
+            AddPanelCommand = new RelayCommand(AddPanelExecute, AddPanelCanExecute);
 
             populateItemsCollections();
 
+            PanelTypeSelections = templates.PanelTypeCatalog;
+
             DeviceTags = new ObservableCollection<TECTag>();
             ControllerTags = new ObservableCollection<TECTag>();
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            ControllerIO = new ObservableCollection<TECIO>();
+
+            setupInterfaceDefaults();
         }
         #endregion
 
         #region Methods
+
+        public void Refresh(TECTemplates templates)
+        {
+            Templates = templates;
+            PanelTypeSelections = templates.PanelTypeCatalog;
+            populateItemsCollections();
+            DeviceTags = new ObservableCollection<TECTag>();
+            ControllerTags = new ObservableCollection<TECTag>();
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            ControllerIO = new ObservableCollection<TECIO>();
+        }
 
         #region Commands
 
@@ -475,13 +719,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 switch (TabIndex)
                 {
-                    case 0:
+                    case ScopeCollectionIndex.System:
                         SystemItemsCollection = new ObservableCollection<TECSystem>();
                         foreach (TECSystem item in Templates.SystemTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) || 
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SystemItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -493,13 +737,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case 1:
+                    case ScopeCollectionIndex.Equipment:
                         EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
                         foreach (TECEquipment item in Templates.EquipmentTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 EquipmentItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -511,13 +755,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case 2:
+                    case ScopeCollectionIndex.SubScope:
                         SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
                         foreach (TECSubScope item in Templates.SubScopeTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()))
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
                             {
-                                Console.WriteLine(item.Name);
                                 SubScopeItemsCollection.Add(item);
                             }
                             foreach (TECTag tag in item.Tags)
@@ -529,40 +773,240 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
+                    case ScopeCollectionIndex.Devices:
+                        DevicesItemsCollection = new ObservableCollection<TECDevice>();
+                        foreach (TECDevice item in Templates.DeviceCatalog)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                DevicesItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    DevicesItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.Controllers:
+                        ControllersItemsCollection = new ObservableCollection<TECController>();
+                        foreach (TECController item in Templates.ControllerTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                ControllersItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    ControllersItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.AssociatedCosts:
+                        AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
+                        foreach (TECAssociatedCost item in Templates.AssociatedCostsCatalog)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                AssociatedCostsItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    AssociatedCostsItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.ControlledScope:
+                        ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
+                        foreach (TECControlledScope item in Templates.ControlledScopeTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                ControlledScopeItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    ControlledScopeItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.Panels:
+                        PanelsItemsCollection = new ObservableCollection<TECPanel>();
+                        foreach (TECPanel item in Templates.PanelTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                PanelsItemsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    PanelsItemsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.MiscCosts:
+                        MiscCostsCollection = new ObservableCollection<TECMiscCost>();
+                        foreach (TECMiscCost item in Templates.MiscCostTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                MiscCostsCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    MiscCostsCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.MiscWiring:
+                        MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
+                        foreach (TECMiscWiring item in Templates.MiscWiringTemplates)
+                        {
+                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
+                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            {
+                                MiscWiringCollection.Add(item);
+                            }
+                            foreach (TECTag tag in item.Tags)
+                            {
+                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                {
+                                    MiscWiringCollection.Add(item);
+                                }
+                            }
+                        }
+                        break;
                     default:
                         break;
 
                 }
             }
         }
+        private bool SearchCanExecute()
+        {
+            bool canSearch = false;
+            switch (TabIndex)
+            {
+                case ScopeCollectionIndex.System:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Equipment:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.SubScope:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Devices:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Controllers:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.AssociatedCosts:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.ControlledScope:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.Panels:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.MiscCosts:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.MiscWiring:
+                    canSearch = true;
+                    break;
+                default:
+                    break;
+            }
+            return canSearch;
+        }
         private void EndSearchExecute()
         {
             populateItemsCollections();
             SearchString = "";
         }
+
         private void AddTagExecute()
         {
             TECTag newTag = new TECTag();
             newTag.Text = TagName;
             Templates.Tags.Add(newTag);
         }
+        private bool canAddTag()
+        {
+            if(TagName != "") { return true; }
+            else { return false; }
+        }
+
         private void AddManufacturerExecute()
         {
-            TECManufacturer newMan = new TECManufacturer(ManufacturerName, ManufacturerMultiplier);
+            TECManufacturer newMan = new TECManufacturer();
+            newMan.Name = ManufacturerName;
+            newMan.Multiplier = ManufacturerMultiplier;
             Templates.ManufacturerCatalog.Add(newMan);
         }
+        private bool CanAddManufacturer()
+        {
+            if(ManufacturerName != "")
+            { return true; }
+            else { return false; }
+        }
+
         private void AddDeviceExecute()
         {
-            var newDevice = new TECDevice(DeviceName, DeviceDescription, DeviceCost, DeviceConnectionType, DeviceManufacturer);
+            var newDevice = new TECDevice();
+            newDevice.Name = DeviceName;
+            newDevice.Description = DeviceDescription;
+            newDevice.Cost = DeviceCost;
+            newDevice.ConnectionType = DeviceConnectionType;
+            newDevice.Manufacturer = DeviceManufacturer;
             newDevice.Tags = DeviceTags;
             Templates.DeviceCatalog.Add(newDevice);
             DeviceName = "";
             DeviceDescription = "";
             DeviceCost = 0;
-            DeviceConnectionType = 0;
+            DeviceConnectionType = null;
             DeviceManufacturer = null;
             DeviceTags = new ObservableCollection<TECTag>();
         }
+        private bool CanAddDevice()
+        {
+            if (DeviceManufacturer != null
+                && DeviceConnectionType != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddControllerExecute()
         {
             var newController = new TECController();
@@ -571,13 +1015,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newController.Cost = ControllerCost;
             newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
+            newController.Manufacturer = ControllerManufacturer;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
             ControllerCost = 0;
             ControllerIO = new ObservableCollection<TECIO>();
             ControllerTags = new ObservableCollection<TECTag>();
+            ControllerManufacturer = null;
         }
+        private bool CanAddController()
+        {
+            if(ControllerManufacturer != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddIOToControllerExecute()
         {
             var newIO = new TECIO();
@@ -585,38 +1043,409 @@ namespace TECUserControlLibrary.ViewModelExtensions
             newIO.Quantity = ControllerIOQTY;
             ControllerIO.Add(newIO);
         }
+        private bool canAddIO()
+        {
+            bool hasIO = false;
+            if (ControllerIO != null && ControllerIOType != 0)
+            {
+                foreach (TECIO io in ControllerIO)
+                {
+                    if (io.Type == ControllerIOType)
+                    {
+                        hasIO = true;
+                        break;
+                    }
+                }
+                return !hasIO;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddTagToDeviceExecute()
         {
             DeviceTags.Add(SelectedTag);
             SelectedTag = null;
+        }
+        private bool CanAddTagToDevice()
+        {
+            if (SelectedTag != null
+                && !DeviceTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         private void AddTagToControllerExecute()
         {
             ControllerTags.Add(SelectedTag);
             SelectedTag = null;
         }
+        private bool CanAddTagToController()
+        {
+            if (SelectedTag != null
+                && !ControllerTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void AddTagToPanelExecute()
+        {
+            PanelTags.Add(SelectedTag);
+            SelectedTag = null;
+        }
+        private bool CanAddTagToPanel()
+        {
+            if (SelectedTag != null
+                && !PanelTags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void AddAssociatedCostToPanelExecute()
+        {
+            PanelAssociatedCosts.Add(SelectedAssociatedCost);
+            SelectedAssociatedCost = null;
+        }
+        private void AddPanelExecute()
+        {
+            var panel = new TECPanel();
+            panel.Type = SelectedPanelType;
+            panel.Name = PanelName;
+            panel.Description = PanelDescription;
+            panel.Tags = PanelTags;
+            panel.AssociatedCosts = PanelAssociatedCosts;
+            Templates.PanelTemplates.Add(panel);
+            SelectedPanelType = null;
+            PanelName = "";
+            PanelDescription = "";
+            PanelTags = new ObservableCollection<TECTag>();
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>(); 
+        }
+        private bool AddPanelCanExecute()
+        {
+            if(SelectedPanelType != null && PanelName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         #endregion
 
-        public void populateItemsCollections()
+        private void setupInterfaceDefaults()
         {
-            SystemItemsCollection = Templates.SystemTemplates;
-            EquipmentItemsCollection = Templates.EquipmentTemplates;
-            SubScopeItemsCollection = Templates.SubScopeTemplates;
-            DevicesItemsCollection = Templates.DeviceCatalog;
-            ControllersItemsCollection = Templates.ControllerTemplates;
+            _deviceName = "";
+            _deviceDescription = "";
+            _deviceCost = 0;
+
+            _controllerName = "";
+            _controllerDescription = "";
+            _controllerCost = 0;
+            _controllerIOQTY = 0;
+
+            _panelName = "";
+            _panelDescription = "";
         }
 
+        public void populateItemsCollections()
+        {
+            SystemItemsCollection = new ObservableCollection<TECSystem>();
+            EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
+            SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
+            DevicesItemsCollection = new ObservableCollection<TECDevice>();
+            ControllersItemsCollection = new ObservableCollection<TECController>();
+            AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
+            ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
+            PanelsItemsCollection = new ObservableCollection<TECPanel>();
+            MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
+            MiscCostsCollection = new ObservableCollection<TECMiscCost>();
+
+            foreach (TECSystem sys in Templates.SystemTemplates)
+            {
+                SystemItemsCollection.Add(sys);
+            }
+            foreach (TECEquipment equip in Templates.EquipmentTemplates)
+            {
+                EquipmentItemsCollection.Add(equip);
+            }
+            foreach(TECSubScope ss in Templates.SubScopeTemplates)
+            {
+                SubScopeItemsCollection.Add(ss);
+            }
+            foreach(TECDevice dev in Templates.DeviceCatalog)
+            {
+                DevicesItemsCollection.Add(dev);
+            }
+            foreach(TECController control in Templates.ControllerTemplates)
+            {
+                ControllersItemsCollection.Add(control);
+            }
+            foreach(TECAssociatedCost assCost in Templates.AssociatedCostsCatalog)
+            {
+                AssociatedCostsItemsCollection.Add(assCost);
+            }
+            TECControlledScope blankScope = new TECControlledScope();
+            blankScope.Name = "Blank";
+            blankScope.Description = "Drag in for a new Controlled Scope";
+            ControlledScopeItemsCollection.Add(blankScope);
+            foreach (TECControlledScope controlScope in Templates.ControlledScopeTemplates)
+            {
+                ControlledScopeItemsCollection.Add(controlScope);
+            }
+            foreach(TECPanel panel in Templates.PanelTemplates)
+            {
+                PanelsItemsCollection.Add(panel);
+            }
+            foreach(TECMiscWiring wiring in Templates.MiscWiringTemplates)
+            {
+                MiscWiringCollection.Add(wiring);
+            }
+            foreach (TECMiscCost cost in Templates.MiscCostTemplates)
+            {
+                MiscCostsCollection.Add(cost);
+            }
+        }
+
+        private void unsubscribeTemplatesCollections()
+        {
+            if (Templates != null)
+            {
+                Templates.SystemTemplates.CollectionChanged -= SystemTemplates_CollectionChanged;
+                Templates.EquipmentTemplates.CollectionChanged -= EquipmentTemplates_CollectionChanged;
+                Templates.SubScopeTemplates.CollectionChanged -= SubScopeTemplates_CollectionChanged;
+                Templates.DeviceCatalog.CollectionChanged -= DeviceCatalog_CollectionChanged;
+                Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
+                Templates.AssociatedCostsCatalog.CollectionChanged -= AssociatedCostsCatalog_CollectionChanged;
+                Templates.ControlledScopeTemplates.CollectionChanged -= ControlledScopeTemplates_CollectionChanged;
+                Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
+                Templates.MiscWiringTemplates.CollectionChanged -= MiscWiringTemplates_CollectionChanged;
+                Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
+            }
+        }
+
+        private void subscribeTemplatesCollections()
+        {
+            Templates.SystemTemplates.CollectionChanged += SystemTemplates_CollectionChanged;
+            Templates.EquipmentTemplates.CollectionChanged += EquipmentTemplates_CollectionChanged;
+            Templates.SubScopeTemplates.CollectionChanged += SubScopeTemplates_CollectionChanged;
+            Templates.DeviceCatalog.CollectionChanged += DeviceCatalog_CollectionChanged;
+            Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
+            Templates.AssociatedCostsCatalog.CollectionChanged += AssociatedCostsCatalog_CollectionChanged;
+            Templates.ControlledScopeTemplates.CollectionChanged += ControlledScopeTemplates_CollectionChanged;
+            Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
+            Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
+            Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
+        }
+        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             DropHandler(dropInfo);
         }
+        
 
+        #endregion
+
+        #region Event Handlers
+        private void SystemTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(object item in e.NewItems)
+                {
+                    SystemItemsCollection.Add(item as TECSystem);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach(object item in e.OldItems)
+                {
+                    SystemItemsCollection.Remove(item as TECSystem);
+                }
+            }
+        }
+
+        private void EquipmentTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    EquipmentItemsCollection.Add(item as TECEquipment);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    EquipmentItemsCollection.Remove(item as TECEquipment);
+                }
+            }
+        }
+
+        private void SubScopeTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    SubScopeItemsCollection.Add(item as TECSubScope);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    SubScopeItemsCollection.Remove(item as TECSubScope);
+                }
+            }
+        }
+
+        private void DeviceCatalog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    DevicesItemsCollection.Add(item as TECDevice);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    DevicesItemsCollection.Remove(item as TECDevice);
+                }
+            }
+        }
+
+        private void ControllerTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    ControllersItemsCollection.Add(item as TECController);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    ControllersItemsCollection.Remove(item as TECController);
+                }
+            }
+        }
+
+        private void AssociatedCostsCatalog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    AssociatedCostsItemsCollection.Add(item as TECAssociatedCost);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    AssociatedCostsItemsCollection.Remove(item as TECAssociatedCost);
+                }
+            }
+        }
+
+        private void ControlledScopeTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    ControlledScopeItemsCollection.Add(item as TECControlledScope);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    ControlledScopeItemsCollection.Remove(item as TECControlledScope);
+                }
+            }
+        }
+
+        private void PanelTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    PanelsItemsCollection.Add(item as TECPanel);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    PanelsItemsCollection.Remove(item as TECPanel);
+                }
+            }
+        }
+
+        private void MiscCostTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    MiscCostsCollection.Add(item as TECMiscCost);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    MiscCostsCollection.Remove(item as TECMiscCost);
+                }
+            }
+        }
+
+        private void MiscWiringTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    MiscWiringCollection.Add(item as TECMiscWiring);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    MiscWiringCollection.Remove(item as TECMiscWiring);
+                }
+            }
+        }
         #endregion
     }
 }

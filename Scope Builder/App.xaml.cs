@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DebugLibrary;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,7 +16,7 @@ namespace Scope_Builder
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs args)
         {
             EventManager.RegisterClassHandler(typeof(TextBox),
                 TextBox.GotFocusEvent,
@@ -23,6 +24,7 @@ namespace Scope_Builder
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
+
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
@@ -37,15 +39,15 @@ namespace Scope_Builder
 
                         Scope_Builder.Properties.Settings.Default.StartupFile = fname;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        MessageBox.Show("Could not open file. Error: " + ex.Message);
+                        DebugHandler.LogError("Could not open startup file. Exception: " + e.Message);
                     }
                 }
             }
             
             
-        base.OnStartup(e);
+        base.OnStartup(args);
 
      }
 

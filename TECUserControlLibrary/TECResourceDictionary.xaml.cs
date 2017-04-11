@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -42,6 +43,42 @@ namespace TECUserControlLibrary
             }
         }
 
+        private void SelectRowDetails(object sender, MouseButtonEventArgs e)
+        {
+            var ogSource = e.OriginalSource;
+            var source = e.Source;
+            var row = sender as DataGridRow;
+            bool isKeyboardFocused = row.IsKeyboardFocused;
+            //if (!isKeyboardFocused)
+            //{
+            //    row.IsSelected = false;
+            //    row.IsSelected = true;
+            //}
+            bool sourceIsRowDetails = source is DataGridDetailsPresenter;
+            bool ogSourceIsBorderOrTextBlock = (ogSource.GetType() == typeof(Border)) || (ogSource is TextBlock);
+
+            if (!isKeyboardFocused &&
+                sourceIsRowDetails
+                && !ogSourceIsBorderOrTextBlock)
+            {
+                if (row == null)
+                {
+                    return;
+                }
+                row.Focusable = true;
+                row.Focus();
+
+                var focusDirection = FocusNavigationDirection.Next;
+                var request = new TraversalRequest(focusDirection);
+                var elementWithFocus = Keyboard.FocusedElement as UIElement;
+                if (elementWithFocus != null)
+                {
+                    elementWithFocus.MoveFocus(request);
+                }
+            }
+
+        }
+
         static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
             UIElement parent = element;
@@ -54,6 +91,33 @@ namespace TECUserControlLibrary
                 }
 
                 parent = VisualTreeHelper.GetParent(parent) as UIElement;
+            }
+            return null;
+        }
+
+        static T FindVisualChild<T>(UIElement element) where T : UIElement
+        {
+            UIElement child = null;
+            if (VisualTreeHelper.GetChildrenCount(element) > 0)
+            {
+                child = VisualTreeHelper.GetChild(element, 0) as UIElement;
+            }
+            while (child != null)
+            {
+                T correctlyTyped = child as T;
+                if (correctlyTyped != null)
+                {
+                    return correctlyTyped;
+                }
+
+                if (VisualTreeHelper.GetChildrenCount(child) > 0)
+                {
+                    child = VisualTreeHelper.GetChild(child, 0) as UIElement;
+                }
+                else
+                {
+                    child = null;
+                }
             }
             return null;
         }

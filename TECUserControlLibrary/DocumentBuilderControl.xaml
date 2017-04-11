@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -30,14 +31,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-            <local:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
+            <grids:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
                                     Margin="5"
                                         Grid.Row="0" Grid.ColumnSpan="2" />
         
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="2" 
                       HorizontalAlignment="Stretch"/>
 
-        <local:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
+        <grids:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
                                             Margin="5"
                                             Grid.Row="2"
                                             Grid.Column="0"
@@ -56,11 +57,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-                <local:NotesGridControl NotesSource="{Binding Bid.Notes}"
+                <grids:NotesGridControl NotesSource="{Binding Bid.Notes}"
                                         Margin="5"/>
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch"/>
-            <local:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"
+            <grids:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"
                                              Grid.Column="2"
                                          Margin="5"/>
             </Grid>

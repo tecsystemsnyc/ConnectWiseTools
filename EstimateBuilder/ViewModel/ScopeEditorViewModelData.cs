@@ -54,8 +54,7 @@ namespace EstimateBuilder
                 RaisePropertyChanged("DevicesItemsCollection");
             }
         }
-
-
+        
         private string _searchString;
         public string SearchString
         {

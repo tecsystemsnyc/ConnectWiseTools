@@ -41,22 +41,6 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty LocationSourceProperty =
             DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLocation>),
               typeof(ByLocationControl), new PropertyMetadata(default(ObservableCollection<TECLocation>)));
-
-        /// <summary>
-        /// Gets or sets the SelectedScopeType which is displayed
-        /// </summary>
-        public LocationScopeType SelectedScopeType
-        {
-            get { return (LocationScopeType)GetValue(SelectedScopeTypeProperty); }
-            set { SetValue(SelectedScopeTypeProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the SelectedScopeType dependency property
-        /// </summary>
-        public static readonly DependencyProperty SelectedScopeTypeProperty =
-            DependencyProperty.Register("SelectedScopeType", typeof(LocationScopeType),
-              typeof(ByLocationControl), new PropertyMetadata(default(LocationScopeType)));
         
         /// <summary>
         /// Gets or sets the SystemSource which is displayed
@@ -127,16 +111,7 @@ namespace TECUserControlLibrary
 
         public ByLocationControl()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                string message = "By Location Control Initalization Failed: " + e.Message;
-                Console.WriteLine(message);
-                throw new Exception(message);
-            }
+            InitializeComponent();
         }
     }
 }

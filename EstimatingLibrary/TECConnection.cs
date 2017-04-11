@@ -9,15 +9,13 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public class TECConnection : TECObject
+    public abstract class TECConnection : TECObject
     {
         #region Properties
-        private Guid _guid;
-        private double _length;
-        private TECController _controller;
-        private ObservableCollection<TECScope> _scope;
-        private ObservableCollection<ConnectionType> _connectionTypes;
-        private ObservableCollection<IOType> _ioTypes;
+        protected Guid _guid;
+        protected double _length;
+        protected TECController _parentController;
+        protected TECConduitType _conduitType;
 
         public Guid Guid
         {
@@ -33,83 +31,46 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Length", temp, this);
             }
         }
-        
-        public TECController Controller
+        public TECController ParentController
         {
-            get { return _controller; }
+            get { return _parentController; }
             set
             {
-                var temp = this.Copy();
-                _controller = value;
-                NotifyPropertyChanged("Controller", temp, this);
+                _parentController = value;
+                RaisePropertyChanged("ParentController");
             }
         }
-        public ObservableCollection<TECScope> Scope
+        public TECConduitType ConduitType
         {
-            get { return _scope; }
+            get { return _conduitType; }
             set
             {
-                var temp = this.Copy();
-                _scope = value;
-                NotifyPropertyChanged("Scope", temp, this);
+                var oldNew = Tuple.Create<Object, Object>(_conduitType, value); 
+                var temp = Copy();
+                _conduitType = value;
+                NotifyPropertyChanged("ConduitType", temp, this);
+                temp = Copy();
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECConduitType));
             }
         }
-        public ObservableCollection<ConnectionType> ConnectionTypes
-        {
-            get { return _connectionTypes; }
-            set
-            {
-                var temp = this.Copy();
-                _connectionTypes = value;
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
-            }
-        }
-        public ObservableCollection<IOType> IOTypes
-        {
-            get { return _ioTypes; }
-            set
-            {
-                var temp = this.Copy();
-                _ioTypes = value;
-                NotifyPropertyChanged("IOTypes", temp, this);
-            }
-        }
-
         #endregion //Properties
 
         #region Constructors 
-        public TECConnection(double length, ObservableCollection<ConnectionType> types, Guid guid)
+        public TECConnection(Guid guid)
         {
-            this._guid = guid;
-            this._length = length;
-            this._connectionTypes = types;
-            this._scope = new ObservableCollection<TECScope>();
-        }
-        public TECConnection()
-        {
-            _guid = Guid.NewGuid();
+            _guid = guid;
             _length = 0;
-            _connectionTypes = new ObservableCollection<ConnectionType>();
-            _ioTypes = new ObservableCollection<IOType>();
-            _controller = new TECController();
-            _scope = new ObservableCollection<TECScope>();
         }
-
-        public TECConnection(TECConnection connectionSource) : this(connectionSource.Length, connectionSource.ConnectionTypes, connectionSource.Guid)
+        public TECConnection() : this(Guid.NewGuid()) { }
+        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
-            _scope = connectionSource.Scope;
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = connectionSource.Guid; }
+
+            _length = connectionSource.Length;            
+            if (connectionSource.ConduitType != null)
+            { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
         #endregion //Constructors
-
-        #region Methods
-        public override Object Copy()
-        {
-            TECConnection connection = new TECConnection(this);
-
-            return connection;
-        }
-        
-        #endregion
-        
     }
 }

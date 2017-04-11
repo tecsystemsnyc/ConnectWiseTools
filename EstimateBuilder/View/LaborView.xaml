@@ -7,9 +7,19 @@
         mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
-
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -22,43 +32,277 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <Label Content="TEC Labor"/>
-        <Label Content="Project Management Coefficient: "
-               Grid.Row="1"/>
-        <TextBox Text="{Binding Labor.PMCoef}"
-                 Grid.Row="1" Grid.Column="1"/>
-        
-        <Label Content="Engineering Coefficient: "
-               Grid.Row="2"/>
-        <TextBox Text="{Binding Labor.ENGCoef}"
-                 Grid.Row="2" Grid.Column="1"/>
+        <!--TEC Labor Headers-->
+        <TextBlock Text="TEC Labor"
+               FontWeight="Bold"/>
+        <TextBlock Text="Points"
+               Grid.Column="1"/>
+        <TextBlock Text="Hours/Point"
+               Grid.Column="2"/>
+        <TextBlock Text="Hours (Points)"
+               Grid.Column="3"/>
+        <TextBlock Text="Extra Hours"
+               Grid.Column="4"/>
+        <TextBlock Text="Total Hours"
+               Grid.Column="5"/>
+        <TextBlock Text="$/Hour"
+               Grid.Column="6"/>
+        <TextBlock Text="SubTotal"
+               Grid.Column="7"/>
 
-        <Label Content="Software Coefficient: "
+
+        <!--Project Management Values-->
+        <TextBlock Text="Project Management: "
+               Grid.Row="1"/>
+        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+                 Grid.Row="1" Grid.Column="1"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.PMCoef, StringFormat= {} {0:F2}}"
+                 Grid.Row="1" Grid.Column="2"
+                 />
+        <TextBlock Text="{Binding Bid.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="1" Grid.Column="3"
+                 />
+        <TextBox Text="{Binding Bid.Labor.PMExtraHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="1" Grid.Column="4"
+                 Margin="2"/>
+        <TextBlock Text="{Binding Bid.PMLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="1" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.PMRate, StringFormat= {} {0:C}}"
+                 Grid.Row="1" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="1" Grid.Column="7"
+                 />
+
+        <!--Engineering Values-->
+        <TextBlock Text="Engineering: "
+               Grid.Row="2"/>
+        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+                 Grid.Row="2" Grid.Column="1"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.ENGCoef, StringFormat= {} {0:F2}}"
+                 Grid.Row="2" Grid.Column="2"
+                 />
+        <TextBlock Text="{Binding Bid.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="2" Grid.Column="3"
+                 />
+        <TextBox Text="{Binding Bid.Labor.ENGExtraHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="2" Grid.Column="4"
+                 Margin="2"/>
+        <TextBlock Text="{Binding Bid.ENGLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="2" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.ENGRate, StringFormat= {} {0:C}}"
+                 Grid.Row="2" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="2" Grid.Column="7"
+                 />
+
+        <!--Software Values-->
+        <TextBlock Text="Software: "
                Grid.Row="3"/>
-        <TextBox Text="{Binding Labor.SoftCoef}"
-                 Grid.Row="3" Grid.Column="1"/>
-        
-        <Label Content="Graphics Coefficient: "
+        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+                 Grid.Row="3" Grid.Column="1"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.SoftCoef, StringFormat= {} {0:F2}}"
+                 Grid.Row="3" Grid.Column="2"
+                 />
+        <TextBlock Text="{Binding Bid.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="3" Grid.Column="3"
+                 />
+        <TextBox Text="{Binding Bid.Labor.SoftExtraHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="3" Grid.Column="4"
+                 Margin="2"/>
+        <TextBlock Text="{Binding Bid.SoftLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="3" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.SoftRate, StringFormat= {} {0:C}}"
+                 Grid.Row="3" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="3" Grid.Column="7"
+                 />
+
+        <!--Graphics Values-->
+        <TextBlock Text="Graphics: "
                Grid.Row="4"/>
-        <TextBox Text="{Binding Labor.GraphCoef}"
-                 Grid.Row="4" Grid.Column="1"/>
+        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+                 Grid.Row="4" Grid.Column="1"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.GraphCoef, StringFormat= {} {0:F2}}"
+                 Grid.Row="4" Grid.Column="2"
+                 />
+        <TextBlock Text="{Binding Bid.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="4" Grid.Column="3"
+                 />
+        <TextBox Text="{Binding Bid.Labor.GraphExtraHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="4" Grid.Column="4"
+                 Margin="2"/>
+        <TextBlock Text="{Binding Bid.GraphLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="4" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.GraphRate, StringFormat= {} {0:C}}"
+                 Grid.Row="4" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="4" Grid.Column="7"
+                 />
         
-        <Label Content="Commisioning Coefficient: "
+        <!--Commisioning Values-->
+        <TextBlock Text="Commisioning: "
                Grid.Row="5"/>
-        <TextBox Text="{Binding Labor.CommCoef}"
-                 Grid.Row="5" Grid.Column="1"/>
+        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+                 Grid.Row="5" Grid.Column="1"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.CommCoef, StringFormat= {} {0:F2}}"
+                 Grid.Row="5" Grid.Column="2"
+                 />
+        <TextBlock Text="{Binding Bid.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="5" Grid.Column="3"
+                 />
+        <TextBox Text="{Binding Bid.Labor.CommExtraHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="5" Grid.Column="4"
+                 Margin="2"/>
+        <TextBlock Text="{Binding Bid.CommLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+                 Grid.Row="5" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.CommRate, StringFormat= {} {0:C}}"
+                 Grid.Row="5" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="5" Grid.Column="7"
+                 />
+
         
-        <Label Content="Subcontractor Labor"
+        <!--Subcontractor Labor Headers-->
+        <TextBlock Text="Subcontractor Labor"
+               FontWeight="Bold"
                Grid.Row="7"/>
+        <TextBlock Text="Hours"
+               Grid.Row="7" Grid.Column="5"/>
+        <TextBlock Text="$/Hour"
+               Grid.Row="7" Grid.Column="6"/>
+        <TextBlock Text="SubTotal"
+               Grid.Row="7" Grid.Column="7"/>
         
-        <Label Content="Electrical Subcontractor Rate: "
+
+        <!--Electrical Values-->
+        <TextBlock Text="Electrical: "
                Grid.Row="8"/>
-        <TextBox Text="{Binding Labor.ElectricalRate}"
-                 Grid.Row="8" Grid.Column="1"/>
+        <TextBlock Text="{Binding Bid.ElectricalLaborHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="8" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.ElectricalEffectiveRate, StringFormat= {} {0:C}}"
+                 Grid.Row="8" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.ElectricalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="8" Grid.Column="7"
+                 />
+
+        <!--Electrical Super Values-->
+        <TextBlock Text="Electrical Supervision: "
+               Grid.Row="9"/>
+        <TextBlock Text="{Binding Bid.ElectricalSuperLaborHours, StringFormat= {} {0:F2}}"
+                 Grid.Row="9" Grid.Column="5"
+                 />
+        <TextBlock Text="{Binding Bid.Labor.ElectricalSuperEffectiveRate, StringFormat= {} {0:C}}"
+                 Grid.Row="9" Grid.Column="6"
+                 />
+        <TextBlock Text="{Binding Bid.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="9" Grid.Column="7"
+                 />
+
+
+        <!--Total Values-->
+        <TextBlock Text="Total"
+               Grid.Row="10" Grid.Column="7"/>
+        <TextBlock Text="{Binding Bid.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+                 Grid.Row="11" Grid.Column="7"
+                 />
+        
+        <!--Boolean Modifiers-->
+        <Grid Grid.Column="8" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Overtime:"/>
+            <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsOnOvertime}"
+                      HorizontalAlignment="Center" Margin="2"/>
+        </Grid>
+
+        <Grid Grid.Column="9" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Union:"/>
+            <CheckBox Grid.Column="1" IsChecked="{Binding Bid.Labor.ElectricalIsUnion}"
+                      HorizontalAlignment="Center" Margin="2"/>
+        </Grid>
+        
+        
+        <!--Reload Button-->
+        <Button Grid.Row="10" Grid.Column="0"
+                Grid.RowSpan="2"
+                Margin="5"
+                Command="{Binding ReloadCommand}">
+            <TextBlock TextWrapping="Wrap"
+                       TextAlignment="Center">Reload Coefficients<LineBreak/>and Rates</TextBlock>
+        </Button>
+
+        <Border Grid.Column="1" 
+                  Grid.Row="1"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="2"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="3"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="4"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                Grid.Row="5"
+                Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="8"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        <Border Grid.Column="1" 
+                  Grid.Row="9"
+                  Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+
+
     </Grid>
 </UserControl>

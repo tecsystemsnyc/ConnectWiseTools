@@ -16,46 +16,55 @@ namespace EstimatingLibrary
             get { return _equipment; }
             set
             {
-                    var temp = this.Copy();
+                var temp = this.Copy();
+                if (Equipment != null)
+                {
+                    Equipment.CollectionChanged -= Equipment_CollectionChanged;
+                }
                     _equipment = value;
                     NotifyPropertyChanged("Equipment", temp, this);
                     subscribeToEquipment();
+                Equipment.CollectionChanged += Equipment_CollectionChanged;
             }
         }
 
-        public double BudgetPrice
+        private void Equipment_CollectionChanged1(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            get { return _budgetPrice; }
+            throw new NotImplementedException();
+        }
+
+        public double BudgetPriceModifier
+        {
+            get { return _budgetPriceModifier; }
             set
             {
                 var temp = this.Copy();
-                if(_budgetPrice != value)
+                if(_budgetPriceModifier != value)
                 {
                     if (value < 0)
                     {
-                        _budgetPrice = -1;
+                        _budgetPriceModifier = -1;
                     }
                     else
                     {
-                        _budgetPrice = value;
+                        _budgetPriceModifier = value;
                     }
-                    NotifyPropertyChanged("BudgetPrice", temp, this);
+                    NotifyPropertyChanged("BudgetPriceModifier", temp, this);
                     RaisePropertyChanged("TotalBudgetPrice");
-                    RaisePropertyChanged("PriceWithEquipment");
+                    RaisePropertyChanged("BudgetUnitPrice");
                 }
             }
         }
-        private double _budgetPrice;
-
-        public double PriceWithEquipment
+        private double _budgetPriceModifier;
+        public double BudgetUnitPrice
         {
             get
             {
                 double price = 0;
                 bool priceExists = false;
-                if (BudgetPrice >= 0 )
+                if (BudgetPriceModifier >= 0 )
                 {
-                    price += BudgetPrice;
+                    price += BudgetPriceModifier;
                     priceExists = true;
                 }
                 foreach (TECEquipment equip in Equipment)
@@ -67,16 +76,11 @@ namespace EstimatingLibrary
                     }
                 }
                 if (priceExists)
-                {
-                    return price;
-                }
+                { return price; }
                 else
-                {
-                    return -1;
-                }
+                { return -1; }
             }
         }
-
         new public int Quantity
         {
             get { return _quantity; }
@@ -88,36 +92,40 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalBudgetPrice");             
             }
         }
-
         public int EquipmentQuantity
         {
             get
             {
                 int equipQuantity = 0;
                 foreach (TECEquipment equip in Equipment)
-                {
-                    equipQuantity += equip.Quantity;
-                }
+                { equipQuantity += equip.Quantity; }
                 return equipQuantity;
             }
         }
-
         public int SubScopeQuantity
         {
             get
             {
                 int ssQuantity = 0;
                 foreach (TECEquipment equip in Equipment)
-                {
-                    ssQuantity += (equip.SubScopeQuantity * equip.Quantity);
-                }
+                { ssQuantity += (equip.SubScopeQuantity * equip.Quantity); }
                 return ssQuantity;
             }
         }
 
         public double TotalBudgetPrice
         {
-            get { return (Quantity * PriceWithEquipment); }
+            get
+            {
+                if (Quantity > 0)
+                {
+                    return (Quantity * BudgetUnitPrice);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
         public double MaterialCost
         {
@@ -127,41 +135,58 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
+
+        public ObservableCollection<TECSubScope> SubScope
+        {
+            get
+            {
+                var outSubScope = new ObservableCollection<TECSubScope>();
+                foreach(TECEquipment equip in Equipment)
+                {
+                    foreach(TECSubScope sub in equip.SubScope)
+                    {
+                        outSubScope.Add(sub);
+                    }
+                }
+                return outSubScope;
+            }
+        }
         #endregion //Properties
 
         #region Constructors
-        public TECSystem(string name, string description, double budgetPrice, ObservableCollection<TECEquipment> equipment, Guid guid) : base(name, description, guid)
+        public TECSystem(Guid guid) : base(guid)
         {
-            _budgetPrice = budgetPrice;
-            _equipment = equipment;
-            subscribeToEquipment();
+            _budgetPriceModifier = -1;
+            _equipment = new ObservableCollection<TECEquipment>();
             Equipment.CollectionChanged += Equipment_CollectionChanged;
+            base.PropertyChanged += TECSystem_PropertyChanged;
         }
 
-
-        public TECSystem(string name, string description, double budgetPrice, ObservableCollection<TECEquipment> equipment) : this(name, description, budgetPrice, equipment, Guid.NewGuid()) { }
-        public TECSystem() : this("", "", -1, new ObservableCollection<TECEquipment>()) { }
+        public TECSystem() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSystem(TECSystem sourceSystem) : this(sourceSystem.Name, sourceSystem.Description, sourceSystem.BudgetPrice, new ObservableCollection<TECEquipment>())
+        public TECSystem(TECSystem sourceSystem, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = sourceSystem.Guid; }
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             {
-                Equipment.Add(new TECEquipment(equipment));
+                Equipment.Add(new TECEquipment(equipment, guidDictionary));
             }
-
-            _location = sourceSystem.Location;
-            _quantity = sourceSystem.Quantity;
-            _tags = new ObservableCollection<TECTag>(sourceSystem.Tags);
-
+            _budgetPriceModifier = sourceSystem.BudgetPriceModifier;
+            this.copyPropertiesFromScope(sourceSystem);
         }
         #endregion //Constructors
 
         #region Methods
         public override Object Copy()
         {
-            TECSystem outSystem = new TECSystem(this);
+            TECSystem outSystem = new TECSystem();
             outSystem._guid = Guid;
+            foreach (TECEquipment equipment in this.Equipment)
+            { outSystem.Equipment.Add(equipment.Copy() as TECEquipment); }
+            outSystem._budgetPriceModifier = this.BudgetPriceModifier;
+            outSystem.copyPropertiesFromScope(this);
             return outSystem;
         }
 
@@ -173,12 +198,16 @@ namespace EstimatingLibrary
 
         private double getMaterialCost()
         {
-            double cost = 0;
+            double matCost = 0;
             foreach(TECEquipment equipment in this.Equipment)
             {
-                cost += equipment.MaterialCost;
+                matCost += equipment.MaterialCost;
             }
-            return cost;
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            {
+                matCost += cost.Cost;
+            }
+            return matCost;
         }
         private double getLaborCost()
         {
@@ -187,65 +216,123 @@ namespace EstimatingLibrary
             {
                 cost += equipment.LaborCost;
             }
+            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            {
+                cost += assCost.Labor;
+            }
             return cost;
         }
-
+        
         private void Equipment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("EquipmentQuantity");
-            RaisePropertyChanged("PriceWithEquipment");
-            RaisePropertyChanged("TotalBudgetPrice");
+            RaisePropertyChanged("BudgetUnitPrice");
+            RaisePropertyChanged("SubScopeQuantity");
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
-                    (item as TECScope).PropertyChanged += equipmentChanged; ;
+                    checkForTotalsInEquipment(item as TECEquipment);
+                    if((item as TECEquipment).Location == null)
+                    {
+                        (item as TECEquipment).SetLocationFromParent(this.Location);
+                    }
                 }
+
             } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
-                    (item as TECScope).PropertyChanged -= equipmentChanged;
+                    NotifyPropertyChanged("RemovedSubScope", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged("Edit", this, sender, typeof(TECSystem), typeof(TECEquipment));
             }
 
-        }
-
-        private void equipmentChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Console.WriteLine("Equipment in system chnaged property: " + e.PropertyName);
-            if (e.PropertyName == "Quantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
-                RaisePropertyChanged("EquipmentQuantity");
-            }
-            else if (e.PropertyName == "SubScopeQuantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-            }
-            else if (e.PropertyName == "BudgetPrice")
-            {
-                RaisePropertyChanged("TotalBudgetPrice");
-                RaisePropertyChanged("PriceWithEquipment");
-            }
+            subscribeToEquipment();
         }
 
         private void subscribeToEquipment()
         {
             foreach (TECEquipment scope in this.Equipment)
             {
-                scope.PropertyChanged += equipmentChanged;
+                scope.PropertyChanged += Scope_PropertyChanged;
             }
         }
 
+        private void Scope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var name = e.PropertyName;
+
+            if (name == "Quantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("BudgetUnitPrice");
+                RaisePropertyChanged("EquipmentQuantity");
+            }
+            else if (name == "SubScopeQuantity")
+            {
+                RaisePropertyChanged("SubScopeQuantity");
+            }
+            else if (name == "BudgetUnitPrice")
+            {
+                RaisePropertyChanged("TotalBudgetPrice");
+                RaisePropertyChanged("BudgetUnitPrice");
+            }
+            else if (name == "TotalPoints")
+            {
+                RaisePropertyChanged("TotalPoints");
+            }
+            else if (name == "TotalDevices")
+            {
+                RaisePropertyChanged("TotalDevices");
+            }
+            else if (name == "SubLength")
+            {
+                RaisePropertyChanged("SubLength");
+            } else if (name == "RemovedSubScope")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                NotifyPropertyChanged("RemovedSubScope", this, args.NewValue);
+            }
+          
+        }
+        
+        private void TECSystem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "ObjectPropertyChanged")
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var oldNew = args.NewValue as Tuple<object, object>;
+                foreach(TECEquipment equipment in this.Equipment)
+                {
+                    if(equipment.Location == oldNew.Item1)
+                    {
+                        equipment.SetLocationFromParent(this.Location);
+                    }
+                }
+            }
+        }
+
+        private void checkForTotalsInEquipment(TECEquipment equipment)
+        {
+            foreach (TECSubScope sub in equipment.SubScope)
+            {
+                if (sub.Points.Count > 0)
+                {
+                    RaisePropertyChanged("TotalPoints");
+                }
+                if (sub.Devices.Count > 0)
+                {
+                    RaisePropertyChanged("TotalDevices");
+                }
+            }
+        }
 
         #endregion
 

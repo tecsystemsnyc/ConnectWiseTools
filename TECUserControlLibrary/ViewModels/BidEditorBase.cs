@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -7,33 +8,65 @@ using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Deployment.Application;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class BidEditorBase : ViewModelBase
+    abstract public class BidEditorBase : ViewModelBase
     {
 
         #region Constants
 
-        string DEFAULT_STATUS_TEXT = "Ready :)";
+        string DEFAULT_STATUS_TEXT = "Ready";
 
         #endregion
 
         #region Properties
-        protected bool isReady
+        private bool _isReady;
+        public bool IsReady
         {
-            get;
-            private set;
+            get { return _isReady; }
+            set
+            {
+                _isReady = value;
+                RaisePropertyChanged("IsReady");
+            }
+        }
+
+        private bool _userCanInteract;
+        public bool UserCanInteract
+        {
+            get { return _userCanInteract; }
+            set
+            {
+                _userCanInteract = value;
+                RaisePropertyChanged("UserCanInteract");
+                if (UserCanInteract)
+                {
+                    Mouse.OverrideCursor = null;
+                }
+                else
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                }
+            }
+        }
+
+        private bool _templatesLoaded;
+        protected bool templatesLoaded
+        {
+            get { return _templatesLoaded; }
+            set
+            {
+                _templatesLoaded = value;
+                TemplatesLoadedSet?.Invoke();
+            }
         }
         private string _programName;
         protected string programName
@@ -72,17 +105,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public string CurrentStatusText
-        {
-            get { return _currentStatusText; }
-            private set
-            {
-                _currentStatusText = value;
-                RaisePropertyChanged("CurrentStatusText");
-            }
-        }
-        private string _currentStatusText;
-
         public string TitleString
         {
             get { return _titleString; }
@@ -95,7 +117,33 @@ namespace TECUserControlLibrary.ViewModels
         private string _titleString;
 
         public string TECLogo { get; set; }
-        public string Version { get; set; }
+
+        private bool isNew;
+
+        protected bool isEstimate;
+
+        #region Settings Properties
+        public string TemplatesFilePath
+        {
+            get { return Properties.Settings.Default.TemplatesFilePath; }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesFilePath != value)
+                {
+                    Properties.Settings.Default.TemplatesFilePath = value;
+                    RaisePropertyChanged("TemplatesFilePath");
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        abstract protected string ScopeDirectoryPath
+        {
+            get;
+            set;
+        }
+        #endregion
+
         #region Command Properties
         public ICommand NewCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
@@ -109,6 +157,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
 
+        public ICommand RefreshTemplatesCommand { get; private set; }
+
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion
 
@@ -116,24 +166,32 @@ namespace TECUserControlLibrary.ViewModels
         private ChangeStack stack;
         private string bidDBFilePath;
         public string startupFile;
-        public string scopeDirectoryPath;
         #endregion
 
         #region Delgates
         public Action BidSet;
+        public Action TemplatesLoadedSet;
+        #endregion
+
+        #region View Models
+        public MenuViewModel MenuVM { get; set; }
+        public StatusBarExtension StatusBarVM { get; set; }
         #endregion
 
         #endregion
         public BidEditorBase()
         {
+            isNew = true;
+
+            setupStatusBar();
             SetBusyStatus("Initializing Program...");
 
             setupCommands();
             setupTemplates();
             getLogo();
-            setupTemplates();
             setupBid();
             setupStack();
+            setupMenu();
 
             ResetStatus();
         }
@@ -154,20 +212,25 @@ namespace TECUserControlLibrary.ViewModels
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
 
+            RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
+
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
         private void setupTemplates()
         {
             Templates = new TECTemplates();
             
-            if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
+            if ((TemplatesFilePath != "") && (File.Exists(TemplatesFilePath)))
             {
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
+                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                {
+                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                    templatesLoaded = true;
+                }
                 else
                 {
-                    string message = "TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
+                    templatesLoaded = false;
                 }
             }
             else
@@ -177,35 +240,69 @@ namespace TECUserControlLibrary.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
+                    TemplatesFilePath = getLoadTemplatesPath();
 
-                    if (Properties.Settings.Default.TemplatesFilePath != null)
+                    if (TemplatesFilePath != null)
                     {
-                        if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                        if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                            templatesLoaded = true;
+                            DebugHandler.LogDebugMessage("Finished loading templates.");
                         }
                         else
                         {
-                            message = "File is open elsewhere";
-                            MessageBox.Show(message);
+                            DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
+                            templatesLoaded = false;
                         }
-                        Console.WriteLine("Finished loading templates");
                     }
+                }
+                else
+                {
+                    templatesLoaded = false;
                 }
             }
         }
         private void setupBid()
         {
             Bid = new TECBid();
-            Bid.DeviceCatalog = Templates.DeviceCatalog;
-            Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-            Bid.Tags = Templates.Tags;
+            Bid.Labor.UpdateConstants(Templates.Labor);
+            UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
             bidDBFilePath = null;
         }
         private void setupStack()
         {
             stack = new ChangeStack(Bid);
+        }
+
+        private void setupMenu()
+        {
+            MenuVM = new MenuViewModel(MenuType.SB);
+
+            MenuVM.NewCommand = NewCommand;
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveAsCommand;
+            MenuVM.ExportProposalCommand = DocumentCommand;
+            MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
+            MenuVM.ExportPointsListCommand = CSVExportCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+
+            MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
+
+            //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
+        }
+        private void setupStatusBar()
+        {
+            StatusBarVM = new StatusBarExtension();
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            else
+            { StatusBarVM.Version = "Undeployed Version"; }
+
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
         }
         #endregion
 
@@ -215,9 +312,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (startupFile != "")
             {
-                CurrentStatusText = "Loading...";
+                SetBusyStatus("Loading " + startupFile);
                 LoadFromPath(startupFile);
-                CurrentStatusText = "Done.";
+                ResetStatus();
             }
         }
 
@@ -227,13 +324,12 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-
         private string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null && !isNew)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -248,26 +344,18 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
         }
-
         private string getDocumentSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -282,25 +370,17 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
         }
-
         private string getCSVSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                saveFileDialog.InitialDirectory = scopeDirectoryPath;
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
@@ -315,32 +395,24 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
         }
-
         private string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (scopeDirectoryPath != null)
+            if (ScopeDirectoryPath != null)
             {
-                openFileDialog.InitialDirectory = scopeDirectoryPath;
+                openFileDialog.InitialDirectory = ScopeDirectoryPath;
             }
             else
             {
                 openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            openFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb";
+            openFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
             openFileDialog.DefaultExt = "bdb";
             openFileDialog.AddExtension = true;
 
@@ -348,19 +420,11 @@ namespace TECUserControlLibrary.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
             }
 
             return path;
         }
-
         private string getLoadTemplatesPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -374,26 +438,47 @@ namespace TECUserControlLibrary.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = openFileDialog.FileName;
-                    Properties.Settings.Default.TemplatesFilePath = path;
-                    Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot load this file. Original error: " + ex.Message);
-                }
+                path = openFileDialog.FileName;
+                TemplatesFilePath = path;
             }
 
             return path;
         }
-
         private void buildTitleString()
         {
             TitleString = Bid.Name + " - " + programName;
         }
+        private void LoadFromPath(string path)
+        {
+            if (path != null)
+            {
+                SetBusyStatus("Loading " + path);
+                bidDBFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
+                if (!UtilitiesMethods.IsFileLocked(path))
+                { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+                ResetStatus();
+            }
+        }
+        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
+        {
+            StatusBarVM.CurrentStatusText = statusText;
+            IsReady = false;
+            UserCanInteract = userCanInteract;
+        }
+        protected void ResetStatus()
+        {
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+            IsReady = true;
+            UserCanInteract = true;
+        }
+        
+        #region Event Handlers
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Name")
@@ -401,51 +486,14 @@ namespace TECUserControlLibrary.ViewModels
                 buildTitleString();
             }
         }
-
-        private void LoadFromPath(string path)
-        {
-            if (path != null)
-            {
-                CurrentStatusText = "Loading...";
-                bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
-                }
-                else
-                {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
-                }
-                Console.WriteLine("Finished loading SQL Database.");
-                CurrentStatusText = "Done.";
-            }
-        }
-
-        protected void SetBusyStatus(string statusText)
-        {
-            CurrentStatusText = statusText;
-            isReady = false;
-        }
-        protected void ResetStatus()
-        {
-            CurrentStatusText = DEFAULT_STATUS_TEXT;
-            isReady = true;
-        }
-
-        protected bool IsReady()
-        {
-            return isReady;
-        }
+        #endregion
 
         #endregion //Helper Functions
 
         #region Commands
         private void NewExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -469,51 +517,58 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    Console.WriteLine("Creating new bid.");
+                    DebugHandler.LogDebugMessage("Creating new bid.");
                     bidDBFilePath = null;
                     Bid = new TECBid();
+                    isNew = true;
                 }
             }
             else
             {
-                Console.WriteLine("Creating new bid.");
+                DebugHandler.LogDebugMessage("Creating new bid.");
                 bidDBFilePath = null;
                 Bid = new TECBid();
+                isNew = true;
             }
             
         }
         private void LoadExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
 
-            //User choose path
-            string path = getLoadPath();
-            if (path != null)
+            if (stack.SaveStack.Count > 0)
             {
-                SetBusyStatus("Loading File: " + path);
-                bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
                 {
-                    Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                    if (saveSynchronously())
+                    {
+                        loadBid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save unsuccessful. File not loaded.");
+                    }
                 }
-                else
+                else if (result == MessageBoxResult.No)
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    loadBid();
                 }
-                Console.WriteLine("Finished loading SQL Database.");
-                ResetStatus();
             }
+            else
+            {
+                loadBid();
+            }
+            
         }
         private void SaveExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -524,7 +579,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void SaveAsExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -537,17 +592,14 @@ namespace TECUserControlLibrary.ViewModels
 
             if (path != null)
             {
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    EstimatingUtilitiesLibrary.ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
-                    Console.WriteLine("Scope saved to document.");
+                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
         }
@@ -557,18 +609,15 @@ namespace TECUserControlLibrary.ViewModels
             string path = getCSVSavePath();
             if (path != null)
             {
-                scopeDirectoryPath = Path.GetDirectoryName(path);
-
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     CSVWriter writer = new CSVWriter(path);
                     writer.BidPointsToCSV(Bid);
-                    Console.WriteLine("Finished exporting points to a csv.");
+                    DebugHandler.LogDebugMessage("Points saved to csv.");
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
         }
@@ -577,35 +626,51 @@ namespace TECUserControlLibrary.ViewModels
             //new View.BudgetWindow();
             //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
         }
-        private void LoadTemplatesExecute()
+        protected void LoadTemplatesExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
             //User choose path
-            Properties.Settings.Default.TemplatesFilePath = getLoadTemplatesPath();
-
-            if (Properties.Settings.Default.TemplatesFilePath != null)
+            string path = getLoadTemplatesPath();
+            if (path != "")
             {
-                SetBusyStatus("Loading templates from file: " + Properties.Settings.Default.TemplatesFilePath);
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                {
-                    
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
-                    Bid.DeviceCatalog = Templates.DeviceCatalog;
-                    Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                    Bid.Tags = Templates.Tags;
-                }
-                else
-                {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
-                }
-                Console.WriteLine("Finished loading templates");
+                TemplatesFilePath = path;
             }
-            ResetStatus();
+
+            if (TemplatesFilePath != null)
+            {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        Bid.DeviceCatalog = Templates.DeviceCatalog;
+                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
+                        Bid.Tags = Templates.Tags;
+                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                        templatesLoaded = true;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished loading templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
         }
 
         private void UndoExecute()
@@ -632,9 +697,51 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
         }
 
+        private void RefreshTemplatesExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            if (TemplatesFilePath != null)
+            {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        Bid.DeviceCatalog = Templates.DeviceCatalog;
+                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
+                        Bid.Tags = Templates.Tags;
+                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
+                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
+                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                        templatesLoaded = true;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished refreshing templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+
+                worker.RunWorkerAsync();
+                
+            }
+        }
+
         private void ClosingExecute(CancelEventArgs e)
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 e.Cancel = true;
@@ -655,12 +762,7 @@ namespace TECUserControlLibrary.ViewModels
                 else if (result == MessageBoxResult.Cancel)
                 {
                     e.Cancel = true;
-                    Console.WriteLine("Closing");
                 }
-            }
-            if (!e.Cancel)
-            {
-                Properties.Settings.Default.Save();
             }
         }
 
@@ -682,16 +784,15 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
                         }
-                        catch (Exception ex)
+                            catch (Exception ex)
                         {
-                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
                             EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
                         }
                     }
                     else
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
                     }
                 };
                 worker.RunWorkerCompleted += (s, e) =>
@@ -713,7 +814,7 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
@@ -732,14 +833,13 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                     }
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
-                    Console.WriteLine("Finished saving SQL Database.");
                     ResetStatus();
+                    isNew = false;
                 };
 
                 worker.RunWorkerAsync();
@@ -757,25 +857,24 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 bidDBFilePath = path;
-                scopeDirectoryPath = Path.GetDirectoryName(path);
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
-                
-                    if (!UtilitiesMethods.IsFileLocked(path))
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
                     {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    saveSuccessful = true;
+                        File.Delete(path);
                     }
-                    else
-                    {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                    //Create new database
+                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                     saveSuccessful = false;
                 }
                
@@ -795,24 +894,23 @@ namespace TECUserControlLibrary.ViewModels
                 ChangeStack stackToSave = stack.Copy();
                 stack.ClearStacks();
                 
-                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                {
+                    try
                     {
-                        try
-                        {
-                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        saveSuccessful = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Write("Save delta failed. Saving to new file. Error: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        }
+                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                    saveSuccessful = true;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        string message = "File is open elsewhere";
-                        MessageBox.Show(message);
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
                     }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
+                }
                
             }
             else
@@ -827,6 +925,40 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             return saveSuccessful;
+        }
+
+        private void loadBid()
+        {
+            //User choose path
+            string path = getLoadPath();
+            if (path != null)
+            {
+                SetBusyStatus("Loading File: " + path, false);
+                TECBid loadingBid = new TECBid();
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    bidDBFilePath = path;
+                    ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    Bid = loadingBid;
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+            }
         }
         #endregion
         

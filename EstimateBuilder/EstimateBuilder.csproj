@@ -152,6 +152,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
+    <Compile Include="ViewModel\ElectricalViewModel.cs" />
     <Compile Include="ViewModel\LaborViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProposalViewModel.cs" />
@@ -159,10 +160,12 @@
     <Compile Include="ViewModel\ReviewViewModel.cs" />
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ElectricalView.xaml.cs">
+      <DependentUpon>ElectricalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
@@ -175,9 +178,6 @@
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
       <DependentUpon>ScopeEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -199,6 +199,10 @@
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ElectricalView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LaborView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,10 +216,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ScopeEditorView.xaml">
-      <SubType>Form</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\SettingsView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,6 +268,10 @@
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
+      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
+      <Name>DebugLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
       <Project>{b0f44768-5b48-47b3-bbe8-0dcbd4b0b0c0}</Project>
       <Name>EstimatingLibrary</Name>

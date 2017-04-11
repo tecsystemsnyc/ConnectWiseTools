@@ -83,6 +83,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -103,16 +104,56 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddAssociatedCostsControl.xaml.cs">
+      <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddPanelControl.xaml.cs">
+      <DependentUpon>AddPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddTagControl.xaml.cs">
+      <DependentUpon>AddTagControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssociatedCostsGridControl.xaml.cs">
+      <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AttachableForStyleBehavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="BubbleScrollEvent .cs" />
     <Compile Include="ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\ConduitTypeGridControl.xaml.cs">
+      <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ConnectionGrid.xaml.cs">
+      <DependentUpon>ConnectionGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ConnectionTypeGridControl.xaml.cs">
+      <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ControlledScopeDataGrid.xaml.cs">
+      <DependentUpon>ControlledScopeDataGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ControllerGridControl.xaml.cs">
+    <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\ControllerInPanelGridControl.xaml.cs">
+      <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\IOGridControl.xaml.cs">
+      <DependentUpon>IOGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\IOModuleGridControl.xaml.cs">
+      <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\PanelsGrid.xaml.cs">
+      <DependentUpon>PanelsGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\PanelTypeGridControl.xaml.cs">
+      <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
@@ -126,32 +167,48 @@
     <Compile Include="EquipmentEditControl.xaml.cs">
       <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExclusionsGridControl.xaml.cs">
+    <Compile Include="DataGrids\ExclusionsGridControl.xaml.cs">
       <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LocationGridControl.xaml.cs">
+    <Compile Include="DataGrids\LocationGridControl.xaml.cs">
       <DependentUpon>LocationGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NotesGridControl.xaml.cs">
+    <Compile Include="MaterialView.xaml.cs">
+      <DependentUpon>MaterialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BMSController.cs" />
+    <Compile Include="Models\ControllerInPanel.cs" />
+    <Compile Include="Models\SubScopeConnection.cs" />
+    <Compile Include="Models\TECMenuItem.cs" />
+    <Compile Include="DataGrids\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelEditControl.xaml.cs">
+      <DependentUpon>PanelEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProposalScopeGridControl.xaml.cs">
+    <Compile Include="DataGrids\ProposalScopeGridControl.xaml.cs">
       <DependentUpon>ProposalScopeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScopeBranchAsNoteGridControl.xaml.cs">
+    <Compile Include="DataGrids\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScopeCollectionsTabControl.xaml.cs">
       <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScopeTreeGridControl.xaml.cs">
+    <Compile Include="DataGrids\ScopeTreeGridControl.xaml.cs">
       <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StatusBarControl.xaml.cs">
+      <DependentUpon>StatusBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubScopeWiringGridControl.xaml.cs">
+      <DependentUpon>SubScopeWiringGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
@@ -160,19 +217,77 @@
       <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
+    <Compile Include="UserControls\MenuControl.xaml.cs">
+      <DependentUpon>MenuControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModelExtensions\AddControlledScopeExtension.cs" />
+    <Compile Include="ViewModelExtensions\ControllersPanelsViewModel.cs" />
     <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
     <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\MaterialsCostsExtension.cs" />
+    <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
     <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
+    <Compile Include="ViewModelExtensions\StatusBarExtension.cs" />
     <Compile Include="ViewModels\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetViewModel.cs" />
+    <Compile Include="ViewModels\ControlledScopeViewModel.cs" />
     <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="BudgetWindow.xaml.cs">
       <DependentUpon>BudgetWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\AddControlledScopeView.xaml.cs">
+      <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControlledScopeView.xaml.cs">
+      <DependentUpon>ControlledScopeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ControllersPanelsView.xaml.cs">
+      <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NetworkView.xaml.cs">
+      <DependentUpon>NetworkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VisibilityModel.cs" />
+    <Page Include="AddAssociatedCostsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddTagControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AssociatedCostsGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ByLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\ConduitTypeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\ConnectionGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\ConnectionTypeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\ControlledScopeDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -180,7 +295,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ControllerGridControl.xaml">
+    <Page Include="DataGrids\ControllerGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\ControllerInPanelGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\IOGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\IOModuleGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\PanelsGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\PanelTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,7 +323,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DevicesGridControl.xaml">
+    <Page Include="DataGrids\DevicesGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -208,23 +343,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EquipmentGridControl.xaml">
+    <Page Include="DataGrids\EquipmentGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ExclusionsGridControl.xaml">
+    <Page Include="DataGrids\ExclusionsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LocationGridControl.xaml">
+    <Page Include="DataGrids\LocationGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ManufacturersGridControl.xaml">
+    <Page Include="DataGrids\ManufacturersGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NotesGridControl.xaml">
+    <Page Include="MaterialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\NotesGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,15 +375,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PointsGridControl.xaml">
+    <Page Include="DataGrids\PointsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ProposalScopeGridControl.xaml">
+    <Page Include="DataGrids\ProposalScopeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScopeBranchAsNoteGridControl.xaml">
+    <Page Include="DataGrids\ScopeBranchAsNoteGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,7 +399,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScopeTreeGridControl.xaml">
+    <Page Include="DataGrids\ScopeTreeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\StatusBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -264,19 +411,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SubScopeGridControl.xaml">
+    <Page Include="DataGrids\SubScopeGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SubScopeWiringGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SystemEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SystemsGridControl .xaml">
+    <Page Include="DataGrids\SystemsGridControl .xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TagsGridControl.xaml">
+    <Page Include="DataGrids\TagsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -289,21 +440,21 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="BaseConverter.cs" />
-    <Compile Include="DevicesGridControl.xaml.cs">
+    <Compile Include="DataGrids\DevicesGridControl.xaml.cs">
       <DependentUpon>DevicesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DevicesPointsControl.xaml.cs">
       <DependentUpon>DevicesPointsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EnumBindingSourceExtension.cs" />
-    <Compile Include="EquipmentGridControl.xaml.cs">
+    <Compile Include="DataGrids\EquipmentGridControl.xaml.cs">
       <DependentUpon>EquipmentGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="HelperConverters.cs" />
-    <Compile Include="ManufacturersGridControl.xaml.cs">
+    <Compile Include="DataGrids\ManufacturersGridControl.xaml.cs">
       <DependentUpon>ManufacturersGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PointsGridControl.xaml.cs">
+    <Compile Include="DataGrids\PointsGridControl.xaml.cs">
       <DependentUpon>PointsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScopeControl.xaml.cs">
@@ -312,18 +463,42 @@
     <Compile Include="ScopeItemsControl.xaml.cs">
       <DependentUpon>ScopeItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SubScopeGridControl.xaml.cs">
+    <Compile Include="DataGrids\SubScopeGridControl.xaml.cs">
       <DependentUpon>SubScopeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemsGridControl .xaml.cs">
+    <Compile Include="DataGrids\SystemsGridControl .xaml.cs">
       <DependentUpon>SystemsGridControl .xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagsGridControl.xaml.cs">
+    <Compile Include="DataGrids\TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
     </Compile>
     <Page Include="BudgetWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddControlledScopeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlledScopeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControllersPanelsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NetworkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +531,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
+      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
+      <Name>DebugLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
       <Project>{b0f44768-5b48-47b3-bbe8-0dcbd4b0b0c0}</Project>
       <Name>EstimatingLibrary</Name>

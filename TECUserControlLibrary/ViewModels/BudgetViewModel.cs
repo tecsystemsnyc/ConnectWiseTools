@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -19,6 +20,7 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class BudgetViewModel : ViewModelBase
     {
+        #region Properties
         private double _manualAdjustmentAmount;
 
         private TECBid _bid;
@@ -40,7 +42,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment >= 0)
+                    if (system.BudgetUnitPrice >= 0)
                     {
                         budgetedSystems.Add(system);
                     }
@@ -48,7 +50,6 @@ namespace TECUserControlLibrary.ViewModels
                 return budgetedSystems;
             }
         }
-
         public ObservableCollection<TECSystem> UnbudgetedSystems
         {
             get
@@ -56,7 +57,7 @@ namespace TECUserControlLibrary.ViewModels
                 ObservableCollection<TECSystem> budgetedSystems = new ObservableCollection<TECSystem>();
                 foreach (TECSystem system in Bid.Systems)
                 {
-                    if (system.PriceWithEquipment < 0)
+                    if (system.BudgetUnitPrice < 0)
                     {
                         budgetedSystems.Add(system);
                     }
@@ -122,6 +123,9 @@ namespace TECUserControlLibrary.ViewModels
         
         public ICommand ExportBudgetCommand { get; private set; }
 
+        #endregion 
+
+        #region Constructors
         public BudgetViewModel(TECBid bid)
         {
             Bid = bid;
@@ -139,6 +143,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 registerSystem(system);
             }
+        }
+        #endregion
+
+        #region Methods
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+            bid.Systems.CollectionChanged += Systems_CollectionChanged;
+
+            foreach (TECSystem system in bid.Systems)
+            {
+                registerSystem(system);
+            }
+            ManualAdjustmentPercentage = 0;
         }
 
         private void Systems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -159,12 +177,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         private void registerSystem(TECSystem system)
         {
             system.PropertyChanged += System_PropertyChanged;
         }
-
         private void System_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TotalBudgetPrice")
@@ -172,7 +188,6 @@ namespace TECUserControlLibrary.ViewModels
                 raiseBudgetChanges();
             }
         }
-
         public void ExportBudgetExecute()
         {
             string path = getCSVSavePath();
@@ -186,13 +201,11 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    string message = "File is open elsewhere";
-                    MessageBox.Show(message);
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
-                Console.WriteLine("Finished saving budget CSV.");
+                DebugHandler.LogDebugMessage("Saving budget to csv.");
             }
         }
-
         private string getCSVSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -205,19 +218,11 @@ namespace TECUserControlLibrary.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                try
-                {
-                    path = saveFileDialog.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Cannot save in this location. Original error: " + ex.Message);
-                }
+                path = saveFileDialog.FileName;
             }
 
             return path;
         }
-
         private void raiseBudgetChanges()
         {
             RaisePropertyChanged("BudgetedSystems");
@@ -225,5 +230,7 @@ namespace TECUserControlLibrary.ViewModels
             RaisePropertyChanged("BudgetSubTotal");
             RaisePropertyChanged("TotalPrice");
         }
+
+        #endregion
     }
 }

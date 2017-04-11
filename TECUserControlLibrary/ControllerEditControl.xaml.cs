@@ -21,7 +21,6 @@ namespace TECUserControlLibrary
     public partial class ControllerEditControl : UserControl
     {
         #region DPs
-       
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
@@ -37,8 +36,6 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(ControllerEditControl));
-
-
         #endregion
         public ControllerEditControl()
         {
