@@ -134,6 +134,7 @@ namespace TemplateBuilder.ViewModel
         #endregion //Interface Properties
 
         #region Commands Properties
+        public ICommand NewCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand SaveToCommand { get; private set; }
@@ -157,6 +158,7 @@ namespace TemplateBuilder.ViewModel
         #region Setup Methods
         private void setupCommands()
         {
+            NewCommand = new RelayCommand(NewExecute);
             LoadCommand = new RelayCommand(LoadExecute);
             SaveCommand = new RelayCommand(SaveExecute);
             SaveToCommand = new RelayCommand(SaveToExecute);
@@ -165,7 +167,7 @@ namespace TemplateBuilder.ViewModel
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
 
-            RefreshCommand = new RelayCommand(RefreshTemplatesExecute);
+            RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
         }
 
         private void getTemplates()
@@ -235,6 +237,7 @@ namespace TemplateBuilder.ViewModel
         {
             MenuVM = new MenuViewModel(MenuType.TB);
 
+            MenuVM.NewCommand = NewCommand;
             MenuVM.LoadCommand = LoadCommand;
             MenuVM.SaveCommand = SaveCommand;
             MenuVM.SaveAsCommand = SaveToCommand;
@@ -263,6 +266,39 @@ namespace TemplateBuilder.ViewModel
         #endregion
 
         #region Commands Methods
+        private void NewExecute()
+        {
+            if (Stack.SaveStack.Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                    else
+                    {
+                        Templates = new TECTemplates();
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    Templates = new TECTemplates();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Templates = new TECTemplates();
+            }
+            refresh();
+            Properties.Settings.Default.TemplatesFilePath = "";
+        }
         private void LoadExecute()
         {
             if (!isReady)
@@ -418,6 +454,10 @@ namespace TemplateBuilder.ViewModel
                 }
             }
             ResetStatus();
+        }
+        private bool RefreshCanExecute()
+        {
+            return !(Properties.Settings.Default.TemplatesFilePath == "");
         }
         #endregion //Commands Methods
 
