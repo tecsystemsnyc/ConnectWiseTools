@@ -1201,7 +1201,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 AssociatedCostsItemsCollection.Add(assCost);
             }
-            foreach(TECControlledScope controlScope in Templates.ControlledScopeTemplates)
+            TECControlledScope blankScope = new TECControlledScope();
+            blankScope.Name = "Blank";
+            blankScope.Description = "Drag in for a new Controlled Scope";
+            ControlledScopeItemsCollection.Add(blankScope);
+            foreach (TECControlledScope controlScope in Templates.ControlledScopeTemplates)
             {
                 ControlledScopeItemsCollection.Add(controlScope);
             }
