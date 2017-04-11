@@ -69,13 +69,16 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECSubScopeConnection(Guid guid) : base(guid) {}
+        public TECSubScopeConnection(Guid guid) : base(guid)
+        {
+            _includeStubUp = false;
+        }
         public TECSubScopeConnection() : base (Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
             if(connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
-            
+            _includeStubUp = connectionSource.IncludeStubUp;
         }
         #endregion Constructors
 
