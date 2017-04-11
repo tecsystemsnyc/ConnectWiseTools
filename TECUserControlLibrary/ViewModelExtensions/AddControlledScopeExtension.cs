@@ -457,7 +457,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                     {
                         var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                        Bid.Controllers.Add(sourceItem as TECController);
+                        ControlledScope.Controllers.Add(sourceItem as TECController);
                         sourceItem = controllerInPanel;
                     }
                     if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
