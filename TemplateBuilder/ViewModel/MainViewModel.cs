@@ -491,19 +491,21 @@ namespace TemplateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
-            Console.WriteLine("Main Drop");
             Object sourceItem;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
-            else
-            { sourceItem = dropInfo.Data; }
+            Type sourceType = dropInfo.Data.GetType();
+            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
-                ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
+                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
-                    ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                }
+                else
+                {
+                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                 }
             }
             else
