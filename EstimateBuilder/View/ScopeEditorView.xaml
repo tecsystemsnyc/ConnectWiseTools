@@ -86,9 +86,10 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                         <DataGrid ItemsSource="{Binding Bid.MiscCosts}"
-                  Grid.Row="1" Grid.Column="1"
-                  AutoGenerateColumns="False"
-                  Margin="5">
+                                  Grid.Row="1" Grid.Column="1"
+                                  AutoGenerateColumns="False"
+                                  Margin="5"
+                                  dd:DragDrop.DropHandler="{Binding}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
@@ -105,9 +106,10 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                         <DataGrid ItemsSource="{Binding Bid.MiscWiring}"
-                  Grid.Row="1" Grid.Column="1"
-                  AutoGenerateColumns="False"
-                  Margin="5">
+                                  Grid.Row="1" Grid.Column="1"
+                                  AutoGenerateColumns="False"
+                                  Margin="5"
+                                  dd:DragDrop.DropHandler="{Binding}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
