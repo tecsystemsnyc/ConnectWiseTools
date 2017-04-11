@@ -38,14 +38,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
+        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
 
         <!--Server Grid-->
-        <Grid Grid.RowSpan="3" Margin="5">
+        <Grid Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
@@ -61,18 +61,100 @@
                       dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
                       CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name"
+                    <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                    <DataGridTextColumn Header="Controller"
                                         Binding="{Binding Name}"
                                         Width="*"/>
                 </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <i:Interaction.Behaviors>
+                                <cLib:BubbleScrollEvent/>
+                            </i:Interaction.Behaviors>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Daisy Chains/Network Connections" FontSize="10"/>
+                                <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="2"
+                                      ItemsSource="{Binding NetworkIO}"
+                                      SelectedItem="{Binding Data.SelectedIO, Source={StaticResource proxy}}"
+                                      Margin="5"/>
+                                <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="4"
+                                      ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}"
+                                      SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
+                                              DisplayMemberPath="Name"
+                                      Margin="5"/>
+                                <Button Grid.Column="5"
+                                    Content="Add"
+                                    Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
+                                    CommandParameter="{Binding Controller}"
+                                    Margin="5"/>
+                            </Grid>
+                            <DataGrid ItemsSource="{Binding ChildNetworkConnections}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
+                                    <DataGridTextColumn Header="IO Type"
+                                                    Binding="{Binding IOType}"
+                                                            IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Wire"
+                                                            Binding="{Binding ConnectionType.Name}"
+                                                            IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"
+                                                            IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding Length}" Header="Length"
+                                                            />
+                                    <DataGridComboBoxColumn Header="Conduit"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        DisplayMemberPath="Name"
+                                        Width="Auto" MinWidth="60"/>
+                                </DataGrid.Columns>
+                                <DataGrid.RowDetailsTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <i:Interaction.Behaviors>
+                                                <cLib:BubbleScrollEvent/>
+                                            </i:Interaction.Behaviors>
+                                            <Label Content="Controllers" FontSize="10"/>
+                                            <DataGrid ItemsSource="{Binding ChildrenControllers}"
+                                                  AutoGenerateColumns="False"
+                                                  CanUserAddRows="False"
+                                                          MinHeight="50">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name"
+                                                                    Binding="{Binding Name}"
+                                                                    Width="Auto"/>
+                                                    <DataGridTextColumn Header="Description"
+                                                        Binding="{Binding Description}"
+                                                            Width="Auto" MinWidth="70"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGrid.RowDetailsTemplate>
+                            </DataGrid>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
-        <Border Grid.RowSpan="3"
+        <Border
                 BorderBrush="Black"
                 BorderThickness="1 1 1 1"/>
 
         <!--BMS Grid-->
-        <Grid Grid.Column="1" Margin="5">
+        <Grid Grid.Row="2" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
@@ -227,18 +309,18 @@
             </Grid>
 
         </Grid>
-        <Border Grid.Column="1"
+        <Border Grid.Row="2"
                 BorderBrush="Black"
                 BorderThickness="1 1 1 1"/>
 
         <!--Standalone Grid-->
-        <Grid Grid.Column="1" Grid.Row="2" Margin="5">
+        <Grid Grid.Column="1" Grid.RowSpan="3" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Standalone Controllers"
+            <TextBlock Text="Standalone"
                        Foreground="{DynamicResource DarkTextBrush}"
                        HorizontalAlignment="Center"/>
             <DataGrid Grid.Row="1"
@@ -257,7 +339,7 @@
             </DataGrid>
 
         </Grid>
-        <Border Grid.Column="1" Grid.Row="2"
+        <Border Grid.Column="1" Grid.RowSpan="3"
                 BorderBrush="Black"
                 BorderThickness="1 1 1 1"/>
 
