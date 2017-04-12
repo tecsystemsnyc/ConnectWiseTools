@@ -358,6 +358,28 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void updateSubScopeConnections()
         {
+            if (SelectedControlledScope != null && SubScopeConnectionCollection != null)
+            {
+                var currentSubScope = new ObservableCollection<TECSubScope>();
+
+                foreach (TECSystem system in SelectedControlledScope.Systems)
+                {
+                    foreach (TECEquipment equipment in system.Equipment)
+                    {
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            currentSubScope.Add(subScope);
+                        }
+                    }
+                }
+                foreach (SubScopeConnection connection in SubScopeConnectionCollection)
+                {
+                    if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
+                    {
+                        connection.Controller.RemoveSubScope(connection.SubScope);
+                    }
+                }
+            }
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             if(SelectedControlledScope != null)
             {
@@ -367,7 +389,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         foreach (TECSubScope subScope in equipment.SubScope)
                         {
-
                             var subConnectionToAdd = new SubScopeConnection(subScope);
 
                             subConnectionToAdd.ParentSystem = system;
