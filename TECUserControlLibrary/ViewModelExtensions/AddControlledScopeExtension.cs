@@ -353,12 +353,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if (e.PropertyName == "RemovedSubScope" || e.PropertyName == "SubScopeQuantity")
             {
+                updateCollections();
                 updateSubScopeConnections();
             }
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateCollections();
+            
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
 
@@ -380,6 +381,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     }
                 }
             }
+            checkForRemovedSubScope();
+            updateCollections();
         }
         private void updateCollections()
         {
@@ -390,7 +393,31 @@ namespace TECUserControlLibrary.ViewModelExtensions
             updatePanels();
             ControllerCollection.CollectionChanged += collectionChanged;
         }
+        private void checkForRemovedSubScope()
+        {
+            if (ControlledScope != null && SubScopeConnectionCollection != null)
+            {
+                var currentSubScope = new ObservableCollection<TECSubScope>();
 
+                foreach (TECSystem system in ControlledScope.Systems)
+                {
+                    foreach (TECEquipment equipment in system.Equipment)
+                    {
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            currentSubScope.Add(subScope);
+                        }
+                    }
+                }
+                foreach (SubScopeConnection connection in SubScopeConnectionCollection)
+                {
+                    if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
+                    {
+                        connection.Controller.RemoveSubScope(connection.SubScope);
+                    }
+                }
+            }
+        }
         private void setupVMs()
         {
             ScopeDataGrid = new ScopeDataGridExtension(Bid);
