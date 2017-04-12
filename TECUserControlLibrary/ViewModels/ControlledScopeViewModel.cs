@@ -420,7 +420,13 @@ namespace TECUserControlLibrary.ViewModels
             
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                
+                foreach(object item in e.NewItems)
+                {
+                    if(item is TECSystem)
+                    {
+                        (item as TECSystem).PropertyChanged += System_PropertyChanged;
+                    }
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {

@@ -88,6 +88,7 @@
     </Style>
     <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource {x:Type DataGridRow}}">
         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SelectRowDetails"/>
+        <EventSetter Event="Control.RequestBringIntoView" Handler="DataGrid_Documents_RequestBringIntoView"/>
     </Style>
     <Style TargetType="Menu">
         <Setter Property="Background" Value="{StaticResource EBWindowBackgroundBrush}"/>
