@@ -47,26 +47,15 @@ namespace TECUserControlLibrary
         {
             var ogSource = e.OriginalSource;
             var source = e.Source;
-            var row = sender as DataGridRow;
-            bool isKeyboardFocused = row.IsKeyboardFocused;
-            //if (!isKeyboardFocused)
-            //{
-            //    row.IsSelected = false;
-            //    row.IsSelected = true;
-            //}
-            bool sourceIsRowDetails = source is DataGridDetailsPresenter;
-            bool ogSourceIsBorderOrTextBlock = (ogSource.GetType() == typeof(Border)) || (ogSource is TextBlock);
+            DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
+            DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
 
-            if (!isKeyboardFocused &&
-                sourceIsRowDetails
-                && !ogSourceIsBorderOrTextBlock)
-            {
-                if (row == null)
+            if (parentRow == null || (childRow!= null && childRow.IsSelected == true) || childRow == null)
                 {
                     return;
                 }
-                row.Focusable = true;
-                row.Focus();
+                parentRow.Focusable = true;
+                parentRow.Focus();
 
                 var focusDirection = FocusNavigationDirection.Next;
                 var request = new TraversalRequest(focusDirection);
@@ -75,13 +64,22 @@ namespace TECUserControlLibrary
                 {
                     elementWithFocus.MoveFocus(request);
                 }
-            }
-
         }
+
+        private void SelectRow(object sender, MouseButtonEventArgs e)
+        {
+            var ogSource = e.OriginalSource;
+            var source = e.Source;
+            DataGridRow row = sender as DataGridRow;
+            DataGrid grid = FindVisualParent<DataGrid>(row);
+            grid.SelectedItem = grid.SelectedItem;
+            
+        }
+
 
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         static T FindVisualParent<T>(UIElement element) where T : UIElement

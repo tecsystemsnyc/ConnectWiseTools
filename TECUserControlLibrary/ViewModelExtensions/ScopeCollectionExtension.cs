@@ -728,11 +728,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 SystemItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    SystemItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        SystemItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -746,11 +749,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 EquipmentItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    EquipmentItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        EquipmentItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -764,11 +770,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 SubScopeItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    SubScopeItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        SubScopeItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -782,11 +791,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 DevicesItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    DevicesItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        DevicesItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -800,11 +812,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 ControllersItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    ControllersItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        ControllersItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -818,11 +833,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 AssociatedCostsItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    AssociatedCostsItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        AssociatedCostsItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -836,11 +854,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 ControlledScopeItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    ControlledScopeItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        ControlledScopeItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -854,11 +875,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 PanelsItemsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    PanelsItemsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        PanelsItemsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -872,11 +896,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 MiscCostsCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    MiscCostsCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        MiscCostsCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -890,11 +917,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 MiscWiringCollection.Add(item);
                             }
-                            foreach (TECTag tag in item.Tags)
+                            else
                             {
-                                if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                foreach (TECTag tag in item.Tags)
                                 {
-                                    MiscWiringCollection.Add(item);
+                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    {
+                                        MiscWiringCollection.Add(item);
+                                    }
                                 }
                             }
                         }
@@ -1263,7 +1293,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DropHandler(dropInfo);
         }
         
-
         #endregion
 
         #region Event Handlers
