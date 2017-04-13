@@ -49,12 +49,13 @@ namespace TECUserControlLibrary
             var source = e.Source;
             DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
             DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
-            if (parentRow == null || childRow.IsSelected == true)
+
+            if (parentRow == null || (childRow!= null && childRow.IsSelected == true) || childRow == null)
                 {
                     return;
                 }
-            parentRow.Focusable = true;
-            parentRow.Focus();
+                parentRow.Focusable = true;
+                parentRow.Focus();
 
                 var focusDirection = FocusNavigationDirection.Next;
                 var request = new TraversalRequest(focusDirection);
@@ -64,6 +65,17 @@ namespace TECUserControlLibrary
                     elementWithFocus.MoveFocus(request);
                 }
         }
+
+        private void SelectRow(object sender, MouseButtonEventArgs e)
+        {
+            var ogSource = e.OriginalSource;
+            var source = e.Source;
+            DataGridRow row = sender as DataGridRow;
+            DataGrid grid = FindVisualParent<DataGrid>(row);
+            grid.SelectedItem = grid.SelectedItem;
+            
+        }
+
 
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
