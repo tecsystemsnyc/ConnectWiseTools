@@ -215,7 +215,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddAssociatedCostCommand}"/>
                     </Grid>
-                    <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
+                    <grids:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
                                           Grid.Row="3"
                                           Margin="5"/>
                 </Grid>

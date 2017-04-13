@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.DataGrids
 {
     /// <summary>
     /// Interaction logic for AssociatedCostsGridControl.xaml

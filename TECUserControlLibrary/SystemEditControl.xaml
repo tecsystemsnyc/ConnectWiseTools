@@ -70,7 +70,7 @@
         <Button Grid.Row="3" Grid.Column="1" Content="Associate Cost"
                             Command="{Binding AddAssociatedCostToSystemCommand}"
                             Margin="5"/>
-        <local:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
+        <grids:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
                                           CostsSource="{Binding SelectedSystem.AssociatedCosts}"
                                           ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <Button Grid.ColumnSpan="2" Grid.Row="5" Content="Delete"
