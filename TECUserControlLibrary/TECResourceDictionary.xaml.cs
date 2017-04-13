@@ -47,26 +47,14 @@ namespace TECUserControlLibrary
         {
             var ogSource = e.OriginalSource;
             var source = e.Source;
-            var row = sender as DataGridRow;
-            bool isKeyboardFocused = row.IsKeyboardFocused;
-            //if (!isKeyboardFocused)
-            //{
-            //    row.IsSelected = false;
-            //    row.IsSelected = true;
-            //}
-            bool sourceIsRowDetails = source is DataGridDetailsPresenter;
-            bool ogSourceIsBorderOrTextBlock = (ogSource.GetType() == typeof(Border)) || (ogSource is TextBlock);
-
-            if (!isKeyboardFocused &&
-                sourceIsRowDetails
-                && !ogSourceIsBorderOrTextBlock)
-            {
-                if (row == null)
+            DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
+            DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
+            if (parentRow == null || childRow.IsSelected == true)
                 {
                     return;
                 }
-                row.Focusable = true;
-                row.Focus();
+            parentRow.Focusable = true;
+            parentRow.Focus();
 
                 var focusDirection = FocusNavigationDirection.Next;
                 var request = new TraversalRequest(focusDirection);
@@ -75,8 +63,6 @@ namespace TECUserControlLibrary
                 {
                     elementWithFocus.MoveFocus(request);
                 }
-            }
-
         }
 
         static T FindVisualParent<T>(UIElement element) where T : UIElement

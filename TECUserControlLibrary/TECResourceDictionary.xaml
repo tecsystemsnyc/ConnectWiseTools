@@ -86,7 +86,10 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource {x:Type DataGridRow}}">
+    <!--<Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SelectRowDetails"/>
+    </Style>-->
+    <Style TargetType="{x:Type DataGridDetailsPresenter}">
         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SelectRowDetails"/>
     </Style>
     <Style TargetType="Menu">
