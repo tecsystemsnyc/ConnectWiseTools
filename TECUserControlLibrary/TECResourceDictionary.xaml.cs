@@ -67,7 +67,7 @@ namespace TECUserControlLibrary
 
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         static T FindVisualParent<T>(UIElement element) where T : UIElement
