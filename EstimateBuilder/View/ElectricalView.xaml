@@ -26,7 +26,7 @@
         <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1"
                               Margin="5"/>
-        <DataGrid ItemsSource="{Binding Bid.MiscCosts}"
+        <DataGrid ItemsSource="{Binding Bid.MiscWiring}"
                   Grid.Row="1" Grid.Column="1"
                   AutoGenerateColumns="False"
                   Margin="5">
