@@ -31,7 +31,7 @@
     <ProductName>Scope Builder</ProductName>
     <PublisherName>TECSystems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>33</ApplicationRevision>
+    <ApplicationRevision>34</ApplicationRevision>
     <ApplicationVersion>1.3.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -62,7 +62,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0F065CE35C01600AC9B8FF437E19F075F8FFBE1F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>52EE9AB3C333D83AB576F8FB313CE9B2486425E3</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
