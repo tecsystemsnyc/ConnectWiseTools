@@ -825,7 +825,8 @@ namespace EstimatingLibrary
             {
                 if(e.PropertyName == "Length" ||
                     e.PropertyName == "ConduitType" ||
-                    e.PropertyName == "ConnectionType")
+                    e.PropertyName == "ConnectionType" ||
+                    e.PropertyName == "IncludeStubUp")
                 {
                     updateElectricalMaterial();
                 }
@@ -1042,6 +1043,7 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("Tax");
             updateTECLabor();
+            updateElectricalLabor();
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
             RaisePropertyChanged("PricePerPoint");

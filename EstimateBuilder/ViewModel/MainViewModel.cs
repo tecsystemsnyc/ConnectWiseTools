@@ -30,6 +30,7 @@ namespace EstimateBuilder.ViewModel
     {
         public MainViewModel()
         {
+            isEstimate = true;
             programName = "Estimate Builder";
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
@@ -37,9 +38,12 @@ namespace EstimateBuilder.ViewModel
             
             BidSet += () =>
             {
-                refreshAllBids();
+                Refresh();
             };
-
+            TemplatesLoadedSet += () =>
+            {
+                Refresh();
+            };
             setupAll();
 
             base.PropertyChanged += BidEditorBase_PropertyChanged;
@@ -229,7 +233,7 @@ namespace EstimateBuilder.ViewModel
             setupMenuVM();
             setupNetworkVM();
         }
-        private void refreshAllBids()
+        public void Refresh()
         {
             ScopeEditorVM.Refresh(Bid, Templates);
             DrawingVM.Bid = Bid;
@@ -240,11 +244,7 @@ namespace EstimateBuilder.ViewModel
             ElectricalVM.Refresh(Bid);
             NetworkVM.Refresh(Bid);
         }
-        private void refreshAllTemplates()
-        {
-            ScopeEditorVM.Templates = Templates;
-            LaborVM.Templates = Templates;
-        }
+        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -290,7 +290,7 @@ namespace EstimateBuilder.ViewModel
             }
             else if (e.PropertyName == "Templates")
             {
-                refreshAllTemplates();
+                Refresh();
             }
         }
         private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)

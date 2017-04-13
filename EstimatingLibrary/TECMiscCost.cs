@@ -21,5 +21,10 @@ namespace EstimatingLibrary
             outCost._guid = this.Guid;
             return outCost;
         }
+
+        public override object DragDropCopy()
+        {
+            return new TECMiscCost(this);
+        }
     }
 }

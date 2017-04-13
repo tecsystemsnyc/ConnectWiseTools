@@ -52,6 +52,7 @@
         <Grid>
         <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -65,7 +66,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-            <Grid Grid.ColumnSpan="5">
+            <Grid Grid.ColumnSpan="7">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -74,6 +75,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Name:" Grid.Column="0" 
@@ -120,14 +122,15 @@
                          Margin="0"
                          VerticalAlignment="Center">
                 </TextBox>
+                <Image Source="{Binding TECLogo}"
+                   Grid.Column="8"/>
             </Grid>
         
-            <Image Source="{Binding TECLogo}"
-                   Grid.Column="5"/>
             <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
                                              Grid.Row="1" Grid.RowSpan="2"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
             <TabControl Grid.Row="1"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Grid.ColumnSpan="5"
                     Grid.RowSpan="2"
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
@@ -159,7 +162,7 @@
 
             <cLibControls:StatusBarControl ViewModel="{Binding ElementName=Window, Path=DataContext.StatusBarVM}"
                 Grid.Row="3"
-                       Grid.ColumnSpan="6"/>
+                       Grid.ColumnSpan="7"/>
         </Grid>
    </DockPanel>
 </Window>

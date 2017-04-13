@@ -52,9 +52,11 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -67,9 +69,9 @@
 
             <cLib:ScopeCollectionsTabControl Grid.RowSpan="2"
                                              ViewModel="{Binding ScopeCollection}"/>
-
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1"/>
             <TabControl Grid.Row="0"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Grid.RowSpan="2"
                         SelectedIndex="{Binding DGTabIndex, Converter={cnvt:TemplateGridIndexToIntegerConverter}}"
                         Background="{DynamicResource SectionBackgroundBrush}">
@@ -124,7 +126,7 @@
                 </TabItem>
                 
             </TabControl>
-
+            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="1"/>
             <!--Right Tab Control-->
             <cLib:EditTabControl Index="{Binding EditTab.TabIndex}"
                              ViewModel="{Binding ElementName=root, Path=DataContext.EditTab}"

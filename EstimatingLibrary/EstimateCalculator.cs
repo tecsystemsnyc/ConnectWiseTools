@@ -117,14 +117,7 @@ namespace EstimatingLibrary
                 foreach(TECConnection connection in controller.ChildrenConnections)
                 {
                     var length = connection.Length;
-                    if (connection.ConduitType != null)
-                    {
-                        cost += length * connection.ConduitType.Cost;
-                        foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
-                        {
-                            cost += associatedCost.Cost;
-                        }
-                    }
+                    
                     if (connection is TECNetworkConnection)
                     {
                         if ((connection as TECNetworkConnection).ConnectionType != null)
@@ -134,6 +127,14 @@ namespace EstimatingLibrary
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                             { cost += associatedCost.Cost; }
                         }
+                        if (connection.ConduitType != null)
+                        {
+                            cost += length * connection.ConduitType.Cost;
+                            foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+                            {
+                                cost += associatedCost.Cost;
+                            }
+                        }
                     }
                     else if (connection is TECSubScopeConnection)
                     {
@@ -141,6 +142,20 @@ namespace EstimatingLibrary
                         {
                             cost += length * type.Cost;
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                            {
+                                cost += associatedCost.Cost;
+                            }
+                        }
+                        if (connection.ConduitType != null)
+                        {
+                            if((connection as TECSubScopeConnection).IncludeStubUp)
+                            {
+                                cost += 15 * connection.ConduitType.Cost;
+                            }else
+                            {
+                                cost += length * connection.ConduitType.Cost;
+                            }
+                            foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
                             {
                                 cost += associatedCost.Cost;
                             }
@@ -489,7 +504,10 @@ namespace EstimatingLibrary
 
             outPrice += GetTECSubtotal(bid);
             outPrice += GetSubcontractorSubtotal(bid);
-
+            if(bid.Parameters.RequiresBond)
+            {
+                outPrice *= 1.013;
+            }
             return outPrice;
         }
 

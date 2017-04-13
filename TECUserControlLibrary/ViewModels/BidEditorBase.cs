@@ -120,6 +120,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool isNew;
 
+        protected bool isEstimate;
+
         #region Settings Properties
         public string TemplatesFilePath
         {
@@ -538,36 +540,31 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
 
-            //User choose path
-            string path = getLoadPath();
-            if (path != null)
+            if (stack.SaveStack.Count > 0)
             {
-                SetBusyStatus("Loading File: " + path, false);
-                TECBid loadingBid = new TECBid();
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
                 {
-                    bidDBFilePath = path;
-                    ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                    if (!UtilitiesMethods.IsFileLocked(path))
+                    if (saveSynchronously())
                     {
-                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                        loadBid();
                     }
                     else
                     {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                        MessageBox.Show("Save unsuccessful. File not loaded.");
                     }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
+                }
+                else if (result == MessageBoxResult.No)
                 {
-                    ResetStatus();
-                    Bid = loadingBid;
-                    isNew = false;
-                };
-                
-                worker.RunWorkerAsync();
+                    loadBid();
+                }
             }
+            else
+            {
+                loadBid();
+            }
+            
         }
         private void SaveExecute()
         {
@@ -597,7 +594,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path);
+                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
@@ -631,6 +628,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected void LoadTemplatesExecute()
         {
+            var loadedTemplates = new TECTemplates();
             if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
@@ -653,14 +651,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
 
-                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                        Bid.DeviceCatalog = Templates.DeviceCatalog;
-                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                        Bid.Tags = Templates.Tags;
-                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
-                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
-                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
-                        templatesLoaded = true;
+                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                     }
                     else
                     {
@@ -670,6 +661,9 @@ namespace TECUserControlLibrary.ViewModels
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
+                    Templates = loadedTemplates;
+                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                    templatesLoaded = true;
                     ResetStatus();
                 };
                 worker.RunWorkerAsync();
@@ -783,15 +777,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
                     {
-                        //try
-                        //{
+                        try
+                        {
                             EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                        //    EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        //}
+                        }
+                            catch (Exception ex)
+                        {
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
                     }
                     else
                     {
@@ -928,6 +922,40 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             return saveSuccessful;
+        }
+
+        private void loadBid()
+        {
+            //User choose path
+            string path = getLoadPath();
+            if (path != null)
+            {
+                SetBusyStatus("Loading File: " + path, false);
+                TECBid loadingBid = new TECBid();
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    bidDBFilePath = path;
+                    ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    Bid = loadingBid;
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+            }
         }
         #endregion
         

@@ -35,8 +35,8 @@
             <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
         <Label Content="Controlled Scope"/>
-        <Label Content="Systems in Selected" Grid.Column="1"/>
-        <Label Content="Panels in Selected" Grid.Column="3"/>
+        <Label Content="Systems in Selected" Grid.Column="2"/>
+        <Label Content="Panels in Selected" Grid.Column="4"/>
         <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Templates.ControlledScopeTemplates}"
                                        ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                        Grid.Row="1" Grid.RowSpan="4"
@@ -72,7 +72,7 @@
                 <grids:ControllerInPanelGridControl Grid.Row="1" Margin="5" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </Grid>
         </Grid>
-        <GridSplitter Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+        <GridSplitter Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
                       HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
         <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2">
             <Grid.RowDefinitions>

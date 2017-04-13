@@ -13,7 +13,7 @@
             xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
              mc:Ignorable="d ignore"
              x:Name="parent"
-        d:DesignWidth="960" d:DesignHeight="660">
+        d:DesignWidth="960" d:DesignHeight="640">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,10 +25,12 @@
            DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -38,9 +40,10 @@
         <cLib:ScopeCollectionsTabControl Grid.Column="0" Grid.Row="0"
                                          Grid.RowSpan="2"
                                          ViewModel="{Binding ScopeCollection}"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
         <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
 
@@ -83,9 +86,10 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                         <DataGrid ItemsSource="{Binding Bid.MiscCosts}"
-                  Grid.Row="1" Grid.Column="1"
-                  AutoGenerateColumns="False"
-                  Margin="5">
+                                  Grid.Row="1" Grid.Column="1"
+                                  AutoGenerateColumns="False"
+                                  Margin="5"
+                                  dd:DragDrop.DropHandler="{Binding}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
@@ -102,9 +106,10 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                         <DataGrid ItemsSource="{Binding Bid.MiscWiring}"
-                  Grid.Row="1" Grid.Column="1"
-                  AutoGenerateColumns="False"
-                  Margin="5">
+                                  Grid.Row="1" Grid.Column="1"
+                                  AutoGenerateColumns="False"
+                                  Margin="5"
+                                  dd:DragDrop.DropHandler="{Binding}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
@@ -116,11 +121,10 @@
             </TabItem>
             
         </TabControl>
+        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
 
-        
         <!--Right Tab Control-->
-        <cLib:EditTabControl Index="{Binding RightTabIndex}"
-                             ViewModel="{Binding EditTab}"
-                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
+        <cLib:EditTabControl ViewModel="{Binding EditTab}"
+                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
     </Grid>
 </UserControl>
