@@ -179,6 +179,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #endregion
+
         public BidEditorBase()
         {
             isNew = true;

@@ -189,8 +189,16 @@ namespace EstimateBuilder.ViewModel
         public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
+            Type sourceType;
+            if (sourceItem is List<object> && ((IList)sourceItem).Count > 0)
+            {
+                sourceType = ((IList)sourceItem)[0].GetType();
+            }else
+            {
+                sourceType = sourceItem.GetType();
+            }
+            
             var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -205,13 +213,24 @@ namespace EstimateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
+            var sourceItem = dropInfo.Data;
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
             
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                if(sourceItem is List<object>)
+                {
+                    var outSource = new List<object>();
+                    foreach(object item in ((IList)sourceItem))
+                    {
+                        outSource.Add(((TECScope)item).DragDropCopy());
+                    }
+                    sourceItem = outSource;
+                }else
+                {
+                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                }
 
                 if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                 {
