@@ -193,7 +193,6 @@ namespace TECUserControlLibrary.ViewModels
             setupStack();
             setupMenu();
 
-            ResetStatus();
         }
 
         #region Methods
@@ -224,8 +223,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                 {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                    templatesLoaded = true;
+                    loadTemplates(TemplatesFilePath);
                 }
                 else
                 {
@@ -246,8 +244,7 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                            templatesLoaded = true;
+                            loadTemplates(TemplatesFilePath);
                             DebugHandler.LogDebugMessage("Finished loading templates.");
                         }
                         else
@@ -628,7 +625,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected void LoadTemplatesExecute()
         {
-            var loadedTemplates = new TECTemplates();
             if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
@@ -641,33 +637,7 @@ namespace TECUserControlLibrary.ViewModels
                 TemplatesFilePath = path;
             }
 
-            if (TemplatesFilePath != null)
-            {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                    {
-
-                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                    }
-                    DebugHandler.LogDebugMessage("Finished loading templates");
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    Templates = loadedTemplates;
-                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
-                    templatesLoaded = true;
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
+            loadTemplates(TemplatesFilePath);
         }
 
         private void UndoExecute()
@@ -957,6 +927,38 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerAsync();
             }
         }
+        private void loadTemplates(string TemplatesFilePath)
+        {
+            var loadedTemplates = new TECTemplates();
+            if (TemplatesFilePath != null)
+            {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished loading templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    Templates = loadedTemplates;
+                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                    templatesLoaded = true;
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+        }
+
         #endregion
         
         #endregion
