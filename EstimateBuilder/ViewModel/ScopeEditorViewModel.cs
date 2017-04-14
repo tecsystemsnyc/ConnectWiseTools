@@ -190,7 +190,7 @@ namespace EstimateBuilder.ViewModel
         {
             var sourceItem = dropInfo.Data;
             Type sourceType;
-            if (sourceItem is List<object> && ((IList)sourceItem).Count > 0)
+            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
             {
                 sourceType = ((IList)sourceItem)[0].GetType();
             }else
@@ -219,7 +219,7 @@ namespace EstimateBuilder.ViewModel
             
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
-                if(sourceItem is List<object>)
+                if(sourceItem is IList)
                 {
                     var outSource = new List<object>();
                     foreach(object item in ((IList)sourceItem))
@@ -240,29 +240,74 @@ namespace EstimateBuilder.ViewModel
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    if(sourceItem is IList)
+                    {
+                        foreach(object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Add(item);
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
                 }
                 else
                 {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                    if (sourceItem is IList)
+                    {
+                        var x = dropInfo.InsertIndex;
+                        foreach (object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Insert(x, item);
+                            x += 1;
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+
+                    }
                 }
             }
             else
             {
                 sourceItem = dropInfo.Data;
-                
                 int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
                 int finalIndex = dropInfo.InsertIndex;
-                if (dropInfo.InsertIndex > currentIndex)
+                
+                if (sourceItem is IList)
                 {
-                    finalIndex -= 1;
+                    currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(((IList)sourceItem)[0]);
+                    if (dropInfo.InsertIndex > currentIndex)
+                    {
+                        finalIndex -= 1;
+                    }
+                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                    {
+                        finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
+                    }
+                    var x = 0;
+                    foreach (object item in ((IList)sourceItem))
+                    {
+                        currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(((IList)sourceItem)[x]);
+                        ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
+                        x += 1;
+                    }
                 }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                else
                 {
-                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
+                    if (dropInfo.InsertIndex > currentIndex)
+                    {
+                        finalIndex -= 1;
+                    }
+                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                    {
+                        finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
+                    }
+                    ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
                 }
                 
-                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
             }
         }
         #endregion

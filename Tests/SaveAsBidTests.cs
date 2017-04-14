@@ -30,9 +30,9 @@ namespace Tests
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
-        static TECDrawing expectedDrawing;
-        static TECPage expectedPage;
-        static TECVisualScope expectedVisualScope;
+        //static TECDrawing expectedDrawing;
+        //static TECPage expectedPage;
+        //static TECVisualScope expectedVisualScope;
         static TECController expectedController;
         static TECProposalScope expectedPropScope;
 
@@ -52,9 +52,9 @@ namespace Tests
         static TECNote actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
-        static TECDrawing actualDrawing;
-        static TECPage actualPage;
-        static TECVisualScope actualVisualScope;
+        //static TECDrawing actualDrawing;
+        //static TECPage actualPage;
+        //static TECVisualScope actualVisualScope;
         static TECController actualController;
         static TECProposalScope actualPropScope;
 

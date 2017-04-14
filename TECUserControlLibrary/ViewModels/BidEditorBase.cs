@@ -360,8 +360,10 @@ namespace TECUserControlLibrary.ViewModels
                 saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
-            saveFileDialog.DefaultExt = "rtf";
+            //saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
+            //saveFileDialog.DefaultExt = "rtf";
+            saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
+            saveFileDialog.DefaultExt = "docx";
             saveFileDialog.AddExtension = true;
 
             string path = null;
@@ -592,7 +594,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    ScopeWordDocumentBuilder.CreateScopeWordDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else

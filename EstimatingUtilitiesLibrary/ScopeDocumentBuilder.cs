@@ -19,6 +19,7 @@ using System.Drawing.Imaging;
 using System.Collections.ObjectModel;
 using DebugLibrary;
 
+
 namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
@@ -73,7 +74,6 @@ namespace EstimatingUtilitiesLibrary
 
             rtfRenderer.Render(scopeDocument, fileName, onlyPath);
         }
-
         private static void createHeader(Document document)
         {
             //Add Logo
@@ -121,7 +121,6 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
             }
         }
-
         private static void createBidInfo(Document document, string bidName, string bidNo, string salesperson, string estimator)
         {
             //Add Name, Bid No and Date
@@ -136,7 +135,6 @@ namespace EstimatingUtilitiesLibrary
             infoParagraph.AddLineBreak();
             infoParagraph.AddLineBreak();
         }
-
         private static void createIntroduction(Document document)
         {
             Paragraph paragraph = document.LastSection.AddParagraph();
@@ -150,7 +148,6 @@ namespace EstimatingUtilitiesLibrary
                 " This proposal is based upon our review of the following documents:");
 
         }
-
         private static void createDocumentList(Document document, TECBid bid)
         {
             Table table = new Table();
@@ -175,7 +172,6 @@ namespace EstimatingUtilitiesLibrary
 
             document.LastSection.Add(table);
         }
-
         private static void createScope(Document document, TECBid bid)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Scope of Work:", "Heading2");
@@ -198,7 +194,6 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             createSystemTree(document, bid);
         }
-
         private static void addScopeBranch(TECScopeBranch branch, Document document, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
             string scopeString = branch.Name;
@@ -223,7 +218,6 @@ namespace EstimatingUtilitiesLibrary
                 addScopeBranch(childBranch, document, paragraph, (tabs + 1));
             }
         }
-
         private static void createSystemTree(Document document, TECBid bid)
         {
             Paragraph paragraph = new Paragraph();
@@ -315,7 +309,6 @@ namespace EstimatingUtilitiesLibrary
                 
             }
         }
-
         private static void createPricing(Document document, double price)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Pricing:", "Heading2");
@@ -341,7 +334,6 @@ namespace EstimatingUtilitiesLibrary
             cell.Add(paragraph);
             document.LastSection.Add(table);
         }
-
         private static void createNotesAndExclusions(Document document, List<TECNote> notes, List<TECExclusion> exclusions)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
@@ -364,7 +356,6 @@ namespace EstimatingUtilitiesLibrary
                 paragraph.AddLineBreak();
             }
         }
-
         private static void createSignature(Document document, string salesperson)
         {
             Paragraph paragraph = document.LastSection.AddParagraph();
@@ -379,7 +370,6 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             paragraph.AddFormattedText(salesperson);
         }
-
         private static void createFooter(Document document)
         {
             try
@@ -395,7 +385,6 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
             }
         }
-
         private static void defineStyles(Document document)
         {
             // Get the predefined style Normal.
@@ -448,7 +437,6 @@ namespace EstimatingUtilitiesLibrary
             style.ParagraphFormat.Alignment = ParagraphAlignment.Left;
 
         }
-
         private static List<string> readFromFile(string path)
         {
             string line;
@@ -460,5 +448,9 @@ namespace EstimatingUtilitiesLibrary
             }
             return fileLines;
         }
+
+
+
+        
     }
 }

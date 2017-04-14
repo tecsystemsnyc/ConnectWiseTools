@@ -347,7 +347,7 @@ namespace EstimateBuilder.ViewModel
         #endregion
         
         #region Drag Drop
-        void IDropTarget.DragOver(IDropInfo dropInfo)
+        public void DragOver(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             var targetCollection = dropInfo.TargetCollection;
@@ -358,7 +358,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        void IDropTarget.Drop(IDropInfo dropInfo)
+        public void Drop(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             System.Windows.Point dropPoint = dropInfo.DropPosition;
