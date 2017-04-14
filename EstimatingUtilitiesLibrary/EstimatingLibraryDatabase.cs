@@ -133,27 +133,83 @@ namespace EstimatingUtilitiesLibrary
             Console.WriteLine("checkAndUpdateDB Templates: " + watch.ElapsedMilliseconds);
             TECTemplates templates = new TECTemplates();
 
+            var loadedWatch = System.Diagnostics.Stopwatch.StartNew();
+
             watch = System.Diagnostics.Stopwatch.StartNew();
             templates = getTemplatesInfo();
+            watch.Stop();
+            Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.Labor = getLaborConstsInTemplates(templates);
+            watch.Stop();
+            Console.WriteLine("getLaborConstsInTemplates: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.SystemTemplates = getOrphanSystems();
+            watch.Stop();
+            Console.WriteLine("getOrphanSystems: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.EquipmentTemplates = getOrphanEquipment();
+            watch.Stop();
+            Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.SubScopeTemplates = getOrphanSubScope();
+            watch.Stop();
+            Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.DeviceCatalog = getAllDevices();
+            watch.Stop();
+            Console.WriteLine("getAllDevices: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.Tags = getAllTags();
+            watch.Stop();
+            Console.WriteLine("getAllTags: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.ManufacturerCatalog = getAllManufacturers();
+            watch.Stop();
+            Console.WriteLine("getAllManufacturers: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.ControllerTemplates = getOrphanControllers();
+            watch.Stop();
+            Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.ConnectionTypeCatalog = getConnectionTypes();
+            watch.Stop();
+            Console.WriteLine("getConnectionTypes: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.ConduitTypeCatalog = getConduitTypes();
+            watch.Stop();
+            Console.WriteLine("getConduitTypes: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.AssociatedCostsCatalog = getAssociatedCosts();
+            watch.Stop();
+            Console.WriteLine("getAssociatedCosts: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.MiscWiringTemplates = getMiscWiring();
+            watch.Stop();
+            Console.WriteLine("getMiscWiring: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.MiscCostTemplates = getMiscCosts();
+            watch.Stop();
+            Console.WriteLine("getMiscCosts: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.PanelTemplates = getOrphanPanels();
+            watch.Stop();
+            Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.PanelTypeCatalog = getPanelTypes();
+            watch.Stop();
+            Console.WriteLine("getPanelTypes: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.ControlledScopeTemplates = getControlledScope();
+            watch.Stop();
+            Console.WriteLine("getControlledScope: " + watch.ElapsedMilliseconds);
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates.IOModuleCatalog = getIOModules();
             watch.Stop();
-            Console.WriteLine("Getting Template Data: " + watch.ElapsedMilliseconds);
+            Console.WriteLine("getIOModules: " + watch.ElapsedMilliseconds);
+            
+            loadedWatch.Stop();
+            Console.WriteLine("Getting Template Data: " + loadedWatch.ElapsedMilliseconds);
 
             watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkTemplates(templates);
@@ -693,15 +749,15 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECDevice> getDevicesInSubScope(Guid subScopeID)
         {
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
-            string command = "select * from (" + DeviceTable.TableName +" inner join "+ SubScopeDeviceTable.TableName + " on ";
+            string command = "select * from (" + DeviceTable.TableName + " inner join " + SubScopeDeviceTable.TableName + " on ";
             command += "(TECDevice.DeviceID = TECSubScopeTECDevice.DeviceID and ";
             command += SubScopeDeviceTable.SubScopeID.Name + " = '" + subScopeID;
             command += "')) order by " + SubScopeDeviceTable.ScopeIndex.Name;
-
+            
             DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in devicesDT.Rows)
             {
-                var deviceToAdd = getDeviceFromRow(row);
+                var deviceToAdd = getPlaceholderSubScopeDeviceFromRow(row);
                 string quantityCommand = "select "+SubScopeDeviceTable.Quantity.Name+" from "+SubScopeDeviceTable.TableName+" where "+SubScopeDeviceTable.SubScopeID.Name+" = '";
                 quantityCommand += (subScopeID + "' and "+SubScopeDeviceTable.DeviceID.Name+" = '" + deviceToAdd.Guid + "'");
                 DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
@@ -729,15 +785,19 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECManufacturer getManufacturerInDevice(Guid deviceID)
         {
-            string command = "select * from "+ManufacturerTable.TableName+ " where " + ManufacturerTable.ManufacturerID.Name + " in ";
-            command += "(select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
+            //string command = "select * from "+ManufacturerTable.TableName+ " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            //command += "(select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
+            //command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
+            //command += deviceID;
+            //command += "')";
+            string command = "select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
             command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
             command += deviceID;
-            command += "')";
+            command += "'";
 
             DataTable manTable = SQLiteDB.getDataFromCommand(command); 
             if (manTable.Rows.Count > 0)
-            { return getManufacturerFromRow(manTable.Rows[0]); }
+            { return getPlaceholderDeviceManufacturerFromRow(manTable.Rows[0]); }
             else
             { return null; }
         }
@@ -757,14 +817,17 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
         {
-            string command = "select * from "+ConnectionTypeTable.TableName+" where "+ ConnectionTypeTable .ConnectionTypeID.Name+ " in ";
-            command += "(select "+DeviceConnectionTypeTable.TypeID.Name+" from "+ DeviceConnectionTypeTable.TableName+ " where ";
+            //string command = "select * from "+ConnectionTypeTable.TableName+" where "+ ConnectionTypeTable .ConnectionTypeID.Name+ " in ";
+            //command += "(select "+DeviceConnectionTypeTable.TypeID.Name+" from "+ DeviceConnectionTypeTable.TableName+ " where ";
+            //command += DeviceConnectionTypeTable.DeviceID.Name + " = '" + deviceID;
+            //command += "')";
+            string command = "select " + DeviceConnectionTypeTable.TypeID.Name + " from " + DeviceConnectionTypeTable.TableName + " where ";
             command += DeviceConnectionTypeTable.DeviceID.Name + " = '" + deviceID;
-            command += "')";
+            command += "'";
 
             DataTable connectionTypeTable = SQLiteDB.getDataFromCommand(command);
             if (connectionTypeTable.Rows.Count > 0)
-            { return (getConnectionTypeFromRow(connectionTypeTable.Rows[0])); }
+            { return (getPlaceholderDeviceConnectionTypeFromRow(connectionTypeTable.Rows[0])); }
             else
             { return null; }
         }
@@ -798,26 +861,6 @@ namespace EstimatingUtilitiesLibrary
                 return null;
             }
         }
-        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
-        {
-            string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
-            command += "(select " + AssociatedCostTable.AssociatedCostID.Name +" from " + ScopeAssociatedCostTable.TableName+  " where ";
-            command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
-            command += "')";
-
-            DataTable DT = SQLiteDB.getDataFromCommand(command);
-            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
-            foreach(DataRow row in DT.Rows)
-            {
-                TECAssociatedCost costToAdd = getAssociatedCostFromRow(row);
-                string quantityCommand = "select " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where " + ScopeAssociatedCostTable.ScopeID.Name + " = '";
-                quantityCommand += (scopeID + "' and " + ScopeAssociatedCostTable.AssociatedCostID.Name + " = '" + costToAdd.Guid + "'");
-                DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
-                int quantity = quantityDT.Rows[0][0].ToString().ToInt();
-                for(int x = 0; x < quantity; x++) { associatedCosts.Add(costToAdd); }
-            }
-            return associatedCosts;
-        }
         static private ObservableCollection<TECNote> getNotes()
         {
             ObservableCollection<TECNote> notes = new ObservableCollection<TECNote>();
@@ -838,18 +881,6 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
             DataTable tagsDT = SQLiteDB.getDataFromTable(TagTable.TableName);
-            foreach (DataRow row in tagsDT.Rows)
-            { tags.Add(getTagFromRow(row)); }
-            return tags;
-        }
-        static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
-        {
-            ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
-            string command = "select * from "+TagTable.TableName+" where "+TagTable.TagID.Name+" in ";
-            command += "(select "+ScopeTagTable.TagID.Name+" from "+ScopeTagTable.TableName+" where ";
-            command += ScopeTagTable.ScopeID.Name + " = '"+scopeID;
-            command += "')";
-            DataTable tagsDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in tagsDT.Rows)
             { tags.Add(getTagFromRow(row)); }
             return tags;
@@ -891,23 +922,6 @@ namespace EstimatingUtilitiesLibrary
             { vs.Add(getVisualScopeFromRow(row)); }
 
             return vs;
-        }
-        static private TECLocation getLocationInScope(Guid ScopeID)
-        {
-            var tables = getAllTableNames();
-            if (tables.Contains(LocationTable.TableName))
-            {
-                string command = "select * from " + LocationTable.TableName + " where " + LocationTable.LocationID.Name + " in ";
-                command += "(select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
-                command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
-                command += "')";
-                DataTable locationDT = SQLiteDB.getDataFromCommand(command);
-                if (locationDT.Rows.Count > 0)
-                { return getLocationFromRow(locationDT.Rows[0]); }
-                else
-                { return null; }
-            } else
-            { return null; }
         }
         static private ObservableCollection<TECController> getControllers()
         {
@@ -1051,15 +1065,18 @@ namespace EstimatingUtilitiesLibrary
         {
             TECSubScope outScope = null;
 
-            string command = "select * from " + SubScopeTable.TableName + " where " + SubScopeTable.SubScopeID.Name + " in ";
-            command += "(select " + SubScopeConnectionChildrenTable.ChildID.Name + " from " + SubScopeConnectionChildrenTable.TableName + " where ";
+            //string command = "select * from " + SubScopeTable.TableName + " where " + SubScopeTable.SubScopeID.Name + " in ";
+            //command += "(select " + SubScopeConnectionChildrenTable.ChildID.Name + " from " + SubScopeConnectionChildrenTable.TableName + " where ";
+            //command += SubScopeConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
+            //command += "')";
+            string command = "select " + SubScopeConnectionChildrenTable.ChildID.Name + " from " + SubScopeConnectionChildrenTable.TableName + " where ";
             command += SubScopeConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
-            command += "')";
+            command += "'";
 
             DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
             if (scopeDT.Rows.Count > 0)
             {
-                return getSubScopePlaceholderFromRow(scopeDT.Rows[0]);
+                return getSubScopeConnectionChildPlaceholderFromRow(scopeDT.Rows[0]);
             }
             
             return outScope;
@@ -1082,15 +1099,19 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
-            string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
-            command += "(select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
+            //string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            //command += "(select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
+            //command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
+            //command += controllerID;
+            //command += "')";
+            string command = "select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
             command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
             command += controllerID;
-            command += "')";
+            command += "'";
 
             DataTable manTable = SQLiteDB.getDataFromCommand(command);
             if (manTable.Rows.Count > 0)
-            { return getManufacturerFromRow(manTable.Rows[0]); }
+            { return getPlaceholderControllerManufacturerFromRow(manTable.Rows[0]); }
             else
             { return null; }
         }
@@ -1306,18 +1327,84 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECIOModule getModuleInIO(Guid ioID)
         {
-            string command = "select * from " + IOModuleTable.TableName + " where " + IOModuleTable.IOModuleID.Name + " in ";
-            command += "(select " + IOIOModuleTable.ModuleID.Name + " from " + IOIOModuleTable.TableName;
+            //string command = "select * from " + IOModuleTable.TableName + " where " + IOModuleTable.IOModuleID.Name + " in ";
+            //command += "(select " + IOIOModuleTable.ModuleID.Name + " from " + IOIOModuleTable.TableName;
+            //command += " where " + IOIOModuleTable.IOID.Name + " = '";
+            //command += ioID;
+            //command += "')";
+            string command = "select " + IOIOModuleTable.ModuleID.Name + " from " + IOIOModuleTable.TableName;
             command += " where " + IOIOModuleTable.IOID.Name + " = '";
             command += ioID;
-            command += "')";
+            command += "'";
 
             DataTable moduleTable = SQLiteDB.getDataFromCommand(command);
             if (moduleTable.Rows.Count > 0)
-            { return getIOModuleFromRow(moduleTable.Rows[0]); }
+            { return getPlaceholderIOModuleFromRow(moduleTable.Rows[0]); }
             else
             { return null; }
         }
+
+        static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
+        {
+            ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
+            //string command = "select * from "+TagTable.TableName+" where "+TagTable.TagID.Name+" in ";
+            //command += "(select "+ScopeTagTable.TagID.Name+" from "+ScopeTagTable.TableName+" where ";
+            //command += ScopeTagTable.ScopeID.Name + " = '"+scopeID;
+            //command += "')";
+            string command = "select " + ScopeTagTable.TagID.Name + " from " + ScopeTagTable.TableName + " where ";
+            command += ScopeTagTable.ScopeID.Name + " = '" + scopeID;
+            command += "'";
+            DataTable tagsDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in tagsDT.Rows)
+            { tags.Add(getPlaceholderTagFromRow(row)); }
+            return tags;
+        }
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
+        {
+            //string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
+            //command += "(select " + AssociatedCostTable.AssociatedCostID.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
+            //command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
+            //command += "')";
+            string command = "select " + AssociatedCostTable.AssociatedCostID.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
+            command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
+            command += "'";
+
+            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            foreach (DataRow row in DT.Rows)
+            {
+                TECAssociatedCost costToAdd = getPlaceholderAssociatedCostFromRow(row);
+                string quantityCommand = "select " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where " + ScopeAssociatedCostTable.ScopeID.Name + " = '";
+                quantityCommand += (scopeID + "' and " + ScopeAssociatedCostTable.AssociatedCostID.Name + " = '" + costToAdd.Guid + "'");
+                DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
+                int quantity = quantityDT.Rows[0][0].ToString().ToInt();
+                for (int x = 0; x < quantity; x++) { associatedCosts.Add(costToAdd); }
+            }
+            return associatedCosts;
+        }
+        static private TECLocation getLocationInScope(Guid ScopeID)
+        {
+            var tables = getAllTableNames();
+            if (tables.Contains(LocationTable.TableName))
+            {
+                //string command = "select * from " + LocationTable.TableName + " where " + LocationTable.LocationID.Name + " in ";
+                //command += "(select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
+                //command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
+                //command += "')";
+                string command = "select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
+                command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
+                command += "'";
+                DataTable locationDT = SQLiteDB.getDataFromCommand(command);
+                if (locationDT.Rows.Count > 0)
+                { return getPlaceholderLocationFromRow(locationDT.Rows[0]); }
+                else
+                { return null; }
+            }
+            else
+            { return null; }
+        }
+
+
         #endregion //Loading from DB Methods
 
         #region Populate Derived
@@ -1696,19 +1783,19 @@ namespace EstimatingUtilitiesLibrary
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
-        string name = row[ConnectionTypeTable.Name.Name].ToString();
-        string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
-        string costString = row[ConnectionTypeTable.Cost.Name].ToString();
+            string name = row[ConnectionTypeTable.Name.Name].ToString();
+            string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
+            string costString = row[ConnectionTypeTable.Cost.Name].ToString();
 
-        double cost = costString.ToDouble(0);
-        double labor = laborString.ToDouble(0);
+            double cost = costString.ToDouble(0);
+            double labor = laborString.ToDouble(0);
 
-        var outConnectionType = new TECConnectionType(guid);
-        outConnectionType.Name = name;
+            var outConnectionType = new TECConnectionType(guid);
+            outConnectionType.Name = name;
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
             outConnectionType.Tags = getTagsInScope(guid);
-        outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
+            outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
             return outConnectionType;
         }
         private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
@@ -1972,13 +2059,11 @@ namespace EstimatingUtilitiesLibrary
 
             return controlledScope;
         }
-        private static TECSubScope getSubScopePlaceholderFromRow(DataRow row)
+
+        private static TECSubScope getSubScopeConnectionChildPlaceholderFromRow(DataRow row)
         {
-            Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
+            Guid subScopeID = new Guid(row[SubScopeConnectionChildrenTable.ChildID.Name].ToString());
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
-            subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
-            subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
-            subScopeToAdd.Tags = getTagsInScope(subScopeID);
             return subScopeToAdd;
         }
         private static TECController getControllerPlaceholderFromRow(DataRow row)
@@ -1990,6 +2075,54 @@ namespace EstimatingUtilitiesLibrary
             controller.Description = row[ControllerTable.Description.Name].ToString();
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             return controller;
+        }
+        private static TECTag getPlaceholderTagFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScopeTagTable.TagID.Name].ToString());
+            TECTag tag = new TECTag(guid);
+            return tag;
+        }
+        private static TECAssociatedCost getPlaceholderAssociatedCostFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScopeAssociatedCostTable.AssociatedCostID.Name].ToString());
+            TECAssociatedCost associatedCost = new TECAssociatedCost(guid);
+            return associatedCost;
+        }
+        private static TECLocation getPlaceholderLocationFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[LocationScopeTable.LocationID.Name].ToString());
+            TECLocation location = new TECLocation(guid);
+            return location;
+        }
+        private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
+            TECDevice device = new TECDevice(guid);
+            return device;
+        }
+        private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[DeviceManufacturerTable.ManufacturerID.Name].ToString());
+            TECManufacturer man = new TECManufacturer(guid);
+            return man;
+        }
+        private static TECManufacturer getPlaceholderControllerManufacturerFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ControllerManufacturerTable.ManufacturerID.Name].ToString());
+            TECManufacturer man = new TECManufacturer(guid);
+            return man;
+        }
+        private static TECConnectionType getPlaceholderDeviceConnectionTypeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString());
+            TECConnectionType connectionType = new TECConnectionType(guid);
+            return connectionType;
+        }
+        private static TECIOModule getPlaceholderIOModuleFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[IOIOModuleTable.ModuleID.Name].ToString());
+            TECIOModule module = new TECIOModule(guid);
+            return module;
         }
         #endregion
 
