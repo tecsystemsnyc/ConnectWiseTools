@@ -113,7 +113,7 @@
     <Compile Include="AddTagControl.xaml.cs">
       <DependentUpon>AddTagControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssociatedCostsGridControl.xaml.cs">
+    <Compile Include="DataGrids\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="AttachableForStyleBehavior.cs" />
@@ -267,7 +267,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AssociatedCostsGridControl.xaml">
+    <Page Include="DataGrids\AssociatedCostsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

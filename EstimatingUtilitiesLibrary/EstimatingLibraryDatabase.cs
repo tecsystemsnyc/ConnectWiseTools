@@ -39,20 +39,47 @@ namespace EstimatingUtilitiesLibrary
 
             watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
-            foreach (TECDevice device in templates.DeviceCatalog)
-            { editObject(new StackItem(Change.Edit, bid, device)); }
+            
             foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
-            { editObject(new StackItem(Change.Edit, bid, manufacturer)); }
+            {
+                editObject(new StackItem(Change.Edit, bid, manufacturer));
+                editScopeChildrenRelations(manufacturer);
+            }
             foreach (TECTag tag in templates.Tags)
             { editObject(new StackItem(Change.Edit, bid, tag)); }
             foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
-            { editObject(new StackItem(Change.Edit, bid, connectionType)); }
+            {
+                editObject(new StackItem(Change.Edit, bid, connectionType));
+                editScopeChildrenRelations(connectionType);
+            }
             foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
-            { editObject(new StackItem(Change.Edit, bid, conduitType)); }
+            {
+                editObject(new StackItem(Change.Edit, bid, conduitType));
+                editScopeChildrenRelations(conduitType);
+            }
             foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
-            { editObject(new StackItem(Change.Edit, bid, cost)); }
+            {
+                editObject(new StackItem(Change.Edit, bid, cost));
+                editScopeChildrenRelations(cost);
+            }
             foreach(TECIOModule module in templates.IOModuleCatalog)
-            { editObject(new StackItem(Change.Edit, bid, module)); }
+            {
+                editObject(new StackItem(Change.Edit, bid, module));
+                editObject(new StackItem(Change.Edit, module, module.Manufacturer));
+                editScopeChildrenRelations(module);
+            }
+            foreach (TECDevice device in templates.DeviceCatalog)
+            {
+                editObject(new StackItem(Change.Edit, bid, device));
+                editObject(new StackItem(Change.Edit, device, device.ConnectionType));
+                editObject(new StackItem(Change.Edit, device, device.Manufacturer));
+                editScopeChildrenRelations(device);
+            }
+            foreach (TECPanelType panelType in templates.PanelTypeCatalog)
+            {
+                editObject(new StackItem(Change.Edit, bid, panelType));
+                editScopeChildrenRelations(panelType);
+            }
             watch.Stop();
             Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
@@ -2990,6 +3017,21 @@ namespace EstimatingUtilitiesLibrary
             } else
             {
                 return (isScope(type.BaseType));
+            }
+        }
+
+        ///<summary>
+        ///Used to merge catalogs more completely. Pass a scope and all relations will be updated.
+        ///</summary>
+        private static void editScopeChildrenRelations(TECScope scope)
+        {
+            foreach (TECTag tag in scope.Tags)
+            {
+                editObject(new StackItem(Change.Edit, scope, tag));
+            }
+            foreach (TECAssociatedCost assCost in scope.AssociatedCosts)
+            {
+                editObject(new StackItem(Change.Edit, scope, assCost));
             }
         }
         #endregion

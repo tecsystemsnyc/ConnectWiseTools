@@ -85,12 +85,12 @@
                                 Grid.Row="3"
                                 ItemsSource="{Binding ConnectionTypeSelections}"
                           DisplayMemberPath="Name"
-                              SelectedValue="{Binding ManufacturerSelections}"
+                              SelectedValue="{Binding SelectedDevice.ConnectionType}"
                              Margin="5"/>
                 <Label Grid.Column="0"
-                           Grid.Row="4"
-                           Content="Manufacturer:"/>
-                <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}"
+                       Grid.Row="4"
+                       Content="Manufacturer:"/>
+                <ComboBox ItemsSource="{Binding ManufacturerSelections}"
                           DisplayMemberPath="Name"
                           Grid.Row="4" Grid.Column="1" Margin="5"
                           SelectedItem="{Binding SelectedDevice.Manufacturer, Converter={cnvt:ManufacturerConverter}}"/>
@@ -110,7 +110,7 @@
         <Button Grid.Row="3" Grid.Column="1" Content="Associate Cost"
                              Command="{Binding AddAssociatedCostToDeviceCommand}"
                              Margin="5"/>
-        <local:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
+        <grids:AssociatedCostsGridControl Grid.Row="4" Grid.ColumnSpan="2"
                                           CostsSource="{Binding SelectedDevice.AssociatedCosts}"
                                           ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <Button Grid.ColumnSpan="2" Grid.Row="5" Content="Delete"
