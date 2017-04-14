@@ -221,7 +221,7 @@
                                         Binding="{Binding IsConnected, Mode=OneWay}"
                                         IsReadOnly="True"
                                         Width="Auto" MinWidth="60"/>
-                        <DataGridTemplateColumn CellTemplate="{StaticResource ClearButton}" Width="100"/>
+                        <DataGridTemplateColumn CellTemplate="{StaticResource ClearButton}" Width="120"/>
 
                     </DataGrid.Columns>
                     <DataGrid.RowDetailsTemplate>
