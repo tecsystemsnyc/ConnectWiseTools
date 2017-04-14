@@ -31,13 +31,13 @@ namespace EstimatingUtilitiesLibrary
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECBid));
-            //watch.Stop();
-            //Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
             TECBid bid = getBidInfo();
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
             foreach (TECDevice device in templates.DeviceCatalog)
             { editObject(new StackItem(Change.Edit, bid, device)); }
@@ -53,11 +53,11 @@ namespace EstimatingUtilitiesLibrary
             { editObject(new StackItem(Change.Edit, bid, cost)); }
             foreach(TECIOModule module in templates.IOModuleCatalog)
             { editObject(new StackItem(Change.Edit, bid, module)); }
-            //watch.Stop();
-            //Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            
+            watch = System.Diagnostics.Stopwatch.StartNew();
+
             bid.Parameters = getBidParameters(bid);
             bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
@@ -79,11 +79,14 @@ namespace EstimatingUtilitiesLibrary
             bid.Panels = getPanels();
             bid.PanelTypeCatalog = getPanelTypes();
             bid.IOModuleCatalog = getIOModules();
+            watch.Stop();
+            Console.WriteLine("Getting Bid Data: " + watch.ElapsedMilliseconds);
 
+            watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
-            //watch.Stop();
-            //Console.WriteLine("loading data: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Linking Bid: " + watch.ElapsedMilliseconds);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
@@ -97,10 +100,13 @@ namespace EstimatingUtilitiesLibrary
         static public TECTemplates LoadDBToTemplates(string path)
         {
             SQLiteDB = new SQLiteDatabase(path);
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECTemplates));
-
+            watch.Stop();
+            Console.WriteLine("checkAndUpdateDB Templates: " + watch.ElapsedMilliseconds);
             TECTemplates templates = new TECTemplates();
-            
+
+            watch = System.Diagnostics.Stopwatch.StartNew();
             templates = getTemplatesInfo();
             templates.Labor = getLaborConstsInTemplates(templates);
             templates.SystemTemplates = getOrphanSystems();
@@ -119,7 +125,14 @@ namespace EstimatingUtilitiesLibrary
             templates.PanelTypeCatalog = getPanelTypes();
             templates.ControlledScopeTemplates = getControlledScope();
             templates.IOModuleCatalog = getIOModules();
+            watch.Stop();
+            Console.WriteLine("Getting Template Data: " + watch.ElapsedMilliseconds);
+
+            watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkTemplates(templates);
+            watch.Stop();
+            Console.WriteLine("Linking Template Data: " + watch.ElapsedMilliseconds);
+
             SQLiteDB.Connection.Close();
             return templates;
         }
