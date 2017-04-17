@@ -14,6 +14,7 @@ namespace EstimatingLibrary
         #region Properties
         protected Guid _guid;
         protected double _length;
+        protected double _conduitLength;
         protected TECController _parentController;
         protected TECConduitType _conduitType;
 
@@ -29,6 +30,16 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _length = value;
                 NotifyPropertyChanged("Length", temp, this);
+            }
+        }
+        public double ConduitLength
+        {
+            get { return _conduitLength; }
+            set
+            {
+                var temp = this.Copy();
+                _conduitLength = value;
+                NotifyPropertyChanged("ConduitLength", temp, this);
             }
         }
         public TECController ParentController
@@ -60,6 +71,7 @@ namespace EstimatingLibrary
         {
             _guid = guid;
             _length = 0;
+            _conduitLength = 0;
         }
         public TECConnection() : this(Guid.NewGuid()) { }
         public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
@@ -67,7 +79,8 @@ namespace EstimatingLibrary
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
 
-            _length = connectionSource.Length;            
+            _length = connectionSource.Length;
+            _conduitLength = connectionSource.ConduitLength;          
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }

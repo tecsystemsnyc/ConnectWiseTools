@@ -717,14 +717,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if (SearchString != null)
             {
+                char dilemeter = ',';
+                string[] searchCriteria = SearchString.ToUpper().Split(dilemeter);
                 switch (TabIndex)
                 {
                     case ScopeCollectionIndex.System:
                         SystemItemsCollection = new ObservableCollection<TECSystem>();
                         foreach (TECSystem item in Templates.SystemTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) || 
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 SystemItemsCollection.Add(item);
                             }
@@ -732,7 +734,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         SystemItemsCollection.Add(item);
                                     }
@@ -744,8 +746,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         EquipmentItemsCollection = new ObservableCollection<TECEquipment>();
                         foreach (TECEquipment item in Templates.EquipmentTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 EquipmentItemsCollection.Add(item);
                             }
@@ -753,7 +755,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         EquipmentItemsCollection.Add(item);
                                     }
@@ -765,8 +767,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
                         foreach (TECSubScope item in Templates.SubScopeTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 SubScopeItemsCollection.Add(item);
                             }
@@ -774,7 +776,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         SubScopeItemsCollection.Add(item);
                                     }
@@ -786,8 +788,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         DevicesItemsCollection = new ObservableCollection<TECDevice>();
                         foreach (TECDevice item in Templates.DeviceCatalog)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 DevicesItemsCollection.Add(item);
                             }
@@ -795,7 +797,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         DevicesItemsCollection.Add(item);
                                     }
@@ -807,8 +809,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         ControllersItemsCollection = new ObservableCollection<TECController>();
                         foreach (TECController item in Templates.ControllerTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 ControllersItemsCollection.Add(item);
                             }
@@ -816,7 +818,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         ControllersItemsCollection.Add(item);
                                     }
@@ -828,8 +830,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
                         foreach (TECAssociatedCost item in Templates.AssociatedCostsCatalog)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 AssociatedCostsItemsCollection.Add(item);
                             }
@@ -837,7 +839,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         AssociatedCostsItemsCollection.Add(item);
                                     }
@@ -849,8 +851,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
                         foreach (TECControlledScope item in Templates.ControlledScopeTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 ControlledScopeItemsCollection.Add(item);
                             }
@@ -858,7 +860,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         ControlledScopeItemsCollection.Add(item);
                                     }
@@ -870,8 +872,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         PanelsItemsCollection = new ObservableCollection<TECPanel>();
                         foreach (TECPanel item in Templates.PanelTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 PanelsItemsCollection.Add(item);
                             }
@@ -879,7 +881,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         PanelsItemsCollection.Add(item);
                                     }
@@ -891,8 +893,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         MiscCostsCollection = new ObservableCollection<TECMiscCost>();
                         foreach (TECMiscCost item in Templates.MiscCostTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 MiscCostsCollection.Add(item);
                             }
@@ -900,7 +902,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         MiscCostsCollection.Add(item);
                                     }
@@ -912,8 +914,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
                         foreach (TECMiscWiring item in Templates.MiscWiringTemplates)
                         {
-                            if (item.Name.ToUpper().Contains(SearchString.ToUpper()) ||
-                                item.Description.ToUpper().Contains(SearchString.ToUpper()))
+                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
                             {
                                 MiscWiringCollection.Add(item);
                             }
@@ -921,7 +923,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             {
                                 foreach (TECTag tag in item.Tags)
                                 {
-                                    if (tag.Text.ToUpper().Contains(SearchString.ToUpper()))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
                                     {
                                         MiscWiringCollection.Add(item);
                                     }

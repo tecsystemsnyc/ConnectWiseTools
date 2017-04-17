@@ -115,6 +115,8 @@
                                                             IsReadOnly="True"/>
                                     <DataGridTextColumn Binding="{Binding Length}" Header="Length"
                                                             />
+                                    <DataGridTextColumn Binding="{Binding ConduitLength}" Header="Conduit Length"
+                                                            />
                                     <DataGridComboBoxColumn Header="Conduit"
                                         ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         DisplayMemberPath="Name"
@@ -213,6 +215,9 @@
                         <DataGridTextColumn Header="Length"
                                     Binding="{Binding Path=Controller.ParentConnection.Length, Mode=TwoWay}"
                                     Width="Auto" MinWidth="50"/>
+                        <DataGridTextColumn Header="Conduit Length"
+                                    Binding="{Binding Path=Controller.ParentConnection.ConduitLength, Mode=TwoWay}"
+                                    Width="Auto" MinWidth="80"/>
                         <DataGridComboBoxColumn Header="Conduit"
                                         ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         DisplayMemberPath="Name"
@@ -272,6 +277,8 @@
                                         <DataGridTextColumn Binding="{Binding ChildrenControllers.Count}" Header="Qty Controllers"
                                                             IsReadOnly="True"/>
                                         <DataGridTextColumn Binding="{Binding Length}" Header="Length"
+                                                            />
+                                        <DataGridTextColumn Binding="{Binding ConduitLength}" Header="Conduit Length"
                                                             />
                                         <DataGridComboBoxColumn Header="Conduit"
                                         ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"

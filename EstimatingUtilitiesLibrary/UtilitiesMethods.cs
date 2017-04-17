@@ -211,6 +211,57 @@ namespace EstimatingUtilitiesLibrary
             bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
         }
 
+        public static bool IsLowerVersion(string currentVersion, string sampleVersion)
+        {
+            var isLowerVersion = false;
+            char delimiter = '.';
+            var currentStrings = currentVersion.Split(delimiter);
+            var sampleStrings = sampleVersion.Split(delimiter);
+            if(sampleStrings.Length != 4 )
+            {
+                return true;
+            }
+            else if(currentStrings[0].ToInt() > sampleStrings[0].ToInt())
+            {
+                return true;
+            }
+            else if (currentStrings[0].ToInt() == sampleStrings[0].ToInt())
+            {
+                if(currentStrings[1].ToInt() > sampleStrings[1].ToInt())
+                {
+                    return true;
+                } else if(currentStrings[1].ToInt() == sampleStrings[1].ToInt())
+                {
+                    if(currentStrings[2].ToInt() > sampleStrings[2].ToInt())
+                    {
+                        return true;
+                    }
+                    else if (currentStrings[2].ToInt() == sampleStrings[2].ToInt())
+                    {
+                        if(currentStrings[3].ToInt() > sampleStrings[3].ToInt())
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+            
+            return isLowerVersion;
+        }
+        public static bool StringContainsStrings(string reference, string[] criteria)
+        {
+            bool containsAll = true;
+            foreach(string critereon in criteria)
+            {
+                if (!reference.Contains(critereon))
+                {
+                    return false;
+                }
+            }
+            return containsAll;
+        }
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, Nothing };
