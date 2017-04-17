@@ -316,42 +316,12 @@ namespace Scope_Builder.ViewModel
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (sourceItem != null && sourceType == targetType)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
+            UIHelpers.StandardDragOver(dropInfo);
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-            }
-            else
-            {
-                sourceItem = dropInfo.Data;
-                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int removeIndex = currentIndex;
-                if (dropInfo.InsertIndex < currentIndex)
-                { removeIndex += 1; }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-                ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
-            }
+            UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
 

@@ -132,6 +132,34 @@ namespace TECUserControlLibrary
             }
         }
 
+        public static void ControlledScopeDrop(IDropInfo dropInfo, object bidOrTemplates)
+        {
+            var sourceItem = dropInfo.Data;
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            {
+                if (dropInfo.Data is TECControlledScope)
+                {
+                    Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+                    sourceItem = new TECControlledScope((dropInfo.Data as TECControlledScope), guidDictionary);
+                    var newControlledScope = sourceItem as TECControlledScope;
+                    ModelLinkingHelper.LinkControlledScopeObjects(newControlledScope.Systems,
+                        newControlledScope.Controllers, newControlledScope.Panels, bidOrTemplates, guidDictionary);
+                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                    }
+                }
+            }
+            else
+            {
+                handleReorderDrop(dropInfo);
+            }
+        }
+
         private static void handleReorderDrop(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;

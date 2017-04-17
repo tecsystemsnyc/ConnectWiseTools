@@ -233,75 +233,28 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            if(targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            if(sourceItem is TECController)
             {
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
-            
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            Object sourceItem;
-            sourceItem = dropInfo.Data;
-
-            var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                if(dropInfo.Data is TECControlledScope)
-                {
-                    Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-                    sourceItem = new TECControlledScope((dropInfo.Data as TECControlledScope), guidDictionary);
-                    var newControlledScope = sourceItem as TECControlledScope;
-                    ModelLinkingHelper.LinkControlledScopeObjects(newControlledScope.Systems,
-                        newControlledScope.Controllers, newControlledScope.Panels, Templates, guidDictionary);
-                }
-                else
-                {
-                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-                }
-                
-                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                    SelectedControlledScope.Controllers.Add(sourceItem as TECController);
-                    sourceItem = controllerInPanel;
-                }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
+                UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
             else
             {
-                sourceItem = dropInfo.Data;
-
-                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int finalIndex = dropInfo.InsertIndex;
-                if (dropInfo.InsertIndex > currentIndex)
-                {
-                    finalIndex -= 1;
-                }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
-                }
-
-                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
+                UIHelpers.StandardDragOver(dropInfo);
+            }
+        }
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is TECControlledScope)
+            {
+                UIHelpers.ControlledScopeDrop(dropInfo, Templates);
+            }
+            else if(dropInfo.Data is TECController)
+            {
+                UIHelpers.ControllerInPanelDrop(dropInfo, SelectedControlledScope.Controllers);
+            }
+            else
+            {
+                UIHelpers.StandardDrop(dropInfo);
             }
         }
 
