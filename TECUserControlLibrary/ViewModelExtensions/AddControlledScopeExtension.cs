@@ -470,21 +470,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Type sourceType = sourceItem.GetType();
 
             var targetCollection = dropInfo.TargetCollection;
-
-            if ((targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0) && sourceType != typeof(ControllerInPanel))
+            if(sourceType == typeof(TECController))
             {
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
+                UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
             else if (sourceType == typeof(TECControlledScope))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                UIHelpers.StandardDragOver(dropInfo);
             }
         }
         public void Drop(IDropInfo dropInfo)
@@ -500,50 +497,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 controlledScopeToAdd.Panels, Bid);
                 ControlledScope = controlledScopeToAdd;
             }
+            else if (dropInfo.Data is TECController)
+            {
+                UIHelpers.ControllerInPanelDrop(dropInfo, ControlledScope.Controllers);
+            }
             else
             {
-                var targetCollection = dropInfo.TargetCollection;
-                Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-                {
-                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-
-                    if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                    {
-                        var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                        ControlledScope.Controllers.Add(sourceItem as TECController);
-                        sourceItem = controllerInPanel;
-                    }
-                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                    }
-                    else
-                    {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                    }
-                }
-                else
-                {
-                    sourceItem = dropInfo.Data;
-
-                    int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                    int finalIndex = dropInfo.InsertIndex;
-                    if (dropInfo.InsertIndex > currentIndex)
-                    {
-                        finalIndex -= 1;
-                    }
-                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
-                    }
-
-                    ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
-                }
+                UIHelpers.StandardDrop(dropInfo);
             }
-            
-
             
         }
         #endregion

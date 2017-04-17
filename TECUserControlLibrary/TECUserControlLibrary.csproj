@@ -189,6 +189,7 @@
     <Compile Include="DataGrids\ScopeTreeGridControl.xaml.cs">
       <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIHelpers.cs" />
     <Compile Include="UserControls\StatusBarControl.xaml.cs">
       <DependentUpon>StatusBarControl.xaml</DependentUpon>
     </Compile>
