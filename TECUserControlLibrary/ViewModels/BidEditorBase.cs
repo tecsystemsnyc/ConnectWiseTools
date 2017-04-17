@@ -403,6 +403,31 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
+        private string getExcelSavePath()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (ScopeDirectoryPath != null)
+            {
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
+            }
+            else
+            {
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+
+            saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
+            saveFileDialog.DefaultExt = "xlsx";
+            saveFileDialog.AddExtension = true;
+
+            string path = null;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                path = saveFileDialog.FileName;
+            }
+
+            return path;
+        }
         private string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -632,7 +657,20 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void ExcelExportExecute()
         {
-            EstimateSpreadsheetExporter.Export(Bid);
+            //User choose path
+            string path = getExcelSavePath();
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    EstimateSpreadsheetExporter.Export(Bid, path);
+                    DebugHandler.LogDebugMessage("Exported to estimating spreadhseet.");
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         protected void LoadTemplatesExecute()
         {
@@ -909,6 +947,14 @@ namespace TECUserControlLibrary.ViewModels
         {
             //User choose path
             string path = getLoadPath();
+            if (path != null)
+            {
+                loadBidFromPath(path);
+            }
+        }
+        protected void loadBidFromPath(string path)
+        {
+            //User choose path
             if (path != null)
             {
                 SetBusyStatus("Loading File: " + path, false);

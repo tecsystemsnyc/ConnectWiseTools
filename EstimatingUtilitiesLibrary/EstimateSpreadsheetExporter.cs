@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.IO;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -14,9 +15,10 @@ namespace EstimatingUtilitiesLibrary
     public static class EstimateSpreadsheetExporter
     {
 
-        public static void Export(TECBid bid)
+        public static void Export(TECBid bid, string path)
         {
-            using(SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(@"C:\Users\dtaylor\Dropbox (TEC Systems)\Sales\Estimating tools\REV.5.Estimate 2017.01.xlsx", true))
+            File.Copy(@"C:\Users\dtaylor\Dropbox (TEC Systems)\Sales\Estimating tools\REV.5.Estimate 2017.01.xlsx", path);
+            using(SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(path, true))
             {
                 WorksheetPart worksheetPart = GetWorksheetPartByName(spreadSheet, "Points List");
                 if (worksheetPart != null)
