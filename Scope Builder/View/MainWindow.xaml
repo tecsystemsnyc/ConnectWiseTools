@@ -15,7 +15,8 @@
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
-        Height="520" Width="900" 
+        Height="720"
+        Width="1200"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         xmlns:dd="urn:gong-wpf-dragdrop"
         MinHeight="300" MinWidth="535"
