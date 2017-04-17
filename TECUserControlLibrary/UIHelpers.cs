@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -129,6 +130,36 @@ namespace TECUserControlLibrary
             else
             {
                 handleReorderDrop(dropInfo);
+            }
+        }
+
+        public static void FileDragOver(IDropInfo dropInfo)
+        {
+            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            if (dragFileList.Count() == 1)
+            {
+                if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+            }
+        }
+        public static string FileDrop(IDropInfo dropInfo)
+        {
+            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            if (dragFileList.Count() == 1)
+            {
+                if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                {
+                    return dragFileList.First();
+                }else
+                {
+                    return null;
+                }
+            }else
+            {
+                return null;
             }
         }
 

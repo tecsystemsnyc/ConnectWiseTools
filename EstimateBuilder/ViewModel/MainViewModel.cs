@@ -19,6 +19,7 @@ using TECUserControlLibrary.ViewModels;
 using DebugLibrary;
 using GongSolutions.Wpf.DragDrop;
 using System.Linq;
+using TECUserControlLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -269,26 +270,15 @@ namespace EstimateBuilder.ViewModel
 
         public void DragOver(IDropInfo dropInfo)
         {
-            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
-            if(dragFileList.Count() == 1)
-            {
-                if(Path.GetExtension(dragFileList.First()) == ".bdb")
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
+            UIHelpers.FileDragOver(dropInfo);
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
-            if (dragFileList.Count() == 1)
+            string path = UIHelpers.FileDrop(dropInfo);
+            if ( path != null)
             {
-                if (Path.GetExtension(dragFileList.First()) == ".bdb")
-                {
-                    loadBidFromPath(dragFileList.First());
-                }
+                loadBidFromPath(path);
             }
         }
 
