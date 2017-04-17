@@ -116,6 +116,7 @@
     <Compile Include="ChangeStack.cs" />
     <Compile Include="CSVWriter.cs" />
     <Compile Include="DBDefinitions.cs" />
+    <Compile Include="EstimateSpreadsheetExporter.cs" />
     <Compile Include="EstimatingLibraryDatabase.cs" />
     <Compile Include="PDFConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

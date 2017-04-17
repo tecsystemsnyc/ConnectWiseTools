@@ -153,6 +153,7 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand LoadTemplatesCommand { get; private set; }
         public ICommand CSVExportCommand { get; private set; }
         public ICommand BudgetCommand { get; private set; }
+        public ICommand ExcelExportCommand { get; private set; }
 
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
@@ -211,6 +212,7 @@ namespace TECUserControlLibrary.ViewModels
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+            ExcelExportCommand = new RelayCommand(ExcelExportExecute);
 
             RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
 
@@ -286,6 +288,7 @@ namespace TECUserControlLibrary.ViewModels
             MenuVM.ExportPointsListCommand = CSVExportCommand;
             MenuVM.UndoCommand = UndoCommand;
             MenuVM.RedoCommand = RedoCommand;
+            MenuVM.ExportExcelCommand = ExcelExportCommand;
 
             MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
 
@@ -626,6 +629,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             //new View.BudgetWindow();
             //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
+        }
+        private void ExcelExportExecute()
+        {
+            EstimateSpreadsheetExporter.Export(Bid);
         }
         protected void LoadTemplatesExecute()
         {
