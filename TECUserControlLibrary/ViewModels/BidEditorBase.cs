@@ -535,8 +535,7 @@ namespace TECUserControlLibrary.ViewModels
 
                     if (saveSynchronously())
                     {
-                        bidDBFilePath = null;
-                        Bid = new TECBid();
+                        setupBid();
                     }
                     else
                     {
@@ -546,16 +545,14 @@ namespace TECUserControlLibrary.ViewModels
                 else if (result == MessageBoxResult.No)
                 {
                     DebugHandler.LogDebugMessage("Creating new bid.");
-                    bidDBFilePath = null;
-                    Bid = new TECBid();
+                    setupBid();
                     isNew = true;
                 }
             }
             else
             {
                 DebugHandler.LogDebugMessage("Creating new bid.");
-                bidDBFilePath = null;
-                Bid = new TECBid();
+                setupBid();
                 isNew = true;
             }
             
@@ -731,12 +728,7 @@ namespace TECUserControlLibrary.ViewModels
                     {
 
                         Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                        Bid.DeviceCatalog = Templates.DeviceCatalog;
-                        Bid.ManufacturerCatalog = Templates.ManufacturerCatalog;
-                        Bid.Tags = Templates.Tags;
-                        Bid.ConnectionTypes = Templates.ConnectionTypeCatalog;
-                        Bid.ConduitTypes = Templates.ConduitTypeCatalog;
-                        Bid.AssociatedCostsCatalog = Templates.AssociatedCostsCatalog;
+                        UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
                         templatesLoaded = true;
                     }
                     else
