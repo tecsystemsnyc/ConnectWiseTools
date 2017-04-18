@@ -130,6 +130,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="reflectedproposal.cs" />
     <Compile Include="ScopeDocumentBuilder.cs" />
     <Compile Include="ScopeWordDocumentBuilder.cs" />
     <Compile Include="SQLiteDatabase.cs" />
