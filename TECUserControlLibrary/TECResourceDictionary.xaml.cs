@@ -16,7 +16,12 @@ namespace TECUserControlLibrary
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
-            if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
+            if(e.ClickCount == 3 && cell.Column is DataGridTextColumn)
+            {
+                var textBox = FindVisualChild<TextBox>(cell);
+                textBox.SelectAll();
+            }
+            else if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {
                 if (!cell.IsFocused)
                 {
@@ -66,6 +71,14 @@ namespace TECUserControlLibrary
                 }
         }
 
+        private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount == 3)
+            {
+                (sender as TextBox).SelectAll();
+            }
+        }
+        
         private void SelectRow(object sender, MouseButtonEventArgs e)
         {
             var ogSource = e.OriginalSource;
@@ -75,8 +88,7 @@ namespace TECUserControlLibrary
             grid.SelectedItem = grid.SelectedItem;
             
         }
-
-
+        
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             //e.Handled = true;
