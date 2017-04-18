@@ -135,15 +135,15 @@ namespace TECUserControlLibrary
 
         public static void FileDragOver(IDropInfo dropInfo)
         {
-            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
-            if (dragFileList.Count() == 1)
-            {
-                if (Path.GetExtension(dragFileList.First()) == ".bdb")
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
+            //var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            //if (dragFileList.Count() == 1)
+            //{
+            //    if (Path.GetExtension(dragFileList.First()) == ".bdb")
+            //    {
+            //        dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+            //        dropInfo.Effects = DragDropEffects.Copy;
+            //    }
+            //}
         }
         public static string FileDrop(IDropInfo dropInfo)
         {

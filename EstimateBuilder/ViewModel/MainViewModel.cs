@@ -272,7 +272,6 @@ namespace EstimateBuilder.ViewModel
         {
             UIHelpers.FileDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             string path = UIHelpers.FileDrop(dropInfo);

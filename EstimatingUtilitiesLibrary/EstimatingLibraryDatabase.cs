@@ -2598,8 +2598,8 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
                         data.Add(field.Name, dataString);
                     }
-                    object[] childObject = { child, item.ReferenceObject }; 
-                    assembleDataWithObjects(data, childObject, tableInfo, field);
+                    var assemblyItem = new StackItem(Change.Add, item.ReferenceObject, child, item.ReferenceType, item.TargetType);
+                    assembleDataWithItem(data, assemblyItem, tableInfo, field);
                 }
                 if (data.Count > 0)
                 {
@@ -2715,7 +2715,7 @@ namespace EstimatingUtilitiesLibrary
                     var dataString = objectToDBString(Properties.Settings.Default.Version);
                     data.Add(field.Name, dataString);
                 }
-                assembleDataWithObjects(data, relevantObjects, tableInfo, field);
+                assembleDataWithItem(data, item, tableInfo, field);
             }
 
             if (data.Count > 0)
@@ -2748,43 +2748,6 @@ namespace EstimatingUtilitiesLibrary
         #endregion
         
         #region Helper Methods
-        static private List<string> getAllTableNames()
-        {
-            string command = "select name from sqlite_master where type = 'table' order by 1";
-            DataTable tables = SQLiteDB.getDataFromCommand(command);
-            List<string> tableNames = new List<string>();
-            foreach (DataRow row in tables.Rows)
-            {
-                tableNames.Add(row["Name"].ToString());
-            }
-            return tableNames;
-        }
-        static private List<string> getAllTableFields(string tableName)
-        {
-            string command = "select * from " + tableName + " limit 1";
-            DataTable data = SQLiteDB.getDataFromCommand(command);
-            List<string> tableFields = new List<string>();
-            foreach (DataColumn col in data.Columns)
-            {
-                tableFields.Add(col.ColumnName);
-            }
-            return tableFields;
-        }
-        static private List<string> getPrimaryKeys(string tableName)
-        {
-            string command = "PRAGMA table_info(" + tableName + ")";
-            DataTable data = SQLiteDB.getDataFromCommand(command);
-            List<string> primaryKeys = new List<string>();
-            foreach (DataRow row in data.Rows)
-            {
-                if(row["pk"].ToString() != "0")
-                {
-                    primaryKeys.Add(row["name"].ToString());
-                }
-                
-            }
-            return primaryKeys;
-        }
         private static Dictionary<string, string> assembleDataToAddRemove(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
@@ -2813,7 +2776,6 @@ namespace EstimatingUtilitiesLibrary
 
             int currentField = 0;
             foreach (TableField field in tableInfo.Fields)
-            //tableInfo.Item2 = AllTableFields;
             {
                 if (isHierarchial)
                 {
@@ -2843,36 +2805,19 @@ namespace EstimatingUtilitiesLibrary
 
             return data;
         } 
-        private static Dictionary<string, string> assembleDataWithObjects(Dictionary<string, string> data, Object[] relevantObjects, TableInfo tableInfo, TableField field)
-        {
-            foreach (Object item in relevantObjects)
-            {
-                if (isFieldType(tableInfo, field, item))
-                {
-                    DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.GetType(), DEBUG_GENERIC);
-                    
-                    var dataString = objectToDBString(field.Property.GetValue(item, null));
-                    data.Add(field.Name, dataString);
-                }
-            }
-            return data;
-        }
         private static Dictionary<string, string> assembleDataWithItem(Dictionary<string, string> data, StackItem item, TableInfo tableInfo, TableField field)
         {
             if (isFieldType(tableInfo, field, item.TargetObject, item.TargetType))
             {
                 DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.TargetType, DEBUG_GENERIC);
-
-                var dataString = objectToDBString(field.Property.GetValue(item.TargetObject, null));
-                data.Add(field.Name, dataString);
+                addFieldPropertyToData(field, item.TargetObject, data);
             }
             else if (isFieldType(tableInfo, field, item.ReferenceObject, item.ReferenceType))
             {
                 DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.ReferenceType, DEBUG_GENERIC);
-
-                var dataString = objectToDBString(field.Property.GetValue(item.ReferenceObject, null));
-                data.Add(field.Name, dataString);
+                addFieldPropertyToData(field, item.ReferenceObject, data);
             }
+            
             return data;
         }
         private static List<TableBase> getRelevantTablesForAddRemove(StackItem item)
@@ -2920,11 +2865,14 @@ namespace EstimatingUtilitiesLibrary
                     return relevantTables;
                 }
             }
-
             return relevantTables;
-
         }
 
+        private static void addFieldPropertyToData(TableField field, object obj, Dictionary<string, string> data)
+        {
+            var dataString = objectToDBString(field.Property.GetValue(obj, null));
+            data.Add(field.Name, dataString);
+        }
         private static string objectToDBString(Object inObject)
         {
             string outstring = "";
@@ -2938,32 +2886,6 @@ namespace EstimatingUtilitiesLibrary
             }
             
             return outstring;
-        }
-        private static List<Type> getObjectTypes(params Object[] objectsToAdd)
-        {
-            var outList = new List<Type>();
-
-            foreach (Object item in objectsToAdd)
-            {
-                outList.Add(item.GetType());
-            }
-
-            return outList;
-        }
-        private static bool sharesTypes(List<Type> list1, List<Type> list2)
-        {
-            bool doesShare = false;
-            foreach (Type type in list1)
-            {
-                foreach (Type otherType in list2)
-                {
-                    if (type == otherType)
-                    {
-                        doesShare = true;
-                    }
-                }
-            }
-            return doesShare;
         }
         private static bool sharesAllTypes(List<Type> list1, List<Type> list2)
         {
@@ -3154,6 +3076,44 @@ namespace EstimatingUtilitiesLibrary
             {
                 return (isScope(type.BaseType));
             }
+        }
+
+        static private List<string> getAllTableNames()
+        {
+            string command = "select name from sqlite_master where type = 'table' order by 1";
+            DataTable tables = SQLiteDB.getDataFromCommand(command);
+            List<string> tableNames = new List<string>();
+            foreach (DataRow row in tables.Rows)
+            {
+                tableNames.Add(row["Name"].ToString());
+            }
+            return tableNames;
+        }
+        static private List<string> getAllTableFields(string tableName)
+        {
+            string command = "select * from " + tableName + " limit 1";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> tableFields = new List<string>();
+            foreach (DataColumn col in data.Columns)
+            {
+                tableFields.Add(col.ColumnName);
+            }
+            return tableFields;
+        }
+        static private List<string> getPrimaryKeys(string tableName)
+        {
+            string command = "PRAGMA table_info(" + tableName + ")";
+            DataTable data = SQLiteDB.getDataFromCommand(command);
+            List<string> primaryKeys = new List<string>();
+            foreach (DataRow row in data.Rows)
+            {
+                if (row["pk"].ToString() != "0")
+                {
+                    primaryKeys.Add(row["name"].ToString());
+                }
+
+            }
+            return primaryKeys;
         }
 
         ///<summary>

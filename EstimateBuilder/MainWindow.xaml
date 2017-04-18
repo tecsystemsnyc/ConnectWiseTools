@@ -49,9 +49,9 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}"
-               dd:DragDrop.IsDropTarget="True"
-               dd:DragDrop.DropHandler="{Binding}">
+    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
+        <!--dd:DragDrop.IsDropTarget="True"
+               dd:DragDrop.DropHandler="{Binding}">-->
 
         <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
