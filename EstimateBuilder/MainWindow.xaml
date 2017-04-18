@@ -11,6 +11,7 @@
         xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         
         mc:Ignorable="d ignore"
         Height="720"
@@ -48,7 +49,9 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
+    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}"
+               dd:DragDrop.IsDropTarget="True"
+               dd:DragDrop.DropHandler="{Binding}">
 
         <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>

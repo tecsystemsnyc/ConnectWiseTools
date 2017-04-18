@@ -153,6 +153,7 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand LoadTemplatesCommand { get; private set; }
         public ICommand CSVExportCommand { get; private set; }
         public ICommand BudgetCommand { get; private set; }
+        public ICommand ExcelExportCommand { get; private set; }
 
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
@@ -211,6 +212,7 @@ namespace TECUserControlLibrary.ViewModels
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
+            ExcelExportCommand = new RelayCommand(ExcelExportExecute);
 
             RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
 
@@ -286,6 +288,7 @@ namespace TECUserControlLibrary.ViewModels
             MenuVM.ExportPointsListCommand = CSVExportCommand;
             MenuVM.UndoCommand = UndoCommand;
             MenuVM.RedoCommand = RedoCommand;
+            MenuVM.ExportExcelCommand = ExcelExportCommand;
 
             MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
 
@@ -389,6 +392,31 @@ namespace TECUserControlLibrary.ViewModels
 
             saveFileDialog.Filter = "Comma Separated Values Files (*.csv)|*.csv";
             saveFileDialog.DefaultExt = "csv";
+            saveFileDialog.AddExtension = true;
+
+            string path = null;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                path = saveFileDialog.FileName;
+            }
+
+            return path;
+        }
+        private string getExcelSavePath()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (ScopeDirectoryPath != null)
+            {
+                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
+            }
+            else
+            {
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+
+            saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
+            saveFileDialog.DefaultExt = "xlsx";
             saveFileDialog.AddExtension = true;
 
             string path = null;
@@ -626,6 +654,23 @@ namespace TECUserControlLibrary.ViewModels
         {
             //new View.BudgetWindow();
             //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
+        }
+        private void ExcelExportExecute()
+        {
+            //User choose path
+            string path = getExcelSavePath();
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    EstimateSpreadsheetExporter.Export(Bid, path);
+                    DebugHandler.LogDebugMessage("Exported to estimating spreadhseet.");
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         protected void LoadTemplatesExecute()
         {
@@ -902,6 +947,14 @@ namespace TECUserControlLibrary.ViewModels
         {
             //User choose path
             string path = getLoadPath();
+            if (path != null)
+            {
+                loadBidFromPath(path);
+            }
+        }
+        protected void loadBidFromPath(string path)
+        {
+            //User choose path
             if (path != null)
             {
                 SetBusyStatus("Loading File: " + path, false);

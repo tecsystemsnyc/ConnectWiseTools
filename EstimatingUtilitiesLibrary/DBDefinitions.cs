@@ -541,6 +541,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
         public static TableField IncludeStubUp = new TableField("IncludeStubUp", "TEXT", ObjectType.GetProperty("IncludeStubUp"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
@@ -558,6 +559,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
         public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {

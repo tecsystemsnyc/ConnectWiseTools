@@ -518,53 +518,12 @@ namespace TemplateBuilder.ViewModel
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (sourceItem != null && sourceType == targetType)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
+            UIHelpers.StandardDragOver(dropInfo);
         }
+
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
-            Type sourceType = dropInfo.Data.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
-            }
-            else
-            {
-                sourceItem = dropInfo.Data;
-
-                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int finalIndex = dropInfo.InsertIndex;
-                if (dropInfo.InsertIndex > currentIndex)
-                {
-                    finalIndex -= 1;
-                }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
-                }
-
-                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
-            }
+            UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
 

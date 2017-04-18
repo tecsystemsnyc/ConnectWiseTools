@@ -1571,7 +1571,8 @@ namespace EstimatingUtilitiesLibrary
                 if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
                 {
                     string version = infoRow[BidInfoTable.DBVersion.Name].ToString();
-                    return (version == currentVersion);
+                    return (!UtilitiesMethods.IsLowerVersion(currentVersion, version));
+                    //return (version == currentVersion);
                 }
                 else
                 { return false; }
@@ -1985,6 +1986,7 @@ namespace EstimatingUtilitiesLibrary
             Guid guid = new Guid(row[SubScopeConnectionTable.ConnectionID.Name].ToString());
             TECSubScopeConnection connection = new TECSubScopeConnection(guid);
             connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
+            connection.ConduitLength = row[SubScopeConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
             connection.IncludeStubUp = row[SubScopeConnectionTable.IncludeStubUp.Name].ToString().ToInt(0).ToBool();
@@ -1995,6 +1997,7 @@ namespace EstimatingUtilitiesLibrary
             Guid guid = new Guid(row[NetworkConnectionTable.ConnectionID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);
             connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
+            connection.ConduitLength = row[NetworkConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
             connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid);

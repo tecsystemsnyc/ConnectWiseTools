@@ -106,6 +106,7 @@ namespace EstimatingLibrary
             double cost = 0;
             double shipping = 0.03;
             double warranty = 0.05;
+            var terminations = 0;
 
             foreach(TECMiscWiring wiring in bid.MiscWiring)
             {
@@ -117,19 +118,21 @@ namespace EstimatingLibrary
                 foreach(TECConnection connection in controller.ChildrenConnections)
                 {
                     var length = connection.Length;
-                    
+                    var conduitLength = connection.ConduitLength;
+
                     if (connection is TECNetworkConnection)
                     {
                         if ((connection as TECNetworkConnection).ConnectionType != null)
                         {
                             TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                             cost += length * type.Cost;
+                            terminations += 2;
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                             { cost += associatedCost.Cost; }
                         }
                         if (connection.ConduitType != null)
                         {
-                            cost += length * connection.ConduitType.Cost;
+                            cost += conduitLength * connection.ConduitType.Cost;
                             foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
                             {
                                 cost += associatedCost.Cost;
@@ -141,6 +144,7 @@ namespace EstimatingLibrary
                         foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                         {
                             cost += length * type.Cost;
+                            terminations += 2;
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                             {
                                 cost += associatedCost.Cost;
@@ -153,7 +157,7 @@ namespace EstimatingLibrary
                                 cost += 15 * connection.ConduitType.Cost;
                             }else
                             {
-                                cost += length * connection.ConduitType.Cost;
+                                cost += conduitLength * connection.ConduitType.Cost;
                             }
                             foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
                             {
@@ -167,6 +171,8 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            //Termination cost should be a stored, user-editable value.
+            cost += terminations * .25;
             cost += cost * shipping + cost * warranty;
             return cost;
         }
@@ -351,6 +357,7 @@ namespace EstimatingLibrary
         public static double GetElectricalLaborHours(TECBid bid)
         {
             double laborHours = 0;
+            var terminations = 0;
 
             foreach (TECController controller in bid.Controllers)
             {
@@ -371,6 +378,7 @@ namespace EstimatingLibrary
                     {
                         if ((connection as TECNetworkConnection).ConnectionType != null)
                         {
+                            terminations += 2;
                             TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                             laborHours += length * type.Labor;
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
@@ -381,6 +389,7 @@ namespace EstimatingLibrary
                     {
                         foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                         {
+                            terminations += 2;
                             laborHours += length * type.Labor;
                             foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                             { laborHours += associatedCost.Labor; }
@@ -393,7 +402,8 @@ namespace EstimatingLibrary
                 }
 
             }
-
+            //Labor hours should be a stored, user-editable value
+            laborHours += terminations * .1;
             return laborHours;
         }
         /// <summary>
@@ -466,6 +476,7 @@ namespace EstimatingLibrary
             return cost;
         }
         #endregion
+
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 
         /// </summary>

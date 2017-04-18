@@ -66,6 +66,13 @@ namespace EstimatingLibrary
                 return outIOTypes;
             }
         }
+        public int Terminations
+        {
+            get
+            {
+                return getTerminations();
+            }
+        }
         #endregion
 
         #region Constructors
@@ -90,6 +97,16 @@ namespace EstimatingLibrary
             if (_subScope != null)
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
+        }
+
+        private int getTerminations()
+        {
+            int terms = 0;
+            foreach(TECConnectionType type in ConnectionTypes)
+            {
+                terms += 2;
+            }
+            return terms;
         }
         #endregion
 

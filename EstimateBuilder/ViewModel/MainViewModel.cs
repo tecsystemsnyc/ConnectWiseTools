@@ -17,6 +17,9 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using TECUserControlLibrary.ViewModels;
 using DebugLibrary;
+using GongSolutions.Wpf.DragDrop;
+using System.Linq;
+using TECUserControlLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -26,7 +29,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : BidEditorBase
+    public class MainViewModel : BidEditorBase, IDropTarget
     {
         public MainViewModel()
         {
@@ -265,6 +268,20 @@ namespace EstimateBuilder.ViewModel
         }
         #endregion
 
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.FileDragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            string path = UIHelpers.FileDrop(dropInfo);
+            if ( path != null)
+            {
+                loadBidFromPath(path);
+            }
+        }
+
         #endregion
 
         #region Event Handlers
@@ -322,6 +339,7 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
+        
         #endregion
     }
 }
