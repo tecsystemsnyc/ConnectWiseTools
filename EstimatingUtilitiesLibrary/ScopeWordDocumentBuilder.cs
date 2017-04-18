@@ -27,6 +27,39 @@ namespace EstimatingUtilitiesLibrary
                 Paragraph para = body.AppendChild(new Paragraph());
                 Run run = para.AppendChild(new Run());
                 run.AppendChild(new Text(bid.Name));
+
+                NumberingDefinitionsPart numberingPart = mainPart.AddNewPart<NumberingDefinitionsPart>("mainList");
+
+                Numbering numElement =
+                  new Numbering(
+                    new AbstractNum(
+                      new Level(
+                        new NumberingFormat() { Val = NumberFormatValues.CardinalText },
+                        new LevelText() { Val = "·" }
+                      )
+                      { LevelIndex = 0 }
+                    )
+                    { AbstractNumberId = 1 },
+                    new NumberingInstance(
+                      new AbstractNumId() { Val = 1 }
+                    )
+                    { NumberID = 1 });
+
+                numElement.Save(numberingPart);
+
+                body = mainPart.Document.AppendChild(new Body());
+
+                foreach (TECSystem system in bid.Systems)
+                {
+                    para = body.AppendChild(new Paragraph());
+                    para.ParagraphProperties = new ParagraphProperties(
+                        new NumberingProperties(
+                        new NumberingLevelReference() { Val = 0 },
+                        new NumberingId() { Val = 1 }));
+                    run = para.AppendChild(new Run());
+                    run.AppendChild(new Text(system.Name));
+                }
+                
             }
         }
     }
