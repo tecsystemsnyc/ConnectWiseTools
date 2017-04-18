@@ -50,9 +50,6 @@
     </Window.InputBindings>
 
     <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-        <!--dd:DragDrop.IsDropTarget="True"
-               dd:DragDrop.DropHandler="{Binding}">-->
-
         <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
@@ -109,7 +106,9 @@
                 </TabItem>
             </TabControl>
             <cLibControls:StatusBarControl ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
-                                           Grid.Row="3" Grid.ColumnSpan="3"/>
+                                           Grid.Row="3" Grid.ColumnSpan="3"
+                                           dd:DragDrop.IsDropTarget="True"
+                                           dd:DragDrop.DropHandler="{Binding}"/>
         </Grid>
     </DockPanel>
 </Window>

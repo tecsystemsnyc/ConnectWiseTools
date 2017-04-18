@@ -2599,7 +2599,7 @@ namespace EstimatingUtilitiesLibrary
                         data.Add(field.Name, dataString);
                     }
                     var assemblyItem = new StackItem(Change.Add, item.ReferenceObject, child, item.ReferenceType, item.TargetType);
-                    assembleDataWithItem(data, assemblyItem, tableInfo, field);
+                    assembleDataWithItem(data, assemblyItem, field);
                 }
                 if (data.Count > 0)
                 {
@@ -2715,7 +2715,7 @@ namespace EstimatingUtilitiesLibrary
                     var dataString = objectToDBString(Properties.Settings.Default.Version);
                     data.Add(field.Name, dataString);
                 }
-                assembleDataWithItem(data, item, tableInfo, field);
+                assembleDataWithItem(data, item, field);
             }
 
             if (data.Count > 0)
@@ -2723,27 +2723,6 @@ namespace EstimatingUtilitiesLibrary
                 if (!SQLiteDB.Replace(tableInfo.Name, data))
                 { DebugHandler.LogError("Couldn't edit data in " + tableInfo.Name + " table."); }
             }
-        }
-        private static List<TableBase> getRelevantTablesToEdit(StackItem item)
-        {
-            var relevantTables = new List<TableBase>();
-            var objectTypes = new List<Type> {item.TargetType, item.ReferenceType };
-
-            foreach (TableBase table in AllTables.Tables)
-            {
-                var tableInfo = new TableInfo(table);
-                bool allTypesMatch = sharesAllTypesForEdit(objectTypes, tableInfo.Types);
-                bool tableHasOnlyType = false;
-                if (item.TargetObject != null){
-                    tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
-                }
-                
-                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
-
-                if ((allTypesMatch || tableHasOnlyType) && (shouldIncludeCatalog))
-                { relevantTables.Add(table);}
-            }
-            return relevantTables;
         }
         #endregion
         
@@ -2798,23 +2777,23 @@ namespace EstimatingUtilitiesLibrary
                         var dataString = objectToDBString(Properties.Settings.Default.Version);
                         data.Add(field.Name, dataString);
                     }
-                    assembleDataWithItem(data, item, tableInfo, field);
+                    assembleDataWithItem(data, item, field);
                 }
                 currentField++;
             }
 
             return data;
         } 
-        private static Dictionary<string, string> assembleDataWithItem(Dictionary<string, string> data, StackItem item, TableInfo tableInfo, TableField field)
+        private static Dictionary<string, string> assembleDataWithItem(Dictionary<string, string> data, StackItem item, TableField field)
         {
-            if (isFieldType(tableInfo, field, item.TargetObject, item.TargetType))
+            if (isFieldType(field, item.TargetObject, item.TargetType))
             {
-                DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.TargetType, DEBUG_GENERIC);
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.TargetType, DEBUG_GENERIC);
                 addFieldPropertyToData(field, item.TargetObject, data);
             }
-            else if (isFieldType(tableInfo, field, item.ReferenceObject, item.ReferenceType))
+            else if (isFieldType(field, item.ReferenceObject, item.ReferenceType))
             {
-                DebugHandler.LogDebugMessage("Changing " + field.Name + " in table " + tableInfo.Name + " with type " + item.ReferenceType, DEBUG_GENERIC);
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.ReferenceType, DEBUG_GENERIC);
                 addFieldPropertyToData(field, item.ReferenceObject, data);
             }
             
@@ -2829,11 +2808,9 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
 
-                //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
                 bool allTypesAndTargetObjectTypeMatch = sharesAllTypes(objectTypesWithTarget, tableInfo.Types);
                 bool tableHasOnlyType = hasOnlyType(item.TargetObject.GetType(), tableInfo.Types);
-                //bool baseAndObjectMatch = hasBaseTypeAndType(objectTypes, tableInfo.Types);
                 bool baseAndObjectMatch = false;
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
 
@@ -2855,7 +2832,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
 
-                //TableInfo.Item4 = List<TableType>
                 bool allTypesMatch = sharesAllTypes(objectTypes, tableInfo.Types);
                 bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
                 if(allTypesMatch && shouldIncludeCatalog)
@@ -2867,7 +2843,29 @@ namespace EstimatingUtilitiesLibrary
             }
             return relevantTables;
         }
+        private static List<TableBase> getRelevantTablesToEdit(StackItem item)
+        {
+            var relevantTables = new List<TableBase>();
+            var objectTypes = new List<Type> { item.TargetType, item.ReferenceType };
 
+            foreach (TableBase table in AllTables.Tables)
+            {
+                var tableInfo = new TableInfo(table);
+                bool allTypesMatch = sharesAllTypesForEdit(objectTypes, tableInfo.Types);
+                bool tableHasOnlyType = false;
+                if (item.TargetObject != null)
+                {
+                    tableHasOnlyType = hasOnlyType(objectTypes[0], tableInfo.Types);
+                }
+
+                bool shouldIncludeCatalog = isCatalogEdit(objectTypes, tableInfo.IsCatalogTable);
+
+                if ((allTypesMatch || tableHasOnlyType) && (shouldIncludeCatalog))
+                { relevantTables.Add(table); }
+            }
+            return relevantTables;
+        }
+        
         private static void addFieldPropertyToData(TableField field, object obj, Dictionary<string, string> data)
         {
             var dataString = objectToDBString(field.Property.GetValue(obj, null));
@@ -3007,7 +3005,7 @@ namespace EstimatingUtilitiesLibrary
             else
                 return false;
         }
-        private static bool isFieldType(TableInfo table, TableField field, Object consideredObject, Type consideredType)
+        private static bool isFieldType(TableField field, Object consideredObject, Type consideredType)
         {
             if (field.Property == null)
                 return false;
