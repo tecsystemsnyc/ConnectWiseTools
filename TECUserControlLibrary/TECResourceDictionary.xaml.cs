@@ -71,7 +71,7 @@ namespace TECUserControlLibrary
                 }
         }
 
-        private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.ClickCount == 3)
             {
