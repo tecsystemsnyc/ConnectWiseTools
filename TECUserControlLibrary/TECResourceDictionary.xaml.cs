@@ -19,7 +19,10 @@ namespace TECUserControlLibrary
             if(e.ClickCount == 3 && cell.Column is DataGridTextColumn)
             {
                 var textBox = FindVisualChild<TextBox>(cell);
-                textBox.SelectAll();
+                if(textBox != null)
+                {
+                    textBox.SelectAll();
+                }
             }
             else if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {
@@ -54,21 +57,23 @@ namespace TECUserControlLibrary
             var source = e.Source;
             DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
             DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
+            Button button = FindVisualParent<Button>(ogSource as UIElement);
+            if (parentRow == null || 
+                (childRow!= null && childRow.IsSelected == true) ||
+                (childRow == null && button == null))
+            {
+                return;
+            }
+            parentRow.Focusable = true;
+            parentRow.Focus();
 
-            if (parentRow == null || (childRow!= null && childRow.IsSelected == true) || childRow == null)
-                {
-                    return;
-                }
-                parentRow.Focusable = true;
-                parentRow.Focus();
-
-                var focusDirection = FocusNavigationDirection.Next;
-                var request = new TraversalRequest(focusDirection);
-                var elementWithFocus = Keyboard.FocusedElement as UIElement;
-                if (elementWithFocus != null)
-                {
-                    elementWithFocus.MoveFocus(request);
-                }
+            var focusDirection = FocusNavigationDirection.Next;
+            var request = new TraversalRequest(focusDirection);
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+            if (elementWithFocus != null)
+            {
+                elementWithFocus.MoveFocus(request);
+            }
         }
 
         private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)

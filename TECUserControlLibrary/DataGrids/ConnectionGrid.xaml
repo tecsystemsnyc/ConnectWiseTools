@@ -22,7 +22,8 @@
         <DataGrid ItemsSource="{Binding SubScopeConnectionCollection}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
                                         SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
