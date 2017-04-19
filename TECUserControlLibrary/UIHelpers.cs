@@ -135,7 +135,7 @@ namespace TECUserControlLibrary
 
         public static void FileDragOver(IDropInfo dropInfo)
         {
-            try
+            if(dropInfo.Data is DataObject)
             {
                 var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
                 if (dragFileList.Count() == 1)
@@ -147,8 +147,6 @@ namespace TECUserControlLibrary
                     }
                 }
             }
-            catch { }
-            
         }
         public static string FileDrop(IDropInfo dropInfo)
         {
