@@ -86,7 +86,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _bid = value;
-                //stack = new ChangeStack(value);
+                stack = new ChangeStack(value);
                 // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
                 buildTitleString();

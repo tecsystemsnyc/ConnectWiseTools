@@ -721,7 +721,6 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateAll();
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
@@ -741,9 +740,17 @@ namespace EstimatingLibrary
                         else if (item is TECSystem)
                         {
                             var sys = item as TECSystem;
+                            var watch = System.Diagnostics.Stopwatch.StartNew();
                             addProposalScope(sys);
+                            watch.Stop();
+                            Console.WriteLine("Adding Proposal Scope: " + watch.ElapsedMilliseconds);
+                            
                             sys.PropertyChanged += System_PropertyChanged;
+
+                            watch = System.Diagnostics.Stopwatch.StartNew();
                             checkForTotalsInSystem(sys);
+                            watch.Stop();
+                            Console.WriteLine("checkForTotalsInSystem: " + watch.ElapsedMilliseconds);
                         } else if (item is TECController)
                         {
                             registerController(item as TECController);
@@ -1085,21 +1092,39 @@ namespace EstimatingLibrary
 
         private void checkForTotalsInSystem(TECSystem system)
         {
+            bool subChanged = false;
+            bool pointsChanged = false;
+            bool devicesChanged = false;
+
             foreach(TECEquipment equip in system.Equipment)
             {
                 foreach(TECSubScope sub in equip.SubScope)
                 {
-                    updateElectricalMaterial();
+                    subChanged = true;
                     if (sub.Points.Count > 0)
                     {
-                        updatePoints();
+                        pointsChanged = true;
                     }
                     if(sub.Devices.Count > 0)
                     {
-                        updateDevices();
+                        devicesChanged = true;
                     }
                 }
             }
+
+            if (subChanged)
+            {
+                updateElectricalMaterial();
+            }
+            if (pointsChanged)
+            {
+                updatePoints();
+            }
+            if (devicesChanged)
+            {
+                updateDevices();
+            }
+
         }
 
         private void handleSystemSubScopeRemoval(TECSystem system)
