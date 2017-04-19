@@ -227,7 +227,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.ControllerInPanelDrop(dropInfo, Bid.Controllers);
+            if(dropInfo.Data is TECController)
+            {
+                UIHelpers.ControllerInPanelDrop(dropInfo, Bid.Controllers);
+            }
+            else
+            {
+                UIHelpers.StandardDrop(dropInfo);
+            }
         }
         #endregion
     }

@@ -468,6 +468,8 @@ namespace EstimatingLibrary
                 { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
                 foreach (TECController scope in bid.Controllers)
                 { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                foreach (TECPanel scope in bid.Panels)
+                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
 
             }
             else if (bidOrTemp is TECTemplates)
@@ -486,6 +488,8 @@ namespace EstimatingLibrary
                 foreach (TECConduitType scope in templates.ConduitTypeCatalog)
                 { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
                 foreach (TECController scope in templates.ControllerTemplates)
+                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                foreach (TECPanel scope in templates.PanelTemplates)
                 { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
             }
         }
