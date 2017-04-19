@@ -3014,11 +3014,11 @@ namespace EstimatingUtilitiesLibrary
         {
             foreach (TECTag tag in scope.Tags)
             {
-                editObject(new StackItem(Change.Edit, scope, tag));
+                editObject(new StackItem(Change.Edit, scope, tag, typeof(TECScope), typeof(TECTag)));
             }
             foreach (TECAssociatedCost assCost in scope.AssociatedCosts)
             {
-                editObject(new StackItem(Change.Edit, scope, assCost));
+                editObject(new StackItem(Change.Edit, scope, assCost, typeof(TECScope), typeof(TECAssociatedCost)));
             }
         }
         #endregion

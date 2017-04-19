@@ -1139,7 +1139,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeAssociatedCostTable : IndexedRelationTableBase
+    public class ScopeAssociatedCostTable : TableBase
     {
         public static new string TableName = "TECScopeTECAssociatedCost";
         public static Type ObjectType = typeof(TECScope);
