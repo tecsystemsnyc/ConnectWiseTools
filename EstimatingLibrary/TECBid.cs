@@ -740,18 +740,11 @@ namespace EstimatingLibrary
                         else if (item is TECSystem)
                         {
                             var sys = item as TECSystem;
-                            var watch = System.Diagnostics.Stopwatch.StartNew();
                             addProposalScope(sys);
-                            watch.Stop();
-                            Console.WriteLine("Adding Proposal Scope: " + watch.ElapsedMilliseconds);
-                            
                             sys.PropertyChanged += System_PropertyChanged;
-
-                            watch = System.Diagnostics.Stopwatch.StartNew();
                             checkForTotalsInSystem(sys);
-                            watch.Stop();
-                            Console.WriteLine("checkForTotalsInSystem: " + watch.ElapsedMilliseconds);
-                        } else if (item is TECController)
+                        }
+                        else if (item is TECController)
                         {
                             registerController(item as TECController);
                         }
@@ -1015,7 +1008,6 @@ namespace EstimatingLibrary
         {
             RaisePropertyChanged("ElectricalMaterialCost");
             RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("SubcontractorLaborCost");
             updateElectricalLabor();
             updateTotal();
         }
@@ -1070,7 +1062,6 @@ namespace EstimatingLibrary
             updateElectricalLabor();
             RaisePropertyChanged("SubcontractorSubtotal");
             RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("PricePerPoint");
             updateTotal();
         }
         private void updateAll()

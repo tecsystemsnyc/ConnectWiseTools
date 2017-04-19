@@ -48,6 +48,12 @@
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
         <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
+    <Style TargetType="Button" x:Key="CollapseAll">
+        <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
+        <EventSetter Event="Click" Handler="CollapseAll_Clicked"/>
+    </Style>
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>

@@ -99,6 +99,23 @@ namespace TECUserControlLibrary
             //e.Handled = true;
         }
 
+        private void CollapseAll_Clicked(object sender, RoutedEventArgs e)
+        {
+            Grid grid = FindVisualParent<Grid>(sender as UIElement);
+            if (grid != null)
+            {
+                DataGrid dataGrid = FindVisualChildInGrid<DataGrid>(grid);
+                if (dataGrid != null)
+                {
+                    List<DataGridRow> rows = FindVisualChildren<DataGridRow>(dataGrid);
+                    foreach (DataGridRow row in rows)
+                    {
+                        row.DetailsVisibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
+
         static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
             UIElement parent = element;
@@ -114,7 +131,6 @@ namespace TECUserControlLibrary
             }
             return null;
         }
-
         static T FindVisualChild<T>(UIElement element) where T : UIElement
         {
             UIElement child = null;
@@ -140,6 +156,58 @@ namespace TECUserControlLibrary
                 }
             }
             return null;
+        }
+        static T FindVisualChildInGrid<T>(UIElement element) where T : UIElement
+        {
+            UIElement child = null;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                child = VisualTreeHelper.GetChild(element, i) as UIElement;
+                while (child != null)
+                {
+                    T correctlyTyped = child as T;
+                    if (correctlyTyped != null)
+                    {
+                        return correctlyTyped;
+                    }
+
+                    if (VisualTreeHelper.GetChildrenCount(child) > 0)
+                    {
+                        child = VisualTreeHelper.GetChild(child, 0) as UIElement;
+                    }
+                    else
+                    {
+                        child = null;
+                    }
+                }
+                
+            }
+            return null;
+        }
+        static List<T> FindVisualChildren<T>(UIElement element) where T : UIElement
+        {
+            List<T> children = new List<T>();
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                UIElement child = VisualTreeHelper.GetChild(element, i) as UIElement;
+                
+                T correctlyTyped = child as T;
+                if (correctlyTyped != null)
+                {
+                    children.Add(child as T);
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        children.Add(childOfChild);
+                    }
+                } else if (child != null)
+                {
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        children.Add(childOfChild);
+                    }
+                }
+            }
+            return children;
         }
     }
 }

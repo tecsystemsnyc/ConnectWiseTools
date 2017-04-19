@@ -21,11 +21,17 @@
     </UserControl.Resources>
     
     <Grid DataContext="{Binding ElementName=parent}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Style="{StaticResource CollapseAll}" Content="Collapse All"/>
         <DataGrid ItemsSource="{Binding Path=SystemsSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
-                  CanUserAddRows="{Binding Path=AllowAddingNew}">
+                  CanUserAddRows="{Binding Path=AllowAddingNew}"
+                  Grid.Row="1">
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
