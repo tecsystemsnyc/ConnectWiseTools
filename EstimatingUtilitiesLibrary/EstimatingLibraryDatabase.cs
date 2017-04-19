@@ -217,6 +217,10 @@ namespace EstimatingUtilitiesLibrary
             Console.WriteLine("Linking Template Data: " + watch.ElapsedMilliseconds);
 
             SQLiteDB.Connection.Close();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             return templates;
         }
         static public void SaveBidToNewDB(string path, TECBid bid)

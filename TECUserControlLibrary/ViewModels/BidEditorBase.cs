@@ -86,7 +86,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _bid = value;
-                stack = new ChangeStack(value);
+                //stack = new ChangeStack(value);
                 // Call OnPropertyChanged whenever the property is updated
                 RaisePropertyChanged("Bid");
                 buildTitleString();
@@ -192,7 +192,6 @@ namespace TECUserControlLibrary.ViewModels
             setupTemplates();
             getLogo();
             setupBid();
-            setupStack();
             setupMenu();
 
         }
@@ -269,10 +268,6 @@ namespace TECUserControlLibrary.ViewModels
             Bid.Labor.UpdateConstants(Templates.Labor);
             UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
             bidDBFilePath = null;
-        }
-        private void setupStack()
-        {
-            stack = new ChangeStack(Bid);
         }
 
         private void setupMenu()
