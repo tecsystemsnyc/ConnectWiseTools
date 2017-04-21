@@ -448,9 +448,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return fileLines;
         }
-
-
-
         
     }
 }

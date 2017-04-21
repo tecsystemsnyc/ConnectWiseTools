@@ -936,7 +936,12 @@ namespace EstimatingUtilitiesLibrary
             var properties = obj.GetType().GetProperties();
             foreach(var property in properties)
             {
-
+                if(property.GetSetMethod() != null)
+                {
+                    if (property.PropertyType is IList){
+                        //foreach(object childObj in )
+                    }
+                }
             }
 
         }
