@@ -1683,19 +1683,19 @@ namespace EstimatingUtilitiesLibrary
         private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
-        string name = row[ConnectionTypeTable.Name.Name].ToString();
-        string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
-        string costString = row[ConnectionTypeTable.Cost.Name].ToString();
+            string name = row[ConnectionTypeTable.Name.Name].ToString();
+            string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
+            string costString = row[ConnectionTypeTable.Cost.Name].ToString();
 
-        double cost = costString.ToDouble(0);
-        double labor = laborString.ToDouble(0);
+            double cost = costString.ToDouble(0);
+            double labor = laborString.ToDouble(0);
 
-        var outConnectionType = new TECConnectionType(guid);
-        outConnectionType.Name = name;
+            var outConnectionType = new TECConnectionType(guid);
+            outConnectionType.Name = name;
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
             outConnectionType.Tags = getTagsInScope(guid);
-        outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
+            outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
             return outConnectionType;
         }
         private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
