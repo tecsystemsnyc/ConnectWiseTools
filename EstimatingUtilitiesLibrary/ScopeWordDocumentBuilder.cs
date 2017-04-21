@@ -1914,6 +1914,22 @@ namespace EstimatingUtilitiesLibrary
 
             paragraph60.Append(paragraphProperties60);
 
+            Run priceRun = new Run() { RsidRunProperties = "00795B63" };
+
+            RunProperties priceRunProperties = new RunProperties();
+
+            Bold priceBold = new Bold();
+            FontSize priceFontSize = new FontSize() { Val = "20" };
+            priceRunProperties.Append(priceBold);
+            priceRunProperties.Append(priceFontSize);
+            Text priceText = new Text();
+            priceText.Text = _bid.TotalPrice.ToString("N");
+        
+            priceRun.Append(priceRunProperties);
+            priceRun.Append(priceText);
+
+            paragraph60.Append(priceRun);
+
             tableCell20.Append(tableCellProperties20);
             tableCell20.Append(paragraph60);
 
