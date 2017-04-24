@@ -283,7 +283,7 @@ namespace TECUserControlLibrary.ViewModels
             MenuVM.ExportPointsListCommand = CSVExportCommand;
             MenuVM.UndoCommand = UndoCommand;
             MenuVM.RedoCommand = RedoCommand;
-            MenuVM.ExportExcelCommand = ExcelExportCommand;
+            //MenuVM.ExportExcelCommand = ExcelExportCommand;
 
             MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
 
@@ -614,9 +614,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
-                    var thing = new ScopeWordDocumentBuilder();
-                    thing.CreateScopeWordDocument(Bid, path, isEstimate);
+                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    //var thing = new ScopeWordDocumentBuilder();
+                    //thing.CreateScopeWordDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
