@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Defaults.cs" />
     <Compile Include="EstimateCalculator.cs" />
+    <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECIOModule.cs" />
     <Compile Include="ModelLinkingHelper.cs" />
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />

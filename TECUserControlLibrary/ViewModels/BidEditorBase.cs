@@ -18,46 +18,11 @@ using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    abstract public class BidEditorBase : ViewModelBase
+    abstract public class BidEditorBase : BuilderViewModel
     {
-
-        #region Constants
-
-        string DEFAULT_STATUS_TEXT = "Ready";
-
-        #endregion
-
+        
         #region Properties
-        private bool _isReady;
-        public bool IsReady
-        {
-            get { return _isReady; }
-            set
-            {
-                _isReady = value;
-                RaisePropertyChanged("IsReady");
-            }
-        }
-
-        private bool _userCanInteract;
-        public bool UserCanInteract
-        {
-            get { return _userCanInteract; }
-            set
-            {
-                _userCanInteract = value;
-                RaisePropertyChanged("UserCanInteract");
-                if (UserCanInteract)
-                {
-                    Mouse.OverrideCursor = null;
-                }
-                else
-                {
-                    Mouse.OverrideCursor = Cursors.Wait;
-                }
-            }
-        }
-
+        
         private bool _templatesLoaded;
         protected bool templatesLoaded
         {
@@ -66,16 +31,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _templatesLoaded = value;
                 TemplatesLoadedSet?.Invoke();
-            }
-        }
-        private string _programName;
-        protected string programName
-        {
-            get { return _programName; }
-            set
-            {
-                _programName = value;
-                buildTitleString();
             }
         }
 
@@ -116,10 +71,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         private string _titleString;
 
-        public string TECLogo { get; set; }
-
-        private bool isNew;
-
         protected bool isEstimate;
 
         #region Settings Properties
@@ -136,7 +87,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         abstract protected string ScopeDirectoryPath
         {
             get;
@@ -145,43 +95,27 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Command Properties
-        public ICommand NewCommand { get; private set; }
-        public ICommand LoadCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
-        public ICommand SaveAsCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
         public ICommand LoadTemplatesCommand { get; private set; }
         public ICommand CSVExportCommand { get; private set; }
         public ICommand BudgetCommand { get; private set; }
         public ICommand ExcelExportCommand { get; private set; }
 
-        public ICommand UndoCommand { get; private set; }
-        public ICommand RedoCommand { get; private set; }
-
         public ICommand RefreshTemplatesCommand { get; private set; }
-
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion
 
         #region Fields
-        private ChangeStack stack;
         private string bidDBFilePath;
-        public string startupFile;
         #endregion
-
+    
         #region Delgates
         public Action BidSet;
         public Action TemplatesLoadedSet;
         #endregion
-
-        #region View Models
-        public MenuViewModel MenuVM { get; set; }
-        public StatusBarExtension StatusBarVM { get; set; }
+        
         #endregion
 
-        #endregion
-
-        public BidEditorBase()
+        public BidEditorBase() : base()
         {
             isNew = true;
 
@@ -193,7 +127,6 @@ namespace TECUserControlLibrary.ViewModels
             getLogo();
             setupBid();
             setupMenu();
-
         }
 
         #region Methods
@@ -201,21 +134,12 @@ namespace TECUserControlLibrary.ViewModels
         #region Setup
         private void setupCommands()
         {
-            NewCommand = new RelayCommand(NewExecute);
-            LoadCommand = new RelayCommand(LoadExecute);
-            SaveCommand = new RelayCommand(SaveExecute);
-            SaveAsCommand = new RelayCommand(SaveAsExecute);
             DocumentCommand = new RelayCommand(DocumentExecute);
             CSVExportCommand = new RelayCommand(CSVExportExecute);
             BudgetCommand = new RelayCommand(BudgetExecute);
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
-            UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
-            RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
             ExcelExportCommand = new RelayCommand(ExcelExportExecute);
-
             RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
-
-            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
         private void setupTemplates()
         {
@@ -269,8 +193,7 @@ namespace TECUserControlLibrary.ViewModels
             UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
             bidDBFilePath = null;
         }
-
-        private void setupMenu()
+        protected override void setupMenu()
         {
             MenuVM = new MenuViewModel(MenuType.SB);
 
@@ -311,7 +234,7 @@ namespace TECUserControlLibrary.ViewModels
                 SetBusyStatus("Loading " + startupFile);
                 try
                 {
-                    LoadFromPath(startupFile);
+                    loadFromPath(startupFile);
                 }
                 catch (Exception e)
                 {
@@ -327,7 +250,7 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-        private string getSavePath()
+        override protected string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             if (ScopeDirectoryPath != null && !isNew)
@@ -430,7 +353,7 @@ namespace TECUserControlLibrary.ViewModels
 
             return path;
         }
-        private string getLoadPath()
+        override protected string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (ScopeDirectoryPath != null)
@@ -478,7 +401,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             TitleString = Bid.Name + " - " + programName;
         }
-        private void LoadFromPath(string path)
+        override protected void loadFromPath(string path)
         {
             if (path != null)
             {
@@ -495,17 +418,240 @@ namespace TECUserControlLibrary.ViewModels
                 ResetStatus();
             }
         }
-        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
+
+        private void saveBid()
         {
-            StatusBarVM.CurrentStatusText = statusText;
-            IsReady = false;
-            UserCanInteract = userCanInteract;
+            if (bidDBFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + bidDBFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                    {
+                        try
+                        {
+                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                        }
+                        catch (Exception ex)
+                        {
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                        }
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                saveBidAs();
+            }
         }
-        protected void ResetStatus()
+
+        private void saveBidAs()
         {
-            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-            IsReady = true;
-            UserCanInteract = true;
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                bidDBFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+
+            }
+
+        }
+
+        private bool saveAsSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                bidDBFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    //Create new database
+                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    saveSuccessful = false;
+                }
+
+
+            }
+
+            return saveSuccessful;
+        }
+
+        private bool saveSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            if (bidDBFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + bidDBFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
+                {
+                    try
+                    {
+                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
+                        saveSuccessful = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
+                    }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
+                }
+
+            }
+            else
+            {
+                if (saveAsSynchronously())
+                {
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    saveSuccessful = false;
+                }
+            }
+
+            return saveSuccessful;
+        }
+
+        private void loadBid()
+        {
+            //User choose path
+            string path = getLoadPath();
+            if (path != null)
+            {
+                loadBidFromPath(path);
+            }
+        }
+        protected void loadBidFromPath(string path)
+        {
+            //User choose path
+            if (path != null)
+            {
+                SetBusyStatus("Loading File: " + path, false);
+                TECBid loadingBid = new TECBid();
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    bidDBFilePath = path;
+                    ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    Bid = loadingBid;
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+            }
+        }
+        private void loadTemplates(string TemplatesFilePath)
+        {
+            var loadedTemplates = new TECTemplates();
+            if (TemplatesFilePath != null)
+            {
+                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                    {
+
+                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
+                    }
+                    DebugHandler.LogDebugMessage("Finished loading templates");
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    Templates = loadedTemplates;
+                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                    templatesLoaded = true;
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
         }
         
         #region Event Handlers
@@ -521,7 +667,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion //Helper Functions
 
         #region Commands
-        private void NewExecute()
+        override protected void NewExecute()
         {
             if (!IsReady)
             {
@@ -559,7 +705,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        private void LoadExecute()
+        override protected void LoadExecute()
         {
             if (!IsReady)
             {
@@ -593,7 +739,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        private void SaveExecute()
+        override protected void SaveExecute()
         {
             if (!IsReady)
             {
@@ -604,7 +750,7 @@ namespace TECUserControlLibrary.ViewModels
             saveBid();
             
         }
-        private void SaveAsExecute()
+        override protected void SaveAsExecute()
         {
             if (!IsReady)
             {
@@ -750,7 +896,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void ClosingExecute(CancelEventArgs e)
+        override protected void ClosingExecute(CancelEventArgs e)
         {
             if (!IsReady)
             {
@@ -776,241 +922,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        private void saveBid()
-        {
-            if (bidDBFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                    {
-                        try
-                        {
-                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        }
-                            catch (Exception ex)
-                        {
-                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        }
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                saveBidAs();
-            }
-        }
-
-        private void saveBidAs()
-        {
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                bidDBFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-
-            }
-
-        }
-
-        private bool saveAsSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                bidDBFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    //Create new database
-                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    saveSuccessful = false;
-                }
-               
-
-            }
-
-            return saveSuccessful;
-        }
-
-        private bool saveSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            if (bidDBFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-                
-                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                {
-                    try
-                    {
-                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                    saveSuccessful = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
-                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                    }
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
-                }
-               
-            }
-            else
-            {
-                if (saveAsSynchronously())
-                {
-                    saveSuccessful = true;
-                }else
-                {
-                    saveSuccessful = false;
-                }
-            }
-
-            return saveSuccessful;
-        }
-
-        private void loadBid()
-        {
-            //User choose path
-            string path = getLoadPath();
-            if (path != null)
-            {
-                loadBidFromPath(path);
-            }
-        }
-        protected void loadBidFromPath(string path)
-        {
-            //User choose path
-            if (path != null)
-            {
-                SetBusyStatus("Loading File: " + path, false);
-                TECBid loadingBid = new TECBid();
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    bidDBFilePath = path;
-                    ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    Bid = loadingBid;
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-            }
-        }
-        private void loadTemplates(string TemplatesFilePath)
-        {
-            var loadedTemplates = new TECTemplates();
-            if (TemplatesFilePath != null)
-            {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                    {
-
-                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                    }
-                    DebugHandler.LogDebugMessage("Finished loading templates");
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    Templates = loadedTemplates;
-                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
-                    templatesLoaded = true;
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-        }
-
         #endregion
         
         #endregion

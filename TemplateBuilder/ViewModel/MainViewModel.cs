@@ -24,23 +24,13 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.ViewModel
 {
-    public class MainViewModel : ViewModelBase, IDropTarget
+    public class MainViewModel : BuilderViewModel, IDropTarget
     {
-        #region Constants
-        string DEFAULT_STATUS_TEXT = "Ready";
-        #endregion
-
         //Initializer
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             _templates = new TECTemplates();
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { Version = "Undeployed Version"; }
-
-            setupStatusBar();
-
+           
             TECLogo = Path.GetTempFileName();
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
 
@@ -73,26 +63,19 @@ namespace TemplateBuilder.ViewModel
         public MaterialsCostsExtension MaterialsTab { get; set; }
         public ControlledScopeViewModel ControlledScopeVM { get; set; }
         #endregion
-
-        #region ViewModels
-        public MenuViewModel MenuVM { get; set; }
-        public StatusBarExtension StatusBarVM { get; set; }
-        #endregion
-
+        
         public TECTemplates Templates
         {
             get { return _templates; }
             set
             {
                 _templates = value;
-                Stack = new ChangeStack(value);
+                stack = new ChangeStack(value);
                 RaisePropertyChanged("Templates");
                 refresh();
             }
         }
         private TECTemplates _templates;
-        public ChangeStack Stack { get; set; }
-        public string TECLogo { get; set; }
         public string Version { get; set; }
         public string TitleString
         {
@@ -104,12 +87,6 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private string _titleString;
-
-        protected bool isReady
-        {
-            get;
-            private set;
-        }
 
         #region Interface Properties
 
@@ -134,15 +111,7 @@ namespace TemplateBuilder.ViewModel
         #endregion //Interface Properties
 
         #region Commands Properties
-        public ICommand NewCommand { get; private set; }
-        public ICommand LoadCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
-        public ICommand SaveToCommand { get; private set; }
-        public ICommand UndoCommand { get; private set; }
-        public ICommand RedoCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
-
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion //Commands Properties
         #endregion //Properties
 
@@ -158,15 +127,6 @@ namespace TemplateBuilder.ViewModel
         #region Setup Methods
         private void setupCommands()
         {
-            NewCommand = new RelayCommand(NewExecute);
-            LoadCommand = new RelayCommand(LoadExecute);
-            SaveCommand = new RelayCommand(SaveExecute);
-            SaveToCommand = new RelayCommand(SaveToExecute);
-            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
-
-            UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
-            RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
-
             RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
         }
 
@@ -235,40 +195,19 @@ namespace TemplateBuilder.ViewModel
         }
         private void setupVMs()
         {
-            MenuVM = new MenuViewModel(MenuType.TB);
-
-            MenuVM.NewCommand = NewCommand;
-            MenuVM.LoadCommand = LoadCommand;
-            MenuVM.SaveCommand = SaveCommand;
-            MenuVM.SaveAsCommand = SaveToCommand;
-            MenuVM.UndoCommand = UndoCommand;
-            MenuVM.RedoCommand = RedoCommand;
-            MenuVM.RefreshTemplatesCommand = RefreshCommand;
-
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
             ControlledScopeVM.DropHandler += Drop;
             ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
             ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
-
-        private void setupStatusBar()
-        {
-            StatusBarVM = new StatusBarExtension();
-
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { StatusBarVM.Version = "Undeployed Version"; }
-
-            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-        }
+        
         #endregion
 
         #region Commands Methods
-        private void NewExecute()
+        protected override void NewExecute()
         {
-            if (Stack.SaveStack.Count > 0)
+            if (stack.SaveStack.Count > 0)
             {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
@@ -299,15 +238,15 @@ namespace TemplateBuilder.ViewModel
             refresh();
             Properties.Settings.Default.TemplatesFilePath = "";
         }
-        private void LoadExecute()
+        protected override void LoadExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
 
-            if (Stack.SaveStack.Count > 0)
+            if (stack.SaveStack.Count > 0)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -330,25 +269,12 @@ namespace TemplateBuilder.ViewModel
 
             if (path != null)
             {
-                SetBusyStatus("Loading File: " + path);
-                //Properties.Settings.Default.TemplateDirectoryPath = path;
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    //File.Copy(path, defaultTemplatesPath, true);
-                    //Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                }
-                ResetStatus();
+                loadFromPath(path);
             }
         }
-        private void SaveExecute()
+        protected override void SaveExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
@@ -356,19 +282,19 @@ namespace TemplateBuilder.ViewModel
 
             saveTemplates();
         }
-        private void SaveToExecute()
+        protected override void SaveAsExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
             saveTemplatesAs();
         }
-        
-        private void ClosingExecute(CancelEventArgs e)
+
+        protected override void ClosingExecute(CancelEventArgs e)
         {
-            bool changes = (Stack.SaveStack.Count > 0);
+            bool changes = (stack.SaveStack.Count > 0);
             if (changes)
             {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
@@ -391,38 +317,14 @@ namespace TemplateBuilder.ViewModel
             }
         }
         
-        private void UndoExecute()
-        {
-            Stack.Undo();
-        }
-        private bool UndoCanExecute()
-        {
-            if (Stack.UndoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
-        private void RedoExecute()
-        {
-            Stack.Redo();
-        }
-        private bool RedoCanExecute()
-        {
-            if (Stack.RedoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
         private void RefreshTemplatesExecute()
         {
-            if (!isReady)
+            if (!IsReady)
             {
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            if (Stack.SaveStack.Count > 0)
+            if (stack.SaveStack.Count > 0)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -462,7 +364,7 @@ namespace TemplateBuilder.ViewModel
         #endregion //Commands Methods
 
         #region Get Path Methods
-        private string getLoadPath()
+        protected override string getLoadPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (Properties.Settings.Default.TemplatesFilePath != null)
@@ -489,7 +391,7 @@ namespace TemplateBuilder.ViewModel
 
             return path;
         }
-        private string getSavePath()
+        protected override string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             if (Properties.Settings.Default.TemplatesFilePath != null)
@@ -755,8 +657,8 @@ namespace TemplateBuilder.ViewModel
             if (path != null)
             {
                 SetBusyStatus("Saving to path: " + path);
-                ChangeStack stackToSave = Stack.Copy();
-                Stack.ClearStacks();
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
 
                 BackgroundWorker worker = new BackgroundWorker();
 
@@ -790,8 +692,8 @@ namespace TemplateBuilder.ViewModel
             if (path != null)
             {
                 Properties.Settings.Default.TemplatesFilePath = path;
-                
-                Stack.ClearStacks();
+
+                stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
 
                 BackgroundWorker worker = new BackgroundWorker();
@@ -820,23 +722,7 @@ namespace TemplateBuilder.ViewModel
 
             }
         }
-
-        private void SetBusyStatus(string statusText)
-        {
-            StatusBarVM.CurrentStatusText = statusText;
-            isReady = false;
-        }
-        protected void ResetStatus()
-        {
-            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-            isReady = true;
-        }
-
-        protected bool IsReady()
-        {
-            return isReady;
-        }
-
+        
         private bool saveAsSynchronously()
         {
             bool saveSuccessful = false;
@@ -845,7 +731,7 @@ namespace TemplateBuilder.ViewModel
             string path = getSavePath();
             if (path != null)
             {
-                Stack.ClearStacks();
+                stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -877,8 +763,8 @@ namespace TemplateBuilder.ViewModel
             if (Properties.Settings.Default.TemplatesFilePath != null)
             {
                 SetBusyStatus("Saving to path: " + Properties.Settings.Default.TemplatesFilePath);
-                ChangeStack stackToSave = Stack.Copy();
-                Stack.ClearStacks();
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
 
                 if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                 {
@@ -913,6 +799,38 @@ namespace TemplateBuilder.ViewModel
 
             return saveSuccessful;
         }
+
+        protected override void setupMenu()
+        {
+            MenuVM = new MenuViewModel(MenuType.TB);
+
+            MenuVM.NewCommand = NewCommand;
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveAsCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+            MenuVM.RefreshTemplatesCommand = RefreshCommand;
+        }
+        
+        protected override void loadFromPath(string path)
+        {
+            SetBusyStatus("Loading File: " + path);
+            //Properties.Settings.Default.TemplateDirectoryPath = path;
+
+            if (!UtilitiesMethods.IsFileLocked(path))
+            {
+                //File.Copy(path, defaultTemplatesPath, true);
+                //Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
+                Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+            }
+            ResetStatus();
+        }
+        
         #endregion //Helper Methods
         #endregion //Methods
     }

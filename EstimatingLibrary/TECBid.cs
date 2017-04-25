@@ -22,24 +22,24 @@ namespace EstimatingLibrary
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
         private ObservableCollection<TECSystem> _systems { get; set; }
-        private ObservableCollection<TECDevice> _deviceCatalog { get; set; }
-        private ObservableCollection<TECManufacturer> _manufacturerCatalog { get; set; }
         private ObservableCollection<TECNote> _notes { get; set; }
         private ObservableCollection<TECExclusion> _exclusions { get; set; }
-        private ObservableCollection<TECTag> _tags { get; set; }
         private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLocation> _locations { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
-        private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
-        private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
-        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
         private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
         private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
+        
+        private ObservableCollection<TECDevice> _deviceCatalog { get; set; }
+        private ObservableCollection<TECManufacturer> _manufacturerCatalog { get; set; }
         private ObservableCollection<TECPanelType> _panelTypeCatalog { get; set; }
         private ObservableCollection<TECIOModule> _ioModuleCatalog;
-
+        private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
+        private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
+        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
+        private ObservableCollection<TECTag> _tags { get; set; }
 
         public string Name {
             get { return _name; }
@@ -118,7 +118,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         public TECBidParameters Parameters
         {
             get { return _parameters; }
@@ -330,28 +329,6 @@ namespace EstimatingLibrary
                 updatePoints();
             }
         }
-        public ObservableCollection<TECDevice> DeviceCatalog {
-            get { return _deviceCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                DeviceCatalog.CollectionChanged -= CollectionChanged;
-                _deviceCatalog = value;
-                DeviceCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("DeviceCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECManufacturer> ManufacturerCatalog {
-            get { return _manufacturerCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
-                _manufacturerCatalog = value;
-                ManufacturerCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
-            }
-        }
         public ObservableCollection<TECNote> Notes {
             get { return _notes; }
             set
@@ -372,17 +349,6 @@ namespace EstimatingLibrary
                 _exclusions = value;
                 Exclusions.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Exclusions", temp, this);
-            }
-        }
-        public ObservableCollection<TECTag> Tags {
-            get { return _tags; }
-            set
-            {
-                var temp = this.Copy();
-                Tags.CollectionChanged -= CollectionChanged;
-                _tags = value;
-                Tags.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Tags", temp, this);
             }
         }
         public ObservableCollection<TECDrawing> Drawings {
@@ -426,6 +392,91 @@ namespace EstimatingLibrary
             get { return _proposalScope; }
             set { _proposalScope = value; }
         }
+        public ObservableCollection<TECMiscCost> MiscCosts
+        {
+            get { return _miscCosts; }
+            set
+            {
+                var temp = this.Copy();
+                MiscCosts.CollectionChanged -= CollectionChanged;
+                _miscCosts = value;
+                MiscCosts.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCosts", temp, this);
+            }
+        }
+        public ObservableCollection<TECMiscWiring> MiscWiring
+        {
+            get { return _miscWiring; }
+            set
+            {
+                var temp = this.Copy();
+                MiscWiring.CollectionChanged -= CollectionChanged;
+                _miscWiring = value;
+                MiscWiring.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscWiring", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanel> Panels
+        {
+            get { return _panels; }
+            set
+            {
+                var temp = this.Copy();
+                Panels.CollectionChanged -= CollectionChanged;
+                _panels = value;
+                Panels.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Panels", temp, this);
+            }
+        }
+
+        public ObservableCollection<TECIOModule> IOModuleCatalog
+        {
+            get { return _ioModuleCatalog; }
+            set
+            {
+                var temp = Copy();
+                IOModuleCatalog.CollectionChanged -= CollectionChanged;
+                _ioModuleCatalog = value;
+                IOModuleCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("IOModuleCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECDevice> DeviceCatalog
+        {
+            get { return _deviceCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                DeviceCatalog.CollectionChanged -= CollectionChanged;
+                _deviceCatalog = value;
+                DeviceCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("DeviceCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECManufacturer> ManufacturerCatalog
+        {
+            get { return _manufacturerCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
+                _manufacturerCatalog = value;
+                ManufacturerCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
+            }
+        }
+        public ObservableCollection<TECPanelType> PanelTypeCatalog
+        {
+            get { return _panelTypeCatalog; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
+                _panelTypeCatalog = value;
+                PanelTypeCatalog.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
+            }
+        }
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }
@@ -462,64 +513,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
             }
         }
-        public ObservableCollection<TECMiscCost> MiscCosts
+        public ObservableCollection<TECTag> Tags
         {
-            get { return _miscCosts; }
+            get { return _tags; }
             set
             {
                 var temp = this.Copy();
-                MiscCosts.CollectionChanged -= CollectionChanged;
-                _miscCosts = value;
-                MiscCosts.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscCosts", temp, this);
-            }
-        }
-        public ObservableCollection<TECMiscWiring> MiscWiring
-        {
-            get { return _miscWiring; }
-            set
-            {
-                var temp = this.Copy();
-                MiscWiring.CollectionChanged -= CollectionChanged;
-                _miscWiring = value;
-                MiscWiring.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscWiring", temp, this);
-            }
-        }
-        public ObservableCollection<TECPanelType> PanelTypeCatalog
-        {
-            get { return _panelTypeCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
-                _panelTypeCatalog = value;
-                PanelTypeCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECPanel> Panels
-        {
-            get { return _panels; }
-            set
-            {
-                var temp = this.Copy();
-                Panels.CollectionChanged -= CollectionChanged;
-                _panels = value;
-                Panels.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Panels", temp, this);
-            }
-        }
-        public ObservableCollection<TECIOModule> IOModuleCatalog
-        {
-            get { return _ioModuleCatalog; }
-            set
-            {
-                var temp = Copy();
-                IOModuleCatalog.CollectionChanged -= CollectionChanged;
-                _ioModuleCatalog = value;
-                IOModuleCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("IOModuleCatalog", temp, this);
+                Tags.CollectionChanged -= CollectionChanged;
+                _tags = value;
+                Tags.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("Tags", temp, this);
             }
         }
         #endregion //Properties
@@ -787,7 +790,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Edit", this, sender, typeof(TECBid), typeof(TECSystem));
             }
         }
-
         private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TotalPoints")
@@ -814,7 +816,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             //NotifyPropertyChanged("ChildChanged", this, sender);
