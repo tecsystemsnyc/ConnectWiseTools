@@ -309,7 +309,14 @@ namespace TECUserControlLibrary.ViewModels
             if (startupFile != "")
             {
                 SetBusyStatus("Loading " + startupFile);
-                LoadFromPath(startupFile);
+                try
+                {
+                    LoadFromPath(startupFile);
+                }
+                catch (Exception e)
+                {
+                    DebugHandler.LogError(e);
+                }
                 ResetStatus();
             }
         }
