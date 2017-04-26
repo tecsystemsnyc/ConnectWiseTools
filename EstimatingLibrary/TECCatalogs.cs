@@ -185,7 +185,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                //
+                //Change order
             }
         }
 

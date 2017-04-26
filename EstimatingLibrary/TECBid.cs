@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECObject
+    public class TECBid : TECScopeManager
     {
         #region Properties
         private string _name;
@@ -16,8 +16,6 @@ namespace EstimatingLibrary
         private DateTime _dueDate;
         private string _salesperson;
         private string _estimator;
-        private Guid _guid;
-        private TECLabor _labor;
         private TECBidParameters _parameters;
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
@@ -31,15 +29,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
         private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
-        
-        private ObservableCollection<TECDevice> _deviceCatalog { get; set; }
-        private ObservableCollection<TECManufacturer> _manufacturerCatalog { get; set; }
-        private ObservableCollection<TECPanelType> _panelTypeCatalog { get; set; }
-        private ObservableCollection<TECIOModule> _ioModuleCatalog;
-        private ObservableCollection<TECConnectionType> _connectionTypes { get; set; }
-        private ObservableCollection<TECConduitType> _conduitTypes { get; set; }
-        private ObservableCollection<TECAssociatedCost> _associatedCostsCatalog { get; set; }
-        private ObservableCollection<TECTag> _tags { get; set; }
 
         public string Name {
             get { return _name; }
@@ -98,26 +87,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Estimator", temp, this);
             }
         }
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
 
-        public TECLabor Labor
-        {
-            get { return _labor; }
-            set
-            {
-                if(_labor != value)
-                {
-                    var temp = Copy();
-                    Labor.PropertyChanged -= objectPropertyChanged;
-                    _labor = value;
-                    NotifyPropertyChanged("Labor", temp, this);
-                    Labor.PropertyChanged += objectPropertyChanged;
-                }
-            }
-        }
         public TECBidParameters Parameters
         {
             get { return _parameters; }
@@ -428,132 +398,26 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Panels", temp, this);
             }
         }
-
-        public ObservableCollection<TECIOModule> IOModuleCatalog
-        {
-            get { return _ioModuleCatalog; }
-            set
-            {
-                var temp = Copy();
-                IOModuleCatalog.CollectionChanged -= CollectionChanged;
-                _ioModuleCatalog = value;
-                IOModuleCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("IOModuleCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECDevice> DeviceCatalog
-        {
-            get { return _deviceCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                DeviceCatalog.CollectionChanged -= CollectionChanged;
-                _deviceCatalog = value;
-                DeviceCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("DeviceCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECManufacturer> ManufacturerCatalog
-        {
-            get { return _manufacturerCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                ManufacturerCatalog.CollectionChanged -= CollectionChanged;
-                _manufacturerCatalog = value;
-                ManufacturerCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ManufacturerCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECPanelType> PanelTypeCatalog
-        {
-            get { return _panelTypeCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                PanelTypeCatalog.CollectionChanged -= CollectionChanged;
-                _panelTypeCatalog = value;
-                PanelTypeCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("PanelTypeCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get { return _connectionTypes; }
-            set
-            {
-                var temp = this.Copy();
-                ConnectionTypes.CollectionChanged -= CollectionChanged;
-                _connectionTypes = value;
-                ConnectionTypes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
-            }
-        }
-        public ObservableCollection<TECConduitType> ConduitTypes
-        {
-            get { return _conduitTypes; }
-            set
-            {
-                var temp = this.Copy();
-                ConduitTypes.CollectionChanged -= CollectionChanged;
-                _conduitTypes = value;
-                ConduitTypes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ConduitTypes", temp, this);
-            }
-        }
-        public ObservableCollection<TECAssociatedCost> AssociatedCostsCatalog
-        {
-            get { return _associatedCostsCatalog; }
-            set
-            {
-                var temp = this.Copy();
-                AssociatedCostsCatalog.CollectionChanged -= CollectionChanged;
-                _associatedCostsCatalog = value;
-                AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("AssociatedCostsCatalog", temp, this);
-            }
-        }
-        public ObservableCollection<TECTag> Tags
-        {
-            get { return _tags; }
-            set
-            {
-                var temp = this.Copy();
-                Tags.CollectionChanged -= CollectionChanged;
-                _tags = value;
-                Tags.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Tags", temp, this);
-            }
-        }
         #endregion //Properties
 
         #region Constructors
-        public TECBid(Guid guid)
+        public TECBid(Guid guid) : base(guid)
         {
-            _guid = guid;
             _name = "";
             _bidNumber = "";
             _salesperson = "";
             _estimator = "";
             _scopeTree = new ObservableCollection<TECScopeBranch>();
             _systems = new ObservableCollection<TECSystem>();
-            _deviceCatalog = new ObservableCollection<TECDevice>();
-            _manufacturerCatalog = new ObservableCollection<TECManufacturer>();
             _notes = new ObservableCollection<TECNote>();
             _exclusions = new ObservableCollection<TECExclusion>();
-            _tags = new ObservableCollection<TECTag>();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
-            _conduitTypes = new ObservableCollection<TECConduitType>();
-            _associatedCostsCatalog = new ObservableCollection<TECAssociatedCost>();
             _miscWiring = new ObservableCollection<TECMiscWiring>();
             _miscCosts = new ObservableCollection<TECMiscCost>();
             _panels = new ObservableCollection<TECPanel>();
-            _panelTypeCatalog = new ObservableCollection<TECPanelType>();
-            _ioModuleCatalog = new ObservableCollection<TECIOModule>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             Parameters.PropertyChanged += objectPropertyChanged;
@@ -561,29 +425,21 @@ namespace EstimatingLibrary
 
             Systems.CollectionChanged += CollectionChanged;
             ScopeTree.CollectionChanged += CollectionChanged;
-            DeviceCatalog.CollectionChanged += CollectionChanged;
-            ManufacturerCatalog.CollectionChanged += CollectionChanged;
             Notes.CollectionChanged += CollectionChanged;
             Exclusions.CollectionChanged += CollectionChanged;
-            Tags.CollectionChanged += CollectionChanged;
             Drawings.CollectionChanged += CollectionChanged;
             Locations.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
-            ConnectionTypes.CollectionChanged += CollectionChanged;
-            ConduitTypes.CollectionChanged += CollectionChanged;
-            AssociatedCostsCatalog.CollectionChanged += CollectionChanged;
             MiscCosts.CollectionChanged += CollectionChanged;
             MiscWiring.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
-            PanelTypeCatalog.CollectionChanged += CollectionChanged;
-            IOModuleCatalog.CollectionChanged += CollectionChanged;
 
             registerSystems();
             registerControllers();
         }
 
-        public TECBid() : this(Guid.NewGuid())
+        public TECBid() : base()
         {
             foreach(string item in Defaults.Scope)
             {
@@ -609,7 +465,7 @@ namespace EstimatingLibrary
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : this(Guid.NewGuid())
+        public TECBid(TECBid bidSource) : base()
         {
             _name = bidSource.Name;
             _bidNumber = bidSource.BidNumber;
@@ -617,6 +473,7 @@ namespace EstimatingLibrary
             _salesperson = bidSource.Salesperson;
             _estimator = bidSource.Estimator;
 
+            _catalogs = bidSource.Catalogs.Copy() as TECCatalogs;
             _labor = new TECLabor(bidSource.Labor);
             _parameters = new TECBidParameters(bidSource.Parameters);
             Parameters.PropertyChanged += objectPropertyChanged;
@@ -630,24 +487,12 @@ namespace EstimatingLibrary
             { Notes.Add(new TECNote(note)); }
             foreach (TECExclusion exclusion in bidSource.Exclusions)
             { Exclusions.Add(new TECExclusion(exclusion)); }
-            foreach(TECAssociatedCost cost in bidSource.AssociatedCostsCatalog)
-            {  AssociatedCostsCatalog.Add(new TECAssociatedCost(cost)); }
-            foreach(TECConduitType conduitType in bidSource.ConduitTypes)
-            { ConduitTypes.Add(new TECConduitType(conduitType)); }
-            foreach(TECConnectionType connectionType in bidSource.ConnectionTypes)
-            { ConnectionTypes.Add(new TECConnectionType(connectionType)); }
-            foreach(TECTag tag in bidSource.Tags)
-            { Tags.Add(new TECTag(tag)); }
             foreach (TECLocation location in bidSource.Locations)
             { Locations.Add(new TECLocation(location)); }
             foreach (TECDrawing drawing in bidSource.Drawings)
             { Drawings.Add(new TECDrawing(drawing)); }
-            foreach(TECManufacturer manufacturer in bidSource.ManufacturerCatalog)
-            { ManufacturerCatalog.Add(new TECManufacturer(manufacturer)); }
             foreach(TECController controller in bidSource.Controllers)
             { Controllers.Add(new TECController(controller)); }
-            foreach(TECDevice device in bidSource.DeviceCatalog)
-            { DeviceCatalog.Add(new TECDevice(device)); }
             foreach(TECProposalScope propScope in bidSource.ProposalScope)
             { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach(TECMiscCost cost in bidSource.MiscCosts)
@@ -656,12 +501,6 @@ namespace EstimatingLibrary
             { MiscWiring.Add(new TECMiscWiring(wiring)); }
             foreach (TECPanel panel in bidSource.Panels)
             { Panels.Add(new TECPanel(panel)); }
-            foreach (TECPanelType panelType in bidSource.PanelTypeCatalog)
-            { PanelTypeCatalog.Add(new TECPanelType(panelType)); }
-            foreach (TECIOModule module in bidSource.IOModuleCatalog)
-            {
-                IOModuleCatalog.Add(new TECIOModule(module));
-            }
         }
 
         #endregion //Constructors
@@ -893,24 +732,12 @@ namespace EstimatingLibrary
             { bid.Notes.Add(note.Copy() as TECNote); }
             foreach (TECExclusion exclusion in this.Exclusions)
             { bid.Exclusions.Add(exclusion.Copy() as TECExclusion); }
-            foreach (TECAssociatedCost cost in this.AssociatedCostsCatalog)
-            { bid.AssociatedCostsCatalog.Add(cost.Copy() as TECAssociatedCost); }
-            foreach (TECConduitType conduitType in this.ConduitTypes)
-            { bid.ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
-            foreach (TECConnectionType connectionType in this.ConnectionTypes)
-            { bid.ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
-            foreach (TECTag tag in this.Tags)
-            { bid.Tags.Add(tag.Copy() as TECTag); }
             foreach (TECLocation location in this.Locations)
             { bid.Locations.Add(location.Copy() as TECLocation); }
             foreach (TECDrawing drawing in this.Drawings)
             { bid.Drawings.Add(drawing.Copy() as TECDrawing); }
-            foreach (TECManufacturer manufacturer in this.ManufacturerCatalog)
-            { bid.ManufacturerCatalog.Add(manufacturer.Copy() as TECManufacturer); }
             foreach (TECController controller in this.Controllers)
             { bid.Controllers.Add(controller.Copy() as TECController); }
-            foreach (TECDevice device in this.DeviceCatalog)
-            { bid.DeviceCatalog.Add(device.Copy() as TECDevice); }
             foreach (TECProposalScope propScope in this.ProposalScope)
             { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
             foreach (TECMiscCost cost in this.MiscCosts)
@@ -919,12 +746,6 @@ namespace EstimatingLibrary
             { bid.MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
             foreach (TECPanel panel in this.Panels)
             { bid.Panels.Add(panel.Copy() as TECPanel); }
-            foreach (TECPanelType panelType in this.PanelTypeCatalog)
-            { bid.PanelTypeCatalog.Add(panelType.Copy() as TECPanelType); }
-            foreach (TECIOModule module in IOModuleCatalog)
-            {
-                bid.IOModuleCatalog.Add(module.Copy() as TECIOModule);
-            }
             return bid;
         }
         

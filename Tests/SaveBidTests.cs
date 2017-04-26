@@ -1013,7 +1013,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = null;
             //Devices can only be added from the device catalog.
-            foreach (TECDevice dev in bid.DeviceCatalog)
+            foreach (TECDevice dev in bid.Catalogs.Devices)
             {
                 if (dev.Name == "Device C1")
                 {
@@ -1126,13 +1126,13 @@ namespace Tests
                 if (deviceToRemove.Guid == dev.Guid) Assert.Fail("Device not removed properly.");
             }
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.DeviceCatalog)
+            foreach (TECDevice dev in actualBid.Catalogs.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
             if (!devFound) Assert.Fail();
 
-            Assert.AreEqual(bid.DeviceCatalog.Count(), actualBid.DeviceCatalog.Count());
+            Assert.AreEqual(bid.Catalogs.Devices.Count(), actualBid.Catalogs.Devices.Count());
             Assert.AreEqual((oldNumDevices - numThisDevice), modifiedSubScope.Devices.Count);
         }
 
@@ -1177,13 +1177,13 @@ namespace Tests
 
             //Assert
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.DeviceCatalog)
+            foreach (TECDevice dev in actualBid.Catalogs.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
             if (!devFound) Assert.Fail();
 
-            Assert.AreEqual(bid.DeviceCatalog.Count(), actualBid.DeviceCatalog.Count());
+            Assert.AreEqual(bid.Catalogs.Devices.Count(), actualBid.Catalogs.Devices.Count());
             Assert.AreEqual((oldNumDevices - 1), modifiedSubScope.Devices.Count);
         }
 
@@ -1496,7 +1496,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
-            TECTag tagToAdd = bid.Tags[1];
+            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECSystem systemToEdit = bid.Systems[0];
 
             systemToEdit.Tags.Add(tagToAdd);
@@ -1527,7 +1527,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECTag tagToAdd = bid.Tags[1];
+            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
 
             equipmentToEdit.Tags.Add(tagToAdd);
@@ -1565,7 +1565,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECTag tagToAdd = bid.Tags[1];
+            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
 
             subScopeToEdit.Tags.Add(tagToAdd);
@@ -1604,7 +1604,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToPoint()
         {
-            TECTag tagToAdd = bid.Tags[1];
+            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
 
             PointToEdit.Tags.Add(tagToAdd);
@@ -1646,7 +1646,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECTag tagToAdd = bid.Tags[1];
+            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECController ControllerToEdit = bid.Controllers[0];
 
             ControllerToEdit.Tags.Add(tagToAdd);
@@ -2377,7 +2377,7 @@ namespace Tests
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 100;
-            expectedController.Manufacturer = bid.ManufacturerCatalog[0];
+            expectedController.Manufacturer = bid.Catalogs.Manufacturers[0];
 
             bid.Controllers.Add(expectedController);
 
@@ -3100,14 +3100,14 @@ namespace Tests
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
 
-            bid.PanelTypeCatalog.Add(expectedCost);
+            bid.Catalogs.PanelTypes.Add(expectedCost);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             TECPanelType actualCost = null;
-            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3125,15 +3125,15 @@ namespace Tests
         public void Save_Bid_Remove_PanelType()
         {
             //Act
-            TECPanelType costToRemove = bid.PanelTypeCatalog[0];
-            bid.PanelTypeCatalog.Remove(costToRemove);
+            TECPanelType costToRemove = bid.Catalogs.PanelTypes[0];
+            bid.Catalogs.PanelTypes.Remove(costToRemove);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             //Assert
-            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -3145,7 +3145,7 @@ namespace Tests
         public void Save_Bid_PanelType_Name()
         {
             //Act
-            TECPanelType expectedCost = bid.PanelTypeCatalog[0];
+            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
@@ -3153,7 +3153,7 @@ namespace Tests
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             TECPanelType actualCost = null;
-            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3170,7 +3170,7 @@ namespace Tests
         public void Save_Bid_PanelType_Cost()
         {
             //Act
-            TECPanelType expectedCost = bid.PanelTypeCatalog[0];
+            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
@@ -3178,7 +3178,7 @@ namespace Tests
             TECBid actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
 
             TECPanelType actualCost = null;
-            foreach (TECPanelType cost in actualBid.PanelTypeCatalog)
+            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3201,7 +3201,7 @@ namespace Tests
             TECPanel expectedPanel = new TECPanel();
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-            expectedPanel.Type = bid.PanelTypeCatalog[0];
+            expectedPanel.Type = bid.Catalogs.PanelTypes[0];
             bid.Panels.Add(expectedPanel);
 
             EstimatingLibraryDatabase.UpdateBidToDB(path, testStack, false);
@@ -3291,10 +3291,10 @@ namespace Tests
             
             var expectedPanel = new TECPanel();
             expectedPanel.Name = "CSPANEL";
-            expectedPanel.Type = bid.PanelTypeCatalog[0];
+            expectedPanel.Type = bid.Catalogs.PanelTypes[0];
             var expectedController = new TECController();
             expectedController.Name = "CSCONTROLLER";
-            expectedController.Manufacturer = bid.ManufacturerCatalog[0];
+            expectedController.Manufacturer = bid.Catalogs.Manufacturers[0];
             expectedPanel.Controllers.Add(expectedController);
             
             var expectedConnection = new TECSubScopeConnection();
