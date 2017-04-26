@@ -38,6 +38,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        protected override string defaultSaveFileName
+        {
+            get
+            {
+                return (Bid.BidNumber + " " + Bid.Name);
+            }
+        }
+
         private TECBid _bid;
         public TECBid Bid
         {
@@ -114,6 +122,8 @@ namespace TECUserControlLibrary.ViewModels
         public BidEditorBase() : base()
         {
             isNew = true;
+
+            workingFileParameters = BidFileParameters;
             
             setupCommands();
             setupTemplates();
@@ -156,7 +166,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    TemplatesFilePath = getLoadTemplatesPath();
+                    TemplatesFilePath = getLoadPath(TemplatesFileParameters);
 
                     if (TemplatesFilePath != null)
                     {
@@ -209,154 +219,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Helper Functions
-        
-        override protected string getSavePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (ScopeDirectoryPath != null && !isNew)
-            {
-                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-            saveFileDialog.FileName = Bid.BidNumber + " " + Bid.Name;
-            saveFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb";
-            saveFileDialog.DefaultExt = "bdb";
-            saveFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                path = saveFileDialog.FileName;
-            }
-
-            return path;
-        }
-        private string getDocumentSavePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            if (ScopeDirectoryPath != null)
-            {
-                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
-            saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
-            saveFileDialog.DefaultExt = "rtf";
-            //saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
-            //saveFileDialog.DefaultExt = "docx";
-            saveFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                path = saveFileDialog.FileName;
-            }
-
-            return path;
-        }
-        private string getCSVSavePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (ScopeDirectoryPath != null)
-            {
-                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
-            saveFileDialog.Filter = "Comma Separated Values Files (*.csv)|*.csv";
-            saveFileDialog.DefaultExt = "csv";
-            saveFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                path = saveFileDialog.FileName;
-            }
-
-            return path;
-        }
-        private string getExcelSavePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (ScopeDirectoryPath != null)
-            {
-                saveFileDialog.InitialDirectory = ScopeDirectoryPath;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
-            saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
-            saveFileDialog.DefaultExt = "xlsx";
-            saveFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                path = saveFileDialog.FileName;
-            }
-
-            return path;
-        }
-        override protected string getLoadPath()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (ScopeDirectoryPath != null)
-            {
-                openFileDialog.InitialDirectory = ScopeDirectoryPath;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
-            openFileDialog.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
-            openFileDialog.DefaultExt = "bdb";
-            openFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                path = openFileDialog.FileName;
-            }
-
-            return path;
-        }
-        private string getLoadTemplatesPath()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Please choose a template database.";
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            openFileDialog.Filter = "Template Database Files (*.tdb)|*.tdb";
-            openFileDialog.DefaultExt = "tdb";
-            openFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                path = openFileDialog.FileName;
-                TemplatesFilePath = path;
-            }
-
-            return path;
-        }
         private void buildTitleString()
         {
             TitleString = Bid.Name + " - " + programName;
