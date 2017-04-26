@@ -288,10 +288,10 @@ namespace TECUserControlLibrary.ViewModels
                 saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            //saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
-            //saveFileDialog.DefaultExt = "rtf";
-            saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
-            saveFileDialog.DefaultExt = "docx";
+            saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
+            saveFileDialog.DefaultExt = "rtf";
+            //saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
+            //saveFileDialog.DefaultExt = "docx";
             saveFileDialog.AddExtension = true;
 
             string path = null;
@@ -834,31 +834,7 @@ namespace TECUserControlLibrary.ViewModels
 
             loadTemplates(TemplatesFilePath);
         }
-
-        private void UndoExecute()
-        {
-            stack.Undo();
-        }
-        private bool UndoCanExecute()
-        {
-            if (stack.UndoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
-        private void RedoExecute()
-        {
-            stack.Redo();
-        }
-        private bool RedoCanExecute()
-        {
-            if (stack.RedoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
+        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)

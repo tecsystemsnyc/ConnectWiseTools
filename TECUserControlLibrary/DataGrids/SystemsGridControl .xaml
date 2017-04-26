@@ -22,10 +22,10 @@
     
     <Grid DataContext="{Binding ElementName=parent}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <!--<RowDefinition Height="30"/>-->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Style="{StaticResource CollapseAll}" Content="Collapse All"/>
+        <!--<Button Style="{StaticResource CollapseAll}" Content="Collapse All"/>-->
         <DataGrid ItemsSource="{Binding Path=SystemsSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
