@@ -31,6 +31,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _templatesLoaded = value;
                 TemplatesLoadedSet?.Invoke();
+                if (isNew)
+                {
+                    setupBid();
+                }
             }
         }
 
