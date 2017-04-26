@@ -119,7 +119,7 @@ namespace TECUserControlLibrary.ViewModels
 
         protected abstract void setupMenu();
 
-        private void setupStatusBar()
+        protected void setupStatusBar()
         {
             StatusBarVM = new StatusBarExtension();
 
