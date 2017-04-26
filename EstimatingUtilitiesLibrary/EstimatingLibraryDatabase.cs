@@ -31,62 +31,12 @@ namespace EstimatingUtilitiesLibrary
         static public TECBid LoadDBToBid(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
-            var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECBid));
-            watch.Stop();
-            Console.WriteLine("checkAndUpdateDB: " + watch.ElapsedMilliseconds);
             TECBid bid = getBidInfo();
+            updateCatalogs(bid, templates);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            //Update catalogs from templates.
-            
-            foreach (TECManufacturer manufacturer in templates.Catalogs.Manufacturers)
-            {
-                editObject(new StackItem(Change.Edit, bid, manufacturer));
-                editScopeChildrenRelations(manufacturer);
-            }
-            foreach (TECTag tag in templates.Catalogs.Tags)
-            { editObject(new StackItem(Change.Edit, bid, tag)); }
-            foreach(TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, connectionType));
-                editScopeChildrenRelations(connectionType);
-            }
-            foreach (TECConduitType conduitType in templates.Catalogs.ConduitTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, conduitType));
-                editScopeChildrenRelations(conduitType);
-            }
-            foreach(TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
-            {
-                editObject(new StackItem(Change.Edit, bid, cost));
-                editScopeChildrenRelations(cost);
-            }
-            foreach(TECIOModule module in templates.Catalogs.IOModules)
-            {
-                editObject(new StackItem(Change.Edit, bid, module));
-                editObject(new StackItem(Change.Edit, module, module.Manufacturer));
-                editScopeChildrenRelations(module);
-            }
-            foreach (TECDevice device in templates.Catalogs.Devices)
-            {
-                editObject(new StackItem(Change.Edit, bid, device));
-                editObject(new StackItem(Change.Edit, device, device.ConnectionType));
-                editObject(new StackItem(Change.Edit, device, device.Manufacturer));
-                editScopeChildrenRelations(device);
-            }
-            foreach (TECPanelType panelType in templates.Catalogs.PanelTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, panelType));
-                editScopeChildrenRelations(panelType);
-            }
-            watch.Stop();
-            Console.WriteLine("updating from catalog: " + watch.ElapsedMilliseconds);
-
-            watch = System.Diagnostics.Stopwatch.StartNew();
-
+            getScopeManagerProperties(bid);
             bid.Parameters = getBidParameters(bid);
-            bid.Labor = getLaborConstsInBid(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid);
             bid.ProposalScope = getAllProposalScope(bid.Systems);
@@ -99,14 +49,9 @@ namespace EstimatingUtilitiesLibrary
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
-            watch.Stop();
-            Console.WriteLine("Getting Bid Data: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);
-            watch.Stop();
-            Console.WriteLine("Linking Bid: " + watch.ElapsedMilliseconds);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
@@ -120,95 +65,23 @@ namespace EstimatingUtilitiesLibrary
         static public TECTemplates LoadDBToTemplates(string path)
         {
             SQLiteDB = new SQLiteDatabase(path);
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
             checkAndUpdateDB(typeof(TECTemplates));
-            //watch.Stop();
-            //Console.WriteLine("checkAndUpdateDB Templates: " + watch.ElapsedMilliseconds);
+           
             TECTemplates templates = new TECTemplates();
-
-            var loadedWatch = System.Diagnostics.Stopwatch.StartNew();
-
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates = getTemplatesInfo();
-            //watch.Stop();
-            //Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Labor = getLaborConstsInTemplates(templates);
-            //watch.Stop();
-            //Console.WriteLine("getLaborConstsInTemplates: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.SystemTemplates = getOrphanSystems();
-            //watch.Stop();
-            //Console.WriteLine("getOrphanSystems: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.EquipmentTemplates = getOrphanEquipment();
-            //watch.Stop();
-            //Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.SubScopeTemplates = getOrphanSubScope();
-            //watch.Stop();
-            //Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.Devices = getAllDevices();
-            //watch.Stop();
-            //Console.WriteLine("getAllDevices: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.Tags = getAllTags();
-            //watch.Stop();
-            //Console.WriteLine("getAllTags: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.Manufacturers = getAllManufacturers();
-            //watch.Stop();
-            //Console.WriteLine("getAllManufacturers: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ControllerTemplates = getOrphanControllers();
-            //watch.Stop();
-            //Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.ConnectionTypes = getConnectionTypes();
-            //watch.Stop();
-            //Console.WriteLine("getConnectionTypes: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.ConduitTypes = getConduitTypes();
-            //watch.Stop();
-            //Console.WriteLine("getConduitTypes: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.AssociatedCosts = getAssociatedCosts();
-            //watch.Stop();
-            //Console.WriteLine("getAssociatedCosts: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.MiscWiringTemplates = getMiscWiring();
-            //watch.Stop();
-            //Console.WriteLine("getMiscWiring: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.MiscCostTemplates = getMiscCosts();
-            //watch.Stop();
-            //Console.WriteLine("getMiscCosts: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.PanelTemplates = getOrphanPanels();
-            //watch.Stop();
-            //Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.PanelTypes = getPanelTypes();
-            //watch.Stop();
-            //Console.WriteLine("getPanelTypes: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ControlledScopeTemplates = getControlledScope();
-            //watch.Stop();
-            //Console.WriteLine("getControlledScope: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Catalogs.IOModules = getIOModules();
-            //watch.Stop();
-            //Console.WriteLine("getIOModules: " + watch.ElapsedMilliseconds);
             
-            //loadedWatch.Stop();
-            //Console.WriteLine("Getting Template Data: " + loadedWatch.ElapsedMilliseconds);
-
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            templates = getTemplatesInfo();
+            getScopeManagerProperties(templates);
+            templates.SystemTemplates = getOrphanSystems();
+            templates.EquipmentTemplates = getOrphanEquipment();
+            templates.SubScopeTemplates = getOrphanSubScope();
+            templates.ControllerTemplates = getOrphanControllers();
+            templates.MiscWiringTemplates = getMiscWiring();
+            templates.MiscCostTemplates = getMiscCosts();
+            templates.PanelTemplates = getOrphanPanels();
+            templates.ControlledScopeTemplates = getControlledScope();
+            
             ModelLinkingHelper.LinkTemplates(templates);
-            //watch.Stop();
-            //Console.WriteLine("Linking Template Data: " + watch.ElapsedMilliseconds);
-
+           
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -347,7 +220,55 @@ namespace EstimatingUtilitiesLibrary
         #endregion Public Functions
         
         #region Loading from DB Methods
-
+        static private void updateCatalogs(TECBid bid, TECTemplates templates)
+        {
+            //Update catalogs from templates.
+            foreach (TECManufacturer manufacturer in templates.Catalogs.Manufacturers)
+            {
+                editObject(new StackItem(Change.Edit, bid, manufacturer));
+                editScopeChildrenRelations(manufacturer);
+            }
+            foreach (TECTag tag in templates.Catalogs.Tags)
+            { editObject(new StackItem(Change.Edit, bid, tag)); }
+            foreach (TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
+            {
+                editObject(new StackItem(Change.Edit, bid, connectionType));
+                editScopeChildrenRelations(connectionType);
+            }
+            foreach (TECConduitType conduitType in templates.Catalogs.ConduitTypes)
+            {
+                editObject(new StackItem(Change.Edit, bid, conduitType));
+                editScopeChildrenRelations(conduitType);
+            }
+            foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                editObject(new StackItem(Change.Edit, bid, cost));
+                editScopeChildrenRelations(cost);
+            }
+            foreach (TECIOModule module in templates.Catalogs.IOModules)
+            {
+                editObject(new StackItem(Change.Edit, bid, module));
+                editObject(new StackItem(Change.Edit, module, module.Manufacturer));
+                editScopeChildrenRelations(module);
+            }
+            foreach (TECDevice device in templates.Catalogs.Devices)
+            {
+                editObject(new StackItem(Change.Edit, bid, device));
+                editObject(new StackItem(Change.Edit, device, device.ConnectionType));
+                editObject(new StackItem(Change.Edit, device, device.Manufacturer));
+                editScopeChildrenRelations(device);
+            }
+            foreach (TECPanelType panelType in templates.Catalogs.PanelTypes)
+            {
+                editObject(new StackItem(Change.Edit, bid, panelType));
+                editScopeChildrenRelations(panelType);
+            }
+        }
+        static private void getScopeManagerProperties(TECScopeManager scopeManager)
+        {
+            scopeManager.Catalogs = getCatalogs();
+            scopeManager.Labor = getLabor();
+        }
         static private TECBid getBidInfo()
         {
             DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
@@ -478,7 +399,7 @@ namespace EstimatingUtilitiesLibrary
             return labor;
         }
 
-        static private TECCatalogs getCatalogs(TECScopeManager scopeManager)
+        static private TECCatalogs getCatalogs()
         {
             TECCatalogs catalogs = new TECCatalogs();
             catalogs.Devices = getAllDevices();
