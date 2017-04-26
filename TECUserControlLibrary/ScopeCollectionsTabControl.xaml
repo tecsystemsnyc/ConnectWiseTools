@@ -127,7 +127,7 @@
                             Margin="5"
                         Command="{Binding Path=ViewModel.AddManufacturerCommand}"/>
 
-                    <grids:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                    <grids:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                                         Grid.Row="3" Grid.ColumnSpan="2"/>
 
                 </Grid>
@@ -177,7 +177,7 @@
                         Content="Wire Type:"/>
                     <ComboBox Grid.Column="1"
                             Grid.Row="3"
-                              ItemsSource="{Binding Path=ViewModel.Templates.ConnectionTypeCatalog}"
+                              ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.ConnectionTypes}"
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
@@ -185,7 +185,7 @@
                     <Label Grid.Column="0"
                         Grid.Row="4"
                         Content="Manufacturer:"/>
-                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                             DisplayMemberPath="Name"
                             SelectedItem="{Binding Path=ViewModel.DeviceManufacturer}"
                             Grid.Row="4" Grid.Column="1"
@@ -246,7 +246,7 @@
                     <Label Grid.Column="0"
                            Grid.Row="3"
                            Content="Manufacturer:"/>
-                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.ManufacturerCatalog}"
+                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
                          SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={cnvt:ManufacturerConverter}}"/>

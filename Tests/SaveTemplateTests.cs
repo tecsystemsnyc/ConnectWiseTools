@@ -838,8 +838,8 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
-            TECAssociatedCost expectedCost = templates.AssociatedCostsCatalog[1];
-            expectedSubScope.AssociatedCosts.Add(templates.AssociatedCostsCatalog[1]);
+            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[1];
+            expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
@@ -1330,7 +1330,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECManufacturer actualManufacturer = null;
-            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -1342,7 +1342,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
             Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
-            Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.ManufacturerCatalog.Count);
+            Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.Catalogs.Manufacturers.Count);
 
         }
         
@@ -1357,7 +1357,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECManufacturer actualMan = null;
-            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -1381,7 +1381,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECManufacturer actualMan = null;
-            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -1462,7 +1462,7 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECAssociatedCost expectedCost = templates.AssociatedCostsCatalog[0];
+            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[0];
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
@@ -1472,7 +1472,7 @@ namespace Tests
 
             TECConnectionType actualConnectionType = null;
             TECAssociatedCost actualCost = null;
-            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
@@ -1485,7 +1485,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
-            Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.ConnectionTypeCatalog.Count);
+            Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.Catalogs.ConnectionTypes.Count);
             Assert.AreEqual(expectedCostCount, actualConnectionType.AssociatedCosts.Count);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
@@ -1499,19 +1499,19 @@ namespace Tests
         public void Save_Templates_Add_ConduitType()
         {
             //Act
-            int oldNumConduitTypes = templates.ConduitTypeCatalog.Count;
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
             TECConduitType expectedConduitType = new TECConduitType();
             expectedConduitType.Name = "Test Add Conduit Type";
             expectedConduitType.Cost = 21.34;
 
-            templates.ConduitTypeCatalog.Add(expectedConduitType);
+            templates.Catalogs.ConduitTypes.Add(expectedConduitType);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECConduitType actualConnectionType = null;
-            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {
@@ -1523,7 +1523,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConnectionType.Cost);
-            Assert.AreEqual((oldNumConduitTypes + 1), actualTemplates.ConduitTypeCatalog.Count);
+            Assert.AreEqual((oldNumConduitTypes + 1), actualTemplates.Catalogs.ConduitTypes.Count);
 
         }
 
@@ -1531,22 +1531,22 @@ namespace Tests
         public void Save_Templates_Remove_ConduitType()
         {
             //Act
-            int oldNumConduitTypes = templates.ConduitTypeCatalog.Count;
-            TECConduitType conduitTypeToRemove = templates.ConduitTypeCatalog[0];
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
+            TECConduitType conduitTypeToRemove = templates.Catalogs.ConduitTypes[0];
 
-            templates.ConduitTypeCatalog.Remove(conduitTypeToRemove);
+            templates.Catalogs.ConduitTypes.Remove(conduitTypeToRemove);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == conduitTypeToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.ConduitTypeCatalog.Count);
+            Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.Catalogs.ConduitTypes.Count);
         }
         #endregion
 
@@ -1555,19 +1555,19 @@ namespace Tests
         public void Save_Templates_Add_AssociatedCost()
         {
             //Act
-            int oldNumAssociatedCosts = templates.AssociatedCostsCatalog.Count;
+            int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
             TECAssociatedCost expectedAssociatedCost = new TECAssociatedCost();
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
-            templates.AssociatedCostsCatalog.Add(expectedAssociatedCost);
+            templates.Catalogs.AssociatedCosts.Add(expectedAssociatedCost);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECAssociatedCost actualCost = null;
-            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -1579,7 +1579,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedAssociatedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedAssociatedCost.Cost, actualCost.Cost);
-            Assert.AreEqual((oldNumAssociatedCosts + 1), actualTemplates.AssociatedCostsCatalog.Count);
+            Assert.AreEqual((oldNumAssociatedCosts + 1), actualTemplates.Catalogs.AssociatedCosts.Count);
 
         }
 
@@ -1587,22 +1587,22 @@ namespace Tests
         public void Save_Templates_Remove_AssociatedCost()
         {
             //Act
-            int oldNumAssociatedCosts = templates.AssociatedCostsCatalog.Count;
-            TECAssociatedCost costToRemove = templates.AssociatedCostsCatalog[0];
+            int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
+            TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
-            templates.AssociatedCostsCatalog.Remove(costToRemove);
+            templates.Catalogs.AssociatedCosts.Remove(costToRemove);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumAssociatedCosts - 1), actualTemplates.AssociatedCostsCatalog.Count);
+            Assert.AreEqual((oldNumAssociatedCosts - 1), actualTemplates.Catalogs.AssociatedCosts.Count);
         }
         #endregion
 
@@ -1939,14 +1939,14 @@ namespace Tests
             expectedModule.Cost = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
 
-            templates.IOModuleCatalog.Add(expectedModule);
+            templates.Catalogs.IOModuless.Add(expectedModule);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.IOModuleCatalog)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
             {
                 if (cost.Guid == expectedModule.Guid)
                 {
@@ -1964,33 +1964,33 @@ namespace Tests
         public void Save_Templates_Remove_IOModule()
         {
             //Act
-            TECIOModule costToRemove = templates.IOModuleCatalog[0];
-            templates.IOModuleCatalog.Remove(costToRemove);
+            TECIOModule costToRemove = templates.Catalogs.IOModuless[0];
+            templates.Catalogs.IOModuless.Remove(costToRemove);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECIOModule cost in actualTemplates.IOModuleCatalog)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual(templates.IOModuleCatalog.Count, actualTemplates.IOModuleCatalog.Count);
+            Assert.AreEqual(templates.Catalogs.IOModuless.Count, actualTemplates.Catalogs.IOModuless.Count);
         }
 
         [TestMethod]
         public void Save_Templates_IOModule_Name()
         {
             //Act
-            TECIOModule expectedCost = templates.IOModuleCatalog[0];
+            TECIOModule expectedCost = templates.Catalogs.IOModuless[0];
             expectedCost.Name = "Test Save IOModule Name";
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.IOModuleCatalog)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2007,14 +2007,14 @@ namespace Tests
         public void Save_Templates_IOModule_Cost()
         {
             //Act
-            TECIOModule expectedCost = templates.IOModuleCatalog[0];
+            TECIOModule expectedCost = templates.Catalogs.IOModuless[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.IOModuleCatalog)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {

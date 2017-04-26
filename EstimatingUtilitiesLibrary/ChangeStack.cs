@@ -394,7 +394,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECLocation location in Bid.Locations)
             { location.PropertyChanged += Object_PropertyChanged; }
             //Manufacturers Changed
-            foreach (TECManufacturer manufacturer in Bid.ManufacturerCatalog)
+            foreach (TECManufacturer manufacturer in Bid.Catalogs.Manufacturers)
             { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             { registerSystems(system); }
@@ -417,21 +417,21 @@ namespace EstimatingUtilitiesLibrary
             { connectionType.PropertyChanged += Object_PropertyChanged; }
             foreach(TECConduitType conduitType in Bid.ConduitTypes)
             { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
+            foreach(TECAssociatedCost cost in Bid.Catalogs.AssociatedCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach(TECMiscCost cost in Bid.MiscCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECMiscWiring wiring in Bid.MiscWiring)
             { wiring.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType panelType in Bid.PanelTypeCatalog)
+            foreach (TECPanelType panelType in Bid.Catalogs.PanelTypes)
             { panelType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECIOModule ioModule in Bid.IOModuleCatalog)
+            foreach (TECIOModule ioModule in Bid.Catalogs.IOModules)
             {
                 ioModule.PropertyChanged += Object_PropertyChanged;
             }
-            foreach (TECDevice device in Bid.DeviceCatalog)
+            foreach (TECDevice device in Bid.Catalogs.Devices)
             { device.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
@@ -444,31 +444,31 @@ namespace EstimatingUtilitiesLibrary
             { registerEquipment(equipment); }
             foreach (TECSubScope subScope in Templates.SubScopeTemplates)
             { registerSubScope(subScope); }
-            foreach (TECDevice device in Templates.DeviceCatalog)
+            foreach (TECDevice device in Templates.Catalogs.Devices)
             { device.PropertyChanged += Object_PropertyChanged; }
             foreach (TECTag tag in Templates.Tags)
             { tag.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECManufacturer manufacturer in Templates.ManufacturerCatalog)
+            foreach (TECManufacturer manufacturer in Templates.Catalogs.Manufacturers)
             { manufacturer.PropertyChanged += Object_PropertyChanged; }
             foreach (TECController controller in Templates.ControllerTemplates)
             { registerController(controller); }
-            foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
+            foreach (TECConnectionType connectionType in Templates.Catalogs.ConnectionTypes)
             { connectionType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in Templates.Catalogs.ConduitTypes)
             { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost cost in Templates.Catalogs.AssociatedCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECMiscCost addition in Templates.MiscCostTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECMiscWiring addition in Templates.MiscWiringTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType addition in Templates.PanelTypeCatalog)
+            foreach (TECPanelType addition in Templates.Catalogs.PanelTypes)
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
             foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
             { registerControlledScope(scope); }
-            foreach (TECIOModule ioModule in Templates.IOModuleCatalog)
+            foreach (TECIOModule ioModule in Templates.Catalogs.IOModules)
             {
                 ioModule.PropertyChanged += Object_PropertyChanged;
             }

@@ -74,11 +74,11 @@ namespace Tests
             //Associated Costs
             var testCost = new TECAssociatedCost();
             testCost.Name = "Test Cost";
-            bid.AssociatedCostsCatalog.Add(testCost);
+            bid.Catalogs.AssociatedCosts.Add(testCost);
 
             var testCost2 = new TECAssociatedCost();
             testCost2.Name = "Other Cost";
-            bid.AssociatedCostsCatalog.Add(testCost2);
+            bid.Catalogs.AssociatedCosts.Add(testCost2);
 
 
             //Locations
@@ -203,7 +203,7 @@ namespace Tests
             manufacturer1.Multiplier = 0.8;
             
             device1.Manufacturer = manufacturer1;
-            bid.ManufacturerCatalog.Add(manufacturer1);
+            bid.Catalogs.Manufacturers.Add(manufacturer1);
 
             //Points
             var point1 = new TECPoint();
@@ -236,8 +236,8 @@ namespace Tests
 
             deviceC1.Manufacturer = manufacturer1;
             deviceC1.ConnectionType = connectionType2;
-            bid.DeviceCatalog.Add(deviceC1);
-            bid.DeviceCatalog.Add(device1);
+            bid.Catalogs.Devices.Add(deviceC1);
+            bid.Catalogs.Devices.Add(device1);
 
             //Scope Branches
             var branch1 = new TECScopeBranch();
@@ -324,7 +324,7 @@ namespace Tests
             panelType.Cost = 123.4;
             panelType.Name = "Test Panel Type";
 
-            bid.PanelTypeCatalog.Add(panelType);
+            bid.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
             TECPanel panel = new TECPanel();
@@ -344,7 +344,7 @@ namespace Tests
             testIOModule.Name = "Test IO Module";
             testIOModule.Cost = 42;
             testIOModule.Manufacturer = manufacturer1;
-            bid.IOModuleCatalog.Add(testIOModule);
+            bid.Catalogs.IOModules.Add(testIOModule);
             ioToAdd.IOModule = testIOModule;
 
             //Bid
@@ -401,9 +401,9 @@ namespace Tests
             childDevMan.Multiplier = 0.916;
 
 
-            templates.ManufacturerCatalog.Add(testMan);
-            templates.ManufacturerCatalog.Add(testDevMan);
-            templates.ManufacturerCatalog.Add(childDevMan);
+            templates.Catalogs.Manufacturers.Add(testMan);
+            templates.Catalogs.Manufacturers.Add(testDevMan);
+            templates.Catalogs.Manufacturers.Add(childDevMan);
 
             //Connection Types
             TECConnectionType testDevConnType = new TECConnectionType();
@@ -412,8 +412,8 @@ namespace Tests
             TECConnectionType childDevConnType = new TECConnectionType();
             childDevConnType.Name = "ThreeC18";
 
-            templates.ConnectionTypeCatalog.Add(testDevConnType);
-            templates.ConnectionTypeCatalog.Add(childDevConnType);
+            templates.Catalogs.ConnectionTypes.Add(testDevConnType);
+            templates.Catalogs.ConnectionTypes.Add(childDevConnType);
 
             //Conduit Types
             TECConduitType testConduitType = new TECConduitType();
@@ -421,32 +421,32 @@ namespace Tests
             testConduitType.Cost = 12;
             testConduitType.Labor = 2;
 
-            templates.ConduitTypeCatalog.Add(testConduitType);
+            templates.Catalogs.ConduitTypes.Add(testConduitType);
 
             TECConduitType otherConduitType = new TECConduitType();
             otherConduitType.Name = "RGS";
             otherConduitType.Cost = 18;
             otherConduitType.Labor = 4;
 
-            templates.ConduitTypeCatalog.Add(otherConduitType);
+            templates.Catalogs.ConduitTypes.Add(otherConduitType);
 
             //Associated Costs
             TECAssociatedCost testAssociatedCost = new TECAssociatedCost();
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
 
-            templates.AssociatedCostsCatalog.Add(testAssociatedCost);
+            templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
             var testCost2 = new TECAssociatedCost();
             testCost2.Name = "Other Cost";
-            templates.AssociatedCostsCatalog.Add(testCost2);
+            templates.Catalogs.AssociatedCosts.Add(testCost2);
 
             //IO Modules
             TECIOModule testIOModule = new TECIOModule();
             testIOModule.Name = "Test IO Module";
             testIOModule.Cost = 42;
             testIOModule.Manufacturer = testMan;
-            templates.IOModuleCatalog.Add(testIOModule);
+            templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
             TECDevice testDev = new TECDevice(Guid.NewGuid());
@@ -466,8 +466,8 @@ namespace Tests
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
 
-            templates.DeviceCatalog.Add(testDev);
-            templates.DeviceCatalog.Add(childDev);
+            templates.Catalogs.Devices.Add(testDev);
+            templates.Catalogs.Devices.Add(childDev);
 
             //System
             TECSystem system = new TECSystem();
@@ -585,7 +585,7 @@ namespace Tests
             panelType.Cost = 123.4;
             panelType.Name = "Test Panel Type";
 
-            templates.PanelTypeCatalog.Add(panelType);
+            templates.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
             TECPanel panel = new TECPanel();

@@ -399,21 +399,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 TagSelections = Bid.Tags;
                 ConduitTypeSelections = Bid.ConduitTypes;
-                AssociatedCostSelections = Bid.AssociatedCostsCatalog;
-                ManufacturerSelections = Bid.ManufacturerCatalog;
+                AssociatedCostSelections = Bid.Catalogs.AssociatedCosts;
+                ManufacturerSelections = Bid.Catalogs.Manufacturers;
                 ConnectionTypeSelections = Bid.ConnectionTypes;
-                IOModuleSelections = Bid.IOModuleCatalog;
-                PanelTypeSelections = Bid.PanelTypeCatalog;
+                IOModuleSelections = Bid.Catalogs.IOModules;
+                PanelTypeSelections = Bid.Catalogs.PanelTypes;
             }
             else if (type is TECTemplates)
             {
                 TagSelections = Templates.Tags;
-                AssociatedCostSelections = Templates.AssociatedCostsCatalog;
-                ConduitTypeSelections = Templates.ConduitTypeCatalog;
-                ManufacturerSelections = Templates.ManufacturerCatalog;
-                ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
-                IOModuleSelections = Templates.IOModuleCatalog;
-                PanelTypeSelections = Templates.PanelTypeCatalog;
+                AssociatedCostSelections = Templates.Catalogs.AssociatedCosts;
+                ConduitTypeSelections = Templates.Catalogs.ConduitTypes;
+                ManufacturerSelections = Templates.Catalogs.Manufacturers;
+                ConnectionTypeSelections = Templates.Catalogs.ConnectionTypes;
+                IOModuleSelections = Templates.Catalogs.IOModules;
+                PanelTypeSelections = Templates.Catalogs.PanelTypes;
             }
 
         }
@@ -594,7 +594,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             else if (Templates != null)
             {
-                Templates.DeviceCatalog.Remove(SelectedDevice);
+                Templates.Catalogs.Devices.Remove(SelectedDevice);
             }
             SelectedDevice = null;
         }

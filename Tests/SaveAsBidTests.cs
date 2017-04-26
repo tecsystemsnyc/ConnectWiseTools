@@ -83,7 +83,7 @@ namespace Tests
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
 
-            expectedManufacturer = expectedBid.ManufacturerCatalog[0];
+            expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
             expectedPoint = expectedSubScope.Points[0];
 
             expectedBranch = null;
@@ -166,7 +166,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECManufacturer man in actualBid.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -608,12 +608,12 @@ namespace Tests
         public void SaveAs_Bid_PanelType()
         {
             //Arrange
-            TECPanelType expectedCost = expectedBid.PanelTypeCatalog[0];
-            TECPanelType actualCost = expectedBid.PanelTypeCatalog[0];
+            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes[0];
+            TECPanelType actualCost = expectedBid.Catalogs.PanelTypes[0];
 
-            Assert.AreEqual(expectedCost.Guid, expectedBid.PanelTypeCatalog[0].Guid);
-            Assert.AreEqual(expectedCost.Name, expectedBid.PanelTypeCatalog[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedBid.PanelTypeCatalog[0].Cost);
+            Assert.AreEqual(expectedCost.Guid, expectedBid.Catalogs.PanelTypes[0].Guid);
+            Assert.AreEqual(expectedCost.Name, expectedBid.Catalogs.PanelTypes[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedBid.Catalogs.PanelTypes[0].Cost);
         }
     }
 }

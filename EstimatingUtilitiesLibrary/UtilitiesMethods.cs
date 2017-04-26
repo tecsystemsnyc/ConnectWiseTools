@@ -201,14 +201,14 @@ namespace EstimatingUtilitiesLibrary
 
         public static void AddCatalogsToBid(TECBid bid, TECTemplates templates)
         {
-            bid.DeviceCatalog = templates.DeviceCatalog;
-            bid.ManufacturerCatalog = templates.ManufacturerCatalog;
-            bid.PanelTypeCatalog = templates.PanelTypeCatalog;
-            bid.ConduitTypes = templates.ConduitTypeCatalog;
-            bid.ConnectionTypes = templates.ConnectionTypeCatalog;
+            bid.Catalogs.Devices = templates.Catalogs.Devices;
+            bid.Catalogs.Manufacturers = templates.Catalogs.Manufacturers;
+            bid.Catalogs.PanelTypes = templates.Catalogs.PanelTypes;
+            bid.ConduitTypes = templates.Catalogs.ConduitTypes;
+            bid.ConnectionTypes = templates.Catalogs.ConnectionTypes;
             bid.Catalogs.Tags = templates.Tags;
-            bid.IOModuleCatalog = templates.IOModuleCatalog;
-            bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
+            bid.Catalogs.IOModules = templates.Catalogs.IOModules;
+            bid.Catalogs.AssociatedCosts = templates.Catalogs.AssociatedCosts;
         }
 
         public static bool IsLowerVersion(string currentVersion, string sampleVersion)
