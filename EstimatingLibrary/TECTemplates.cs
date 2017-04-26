@@ -119,7 +119,7 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECTemplates() : base() {}
+        public TECTemplates() : this(Guid.NewGuid()) {}
         public TECTemplates(Guid guid) : base(guid)
         {
             _labor = new TECLabor();
@@ -127,6 +127,7 @@ namespace EstimatingLibrary
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
+            _controllerTemplates = new ObservableCollection<TECController>();
             _miscWiringTemplates = new ObservableCollection<TECMiscWiring>();
             _miscCostTemplates = new ObservableCollection<TECMiscCost>();
             _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
@@ -141,7 +142,7 @@ namespace EstimatingLibrary
             PanelTemplates.CollectionChanged += CollectionChanged;
             ControlledScopeTemplates.CollectionChanged += CollectionChanged;
         }
-        public TECTemplates(TECTemplates templatesSource) : base(templatesSource.Guid)
+        public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
             if (_labor != null)
             { _labor = templatesSource.Labor;
