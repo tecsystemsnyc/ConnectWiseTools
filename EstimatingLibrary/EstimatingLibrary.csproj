@@ -131,6 +131,7 @@
     <Compile Include="TECPanel.cs" />
     <Compile Include="TECPanelType.cs" />
     <Compile Include="TECProposalScope.cs" />
+    <Compile Include="TECScopeManager.cs" />
     <Compile Include="TECSubScope.cs" />
     <Compile Include="TECPoint.cs" />
     <Compile Include="TECScope.cs" />
