@@ -397,17 +397,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if(type is TECBid)
             {
-                TagSelections = Bid.Tags;
-                ConduitTypeSelections = Bid.ConduitTypes;
+                TagSelections = Bid.Catalogs.Tags;
+                ConduitTypeSelections = Bid.Catalogs.ConduitTypes;
                 AssociatedCostSelections = Bid.Catalogs.AssociatedCosts;
                 ManufacturerSelections = Bid.Catalogs.Manufacturers;
-                ConnectionTypeSelections = Bid.ConnectionTypes;
+                ConnectionTypeSelections = Bid.Catalogs.ConnectionTypes;
                 IOModuleSelections = Bid.Catalogs.IOModules;
                 PanelTypeSelections = Bid.Catalogs.PanelTypes;
             }
             else if (type is TECTemplates)
             {
-                TagSelections = Templates.Tags;
+                TagSelections = Templates.Catalogs.Tags;
                 AssociatedCostSelections = Templates.Catalogs.AssociatedCosts;
                 ConduitTypeSelections = Templates.Catalogs.ConduitTypes;
                 ManufacturerSelections = Templates.Catalogs.Manufacturers;

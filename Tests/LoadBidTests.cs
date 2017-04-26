@@ -313,7 +313,7 @@ namespace Tests
         public void Load_Bid_Tag()
         {
             //Arrange
-            TECTag actualTag = actualBid.Tags[0];
+            TECTag actualTag = actualBid.Catalogs.Tags[0];
             TECSystem actualSystem = actualBid.Systems[0];
             TECEquipment actualEquipment = actualSystem.Equipment[0];
             TECSubScope actualSubScope = actualEquipment.SubScope[0];
@@ -501,7 +501,7 @@ namespace Tests
         public void Load_Bid_ConnectionType()
         {
             //Arrange
-            TECConnectionType actualConnectionType = actualBid.ConnectionTypes[0];
+            TECConnectionType actualConnectionType = actualBid.Catalogs.ConnectionTypes[0];
 
             //Assert
             string expectedName = "ThreeC18";
@@ -512,7 +512,7 @@ namespace Tests
         public void Load_Bid_ConduitType()
         {
             //Arrange
-            TECConduitType actualConduitType = actualBid.ConduitTypes[0];
+            TECConduitType actualConduitType = actualBid.Catalogs.ConduitTypes[0];
 
             //Assert
             string expectedName = "Test ConduitType";
@@ -635,7 +635,7 @@ namespace Tests
                     { Assert.Fail("Associated costs in device catalog not linked"); }
                 }
             }
-            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
             {
                 foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
                 {
@@ -643,7 +643,7 @@ namespace Tests
                     { Assert.Fail("Associated costs in conduit type catalog not linked"); }
                 }
             }
-            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
             {
                 foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
                 {
@@ -690,7 +690,7 @@ namespace Tests
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (!actualBid.ConduitTypes.Contains(connection.ConduitType))
+                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType))
                     { Assert.Fail("Conduit types in connection not linked"); }
                 }
             }
@@ -705,28 +705,28 @@ namespace Tests
             {
                 foreach (TECTag tag in system.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in system templates not linked"); }
                 }
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     foreach (TECTag tag in equipment.Tags)
                     {
-                        if (!actualBid.Tags.Contains(tag))
+                        if (!actualBid.Catalogs.Tags.Contains(tag))
                         { Assert.Fail("Tags in system templates not linked"); }
                     }
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         foreach (TECTag tag in subScope.Tags)
                         {
-                            if (!actualBid.Tags.Contains(tag))
+                            if (!actualBid.Catalogs.Tags.Contains(tag))
                             { Assert.Fail("Tags in system templates not linked"); }
                         }
                         foreach (TECDevice device in subScope.Devices)
                         {
                             foreach (TECTag tag in device.Tags)
                             {
-                                if (!actualBid.Tags.Contains(tag))
+                                if (!actualBid.Catalogs.Tags.Contains(tag))
                                 { Assert.Fail("Tags in system templates not linked"); }
                             }
                         }
@@ -738,23 +738,23 @@ namespace Tests
             {
                 foreach (TECTag tag in device.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in device catalog not linked"); }
                 }
             }
-            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
             {
                 foreach (TECTag tag in conduitType.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in conduit type catalog not linked"); }
                 }
             }
-            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
             {
                 foreach (TECTag tag in connectionType.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in connection type catalog not linked"); }
                 }
             }
@@ -772,7 +772,7 @@ namespace Tests
                     Assert.Fail("Device doesn't have connectionType");
                 }
 
-                if (!actualBid.ConnectionTypes.Contains(device.ConnectionType))
+                if (!actualBid.Catalogs.ConnectionTypes.Contains(device.ConnectionType))
                 {
                     Assert.Fail("ConnectionTypes not linked in device catalog");
                 }

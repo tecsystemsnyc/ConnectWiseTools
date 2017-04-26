@@ -137,7 +137,7 @@ namespace TECUserControlLibrary.ViewModels
             PossibleConduitTypes = new ObservableCollection<TECConduitType>();
 
             Bid.Controllers.CollectionChanged += Controllers_CollectionChanged;
-            Bid.ConduitTypes.CollectionChanged += ConduitTypes_CollectionChanged;
+            Bid.Catalogs.ConduitTypes.CollectionChanged += ConduitTypes_CollectionChanged;
             ServerControllers.CollectionChanged += ServerControllers_CollectionChanged;
             BMSControllers.CollectionChanged += BMSControllers_CollectionChanged;
 
@@ -152,7 +152,7 @@ namespace TECUserControlLibrary.ViewModels
             TECConduitType noneConduit = new TECConduitType();
             noneConduit.Name = "None";
             PossibleConduitTypes.Add(noneConduit);
-            foreach (TECConduitType type in Bid.ConduitTypes)
+            foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 PossibleConduitTypes.Add(type);
             }
@@ -403,9 +403,9 @@ namespace TECUserControlLibrary.ViewModels
                             controller.ParentConnection.IOType = controller.ParentConnection.PossibleIO[0];
                         }
                     }
-                    if (Bid.ConnectionTypes.Count > 0)
+                    if (Bid.Catalogs.ConnectionTypes.Count > 0)
                     {
-                        controller.ParentConnection.ConnectionType = Bid.ConnectionTypes[0];
+                        controller.ParentConnection.ConnectionType = Bid.Catalogs.ConnectionTypes[0];
                     }
                 }
             }

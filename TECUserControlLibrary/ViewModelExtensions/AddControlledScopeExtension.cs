@@ -219,7 +219,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             var noneConduit = new TECConduitType();
             noneConduit.Name = "None";
             ConduitTypeSelections.Add(noneConduit);
-            foreach (TECConduitType type in Bid.ConduitTypes)
+            foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
             }

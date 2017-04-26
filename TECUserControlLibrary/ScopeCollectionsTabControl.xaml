@@ -92,7 +92,7 @@
                             Grid.Row="1"
                             Command="{Binding Path=ViewModel.AddTagCommand}"
                                 Margin="5"/>
-                    <grids:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <grids:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                                            Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
@@ -191,7 +191,7 @@
                             Grid.Row="4" Grid.Column="1"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0"/>
-                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                               SelectedItem="{Binding Path=ViewModel.SelectedTag}"
                               DisplayMemberPath="Text"/>
                     <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
@@ -279,7 +279,7 @@
                             <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Tags}"
+                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                               SelectedItem="{Binding Path=ViewModel.SelectedTag}"
                               DisplayMemberPath="Text"/>
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"

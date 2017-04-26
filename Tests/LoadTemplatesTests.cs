@@ -64,7 +64,7 @@ namespace Tests
             }
 
             actualTag = null;
-            foreach (TECTag tag in actualTemplates.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Text == "Test Tag") actualTag = tag;
             }
@@ -598,28 +598,28 @@ namespace Tests
             {
                 foreach (TECTag tag in system.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in system templates not linked"); }
                 }
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     foreach (TECTag tag in equipment.Tags)
                     {
-                        if (!actualTemplates.Tags.Contains(tag))
+                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
                         { Assert.Fail("Tags in system templates not linked"); }
                     }
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         foreach (TECTag tag in subScope.Tags)
                         {
-                            if (!actualTemplates.Tags.Contains(tag))
+                            if (!actualTemplates.Catalogs.Tags.Contains(tag))
                             { Assert.Fail("Tags in system templates not linked"); }
                         }
                         foreach (TECDevice device in subScope.Devices)
                         {
                             foreach (TECTag tag in device.Tags)
                             {
-                                if (!actualTemplates.Tags.Contains(tag))
+                                if (!actualTemplates.Catalogs.Tags.Contains(tag))
                                 { Assert.Fail("Tags in system templates not linked"); }
                             }
                         }
@@ -630,21 +630,21 @@ namespace Tests
             {
                 foreach (TECTag tag in equipment.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in equipment templates not linked"); }
                 }
                 foreach (TECSubScope subScope in equipment.SubScope)
                 {
                     foreach (TECTag tag in subScope.Tags)
                     {
-                        if (!actualTemplates.Tags.Contains(tag))
+                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
                         { Assert.Fail("Tags in equipment templates not linked"); }
                     }
                     foreach (TECDevice device in subScope.Devices)
                     {
                         foreach (TECTag tag in device.Tags)
                         {
-                            if (!actualTemplates.Tags.Contains(tag))
+                            if (!actualTemplates.Catalogs.Tags.Contains(tag))
                             { Assert.Fail("Tags in equipment templates not linked"); }
                         }
                     }
@@ -654,14 +654,14 @@ namespace Tests
             {
                 foreach (TECTag tag in subScope.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in subscope templates not linked"); }
                 }
                 foreach (TECDevice device in subScope.Devices)
                 {
                     foreach (TECTag tag in device.Tags)
                     {
-                        if (!actualTemplates.Tags.Contains(tag))
+                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
                         { Assert.Fail("Tags in subscope templates not linked"); }
                     }
                 }
@@ -670,7 +670,7 @@ namespace Tests
             {
                 foreach (TECTag tag in device.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in device catalog not linked"); }
                 }
             }
@@ -678,7 +678,7 @@ namespace Tests
             {
                 foreach (TECTag tag in conduitType.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in conduit type catalog not linked"); }
                 }
             }
@@ -686,7 +686,7 @@ namespace Tests
             {
                 foreach (TECTag tag in connectionType.Tags)
                 {
-                    if (!actualTemplates.Tags.Contains(tag))
+                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in connection type catalog not linked"); }
                 }
             }

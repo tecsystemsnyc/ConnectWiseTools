@@ -64,7 +64,7 @@ namespace Tests
             expectedSubScope = expectedTemplates.SubScopeTemplates[0];
             expectedDevice = expectedTemplates.Catalogs.Devices[0];
             expectedManufacturer = expectedTemplates.Catalogs.Manufacturers[0];
-            expectedTag = expectedTemplates.Tags[0];
+            expectedTag = expectedTemplates.Catalogs.Tags[0];
             expectedController = expectedTemplates.ControllerTemplates[0];
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
             expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
@@ -122,7 +122,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualTemplates.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {

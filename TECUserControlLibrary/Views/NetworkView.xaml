@@ -90,7 +90,7 @@
                                       Margin="5"/>
                                 <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
                                 <ComboBox Grid.Column="4"
-                                      ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}"
+                                      ItemsSource="{Binding Data.Bid.Catalogs.ConnectionTypes, Source={StaticResource proxy}}"
                                       SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
                                               DisplayMemberPath="Name"
                                       Margin="5"/>
@@ -209,7 +209,7 @@
                             </DataGridComboBoxColumn.EditingElementStyle>
                         </DataGridComboBoxColumn>
                         <DataGridComboBoxColumn Header="Wire"
-                                        ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConnectionType}"
+                                        ItemsSource="{Binding Data.Bid.Catalogs.ConnectionTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=Controller.ParentConnection.ConnectionType}"
                                         DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="40"/>
                         <DataGridTextColumn Header="Length"
@@ -253,7 +253,7 @@
                                       Margin="5"/>
                                     <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
                                     <ComboBox Grid.Column="4"
-                                      ItemsSource="{Binding Data.Bid.ConnectionTypes, Source={StaticResource proxy}}"
+                                      ItemsSource="{Binding Data.Bid.Catalogs.ConnectionTypes, Source={StaticResource proxy}}"
                                       SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
                                               DisplayMemberPath="Name"
                                       Margin="5"/>

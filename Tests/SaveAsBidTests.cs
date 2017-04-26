@@ -98,7 +98,7 @@ namespace Tests
 
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
-            expectedTag = expectedBid.Tags[0];
+            expectedTag = expectedBid.Catalogs.Tags[0];
 
             //expectedDrawing = expectedBid.Drawings[0];
             //expectedPage = expectedDrawing.Pages[0];
@@ -211,7 +211,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualBid.Tags)
+            foreach (TECTag tag in actualBid.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {

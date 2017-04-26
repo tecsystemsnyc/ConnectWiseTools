@@ -300,7 +300,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECTag> expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Bid.Tags)
+            foreach (TECTag item in Bid.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -309,12 +309,12 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Tags.Add(edit);
+            Bid.Catalogs.Tags.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECTag> actual = Bid.Tags;
+            ObservableCollection<TECTag> actual = Bid.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -963,7 +963,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECConduitType expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
-            TECConduitType edit = Bid.ConduitTypes[1];
+            TECConduitType edit = Bid.Catalogs.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1500,9 +1500,9 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Tags.Add(edit);
+            Bid.Catalogs.Tags.Add(edit);
             var expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Bid.Tags)
+            foreach (TECTag item in Bid.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -1510,7 +1510,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECTag> actual = Bid.Tags;
+            ObservableCollection<TECTag> actual = Bid.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
