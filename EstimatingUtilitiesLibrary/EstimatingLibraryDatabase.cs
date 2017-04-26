@@ -28,7 +28,7 @@ namespace EstimatingUtilitiesLibrary
         static private SQLiteDatabase SQLiteDB;
 
         #region Public Functions
-        static public TECBid LoadDBToBid(string path, TECTemplates templates)
+        static public TECBid Load(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
             checkAndUpdateDB(typeof(TECBid));
@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibrary
 
             return bid;
         }
-        static public TECTemplates LoadDBToTemplates(string path)
+        static public TECTemplates Load(string path)
         {
             SQLiteDB = new SQLiteDatabase(path);
             checkAndUpdateDB(typeof(TECTemplates));
@@ -89,43 +89,28 @@ namespace EstimatingUtilitiesLibrary
 
             return templates;
         }
-        static public void SaveBidToNewDB(string path, TECBid bid)
+        static public void SaveNew(string path, TECScopeManager scopeManager)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
             SQLiteDB = new SQLiteDatabase(path);
-            //watch.Stop();
-            //Console.WriteLine("New connection: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            
             if (File.Exists(path))
             { SQLiteDB.overwriteFile(); }
-            createAllBidTables();
-            //watch.Stop();
-            //Console.WriteLine("CreateAllBidTales: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            saveCompleteBid(bid);
-            //watch.Stop();
-            //Console.WriteLine("SaveCompleteBid: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            if(scopeManager is TECBid)
+            {
+                createAllBidTables();
+                saveCompleteBid(scopeManager as TECBid);
+            } else if (scopeManager is TECTemplates)
+            {
+                createAllTemplateTables();
+                saveCompleteTemplate(scopeManager as TECTemplates);
+            }
+            
             SQLiteDB.Connection.Close();
-            //watch.Stop();
-            //Console.WriteLine("Close connection: " + watch.ElapsedMilliseconds);
+            
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-        static public void SaveTemplatesToNewDB(string path, TECTemplates templates)
-        {
-            SQLiteDB = new SQLiteDatabase(path);
-
-            if (File.Exists(path))
-            { SQLiteDB.overwriteFile(); }
-
-            createAllTemplateTables();
-
-            saveCompleteTemplate(templates);
-
-            SQLiteDB.Connection.Close();
-        }
-        static public void UpdateBidToDB(string path, ChangeStack changeStack, bool doBackup = true)
+        static public void Update(string path, ChangeStack changeStack, bool doBackup = true)
         {
             if (doBackup) { createBackup(path); }
 
@@ -160,51 +145,6 @@ namespace EstimatingUtilitiesLibrary
                 else if(changeType == Change.RemoveRelationship)
                 {
                     removeRelationship(change);
-                }
-            }
-
-            SQLiteDB.Connection.Close();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            File.Copy(tempPath, path, true);
-
-            File.Delete(tempPath);
-        }
-        static public void UpdateTemplatesToDB(string path, ChangeStack changeStack)
-        {
-            string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + String.Format("{0:ffff}", DateTime.Now) + ".tmp";
-
-            File.Copy(path, tempPath);
-
-            SQLiteDB = new SQLiteDatabase(tempPath);
-
-            foreach (StackItem item in changeStack.SaveStack)
-            {
-                Change changeType = item.Change;
-                object targetObject = item.TargetObject;
-                object refObject = item.ReferenceObject;
-
-                if (changeType == Change.Add)
-                {
-                    addObject(item);
-                }
-                else if (changeType == Change.Edit)
-                {
-                    editObject(item);
-                }
-                else if (changeType == Change.Remove)
-                {
-                    removeObject(item);
-                }
-                else if (changeType == Change.AddRelationship)
-                {
-                    addRelationship(item);
-                }
-                else if (changeType == Change.RemoveRelationship)
-                {
-                    removeRelationship(item);
                 }
             }
 
