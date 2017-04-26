@@ -439,7 +439,7 @@ namespace EstimatingLibrary
             registerControllers();
         }
 
-        public TECBid() : base()
+        public TECBid() : this(Guid.NewGuid())
         {
             foreach(string item in Defaults.Scope)
             {
@@ -465,7 +465,7 @@ namespace EstimatingLibrary
         }
 
         //Copy Constructor
-        public TECBid(TECBid bidSource) : base()
+        public TECBid(TECBid bidSource) : this()
         {
             _name = bidSource.Name;
             _bidNumber = bidSource.BidNumber;
