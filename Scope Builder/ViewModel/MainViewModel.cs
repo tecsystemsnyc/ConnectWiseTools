@@ -105,7 +105,6 @@ namespace Scope_Builder.ViewModel
             TemplatesVisibility = Visibility.Visible;
 
             startupFile = Properties.Settings.Default.StartupFile;
-            checkForOpenWith(Properties.Settings.Default.StartupFile);
             Properties.Settings.Default.StartupFile = "";
             Properties.Settings.Default.Save();
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
