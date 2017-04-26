@@ -195,7 +195,7 @@ namespace Tests
         //}
 
         [TestMethod]
-        public void Undo_Bid_Catalogs.Devices()
+        public void Undo_Bid_Catalogs_Devices()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -220,7 +220,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Bid_Catalogs.Manufacturers()
+        public void Undo_Bid_Catalogs_Manufacturers()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -1324,7 +1324,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Bid_Catalogs.Devices()
+        public void Redo_Bid_Catalogs_Devices()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -1348,7 +1348,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Bid_Catalogs.Manufacturers()
+        public void Redo_Bid_Catalogs_Manufacturers()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();

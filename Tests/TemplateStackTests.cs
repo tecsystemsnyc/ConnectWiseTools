@@ -137,7 +137,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_Catalogs.Devices()
+        public void Undo_Template_Catalogs_Devices()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -161,7 +161,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_Catalogs.Manufacturers()
+        public void Undo_Template_Catalogs_Manufacturers()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -185,7 +185,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_Catalogs.AssociatedCosts()
+        public void Undo_Template_Catalogs_AssociatedCosts()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -209,7 +209,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_Catalogs.ConnectionTypes()
+        public void Undo_Template_Catalogs_ConnectionTypes()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -233,7 +233,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_Catalogs.ConduitTypes()
+        public void Undo_Template_Catalogs_ConduitTypes()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -262,7 +262,7 @@ namespace Tests
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
             ObservableCollection<TECTag> expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Template.Tags)
+            foreach (TECTag item in Template.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -270,12 +270,12 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.Tags.Add(edit);
+            Template.Catalogs.Tags.Add(edit);
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Tags;
+            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1001,7 +1001,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Template_Catalogs.Devices()
+        public void Redo_Template_Catalogs_Devices()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -1025,7 +1025,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Template_Catalogs.Manufacturers()
+        public void Redo_Template_Catalogs_Manufacturers()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
@@ -1057,9 +1057,9 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.Tags.Add(edit);
+            Template.Catalogs.Tags.Add(edit);
             var expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Template.Tags)
+            foreach (TECTag item in Template.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -1067,7 +1067,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Tags;
+            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
