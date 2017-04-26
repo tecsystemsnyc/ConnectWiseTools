@@ -630,7 +630,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleControllerChildren(newItem as TECController, item.Change);
             }
-            else if (newItem is TECDevice && (item.ReferenceObject is TECBid || item.ReferenceObject is TECTemplates))
+            else if (newItem is TECDevice && (item.ReferenceObject is TECCatalogs))
             {
                 handleDeviceChildren(newItem as TECDevice, item.Change);
             }
