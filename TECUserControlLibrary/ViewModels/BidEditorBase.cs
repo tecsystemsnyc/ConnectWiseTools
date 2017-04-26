@@ -118,13 +118,9 @@ namespace TECUserControlLibrary.ViewModels
         public BidEditorBase() : base()
         {
             isNew = true;
-
-            setupStatusBar();
-            SetBusyStatus("Initializing Program...");
-
+            
             setupCommands();
             setupTemplates();
-            getLogo();
             setupBid();
             setupMenu();
         }
@@ -212,44 +208,11 @@ namespace TECUserControlLibrary.ViewModels
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
-        private void setupStatusBar()
-        {
-            StatusBarVM = new StatusBarExtension();
-
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { StatusBarVM.Version = "Undeployed Version"; }
-
-            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-        }
+        
         #endregion
 
         #region Helper Functions
-
-        public void checkForOpenWith(string startupFile)
-        {
-            if (startupFile != "")
-            {
-                SetBusyStatus("Loading " + startupFile);
-                try
-                {
-                    loadFromPath(startupFile);
-                }
-                catch (Exception e)
-                {
-                    DebugHandler.LogError(e);
-                }
-                ResetStatus();
-            }
-        }
-
-        private void getLogo()
-        {
-            TECLogo = Path.GetTempFileName();
-
-            (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
-        }
+        
         override protected string getSavePath()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -288,10 +251,10 @@ namespace TECUserControlLibrary.ViewModels
                 saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            //saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
-            //saveFileDialog.DefaultExt = "rtf";
-            saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
-            saveFileDialog.DefaultExt = "docx";
+            saveFileDialog.Filter = "Rich Text Files (*.rtf)|*.rtf";
+            saveFileDialog.DefaultExt = "rtf";
+            //saveFileDialog.Filter = "Word Document (*.docx)|*.docx";
+            //saveFileDialog.DefaultExt = "docx";
             saveFileDialog.AddExtension = true;
 
             string path = null;
@@ -459,7 +422,6 @@ namespace TECUserControlLibrary.ViewModels
                 saveBidAs();
             }
         }
-
         private void saveBidAs()
         {
             //User choose path
@@ -592,7 +554,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected void loadBidFromPath(string path)
         {
-            //User choose path
             if (path != null)
             {
                 SetBusyStatus("Loading File: " + path, false);
@@ -834,31 +795,7 @@ namespace TECUserControlLibrary.ViewModels
 
             loadTemplates(TemplatesFilePath);
         }
-
-        private void UndoExecute()
-        {
-            stack.Undo();
-        }
-        private bool UndoCanExecute()
-        {
-            if (stack.UndoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
-        private void RedoExecute()
-        {
-            stack.Redo();
-        }
-        private bool RedoCanExecute()
-        {
-            if (stack.RedoStack.Count > 0)
-                return true;
-            else
-                return false;
-        }
-
+        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)

@@ -31,9 +31,6 @@ namespace TemplateBuilder.ViewModel
         {
             _templates = new TECTemplates();
            
-            TECLogo = Path.GetTempFileName();
-            (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
-
             TitleString = "Template Builder";
             
             setupScopeCollecion();
