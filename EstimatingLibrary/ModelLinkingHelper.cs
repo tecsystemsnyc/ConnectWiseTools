@@ -14,37 +14,33 @@ namespace EstimatingLibrary
         #region Public Methods
         public static void LinkBid(TECBid bid)
         {
+            linkCatalogs(bid.Catalogs);
             linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
             linkAllLocations(bid.Locations, bid.Systems);
-            linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
-            linkAllDevices(bid.Systems, bid.DeviceCatalog);
-            linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
+            linkAllDevices(bid.Systems, bid.Catalogs.Devices);
             linkTagsInBid(bid.Catalogs.Tags, bid);
-            linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
+            linkManufacturersWithControllers(bid.Catalogs.Manufacturers, bid.Controllers);
             linkAssociatedCostsWithScope(bid);
-            linkConduitTypeWithConnections(bid.ConduitTypes, bid.Controllers);
-            linkPanelTypesInPanel(bid.PanelTypeCatalog, bid.Panels);
+            linkConduitTypeWithConnections(bid.Catalogs.ConduitTypes, bid.Controllers);
+            linkPanelTypesInPanel(bid.Catalogs.PanelTypes, bid.Panels);
             linkControllersInPanels(bid.Controllers, bid.Panels);
             linkAllConnections(bid.Controllers, bid.Systems);
-            linkIOModules(bid.Controllers, bid.IOModuleCatalog);
-            linkManufacturersWithIOModules(bid.ManufacturerCatalog, bid.IOModuleCatalog);
-            linkAllConnectionTypes(bid.Controllers, bid.ConnectionTypes);
+            linkIOModules(bid.Controllers, bid.Catalogs.IOModules);
+            linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
         }
         public static void LinkTemplates(TECTemplates templates)
         {
-            linkAllDevicesFromSystems(templates.SystemTemplates, templates.DeviceCatalog);
-            linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.DeviceCatalog);
-            linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.DeviceCatalog);
-            linkManufacturersWithDevices(templates.ManufacturerCatalog, templates.DeviceCatalog);
-            linkConnectionTypeWithDevices(templates.ConnectionTypeCatalog, templates.DeviceCatalog);
-            linkTagsInTemplates(templates.Tags, templates);
-            linkManufacturersWithControllers(templates.ManufacturerCatalog, templates.ControllerTemplates);
+            linkCatalogs(templates.Catalogs);
+            linkAllDevicesFromSystems(templates.SystemTemplates, templates.Catalogs.Devices);
+            linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.Catalogs.Devices);
+            linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.Catalogs.Devices);
+            linkTagsInTemplates(templates.Catalogs.Tags, templates);
+            linkManufacturersWithControllers(templates.Catalogs.Manufacturers, templates.ControllerTemplates);
             linkAssociatedCostsWithScope(templates);
-            linkPanelTypesInPanel(templates.PanelTypeCatalog, templates.PanelTemplates);
+            linkPanelTypesInPanel(templates.Catalogs.PanelTypes, templates.PanelTemplates);
             linkControllersInPanels(templates.ControllerTemplates, templates.PanelTemplates);
             linkControlledScope(templates.ControlledScopeTemplates, templates);
-            linkIOModules(templates.ControllerTemplates, templates.IOModuleCatalog);
-            linkManufacturersWithIOModules(templates.ManufacturerCatalog, templates.IOModuleCatalog);
+            linkIOModules(templates.ControllerTemplates, templates.Catalogs.IOModules);
         }
         public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
             ObservableCollection<TECPanel> panels, object bidOrTemplates, Dictionary<Guid, Guid> guidDictionary = null)
@@ -101,6 +97,14 @@ namespace EstimatingLibrary
         #endregion
 
         #region Link Methods
+        static private void linkCatalogs(TECCatalogs catalogs)
+        {
+            linkConnectionTypeWithDevices(catalogs.ConnectionTypes, catalogs.Devices);
+            linkManufacturersWithDevices(catalogs.Manufacturers, catalogs.Devices);
+            linkManufacturersWithIOModules(catalogs.Manufacturers, catalogs.IOModules);
+
+        }
+
         static private void linkScopeChildren(TECScope scope, object bidOrTemp)
         {
             if (bidOrTemp is TECBid)
