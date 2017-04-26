@@ -195,12 +195,12 @@ namespace Tests
         //}
 
         [TestMethod]
-        public void Undo_Bid_DeviceCatalog()
+        public void Undo_Bid_Catalogs.Devices()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Bid.DeviceCatalog)
+            foreach (TECDevice item in Bid.Catalogs.Devices)
             {
                 expected.Add(item);
             }
@@ -209,23 +209,23 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.DeviceCatalog.Add(edit);
+            Bid.Catalogs.Devices.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Bid.DeviceCatalog;
+            ObservableCollection<TECDevice> actual = Bid.Catalogs.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
 
         [TestMethod]
-        public void Undo_Bid_ManufacturerCatalog()
+        public void Undo_Bid_Catalogs.Manufacturers()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECManufacturer> expected = new ObservableCollection<TECManufacturer>();
-            foreach (TECManufacturer item in Bid.ManufacturerCatalog)
+            foreach (TECManufacturer item in Bid.Catalogs.Manufacturers)
             {
                 expected.Add(item);
             }
@@ -234,12 +234,12 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.ManufacturerCatalog.Add(edit);
+            Bid.Catalogs.Manufacturers.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECManufacturer> actual = Bid.ManufacturerCatalog;
+            ObservableCollection<TECManufacturer> actual = Bid.Catalogs.Manufacturers;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -428,7 +428,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
-            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            foreach (TECPanelType item in Bid.Catalogs.PanelTypes)
             {
                 expected.Add(item);
             }
@@ -437,12 +437,12 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.PanelTypeCatalog.Add(edit);
+            Bid.Catalogs.PanelTypes.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            ObservableCollection<TECPanelType> actual = Bid.Catalogs.PanelTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1324,7 +1324,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Redo_Bid_DeviceCatalog()
+        public void Redo_Bid_Catalogs.Devices()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -1332,9 +1332,9 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.DeviceCatalog.Add(edit);
+            Bid.Catalogs.Devices.Add(edit);
             var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Bid.DeviceCatalog)
+            foreach (TECDevice item in Bid.Catalogs.Devices)
             {
                 expected.Add(item);
             }
@@ -1342,13 +1342,13 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Bid.DeviceCatalog;
+            ObservableCollection<TECDevice> actual = Bid.Catalogs.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
 
         [TestMethod]
-        public void Redo_Bid_ManufacturerCatalog()
+        public void Redo_Bid_Catalogs.Manufacturers()
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
@@ -1356,9 +1356,9 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.ManufacturerCatalog.Add(edit);
+            Bid.Catalogs.Manufacturers.Add(edit);
             var expected = new ObservableCollection<TECManufacturer>();
-            foreach (TECManufacturer item in Bid.ManufacturerCatalog)
+            foreach (TECManufacturer item in Bid.Catalogs.Manufacturers)
             {
                 expected.Add(item);
             }
@@ -1366,7 +1366,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECManufacturer> actual = Bid.ManufacturerCatalog;
+            ObservableCollection<TECManufacturer> actual = Bid.Catalogs.Manufacturers;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1476,9 +1476,9 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.PanelTypeCatalog.Add(edit);
+            Bid.Catalogs.PanelTypes.Add(edit);
             var expected = new ObservableCollection<TECPanelType>();
-            foreach (TECPanelType item in Bid.PanelTypeCatalog)
+            foreach (TECPanelType item in Bid.Catalogs.PanelTypes)
             {
                 expected.Add(item);
             }
@@ -1486,7 +1486,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPanelType> actual = Bid.PanelTypeCatalog;
+            ObservableCollection<TECPanelType> actual = Bid.Catalogs.PanelTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

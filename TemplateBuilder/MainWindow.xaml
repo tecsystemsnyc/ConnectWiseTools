@@ -95,7 +95,7 @@
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Devices">
-                    <grids:DevicesGridControl DevicesSource="{Binding Templates.DeviceCatalog}"
+                    <grids:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">

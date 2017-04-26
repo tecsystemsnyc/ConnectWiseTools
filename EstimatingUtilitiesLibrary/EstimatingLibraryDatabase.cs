@@ -40,42 +40,42 @@ namespace EstimatingUtilitiesLibrary
             watch = System.Diagnostics.Stopwatch.StartNew();
             //Update catalogs from templates.
             
-            foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+            foreach (TECManufacturer manufacturer in templates.Catalogs.Manufacturers)
             {
                 editObject(new StackItem(Change.Edit, bid, manufacturer));
                 editScopeChildrenRelations(manufacturer);
             }
             foreach (TECTag tag in templates.Tags)
             { editObject(new StackItem(Change.Edit, bid, tag)); }
-            foreach(TECConnectionType connectionType in templates.ConnectionTypeCatalog)
+            foreach(TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
             {
                 editObject(new StackItem(Change.Edit, bid, connectionType));
                 editScopeChildrenRelations(connectionType);
             }
-            foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in templates.Catalogs.ConduitTypes)
             {
                 editObject(new StackItem(Change.Edit, bid, conduitType));
                 editScopeChildrenRelations(conduitType);
             }
-            foreach(TECAssociatedCost cost in templates.AssociatedCostsCatalog)
+            foreach(TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
             {
                 editObject(new StackItem(Change.Edit, bid, cost));
                 editScopeChildrenRelations(cost);
             }
-            foreach(TECIOModule module in templates.IOModuleCatalog)
+            foreach(TECIOModule module in templates.Catalogs.IOModules)
             {
                 editObject(new StackItem(Change.Edit, bid, module));
                 editObject(new StackItem(Change.Edit, module, module.Manufacturer));
                 editScopeChildrenRelations(module);
             }
-            foreach (TECDevice device in templates.DeviceCatalog)
+            foreach (TECDevice device in templates.Catalogs.Devices)
             {
                 editObject(new StackItem(Change.Edit, bid, device));
                 editObject(new StackItem(Change.Edit, device, device.ConnectionType));
                 editObject(new StackItem(Change.Edit, device, device.Manufacturer));
                 editScopeChildrenRelations(device);
             }
-            foreach (TECPanelType panelType in templates.PanelTypeCatalog)
+            foreach (TECPanelType panelType in templates.Catalogs.PanelTypes)
             {
                 editObject(new StackItem(Change.Edit, bid, panelType));
                 editScopeChildrenRelations(panelType);
@@ -90,8 +90,8 @@ namespace EstimatingUtilitiesLibrary
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid);
             bid.ProposalScope = getAllProposalScope(bid.Systems);
-            bid.DeviceCatalog = getAllDevices();
-            bid.ManufacturerCatalog = getAllManufacturers();
+            bid.Catalogs.Devices = getAllDevices();
+            bid.Catalogs.Manufacturers = getAllManufacturers();
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
@@ -100,12 +100,12 @@ namespace EstimatingUtilitiesLibrary
             bid.Controllers = getControllers();
             bid.ConnectionTypes = getConnectionTypes();
             bid.ConduitTypes = getConduitTypes();
-            bid.AssociatedCostsCatalog = getAssociatedCosts();
+            bid.Catalogs.AssociatedCosts = getAssociatedCosts();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
-            bid.PanelTypeCatalog = getPanelTypes();
-            bid.IOModuleCatalog = getIOModules();
+            bid.Catalogs.PanelTypes = getPanelTypes();
+            bid.Catalogs.IOModules = getIOModules();
             watch.Stop();
             Console.WriteLine("Getting Bid Data: " + watch.ElapsedMilliseconds);
 
@@ -156,7 +156,7 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.DeviceCatalog = getAllDevices();
+            templates.Catalogs.Devices = getAllDevices();
             //watch.Stop();
             //Console.WriteLine("getAllDevices: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -164,7 +164,7 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getAllTags: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ManufacturerCatalog = getAllManufacturers();
+            templates.Catalogs.Manufacturers = getAllManufacturers();
             //watch.Stop();
             //Console.WriteLine("getAllManufacturers: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -172,15 +172,15 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ConnectionTypeCatalog = getConnectionTypes();
+            templates.Catalogs.ConnectionTypes = getConnectionTypes();
             //watch.Stop();
             //Console.WriteLine("getConnectionTypes: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ConduitTypeCatalog = getConduitTypes();
+            templates.Catalogs.ConduitTypes = getConduitTypes();
             //watch.Stop();
             //Console.WriteLine("getConduitTypes: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.AssociatedCostsCatalog = getAssociatedCosts();
+            templates.Catalogs.AssociatedCosts = getAssociatedCosts();
             //watch.Stop();
             //Console.WriteLine("getAssociatedCosts: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -196,7 +196,7 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.PanelTypeCatalog = getPanelTypes();
+            templates.Catalogs.PanelTypes = getPanelTypes();
             //watch.Stop();
             //Console.WriteLine("getPanelTypes: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -204,7 +204,7 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getControlledScope: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.IOModuleCatalog = getIOModules();
+            templates.Catalogs.IOModules = getIOModules();
             //watch.Stop();
             //Console.WriteLine("getIOModules: " + watch.ElapsedMilliseconds);
             
@@ -2216,7 +2216,7 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(system);
                 saveCompleteEquipment(system);
             }
-            foreach(TECManufacturer manufacturer in bid.ManufacturerCatalog)
+            foreach(TECManufacturer manufacturer in bid.Catalogs.Manufacturers)
             { addObject(new StackItem(Change.Add, bid, manufacturer)); }
             foreach(TECController controller in bid.Controllers)
             {
@@ -2224,7 +2224,7 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach (TECAssociatedCost associatedCost in bid.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost associatedCost in bid.Catalogs.AssociatedCosts)
             { addObject(new StackItem(Change.Add, bid, associatedCost)); }
             foreach (TECNote note in bid.Notes)
             { addObject(new StackItem(Change.Add, bid, note)); }
@@ -2259,7 +2259,7 @@ namespace EstimatingUtilitiesLibrary
                 addObject(new StackItem(Change.Add, bid, proposalScope));
                 saveCompleteProposalScope(proposalScope);
             }
-            foreach(TECDevice device in bid.DeviceCatalog)
+            foreach(TECDevice device in bid.Catalogs.Devices)
             {
                 addObject(new StackItem(Change.Add, bid, device));
                 saveScopeChildProperties(device);
@@ -2273,7 +2273,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(new StackItem(Change.Add, bid, wiring));
             }
-            foreach (TECPanelType panelType in bid.PanelTypeCatalog)
+            foreach (TECPanelType panelType in bid.Catalogs.PanelTypes)
             {
                 addObject(new StackItem(Change.Add, bid, panelType));
             }
@@ -2281,7 +2281,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, bid);
             }
-            foreach (TECIOModule ioModule in bid.IOModuleCatalog)
+            foreach (TECIOModule ioModule in bid.Catalogs.IOModules)
             {
                 saveCompleteIOModule(ioModule, bid);
             }
@@ -2311,11 +2311,11 @@ namespace EstimatingUtilitiesLibrary
                 saveDevicesInSubScope(subScope);
                 saveCompletePoints(subScope);
             }
-            foreach (TECDevice device in templates.DeviceCatalog)
+            foreach (TECDevice device in templates.Catalogs.Devices)
             {
                 saveDeviceInCatalog(device, templates);
             }
-            foreach (TECManufacturer manufacturer in templates.ManufacturerCatalog)
+            foreach (TECManufacturer manufacturer in templates.Catalogs.Manufacturers)
             { addObject(new StackItem(Change.Add, templates, manufacturer)); }
             foreach (TECController controller in templates.ControllerTemplates)
             {
@@ -2323,17 +2323,17 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach (TECConduitType conduitType in templates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in templates.Catalogs.ConduitTypes)
             {
                 addObject(new StackItem(Change.Add, templates, conduitType));
                 saveAssociatedCosts(conduitType);
             }
-            foreach (TECConnectionType connectionType in templates.ConnectionTypeCatalog)
+            foreach (TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
             {
                 addObject(new StackItem(Change.Add, templates, connectionType));
                 saveAssociatedCosts(connectionType);
             }
-            foreach (TECAssociatedCost associatedCost in templates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost associatedCost in templates.Catalogs.AssociatedCosts)
             { addObject(new StackItem(Change.Add, templates, associatedCost)); }
             foreach (TECMiscCost cost in templates.MiscCostTemplates)
             {
@@ -2343,7 +2343,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(new StackItem(Change.Add, templates, wiring));
             }
-            foreach (TECPanelType panelType in templates.PanelTypeCatalog)
+            foreach (TECPanelType panelType in templates.Catalogs.PanelTypes)
             {
                 addObject(new StackItem(Change.Add, templates, panelType));
             }
@@ -2355,7 +2355,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 saveFullControlledScope(conScope, templates);
             }
-            foreach(TECIOModule ioModule in templates.IOModuleCatalog)
+            foreach(TECIOModule ioModule in templates.Catalogs.IOModules)
             {
                 saveCompleteIOModule(ioModule, templates);
             }

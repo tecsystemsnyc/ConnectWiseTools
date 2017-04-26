@@ -204,7 +204,7 @@ namespace TECUserControlLibrary.ViewModels
             var noneConduit = new TECConduitType();
             noneConduit.Name = "None";
             ConduitTypeSelections.Add(noneConduit);
-            foreach (TECConduitType type in Templates.ConduitTypeCatalog)
+            foreach (TECConduitType type in Templates.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
             }
