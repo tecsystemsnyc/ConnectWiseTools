@@ -19,7 +19,7 @@ namespace EstimatingLibrary
             linkConnectionTypeWithDevices(bid.ConnectionTypes, bid.DeviceCatalog);
             linkAllDevices(bid.Systems, bid.DeviceCatalog);
             linkManufacturersWithDevices(bid.ManufacturerCatalog, bid.DeviceCatalog);
-            linkTagsInBid(bid.Tags, bid);
+            linkTagsInBid(bid.Catalogs.Tags, bid);
             linkManufacturersWithControllers(bid.ManufacturerCatalog, bid.Controllers);
             linkAssociatedCostsWithScope(bid);
             linkConduitTypeWithConnections(bid.ConduitTypes, bid.Controllers);

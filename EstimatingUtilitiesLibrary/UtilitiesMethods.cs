@@ -206,7 +206,7 @@ namespace EstimatingUtilitiesLibrary
             bid.PanelTypeCatalog = templates.PanelTypeCatalog;
             bid.ConduitTypes = templates.ConduitTypeCatalog;
             bid.ConnectionTypes = templates.ConnectionTypeCatalog;
-            bid.Tags = templates.Tags;
+            bid.Catalogs.Tags = templates.Tags;
             bid.IOModuleCatalog = templates.IOModuleCatalog;
             bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
         }

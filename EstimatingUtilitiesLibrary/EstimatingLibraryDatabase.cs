@@ -93,7 +93,7 @@ namespace EstimatingUtilitiesLibrary
             bid.DeviceCatalog = getAllDevices();
             bid.ManufacturerCatalog = getAllManufacturers();
             bid.Locations = getAllLocations();
-            bid.Tags = getAllTags();
+            bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
@@ -2242,7 +2242,7 @@ namespace EstimatingUtilitiesLibrary
                 addObject(new StackItem(Change.Add, bid, connectionType));
                 saveScopeChildProperties(connectionType);
             }
-            foreach (TECTag tag in bid.Tags)
+            foreach (TECTag tag in bid.Catalogs.Tags)
             { addObject(new StackItem(Change.Add, bid, tag)); }
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {

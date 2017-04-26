@@ -67,8 +67,8 @@ namespace Tests
             var tag2 = new TECTag();
             tag2.Text = "Test Tag";
 
-            bid.Tags.Add(tag1);
-            bid.Tags.Add(tag2);
+            bid.Catalogs.Tags.Add(tag1);
+            bid.Catalogs.Tags.Add(tag2);
 
 
             //Associated Costs
