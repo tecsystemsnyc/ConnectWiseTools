@@ -3,6 +3,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
 using System;
 using System.ComponentModel;
 using System.Deployment.Application;
@@ -205,8 +206,6 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-        protected abstract string getSavePath();
-        protected abstract string getLoadPath();
         protected abstract void loadFromPath(string path);
 
         protected void SetBusyStatus(string statusText, bool userCanInteract = true)
@@ -223,6 +222,57 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #endregion //Helper Functions
+
+        #region Get Path Methods
+
+        protected string getSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = null)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (initialDirectory != null && !isNew)
+            {
+                saveFileDialog.InitialDirectory = initialDirectory;
+            }
+            else
+            {
+                saveFileDialog.InitialDirectory = fileParams.DefaultDirectory;
+            }
+            saveFileDialog.FileName = defaultFileName;
+            saveFileDialog.Filter = fileParams.Filter;
+            saveFileDialog.DefaultExt = fileParams.DefaultExtension;
+            saveFileDialog.AddExtension = true;
+
+            string savePath = null;
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                savePath = saveFileDialog.FileName;
+            }
+            return savePath;
+        }
+
+        protected string getLoadPath(FileDialogParameters fileParams, string initialDirectory = null)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (initialDirectory != null && !isNew)
+            {
+                openFileDialog.InitialDirectory = initialDirectory;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = fileParams.DefaultDirectory;
+            }
+            openFileDialog.Filter = fileParams.Filter;
+            openFileDialog.DefaultExt = fileParams.DefaultExtension;
+            openFileDialog.AddExtension = true;
+
+            string savePath = null;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                savePath = openFileDialog.FileName;
+            }
+            return savePath;
+        }
+
+        #endregion
 
         #region Commands
         protected abstract void NewExecute();
