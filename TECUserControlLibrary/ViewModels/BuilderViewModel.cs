@@ -27,6 +27,12 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Properties
         protected TECScopeManager workingScopeManager;
+        protected FileDialogParameters workingFileParameters;
+
+        abstract protected string defaultSaveFileName
+        {
+            get;
+        }
 
         protected bool _isReady;
         public bool IsReady
@@ -273,7 +279,7 @@ namespace TECUserControlLibrary.ViewModels
         private void saveAs()
         {
             //User choose path
-            string path = getSavePath();
+            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 saveFilePath = path;
@@ -315,7 +321,7 @@ namespace TECUserControlLibrary.ViewModels
             bool saveSuccessful = false;
 
             //User choose path
-            string path = getSavePath();
+            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 saveFilePath = path;

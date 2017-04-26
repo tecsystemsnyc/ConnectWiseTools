@@ -85,6 +85,28 @@ namespace TemplateBuilder.ViewModel
         }
         private string _titleString;
 
+        protected override string ScopeDirectoryPath
+        {
+            get
+            {
+                return Properties.Settings.Default.ScopeDirectoryPath;
+            }
+
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        protected override string defaultSaveFileName
+        {
+            get
+            {
+                return "Templates";
+            }
+        }
+
         #region Interface Properties
 
         #region Tab Indexes

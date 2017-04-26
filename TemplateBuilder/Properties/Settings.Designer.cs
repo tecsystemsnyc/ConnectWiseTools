@@ -34,5 +34,17 @@ namespace TemplateBuilder.Properties {
                 this["TemplatesFilePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScopeDirectoryPath {
+            get {
+                return ((string)(this["ScopeDirectoryPath"]));
+            }
+            set {
+                this["ScopeDirectoryPath"] = value;
+            }
+        }
     }
 }

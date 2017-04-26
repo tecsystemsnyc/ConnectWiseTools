@@ -38,6 +38,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        protected override string defaultSaveFileName
+        {
+            get
+            {
+                return (Bid.BidNumber + " " + Bid.Name);
+            }
+        }
+
         private TECBid _bid;
         public TECBid Bid
         {
@@ -114,6 +122,8 @@ namespace TECUserControlLibrary.ViewModels
         public BidEditorBase() : base()
         {
             isNew = true;
+
+            workingFileParameters = BidFileParameters;
             
             setupCommands();
             setupTemplates();
@@ -156,7 +166,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    TemplatesFilePath = getLoadTemplatesPath();
+                    TemplatesFilePath = getLoadPath(TemplatesFileParameters);
 
                     if (TemplatesFilePath != null)
                     {
@@ -230,14 +240,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        
-
-        
-
         private void loadBid()
         {
             //User choose path
-            string path = getLoadPath();
+            string path = getLoadPath(BidFileParameters, ScopeDirectoryPath);
             if (path != null)
             {
                 loadBidFromPath(path);
