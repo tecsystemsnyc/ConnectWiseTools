@@ -56,7 +56,7 @@ namespace EstimatingLibrary
                 var bid = bidOrTemplates as TECBid;
                 deviceCatalog = bid.DeviceCatalog;
                 panelTypes = bid.PanelTypeCatalog;
-                conduitTypes = bid.ConduitTypes;
+                conduitTypes = bid.Catalogs.ConduitTypes;
                 manufacturers = bid.ManufacturerCatalog;
                 ioModules = bid.IOModuleCatalog;
             }
@@ -466,9 +466,9 @@ namespace EstimatingLibrary
                 TECBid bid = bidOrTemp as TECBid;
                 foreach (TECSystem system in bid.Systems)
                 { linkAssociatedCostsInSystem(bid.AssociatedCostsCatalog, system); }
-                foreach (TECConnectionType scope in bid.ConnectionTypes)
+                foreach (TECConnectionType scope in bid.Catalogs.ConnectionTypes)
                 { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
-                foreach (TECConduitType scope in bid.ConduitTypes)
+                foreach (TECConduitType scope in bid.Catalogs.ConduitTypes)
                 { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
                 foreach (TECController scope in bid.Controllers)
                 { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }

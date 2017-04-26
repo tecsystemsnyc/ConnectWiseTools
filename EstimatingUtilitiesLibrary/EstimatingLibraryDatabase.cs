@@ -45,7 +45,7 @@ namespace EstimatingUtilitiesLibrary
                 editObject(new StackItem(Change.Edit, bid, manufacturer));
                 editScopeChildrenRelations(manufacturer);
             }
-            foreach (TECTag tag in templates.Tags)
+            foreach (TECTag tag in templates.Catalogs.Tags)
             { editObject(new StackItem(Change.Edit, bid, tag)); }
             foreach(TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
             {
@@ -98,8 +98,8 @@ namespace EstimatingUtilitiesLibrary
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
             bid.Controllers = getControllers();
-            bid.ConnectionTypes = getConnectionTypes();
-            bid.ConduitTypes = getConduitTypes();
+            bid.Catalogs.ConnectionTypes = getConnectionTypes();
+            bid.Catalogs.ConduitTypes = getConduitTypes();
             bid.Catalogs.AssociatedCosts = getAssociatedCosts();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
@@ -160,7 +160,7 @@ namespace EstimatingUtilitiesLibrary
             //watch.Stop();
             //Console.WriteLine("getAllDevices: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.Tags = getAllTags();
+            templates.Catalogs.Tags = getAllTags();
             //watch.Stop();
             //Console.WriteLine("getAllTags: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -2232,12 +2232,12 @@ namespace EstimatingUtilitiesLibrary
             { addObject(new StackItem(Change.Add, bid, exclusion)); }
             foreach (TECLocation location in bid.Locations)
             { addObject(new StackItem(Change.Add, bid, location)); }
-            foreach (TECConduitType conduitType in bid.ConduitTypes)
+            foreach (TECConduitType conduitType in bid.Catalogs.ConduitTypes)
             {
                 addObject(new StackItem(Change.Add, bid, conduitType));
                 saveScopeChildProperties(conduitType);
             }
-            foreach (TECConnectionType connectionType in bid.ConnectionTypes)
+            foreach (TECConnectionType connectionType in bid.Catalogs.ConnectionTypes)
             {
                 addObject(new StackItem(Change.Add, bid, connectionType));
                 saveScopeChildProperties(connectionType);
@@ -2290,7 +2290,7 @@ namespace EstimatingUtilitiesLibrary
         {
             addObject(new StackItem(Change.Add, templates, templates));
             addObject(new StackItem(Change.Add, templates, templates.Labor));
-            foreach(TECTag tag in templates.Tags)
+            foreach(TECTag tag in templates.Catalogs.Tags)
             { addObject(new StackItem(Change.Add, templates, tag)); }
             foreach (TECSystem system in templates.SystemTemplates)
             {
