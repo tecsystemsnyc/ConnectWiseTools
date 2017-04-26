@@ -657,7 +657,6 @@ namespace EstimatingLibrary
         }
         private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //NotifyPropertyChanged("ChildChanged", this, sender);
             if (sender is TECLabor)
             {
                 updateFromLabor();
