@@ -96,14 +96,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private TECMenuItem exportExcelMenuItem;
-        public ICommand ExportExcelCommand
-        {
-            set
-            {
-                exportExcelMenuItem.Command = value;
-            }
-        }
+        //private TECMenuItem exportExcelMenuItem;
+        //public ICommand ExportExcelCommand
+        //{
+        //    set
+        //    {
+        //        exportExcelMenuItem.Command = value;
+        //    }
+        //}
 
         private TECMenuItem undoMenuItem;
         public ICommand UndoCommand
