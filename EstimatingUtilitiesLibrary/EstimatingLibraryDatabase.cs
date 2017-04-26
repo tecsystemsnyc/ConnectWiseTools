@@ -267,7 +267,7 @@ namespace EstimatingUtilitiesLibrary
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
-            scopeManager.Labor = getLabor();
+            scopeManager.Labor = getLaborConsts(scopeManager);
         }
         static private TECBid getBidInfo()
         {
