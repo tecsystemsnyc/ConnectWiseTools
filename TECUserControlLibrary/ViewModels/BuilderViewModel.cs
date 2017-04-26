@@ -190,7 +190,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Helper Functions
-
         private void checkForOpenWith(string startupFile)
         {
             if (startupFile != "")
@@ -246,9 +245,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (!UtilitiesMethods.IsFileLocked(saveFilePath))
                     {
                         try
-                        {
-                            EstimatingLibraryDatabase.Update(saveFilePath, stackToSave);
-                        }
+                        { EstimatingLibraryDatabase.Update(saveFilePath, stackToSave); }
                         catch (Exception ex)
                         {
                             DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
@@ -388,11 +385,80 @@ namespace TECUserControlLibrary.ViewModels
 
             return saveSuccessful;
         }
+        protected void load()
+        {
+            string path = getLoadPath();
+            if (path != null)
+            {
+                SetBusyStatus("Loading File: " + path, false);
+                TECScopeManager loadingScopeManager = null;
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    saveFilePath = path;
+                    ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        loadingScopeManager = EstimatingLibraryDatabase.Load(path);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    if(loadingScopeManager == null)
+                    {
+                        workingScopeManager = loadingScopeManager;
+                    }
+                    
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+            }
+        }
         #endregion //Helper Functions
 
         #region Commands
         protected abstract void NewExecute();
-        protected abstract void LoadExecute();
+        protected void LoadExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
+            if (stack.SaveStack.Count > 0)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (saveSynchronously())
+                    {
+                        load();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save unsuccessful. File not loaded.");
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    load();
+                }
+            }
+            else
+            {
+                load();
+            }
+
+        }
         protected void SaveExecute()
         {
             if (!IsReady)

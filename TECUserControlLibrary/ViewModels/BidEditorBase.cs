@@ -182,7 +182,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = new TECBid();
             Bid.Labor.UpdateConstants(Templates.Labor);
-            UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+            var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
+            Bid.Catalogs = newCatalogs;
             saveFilePath = null;
         }
         protected override void setupMenu()
@@ -377,51 +378,8 @@ namespace TECUserControlLibrary.ViewModels
                 ResetStatus();
             }
         }
-
         
-
         
-
-        private void loadBid()
-        {
-            //User choose path
-            string path = getLoadPath();
-            if (path != null)
-            {
-                loadBidFromPath(path);
-            }
-        }
-        protected void loadBidFromPath(string path)
-        {
-            if (path != null)
-            {
-                SetBusyStatus("Loading File: " + path, false);
-                TECBid loadingBid = new TECBid();
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    bidDBFilePath = path;
-                    ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        loadingBid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    Bid = loadingBid;
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-            }
-        }
         private void loadTemplates(string TemplatesFilePath)
         {
             var loadedTemplates = new TECTemplates();
@@ -434,7 +392,6 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-
                         loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
                     }
                     else
@@ -446,7 +403,8 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     Templates = loadedTemplates;
-                    UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                    var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
+                    Bid.Catalogs = newCatalogs;
                     templatesLoaded = true;
                     ResetStatus();
                 };
@@ -505,40 +463,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        override protected void LoadExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-
-            if (stack.SaveStack.Count > 0)
-            {
-                string message = "Would you like to save your changes before loading?";
-                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (saveSynchronously())
-                    {
-                        loadBid();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Save unsuccessful. File not loaded.");
-                    }
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    loadBid();
-                }
-            }
-            else
-            {
-                loadBid();
-            }
-            
-        }
+        
         
         private void DocumentExecute()
         {
@@ -633,8 +558,9 @@ namespace TECUserControlLibrary.ViewModels
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
 
-                        Templates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
-                        UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
+                        Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath);
+                        var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
+                        Bid.Catalogs = newCatalogs;
                         templatesLoaded = true;
                     }
                     else

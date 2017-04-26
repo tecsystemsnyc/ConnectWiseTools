@@ -199,16 +199,42 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
 
-        public static void AddCatalogsToBid(TECBid bid, TECTemplates templates)
+        public static TECCatalogs UnionizeCatalogs(TECCatalogs catalog1, TECCatalogs catalog2)
         {
-            bid.Catalogs.Devices = templates.Catalogs.Devices;
-            bid.Catalogs.Manufacturers = templates.Catalogs.Manufacturers;
-            bid.Catalogs.PanelTypes = templates.Catalogs.PanelTypes;
-            bid.Catalogs.ConduitTypes = templates.Catalogs.ConduitTypes;
-            bid.Catalogs.ConnectionTypes = templates.Catalogs.ConnectionTypes;
-            bid.Catalogs.Tags = templates.Catalogs.Tags;
-            bid.Catalogs.IOModules = templates.Catalogs.IOModules;
-            bid.Catalogs.AssociatedCosts = templates.Catalogs.AssociatedCosts;
+            TECCatalogs outCatalogs = new TECCatalogs();
+            outCatalogs.Devices = unionizeScope(catalog1.Devices, catalog2.Devices);
+            outCatalogs.Manufacturers = unionizeScope(catalog1.Manufacturers, catalog2.Manufacturers);
+            outCatalogs.ConnectionTypes = unionizeScope(catalog1.ConnectionTypes, catalog2.ConnectionTypes);
+            outCatalogs.ConduitTypes = unionizeScope(catalog1.ConduitTypes, catalog2.ConduitTypes);
+            outCatalogs.PanelTypes = unionizeScope(catalog1.PanelTypes, catalog2.PanelTypes);
+            outCatalogs.IOModules = unionizeScope(catalog1.IOModules, catalog2.IOModules);
+            outCatalogs.Tags = unionizeScope(catalog1.Tags, catalog2.Tags);
+            outCatalogs.AssociatedCosts = unionizeScope(catalog1.AssociatedCosts, catalog2.AssociatedCosts);
+            return outCatalogs;
+
+        }
+        private static ObservableCollection<T> unionizeScope<T>(ObservableCollection<T> scope1, ObservableCollection<T> scope2)
+        {
+            ObservableCollection<T> outScope = new ObservableCollection<T>();
+            foreach(T scope in scope1)
+            {
+                foreach(T otherScope in scope2)
+                {
+                    if((scope as TECScope).Guid == (scope as TECScope).Guid)
+                    {
+                        outScope.Add(otherScope);
+                        break;
+                    }
+                }
+            }
+            foreach(T scope in scope2)
+            {
+                if (!outScope.Contains(scope))
+                {
+                    outScope.Add(scope);
+                }
+            }
+            return outScope;
         }
 
         public static bool IsLowerVersion(string currentVersion, string sampleVersion)

@@ -157,6 +157,38 @@ namespace EstimatingUtilitiesLibrary
 
             File.Delete(tempPath);
         }
+        static public void UpdateCatalogs(string path, TECTemplates templates)
+        {
+            SQLiteDB = new SQLiteDatabase(path);
+            checkAndUpdateDB(typeof(TECBid));
+            TECBid bid = getBidInfo();
+            updateCatalogs(bid, templates);
+
+            getScopeManagerProperties(bid);
+            bid.Parameters = getBidParameters(bid);
+            bid.ScopeTree = getBidScopeBranches();
+            bid.Systems = getAllSystemsInBid(bid);
+            bid.ProposalScope = getAllProposalScope(bid.Systems);
+            bid.Locations = getAllLocations();
+            bid.Catalogs.Tags = getAllTags();
+            bid.Notes = getNotes();
+            bid.Exclusions = getExclusions();
+            bid.Drawings = getDrawings();
+            bid.Controllers = getControllers();
+            bid.MiscWiring = getMiscWiring();
+            bid.MiscCosts = getMiscCosts();
+            bid.Panels = getPanels();
+
+            ModelLinkingHelper.LinkBid(bid);
+            getUserAdjustments(bid);
+            //Breaks Visual Scope in a page
+            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+
+            SQLiteDB.Connection.Close();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
         #endregion Public Functions
         
         #region Loading from DB Methods
