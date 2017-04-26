@@ -201,7 +201,7 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             var outTemplate = new TECTemplates(Guid);
-
+            outTemplate._catalogs = this.Catalogs.Copy() as TECCatalogs;
             if (_labor != null)
             {
                 outTemplate._labor = this.Labor;

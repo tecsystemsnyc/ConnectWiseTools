@@ -720,6 +720,7 @@ namespace EstimatingLibrary
             bid._estimator = this.Estimator;
 
             bid._labor = this.Labor.Copy() as TECLabor;
+            bid._catalogs = this.Catalogs.Copy() as TECCatalogs;
             bid._parameters = this.Parameters.Copy() as TECBidParameters;
             bid.Parameters.PropertyChanged += bid.objectPropertyChanged;
             bid.Labor.PropertyChanged += bid.objectPropertyChanged;
