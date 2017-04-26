@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Deployment.Application;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.ViewModelExtensions;
 
@@ -23,6 +24,8 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
+        protected TECScopeManager workingScopeManager;
+
         protected bool _isReady;
         public bool IsReady
         {
@@ -82,8 +85,14 @@ namespace TECUserControlLibrary.ViewModels
         #region Fields
         protected ChangeStack stack;
         public string startupFile;
+        protected string saveFilePath;
+        abstract protected string ScopeDirectoryPath
+        {
+            get;
+            set;
+        }
         #endregion
-        
+
         #region View Models
         public MenuViewModel MenuVM { get; set; }
         public StatusBarExtension StatusBarVM { get; set; }
@@ -174,13 +183,186 @@ namespace TECUserControlLibrary.ViewModels
             UserCanInteract = true;
         }
 
+        protected void save()
+        {
+            if (saveFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + saveFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(saveFilePath))
+                    {
+                        try
+                        {
+                            EstimatingLibraryDatabase.Update(saveFilePath, stackToSave);
+                        }
+                        catch (Exception ex)
+                        {
+                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                            EstimatingLibraryDatabase.SaveNew(saveFilePath, workingScopeManager);
+                        }
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + saveFilePath + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                saveAs();
+            }
+        }
+        private void saveAs()
+        {
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                saveFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) =>
+                {
+                    if (!UtilitiesMethods.IsFileLocked(path))
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                        //Create new database
+                        EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    }
+                };
+                worker.RunWorkerCompleted += (s, e) =>
+                {
+                    ResetStatus();
+                    isNew = false;
+                };
+
+                worker.RunWorkerAsync();
+
+            }
+
+        }
+        private bool saveAsSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            //User choose path
+            string path = getSavePath();
+            if (path != null)
+            {
+                saveFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path);
+
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                    saveSuccessful = false;
+                }
+
+
+            }
+
+            return saveSuccessful;
+        }
+        private bool saveSynchronously()
+        {
+            bool saveSuccessful = false;
+
+            if (saveFilePath != null)
+            {
+                SetBusyStatus("Saving to path: " + saveFilePath);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                if (!UtilitiesMethods.IsFileLocked(saveFilePath))
+                {
+                    try
+                    {
+                        EstimatingLibraryDatabase.Update(saveFilePath, stackToSave);
+                        saveSuccessful = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
+                        EstimatingLibraryDatabase.SaveNew(saveFilePath, workingScopeManager);
+                    }
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + saveFilePath + " File is open elsewhere.");
+                }
+
+            }
+            else
+            {
+                if (saveAsSynchronously())
+                {
+                    saveSuccessful = true;
+                }
+                else
+                {
+                    saveSuccessful = false;
+                }
+            }
+
+            return saveSuccessful;
+        }
         #endregion //Helper Functions
 
         #region Commands
         protected abstract void NewExecute();
         protected abstract void LoadExecute();
-        protected abstract void SaveExecute();
-        protected abstract void SaveAsExecute();
+        protected void SaveExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            save();
+        }
+        protected void SaveAsExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            saveAs();
+        }
 
         private void UndoExecute()
         {

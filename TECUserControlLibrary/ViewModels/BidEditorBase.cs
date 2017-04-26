@@ -91,11 +91,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        abstract protected string ScopeDirectoryPath
-        {
-            get;
-            set;
-        }
+        
         #endregion
 
         #region Command Properties
@@ -107,11 +103,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand RefreshTemplatesCommand { get; private set; }
         #endregion
-
-        #region Fields
-        private string bidDBFilePath;
-        #endregion
-    
+        
         #region Delgates
         public Action BidSet;
         public Action TemplatesLoadedSet;
@@ -191,7 +183,7 @@ namespace TECUserControlLibrary.ViewModels
             Bid = new TECBid();
             Bid.Labor.UpdateConstants(Templates.Labor);
             UtilitiesMethods.AddCatalogsToBid(Bid, Templates);
-            bidDBFilePath = null;
+            saveFilePath = null;
         }
         protected override void setupMenu()
         {
@@ -373,7 +365,7 @@ namespace TECUserControlLibrary.ViewModels
             if (path != null)
             {
                 SetBusyStatus("Loading " + path);
-                bidDBFilePath = path;
+                saveFilePath = path;
                 ScopeDirectoryPath = Path.GetDirectoryName(path);
 
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -386,166 +378,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void saveBid()
-        {
-            if (bidDBFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
+        
 
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                    {
-                        try
-                        {
-                            EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        }
-                        catch (Exception ex)
-                        {
-                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                        }
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                saveBidAs();
-            }
-        }
-        private void saveBidAs()
-        {
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                bidDBFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-
-            }
-
-        }
-
-        private bool saveAsSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                bidDBFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    //Create new database
-                    EstimatingLibraryDatabase.SaveBidToNewDB(path, Bid);
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    saveSuccessful = false;
-                }
-
-
-            }
-
-            return saveSuccessful;
-        }
-
-        private bool saveSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            if (bidDBFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + bidDBFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                if (!UtilitiesMethods.IsFileLocked(bidDBFilePath))
-                {
-                    try
-                    {
-                        EstimatingLibraryDatabase.UpdateBidToDB(bidDBFilePath, stackToSave);
-                        saveSuccessful = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
-                        EstimatingLibraryDatabase.SaveBidToNewDB(bidDBFilePath, Bid);
-                    }
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + bidDBFilePath + " File is open elsewhere.");
-                }
-
-            }
-            else
-            {
-                if (saveAsSynchronously())
-                {
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    saveSuccessful = false;
-                }
-            }
-
-            return saveSuccessful;
-        }
+        
 
         private void loadBid()
         {
@@ -704,26 +539,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        override protected void SaveExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-
-            saveBid();
-            
-        }
-        override protected void SaveAsExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            saveBidAs();
-        }
+        
         private void DocumentExecute()
         {
             string path = getDocumentSavePath();
