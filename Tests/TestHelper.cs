@@ -163,14 +163,14 @@ namespace Tests
             conduitType1.Cost = 13;
             conduitType1.Labor = 14;
 
-            bid.ConduitTypes.Add(conduitType1);
+            bid.Catalogs.ConduitTypes.Add(conduitType1);
 
             var conduitType2 = new TECConduitType();
             conduitType2.Name = "Test Conduit 2";
             conduitType2.Cost = 13;
             conduitType2.Labor = 14;
 
-            bid.ConduitTypes.Add(conduitType2);
+            bid.Catalogs.ConduitTypes.Add(conduitType2);
            
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
@@ -181,8 +181,8 @@ namespace Tests
             var connectionType2 = new TECConnectionType();
             connectionType2.Name = "FourC18";
 
-            bid.ConnectionTypes.Add(connectionType1);
-            bid.ConnectionTypes.Add(connectionType2);
+            bid.Catalogs.ConnectionTypes.Add(connectionType1);
+            bid.Catalogs.ConnectionTypes.Add(connectionType2);
 
             //Devices
             TECDevice device1 = new TECDevice(Guid.NewGuid());
@@ -383,11 +383,11 @@ namespace Tests
             TECTag devTag = new TECTag();
             devTag.Text = "Device Tag";
 
-            templates.Tags.Add(testTag);
-            templates.Tags.Add(sysTag);
-            templates.Tags.Add(equipTag);
-            templates.Tags.Add(ssTag);
-            templates.Tags.Add(devTag);
+            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Tags.Add(sysTag);
+            templates.Catalogs.Tags.Add(equipTag);
+            templates.Catalogs.Tags.Add(ssTag);
+            templates.Catalogs.Tags.Add(devTag);
 
             //Manufacturers
             TECManufacturer testMan = new TECManufacturer();

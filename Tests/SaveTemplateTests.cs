@@ -1939,14 +1939,14 @@ namespace Tests
             expectedModule.Cost = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
 
-            templates.Catalogs.IOModuless.Add(expectedModule);
+            templates.Catalogs.IOModules.Add(expectedModule);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
             {
                 if (cost.Guid == expectedModule.Guid)
                 {
@@ -1964,33 +1964,33 @@ namespace Tests
         public void Save_Templates_Remove_IOModule()
         {
             //Act
-            TECIOModule costToRemove = templates.Catalogs.IOModuless[0];
-            templates.Catalogs.IOModuless.Remove(costToRemove);
+            TECIOModule costToRemove = templates.Catalogs.IOModules[0];
+            templates.Catalogs.IOModules.Remove(costToRemove);
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             //Assert
-            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual(templates.Catalogs.IOModuless.Count, actualTemplates.Catalogs.IOModuless.Count);
+            Assert.AreEqual(templates.Catalogs.IOModules.Count, actualTemplates.Catalogs.IOModules.Count);
         }
 
         [TestMethod]
         public void Save_Templates_IOModule_Name()
         {
             //Act
-            TECIOModule expectedCost = templates.Catalogs.IOModuless[0];
+            TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Name = "Test Save IOModule Name";
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2007,14 +2007,14 @@ namespace Tests
         public void Save_Templates_IOModule_Cost()
         {
             //Act
-            TECIOModule expectedCost = templates.Catalogs.IOModuless[0];
+            TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.UpdateTemplatesToDB(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
 
             TECIOModule actualCost = null;
-            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModuless)
+            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
