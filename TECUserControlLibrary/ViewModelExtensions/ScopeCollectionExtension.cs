@@ -987,7 +987,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             TECTag newTag = new TECTag();
             newTag.Text = TagName;
-            Templates.Tags.Add(newTag);
+            Templates.Catalogs.Tags.Add(newTag);
         }
         private bool canAddTag()
         {
@@ -1262,9 +1262,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.SystemTemplates.CollectionChanged -= SystemTemplates_CollectionChanged;
                 Templates.EquipmentTemplates.CollectionChanged -= EquipmentTemplates_CollectionChanged;
                 Templates.SubScopeTemplates.CollectionChanged -= SubScopeTemplates_CollectionChanged;
-                Templates.Catalogs.Devices.CollectionChanged -= Catalogs.Devices_CollectionChanged;
+                Templates.Catalogs.Devices.CollectionChanged -= Devices_CollectionChanged;
                 Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
-                Templates.Catalogs.AssociatedCosts.CollectionChanged -= Catalogs.AssociatedCosts_CollectionChanged;
+                Templates.Catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
                 Templates.ControlledScopeTemplates.CollectionChanged -= ControlledScopeTemplates_CollectionChanged;
                 Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
                 Templates.MiscWiringTemplates.CollectionChanged -= MiscWiringTemplates_CollectionChanged;
@@ -1277,9 +1277,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.SystemTemplates.CollectionChanged += SystemTemplates_CollectionChanged;
             Templates.EquipmentTemplates.CollectionChanged += EquipmentTemplates_CollectionChanged;
             Templates.SubScopeTemplates.CollectionChanged += SubScopeTemplates_CollectionChanged;
-            Templates.Catalogs.Devices.CollectionChanged += Catalogs.Devices_CollectionChanged;
+            Templates.Catalogs.Devices.CollectionChanged += Devices_CollectionChanged;
             Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
-            Templates.Catalogs.AssociatedCosts.CollectionChanged += Catalogs.AssociatedCosts_CollectionChanged;
+            Templates.Catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             Templates.ControlledScopeTemplates.CollectionChanged += ControlledScopeTemplates_CollectionChanged;
             Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
             Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
@@ -1352,7 +1352,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private void Catalogs.Devices_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Devices_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -1388,7 +1388,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private void Catalogs.AssociatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void AssociatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

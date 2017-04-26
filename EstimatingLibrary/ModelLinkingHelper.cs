@@ -43,54 +43,25 @@ namespace EstimatingLibrary
             linkIOModules(templates.ControllerTemplates, templates.Catalogs.IOModules);
         }
         public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
-            ObservableCollection<TECPanel> panels, object bidOrTemplates, Dictionary<Guid, Guid> guidDictionary = null)
+            ObservableCollection<TECPanel> panels, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            ObservableCollection<TECDevice> deviceCatalog = new ObservableCollection<TECDevice>();
-            ObservableCollection<TECPanelType> panelTypes = new ObservableCollection<TECPanelType>();
-            ObservableCollection<TECConduitType> conduitTypes = new ObservableCollection<TECConduitType>();
-            ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
-            ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
-
-            if(bidOrTemplates is TECBid)
-            {
-                var bid = bidOrTemplates as TECBid;
-                deviceCatalog = bid.DeviceCatalog;
-                panelTypes = bid.PanelTypeCatalog;
-                conduitTypes = bid.ConduitTypes;
-                manufacturers = bid.ManufacturerCatalog;
-                ioModules = bid.IOModuleCatalog;
-            }
-            else if(bidOrTemplates is TECTemplates)
-            {
-                var templates = bidOrTemplates as TECTemplates;
-                deviceCatalog = templates.DeviceCatalog;
-                panelTypes = templates.PanelTypeCatalog;
-                conduitTypes = templates.ConduitTypeCatalog;
-                manufacturers = templates.ManufacturerCatalog;
-                ioModules = templates.IOModuleCatalog;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            linkAllDevicesFromSystems(systems, deviceCatalog);
-            linkPanelTypesInPanel(panelTypes, panels);
-            linkConduitTypeWithConnections(conduitTypes, controllers);
-            linkManufacturersWithControllers(manufacturers, controllers);
-            linkIOModules(controllers, ioModules);
+            linkAllDevicesFromSystems(systems, scopeManager.Catalogs.Devices);
+            linkPanelTypesInPanel(scopeManager.Catalogs.PanelTypes, panels);
+            linkConduitTypeWithConnections(scopeManager.Catalogs.ConduitTypes, controllers);
+            linkManufacturersWithControllers(scopeManager.Catalogs.Manufacturers, controllers);
+            linkIOModules(controllers, scopeManager.Catalogs.IOModules);
             foreach (TECSystem sys in systems)
             {
-                linkScopeChildrenInSystem(sys, bidOrTemplates);
+                linkScopeChildrenInSystem(sys, scopeManager);
             }
             linkControllersInPanels(controllers, panels, guidDictionary);
             foreach (TECController control in controllers)
             {
-                linkScopeChildren(control, bidOrTemplates);
+                linkScopeChildren(control, scopeManager);
             }
             foreach (TECPanel panel in panels)
             {
-                linkScopeChildren(panel, bidOrTemplates);
+                linkScopeChildren(panel, scopeManager);
             }
             linkAllConnections(controllers, systems, guidDictionary);
         }
@@ -105,34 +76,24 @@ namespace EstimatingLibrary
 
         }
 
-        static private void linkScopeChildren(TECScope scope, object bidOrTemp)
+        static private void linkScopeChildren(TECScope scope, TECScopeManager scopeManager)
         {
-            if (bidOrTemp is TECBid)
+            linkTags(scopeManager.Catalogs.Tags, scope);
+            linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
+            if (scopeManager is TECBid)
             {
-                linkTags((bidOrTemp as TECBid).Tags, scope);
-                linkAssociatedCostsInScope((bidOrTemp as TECBid).AssociatedCostsCatalog, scope);
-                linkLocationsInScope((bidOrTemp as TECBid).Locations, scope);
-                
-            }
-            else if (bidOrTemp is TECTemplates)
-            {
-                linkTags((bidOrTemp as TECTemplates).Tags, scope);
-                linkAssociatedCostsInScope((bidOrTemp as TECTemplates).AssociatedCostsCatalog, scope);
-            }
-            else
-            {
-                throw new NotImplementedException();
+                linkLocationsInScope((scopeManager as TECBid).Locations, scope);
             }
         }
-        static private void linkScopeChildrenInSystem(TECSystem system, object bidOrTemp)
+        static private void linkScopeChildrenInSystem(TECSystem system, TECScopeManager scopeManager)
         {
-            linkScopeChildren(system, bidOrTemp);
+            linkScopeChildren(system, scopeManager);
             foreach(TECEquipment equip in system.Equipment)
             {
-                linkScopeChildren(equip, bidOrTemp);
+                linkScopeChildren(equip, scopeManager);
                 foreach(TECSubScope ss in equip.SubScope)
                 {
-                    linkScopeChildren(ss, bidOrTemp);
+                    linkScopeChildren(ss, scopeManager);
                 }
             }
         }
@@ -387,7 +348,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in bid.Controllers)
             { linkTags(tags, controller); }
-            foreach (TECDevice device in bid.DeviceCatalog)
+            foreach (TECDevice device in bid.Catalogs.Devices)
             { linkTags(tags, device); }
         }
         static private void linkTagsInTemplates(ObservableCollection<TECTag> tags, TECTemplates templates)
@@ -430,7 +391,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in templates.ControllerTemplates)
             { linkTags(tags, controller); }
-            foreach (TECDevice device in templates.DeviceCatalog)
+            foreach (TECDevice device in templates.Catalogs.Devices)
             { linkTags(tags, device); }
         }
         static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
@@ -459,42 +420,42 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAssociatedCostsWithScope(Object bidOrTemp)
+        static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
         {
-            if (bidOrTemp is TECBid)
+            if (scopeManager is TECBid)
             {
-                TECBid bid = bidOrTemp as TECBid;
+                TECBid bid = scopeManager as TECBid;
                 foreach (TECSystem system in bid.Systems)
-                { linkAssociatedCostsInSystem(bid.AssociatedCostsCatalog, system); }
-                foreach (TECConnectionType scope in bid.ConnectionTypes)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
-                foreach (TECConduitType scope in bid.ConduitTypes)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInSystem(bid.Catalogs.AssociatedCosts, system); }
+                foreach (TECConnectionType scope in bid.Catalogs.ConnectionTypes)
+                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
+                foreach (TECConduitType scope in bid.Catalogs.ConduitTypes)
+                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
                 foreach (TECController scope in bid.Controllers)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
                 foreach (TECPanel scope in bid.Panels)
-                { linkAssociatedCostsInScope(bid.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
 
             }
-            else if (bidOrTemp is TECTemplates)
+            else if (scopeManager is TECTemplates)
             {
-                TECTemplates templates = bidOrTemp as TECTemplates;
+                TECTemplates templates = scopeManager as TECTemplates;
                 foreach (TECSystem system in templates.SystemTemplates)
-                { linkAssociatedCostsInSystem(templates.AssociatedCostsCatalog, system); }
+                { linkAssociatedCostsInSystem(templates.Catalogs.AssociatedCosts, system); }
                 foreach (TECEquipment equipment in templates.EquipmentTemplates)
-                { linkAssociatedCostsInEquipment(templates.AssociatedCostsCatalog, equipment); }
+                { linkAssociatedCostsInEquipment(templates.Catalogs.AssociatedCosts, equipment); }
                 foreach (TECSubScope subScope in templates.SubScopeTemplates)
-                { linkAssociatedCostsInSubScope(templates.AssociatedCostsCatalog, subScope); }
-                foreach (TECDevice device in templates.DeviceCatalog)
-                { linkAssociatedCostsInDevice(templates.AssociatedCostsCatalog, device); }
-                foreach (TECConnectionType scope in templates.ConnectionTypeCatalog)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
-                foreach (TECConduitType scope in templates.ConduitTypeCatalog)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInSubScope(templates.Catalogs.AssociatedCosts, subScope); }
+                foreach (TECDevice device in templates.Catalogs.Devices)
+                { linkAssociatedCostsInDevice(templates.Catalogs.AssociatedCosts, device); }
+                foreach (TECConnectionType scope in templates.Catalogs.ConnectionTypes)
+                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
+                foreach (TECConduitType scope in templates.Catalogs.ConduitTypes)
+                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
                 foreach (TECController scope in templates.ControllerTemplates)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
                 foreach (TECPanel scope in templates.PanelTemplates)
-                { linkAssociatedCostsInScope(templates.AssociatedCostsCatalog, scope); }
+                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
             }
         }
         static private void linkAssociatedCostsInDevice(ObservableCollection<TECAssociatedCost> costs, TECDevice device)
@@ -609,11 +570,11 @@ namespace EstimatingLibrary
         {
             foreach(TECControlledScope scope in controlledScope)
             {
-                linkAllDevicesFromSystems(scope.Systems, templates.DeviceCatalog);
-                linkPanelTypesInPanel(templates.PanelTypeCatalog, scope.Panels);
-                linkConduitTypeWithConnections(templates.ConduitTypeCatalog, scope.Controllers);
-                linkManufacturersWithControllers(templates.ManufacturerCatalog, scope.Controllers);
-                linkIOModules(scope.Controllers, templates.IOModuleCatalog);
+                linkAllDevicesFromSystems(scope.Systems, templates.Catalogs.Devices);
+                linkPanelTypesInPanel(templates.Catalogs.PanelTypes, scope.Panels);
+                linkConduitTypeWithConnections(templates.Catalogs.ConduitTypes, scope.Controllers);
+                linkManufacturersWithControllers(templates.Catalogs.Manufacturers, scope.Controllers);
+                linkIOModules(scope.Controllers, templates.Catalogs.IOModules);
                 foreach (TECSystem sys in scope.Systems)
                 {
                     linkScopeChildrenInSystem(sys, templates);
