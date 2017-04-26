@@ -90,22 +90,15 @@ namespace EstimatingUtilitiesLibrary
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid);
             bid.ProposalScope = getAllProposalScope(bid.Systems);
-            bid.Catalogs.Devices = getAllDevices();
-            bid.Catalogs.Manufacturers = getAllManufacturers();
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
             bid.Controllers = getControllers();
-            bid.Catalogs.ConnectionTypes = getConnectionTypes();
-            bid.Catalogs.ConduitTypes = getConduitTypes();
-            bid.Catalogs.AssociatedCosts = getAssociatedCosts();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
-            bid.Catalogs.PanelTypes = getPanelTypes();
-            bid.Catalogs.IOModules = getIOModules();
             watch.Stop();
             Console.WriteLine("Getting Bid Data: " + watch.ElapsedMilliseconds);
 
@@ -468,7 +461,6 @@ namespace EstimatingUtilitiesLibrary
 
             return labor;
         }
-
         static private TECLabor getLaborConstsInTemplates(TECTemplates templates)
         {
             DataTable laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
@@ -525,6 +517,19 @@ namespace EstimatingUtilitiesLibrary
             labor.ElectricalIsUnion = subContractRow[SubcontractorConstantsTable.ElectricalIsUnion.Name].ToString().ToInt(0).ToBool();
 
             return labor;
+        }
+
+        static private TECCatalogs getCatalogs(TECScopeManager scopeManager)
+        {
+            TECCatalogs catalogs = new TECCatalogs();
+            catalogs.Devices = getAllDevices();
+            catalogs.Manufacturers = getAllManufacturers();
+            catalogs.ConnectionTypes = getConnectionTypes();
+            catalogs.ConduitTypes = getConduitTypes();
+            catalogs.AssociatedCosts = getAssociatedCosts();
+            catalogs.PanelTypes = getPanelTypes();
+            catalogs.IOModules = getIOModules();
+            return catalogs;
         }
         
         static private TECTemplates getTemplatesInfo()
