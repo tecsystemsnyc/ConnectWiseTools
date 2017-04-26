@@ -29,9 +29,10 @@ namespace TECUserControlLibrary.ViewModels
             get { return _bid; }
             set
             {
+                TECBid oldBid = _bid;
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                update();
+                update(oldBid);
             }
         }
 
@@ -127,8 +128,14 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
         }
 
-        private void update()
+        private void update(TECBid oldBid = null)
         {
+            if (oldBid != null)
+            {
+                oldBid.Controllers.CollectionChanged -= Controllers_CollectionChanged;
+                oldBid.Catalogs.ConduitTypes.CollectionChanged -= ConduitTypes_CollectionChanged;
+            }
+
             //Reset Collections
             ServerControllers = new ObservableCollection<TECController>();
             BMSControllers = new ObservableCollection<BMSController>();
@@ -435,7 +442,7 @@ namespace TECUserControlLibrary.ViewModels
             Type sourceType = sourceItem.GetType();
             Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
-            if (sourceItem != null && !(sourceItem is TECConnection))
+            if (((sourceItem is TECController) || (sourceItem is BMSController)) && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController))))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Move;
