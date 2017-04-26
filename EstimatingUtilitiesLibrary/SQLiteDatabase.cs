@@ -84,7 +84,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (KeyValuePair<string,string> stringParam in stringData)
             {
                 colNames.Add(stringParam.Key);
-                stringVals.Add("'" + stringParam.Value + "'");
+                stringVals.Add("'" + doubleApostraphes(stringParam.Value) + "'");
             }
 
             if (byteData != null)
@@ -123,7 +123,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (KeyValuePair<String, String> val in data)
             {
                 columns += string.Format(" {0},", val.Key.ToString());
-                values += string.Format(" '{0}',", val.Value);
+                values += string.Format(" '{0}',", doubleApostraphes(val.Value));
             }
             columns = columns.Substring(0, columns.Length - 1);
             values = values.Substring(0, values.Length - 1);
@@ -230,6 +230,11 @@ namespace EstimatingUtilitiesLibrary
             connectionBuilder.Version = SQLITE_VERSION;
 
             return new SQLiteConnection(connectionBuilder.ConnectionString);
+        }
+
+        private string doubleApostraphes(string str)
+        {
+            return str.Replace("'", "''");
         }
     }
 }
