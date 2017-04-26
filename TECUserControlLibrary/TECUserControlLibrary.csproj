@@ -166,6 +166,7 @@
     </Compile>
     <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
+    <Compile Include="Models\FileDialogParameters.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="DataGrids\NotesGridControl.xaml.cs">

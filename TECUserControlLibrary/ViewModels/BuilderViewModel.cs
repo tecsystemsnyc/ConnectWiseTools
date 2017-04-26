@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
@@ -96,6 +97,53 @@ namespace TECUserControlLibrary.ViewModels
         #region View Models
         public MenuViewModel MenuVM { get; set; }
         public StatusBarExtension StatusBarVM { get; set; }
+        #endregion
+
+        #region File Parameters
+        protected FileDialogParameters BidFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "bdb";
+                return fileParams;
+            }
+        }
+        protected FileDialogParameters TemplatesFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Templates Database Files (*.tdb)|*.tdb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "tdb";
+                return fileParams;
+            }
+        }
+        protected FileDialogParameters DocumentFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
+                fileParams.DefaultExtension = "rtf";
+                return fileParams;
+            }
+        }
+        protected FileDialogParameters CSVFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Comma Separated Values Files (*.csv)|*.csv";
+                fileParams.DefaultExtension = "csv";
+                return fileParams;
+            }
+        }
         #endregion
 
         #endregion
