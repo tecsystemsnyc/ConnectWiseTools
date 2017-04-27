@@ -635,7 +635,7 @@ namespace Tests
 
         public static TECTemplates LoadTestTemplates(string path)
         {
-            return EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            return EstimatingLibraryDatabase.Load(path);
         }
     }
 }

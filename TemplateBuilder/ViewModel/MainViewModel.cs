@@ -156,7 +156,7 @@ namespace TemplateBuilder.ViewModel
             if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
+                { Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath); }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -175,7 +175,7 @@ namespace TemplateBuilder.ViewModel
                     {
                         if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                            Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath);
                         }
                         else
                         {
@@ -367,7 +367,7 @@ namespace TemplateBuilder.ViewModel
                 SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                    Templates = EstimatingLibraryDatabase.Load(path);
                 }
                 else
                 {
@@ -685,7 +685,7 @@ namespace TemplateBuilder.ViewModel
                 {
                     if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                     {
-                        EstimatingLibraryDatabase.UpdateTemplatesToDB(path, stackToSave);
+                        EstimatingLibraryDatabase.Update(path, stackToSave);
                     }
                     else
                     {
@@ -789,7 +789,7 @@ namespace TemplateBuilder.ViewModel
                 {
                     try
                     {
-                        EstimatingLibraryDatabase.UpdateTemplatesToDB(Properties.Settings.Default.TemplatesFilePath, stackToSave);
+                        EstimatingLibraryDatabase.Update(Properties.Settings.Default.TemplatesFilePath, stackToSave);
                         saveSuccessful = true;
                     }
                     catch (Exception ex)
@@ -840,8 +840,8 @@ namespace TemplateBuilder.ViewModel
             if (!UtilitiesMethods.IsFileLocked(path))
             {
                 //File.Copy(path, defaultTemplatesPath, true);
-                //Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                //Templates = EstimatingLibraryDatabase.Load(defaultTemplatesPath);
+                Templates = EstimatingLibraryDatabase.Load(path);
             }
             else
             {

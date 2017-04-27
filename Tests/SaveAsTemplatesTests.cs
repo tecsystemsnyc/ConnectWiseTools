@@ -75,7 +75,7 @@ namespace Tests
             //Act
             EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, expectedTemplates);
 
-            actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            actualTemplates = EstimatingLibraryDatabase.Load(path);
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {

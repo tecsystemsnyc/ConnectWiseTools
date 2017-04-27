@@ -254,7 +254,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        loadedTemplates = EstimatingLibraryDatabase.Load(TemplatesFilePath);
                     }
                     else
                     {
@@ -420,7 +420,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
 
-                        Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath);
+                        Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
                         var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
                         Bid.Catalogs = newCatalogs;
                         templatesLoaded = true;

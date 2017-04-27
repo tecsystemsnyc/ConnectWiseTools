@@ -235,7 +235,7 @@ namespace TECUserControlLibrary.ViewModels
             UserCanInteract = true;
         }
 
-        protected void save()
+        private void save()
         {
             if (saveFilePath != null)
             {
@@ -390,7 +390,7 @@ namespace TECUserControlLibrary.ViewModels
 
             return saveSuccessful;
         }
-        protected void load()
+        private void load()
         {
             string path = getLoadPath();
             if (path != null)
@@ -418,8 +418,8 @@ namespace TECUserControlLibrary.ViewModels
                     if(loadingScopeManager == null)
                     {
                         workingScopeManager = loadingScopeManager;
-                    }
-                    
+                    } 
+                                        
                     isNew = false;
                 };
 
