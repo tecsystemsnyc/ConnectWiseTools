@@ -220,7 +220,53 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-        protected abstract void loadFromPath(string path);
+        protected TECScopeManager loadFromPath(string path)
+        {
+            SetBusyStatus("Loading " + path);
+            saveFilePath = path;
+            ScopeDirectoryPath = Path.GetDirectoryName(path);
+            TECScopeManager outScope = null;
+            if (!UtilitiesMethods.IsFileLocked(path))
+            { outScope= EstimatingLibraryDatabase.Load(path); }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+            }
+            return outScope;
+        }
+        protected void saveNewToPath(string path)
+        {
+            if (!UtilitiesMethods.IsFileLocked(path))
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+                //Create new database
+                EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+            }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+            }
+        }
+        protected void saveToPath(string path, ChangeStack saveStack)
+        {
+            if (!UtilitiesMethods.IsFileLocked(path))
+            {
+                try
+                { EstimatingLibraryDatabase.Update(path, saveStack); }
+                catch (Exception ex)
+                {
+                    DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                    EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                }
+            }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+            }
+        }
 
         protected void SetBusyStatus(string statusText, bool userCanInteract = true)
         {
@@ -247,20 +293,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 worker.DoWork += (s, e) =>
                 {
-                    if (!UtilitiesMethods.IsFileLocked(saveFilePath))
-                    {
-                        try
-                        { EstimatingLibraryDatabase.Update(saveFilePath, stackToSave); }
-                        catch (Exception ex)
-                        {
-                            DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                            EstimatingLibraryDatabase.SaveNew(saveFilePath, workingScopeManager);
-                        }
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + saveFilePath + " File is open elsewhere.");
-                    }
+                    saveToPath(saveFilePath, stackToSave);
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
@@ -288,19 +321,7 @@ namespace TECUserControlLibrary.ViewModels
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += (s, e) =>
                 {
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
+                    saveNewToPath(path);
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {
@@ -309,11 +330,10 @@ namespace TECUserControlLibrary.ViewModels
                 };
 
                 worker.RunWorkerAsync();
-
             }
 
         }
-        private bool saveAsSynchronously()
+        protected bool saveAsSynchronously()
         {
             bool saveSuccessful = false;
 
@@ -347,7 +367,7 @@ namespace TECUserControlLibrary.ViewModels
 
             return saveSuccessful;
         }
-        private bool saveSynchronously()
+        protected bool saveSynchronously()
         {
             bool saveSuccessful = false;
 
@@ -392,7 +412,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void load()
         {
-            string path = getLoadPath();
+            string path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
             if (path != null)
             {
                 SetBusyStatus("Loading File: " + path, false);
@@ -403,14 +423,7 @@ namespace TECUserControlLibrary.ViewModels
                     saveFilePath = path;
                     ScopeDirectoryPath = Path.GetDirectoryName(path);
 
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        loadingScopeManager = EstimatingLibraryDatabase.Load(path);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
+                    loadingScopeManager = loadFromPath(path);
                 };
                 worker.RunWorkerCompleted += (s, e) =>
                 {

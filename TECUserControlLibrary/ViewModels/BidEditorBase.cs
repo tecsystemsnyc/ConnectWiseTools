@@ -223,23 +223,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             TitleString = Bid.Name + " - " + programName;
         }
-        override protected void loadFromPath(string path)
-        {
-            if (path != null)
-            {
-                SetBusyStatus("Loading " + path);
-                saveFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                }
-                ResetStatus();
-            }
-        }
+        
         
         
         private void loadTemplates(string TemplatesFilePath)
@@ -254,7 +238,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-                        loadedTemplates = EstimatingLibraryDatabase.Load(TemplatesFilePath);
+                        loadedTemplates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
                     }
                     else
                     {
@@ -329,7 +313,7 @@ namespace TECUserControlLibrary.ViewModels
         
         private void DocumentExecute()
         {
-            string path = getDocumentSavePath();
+            string path = getSavePath(DocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
 
             if (path != null)
             {
@@ -349,7 +333,7 @@ namespace TECUserControlLibrary.ViewModels
         private void CSVExportExecute()
         {
             //User choose path
-            string path = getCSVSavePath();
+            string path = getSavePath(CSVFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -372,7 +356,7 @@ namespace TECUserControlLibrary.ViewModels
         private void ExcelExportExecute()
         {
             //User choose path
-            string path = getExcelSavePath();
+            string path = getSavePath(CSVFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -394,7 +378,7 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
             //User choose path
-            string path = getLoadTemplatesPath();
+            string path = getLoadPath(TemplatesFileParameters);
             if (path != "")
             {
                 TemplatesFilePath = path;
