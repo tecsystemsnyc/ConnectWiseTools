@@ -3,6 +3,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel;
@@ -16,7 +17,7 @@ using TECUserControlLibrary.ViewModelExtensions;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    abstract public class BuilderViewModel : ViewModelBase
+    abstract public class BuilderViewModel : ViewModelBase, IDropTarget
     {
 
         #region Constants
@@ -571,8 +572,44 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
         }
 
-        protected abstract void ClosingExecute(CancelEventArgs e);
+        private void ClosingExecute(CancelEventArgs e)
+        {
+            bool changes = (stack.SaveStack.Count > 0);
+            if (changes)
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveSynchronously())
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+            if (!e.Cancel)
+            {
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.FileDragOver(dropInfo);
+        }
+        public void Drop(IDropInfo dropInfo)
+        {
+            string path = UIHelpers.FileDrop(dropInfo);
+            if (path != null)
+            {
+                loadFromPath(path);
+            }
+        }
 
         #endregion
     }

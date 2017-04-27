@@ -29,7 +29,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : BidEditorBase, IDropTarget
+    public class MainViewModel : BidEditorBase
     {
         public MainViewModel()
         {
@@ -267,20 +267,7 @@ namespace EstimateBuilder.ViewModel
             return path;
         }
         #endregion
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            UIHelpers.FileDragOver(dropInfo);
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            string path = UIHelpers.FileDrop(dropInfo);
-            if ( path != null)
-            {
-                loadBidFromPath(path);
-            }
-        }
-
+        
         #endregion
 
         #region Event Handlers

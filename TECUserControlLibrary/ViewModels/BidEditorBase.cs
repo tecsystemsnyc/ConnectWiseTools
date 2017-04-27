@@ -424,33 +424,7 @@ namespace TECUserControlLibrary.ViewModels
                 
             }
         }
-
-        override protected void ClosingExecute(CancelEventArgs e)
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                e.Cancel = true;
-                return;
-            }
-            bool changes = (stack.SaveStack.Count > 0);
-            if (changes)
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveSynchronously())
-                    {
-                        e.Cancel = true;
-                        MessageBox.Show("Save unsuccessful, cancelling quit.");
-                    }
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    e.Cancel = true;
-                }
-            }
-        }
+        
         #endregion
         
         #endregion
