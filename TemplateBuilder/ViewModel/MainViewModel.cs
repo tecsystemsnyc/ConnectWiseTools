@@ -60,30 +60,27 @@ namespace TemplateBuilder.ViewModel
         public MaterialsCostsExtension MaterialsTab { get; set; }
         public ControlledScopeViewModel ControlledScopeVM { get; set; }
         #endregion
-        
-        public TECTemplates Templates
+        protected override TECScopeManager workingScopeManager
         {
-            get { return _templates; }
+            get
+            { return base.workingScopeManager; }
             set
             {
-                _templates = value;
-                stack = new ChangeStack(value);
+                base.workingScopeManager = value;
                 RaisePropertyChanged("Templates");
                 refresh();
             }
         }
-        private TECTemplates _templates;
-        public string Version { get; set; }
-        public string TitleString
+        
+        public TECTemplates Templates
         {
-            get { return _titleString; }
+            get { return workingScopeManager as TECTemplates; }
             set
             {
-                _titleString = value;
-                RaisePropertyChanged("TitleString");
+                workingScopeManager = value;
             }
         }
-        private string _titleString;
+        
 
         protected override string ScopeDirectoryPath
         {
@@ -148,7 +145,6 @@ namespace TemplateBuilder.ViewModel
         {
             RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
         }
-
         private void getTemplates()
         {
             Templates = new TECTemplates();
@@ -156,7 +152,7 @@ namespace TemplateBuilder.ViewModel
             if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath); }
+                { Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates; }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -169,13 +165,13 @@ namespace TemplateBuilder.ViewModel
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    Properties.Settings.Default.TemplatesFilePath = getLoadPath();
+                    Properties.Settings.Default.TemplatesFilePath = getLoadPath(TemplatesFileParameters);
 
                     if (Properties.Settings.Default.TemplatesFilePath != null)
                     {
                         if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath);
+                            Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates;
                         }
                         else
                         {
@@ -289,7 +285,7 @@ namespace TemplateBuilder.ViewModel
                 SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Templates = EstimatingLibraryDatabase.Load(path);
+                    Templates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
                 }
                 else
                 {

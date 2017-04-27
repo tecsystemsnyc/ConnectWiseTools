@@ -27,7 +27,19 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
-        protected TECScopeManager workingScopeManager;
+        private TECScopeManager _workingScopeManager;
+        protected virtual TECScopeManager workingScopeManager
+        {
+            get
+            {
+                return _workingScopeManager;
+            }
+            set
+            {
+                _workingScopeManager = value;
+                stack = new ChangeStack(value);
+            }
+        }
         protected FileDialogParameters workingFileParameters;
 
         abstract protected string defaultSaveFileName
@@ -78,7 +90,18 @@ namespace TECUserControlLibrary.ViewModels
         public string TECLogo { get; set; }
 
         protected bool isNew;
-      
+        public string Version { get; set; }
+        public string TitleString
+        {
+            get { return _titleString; }
+            set
+            {
+                _titleString = value;
+                RaisePropertyChanged("TitleString");
+            }
+        }
+        private string _titleString;
+
         #region Command Properties
         public ICommand NewCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
@@ -181,9 +204,7 @@ namespace TECUserControlLibrary.ViewModels
             RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
-
         protected abstract void setupMenu();
-
         protected void setupStatusBar()
         {
             StatusBarVM = new StatusBarExtension();
