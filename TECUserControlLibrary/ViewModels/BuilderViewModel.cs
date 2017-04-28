@@ -194,8 +194,9 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
-        private void checkForOpenWith(string startupFile)
+        private void checkForOpenWith()
         {
+            startupFile = getStartupFile();
             if (startupFile != "")
             {
                 SetBusyStatus("Loading " + startupFile);
@@ -209,6 +210,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 ResetStatus();
             }
+            clearStartupFile();
         }
         private void getLogo()
         {
@@ -228,6 +230,8 @@ namespace TECUserControlLibrary.ViewModels
             IsReady = true;
             UserCanInteract = true;
         }
+        protected abstract string getStartupFile();
+        protected abstract void clearStartupFile();
         #region Setup
         private void setupCommands()
         {

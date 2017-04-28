@@ -93,7 +93,7 @@ namespace Scope_Builder.ViewModel
         #endregion
         
         #region Intitializer
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = false;
             programName = "Scope Builder";
@@ -103,10 +103,7 @@ namespace Scope_Builder.ViewModel
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
-
-            startupFile = Properties.Settings.Default.StartupFile;
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
+            
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             BidSet += () =>
@@ -262,6 +259,15 @@ namespace Scope_Builder.ViewModel
             }
             
             return outString;
+        }
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
         }
         #endregion //Helper Functions
 

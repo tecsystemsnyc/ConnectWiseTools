@@ -176,11 +176,11 @@ namespace TemplateBuilder.ViewModel
         }
         private void setupVMs()
         {
-            setupControlledScopeTab();
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
             setupMaterialsTab();
+            setupControlledScopeTab();
         }
 
         private void setupScopeCollecion()
@@ -307,6 +307,15 @@ namespace TemplateBuilder.ViewModel
         }
         #endregion
         #region Helper Methods
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
+        }
         private void setVisibility(TemplateGridIndex gridIndex)
         {
             nullifySelected();

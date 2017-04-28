@@ -31,7 +31,7 @@ namespace EstimateBuilder.ViewModel
     /// </summary>
     public class MainViewModel : BidEditorBase
     {
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = true;
             programName = "Estimate Builder";
@@ -264,8 +264,17 @@ namespace EstimateBuilder.ViewModel
 
             return path;
         }
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
+        }
         #endregion
-        
+
         #endregion
 
         #region Event Handlers

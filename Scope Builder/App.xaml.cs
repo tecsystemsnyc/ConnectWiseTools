@@ -1,13 +1,9 @@
 ﻿using DebugLibrary;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Deployment.Application;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using GalaSoft.MvvmLight.Threading;
 using System.Windows.Controls;
+using System.Deployment.Application;
+using System;
 
 namespace Scope_Builder
 {
@@ -16,12 +12,12 @@ namespace Scope_Builder
     /// </summary>
     public partial class App : Application
     {
+        static App()
+        {
+            DispatcherHelper.Initialize();
+        }
         protected override void OnStartup(StartupEventArgs args)
         {
-            EventManager.RegisterClassHandler(typeof(TextBox),
-                TextBox.GotFocusEvent,
-                new RoutedEventHandler(TextBox_GotFocus));
-
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
 
@@ -46,14 +42,9 @@ namespace Scope_Builder
                 }
             }
             
-            
-        base.OnStartup(args);
+            base.OnStartup(args);
 
-     }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            (sender as TextBox).SelectAll();
         }
+        
     }
 }
