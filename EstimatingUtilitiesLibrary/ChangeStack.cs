@@ -39,15 +39,22 @@ namespace EstimatingUtilitiesLibrary
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-        public ChangeStack(TECBid bid) : this()
+        public ChangeStack(TECScopeManager scopeManager) : this()
         {
-            Bid = bid;
-            registerBidChanges(bid);
-        }
-        public ChangeStack(TECTemplates templates) : this()
-        {
-            Templates = templates;
-            registerTemplatesChanges(templates);
+            if(scopeManager is TECBid)
+            {
+                Bid = scopeManager as TECBid;
+                registerBidChanges(Bid);
+            } else if (scopeManager is TECTemplates)
+            {
+                Templates = scopeManager as TECTemplates;
+                registerTemplatesChanges(Templates);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            
         }
         #endregion
 

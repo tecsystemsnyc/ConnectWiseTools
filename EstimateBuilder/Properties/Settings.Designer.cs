@@ -46,5 +46,17 @@ namespace EstimateBuilder.Properties {
                 this["TemplatesHidden"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartupFile {
+            get {
+                return ((string)(this["StartupFile"]));
+            }
+            set {
+                this["StartupFile"] = value;
+            }
+        }
     }
 }

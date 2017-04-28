@@ -29,19 +29,12 @@ namespace TemplateBuilder.ViewModel
         //Initializer
         public MainViewModel() : base()
         {
-            _templates = new TECTemplates();
-           
             TitleString = "Template Builder";
-            
-            setupScopeCollecion();
-            setupEditTab();
-            setupScopeDataGrid();
-            setupMaterialsTab();
-            setupCommands();
-            setupVMs();
 
             getTemplates();
-
+            
+            setupCommands();
+            setupVMs();
             DGTabIndex = TemplateGridIndex.ControlledScope;
 
             ResetStatus();
@@ -60,31 +53,25 @@ namespace TemplateBuilder.ViewModel
         public MaterialsCostsExtension MaterialsTab { get; set; }
         public ControlledScopeViewModel ControlledScopeVM { get; set; }
         #endregion
-        
-        public TECTemplates Templates
+        protected override TECScopeManager workingScopeManager
         {
-            get { return _templates; }
+            get
+            { return base.workingScopeManager; }
             set
             {
-                _templates = value;
-                stack = new ChangeStack(value);
+                base.workingScopeManager = value;
                 RaisePropertyChanged("Templates");
                 refresh();
             }
         }
-        private TECTemplates _templates;
-        public string Version { get; set; }
-        public string TitleString
+        public TECTemplates Templates
         {
-            get { return _titleString; }
+            get { return workingScopeManager as TECTemplates; }
             set
             {
-                _titleString = value;
-                RaisePropertyChanged("TitleString");
+                workingScopeManager = value;
             }
         }
-        private string _titleString;
-
         protected override string ScopeDirectoryPath
         {
             get
@@ -98,7 +85,6 @@ namespace TemplateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
-
         protected override string defaultSaveFileName
         {
             get
@@ -137,18 +123,20 @@ namespace TemplateBuilder.ViewModel
         #region Methods
         private void refresh()
         {
-            ScopeCollection.Refresh(Templates);
-            ScopeDataGrid.Refresh(Templates);
-            EditTab.Refresh(Templates);
-            MaterialsTab.Refresh(Templates);
-            ControlledScopeVM.Refresh(Templates);
+            if(ScopeCollection != null)
+            {
+                ScopeCollection.Refresh(Templates);
+                ScopeDataGrid.Refresh(Templates);
+                EditTab.Refresh(Templates);
+                MaterialsTab.Refresh(Templates);
+                ControlledScopeVM.Refresh(Templates);
+            }
         }
         #region Setup Methods
         private void setupCommands()
         {
             RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
         }
-
         private void getTemplates()
         {
             Templates = new TECTemplates();
@@ -156,7 +144,7 @@ namespace TemplateBuilder.ViewModel
             if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath); }
+                { Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates; }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -169,13 +157,13 @@ namespace TemplateBuilder.ViewModel
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    Properties.Settings.Default.TemplatesFilePath = getLoadPath();
+                    Properties.Settings.Default.TemplatesFilePath = getLoadPath(TemplatesFileParameters);
 
                     if (Properties.Settings.Default.TemplatesFilePath != null)
                     {
                         if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.LoadDBToTemplates(Properties.Settings.Default.TemplatesFilePath);
+                            Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates;
                         }
                         else
                         {
@@ -185,6 +173,14 @@ namespace TemplateBuilder.ViewModel
                     }
                 }
             }
+        }
+        private void setupVMs()
+        {
+            setupScopeCollecion();
+            setupEditTab();
+            setupScopeDataGrid();
+            setupMaterialsTab();
+            setupControlledScopeTab();
         }
 
         private void setupScopeCollecion()
@@ -212,7 +208,7 @@ namespace TemplateBuilder.ViewModel
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
         }
-        private void setupVMs()
+        private void setupControlledScopeTab()
         {
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
@@ -220,9 +216,7 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
             ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
-        
         #endregion
-
         #region Commands Methods
         protected override void NewExecute()
         {
@@ -257,85 +251,6 @@ namespace TemplateBuilder.ViewModel
             refresh();
             Properties.Settings.Default.TemplatesFilePath = "";
         }
-        protected override void LoadExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-
-            if (stack.SaveStack.Count > 0)
-            {
-                string message = "Would you like to save your changes before loading?";
-                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveSynchronously())
-                    {
-                        MessageBox.Show("Save unsuccessful.");
-                        return;
-                    }
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    return;
-                }
-            }
-
-            //User choose path
-            string path = getLoadPath();
-
-            if (path != null)
-            {
-                loadFromPath(path);
-            }
-        }
-        protected override void SaveExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-
-            saveTemplates();
-        }
-        protected override void SaveAsExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            saveTemplatesAs();
-        }
-
-        protected override void ClosingExecute(CancelEventArgs e)
-        {
-            bool changes = (stack.SaveStack.Count > 0);
-            if (changes)
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveSynchronously())
-                    {
-                        MessageBox.Show("Save unsuccessful.");
-                        return;
-                    }
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    e.Cancel = true;
-                }
-            }
-            if (!e.Cancel)
-            {
-                Properties.Settings.Default.Save();
-            }
-        }
-        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)
@@ -367,7 +282,7 @@ namespace TemplateBuilder.ViewModel
                 SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+                    Templates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
                 }
                 else
                 {
@@ -381,74 +296,26 @@ namespace TemplateBuilder.ViewModel
             return !(Properties.Settings.Default.TemplatesFilePath == "");
         }
         #endregion //Commands Methods
-
-        #region Get Path Methods
-        protected override string getLoadPath()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (Properties.Settings.Default.TemplatesFilePath != null)
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.TemplatesFilePath;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-
-            openFileDialog.Filter = "TEC Template Database Files (*.tdb)|*.tdb";
-            openFileDialog.DefaultExt = "tdb";
-            openFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                path = openFileDialog.FileName;
-                Properties.Settings.Default.TemplatesFilePath = path;
-                Properties.Settings.Default.Save();
-            }
-
-            return path;
-        }
-        protected override string getSavePath()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (Properties.Settings.Default.TemplatesFilePath != null)
-            {
-                saveFileDialog.InitialDirectory = Properties.Settings.Default.TemplatesFilePath;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
-            saveFileDialog.Filter = "TEC Template Database Files (*.tdb)|*.tdb";
-            saveFileDialog.DefaultExt = "tdb";
-            saveFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                path = saveFileDialog.FileName;
-            }
-
-            return path;
-        }
-        #endregion //Get Path Methods
-
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
-
         #region Helper Methods
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
+        }
         private void setVisibility(TemplateGridIndex gridIndex)
         {
             nullifySelected();
@@ -670,155 +537,6 @@ namespace TemplateBuilder.ViewModel
             ScopeDataGrid.SelectedEquipment = null;
             ScopeDataGrid.SelectedSystem = null;
         }
-        private void saveTemplates()
-        {
-            string path = Properties.Settings.Default.TemplatesFilePath;
-            if (path != null)
-            {
-                SetBusyStatus("Saving to path: " + path);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                    {
-                        EstimatingLibraryDatabase.UpdateTemplatesToDB(path, stackToSave);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                saveTemplatesAs();
-            }
-        }
-        private void saveTemplatesAs()
-        {
-            //User choose path
-            string path = getSavePath();
-
-            if (path != null)
-            {
-                Properties.Settings.Default.TemplatesFilePath = path;
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(path))
-                    {
-                        if (File.Exists(path))
-                        {
-                            File.Delete(path);
-                        }
-                        //Create new database
-                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    }
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-
-                worker.RunWorkerAsync();
-
-            }
-        }
-        
-        private bool saveAsSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            //User choose path
-            string path = getSavePath();
-            if (path != null)
-            {
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    //Create new database
-                    EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, Templates);
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    saveSuccessful = false;
-                }
-
-
-            }
-
-            return saveSuccessful;
-        }
-
-        private bool saveSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            if (Properties.Settings.Default.TemplatesFilePath != null)
-            {
-                SetBusyStatus("Saving to path: " + Properties.Settings.Default.TemplatesFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                {
-                    try
-                    {
-                        EstimatingLibraryDatabase.UpdateTemplatesToDB(Properties.Settings.Default.TemplatesFilePath, stackToSave);
-                        saveSuccessful = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
-                        EstimatingLibraryDatabase.SaveTemplatesToNewDB(Properties.Settings.Default.TemplatesFilePath, Templates);
-                    }
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
-                }
-
-            }
-            else
-            {
-                if (saveAsSynchronously())
-                {
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    saveSuccessful = false;
-                }
-            }
-
-            return saveSuccessful;
-        }
-
         protected override void setupMenu()
         {
             MenuVM = new MenuViewModel(MenuType.TB);
@@ -831,25 +549,6 @@ namespace TemplateBuilder.ViewModel
             MenuVM.RedoCommand = RedoCommand;
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
         }
-        
-        protected override void loadFromPath(string path)
-        {
-            SetBusyStatus("Loading File: " + path);
-            //Properties.Settings.Default.TemplateDirectoryPath = path;
-
-            if (!UtilitiesMethods.IsFileLocked(path))
-            {
-                //File.Copy(path, defaultTemplatesPath, true);
-                //Templates = EstimatingLibraryDatabase.LoadDBToTemplates(defaultTemplatesPath);
-                Templates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
-            }
-            else
-            {
-                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-            }
-            ResetStatus();
-        }
-        
         #endregion //Helper Methods
         #endregion //Methods
     }

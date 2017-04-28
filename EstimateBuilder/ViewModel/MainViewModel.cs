@@ -29,9 +29,9 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : BidEditorBase, IDropTarget
+    public class MainViewModel : BidEditorBase
     {
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = true;
             programName = "Estimate Builder";
@@ -160,7 +160,6 @@ namespace EstimateBuilder.ViewModel
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
         }
-
         private void setupNetworkVM()
         {
             NetworkVM = new NetworkViewModel(Bid);
@@ -247,7 +246,6 @@ namespace EstimateBuilder.ViewModel
             ElectricalVM.Refresh(Bid);
             NetworkVM.Refresh(Bid);
         }
-        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -266,20 +264,16 @@ namespace EstimateBuilder.ViewModel
 
             return path;
         }
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
+        }
         #endregion
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            UIHelpers.FileDragOver(dropInfo);
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            string path = UIHelpers.FileDrop(dropInfo);
-            if ( path != null)
-            {
-                loadBidFromPath(path);
-            }
-        }
 
         #endregion
 

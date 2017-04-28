@@ -93,7 +93,7 @@ namespace Scope_Builder.ViewModel
         #endregion
         
         #region Intitializer
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = false;
             programName = "Scope Builder";
@@ -103,10 +103,7 @@ namespace Scope_Builder.ViewModel
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
-
-            startupFile = Properties.Settings.Default.StartupFile;
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
+            
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             BidSet += () =>
@@ -133,7 +130,6 @@ namespace Scope_Builder.ViewModel
                 MenuVM.TemplatesHidden = false;
             }
         }
-
         #endregion //Commands Methods
 
         #region Helper Functions
@@ -264,10 +260,18 @@ namespace Scope_Builder.ViewModel
             
             return outString;
         }
+        protected override string getStartupFile()
+        {
+            return Properties.Settings.Default.StartupFile;
+        }
+        protected override void clearStartupFile()
+        {
+            Properties.Settings.Default.StartupFile = "";
+            Properties.Settings.Default.Save();
+        }
         #endregion //Helper Functions
 
         #region Setup Extensions
-
         private void setupAll()
         {
             setupScopeDataGrid();
@@ -317,7 +321,6 @@ namespace Scope_Builder.ViewModel
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             UIHelpers.StandardDrop(dropInfo);
@@ -325,7 +328,6 @@ namespace Scope_Builder.ViewModel
         #endregion
 
         #region Event Handlers
-
         private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedScopeType")
@@ -333,7 +335,6 @@ namespace Scope_Builder.ViewModel
                 updateVisibility();
             }
         }
-
         #endregion
     }
 }

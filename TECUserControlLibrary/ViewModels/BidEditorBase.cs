@@ -37,6 +37,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+        protected bool isEstimate;
 
         protected override string defaultSaveFileName
         {
@@ -45,20 +46,25 @@ namespace TECUserControlLibrary.ViewModels
                 return (Bid.BidNumber + " " + Bid.Name);
             }
         }
-
-        private TECBid _bid;
-        public TECBid Bid
+        protected override TECScopeManager workingScopeManager
         {
-            get { return _bid; }
+            get
+            { return base.workingScopeManager; }
             set
             {
-                _bid = value;
-                stack = new ChangeStack(value);
-                // Call OnPropertyChanged whenever the property is updated
+                base.workingScopeManager = value;
                 RaisePropertyChanged("Bid");
-                buildTitleString();
                 Bid.PropertyChanged += Bid_PropertyChanged;
                 BidSet?.Invoke();
+                buildTitleString();
+            }
+        }
+        public TECBid Bid
+        {
+            get { return workingScopeManager as TECBid; }
+            set
+            {
+                workingScopeManager = value;
             }
         }
         private TECTemplates _templates;
@@ -71,20 +77,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-
-        public string TitleString
-        {
-            get { return _titleString; }
-            set
-            {
-                _titleString = value;
-                RaisePropertyChanged("TitleString");
-            }
-        }
-        private string _titleString;
-
-        protected bool isEstimate;
-
         #region Settings Properties
         public string TemplatesFilePath
         {
@@ -132,7 +124,6 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
-
         #region Setup
         private void setupCommands()
         {
@@ -215,33 +206,12 @@ namespace TECUserControlLibrary.ViewModels
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
-        
         #endregion
-
         #region Helper Functions
         private void buildTitleString()
         {
             TitleString = Bid.Name + " - " + programName;
         }
-        override protected void loadFromPath(string path)
-        {
-            if (path != null)
-            {
-                SetBusyStatus("Loading " + path);
-                saveFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                { Bid = EstimatingLibraryDatabase.LoadDBToBid(path, Templates); }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                }
-                ResetStatus();
-            }
-        }
-        
-        
         private void loadTemplates(string TemplatesFilePath)
         {
             var loadedTemplates = new TECTemplates();
@@ -254,7 +224,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-                        loadedTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(TemplatesFilePath);
+                        loadedTemplates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
                     }
                     else
                     {
@@ -273,7 +243,6 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerAsync();
             }
         }
-        
         #region Event Handlers
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -283,9 +252,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
-        #endregion //Helper Functions
-
+        #endregion
         #region Commands
         override protected void NewExecute()
         {
@@ -325,11 +292,9 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        
-        
         private void DocumentExecute()
         {
-            string path = getDocumentSavePath();
+            string path = getSavePath(DocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
 
             if (path != null)
             {
@@ -349,7 +314,7 @@ namespace TECUserControlLibrary.ViewModels
         private void CSVExportExecute()
         {
             //User choose path
-            string path = getCSVSavePath();
+            string path = getSavePath(CSVFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -372,7 +337,7 @@ namespace TECUserControlLibrary.ViewModels
         private void ExcelExportExecute()
         {
             //User choose path
-            string path = getExcelSavePath();
+            string path = getSavePath(CSVFileParameters, defaultSaveFileName, ScopeDirectoryPath);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -394,7 +359,7 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
             //User choose path
-            string path = getLoadTemplatesPath();
+            string path = getLoadPath(TemplatesFileParameters);
             if (path != "")
             {
                 TemplatesFilePath = path;
@@ -402,7 +367,6 @@ namespace TECUserControlLibrary.ViewModels
 
             loadTemplates(TemplatesFilePath);
         }
-        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)
@@ -412,63 +376,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                    {
-
-                        Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath);
-                        var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
-                        Bid.Catalogs = newCatalogs;
-                        templatesLoaded = true;
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                    }
-                    DebugHandler.LogDebugMessage("Finished refreshing templates");
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-
-                worker.RunWorkerAsync();
-                
-            }
-        }
-
-        override protected void ClosingExecute(CancelEventArgs e)
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                e.Cancel = true;
-                return;
-            }
-            bool changes = (stack.SaveStack.Count > 0);
-            if (changes)
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveSynchronously())
-                    {
-                        e.Cancel = true;
-                        MessageBox.Show("Save unsuccessful, cancelling quit.");
-                    }
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    e.Cancel = true;
-                }
+                loadTemplates(TemplatesFilePath);
             }
         }
         #endregion
-        
         #endregion
     }
 }

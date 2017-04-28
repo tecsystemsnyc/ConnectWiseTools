@@ -629,13 +629,13 @@ namespace Tests
 
         public static TECBid LoadTestBid(string path)
         {
-            TECBid testBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            TECBid testBid = EstimatingLibraryDatabase.Load(path) as TECBid;
             return testBid;
         }
 
         public static TECTemplates LoadTestTemplates(string path)
         {
-            return EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            return EstimatingLibraryDatabase.Load(path) as TECTemplates;
         }
     }
 }

@@ -28,67 +28,34 @@ namespace EstimatingUtilitiesLibrary
         static private SQLiteDatabase SQLiteDB;
 
         #region Public Functions
-        static public TECBid Load(string path, TECTemplates templates)
+        static public TECScopeManager Load(string path)
         {
+            TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
-            checkAndUpdateDB(typeof(TECBid));
-            TECBid bid = getBidInfo();
-            updateCatalogs(bid, templates);
 
-            getScopeManagerProperties(bid);
-            bid.Parameters = getBidParameters(bid);
-            bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
-            bid.ProposalScope = getAllProposalScope(bid.Systems);
-            bid.Locations = getAllLocations();
-            bid.Catalogs.Tags = getAllTags();
-            bid.Notes = getNotes();
-            bid.Exclusions = getExclusions();
-            bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
-            bid.MiscWiring = getMiscWiring();
-            bid.MiscCosts = getMiscCosts();
-            bid.Panels = getPanels();
-
-            ModelLinkingHelper.LinkBid(bid);
-            getUserAdjustments(bid);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+            var tableNames = getAllTableNames();
+            if (tableNames.Contains("TECBidInfo"))
+            {
+                workingScopeManager = loadBid(path);
+            }
+            else if (tableNames.Contains("TECTemplatesInfo"))
+            {
+                workingScopeManager = loadTemplates(path);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
 
             SQLiteDB.Connection.Close();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            return bid;
-        }
-        static public TECTemplates Load(string path)
-        {
-            SQLiteDB = new SQLiteDatabase(path);
-            checkAndUpdateDB(typeof(TECTemplates));
-           
-            TECTemplates templates = new TECTemplates();
-            
-            templates = getTemplatesInfo();
-            getScopeManagerProperties(templates);
-            templates.SystemTemplates = getOrphanSystems();
-            templates.EquipmentTemplates = getOrphanEquipment();
-            templates.SubScopeTemplates = getOrphanSubScope();
-            templates.ControllerTemplates = getOrphanControllers();
-            templates.MiscWiringTemplates = getMiscWiring();
-            templates.MiscCostTemplates = getMiscCosts();
-            templates.PanelTemplates = getOrphanPanels();
-            templates.ControlledScopeTemplates = getControlledScope();
-            
-            ModelLinkingHelper.LinkTemplates(templates);
-           
-            SQLiteDB.Connection.Close();
+            return workingScopeManager;
 
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            return templates;
         }
+        
         static public void SaveNew(string path, TECScopeManager scopeManager)
         {
             SQLiteDB = new SQLiteDatabase(path);
@@ -190,8 +157,57 @@ namespace EstimatingUtilitiesLibrary
             GC.WaitForPendingFinalizers();
         }
         #endregion Public Functions
-        
+
         #region Loading from DB Methods
+        static private TECBid loadBid(string path)
+        {
+            checkAndUpdateDB(typeof(TECBid));
+            TECBid bid = getBidInfo();
+            //updateCatalogs(bid, templates);
+
+            getScopeManagerProperties(bid);
+            bid.Parameters = getBidParameters(bid);
+            bid.ScopeTree = getBidScopeBranches();
+            bid.Systems = getAllSystemsInBid(bid);
+            bid.ProposalScope = getAllProposalScope(bid.Systems);
+            bid.Locations = getAllLocations();
+            bid.Catalogs.Tags = getAllTags();
+            bid.Notes = getNotes();
+            bid.Exclusions = getExclusions();
+            bid.Drawings = getDrawings();
+            bid.Controllers = getControllers();
+            bid.MiscWiring = getMiscWiring();
+            bid.MiscCosts = getMiscCosts();
+            bid.Panels = getPanels();
+
+            ModelLinkingHelper.LinkBid(bid);
+            getUserAdjustments(bid);
+            //Breaks Visual Scope in a page
+            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+            
+            return bid;
+        }
+        static private TECTemplates loadTemplates(string path)
+        {
+            checkAndUpdateDB(typeof(TECTemplates));
+
+            TECTemplates templates = new TECTemplates();
+
+            templates = getTemplatesInfo();
+            getScopeManagerProperties(templates);
+            templates.SystemTemplates = getOrphanSystems();
+            templates.EquipmentTemplates = getOrphanEquipment();
+            templates.SubScopeTemplates = getOrphanSubScope();
+            templates.ControllerTemplates = getOrphanControllers();
+            templates.MiscWiringTemplates = getMiscWiring();
+            templates.MiscCostTemplates = getMiscCosts();
+            templates.PanelTemplates = getOrphanPanels();
+            templates.ControlledScopeTemplates = getControlledScope();
+
+            ModelLinkingHelper.LinkTemplates(templates);
+            return templates;
+        }
+        
         static private void updateCatalogs(TECBid bid, TECTemplates templates)
         {
             //Update catalogs from templates.
@@ -240,29 +256,6 @@ namespace EstimatingUtilitiesLibrary
         {
             scopeManager.Catalogs = getCatalogs();
             scopeManager.Labor = getLaborConsts(scopeManager);
-        }
-        static private TECBid getBidInfo()
-        {
-            DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
-            if (bidInfoDT.Rows.Count < 1)
-            {
-                DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
-                return new TECBid();
-            }
-
-            DataRow bidInfoRow = bidInfoDT.Rows[0];
-
-            TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString()));
-            outBid.Name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
-            outBid.BidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
-
-            string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
-            outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
-
-            outBid.Salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
-            outBid.Estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
-
-            return outBid;
         }
         static private void getUserAdjustments(TECBid bid)
         {
@@ -384,7 +377,30 @@ namespace EstimatingUtilitiesLibrary
             catalogs.Tags = getAllTags();
             return catalogs;
         }
-        
+
+        static private TECBid getBidInfo()
+        {
+            DataTable bidInfoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName);
+            if (bidInfoDT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
+                return new TECBid();
+            }
+
+            DataRow bidInfoRow = bidInfoDT.Rows[0];
+
+            TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString()));
+            outBid.Name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
+            outBid.BidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
+
+            string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
+            outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
+
+            outBid.Salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
+            outBid.Estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
+
+            return outBid;
+        }
         static private TECTemplates getTemplatesInfo()
         {
             DataTable templateInfoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
