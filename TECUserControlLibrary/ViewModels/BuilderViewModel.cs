@@ -130,6 +130,7 @@ namespace TECUserControlLibrary.ViewModels
         #region View Models
         public MenuViewModel MenuVM { get; set; }
         public StatusBarExtension StatusBarVM { get; set; }
+        public SettingsViewModel SettingsVM { get; set; }
         #endregion
 
         #region File Parameters
@@ -185,12 +186,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             isNew = true;
 
-            setupStatusBar();
-            SetBusyStatus("Initializing Program...");
+            setupVMs();
 
             setupCommands();
             getLogo();
-            setupMenu();
         }
 
         #region Methods
@@ -233,6 +232,13 @@ namespace TECUserControlLibrary.ViewModels
         protected abstract string getStartupFile();
         protected abstract void clearStartupFile();
         #region Setup
+        private void setupVMs()
+        {
+            setupMenu();
+            setupStatusBar();
+            setupSettings();
+        }
+
         private void setupCommands()
         {
             NewCommand = new RelayCommand(NewExecute);
@@ -244,7 +250,7 @@ namespace TECUserControlLibrary.ViewModels
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
         }
         protected abstract void setupMenu();
-        protected void setupStatusBar()
+        private void setupStatusBar()
         {
             StatusBarVM = new StatusBarExtension();
 
@@ -254,6 +260,17 @@ namespace TECUserControlLibrary.ViewModels
             { StatusBarVM.Version = "Undeployed Version"; }
 
             StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+        }
+        private void setupSettings()
+        {
+            SettingsVM = new SettingsViewModel();
+            SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
+            //Do stuff here
+        }
+
+        private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
         #region Save/Load
