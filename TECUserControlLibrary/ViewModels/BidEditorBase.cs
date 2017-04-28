@@ -20,7 +20,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     abstract public class BidEditorBase : BuilderViewModel
     {
-        
         #region Properties
         
         private bool _templatesLoaded;
@@ -118,8 +117,7 @@ namespace TECUserControlLibrary.ViewModels
             workingFileParameters = BidFileParameters;
             
             setupCommands();
-            setupTemplates();
-            setupBid();
+            setupData();
             setupMenu();
         }
 
@@ -134,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels
             ExcelExportCommand = new RelayCommand(ExcelExportExecute);
             RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
         }
-        private void setupTemplates()
+        private void setupData()
         {
             Templates = new TECTemplates();
             
