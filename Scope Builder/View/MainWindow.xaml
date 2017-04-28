@@ -9,6 +9,7 @@
         xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
@@ -158,6 +159,9 @@
                 </TabItem>
                 <TabItem Header="Budget">
                     <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
+                </TabItem>
+                <TabItem Header="Settings">
+                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
 
