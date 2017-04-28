@@ -21,9 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     {
 
         #region Constants
-
         protected string DEFAULT_STATUS_TEXT = "Ready";
-
         #endregion
 
         #region Properties
@@ -86,11 +84,13 @@ namespace TECUserControlLibrary.ViewModels
                 _programName = value;
             }
         }
-        
+
         public string TECLogo { get; set; }
 
         protected bool isNew;
+
         public string Version { get; set; }
+
         public string TitleString
         {
             get { return _titleString; }
@@ -101,6 +101,12 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         private string _titleString;
+
+        abstract protected string ScopeDirectoryPath
+        {
+            get;
+            set;
+        }
 
         #region Command Properties
         public ICommand NewCommand { get; private set; }
@@ -118,11 +124,7 @@ namespace TECUserControlLibrary.ViewModels
         protected ChangeStack stack;
         public string startupFile;
         protected string saveFilePath;
-        abstract protected string ScopeDirectoryPath
-        {
-            get;
-            set;
-        }
+        
         #endregion
 
         #region View Models
@@ -192,7 +194,40 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
+        private void checkForOpenWith(string startupFile)
+        {
+            if (startupFile != "")
+            {
+                SetBusyStatus("Loading " + startupFile);
+                try
+                {
+                    loadFromPath(startupFile);
+                }
+                catch (Exception e)
+                {
+                    DebugHandler.LogError(e);
+                }
+                ResetStatus();
+            }
+        }
+        private void getLogo()
+        {
+            TECLogo = Path.GetTempFileName();
 
+            (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
+        }
+        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
+        {
+            StatusBarVM.CurrentStatusText = statusText;
+            IsReady = false;
+            UserCanInteract = userCanInteract;
+        }
+        protected void ResetStatus()
+        {
+            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
+            IsReady = true;
+            UserCanInteract = true;
+        }
         #region Setup
         private void setupCommands()
         {
@@ -217,45 +252,7 @@ namespace TECUserControlLibrary.ViewModels
             StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
         }
         #endregion
-
-        #region Helper Functions
-        private void checkForOpenWith(string startupFile)
-        {
-            if (startupFile != "")
-            {
-                SetBusyStatus("Loading " + startupFile);
-                try
-                {
-                    loadFromPath(startupFile);
-                }
-                catch (Exception e)
-                {
-                    DebugHandler.LogError(e);
-                }
-                ResetStatus();
-            }
-        }
-
-        private void getLogo()
-        {
-            TECLogo = Path.GetTempFileName();
-
-            (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
-        }
-        protected TECScopeManager loadFromPath(string path)
-        {
-            SetBusyStatus("Loading " + path);
-            saveFilePath = path;
-            ScopeDirectoryPath = Path.GetDirectoryName(path);
-            TECScopeManager outScope = null;
-            if (!UtilitiesMethods.IsFileLocked(path))
-            { outScope= EstimatingLibraryDatabase.Load(path); }
-            else
-            {
-                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-            }
-            return outScope;
-        }
+        #region Save/Load
         protected void saveNewToPath(string path)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
@@ -289,20 +286,6 @@ namespace TECUserControlLibrary.ViewModels
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
             }
         }
-
-        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
-        {
-            StatusBarVM.CurrentStatusText = statusText;
-            IsReady = false;
-            UserCanInteract = userCanInteract;
-        }
-        protected void ResetStatus()
-        {
-            StatusBarVM.CurrentStatusText = DEFAULT_STATUS_TEXT;
-            IsReady = true;
-            UserCanInteract = true;
-        }
-
         private void save()
         {
             if (saveFilePath != null)
@@ -432,6 +415,20 @@ namespace TECUserControlLibrary.ViewModels
 
             return saveSuccessful;
         }
+        
+        protected TECScopeManager loadFromPath(string path)
+        {
+            saveFilePath = path;
+            ScopeDirectoryPath = Path.GetDirectoryName(path);
+            TECScopeManager outScope = null;
+            if (!UtilitiesMethods.IsFileLocked(path))
+            { outScope = EstimatingLibraryDatabase.Load(path); }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+            }
+            return outScope;
+        }
         private void load()
         {
             string path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
@@ -450,21 +447,19 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     ResetStatus();
-                    if(loadingScopeManager == null)
+                    if (loadingScopeManager != null)
                     {
                         workingScopeManager = loadingScopeManager;
-                    } 
-                                        
+                    }
+
                     isNew = false;
                 };
 
                 worker.RunWorkerAsync();
             }
         }
-        #endregion //Helper Functions
-
+        #endregion 
         #region Get Path Methods
-
         protected string getSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = null)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -488,7 +483,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             return savePath;
         }
-
         protected string getLoadPath(FileDialogParameters fileParams, string initialDirectory = null)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -511,9 +505,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return savePath;
         }
-
         #endregion
-
         #region Commands
         protected abstract void NewExecute();
         protected void LoadExecute()
@@ -568,7 +560,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             saveAs();
         }
-
         private void UndoExecute()
         {
             stack.Undo();
@@ -580,7 +571,6 @@ namespace TECUserControlLibrary.ViewModels
             else
                 return false;
         }
-
         private void RedoExecute()
         {
             stack.Redo();
@@ -592,7 +582,6 @@ namespace TECUserControlLibrary.ViewModels
             else
                 return false;
         }
-
         private void ClosingExecute(CancelEventArgs e)
         {
             bool changes = (stack.SaveStack.Count > 0);
@@ -618,7 +607,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
+        #region Drag-Drop
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.FileDragOver(dropInfo);
@@ -631,7 +620,7 @@ namespace TECUserControlLibrary.ViewModels
                 loadFromPath(path);
             }
         }
-
+        #endregion
         #endregion
     }
 }

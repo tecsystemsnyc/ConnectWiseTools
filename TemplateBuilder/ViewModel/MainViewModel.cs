@@ -29,19 +29,12 @@ namespace TemplateBuilder.ViewModel
         //Initializer
         public MainViewModel() : base()
         {
-            _templates = new TECTemplates();
-           
             TitleString = "Template Builder";
-            
-            setupScopeCollecion();
-            setupEditTab();
-            setupScopeDataGrid();
-            setupMaterialsTab();
-            setupCommands();
-            setupVMs();
 
             getTemplates();
-
+            
+            setupCommands();
+            setupVMs();
             DGTabIndex = TemplateGridIndex.ControlledScope;
 
             ResetStatus();
@@ -71,7 +64,6 @@ namespace TemplateBuilder.ViewModel
                 refresh();
             }
         }
-        
         public TECTemplates Templates
         {
             get { return workingScopeManager as TECTemplates; }
@@ -80,8 +72,6 @@ namespace TemplateBuilder.ViewModel
                 workingScopeManager = value;
             }
         }
-        
-
         protected override string ScopeDirectoryPath
         {
             get
@@ -95,7 +85,6 @@ namespace TemplateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
-
         protected override string defaultSaveFileName
         {
             get
@@ -134,11 +123,14 @@ namespace TemplateBuilder.ViewModel
         #region Methods
         private void refresh()
         {
-            ScopeCollection.Refresh(Templates);
-            ScopeDataGrid.Refresh(Templates);
-            EditTab.Refresh(Templates);
-            MaterialsTab.Refresh(Templates);
-            ControlledScopeVM.Refresh(Templates);
+            if(ScopeCollection != null)
+            {
+                ScopeCollection.Refresh(Templates);
+                ScopeDataGrid.Refresh(Templates);
+                EditTab.Refresh(Templates);
+                MaterialsTab.Refresh(Templates);
+                ControlledScopeVM.Refresh(Templates);
+            }
         }
         #region Setup Methods
         private void setupCommands()
@@ -182,6 +174,14 @@ namespace TemplateBuilder.ViewModel
                 }
             }
         }
+        private void setupVMs()
+        {
+            setupControlledScopeTab();
+            setupScopeCollecion();
+            setupEditTab();
+            setupScopeDataGrid();
+            setupMaterialsTab();
+        }
 
         private void setupScopeCollecion()
         {
@@ -208,7 +208,7 @@ namespace TemplateBuilder.ViewModel
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
         }
-        private void setupVMs()
+        private void setupControlledScopeTab()
         {
             ControlledScopeVM = new ControlledScopeViewModel(Templates);
             ControlledScopeVM.DragHandler += DragOver;
@@ -216,9 +216,7 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
             ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
-        
         #endregion
-
         #region Commands Methods
         protected override void NewExecute()
         {
@@ -253,7 +251,6 @@ namespace TemplateBuilder.ViewModel
             refresh();
             Properties.Settings.Default.TemplatesFilePath = "";
         }
-        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)
@@ -299,19 +296,16 @@ namespace TemplateBuilder.ViewModel
             return !(Properties.Settings.Default.TemplatesFilePath == "");
         }
         #endregion //Commands Methods
-        
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
-
         #region Helper Methods
         private void setVisibility(TemplateGridIndex gridIndex)
         {
@@ -534,7 +528,6 @@ namespace TemplateBuilder.ViewModel
             ScopeDataGrid.SelectedEquipment = null;
             ScopeDataGrid.SelectedSystem = null;
         }
-
         protected override void setupMenu()
         {
             MenuVM = new MenuViewModel(MenuType.TB);
@@ -547,8 +540,6 @@ namespace TemplateBuilder.ViewModel
             MenuVM.RedoCommand = RedoCommand;
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
         }
-        
-        
         #endregion //Helper Methods
         #endregion //Methods
     }

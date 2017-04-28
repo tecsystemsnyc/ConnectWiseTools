@@ -160,7 +160,6 @@ namespace EstimateBuilder.ViewModel
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
         }
-
         private void setupNetworkVM()
         {
             NetworkVM = new NetworkViewModel(Bid);
@@ -247,7 +246,6 @@ namespace EstimateBuilder.ViewModel
             ElectricalVM.Refresh(Bid);
             NetworkVM.Refresh(Bid);
         }
-        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();

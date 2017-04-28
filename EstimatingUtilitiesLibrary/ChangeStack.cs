@@ -39,10 +39,6 @@ namespace EstimatingUtilitiesLibrary
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-        public ChangeStack(TECBid bid) : this()
-        {
-            
-        }
         public ChangeStack(TECScopeManager scopeManager) : this()
         {
             if(scopeManager is TECBid)

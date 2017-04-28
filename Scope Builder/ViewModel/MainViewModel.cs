@@ -133,7 +133,6 @@ namespace Scope_Builder.ViewModel
                 MenuVM.TemplatesHidden = false;
             }
         }
-
         #endregion //Commands Methods
 
         #region Helper Functions
@@ -267,7 +266,6 @@ namespace Scope_Builder.ViewModel
         #endregion //Helper Functions
 
         #region Setup Extensions
-
         private void setupAll()
         {
             setupScopeDataGrid();
@@ -317,7 +315,6 @@ namespace Scope_Builder.ViewModel
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             UIHelpers.StandardDrop(dropInfo);
@@ -325,7 +322,6 @@ namespace Scope_Builder.ViewModel
         #endregion
 
         #region Event Handlers
-
         private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedScopeType")
@@ -333,7 +329,6 @@ namespace Scope_Builder.ViewModel
                 updateVisibility();
             }
         }
-
         #endregion
     }
 }

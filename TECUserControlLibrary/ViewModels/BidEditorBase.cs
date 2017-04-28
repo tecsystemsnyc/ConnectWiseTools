@@ -37,6 +37,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+        protected bool isEstimate;
 
         protected override string defaultSaveFileName
         {
@@ -45,20 +46,25 @@ namespace TECUserControlLibrary.ViewModels
                 return (Bid.BidNumber + " " + Bid.Name);
             }
         }
-
-        private TECBid _bid;
-        public TECBid Bid
+        protected override TECScopeManager workingScopeManager
         {
-            get { return _bid; }
+            get
+            { return base.workingScopeManager; }
             set
             {
-                _bid = value;
-                stack = new ChangeStack(value);
-                // Call OnPropertyChanged whenever the property is updated
+                base.workingScopeManager = value;
                 RaisePropertyChanged("Bid");
-                buildTitleString();
                 Bid.PropertyChanged += Bid_PropertyChanged;
                 BidSet?.Invoke();
+                buildTitleString();
+            }
+        }
+        public TECBid Bid
+        {
+            get { return workingScopeManager as TECBid; }
+            set
+            {
+                workingScopeManager = value;
             }
         }
         private TECTemplates _templates;
@@ -71,20 +77,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-
-        public string TitleString
-        {
-            get { return _titleString; }
-            set
-            {
-                _titleString = value;
-                RaisePropertyChanged("TitleString");
-            }
-        }
-        private string _titleString;
-
-        protected bool isEstimate;
-
         #region Settings Properties
         public string TemplatesFilePath
         {
@@ -132,7 +124,6 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
-
         #region Setup
         private void setupCommands()
         {
@@ -215,17 +206,12 @@ namespace TECUserControlLibrary.ViewModels
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
-        
         #endregion
-
         #region Helper Functions
         private void buildTitleString()
         {
             TitleString = Bid.Name + " - " + programName;
         }
-        
-        
-        
         private void loadTemplates(string TemplatesFilePath)
         {
             var loadedTemplates = new TECTemplates();
@@ -257,7 +243,6 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerAsync();
             }
         }
-        
         #region Event Handlers
         private void Bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -267,9 +252,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
-        #endregion //Helper Functions
-
+        #endregion
         #region Commands
         override protected void NewExecute()
         {
@@ -309,8 +292,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-        
-        
         private void DocumentExecute()
         {
             string path = getSavePath(DocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
@@ -386,7 +367,6 @@ namespace TECUserControlLibrary.ViewModels
 
             loadTemplates(TemplatesFilePath);
         }
-        
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)
@@ -396,37 +376,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (TemplatesFilePath != null)
             {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                    {
-
-                        Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
-                        var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
-                        Bid.Catalogs = newCatalogs;
-                        templatesLoaded = true;
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                    }
-                    DebugHandler.LogDebugMessage("Finished refreshing templates");
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-
-                worker.RunWorkerAsync();
-                
+                loadTemplates(TemplatesFilePath);
             }
         }
-        
         #endregion
-        
         #endregion
     }
 }
