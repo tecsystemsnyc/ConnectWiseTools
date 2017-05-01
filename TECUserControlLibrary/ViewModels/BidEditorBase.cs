@@ -85,8 +85,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (Properties.Settings.Default.TemplatesFilePath != value)
                 {
                     Properties.Settings.Default.TemplatesFilePath = value;
-                    RaisePropertyChanged("TemplatesFilePath");
                     Properties.Settings.Default.Save();
+                    TemplatesFilePathChanged();
                 }
             }
         }
@@ -116,15 +116,14 @@ namespace TECUserControlLibrary.ViewModels
 
             workingFileParameters = BidFileParameters;
             
-            setupCommands();
             setupData();
-            setupMenu();
         }
 
         #region Methods
         #region Setup
-        private void setupCommands()
+        override protected void setupCommands()
         {
+            base.setupCommands();
             DocumentCommand = new RelayCommand(DocumentExecute);
             CSVExportCommand = new RelayCommand(CSVExportExecute);
             BudgetCommand = new RelayCommand(BudgetExecute);
@@ -359,12 +358,11 @@ namespace TECUserControlLibrary.ViewModels
             }
             //User choose path
             string path = getLoadPath(TemplatesFileParameters);
-            if (path != "")
+            if (path != null)
             {
                 TemplatesFilePath = path;
+                loadTemplates(TemplatesFilePath);
             }
-
-            loadTemplates(TemplatesFilePath);
         }
         private void RefreshTemplatesExecute()
         {

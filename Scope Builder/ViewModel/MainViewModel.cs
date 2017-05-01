@@ -50,20 +50,6 @@ namespace Scope_Builder.ViewModel
             }
         }
 
-        protected override string ScopeDirectoryPath
-        {
-            get
-            {
-                return Properties.Settings.Default.ScopeDirectoryPath;
-            }
-
-            set
-            {
-                Properties.Settings.Default.ScopeDirectoryPath = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-
         #region VMExtensions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public LocationDataGridExtension LocationDataGrid { get; set; }
@@ -79,7 +65,7 @@ namespace Scope_Builder.ViewModel
 
         #region Visibility Properties
         private Visibility _templatesVisibility;
-        public Visibility TemplatesVisibility
+        override public Visibility TemplatesVisibility
         {
             get
             { return _templatesVisibility; }
@@ -90,8 +76,37 @@ namespace Scope_Builder.ViewModel
             }
         }
         #endregion Visibility Properties
+
+        #region SettingsProperties
+        override protected bool TemplatesHidden
+        {
+            get
+            {
+                return Properties.Settings.Default.TemplatesHidden;
+            }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesHidden != value)
+                {
+                    Properties.Settings.Default.TemplatesHidden = value;
+                    RaisePropertyChanged("TemplatesHidden");
+                    TemplatesHiddenChanged();
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+        override protected string ScopeDirectoryPath
+        {
+            get { return Properties.Settings.Default.ScopeDirectoryPath; }
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
-        
+        #endregion
+
         #region Intitializer
         public MainViewModel() : base()
         {
@@ -230,6 +245,24 @@ namespace Scope_Builder.ViewModel
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.None;
             }
+            else if (DGTabIndex == GridIndex.Settings)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+            }
             else
             {
                 throw new NotImplementedException();
@@ -291,7 +324,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupScopeDataGrid()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(Bid);
+            ScopeDataGrid = new ScopeDataGridExtension(new TECBid());
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.SelectionChanged += setContextText;
@@ -300,19 +333,19 @@ namespace Scope_Builder.ViewModel
         }
         private void setupLocationDataGrid()
         {
-            LocationDataGrid = new LocationDataGridExtension(Bid);
+            LocationDataGrid = new LocationDataGridExtension(new TECBid());
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
         }
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionExtension(Templates);
+            ScopeCollection = new ScopeCollectionExtension(new TECTemplates());
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }
         private void setupBudget()
         {
-            BudgetVM = new BudgetViewModel(Bid);
+            BudgetVM = new BudgetViewModel(new TECBid());
         }
         #endregion
         

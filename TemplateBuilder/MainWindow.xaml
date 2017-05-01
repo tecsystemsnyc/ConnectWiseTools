@@ -55,7 +55,7 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>

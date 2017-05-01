@@ -108,6 +108,18 @@ namespace TECUserControlLibrary.ViewModels
             set;
         }
 
+        abstract public Visibility TemplatesVisibility
+        {
+            get;
+            set;
+        }
+
+        virtual protected string saveFilePath
+        {
+            get;
+            set;
+        }
+
         #region Command Properties
         public ICommand NewCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
@@ -123,7 +135,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Fields
         protected ChangeStack stack;
         public string startupFile;
-        protected string saveFilePath;
+        
         
         #endregion
 
@@ -199,10 +211,12 @@ namespace TECUserControlLibrary.ViewModels
         {
             isNew = true;
 
-            setupVMs();
-
             setupCommands();
+            setupVMs();
+            
             getLogo();
+
+            ResetStatus();
         }
 
         #region Methods
@@ -253,7 +267,7 @@ namespace TECUserControlLibrary.ViewModels
             setupSettings();
         }
 
-        private void setupCommands()
+        virtual protected void setupCommands()
         {
             NewCommand = new RelayCommand(NewExecute);
             LoadCommand = new RelayCommand(LoadExecute);
@@ -661,6 +675,26 @@ namespace TECUserControlLibrary.ViewModels
             {
                 TemplatesHidden = SettingsVM.TemplatesHidden;
             }
+        }
+
+        protected void TemplatesHiddenChanged()
+        {
+            SettingsVM.TemplatesHidden = TemplatesHidden;
+            if (TemplatesHidden)
+            {
+                TemplatesVisibility = Visibility.Hidden;
+                MenuVM.TemplatesHidden = true;
+            }
+            else
+            {
+                TemplatesVisibility = Visibility.Visible;
+                MenuVM.TemplatesHidden = false;
+            }
+        }
+
+        protected void TemplatesFilePathChanged()
+        {
+            SettingsVM.TemplatesLoadPath = TemplatesFilePath;
         }
 
         #endregion

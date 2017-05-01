@@ -129,6 +129,7 @@
             </Grid>
         
             <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
+                                             Grid.Column="0"
                                              Grid.Row="1" Grid.RowSpan="2"/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
             <TabControl Grid.Row="1"
@@ -160,6 +161,8 @@
                 <TabItem Header="Budget">
                     <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
                 </TabItem>
+                <!--Misc Tab-->
+                <TabItem Visibility="Collapsed"/>
                 <TabItem Header="Settings">
                     <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
