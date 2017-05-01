@@ -927,7 +927,7 @@ namespace Tests
                 if (dev.Guid == deviceToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumDevices - 1), actualTemplates.SubScopeTemplates.Count);
+            Assert.AreEqual((oldNumDevices - 1), actualTemplates.Catalogs.Devices.Count);
         }
 
         [TestMethod]

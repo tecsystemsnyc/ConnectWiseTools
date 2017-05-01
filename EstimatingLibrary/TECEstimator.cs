@@ -19,7 +19,7 @@ namespace EstimatingLibrary
 
         #region Cost Base
         private double tecLaborHours;
-        private double tecMaterialCost = 0;
+        private double tecMaterialCost;
         private double electricalLaborHours;
         private double electricalMaterialCost;
         private int pointNumber;
@@ -106,6 +106,11 @@ namespace EstimatingLibrary
             get { return GetTotalLaborCost(bid); }
         }
 
+        public double TECCost
+        {
+            get { return GetTECCost(bid); }
+        }
+
         public double MaterialCost
         {
             get
@@ -128,7 +133,7 @@ namespace EstimatingLibrary
 
         public double ElectricalLaborHours
         {
-            get { return GetElectricalLaborHours(bid); }
+            get { return electricalLaborHours; }
         }
         public double ElectricalLaborCost
         {
@@ -293,7 +298,7 @@ namespace EstimatingLibrary
             }
             else if (item is TECMiscWiring)
             {
-                var cost = item as TECMiscCost;
+                var cost = item as TECMiscWiring;
                 electricalMaterialCost += cost.Cost * cost.Quantity;
                 RaiseAll();
             }
@@ -405,7 +410,7 @@ namespace EstimatingLibrary
         }
 
         /// <summary>
-        /// Returns cost of all TEC material and labor with escalation, overhead, and tax
+        /// Returns cost of all TEC material and labor with escalation and tax
         /// </summary>
         public double GetTECCost(TECBid bid)
         {
@@ -616,66 +621,13 @@ namespace EstimatingLibrary
             outCost += GetMaterialLabor(bid);
             return outCost;
         }
-
-        /// <summary>
-        /// Returns the Journeyman electrical labor hours
-        /// </summary>
-        public double GetElectricalLaborHours(TECBid bid)
-        {
-            double laborHours = 0;
-            var terminations = 0;
-
-            foreach (TECController controller in bid.Controllers)
-            {
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    var length = connection.Length;
-                    if (connection.ConduitType != null)
-                    {
-                        laborHours += length * connection.ConduitType.Labor;
-                        foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
-                        {
-                            laborHours += associatedCost.Labor;
-                        }
-                    }
-                    if (connection is TECNetworkConnection)
-                    {
-                        if ((connection as TECNetworkConnection).ConnectionType != null)
-                        {
-                            terminations += 2;
-                            TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
-                            laborHours += length * type.Labor;
-                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                            { laborHours += associatedCost.Labor; }
-                        }
-                    }
-                    else if (connection is TECSubScopeConnection)
-                    {
-                        foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
-                        {
-                            terminations += 2;
-                            laborHours += length * type.Labor;
-                            foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                            { laborHours += associatedCost.Labor; }
-                        }
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                    }
-                }
-
-            }
-            //Labor hours should be a stored, user-editable value
-            laborHours += terminations * .1;
-            return laborHours;
-        }
+        
         /// <summary>
         /// Returns the Journeyman electrical labor cost
         /// </summary>
         public double GetElectricalLaborCost(TECBid bid)
         {
-            double cost = GetElectricalLaborHours(bid) * bid.Labor.ElectricalEffectiveRate;
+            double cost = electricalLaborHours * bid.Labor.ElectricalEffectiveRate;
 
             return cost;
         }
@@ -684,7 +636,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetElectricalSuperLaborHours(TECBid bid)
         {
-            double laborHours = GetElectricalLaborHours(bid);
+            double laborHours = electricalLaborHours;
 
             return laborHours / 7;
         }
@@ -702,7 +654,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetTotalElectricalLaborHours(TECBid bid)
         {
-            double laborCost = GetElectricalLaborHours(bid) + GetElectricalSuperLaborHours(bid);
+            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours(bid);
             return laborCost;
         }
         /// <summary>

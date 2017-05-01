@@ -33,7 +33,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 _userPrice = value;
-                var newProfit = (value - Bid.Estimate.SubcontractorSubtotal) / (EstimateCalculator.GetTECCost(Bid) * (1 + Bid.Parameters.Overhead / 100)) - 1;
+                var newProfit = (value - Bid.Estimate.SubcontractorSubtotal) / (Bid.Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
                 Bid.Parameters.Profit = newProfit * 100;
                 RaisePropertyChanged("UserPrice");
             }

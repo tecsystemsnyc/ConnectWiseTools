@@ -345,7 +345,7 @@ namespace EstimatingLibrary
 
         public void addControlledScope(TECControlledScope controlledScope)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var systemCollection = new ObservableCollection<TECSystem>();
             var controllerCollection = new ObservableCollection<TECController>();
@@ -362,38 +362,38 @@ namespace EstimatingLibrary
             {
                 panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
-            watch.Stop();
-            Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
               panelCollection, this, guidDictionary);
-            watch.Stop();
-            Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECController controller in controllerCollection)
             {
                 Controllers.Add(controller);
             }
-            watch.Stop();
-            Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECPanel panel in panelCollection)
             {
                 Panels.Add(panel);
             }
-            watch.Stop();
-            Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
 
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            //watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECSystem system in systemCollection)
             {
                 Systems.Add(system);
             }
-            watch.Stop();
-            Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
         }
 
         #region Event Handlers

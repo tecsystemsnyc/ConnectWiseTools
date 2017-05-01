@@ -27,6 +27,8 @@ namespace EstimatingUtilitiesLibrary
 
         static private SQLiteDatabase SQLiteDB;
 
+        static private Dictionary<TableBase, StackItem> indexesToUpdate;
+
         #region Public Functions
         static public TECScopeManager Load(string path)
         {
@@ -58,8 +60,11 @@ namespace EstimatingUtilitiesLibrary
         
         static public void SaveNew(string path, TECScopeManager scopeManager)
         {
-            SQLiteDB = new SQLiteDatabase(path);
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             
+            SQLiteDB = new SQLiteDatabase(path);
+            indexesToUpdate = new Dictionary<TableBase, StackItem>();
+
             if (File.Exists(path))
             { SQLiteDB.overwriteFile(); }
             if(scopeManager is TECBid)
@@ -71,14 +76,21 @@ namespace EstimatingUtilitiesLibrary
                 createAllTemplateTables();
                 saveCompleteTemplate(scopeManager as TECTemplates);
             }
-            
+            //foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
+            //{
+            //    updateIndexedRelation(item.Key, item.Value);
+            //}
             SQLiteDB.Connection.Close();
             
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            watch.Stop();
+            Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
         }
         static public void Update(string path, ChangeStack changeStack, bool doBackup = true)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             if (doBackup) { createBackup(path); }
 
             string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + String.Format("{0:ffff}", DateTime.Now) + ".tmp";
@@ -86,7 +98,7 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(path, tempPath);
 
             SQLiteDB = new SQLiteDatabase(tempPath);
-
+            indexesToUpdate = new Dictionary<TableBase, StackItem>();
             foreach (StackItem change in changeStack.SaveStack)
             {
                 Change changeType = change.Change;
@@ -114,6 +126,10 @@ namespace EstimatingUtilitiesLibrary
                     removeRelationship(change);
                 }
             }
+            //foreach(KeyValuePair<TableBase,StackItem> item in indexesToUpdate)
+            //{
+            //    updateIndexedRelation(item.Key, item.Value);
+            //}
 
             SQLiteDB.Connection.Close();
 
@@ -123,6 +139,8 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(tempPath, path, true);
 
             File.Delete(tempPath);
+            watch.Stop();
+            Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
         static public void UpdateCatalogs(string path, TECTemplates templates)
         {
@@ -1979,6 +1997,9 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
             TECDevice device = new TECDevice(guid);
+            device.Description = "placeholder";
+            device.Manufacturer = new TECManufacturer();
+            device.ConnectionType = new TECConnectionType();
             return device;
         }
         private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
@@ -2003,6 +2024,8 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid guid = new Guid(row[IOIOModuleTable.ModuleID.Name].ToString());
             TECIOModule module = new TECIOModule(guid);
+            module.Description = "placeholder";
+            module.Manufacturer = new TECManufacturer();
             return module;
         }
         #endregion
@@ -2417,6 +2440,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
+                //{ indexesToUpdate[table] = item; }
                 { updateIndexedRelation(table, item); }
                 else
                 { addObjectToTable(table, item); } 
@@ -2454,7 +2478,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                     else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
-                        var dataString = objectToDBString(getQuantityInParentCollection(item.TargetObject, item.ReferenceObject));
+                        var dataString = objectToDBString(getQuantityInParentCollection(child, item.ReferenceObject));
                         data.Add(field.Name, dataString);
                     }
                     var assemblyItem = new StackItem(Change.Add, item.ReferenceObject, child, item.ReferenceType, item.TargetType);
