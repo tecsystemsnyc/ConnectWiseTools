@@ -5,8 +5,6 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
 {
-
-    /// </summary>
     public class SettingsViewModel : ViewModelBase
     {
 
@@ -40,16 +38,18 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand ReloadTemplatesCommand { get; private set; }
 
-        public Action ReloadTemplates;
-
-        public SettingsViewModel()
+        public SettingsViewModel(bool templatesHidden, string templatesLoadPath, ICommand reloadTemplatesCommand)
         {
-            ReloadTemplatesCommand = new RelayCommand(ReloadTemplatesExecute);
+            TemplatesHidden = templatesHidden;
+            TemplatesLoadPath = templatesLoadPath;
+            ReloadTemplatesCommand = reloadTemplatesCommand;
         }
 
-        private void ReloadTemplatesExecute()
+        public void Refresh(bool templatesHidden, string templatesLoadPath, ICommand reloadTemplatesCommand)
         {
-            ReloadTemplates();
+            TemplatesHidden = templatesHidden;
+            TemplatesLoadPath = templatesLoadPath;
+            ReloadTemplatesCommand = reloadTemplatesCommand;
         }
     }
 }

@@ -136,6 +136,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 loadTemplatesMenuItem.Command = value;
             }
+            get
+            {
+                return loadTemplatesMenuItem.Command;
+            }
         }
 
         private TECMenuItem refreshTemplatesMenuItem;
@@ -215,9 +219,10 @@ namespace TECUserControlLibrary.ViewModels
             //Templates
             TECMenuItem TemplatesMenu = new TECMenuItem("Templates", lightTextBrush);
 
+            loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
+
             if (type != MenuType.TB)
             {
-                loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
                 TemplatesMenu.Items.Add(loadTemplatesMenuItem);
             }
 
