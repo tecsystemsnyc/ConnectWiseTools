@@ -1923,7 +1923,7 @@ namespace EstimatingUtilitiesLibrary
             priceRunProperties.Append(priceBold);
             priceRunProperties.Append(priceFontSize);
             Text priceText = new Text();
-            priceText.Text = _bid.TotalPrice.ToString("N");
+            //priceText.Text = _bid.TotalPrice.ToString("N");
         
             priceRun.Append(priceRunProperties);
             priceRun.Append(priceText);

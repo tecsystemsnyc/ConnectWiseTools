@@ -107,7 +107,7 @@ namespace TECUserControlLibrary.ViewModels
         public Action BidSet;
         public Action TemplatesLoadedSet;
         #endregion
-        
+
         #endregion
 
         public BidEditorBase() : base()
@@ -233,9 +233,10 @@ namespace TECUserControlLibrary.ViewModels
                 worker.RunWorkerCompleted += (s, e) =>
                 {
                     Templates = loadedTemplates;
-                    var newCatalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
-                    Bid.Catalogs = newCatalogs;
-                    templatesLoaded = true;
+                    if (isNew)
+                    {
+                        setupBid();
+                    }
                     ResetStatus();
                 };
                 worker.RunWorkerAsync();

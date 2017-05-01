@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECScope
+    public class TECEquipment : TECScope, CostComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -95,6 +96,22 @@ namespace EstimatingLibrary
         public double LaborCost
         {
             get { return getLaborCost(); }
+        }
+
+        public double ElectricalCost
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public double ElectricalLabor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion //Properties

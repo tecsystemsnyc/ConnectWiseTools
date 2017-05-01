@@ -98,6 +98,9 @@ namespace EstimatingLibrary
             }
         }
 
+        //public abstract double MaterialCost { get; }
+        //public abstract double LaborCost { get; }
+
         public void SetLocationFromParent(TECLocation location)
         {
             var oldNew = Tuple.Create<Object, Object>(_location, location);
@@ -139,7 +142,6 @@ namespace EstimatingLibrary
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
         }
-
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -157,7 +159,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         #endregion Methods
     }
 }

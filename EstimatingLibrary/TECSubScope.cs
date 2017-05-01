@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECScope
+    public class TECSubScope : TECScope, CostComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -122,6 +123,22 @@ namespace EstimatingLibrary
         public int BI { get { return _bi; } }
         public int BO { get { return _bo; } }
         public int Serial { get { return _serial; } }
+
+        public double ElectricalCost
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public double ElectricalLabor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion //Num Point Types
 
         #region Event Handlers

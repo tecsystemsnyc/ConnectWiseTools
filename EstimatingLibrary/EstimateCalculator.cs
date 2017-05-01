@@ -66,7 +66,7 @@ namespace EstimatingLibrary
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * bid.MaterialCost;
+                outTax += .0875 * GetMaterialCost(bid);
             }
 
             return outTax;
@@ -79,9 +79,9 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetTECLaborCost(bid);
-            outCost += bid.MaterialCost;
+            outCost += GetMaterialLabor(bid);
             outCost += outCost * bid.Parameters.Escalation / 100;
-            outCost += bid.Tax;
+            outCost += GetTax(bid);
 
             return outCost;
         }
@@ -483,8 +483,8 @@ namespace EstimatingLibrary
         public static double GetSubcontractorCost(TECBid bid)
         {
             double outCost = 0;
-            outCost += bid.SubcontractorLaborCost;
-            outCost += bid.ElectricalMaterialCost;
+            outCost += GetSubcontractorLaborCost(bid);
+            outCost += GetElectricalMaterialCost(bid);
             outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
 
             return outCost;
