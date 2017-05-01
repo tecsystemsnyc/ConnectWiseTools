@@ -323,7 +323,7 @@ namespace EstimatingLibrary
             }
             else if (item is TECMiscWiring)
             {
-                var cost = item as TECMiscCost;
+                var cost = item as TECMiscWiring;
                 electricalMaterialCost -= cost.Cost * cost.Quantity;
                 RaiseAll();
             }

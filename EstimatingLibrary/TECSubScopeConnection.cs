@@ -43,12 +43,14 @@ namespace EstimatingLibrary
             get
             {
                 var outConnectionTypes = new ObservableCollection<TECConnectionType>();
-                
-                foreach (TECDevice dev in SubScope.Devices)
+                if(SubScope != null)
                 {
-                    outConnectionTypes.Add(dev.ConnectionType);
+                    foreach (TECDevice dev in SubScope.Devices)
+                    {
+                        outConnectionTypes.Add(dev.ConnectionType);
+                    }
                 }
-
+                
                 return outConnectionTypes;
             }
         }
