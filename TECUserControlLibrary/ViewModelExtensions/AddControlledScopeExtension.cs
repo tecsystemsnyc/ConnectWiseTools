@@ -447,10 +447,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
        
         private void addControlledScopeExecute()
         {
-            for(int x = 0; x < ControlledScopeQuantity; x++)
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            for (int x = 0; x < ControlledScopeQuantity; x++)
             {
+                var subWatch = System.Diagnostics.Stopwatch.StartNew();
                 Bid.addControlledScope(ControlledScope);
+                subWatch.Stop();
+                Console.WriteLine("Add " + x + " controlled scope: " + subWatch.ElapsedMilliseconds);
             }
+            watch.Stop();
+            Console.WriteLine("Add all controlled scope: " + watch.ElapsedMilliseconds);
             ControlledScopeQuantity = 0;
         }
         private bool addControlledScopeCanExecute()
