@@ -72,24 +72,38 @@ namespace TemplateBuilder.ViewModel
                 workingScopeManager = value;
             }
         }
-        protected override string ScopeDirectoryPath
-        {
-            get
-            {
-                return Properties.Settings.Default.ScopeDirectoryPath;
-            }
-
-            set
-            {
-                Properties.Settings.Default.ScopeDirectoryPath = value;
-                Properties.Settings.Default.Save();
-            }
-        }
         protected override string defaultSaveFileName
         {
             get
             {
                 return "Templates";
+            }
+        }
+
+        override protected string TemplatesFilePath
+        {
+            get { return Properties.Settings.Default.TemplatesFilePath; }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesFilePath != value)
+                {
+                    Properties.Settings.Default.TemplatesFilePath = value;
+                    Properties.Settings.Default.Save();
+                    TemplatesFilePathChanged();
+                }
+            }
+        }
+        protected override string saveFilePath
+        {
+            get
+            {
+                return base.saveFilePath;
+            }
+
+            set
+            {
+                TemplatesFilePath = value;
+                base.saveFilePath = value;
             }
         }
 
@@ -118,6 +132,49 @@ namespace TemplateBuilder.ViewModel
         #region Commands Properties
         public ICommand RefreshCommand { get; private set; }
         #endregion //Commands Properties
+
+        #region Visibility Properties
+        private Visibility _templatesVisibility;
+        override public Visibility TemplatesVisibility
+        {
+            get
+            { return _templatesVisibility; }
+            set
+            {
+                _templatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
+            }
+        }
+        #endregion Visibility Properties
+
+        #region SettingsProperties
+        override protected bool TemplatesHidden
+        {
+            get
+            {
+                return Properties.Settings.Default.TemplatesHidden;
+            }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesHidden != value)
+                {
+                    Properties.Settings.Default.TemplatesHidden = value;
+                    RaisePropertyChanged("TemplatesHidden");
+                    TemplatesHiddenChanged();
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+        override protected string ScopeDirectoryPath
+        {
+            get { return Properties.Settings.Default.ScopeDirectoryPath; }
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+        #endregion
         #endregion //Properties
 
         #region Methods
@@ -133,18 +190,19 @@ namespace TemplateBuilder.ViewModel
             }
         }
         #region Setup Methods
-        private void setupCommands()
+        override protected void setupCommands()
         {
+            base.setupCommands();
             RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
         }
         private void getTemplates()
         {
             Templates = new TECTemplates();
 
-            if ((Properties.Settings.Default.TemplatesFilePath != "") && (File.Exists(Properties.Settings.Default.TemplatesFilePath)))
+            if ((TemplatesFilePath != "") && (File.Exists(TemplatesFilePath)))
             {
-                if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates; }
+                if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
+                { Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates; }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -157,17 +215,17 @@ namespace TemplateBuilder.ViewModel
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    Properties.Settings.Default.TemplatesFilePath = getLoadPath(TemplatesFileParameters);
+                    TemplatesFilePath = getLoadPath(TemplatesFileParameters);
 
-                    if (Properties.Settings.Default.TemplatesFilePath != null)
+                    if (TemplatesFilePath != null)
                     {
-                        if (!UtilitiesMethods.IsFileLocked(Properties.Settings.Default.TemplatesFilePath))
+                        if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.Load(Properties.Settings.Default.TemplatesFilePath) as TECTemplates;
+                            Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
                         }
                         else
                         {
-                            DebugHandler.LogError("Could not open file " + Properties.Settings.Default.TemplatesFilePath + " File is open elsewhere.");
+                            DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
                         }
                         DebugHandler.LogDebugMessage("Finished loading templates");
                     }
@@ -249,7 +307,7 @@ namespace TemplateBuilder.ViewModel
                 Templates = new TECTemplates();
             }
             refresh();
-            Properties.Settings.Default.TemplatesFilePath = "";
+            TemplatesFilePath = "";
         }
         private void RefreshTemplatesExecute()
         {
@@ -276,7 +334,7 @@ namespace TemplateBuilder.ViewModel
                 }
             }
 
-            string path = Properties.Settings.Default.TemplatesFilePath;
+            string path = TemplatesFilePath;
             if (path != null)
             {
                 SetBusyStatus("Loading templates from file: " + path);
@@ -293,7 +351,7 @@ namespace TemplateBuilder.ViewModel
         }
         private bool RefreshCanExecute()
         {
-            return !(Properties.Settings.Default.TemplatesFilePath == "");
+            return !(TemplatesFilePath == "");
         }
         #endregion //Commands Methods
         #region Drag Drop
@@ -548,6 +606,7 @@ namespace TemplateBuilder.ViewModel
             MenuVM.UndoCommand = UndoCommand;
             MenuVM.RedoCommand = RedoCommand;
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
+            MenuVM.LoadTemplatesCommand = LoadCommand;
         }
         #endregion //Helper Methods
         #endregion //Methods

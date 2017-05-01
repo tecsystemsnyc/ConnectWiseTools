@@ -88,7 +88,6 @@ namespace EstimateBuilder.ViewModel
         public ScopeEditorViewModel ScopeEditorVM { get; set; }
         public DrawingViewModel DrawingVM { get; set; }
         public LaborViewModel LaborVM { get; set; }
-        public SettingsViewModel SettingsVM { get; set; }
         public ReviewViewModel ReviewVM { get; set; }
         public ProposalViewModel ProposalVM { get; set; }
         public ElectricalViewModel ElectricalVM { get; set; }
@@ -99,6 +98,19 @@ namespace EstimateBuilder.ViewModel
         public ICommand LoadDrawingCommand { get; private set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         #endregion Command Properties
+
+        public override Visibility TemplatesVisibility
+        {
+            get
+            {
+                return ScopeEditorVM.TemplatesVisibility;
+            }
+
+            set
+            {
+                ScopeEditorVM.TemplatesVisibility = value;
+            }
+        }
         #endregion Properties
 
         #region Methods
@@ -222,7 +234,6 @@ namespace EstimateBuilder.ViewModel
             setupDrawingVM(new TECBid());
             setupLaborVM(new TECBid(), new TECTemplates());
             setupReviewVM(new TECBid());
-            setupSettingsVM();
             setupProposalVM(new TECBid());
             setupElectricalVM(new TECBid());
             setupMenuVM();
@@ -236,7 +247,6 @@ namespace EstimateBuilder.ViewModel
                 DrawingVM.Bid = Bid;
                 LaborVM.Refresh(Bid, Templates);
                 ReviewVM.Refresh(Bid);
-                //SettingsVM.Bid = Bid;
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid);
@@ -274,20 +284,7 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region Event Handlers
-        private void TemplatesHiddenChanged()
-        {
-            SettingsVM.TemplatesHidden = TemplatesHidden;
-            if (TemplatesHidden)
-            {
-                ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
-                MenuVM.TemplatesHidden = true;
-            }
-            else
-            {
-                ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
-                MenuVM.TemplatesHidden = false;
-            }
-        }
+        
         private void BidEditorBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesFilePath")
