@@ -77,7 +77,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #region Settings Properties
-        public string TemplatesFilePath
+        override protected string TemplatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
             set

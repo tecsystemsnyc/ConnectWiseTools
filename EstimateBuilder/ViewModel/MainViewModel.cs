@@ -55,7 +55,7 @@ namespace EstimateBuilder.ViewModel
         #region Properties
 
         #region SettingsProperties
-        public bool TemplatesHidden
+        override protected bool TemplatesHidden
         {
             get
             {
@@ -133,14 +133,6 @@ namespace EstimateBuilder.ViewModel
             TemplatesLoadedSet += () => {
                 LaborVM.TemplatesLoaded = templatesLoaded;
             };
-        }
-        private void setupSettingsVM()
-        {
-            SettingsVM = new SettingsViewModel();
-            SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
-            SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-            SettingsVM.TemplatesHidden = TemplatesHidden;
-            SettingsVM.ReloadTemplates += LoadTemplatesExecute;
         }
         private void setupReviewVM(TECBid bid)
         {
@@ -229,7 +221,6 @@ namespace EstimateBuilder.ViewModel
             setupDrawingVM(Bid);
             setupLaborVM(Bid, Templates);
             setupReviewVM(Bid);
-            setupSettingsVM();
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
             setupMenuVM();

@@ -180,6 +180,19 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
+        #region SettingsProperties
+        abstract protected bool TemplatesHidden
+        {
+            get;
+            set;
+        }
+        abstract protected string TemplatesFilePath
+        {
+            get;
+            set;
+        }
+        #endregion
+
         #endregion
 
         public BuilderViewModel()
@@ -231,6 +244,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected abstract string getStartupFile();
         protected abstract void clearStartupFile();
+
         #region Setup
         private void setupVMs()
         {
@@ -263,15 +277,11 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupSettings()
         {
-            SettingsVM = new SettingsViewModel();
+            SettingsVM = new SettingsViewModel(TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
-            //Do stuff here
         }
 
-        private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        
         #endregion
         #region Save/Load
         protected void saveNewToPath(string path)
@@ -642,6 +652,19 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
+
+        #region Event Handlers
+
+        private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TemplatesHidden")
+            {
+                TemplatesHidden = SettingsVM.TemplatesHidden;
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }
