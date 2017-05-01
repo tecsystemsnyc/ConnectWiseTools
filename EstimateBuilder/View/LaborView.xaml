@@ -67,125 +67,125 @@
         <!--Project Management Values-->
         <TextBlock Text="Project Management: "
                Grid.Row="1"/>
-        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.PMCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.PMExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.PMLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.PMLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.PMRate, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="7"
                  />
 
         <!--Engineering Values-->
         <TextBlock Text="Engineering: "
                Grid.Row="2"/>
-        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.ENGCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.ENGExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.ENGLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.ENGLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ENGRate, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="7"
                  />
 
         <!--Software Values-->
         <TextBlock Text="Software: "
                Grid.Row="3"/>
-        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.SoftCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.SoftExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.SoftLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.SoftLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="7"
                  />
 
         <!--Graphics Values-->
         <TextBlock Text="Graphics: "
                Grid.Row="4"/>
-        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.GraphCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.GraphExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.GraphLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.GraphLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="7"
                  />
         
         <!--Commisioning Values-->
         <TextBlock Text="Commisioning: "
                Grid.Row="5"/>
-        <TextBlock Text="{Binding Bid.TotalPointNumber, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="1"
                  />
         <TextBlock Text="{Binding Bid.Labor.CommCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="2"
                  />
-        <TextBlock Text="{Binding Bid.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="3"
                  />
         <TextBox Text="{Binding Bid.Labor.CommExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Bid.CommLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.CommLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="7"
                  />
 
@@ -205,26 +205,26 @@
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
                Grid.Row="8"/>
-        <TextBlock Text="{Binding Bid.ElectricalLaborHours, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.ElectricalLaborHours, StringFormat= {} {0:F2}}"
                  Grid.Row="8" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.ElectricalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.ElectricalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="8" Grid.Column="7"
                  />
 
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
                Grid.Row="9"/>
-        <TextBlock Text="{Binding Bid.ElectricalSuperLaborHours, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Estimate.ElectricalSuperLaborHours, StringFormat= {} {0:F2}}"
                  Grid.Row="9" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalSuperEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="9" Grid.Column="6"
                  />
-        <TextBlock Text="{Binding Bid.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="9" Grid.Column="7"
                  />
 
@@ -232,7 +232,7 @@
         <!--Total Values-->
         <TextBlock Text="Total"
                Grid.Row="10" Grid.Column="7"/>
-        <TextBlock Text="{Binding Bid.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
+        <TextBlock Text="{Binding Bid.Estimate.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="11" Grid.Column="7"
                  />
         

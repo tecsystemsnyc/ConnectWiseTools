@@ -26,128 +26,128 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        //private double _userPrice;
-        //public double UserPrice
-        //{
-        //    get { return _userPrice; }
-        //    set
-        //    {
-        //        _userPrice = value;
-        //        var newProfit = (value - Bid.SubcontractorSubtotal) / (EstimateCalculator.GetTECCost(Bid) * (1 + Bid.Parameters.Overhead / 100)) - 1;
-        //        Bid.Parameters.Profit = newProfit * 100;
-        //        RaisePropertyChanged("UserPrice");
-        //    }
-        //}
+        private double _userPrice;
+        public double UserPrice
+        {
+            get { return _userPrice; }
+            set
+            {
+                _userPrice = value;
+                var newProfit = (value - Bid.Estimate.SubcontractorSubtotal) / (EstimateCalculator.GetTECCost(Bid) * (1 + Bid.Parameters.Overhead / 100)) - 1;
+                Bid.Parameters.Profit = newProfit * 100;
+                RaisePropertyChanged("UserPrice");
+            }
+        }
 
-        //#region Margins
+        #region Margins
 
-        //public double MarginM8
-        //{
-        //    get { return Bid.Margin - 8; }
-        //}
-        //public double MarginM6
-        //{
-        //    get { return Bid.Margin - 6; }
-        //}
-        //public double MarginM4
-        //{
-        //    get { return Bid.Margin - 4; }
-        //}
-        //public double MarginM2
-        //{
-        //    get { return Bid.Margin - 2; }
-        //}
-        //public double MarginP2
-        //{
-        //    get { return Bid.Margin +2; }
-        //}
-        //public double MarginP4
-        //{
-        //    get { return Bid.Margin + 4; }
-        //}
-        //public double MarginP6
-        //{
-        //    get { return Bid.Margin + 6; }
-        //}
-        //public double MarginP8
-        //{
-        //    get { return Bid.Margin + 8; }
-        //}
+        public double MarginM8
+        {
+            get { return Bid.Estimate.Margin - 8; }
+        }
+        public double MarginM6
+        {
+            get { return Bid.Estimate.Margin - 6; }
+        }
+        public double MarginM4
+        {
+            get { return Bid.Estimate.Margin - 4; }
+        }
+        public double MarginM2
+        {
+            get { return Bid.Estimate.Margin - 2; }
+        }
+        public double MarginP2
+        {
+            get { return Bid.Estimate.Margin + 2; }
+        }
+        public double MarginP4
+        {
+            get { return Bid.Estimate.Margin + 4; }
+        }
+        public double MarginP6
+        {
+            get { return Bid.Estimate.Margin + 6; }
+        }
+        public double MarginP8
+        {
+            get { return Bid.Estimate.Margin + 8; }
+        }
 
-        //#endregion
-        //#region Prices
-        //public double TotalPriceM8
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginM8 / 100); }
-        //}
-        //public double TotalPriceM6
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginM6 / 100); }
-        //}
-        //public double TotalPriceM4
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginM4 / 100); }
-        //}
-        //public double TotalPriceM2
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginM2 / 100); }
-        //}
-        //public double TotalPriceP2
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginP2 / 100); }
-        //}
-        //public double TotalPriceP4
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginP4 / 100); }
-        //}
-        //public double TotalPriceP6
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginP6 / 100); }
-        //}
-        //public double TotalPriceP8
-        //{
-        //    get { return Bid.TotalCost / (1 - MarginP8 / 100); }
-        //}
-        //#endregion
-        //#region Markups
-        //public double Markup
-        //{
-        //    get { return Bid.TotalPrice - Bid.TotalCost; }
-        //}
+        #endregion
+        #region Prices
+        public double TotalPriceM8
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginM8 / 100); }
+        }
+        public double TotalPriceM6
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginM6 / 100); }
+        }
+        public double TotalPriceM4
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginM4 / 100); }
+        }
+        public double TotalPriceM2
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginM2 / 100); }
+        }
+        public double TotalPriceP2
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginP2 / 100); }
+        }
+        public double TotalPriceP4
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginP4 / 100); }
+        }
+        public double TotalPriceP6
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginP6 / 100); }
+        }
+        public double TotalPriceP8
+        {
+            get { return Bid.Estimate.TotalCost / (1 - MarginP8 / 100); }
+        }
+        #endregion
+        #region Markups
+        public double Markup
+        {
+            get { return Bid.Estimate.TotalPrice - Bid.Estimate.TotalCost; }
+        }
 
-        //public double MarkupM8
-        //{
-        //    get { return TotalPriceM8 - Bid.TotalCost; }
-        //}
-        //public double MarkupM6
-        //{
-        //    get { return TotalPriceM6 - Bid.TotalCost; }
-        //}
-        //public double MarkupM4
-        //{
-        //    get { return TotalPriceM4 - Bid.TotalCost; }
-        //}
-        //public double MarkupM2
-        //{
-        //    get { return TotalPriceM2 - Bid.TotalCost; }
-        //}
-        //public double MarkupP2
-        //{
-        //    get { return TotalPriceP2 - Bid.TotalCost; }
-        //}
-        //public double MarkupP4
-        //{
-        //    get { return TotalPriceP4 - Bid.TotalCost; }
-        //}
-        //public double MarkupP6
-        //{
-        //    get { return TotalPriceP6 - Bid.TotalCost; }
-        //}
-        //public double MarkupP8
-        //{
-        //    get { return TotalPriceP8 - Bid.TotalCost; }
-        //}
-        //#endregion
+        public double MarkupM8
+        {
+            get { return TotalPriceM8 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupM6
+        {
+            get { return TotalPriceM6 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupM4
+        {
+            get { return TotalPriceM4 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupM2
+        {
+            get { return TotalPriceM2 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupP2
+        {
+            get { return TotalPriceP2 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupP4
+        {
+            get { return TotalPriceP4 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupP6
+        {
+            get { return TotalPriceP6 - Bid.Estimate.TotalCost; }
+        }
+        public double MarkupP8
+        {
+            get { return TotalPriceP8 - Bid.Estimate.TotalCost; }
+        }
+        #endregion
 
         public ReviewViewModel()
         {
