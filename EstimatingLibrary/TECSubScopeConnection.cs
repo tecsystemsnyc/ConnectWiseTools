@@ -98,7 +98,6 @@ namespace EstimatingLibrary
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
         }
-
         private int getTerminations()
         {
             int terms = 0;
@@ -107,6 +106,11 @@ namespace EstimatingLibrary
                 terms += 2;
             }
             return terms;
+        }
+
+        protected override double getElectricalCost()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

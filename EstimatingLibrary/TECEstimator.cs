@@ -1,4 +1,5 @@
 ﻿using DebugLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
@@ -524,11 +525,25 @@ namespace EstimatingLibrary
 
         private void addCost(object item)
         {
-            if(item is TECScope)
+            if(item is CostComponent)
             {
-                var scope = (item as TECScope);
-                //MaterialCost += scope.MaterialCost;
-                //TECLaborHours += scope.LaborCost;
+                var cost = item as CostComponent;
+                MaterialCost += cost.MaterialCost;
+                TECLaborHours += cost.LaborCost;
+            }
+            else if (item is TECMiscCost)
+            {
+                var cost = item as TECMiscCost;
+                MaterialCost += cost.Cost * cost.Quantity;
+            }
+            else if (item is TECMiscWiring)
+            {
+                var cost = item as TECMiscCost;
+                ElectricalMaterialCost += cost.Cost * cost.Quantity;
+            }
+            else if(item is TECConnection)
+            {
+
             }
 
         }

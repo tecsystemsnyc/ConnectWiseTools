@@ -119,6 +119,10 @@ namespace EstimatingLibrary
             
             return connection;
         }
+        protected override double getElectricalCost()
+        {
+            throw new NotImplementedException();
+        }
         #endregion Methods
 
         #region Event Handlers
@@ -141,6 +145,8 @@ namespace EstimatingLibrary
                 }
             }
         }
+
+        
         #endregion
     }
 }

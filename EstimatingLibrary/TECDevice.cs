@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECScope
+    public class TECDevice : TECScope, CostComponent
     {
         #region Properties
         private double _cost;
@@ -66,8 +67,16 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
-        #endregion//Properties
 
+        public double ElectricalCost
+        {
+            get { return 0; }
+        }
+        public double ElectricalLabor
+        {
+            get { return 0; }
+        }
+        #endregion//Properties
 
         #region Constructors
         public TECDevice(Guid guid) : base(guid)

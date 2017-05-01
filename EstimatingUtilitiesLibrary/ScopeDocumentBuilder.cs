@@ -46,10 +46,10 @@ namespace EstimatingUtilitiesLibrary
             createIntroduction(scopeDocument);
             createDocumentList(scopeDocument, bid);
             createScope(scopeDocument, bid);
-            if (isEstimate)
-            { createPricing(scopeDocument, bid.TotalPrice); }
-            else
-            { createPricing(scopeDocument, bid.BudgetPrice); }
+            //if (isEstimate)
+            //{ createPricing(scopeDocument, bid.TotalPrice); }
+            //else
+            //{ createPricing(scopeDocument, bid.BudgetPrice); }
             
             createNotesAndExclusions(scopeDocument, bid.Notes.ToList(), bid.Exclusions.ToList());
             createSignature(scopeDocument, bid.Salesperson);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECScope
+    public class TECSystem : TECScope, CostComponent
     {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
         #region Properties
         private ObservableCollection<TECEquipment> _equipment;
@@ -149,6 +150,22 @@ namespace EstimatingLibrary
                     }
                 }
                 return outSubScope;
+            }
+        }
+
+        public double ElectricalCost
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public double ElectricalLabor
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion //Properties

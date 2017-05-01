@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Defaults.cs" />
     <Compile Include="EstimateCalculator.cs" />
+    <Compile Include="Interfaces\CostComponent.cs" />
+    <Compile Include="Interfaces\PointComponent.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />
     <Compile Include="TECIOModule.cs" />

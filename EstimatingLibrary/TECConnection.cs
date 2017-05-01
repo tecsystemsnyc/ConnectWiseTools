@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject
+    public abstract class TECConnection : TECObject, CostComponent
     {
         #region Properties
         protected Guid _guid;
@@ -64,6 +65,38 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECConduitType));
             }
         }
+
+        public double MaterialCost
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public double LaborCost
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public double ElectricalCost
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public double ElectricalLabor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion //Properties
 
         #region Constructors 
@@ -85,5 +118,7 @@ namespace EstimatingLibrary
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
         #endregion //Constructors
+
+        abstract protected double getElectricalCost();
     }
 }
