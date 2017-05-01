@@ -86,7 +86,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                throw new NotImplementedException();
+                return getElectricalCost();
             }
         }
 
@@ -94,7 +94,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                throw new NotImplementedException();
+                return getElectricalLabor();
             }
         }
         #endregion //Properties
@@ -120,5 +120,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         abstract protected double getElectricalCost();
+        abstract protected double getElectricalLabor();
     }
 }

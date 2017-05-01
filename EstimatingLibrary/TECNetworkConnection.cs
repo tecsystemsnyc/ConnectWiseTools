@@ -121,7 +121,49 @@ namespace EstimatingLibrary
         }
         protected override double getElectricalCost()
         {
-            throw new NotImplementedException();
+            double cost = 0;
+            var terminations = 0;
+            if (ConnectionType != null)
+            {
+                TECConnectionType type = ConnectionType;
+                cost += Length * type.Cost;
+                terminations += 2;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                { cost += associatedCost.Cost; }
+            }
+            if (ConduitType != null)
+            {
+                cost += ConduitLength * ConduitType.Cost;
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    cost += associatedCost.Cost;
+                }
+            }
+            cost += terminations * .25;
+            return cost;
+        }
+        protected override double getElectricalLabor()
+        {
+            double laborHours = 0;
+            var terminations = 0;
+            if (ConnectionType != null)
+            {
+                terminations += 2;
+                TECConnectionType type = ConnectionType;
+                laborHours += Length * type.Labor;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                { laborHours += associatedCost.Labor; }
+            }
+            if (ConduitType != null)
+            {
+                laborHours += Length * ConduitType.Labor;
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    laborHours += associatedCost.Labor;
+                }
+            }
+            laborHours += terminations * .1;
+            return laborHours;
         }
         #endregion Methods
 

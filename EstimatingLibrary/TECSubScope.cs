@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECScope, CostComponent
+    public class TECSubScope : TECScope, CostComponent, PointComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -64,6 +64,20 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
+        public double ElectricalCost
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public double ElectricalLabor
+        {
+            get
+            {
+                return 0;
+            }
+        }
 
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
@@ -81,7 +95,14 @@ namespace EstimatingLibrary
         {
             get { return getAllIOTypes(); }
         }
-        
+
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -123,22 +144,7 @@ namespace EstimatingLibrary
         public int BI { get { return _bi; } }
         public int BO { get { return _bo; } }
         public int Serial { get { return _serial; } }
-
-        public double ElectricalCost
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public double ElectricalLabor
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
         #endregion //Num Point Types
 
         #region Event Handlers
@@ -233,7 +239,6 @@ namespace EstimatingLibrary
             outScope.copyPropertiesFromScope(this);
             return outScope;
         }
-
         public override object DragDropCopy()
         {
             TECSubScope outScope = new TECSubScope(this);
@@ -269,7 +274,6 @@ namespace EstimatingLibrary
 
             return matCost;
         }
-
         private double getLaborCost()
         {
             double labCost = 0;
@@ -293,7 +297,6 @@ namespace EstimatingLibrary
                 item.PropertyChanged += DeviceChanged;
             }
         }
-
         private void unSubscribeToDevices()
         {
             foreach (TECDevice item in this._devices)
@@ -312,7 +315,6 @@ namespace EstimatingLibrary
 
             return availableConnections;
         }
-
         private ObservableCollection<PointTypes> getAllPointTypes()
         {
             var allPointTypes = new ObservableCollection<PointTypes>();
@@ -324,7 +326,6 @@ namespace EstimatingLibrary
             
             return allPointTypes;
         }
-
         private ObservableCollection<IOType> getAllIOTypes()
         {
             var allIOTypes = new ObservableCollection<IOType>();
@@ -334,6 +335,16 @@ namespace EstimatingLibrary
                 allIOTypes.Add(device.IOType);
             }
             return allIOTypes;
+        }
+
+        private int getPointNumber()
+        {
+            var totalPoints = 0;
+            foreach(TECPoint point in Points)
+            {
+                totalPoints += point.PointNumber;
+            }
+            return totalPoints;
         }
         #endregion
     }

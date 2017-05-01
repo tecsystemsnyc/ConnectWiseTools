@@ -8,7 +8,7 @@ using EstimatingLibrary.Interfaces;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECScope, CostComponent
+    public class TECEquipment : TECScope, CostComponent, PointComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -102,7 +102,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                throw new NotImplementedException();
+                return 0;
             }
         }
 
@@ -110,7 +110,15 @@ namespace EstimatingLibrary
         {
             get
             {
-                throw new NotImplementedException();
+                return 0;
+            }
+        }
+
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
             }
         }
 
@@ -271,6 +279,16 @@ namespace EstimatingLibrary
                     }
                 }
             }
+        }
+
+        private int getPointNumber()
+        {
+            var totalPoints = 0;
+            foreach(TECSubScope subScope in SubScope)
+            {
+                totalPoints += subScope.PointNumber;
+            }
+            return totalPoints;
         }
         #endregion
 

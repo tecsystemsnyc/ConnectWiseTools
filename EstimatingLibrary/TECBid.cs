@@ -122,7 +122,6 @@ namespace EstimatingLibrary
                 registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
-                updatePoints();
             }
         }
         public ObservableCollection<TECNote> Notes {
@@ -413,7 +412,6 @@ namespace EstimatingLibrary
                         NotifyPropertyChanged("Add", this, item);
                         if (item is TECCost)
                         { 
-                            updateElectricalMaterial();
                             (item as TECObject).PropertyChanged += objectPropertyChanged;
                         }
                         else if (item is TECSystem)
@@ -421,7 +419,6 @@ namespace EstimatingLibrary
                             var sys = item as TECSystem;
                             addProposalScope(sys);
                             sys.PropertyChanged += System_PropertyChanged;
-                            checkForTotalsInSystem(sys);
                         }
                         else if (item is TECController)
                         {
@@ -448,7 +445,6 @@ namespace EstimatingLibrary
 
                         if (item is TECCost)
                         {
-                            updateElectricalMaterial();
                             (item as TECCost).PropertyChanged -= objectPropertyChanged;
                         }
                         else if (item is TECSystem)
@@ -468,19 +464,7 @@ namespace EstimatingLibrary
         }
         private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "TotalPoints")
-            {
-                updatePoints();
-            }
-            else if (e.PropertyName == "TotalDevices")
-            {
-                updateDevices();
-            }
-            else if (e.PropertyName == "SubLength")
-            {
-                updateElectricalMaterial();
-            }
-            else if(e.PropertyName == "RemovedSubScope")
+            if(e.PropertyName == "RemovedSubScope")
             {
                 var args = e as PropertyChangedExtendedEventArgs<object>;
                 if(args.NewValue is TECEquipment)
@@ -496,7 +480,6 @@ namespace EstimatingLibrary
         {
             if (sender is TECLabor)
             {
-                updateFromLabor();
                 List<string> userAdjustmentPropertyNames = new List<string>()
                 {
                     "PMExtraHours",
@@ -508,20 +491,6 @@ namespace EstimatingLibrary
                 if (userAdjustmentPropertyNames.Contains(e.PropertyName))
                 {
                     NotifyPropertyChanged("Edit", (object)this, (object)Labor);
-                }
-            }
-            else if (sender is TECBidParameters)
-            { updateFromParameters(); }
-            else if (sender is TECCost)
-            { updateElectricalMaterial(); }
-            else if (sender is TECConnection)
-            {
-                if(e.PropertyName == "Length" ||
-                    e.PropertyName == "ConduitType" ||
-                    e.PropertyName == "ConnectionType" ||
-                    e.PropertyName == "IncludeStubUp")
-                {
-                    updateElectricalMaterial();
                 }
             }
         }
@@ -649,134 +618,6 @@ namespace EstimatingLibrary
             }
         }
         
-        private void updatePoints()
-        {
-            RaisePropertyChanged("TotalPointNumber");
-            updateTECLabor();
-            updateTotal();
-        }
-        private void updateDevices()
-        {
-            RaisePropertyChanged("MaterialCost");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("Tax");
-            RaisePropertyChanged("TECSubtotal");
-            updateTotal();
-        }
-        private void updateElectricalMaterial()
-        {
-            RaisePropertyChanged("ElectricalMaterialCost");
-            RaisePropertyChanged("SubcontractorSubtotal");
-            updateElectricalLabor();
-            updateTotal();
-        }
-        private void updateElectricalLabor()
-        {
-            RaisePropertyChanged("ElectricalLaborHours");
-            RaisePropertyChanged("ElectricalLaborCost");
-            RaisePropertyChanged("ElectricalSuperLaborHours");
-            RaisePropertyChanged("ElectricalSuperLaborCost");
-            RaisePropertyChanged("SubcontractorLaborHours");
-            RaisePropertyChanged("SubcontractorLaborCost");
-        }
-        private void updateTECLabor()
-        {
-            RaisePropertyChanged("PMPointLaborHours");
-            RaisePropertyChanged("PMLaborHours");
-            RaisePropertyChanged("PMLaborCost");
-
-            RaisePropertyChanged("ENGPointLaborHours");
-            RaisePropertyChanged("ENGLaborHours");
-            RaisePropertyChanged("ENGLaborCost");
-
-            RaisePropertyChanged("SoftPointLaborHours");
-            RaisePropertyChanged("SoftLaborHours");
-            RaisePropertyChanged("SoftLaborCost");
-
-            RaisePropertyChanged("CommPointLaborHours");
-            RaisePropertyChanged("CommLaborHours");
-            RaisePropertyChanged("CommLaborCost");
-
-            RaisePropertyChanged("GraphPointLaborHours");
-            RaisePropertyChanged("GraphLaborHours");
-            RaisePropertyChanged("GraphLaborCost");
-
-            RaisePropertyChanged("TECLaborHours");
-            RaisePropertyChanged("TECLaborCost");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("TotalLaborCost");
-        }
-        private void updateFromParameters()
-        {
-            RaisePropertyChanged("Tax");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            updateTotal();
-        }
-        private void updateFromLabor()
-        {
-            RaisePropertyChanged("Tax");
-            updateTECLabor();
-            updateElectricalLabor();
-            RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            updateTotal();
-        }
-        private void updateAll()
-        {
-            RaisePropertyChanged("Tax");
-            updateTECLabor();
-            RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("ElectricalMaterialCost");
-            updateTotal();
-        }
-        private void updateTotal()
-        {
-            RaisePropertyChanged("TotalPrice");
-            RaisePropertyChanged("TotalCost");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("Margin");
-        }
-
-        private void checkForTotalsInSystem(TECSystem system)
-        {
-            bool subChanged = false;
-            bool pointsChanged = false;
-            bool devicesChanged = false;
-
-            foreach(TECEquipment equip in system.Equipment)
-            {
-                foreach(TECSubScope sub in equip.SubScope)
-                {
-                    subChanged = true;
-                    if (sub.Points.Count > 0)
-                    {
-                        pointsChanged = true;
-                    }
-                    if(sub.Devices.Count > 0)
-                    {
-                        devicesChanged = true;
-                    }
-                }
-            }
-
-            if (subChanged)
-            {
-                updateElectricalMaterial();
-            }
-            if (pointsChanged)
-            {
-                updatePoints();
-            }
-            if (devicesChanged)
-            {
-                updateDevices();
-            }
-
-        }
-
         private void handleSystemSubScopeRemoval(TECSystem system)
         {
             foreach(TECEquipment equipment in system.Equipment)
@@ -828,10 +669,6 @@ namespace EstimatingLibrary
             {
                 connection.PropertyChanged += objectPropertyChanged;
             }
-            if(controller.ChildrenConnections.Count > 0)
-            {
-                updateElectricalMaterial();
-            }
         }
         
         private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -850,7 +687,6 @@ namespace EstimatingLibrary
                     item.PropertyChanged -= objectPropertyChanged;
                 }
             }
-            updateElectricalMaterial();
         }
         #endregion
 

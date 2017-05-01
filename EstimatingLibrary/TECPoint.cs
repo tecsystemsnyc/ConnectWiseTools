@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace EstimatingLibrary
 
     public enum PointTypes { AI = 1, AO, BI, BO, Serial };
 
-    public class TECPoint : TECScope
+    public class TECPoint : TECScope, PointComponent
     {
         #region Properties
         private PointTypes _type;
@@ -42,6 +43,14 @@ namespace EstimatingLibrary
                 }
             }
         }
+
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -67,6 +76,11 @@ namespace EstimatingLibrary
         {
             TECPoint outPoint = new TECPoint(this);
             return outPoint;
+        }
+
+        private int getPointNumber()
+        {
+            return Quantity;
         }
         #region Conversion Methods
         public static PointTypes convertStringToType(string type)

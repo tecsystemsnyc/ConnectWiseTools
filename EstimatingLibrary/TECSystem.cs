@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECScope, CostComponent
+    public class TECSystem : TECScope, CostComponent, PointComponent
     {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
         #region Properties
         private ObservableCollection<TECEquipment> _equipment;
@@ -157,15 +157,22 @@ namespace EstimatingLibrary
         {
             get
             {
-                throw new NotImplementedException();
+                return 0;
             }
         }
-
         public double ElectricalLabor
         {
             get
             {
-                throw new NotImplementedException();
+                return 0;
+            }
+        }
+
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
             }
         }
         #endregion //Properties
@@ -351,7 +358,15 @@ namespace EstimatingLibrary
             }
         }
 
+        private int getPointNumber()
+        {
+            var totalPoints = 0;
+            foreach(TECEquipment equipment in Equipment)
+            {
+                totalPoints += equipment.PointNumber;
+            }
+            return totalPoints;
+        }
         #endregion
-
     }
 }

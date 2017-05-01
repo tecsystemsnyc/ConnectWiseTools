@@ -110,7 +110,58 @@ namespace EstimatingLibrary
 
         protected override double getElectricalCost()
         {
-            throw new NotImplementedException();
+            double cost = 0;
+            var terminations = 0;
+
+            foreach (TECConnectionType type in ConnectionTypes)
+            {
+                cost += Length * type.Cost;
+                terminations += 2;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                {
+                    cost += associatedCost.Cost;
+                }
+            }
+            if (ConduitType != null)
+            {
+                if (IncludeStubUp)
+                {
+                    cost += 15 * ConduitType.Cost;
+                }
+                else
+                {
+                    cost += ConduitLength * ConduitType.Cost;
+                }
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    cost += associatedCost.Cost;
+                }
+            }
+
+            cost += terminations * .25;
+            return cost;
+        }
+        protected override double getElectricalLabor()
+        {
+            double laborHours = 0;
+            var terminations = 0;
+            if (ConduitType != null)
+            {
+                laborHours += ConduitLength * ConduitType.Labor;
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    laborHours += associatedCost.Labor;
+                }
+            }
+            foreach (TECConnectionType type in ConnectionTypes)
+            {
+                terminations += 2;
+                laborHours += Length * type.Labor;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                { laborHours += associatedCost.Labor; }
+            }
+            laborHours += terminations * .1;
+            return laborHours;
         }
         #endregion
 
