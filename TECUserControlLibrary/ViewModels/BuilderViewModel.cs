@@ -333,7 +333,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void save()
         {
-            if (saveFilePath != null)
+            if (saveFilePath != null && File.Exists(saveFilePath))
             {
                 SetBusyStatus("Saving to path: " + saveFilePath);
                 ChangeStack stackToSave = stack.Copy();
@@ -421,7 +421,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             bool saveSuccessful = false;
 
-            if (saveFilePath != null)
+            if (saveFilePath != null && File.Exists(saveFilePath))
             {
                 SetBusyStatus("Saving to path: " + saveFilePath);
                 ChangeStack stackToSave = stack.Copy();
