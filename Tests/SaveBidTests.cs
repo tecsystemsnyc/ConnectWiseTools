@@ -3361,5 +3361,6 @@ namespace Tests
             Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
         }
         #endregion
+        
     }
 }
