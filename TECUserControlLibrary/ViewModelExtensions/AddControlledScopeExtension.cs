@@ -476,7 +476,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Type sourceType = sourceItem.GetType();
 
             var targetCollection = dropInfo.TargetCollection;
-            if(sourceType == typeof(TECController))
+            if(sourceType == typeof(TECController) && ControlledScope != null)
             {
                 UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
@@ -485,7 +485,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
             }
-            else
+            else if (ControlledScope != null)
             {
                 UIHelpers.StandardDragOver(dropInfo);
             }
