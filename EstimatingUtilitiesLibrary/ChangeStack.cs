@@ -96,7 +96,7 @@ namespace EstimatingUtilitiesLibrary
                     item = new StackItem(Change.Add, args);
                     handleChildren(item);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -109,7 +109,7 @@ namespace EstimatingUtilitiesLibrary
                     item = new StackItem(Change.Remove, args);
                     handleChildren(item);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -120,7 +120,7 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
 
                     item = new StackItem(Change.Edit, args);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -131,7 +131,7 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
 
                     item = new StackItem(Change.Edit, args);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -153,7 +153,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                     foreach (var save in toSave)
                     {
-                        addSaveItem(save);
+                        SaveStack.Add(save);
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
@@ -176,7 +176,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                     foreach (var save in toSave)
                     {
-                        addSaveItem(save);
+                        SaveStack.Add(save);
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
@@ -188,7 +188,7 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
 
                     item = new StackItem(Change.Add, args);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -199,7 +199,7 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
 
                     item = new StackItem(Change.Remove, args);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -211,7 +211,7 @@ namespace EstimatingUtilitiesLibrary
 
                     item = new StackItem(Change.AddRelationship, args);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -223,7 +223,7 @@ namespace EstimatingUtilitiesLibrary
 
                     item = new StackItem(Change.RemoveRelationship, args);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -236,7 +236,7 @@ namespace EstimatingUtilitiesLibrary
 
                     item = new StackItem(Change.Add, args);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -248,7 +248,7 @@ namespace EstimatingUtilitiesLibrary
 
                     item = new StackItem(Change.Remove, args);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -264,7 +264,7 @@ namespace EstimatingUtilitiesLibrary
 
                     item = new StackItem(Change.Edit, args);
                     UndoStack.Add(item);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DEBUG_STACK);
@@ -376,7 +376,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (var item in SaveStack)
             {
-                outStack.addSaveItem(item);
+                outStack.SaveStack.Add(item);
             }
             return outStack;
         }
@@ -491,7 +491,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach (TECPage page in ((TECDrawing)newItem).Pages)
                 {
-                    addSaveItem(new StackItem(Change.Add, newItem, page));
+                    SaveStack.Add(new StackItem(Change.Add, newItem, page));
                 }
             } else if (newItem is TECIOModule)
             {
@@ -505,7 +505,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECEquipment newEquipment in system.Equipment)
             {
                 item = new StackItem(change, (object)system, (object)newEquipment);
-                addSaveItem(item);
+                SaveStack.Add(item);
                 
                 handleEquipmentChildren(newEquipment, change);
             }
@@ -517,7 +517,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSubScope newSubScope in equipment.SubScope)
             {
                 item = new StackItem(change, (object)equipment, (object)newSubScope);
-                addSaveItem(item);
+                SaveStack.Add(item);
                 handleSubScopeChildren(newSubScope, change);
             }
         }
@@ -529,12 +529,12 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleScopeChildren(newPoint as TECScope, change);
                 item = new StackItem(change, (object)subScope, (object)newPoint);
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
             foreach (TECDevice newDevice in subScope.Devices)
             {
                 item = new StackItem(change, (object)subScope, (object)newDevice);
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
         }
         private void handleConnectionChildren(TECConnection connection, Change change)
@@ -544,11 +544,11 @@ namespace EstimatingUtilitiesLibrary
             {
                 if(change == Change.Add)
                 {
-                    addSaveItem(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
 
                 } else if (change == Change.Remove)
                 {
-                    addSaveItem(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
 
                 }
             }
@@ -562,11 +562,11 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (change == Change.Add)
                     {
-                        addSaveItem(new StackItem(Change.AddRelationship, netConnect, controller));
+                        SaveStack.Add(new StackItem(Change.AddRelationship, netConnect, controller));
                     }
                     else if (change == Change.Remove)
                     {
-                        addSaveItem(new StackItem(Change.RemoveRelationship, netConnect, controller));
+                        SaveStack.Add(new StackItem(Change.RemoveRelationship, netConnect, controller));
                     }
                 }
 
@@ -574,11 +574,11 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (change == Change.Add)
                     {
-                        addSaveItem(new StackItem(Change.AddRelationship, netConnect, netConnect.ConnectionType));
+                        SaveStack.Add(new StackItem(Change.AddRelationship, netConnect, netConnect.ConnectionType));
                     }
                     else if (change == Change.Remove)
                     {
-                        addSaveItem(new StackItem(Change.RemoveRelationship, netConnect, netConnect.ConnectionType));
+                        SaveStack.Add(new StackItem(Change.RemoveRelationship, netConnect, netConnect.ConnectionType));
                     }
                 }
             }
@@ -590,11 +590,11 @@ namespace EstimatingUtilitiesLibrary
                 TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
                 if (change == Change.Add)
                 {
-                    addSaveItem(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
+                    SaveStack.Add(new StackItem(Change.AddRelationship, ssConnect, ssConnect.SubScope));
                 }
                 else if (change == Change.Remove)
                 {
-                    addSaveItem(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, ssConnect, ssConnect.SubScope));
                 }
             }
             #endregion
@@ -609,9 +609,9 @@ namespace EstimatingUtilitiesLibrary
             handleScopeChildren(device as TECScope, change);
             StackItem item;
             item = new StackItem(change, (object)device, (object)device.Manufacturer);
-            addSaveItem(item);
+            SaveStack.Add(item);
             item = new StackItem(change, (object)device, (object)device.ConnectionType);
-            addSaveItem(item);
+            SaveStack.Add(item);
         }
         private void handleControllerChildren(TECController controller, Change change)
         {
@@ -620,22 +620,22 @@ namespace EstimatingUtilitiesLibrary
             if(controller.Manufacturer != null)
             {
                 item = new StackItem(change, controller, controller.Manufacturer);
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
             foreach (TECConnection connection in controller.ChildrenConnections)
             {
                 item = new StackItem(change, controller, connection, typeof(TECController), typeof(TECConnection));
-                addSaveItem(item);
+                SaveStack.Add(item);
                 handleConnectionChildren(connection, change);
             }
             foreach (TECIO io in controller.IO)
             {
                 item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
-                addSaveItem(item);
+                SaveStack.Add(item);
                 if(io.IOModule != null)
                 {
                     item = new StackItem(change, io, io.IOModule);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
                 }
                 
             }
@@ -646,12 +646,12 @@ namespace EstimatingUtilitiesLibrary
             foreach(TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECAssociatedCost));
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
             foreach(TECTag tag in scope.Tags)
             {
                 item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECTag));
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
         }
         private void handleControlledScope(TECControlledScope scope, Change change)
@@ -661,21 +661,21 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleScopeChildren(system as TECScope, change);
                 item = new StackItem(change, (object)scope, (object)system);
-                addSaveItem(item);
+                SaveStack.Add(item);
                 handleSystemChildren(system, change);
             }
             foreach (TECController controller in scope.Controllers)
             {
                 handleScopeChildren(controller as TECScope, change);
                 item = new StackItem(change, (object)scope, (object)controller);
-                addSaveItem(item);
+                SaveStack.Add(item);
                 handleControllerChildren(controller, change);
             }
             foreach(TECPanel panel in scope.Panels)
             {
                 handleScopeChildren(panel as TECScope, change);
                 item = new StackItem(change, (object)scope, (object)panel);
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
         }
         private void handlePanelChildren(TECPanel panel, Change change)
@@ -683,18 +683,18 @@ namespace EstimatingUtilitiesLibrary
             handleScopeChildren(panel as TECScope, change);
             StackItem item;
             item = new StackItem(change, panel, panel.Type);
-            addSaveItem(item);
+            SaveStack.Add(item);
             foreach (TECController controller in panel.Controllers)
             {
                 if (change == Change.Add)
                 {
                     item = new StackItem(Change.AddRelationship, (object)controller, (object)panel);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
                 }
                 else if (change == Change.Remove)
                 {
                     item = new StackItem(Change.RemoveRelationship, (object)controller, (object)panel);
-                    addSaveItem(item);
+                    SaveStack.Add(item);
                 }
             }
         }
@@ -705,32 +705,10 @@ namespace EstimatingUtilitiesLibrary
             if(ioModule.Manufacturer != null)
             {
                 item = new StackItem(change, ioModule, ioModule.Manufacturer);
-                addSaveItem(item);
+                SaveStack.Add(item);
             }
         }
         
-        private void addSaveItem(StackItem item)
-        {
-            //bool editAdded = false;
-            //foreach(StackItem saveItem in SaveStack)
-            //{
-            //    if(item.Change == Change.Edit && saveItem.Change == Change.Edit)
-            //    {
-            //        if(item.TargetObject == saveItem.TargetObject)
-            //        {
-            //            editAdded = true;
-            //        }
-            //    }
-            //}
-
-            //if (!editAdded)
-            //{
-            //    SaveStack.Add(item);
-            //}
-            SaveStack.Add(item);
-        }
-
-
         private void registerGeneric(TECObject obj)
         {
             obj.PropertyChanged += Object_PropertyChanged;

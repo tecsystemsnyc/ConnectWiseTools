@@ -98,8 +98,9 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(path, tempPath);
 
             SQLiteDB = new SQLiteDatabase(tempPath);
-            indexesToUpdate = new Dictionary<TableBase, StackItem>();
-            foreach (StackItem change in changeStack.SaveStack)
+            //indexesToUpdate = new Dictionary<TableBase, StackItem>();
+            var cleansedStack = cleanseStack(changeStack.SaveStack);
+            foreach (StackItem change in cleansedStack)
             {
                 Change changeType = change.Change;
                 object targetObject = change.TargetObject;
@@ -126,7 +127,7 @@ namespace EstimatingUtilitiesLibrary
                     removeRelationship(change);
                 }
             }
-            //foreach(KeyValuePair<TableBase,StackItem> item in indexesToUpdate)
+            //foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
             //{
             //    updateIndexedRelation(item.Key, item.Value);
             //}
@@ -2995,6 +2996,37 @@ namespace EstimatingUtilitiesLibrary
 
             }
             return primaryKeys;
+        }
+
+        static private List<StackItem> cleanseStack(ObservableCollection<StackItem> saveStack)
+        {
+            List<StackItem> outStack = new List<StackItem>();
+            foreach(StackItem item in saveStack)
+            {
+                bool alreadyEdited = false;
+                if(item.Change == Change.Edit)
+                {
+                    foreach(StackItem outItem in outStack)
+                    {
+                        if(outItem.Change == Change.Edit)
+                        {
+                            if(item.TargetType == item.ReferenceType &&
+                                outItem.TargetType == outItem.ReferenceType &&
+                                item.TargetObject == outItem.TargetObject)
+                            {
+                                alreadyEdited = true;
+                            }
+                        }
+                    }
+                }
+                
+                if (!alreadyEdited)
+                {
+                    outStack.Add(item);
+                }
+            }
+
+            return outStack;
         }
 
         ///<summary>
