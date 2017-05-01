@@ -66,7 +66,7 @@ namespace EstimatingLibrary
         public string DueDateString
         {
             get { return _dueDate.ToString("O"); }
-        }
+        } 
         public string Salesperson
         {
             get { return _salesperson; }
@@ -100,181 +100,7 @@ namespace EstimatingLibrary
                 Parameters.PropertyChanged += objectPropertyChanged;
             }
         }
-
-        #region Cost and Labor
-
-        public double PMPointLaborHours
-        {
-            get { return EstimateCalculator.GetPMPointHours(this); }
-        }
-        public double PMLaborHours
-        {
-            get { return EstimateCalculator.GetPMTotalHours(this); }
-        }
-        public double PMLaborCost
-        {
-            get { return EstimateCalculator.GetPMLaborCost(this); }
-        }
-
-        public double ENGPointLaborHours
-        {
-            get { return EstimateCalculator.GetENGPointHours(this); }
-        }
-        public double ENGLaborHours
-        {
-            get { return EstimateCalculator.GetENGTotalHours(this); }
-        }
-        public double ENGLaborCost
-        {
-            get { return EstimateCalculator.GetENGLaborCost(this); }
-        }
-
-        public double SoftPointLaborHours
-        {
-            get { return EstimateCalculator.GetSoftPointHours(this); }
-        }
-        public double SoftLaborHours
-        {
-            get { return EstimateCalculator.GetSoftTotalHours(this); }
-        }
-        public double SoftLaborCost
-        {
-            get { return EstimateCalculator.GetSoftLaborCost(this); }
-        }
-
-        public double CommPointLaborHours
-        {
-            get { return EstimateCalculator.GetCommPointHours(this); }
-        }
-        public double CommLaborHours
-        {
-            get { return EstimateCalculator.GetCommTotalHours(this); }
-        }
-        public double CommLaborCost
-        {
-            get { return EstimateCalculator.GetCommLaborCost(this); }
-        }
-
-        public double GraphPointLaborHours
-        {
-            get { return EstimateCalculator.GetGraphPointHours(this); }
-        }
-        public double GraphLaborHours
-        {
-            get { return EstimateCalculator.GetGraphTotalHours(this); }
-        }
-        public double GraphLaborCost
-        {
-            get { return EstimateCalculator.GetGraphLaborCost(this); }
-        }
-
-        public double TECLaborHours
-        {
-            get { return EstimateCalculator.GetTECLaborHours(this); }
-        }
-        public double TECLaborCost
-        {
-            get { return EstimateCalculator.GetTECLaborCost(this); }
-        }
-
-        public double TotalLaborCost
-        {
-            get { return EstimateCalculator.GetTotalLaborCost(this); }
-        }
         
-        public double MaterialCost
-        {
-            get
-            {
-                return EstimateCalculator.GetMaterialCost(this);
-            }
-        }
-        public double Tax
-        {
-            get
-            {  return EstimateCalculator.GetTax(this); }
-        }
-        public double TECSubtotal
-        {
-            get
-            {
-                return EstimateCalculator.GetTECSubtotal(this);
-            }
-        }
-        
-        public double ElectricalLaborHours
-        {
-            get { return EstimateCalculator.GetElectricalLaborHours(this); }
-        }
-        public double ElectricalLaborCost
-        {
-            get { return EstimateCalculator.GetElectricalLaborCost(this); }
-        }
-        public double ElectricalSuperLaborHours
-        {
-            get { return EstimateCalculator.GetElectricalSuperLaborHours(this); }
-        }
-        public double ElectricalSuperLaborCost
-        {
-            get { return EstimateCalculator.GetElectricalSuperLaborCost(this); }
-        }
-
-        public double SubcontractorLaborHours
-        {
-            get { return EstimateCalculator.GetSubcontractorLaborHours(this); }
-        }
-        public double SubcontractorLaborCost
-        {
-            get { return EstimateCalculator.GetSubcontractorLaborCost(this); }
-        }
-
-        public double ElectricalMaterialCost
-        {
-            get
-            { return EstimateCalculator.GetElectricalMaterialCost(this); }
-        }
-        public double SubcontractorSubtotal
-        {
-            get
-            {
-                return EstimateCalculator.GetSubcontractorSubtotal(this);
-            }
-        }
-
-        public double TotalPrice
-        {
-            get
-            {
-                return EstimateCalculator.GetTotalPrice(this);
-            }
-        }
-
-        public double BudgetPrice
-        {
-            get { return EstimateCalculator.GetBudgetPrice(this); }
-        }
-        public int TotalPointNumber
-        {
-            get
-            {
-                return getPointNumber();
-            }
-        }
-        public double PricePerPoint
-        {
-            get { return EstimateCalculator.GetPricePerPoint(this); }
-        }
-        public double Margin
-        {
-            get { return EstimateCalculator.GetMargin(this); }
-        }
-
-        public double TotalCost
-        {
-            get { return EstimateCalculator.GetTotalCost(this); }
-        }
-        #endregion
-
         public ObservableCollection<TECScopeBranch> ScopeTree {
             get { return _scopeTree; }
             set
@@ -398,6 +224,16 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Panels", temp, this);
             }
         }
+
+        public int TotalPointNumber
+        {
+            get
+            {
+                return getPointNumber();
+            }
+        }
+
+        public TECEstimator Estimate { get; set; }
         #endregion //Properties
 
         #region Constructors
@@ -437,6 +273,7 @@ namespace EstimatingLibrary
 
             registerSystems();
             registerControllers();
+            Estimate = new TECEstimator(this);
         }
 
         public TECBid() : this(Guid.NewGuid())

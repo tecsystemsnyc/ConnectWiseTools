@@ -38,7 +38,9 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
-            
+
+            setupAll();
+
             BidSet += () =>
             {
                 Refresh();
@@ -47,8 +49,7 @@ namespace EstimateBuilder.ViewModel
             {
                 Refresh();
             };
-            setupAll();
-
+            
             base.PropertyChanged += BidEditorBase_PropertyChanged;
         }
         
@@ -160,9 +161,9 @@ namespace EstimateBuilder.ViewModel
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
         }
-        private void setupNetworkVM()
+        private void setupNetworkVM(TECBid bid)
         {
-            NetworkVM = new NetworkViewModel(Bid);
+            NetworkVM = new NetworkViewModel(bid);
         }
         #endregion
 
@@ -225,26 +226,29 @@ namespace EstimateBuilder.ViewModel
         #region Helper Methods
         private void setupAll()
         {
-            setupScopeEditorVM(Bid, Templates);
-            setupDrawingVM(Bid);
-            setupLaborVM(Bid, Templates);
-            setupReviewVM(Bid);
+            setupScopeEditorVM(new TECBid(), new TECTemplates());
+            setupDrawingVM(new TECBid());
+            setupLaborVM(new TECBid(), new TECTemplates());
+            setupReviewVM(new TECBid());
             setupSettingsVM();
-            setupProposalVM(Bid);
-            setupElectricalVM(Bid);
+            setupProposalVM(new TECBid());
+            setupElectricalVM(new TECBid());
             setupMenuVM();
-            setupNetworkVM();
+            setupNetworkVM(new TECBid());
         }
         public void Refresh()
         {
-            ScopeEditorVM.Refresh(Bid, Templates);
-            DrawingVM.Bid = Bid;
-            LaborVM.Refresh(Bid, Templates);
-            ReviewVM.Refresh(Bid);
-            //SettingsVM.Bid = Bid;
-            ProposalVM.Refresh(Bid);
-            ElectricalVM.Refresh(Bid);
-            NetworkVM.Refresh(Bid);
+            if(Bid != null && Templates != null)
+            {
+                ScopeEditorVM.Refresh(Bid, Templates);
+                DrawingVM.Bid = Bid;
+                LaborVM.Refresh(Bid, Templates);
+                ReviewVM.Refresh(Bid);
+                //SettingsVM.Bid = Bid;
+                ProposalVM.Refresh(Bid);
+                ElectricalVM.Refresh(Bid);
+                NetworkVM.Refresh(Bid);
+            }
         }
         private string getLoadDrawingsPath()
         {

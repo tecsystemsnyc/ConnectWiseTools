@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EstimatingLibrary
-{
+{ 
     public class TECCost : TECScope
     {
         #region Properties

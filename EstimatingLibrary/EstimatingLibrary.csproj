@@ -103,6 +103,7 @@
     <Compile Include="Defaults.cs" />
     <Compile Include="EstimateCalculator.cs" />
     <Compile Include="TECCatalogs.cs" />
+    <Compile Include="TECEstimator.cs" />
     <Compile Include="TECIOModule.cs" />
     <Compile Include="ModelLinkingHelper.cs" />
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="TECTemplates.cs" />
     <Compile Include="TECVisualConnection.cs" />
     <Compile Include="TECVisualScope.cs" />
+    <Compile Include="Utilities\ChangeWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
