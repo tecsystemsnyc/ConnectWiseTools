@@ -492,13 +492,17 @@ namespace TECUserControlLibrary.ViewModels
                     //See if source collection is a child controller connection
                     foreach (TECController parent in parentControllers)
                     {
-                        foreach (TECNetworkConnection connection in parent.ChildrenConnections)
+                        foreach (TECConnection connection in parent.ChildrenConnections)
                         {
-                            if (sourceCollection == connection.ChildrenControllers)
+                            if (connection is TECNetworkConnection)
                             {
-                                foundCollection = true;
-                                parent.RemoveController(sourceItem as TECController);
-                                break;
+                                TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                                if (sourceCollection == netConnect.ChildrenControllers)
+                                {
+                                    foundCollection = true;
+                                    parent.RemoveController(sourceItem as TECController);
+                                    break;
+                                }
                             }
                         }
                         if (foundCollection) break;
