@@ -179,7 +179,6 @@ namespace EstimatingLibrary
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
-                registerControllers();
             }
         }
         public ObservableCollection<TECProposalScope> ProposalScope
@@ -271,7 +270,6 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            registerControllers();
             Estimate = new TECEstimator(this);
         }
 
@@ -345,7 +343,7 @@ namespace EstimatingLibrary
 
         public void addControlledScope(TECControlledScope controlledScope)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var systemCollection = new ObservableCollection<TECSystem>();
             var controllerCollection = new ObservableCollection<TECController>();
@@ -362,38 +360,38 @@ namespace EstimatingLibrary
             {
                 panelCollection.Add(new TECPanel(panel, guidDictionary));
             }
-            //watch.Stop();
-            //Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            watch = System.Diagnostics.Stopwatch.StartNew();
             ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
               panelCollection, this, guidDictionary);
-            //watch.Stop();
-            //Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECController controller in controllerCollection)
             {
                 Controllers.Add(controller);
             }
-            //watch.Stop();
-            //Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECPanel panel in panelCollection)
             {
                 Panels.Add(panel);
             }
-            //watch.Stop();
-            //Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
+            watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECSystem system in systemCollection)
             {
                 Systems.Add(system);
             }
-            //watch.Stop();
-            //Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
+            watch.Stop();
+            Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
         }
 
         #region Event Handlers
@@ -419,10 +417,6 @@ namespace EstimatingLibrary
                             var sys = item as TECSystem;
                             addProposalScope(sys);
                             sys.PropertyChanged += System_PropertyChanged;
-                        }
-                        else if (item is TECController)
-                        {
-                            registerController(item as TECController);
                         }
                     }
                 }
@@ -655,39 +649,6 @@ namespace EstimatingLibrary
             }
         }
         
-        private void registerControllers()
-        {
-            foreach(TECController controller in Controllers)
-            {
-                registerController(controller);
-            }
-        }
-        private void registerController(TECController controller)
-        {
-            controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
-            foreach (TECConnection connection in controller.ChildrenConnections)
-            {
-                connection.PropertyChanged += objectPropertyChanged;
-            }
-        }
-        
-        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(TECConnection item in e.NewItems)
-                {
-                    item.PropertyChanged += objectPropertyChanged;
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECConnection item in e.OldItems)
-                {
-                    item.PropertyChanged -= objectPropertyChanged;
-                }
-            }
-        }
         #endregion
 
     }
