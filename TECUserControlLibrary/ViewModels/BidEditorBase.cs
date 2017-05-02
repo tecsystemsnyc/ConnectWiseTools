@@ -260,6 +260,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (saveDelta(false))
                     {
                         DebugHandler.LogDebugMessage("Creating new bid.");
+                        isNew = true;
                         Bid = new TECBid();
                     }
                     else
@@ -271,8 +272,8 @@ namespace TECUserControlLibrary.ViewModels
                 else if (result == MessageBoxResult.No)
                 {
                     DebugHandler.LogDebugMessage("Creating new bid.");
-                    Bid = new TECBid();
                     isNew = true;
+                    Bid = new TECBid();
                 }
                 else
                 {
@@ -282,8 +283,8 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 DebugHandler.LogDebugMessage("Creating new bid.");
-                Bid = new TECBid();
                 isNew = true;
+                Bid = new TECBid();
             }
             
         }
