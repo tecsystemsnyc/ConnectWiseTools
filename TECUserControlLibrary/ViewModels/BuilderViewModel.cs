@@ -211,6 +211,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public BuilderViewModel()
         {
+            setupCommands();
             setupExtensions();
             getStartupFile();
 
@@ -218,8 +219,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 isNew = true;
             }
-
-            setupCommands();
             
             getLogo();
         }
@@ -630,6 +629,7 @@ namespace TECUserControlLibrary.ViewModels
                         if (!saveDelta(false))
                         {
                             MessageBox.Show("Save unsuccessful.");
+                            e.Cancel = true;
                             return;
                         }
                     }
