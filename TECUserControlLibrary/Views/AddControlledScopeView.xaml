@@ -92,7 +92,6 @@
             <Label Content="Systems"/>
             <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.ControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
-                                  AllowAddingNew="False"
                                   Grid.Row="1"
                                   Margin="5"/>
         </Grid>

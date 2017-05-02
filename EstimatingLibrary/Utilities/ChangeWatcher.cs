@@ -12,7 +12,7 @@ namespace EstimatingLibrary.Utilities
     public enum Change { Add, Remove };
     public class ChangeWatcher
     {
-        private const bool DEBUG_PROPERTIES = false;
+        private const bool DebugBooleans.Properties = false;
 
         public Action<object, PropertyChangedEventArgs> Changed;
 
@@ -315,7 +315,7 @@ namespace EstimatingLibrary.Utilities
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -326,13 +326,13 @@ namespace EstimatingLibrary.Utilities
                 {
                     message = "Add change: " + oldValue;
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     handleChildren(newValue, Change.Add);
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(newValue, Change.Remove);
@@ -341,7 +341,7 @@ namespace EstimatingLibrary.Utilities
                 else if (e.PropertyName == "MetaAdd")
                 {
                     message = "MetaAdd change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
 
@@ -349,7 +349,7 @@ namespace EstimatingLibrary.Utilities
                 else if (e.PropertyName == "MetaRemove")
                 {
                     message = "MetaRemove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                 }
@@ -359,7 +359,7 @@ namespace EstimatingLibrary.Utilities
             else
             {
                 message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                
             }
         }

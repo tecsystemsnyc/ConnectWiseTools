@@ -25,10 +25,6 @@ namespace EstimatingUtilitiesLibrary
         public ObservableCollection<StackItem> SaveStack { get; set; }
         public TECBid Bid;
         public TECTemplates Templates;
-
-        private const bool DEBUG_PROPERTIES = false;
-        private const bool DEBUG_STACK = false;
-        private const bool DEBUG_REGISTER = false;
         
         private bool isDoing = false;
         private ChangeWatcher watcher;
@@ -79,7 +75,7 @@ namespace EstimatingUtilitiesLibrary
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             if (!isDoing) { RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -91,7 +87,7 @@ namespace EstimatingUtilitiesLibrary
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
                     handleChildren(item);
@@ -99,12 +95,12 @@ namespace EstimatingUtilitiesLibrary
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
                     handleChildren(item);
@@ -112,34 +108,34 @@ namespace EstimatingUtilitiesLibrary
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "Edit")
                 {
                     message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "ChildChanged")
                 {
                     message = "Child change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "ObjectPropertyChanged")
                 {
                     message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<StackItem>();
@@ -157,12 +153,12 @@ namespace EstimatingUtilitiesLibrary
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RelationshipPropertyChanged")
                 {
                     message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<StackItem>();
@@ -180,78 +176,78 @@ namespace EstimatingUtilitiesLibrary
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "MetaAdd")
                 {
                     message = "MetaAdd change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "MetaRemove")
                 {
                     message = "MetaRemove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "AddRelationship")
                 {
                     message = "Add relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.AddRelationship, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemoveRelationship")
                 {
                     message = "Remove relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.RemoveRelationship, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
                 else if (e.PropertyName == "AddCatalog")
                 {
                     message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemoveCatalog")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 //else if (e.PropertyName == "Index Changed")
                 //{
@@ -260,23 +256,23 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 
             }
             else
             {
                 message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         #endregion //Event Handlers
@@ -287,7 +283,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             StackItem item = UndoStack.Last();
-            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
+            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DebugBooleans.Stack);
             if (item.Change == Change.Add || item.Change == Change.AddRelationship)
             {
                 handleAdd(item);
@@ -314,7 +310,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             string message = "After Undoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             isDoing = false;
         }
@@ -324,7 +320,7 @@ namespace EstimatingUtilitiesLibrary
             StackItem item = RedoStack.Last();
 
             string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             if (item.Change == Change.Add)
             {
@@ -353,7 +349,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             message = "After Redoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             isDoing = false;
         }
@@ -391,7 +387,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.ReferenceObject + " and reference object " + item.TargetObject + " not handled in add";
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         private void handleRemove(StackItem item)
@@ -404,7 +400,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.ReferenceObject + " and reference object " + item.TargetObject + " not handled in remove";
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         private void handleEdit(StackItem item)
@@ -420,7 +416,7 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     string message = "Property could not be set: " + property.Name;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 }
             }
         }
@@ -441,7 +437,7 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     string message = "Property could not be set: " + property.Name;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 }
             }
             return outObj;

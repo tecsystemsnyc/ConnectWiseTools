@@ -15,8 +15,7 @@ namespace Tests
     public class SaveAsBidTests
     {
         private const bool DEBUG = true;
-
-
+        
         static TECBid expectedBid;
         static TECLabor expectedLabor;
         static TECSystem expectedSystem;

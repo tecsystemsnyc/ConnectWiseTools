@@ -24,11 +24,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public TECBid Bid
         {
             get { return _bid; }
-            set
+            private set
             {
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                registerChanges();
             }
         }
         
@@ -65,7 +64,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _controllerCollection = value;
+                ControllerCollection.CollectionChanged -= collectionChanged;
                 RaisePropertyChanged("ControllerCollection");
+                ControllerCollection.CollectionChanged += collectionChanged;
             }
         }
 
@@ -119,10 +120,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ControllersPanelsViewModel(TECBid bid)
         {
             _bid = bid;
-            registerChanges();
-            populateControllerCollection();
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            updateCollections();
+            setup();
         }
         #endregion
 
@@ -130,10 +128,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Refresh(TECBid bid)
         {
             Bid = bid;
-            populateControllerCollection();
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            updateCollections();
+            setup();
         }
+
+        private void setup()
+        {
+            registerChanges();
+            populateControllerCollection();
+            populatePanelSelections();
+            ControllerCollection = new ObservableCollection<ControllerInPanel>();
+        } 
 
         private void populateControllerCollection()
         {
@@ -153,24 +157,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
             }
         }
-        private void updateControllerCollection()
-        {
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            foreach (TECController controller in Bid.Controllers)
-            {
-                TECPanel panelToAdd = null;
-                foreach (TECPanel panel in Bid.Panels)
-                {
-                    if (panel.Controllers.Contains(controller))
-                    {
-                        panelToAdd = panel;
-                    }
-                }
-                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
-                ControllerCollection.Add(controllerInPanelToAdd);
-            }
-        }
-        private void updatePanels()
+        private void populatePanelSelections()
         {
             PanelSelections = new ObservableCollection<TECPanel>();
             var nonePanel = new TECPanel();
@@ -189,10 +176,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateCollections();
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                
+                foreach(object item in e.NewItems)
+                {
+                    if(item is TECController)
+                    {
+                        addController(item as TECController);
+                    } else if (item is TECPanel)
+                    {
+                        addPanel(item as TECPanel);
+                    }
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -209,18 +204,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                         Bid.Controllers.Remove((item as ControllerInPanel).Controller);
                     }
+                    if (item is TECController)
+                    {
+                        removeController(item as TECController);
+                    }
+                    else if (item is TECPanel)
+                    {
+                        removePanel(item as TECPanel);
+                    }
                 }
             }
         }
-
-        private void updateCollections()
-        {
-            ControllerCollection.CollectionChanged -= collectionChanged;
-            updateControllerCollection();
-            updatePanels();
-            ControllerCollection.CollectionChanged += collectionChanged;
-        }
-
+        
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.ControllerInPanelDragOver(dropInfo);
@@ -235,6 +230,40 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 UIHelpers.StandardDrop(dropInfo);
             }
+        }
+
+        private void addController(TECController controller)
+        {
+            TECController controllerToAdd = controller;
+            TECPanel panelToAdd = null;
+            foreach (TECPanel panel in Bid.Panels)
+            {
+                if (panel.Controllers.Contains(controller))
+                {
+                    panelToAdd = panel;
+                    break;
+                }
+            }
+            ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
+        }
+        private void addPanel(TECPanel panel)
+        {
+            PanelSelections.Add(panel);
+        }
+        private void removeController(TECController controller)
+        {
+            foreach(ControllerInPanel controllerInPanel in ControllerCollection)
+            {
+                if(controllerInPanel.Controller == controller)
+                {
+                    ControllerCollection.Remove(controllerInPanel);
+                    return;
+                }
+            }
+        }
+        private void removePanel(TECPanel panel)
+        {
+            PanelSelections.Remove(panel);
         }
         #endregion
     }
