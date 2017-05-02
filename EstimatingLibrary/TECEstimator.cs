@@ -228,7 +228,6 @@ namespace EstimatingLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                     addCost(newValue);
                     addPoints(newValue);
-                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -236,7 +235,6 @@ namespace EstimatingLibrary
                     DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
                     removeCost(newValue);
                     removePoints(newValue);
-                    
                 }
                 else
                 {
@@ -288,19 +286,30 @@ namespace EstimatingLibrary
                 tecLaborHours += cost.LaborCost;
                 electricalMaterialCost += cost.ElectricalCost;
                 electricalLaborHours += cost.ElectricalLabor;
-                RaiseAll();
+
+                if (cost.MaterialCost != 0)
+                { raiseMaterial(); }
+                if (cost.LaborCost != 0)
+                { raiseTECLabor(); }
+                if (cost.ElectricalCost != 0)
+                { raiseElectricalMaterial(); }
+                if (cost.ElectricalLabor != 0)
+                { raiseElectricalLabor(); }
+
             }
             else if (item is TECMiscCost)
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost += cost.Cost * cost.Quantity;
-                RaiseAll();
+                if (cost.Cost != 0)
+                { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost += cost.Cost * cost.Quantity;
-                RaiseAll();
+                if (cost.Cost != 0)
+                { raiseElectricalMaterial(); }
             }
             
         }
@@ -313,19 +322,28 @@ namespace EstimatingLibrary
                 tecLaborHours -= cost.LaborCost;
                 electricalMaterialCost -= cost.ElectricalCost;
                 electricalLaborHours -= cost.ElectricalLabor;
-                RaiseAll();
+                if (cost.MaterialCost != 0)
+                { raiseMaterial(); }
+                if (cost.LaborCost != 0)
+                { raiseTECLabor(); }
+                if (cost.ElectricalCost != 0)
+                { raiseElectricalMaterial(); }
+                if (cost.ElectricalLabor != 0)
+                { raiseElectricalLabor(); }
             }
             else if (item is TECMiscCost)
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost -= cost.Cost * cost.Quantity;
-                RaiseAll();
+                if (cost.Cost != 0)
+                { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost -= cost.Cost * cost.Quantity;
-                RaiseAll();
+                if (cost.Cost != 0)
+                { raiseElectricalMaterial(); }
             }
         }
         private void editCost(object newValue, object oldValue)
@@ -337,7 +355,6 @@ namespace EstimatingLibrary
                 {
                     addCost(newValue);
                     removeCost(oldValue);
-                    RaiseAll();
                 }
             }
         }
@@ -347,7 +364,8 @@ namespace EstimatingLibrary
             if(item is PointComponent)
             {
                 pointNumber += (item as PointComponent).PointNumber;
-                RaiseAll();
+                if ((item as PointComponent).PointNumber != 0)
+                { raiseFromPoints(); }
             }
         }
         private void removePoints(object item)
@@ -355,7 +373,8 @@ namespace EstimatingLibrary
             if (item is PointComponent)
             {
                 pointNumber -= (item as PointComponent).PointNumber;
-                RaiseAll();
+                if ((item as PointComponent).PointNumber != 0)
+                { raiseFromPoints(); }
             }
         }
         private void editPoints(object newValue, object oldValue)
@@ -366,7 +385,6 @@ namespace EstimatingLibrary
                 {
                     addPoints(newValue);
                     removePoints(oldValue);
-                    RaiseAll();
                 }
             }
         }
@@ -780,21 +798,24 @@ namespace EstimatingLibrary
         #endregion
 
         #region Raise Properties
-        private void RaiseAll()
+        private void raiseFromPoints()
         {
             RaisePropertyChanged("TotalPointNumber");
+            raiseTECLabor();
+        }
+        private void raiseElectricalMaterial()
+        {
+            RaisePropertyChanged("ElectricalMaterialCost");
+            raiseSubcontractorTotals();
+        }
+        private void raiseMaterial()
+        {
             RaisePropertyChanged("MaterialCost");
             RaisePropertyChanged("Tax");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("ElectricalMaterialCost");
-            RaisePropertyChanged("ElectricalLaborHours");
-            RaisePropertyChanged("ElectricalLaborCost");
-            RaisePropertyChanged("ElectricalSuperLaborHours");
-            RaisePropertyChanged("ElectricalSuperLaborCost");
-            RaisePropertyChanged("SubcontractorLaborHours");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("SubcontractorSubtotal");
-
+            raiseTECTotals();
+        }
+        private void raiseTECLabor()
+        {
             RaisePropertyChanged("PMPointLaborHours");
             RaisePropertyChanged("PMLaborHours");
             RaisePropertyChanged("PMLaborCost");
@@ -818,10 +839,85 @@ namespace EstimatingLibrary
             RaisePropertyChanged("TECLaborHours");
             RaisePropertyChanged("TECLaborCost");
             RaisePropertyChanged("TECSubtotal");
+            raiseTECTotals();
+        }
+        private void raiseElectricalLabor()
+        {
+            RaisePropertyChanged("ElectricalLaborHours");
+            RaisePropertyChanged("ElectricalLaborCost");
+            RaisePropertyChanged("ElectricalSuperLaborHours");
+            RaisePropertyChanged("ElectricalSuperLaborCost");
+            raiseSubcontractorLabor();
+            raiseLabor();
+        }
+        private void raiseSubcontractorLabor()
+        {
+            RaisePropertyChanged("SubcontractorLaborHours");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            raiseSubcontractorTotals();
+            raiseLabor();
+        }
+        private void raiseTECTotals()
+        {
+            RaisePropertyChanged("TECSubtotal");
+            raiseTotals();
+        }
+        private void raiseSubcontractorTotals()
+        {
+            RaisePropertyChanged("SubcontractorSubtotal");
+            raiseTotals();
+        }
+        private void raiseLabor()
+        {
             RaisePropertyChanged("TotalLaborCost");
-
-            RaisePropertyChanged("TotalPrice");
+        }
+        private void raiseTotals()
+        {
             RaisePropertyChanged("TotalCost");
+            RaisePropertyChanged("TotalPrice");
+            RaisePropertyChanged("PricePerPoint");
+            RaisePropertyChanged("Margin");
+        }
+        private void raiseAll()
+        {
+            RaisePropertyChanged("TotalPointNumber");
+            RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("Tax");
+            RaisePropertyChanged("PMPointLaborHours");
+            RaisePropertyChanged("PMLaborHours");
+            RaisePropertyChanged("PMLaborCost");
+
+            RaisePropertyChanged("ENGPointLaborHours");
+            RaisePropertyChanged("ENGLaborHours");
+            RaisePropertyChanged("ENGLaborCost");
+
+            RaisePropertyChanged("SoftPointLaborHours");
+            RaisePropertyChanged("SoftLaborHours");
+            RaisePropertyChanged("SoftLaborCost");
+
+            RaisePropertyChanged("CommPointLaborHours");
+            RaisePropertyChanged("CommLaborHours");
+            RaisePropertyChanged("CommLaborCost");
+
+            RaisePropertyChanged("GraphPointLaborHours");
+            RaisePropertyChanged("GraphLaborHours");
+            RaisePropertyChanged("GraphLaborCost");
+
+            RaisePropertyChanged("TECLaborHours");
+            RaisePropertyChanged("TECLaborCost");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("ElectricalLaborHours");
+            RaisePropertyChanged("ElectricalLaborCost");
+            RaisePropertyChanged("ElectricalSuperLaborHours");
+            RaisePropertyChanged("ElectricalSuperLaborCost");
+            RaisePropertyChanged("SubcontractorLaborHours");
+            RaisePropertyChanged("SubcontractorLaborCost");
+            RaisePropertyChanged("TECSubtotal");
+            RaisePropertyChanged("SubcontractorSubtotal");
+            RaisePropertyChanged("TotalLaborCost");
+            RaisePropertyChanged("TotalCost");
+            RaisePropertyChanged("TotalPrice");
             RaisePropertyChanged("PricePerPoint");
             RaisePropertyChanged("Margin");
         }
