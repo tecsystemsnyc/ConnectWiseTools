@@ -265,8 +265,8 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
                 {
-
-                    if (saveSynchronously())
+                    SetBusyStatus("Saving...", false);
+                    if (saveDelta(false))
                     {
                         setupBid();
                     }
@@ -274,12 +274,17 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         MessageBox.Show("Save unsuccessful. New scope not created.");
                     }
+                    ResetStatus();
                 }
                 else if (result == MessageBoxResult.No)
                 {
                     DebugHandler.LogDebugMessage("Creating new bid.");
                     setupBid();
                     isNew = true;
+                }
+                else
+                {
+                    return;
                 }
             }
             else

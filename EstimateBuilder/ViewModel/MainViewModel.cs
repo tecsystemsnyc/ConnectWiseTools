@@ -186,7 +186,7 @@ namespace EstimateBuilder.ViewModel
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    SetBusyStatus("Loading drawings from file: " + path);
+                    SetBusyStatus("Loading drawings from file: " + path, true);
                     var worker = new BackgroundWorker();
 
                     worker.DoWork += (s, e) => {
