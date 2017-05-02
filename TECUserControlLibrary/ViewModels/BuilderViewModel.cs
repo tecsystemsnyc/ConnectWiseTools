@@ -19,6 +19,7 @@ namespace TECUserControlLibrary.ViewModels
 {
     abstract public class BuilderViewModel : ViewModelBase, IDropTarget
     {
+        protected const bool DEBUG = true;
 
         #region Constants
         protected string DEFAULT_STATUS_TEXT = "Ready";
@@ -114,6 +115,7 @@ namespace TECUserControlLibrary.ViewModels
             set;
         }
 
+        //Used to update relevant properties in children view models
         virtual protected string saveFilePath
         {
             get;
@@ -225,7 +227,7 @@ namespace TECUserControlLibrary.ViewModels
             startupFile = getStartupFile();
             if (startupFile != "")
             {
-                SetBusyStatus("Loading " + startupFile);
+                SetBusyStatus("Loading " + startupFile, false);
                 try
                 {
                     loadFromPath(startupFile);
@@ -244,7 +246,7 @@ namespace TECUserControlLibrary.ViewModels
 
             (Properties.Resources.TECLogo).Save(TECLogo, ImageFormat.Png);
         }
-        protected void SetBusyStatus(string statusText, bool userCanInteract = true)
+        protected void SetBusyStatus(string statusText, bool userCanInteract)
         {
             StatusBarVM.CurrentStatusText = statusText;
             IsReady = false;
@@ -296,8 +298,131 @@ namespace TECUserControlLibrary.ViewModels
         }
         
         #endregion
+
         #region Save/Load
-        protected void saveNewToPath(string path)
+        protected bool saveNew(bool async)
+        {
+            //User choose path
+            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
+            if (path != null)
+            {
+                saveFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+
+                stack.ClearStacks();
+                SetBusyStatus("Saving file: " + path, true);
+
+                if (async)
+                {
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += (s, e) =>
+                    {
+                        saveNewToPath(path);
+                    };
+                    worker.RunWorkerCompleted += (s, e) =>
+                    {
+                        isNew = false;
+                        ResetStatus();
+                    };
+
+                    worker.RunWorkerAsync();
+                    return false;
+                }
+                else
+                {
+                    bool success = saveNewToPath(path);
+                    ResetStatus();
+                    return success;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        protected bool saveDelta(bool async)
+        {
+            if (saveFilePath != null && File.Exists(saveFilePath))
+            {
+                SetBusyStatus("Saving to path: " + saveFilePath, true);
+                ChangeStack stackToSave = stack.Copy();
+                stack.ClearStacks();
+
+                if (async)
+                {
+                    BackgroundWorker worker = new BackgroundWorker();
+
+                    worker.DoWork += (s, e) =>
+                    {
+                        saveDeltaToPath(saveFilePath, stackToSave);
+                    };
+
+                    worker.RunWorkerCompleted += (s, e) =>
+                    {
+                        isNew = false;
+                        ResetStatus();
+                    };
+
+                    worker.RunWorkerAsync();
+                    return false;
+                }
+                else
+                {
+                    bool success = saveDeltaToPath(saveFilePath, stackToSave);
+                    ResetStatus();
+                    return success;
+                }
+            }
+            else
+            {
+                return saveNew(async);
+            }
+        }
+        protected bool load(bool async)
+        {
+            string path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
+            if (path != null)
+            {
+                saveFilePath = path;
+                ScopeDirectoryPath = Path.GetDirectoryName(path);
+                SetBusyStatus("Loading File: " + path, false);
+
+                if (async)
+                {
+                    TECScopeManager loadingScopeManager = null;
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += (s, e) =>
+                    {
+                        loadingScopeManager = loadFromPath(path);
+                    };
+                    worker.RunWorkerCompleted += (s, e) =>
+                    {
+                        if (loadingScopeManager != null)
+                        {
+                            workingScopeManager = loadingScopeManager;
+                        }
+                        isNew = false;
+                        ResetStatus();
+                    };
+
+                    worker.RunWorkerAsync();
+                    return false;
+                }
+                else
+                {
+                    workingScopeManager = loadFromPath(path);
+                    isNew = false;
+                    ResetStatus();
+                    return (workingScopeManager != null);
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool saveNewToPath(string path)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
@@ -307,161 +432,43 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 //Create new database
                 EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                return true;
             }
             else
             {
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                return false;
             }
         }
-        protected void saveToPath(string path, ChangeStack saveStack)
+        private bool saveDeltaToPath(string path, ChangeStack saveStack)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
                 try
-                { EstimatingLibraryDatabase.Update(path, saveStack); }
+                {
+                    EstimatingLibraryDatabase.Update(path, saveStack);
+                    return true;
+                }
                 catch (Exception ex)
                 {
-                    throw ex;
-                    //DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                    //EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                    if (DEBUG)
+                    {
+                        throw ex;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                        return saveNewToPath(path);
+                    }
                 }
             }
             else
             {
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                return false;
             }
         }
-        private void save()
-        {
-            if (saveFilePath != null && File.Exists(saveFilePath))
-            {
-                SetBusyStatus("Saving to path: " + saveFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (s, e) =>
-                {
-                    saveToPath(saveFilePath, stackToSave);
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-            else
-            {
-                saveAs();
-            }
-        }
-        private void saveAs()
-        {
-            //User choose path
-            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
-            if (path != null)
-            {
-                saveFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    saveNewToPath(path);
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-            }
-
-        }
-        protected bool saveAsSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            //User choose path
-            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
-            if (path != null)
-            {
-                saveFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                stack.ClearStacks();
-                SetBusyStatus("Saving file: " + path);
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
-                    saveSuccessful = false;
-                }
-
-
-            }
-
-            return saveSuccessful;
-        }
-        protected bool saveSynchronously()
-        {
-            bool saveSuccessful = false;
-
-            if (saveFilePath != null && File.Exists(saveFilePath))
-            {
-                SetBusyStatus("Saving to path: " + saveFilePath);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
-
-                if (!UtilitiesMethods.IsFileLocked(saveFilePath))
-                {
-                    try
-                    {
-                        EstimatingLibraryDatabase.Update(saveFilePath, stackToSave);
-                        saveSuccessful = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugHandler.LogError("Save delta failed. Saving to new file. Error: " + ex.Message);
-                        EstimatingLibraryDatabase.SaveNew(saveFilePath, workingScopeManager);
-                    }
-                }
-                else
-                {
-                    DebugHandler.LogError("Could not open file " + saveFilePath + " File is open elsewhere.");
-                }
-
-            }
-            else
-            {
-                if (saveAsSynchronously())
-                {
-                    saveSuccessful = true;
-                }
-                else
-                {
-                    saveSuccessful = false;
-                }
-            }
-
-            return saveSuccessful;
-        }
-        
-        protected TECScopeManager loadFromPath(string path)
+        private TECScopeManager loadFromPath(string path)
         {
             saveFilePath = path;
             ScopeDirectoryPath = Path.GetDirectoryName(path);
@@ -474,36 +481,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             return outScope;
         }
-        private void load()
-        {
-            string path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
-            if (path != null)
-            {
-                SetBusyStatus("Loading File: " + path, false);
-                TECScopeManager loadingScopeManager = null;
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    saveFilePath = path;
-                    ScopeDirectoryPath = Path.GetDirectoryName(path);
-
-                    loadingScopeManager = loadFromPath(path);
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    ResetStatus();
-                    if (loadingScopeManager != null)
-                    {
-                        workingScopeManager = loadingScopeManager;
-                    }
-
-                    isNew = false;
-                };
-
-                worker.RunWorkerAsync();
-            }
-        }
         #endregion 
+
         #region Get Path Methods
         protected string getSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = null)
         {
@@ -551,6 +530,7 @@ namespace TECUserControlLibrary.ViewModels
             return savePath;
         }
         #endregion
+
         #region Commands
         protected abstract void NewExecute();
         protected void LoadExecute()
@@ -567,9 +547,9 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (saveSynchronously())
+                    if (saveDelta(false))
                     {
-                        load();
+                        load(true);
                     }
                     else
                     {
@@ -578,14 +558,17 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    load();
+                    load(false);
+                }
+                else
+                {
+                    return;
                 }
             }
             else
             {
-                load();
+                load(false);
             }
-
         }
         protected void SaveExecute()
         {
@@ -594,7 +577,7 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            save();
+            saveDelta(true);
         }
         protected void SaveAsExecute()
         {
@@ -603,7 +586,7 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            saveAs();
+            saveNew(true);
         }
         private void UndoExecute()
         {
@@ -637,7 +620,7 @@ namespace TECUserControlLibrary.ViewModels
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                     if (result == MessageBoxResult.Yes)
                     {
-                        if (!saveSynchronously())
+                        if (!saveDelta(false))
                         {
                             MessageBox.Show("Save unsuccessful.");
                             return;

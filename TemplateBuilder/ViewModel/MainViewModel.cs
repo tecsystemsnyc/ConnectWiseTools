@@ -283,7 +283,7 @@ namespace TemplateBuilder.ViewModel
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (!saveSynchronously())
+                    if (!saveDelta(false))
                     {
                         MessageBox.Show("Save unsuccessful.");
                         return;
@@ -322,7 +322,7 @@ namespace TemplateBuilder.ViewModel
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (!saveSynchronously())
+                    if (!saveDelta(false))
                     {
                         MessageBox.Show("Save unsuccessful.");
                         return;
@@ -337,17 +337,15 @@ namespace TemplateBuilder.ViewModel
             string path = TemplatesFilePath;
             if (path != null)
             {
-                SetBusyStatus("Loading templates from file: " + path);
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Templates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+                    load(true);
                 }
                 else
                 {
                     DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
                 }
             }
-            ResetStatus();
         }
         private bool RefreshCanExecute()
         {
