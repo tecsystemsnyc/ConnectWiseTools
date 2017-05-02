@@ -23,8 +23,6 @@ namespace EstimatingUtilitiesLibrary
         private const string DB_FMT = "O";
         //private const bool DEBUG = true;
 
-        private const bool DEBUG_GENERIC = false;
-
         static private SQLiteDatabase SQLiteDB;
 
         static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
@@ -2679,7 +2677,7 @@ namespace EstimatingUtilitiesLibrary
                 {
                     if (isFieldType(tableInfo, field, relevantObjects[currentField]))
                     {
-                        DebugHandler.LogDebugMessage("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType(), DEBUG_GENERIC);
+                        DebugHandler.LogDebugMessage("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType(), DebugBooleans.Generic);
                         
                         var dataString = objectToDBString(field.Property.GetValue(relevantObjects[currentField], null));
                         data.Add(field.Name, dataString);
@@ -2707,12 +2705,12 @@ namespace EstimatingUtilitiesLibrary
         {
             if (isFieldType(field, item.TargetObject, item.TargetType))
             {
-                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.TargetType, DEBUG_GENERIC);
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.TargetType, DebugBooleans.Generic);
                 addFieldPropertyToData(field, item.TargetObject, data);
             }
             else if (isFieldType(field, item.ReferenceObject, item.ReferenceType))
             {
-                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.ReferenceType, DEBUG_GENERIC);
+                DebugHandler.LogDebugMessage("Changing " + field.Name + " with type " + item.ReferenceType, DebugBooleans.Generic);
                 addFieldPropertyToData(field, item.ReferenceObject, data);
             }
             

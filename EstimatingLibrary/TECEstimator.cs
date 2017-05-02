@@ -12,7 +12,6 @@ namespace EstimatingLibrary
 {
     public class TECEstimator : TECObject
     {
-        private const bool DEBUG_PROPERTIES = false;
 
         TECBid bid;
         ChangeWatcher watcher;
@@ -215,7 +214,7 @@ namespace EstimatingLibrary
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -225,21 +224,21 @@ namespace EstimatingLibrary
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     addCost(newValue);
                     addPoints(newValue);
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     removeCost(newValue);
                     removePoints(newValue);
                 }
                 else
                 {
                     message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     editCost(newValue, oldValue);
                     editPoints(newValue, oldValue);
                 }
@@ -247,7 +246,7 @@ namespace EstimatingLibrary
             else
             {
                 message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 
             }
         }

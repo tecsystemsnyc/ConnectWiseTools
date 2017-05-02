@@ -19,8 +19,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     abstract public class BuilderViewModel : ViewModelBase, IDropTarget
     {
-        protected const bool DEBUG = true;
-
         #region Constants
         protected string DEFAULT_STATUS_TEXT = "Ready";
         #endregion
@@ -460,7 +458,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    if (DEBUG)
+                    if (DebugBooleans.ViewModel)
                     {
                         throw ex;
                     }
