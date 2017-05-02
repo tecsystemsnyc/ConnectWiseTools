@@ -137,7 +137,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupData()
         {
-            if (!isNew)
+            if (isNew)
             {
                 Bid = new TECBid();
             }
