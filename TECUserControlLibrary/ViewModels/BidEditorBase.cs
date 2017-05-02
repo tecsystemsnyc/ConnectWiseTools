@@ -59,6 +59,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 workingScopeManager = value;
+                updateBidWithTemplates();
                 refresh();
             }
         }
@@ -70,7 +71,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _templates = value;
                 RaisePropertyChanged("Templates");
-                
+                updateBidWithTemplates();
                 refresh();
             }
         }
