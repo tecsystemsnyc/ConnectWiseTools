@@ -38,8 +38,6 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
-
-            setupAll();
         }
         
         #region Properties
@@ -257,8 +255,9 @@ namespace EstimateBuilder.ViewModel
         #endregion Commands Methods
 
         #region Helper Methods
-        private void setupAll()
+        override protected void setupExtensions()
         {
+            base.setupExtensions();
             setupScopeEditorVM(new TECBid(), new TECTemplates());
             setupDrawingVM(new TECBid());
             setupLaborVM(new TECBid(), new TECTemplates());

@@ -211,6 +211,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public BuilderViewModel()
         {
+            setupExtensions();
             getStartupFile();
 
             if (workingScopeManager == null)
@@ -219,7 +220,6 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             setupCommands();
-            setupVMs();
             
             getLogo();
         }
@@ -269,7 +269,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Setup
-        private void setupVMs()
+        virtual protected void setupExtensions()
         {
             setupMenu();
             setupStatusBar();
