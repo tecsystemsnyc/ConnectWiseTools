@@ -12,7 +12,6 @@ namespace EstimatingLibrary
 {
     public class TECEstimator : TECObject
     {
-        private const bool DebugBooleans.Properties = false;
 
         TECBid bid;
         ChangeWatcher watcher;

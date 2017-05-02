@@ -12,8 +12,6 @@ namespace EstimatingLibrary.Utilities
     public enum Change { Add, Remove };
     public class ChangeWatcher
     {
-        private const bool DebugBooleans.Properties = false;
-
         public Action<object, PropertyChangedEventArgs> Changed;
 
         public ChangeWatcher(TECScopeManager scopeManager)

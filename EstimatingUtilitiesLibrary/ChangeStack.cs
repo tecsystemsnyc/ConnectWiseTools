@@ -253,6 +253,17 @@ namespace EstimatingUtilitiesLibrary
                 //{
 
                 //}
+                else if (e.PropertyName == "Catalogs")
+                {
+                    message = "Catalog change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                    item = new StackItem(Change.Add, args);
+                    handleChildren(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                }
                 else
                 {
                     message = "Edit change: " + oldValue;
@@ -493,6 +504,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleIOModuelChildren(newItem as TECIOModule, item.Change);
             }
+            else if(newItem is TECCatalogs)
+            {
+                handleCatalogsChildren(newItem as TECCatalogs, item.Change);
+            }
         }
         private void handleSystemChildren(TECSystem system, Change change)
         {
@@ -703,6 +718,48 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, ioModule, ioModule.Manufacturer);
                 SaveStack.Add(item);
             }
+        }
+        private void handleCatalogsChildren(TECCatalogs catalogs, Change change)
+        {
+            foreach(TECDevice device in catalogs.Devices)
+            {
+                SaveStack.Add(new StackItem(Change.Add, device, catalogs));
+                handleDeviceChildren(device, change);
+            }
+            foreach (TECConnectionType type in catalogs.ConnectionTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECConduitType type in catalogs.ConduitTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
+            {
+                SaveStack.Add(new StackItem(Change.Add, cost, catalogs));
+                handleScopeChildren(cost, change);
+            }
+            foreach (TECPanelType type in catalogs.PanelTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECIOModule ioModule in catalogs.IOModules)
+            {
+                SaveStack.Add(new StackItem(Change.Add, ioModule, catalogs));
+                handleIOModuelChildren(ioModule, change);
+            }
+            foreach (TECManufacturer manufacturer in catalogs.Manufacturers)
+            {
+                SaveStack.Add(new StackItem(Change.Add, manufacturer, catalogs));
+            }
+            foreach (TECTag tag in catalogs.Tags)
+            {
+                SaveStack.Add(new StackItem(Change.Add, tag, catalogs));
+            }
+
         }
         
         private void registerGeneric(TECObject obj)
