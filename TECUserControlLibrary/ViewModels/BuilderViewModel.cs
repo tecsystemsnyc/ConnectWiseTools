@@ -629,26 +629,34 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void ClosingExecute(CancelEventArgs e)
         {
-            bool changes = (stack.SaveStack.Count > 0);
-            if (changes)
+            if (IsReady)
             {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
+                bool changesExist = (stack.SaveStack.Count > 0);
+                if (changesExist)
                 {
-                    if (!saveSynchronously())
+                    MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
+                    if (result == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("Save unsuccessful.");
-                        return;
+                        if (!saveSynchronously())
+                        {
+                            MessageBox.Show("Save unsuccessful.");
+                            return;
+                        }
+                    }
+                    else if (result == MessageBoxResult.Cancel)
+                    {
+                        e.Cancel = true;
                     }
                 }
-                else if (result == MessageBoxResult.Cancel)
+                if (!e.Cancel)
                 {
-                    e.Cancel = true;
+                    Properties.Settings.Default.Save();
                 }
             }
-            if (!e.Cancel)
+            else
             {
-                Properties.Settings.Default.Save();
+                e.Cancel = true;
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
             }
         }
         #endregion
