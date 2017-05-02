@@ -4,6 +4,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TECUserControlLibrary;
 using TECUserControlLibrary.Models;
 
 namespace EstimateBuilder.ViewModel
@@ -59,8 +60,11 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        public ElectricalViewModel(TECBid bid)
+        private NoneObjects NoneContainer;
+
+        public ElectricalViewModel(TECBid bid, NoneObjects noneContainer)
         {
+            NoneContainer = noneContainer;
             Refresh(bid);
         }
 
@@ -137,9 +141,7 @@ namespace EstimateBuilder.ViewModel
         private void updateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
-            var noneController = new TECController();
-            noneController.Name = "None";
-            ControllerSelections.Add(noneController);
+            ControllerSelections.Add(NoneContainer.NoneController);
             foreach (TECController controller in Bid.Controllers)
             {
                 ControllerSelections.Add(controller);
