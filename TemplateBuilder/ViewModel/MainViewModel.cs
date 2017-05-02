@@ -174,6 +174,19 @@ namespace TemplateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+        protected override string startupFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.StartupFile;
+            }
+
+            set
+            {
+                Properties.Settings.Default.StartupFile = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
         #endregion //Properties
 
@@ -363,15 +376,6 @@ namespace TemplateBuilder.ViewModel
         }
         #endregion
         #region Helper Methods
-        protected override string getStartupFile()
-        {
-            return Properties.Settings.Default.StartupFile;
-        }
-        protected override void clearStartupFile()
-        {
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
-        }
         private void setVisibility(TemplateGridIndex gridIndex)
         {
             nullifySelected();

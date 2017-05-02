@@ -104,6 +104,19 @@ namespace Scope_Builder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+        protected override string startupFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.StartupFile;
+            }
+
+            set
+            {
+                Properties.Settings.Default.StartupFile = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
         #endregion
 
@@ -120,11 +133,6 @@ namespace Scope_Builder.ViewModel
             TemplatesVisibility = Visibility.Visible;
             
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
-
-            BidSet += () =>
-            { refreshAll(); };
-            TemplatesLoadedSet += () =>
-            { refreshTemplates(); };
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
@@ -293,15 +301,6 @@ namespace Scope_Builder.ViewModel
             
             return outString;
         }
-        protected override string getStartupFile()
-        {
-            return Properties.Settings.Default.StartupFile;
-        }
-        protected override void clearStartupFile()
-        {
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
-        }
         #endregion //Helper Functions
 
         #region Setup Extensions
@@ -312,14 +311,11 @@ namespace Scope_Builder.ViewModel
             setupScopeCollection();
             setupBudget();
         }
-        private void refreshAll()
+        override protected void refresh()
         {
             ScopeDataGrid.Refresh(Bid);
             LocationDataGrid.Refresh(Bid);
             BudgetVM.Refresh(Bid);
-        }
-        private void refreshTemplates()
-        {
             ScopeCollection.Refresh(Templates);
         }
         private void setupScopeDataGrid()

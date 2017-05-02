@@ -40,17 +40,6 @@ namespace EstimateBuilder.ViewModel
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
 
             setupAll();
-
-            BidSet += () =>
-            {
-                Refresh();
-            };
-            TemplatesLoadedSet += () =>
-            {
-                Refresh();
-            };
-            
-            base.PropertyChanged += BidEditorBase_PropertyChanged;
         }
         
         #region Properties
@@ -82,6 +71,32 @@ namespace EstimateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+        protected override string TemplatesFilePath
+        {
+            get
+            {
+                return base.TemplatesFilePath;
+            }
+
+            set
+            {
+                base.TemplatesFilePath = value;
+                SettingsVM.TemplatesLoadPath = TemplatesFilePath;
+            }
+        }
+        protected override string startupFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.StartupFile;
+            }
+
+            set
+            {
+                Properties.Settings.Default.StartupFile = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
 
         #region ViewModels
@@ -109,6 +124,20 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 ScopeEditorVM.TemplatesVisibility = value;
+            }
+        }
+
+        protected override bool templatesLoaded
+        {
+            get
+            {
+                return base.templatesLoaded;
+            }
+
+            set
+            {
+                base.templatesLoaded = value;
+                LaborVM.TemplatesLoaded = templatesLoaded;
             }
         }
         #endregion Properties
@@ -143,9 +172,6 @@ namespace EstimateBuilder.ViewModel
             LaborVM.Templates = templates;
             LaborVM.LoadTemplates += LoadTemplatesExecute;
             LaborVM.TemplatesLoaded = templatesLoaded;
-            TemplatesLoadedSet += () => {
-                LaborVM.TemplatesLoaded = templatesLoaded;
-            };
         }
         private void setupReviewVM(TECBid bid)
         {
@@ -239,7 +265,7 @@ namespace EstimateBuilder.ViewModel
             setupMenuVM();
             setupNetworkVM(new TECBid());
         }
-        public void Refresh()
+        override protected void refresh()
         {
             if(Bid != null && Templates != null)
             {
@@ -270,32 +296,11 @@ namespace EstimateBuilder.ViewModel
 
             return path;
         }
-        protected override string getStartupFile()
-        {
-            return Properties.Settings.Default.StartupFile;
-        }
-        protected override void clearStartupFile()
-        {
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
-        }
         #endregion
 
         #endregion
 
         #region Event Handlers
-        
-        private void BidEditorBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "TemplatesFilePath")
-            {
-                SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-            }
-            else if (e.PropertyName == "Templates")
-            {
-                Refresh();
-            }
-        }
         private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesHidden")

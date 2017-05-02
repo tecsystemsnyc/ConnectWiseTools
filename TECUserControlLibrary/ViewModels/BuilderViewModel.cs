@@ -136,9 +136,6 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Fields
         protected ChangeStack stack;
-        public string startupFile;
-        
-        
         #endregion
 
         #region View Models
@@ -205,32 +202,46 @@ namespace TECUserControlLibrary.ViewModels
             get;
             set;
         }
+        abstract protected string startupFilePath
+        {
+            get;
+            set;
+        }
         #endregion
 
         #endregion
 
         public BuilderViewModel()
         {
-            isNew = true;
+            getStartupFile();
+
+            if (workingScopeManager == null)
+            {
+                isNew = true;
+            }
 
             setupCommands();
             setupVMs();
             
             getLogo();
-
-            ResetStatus();
         }
 
         #region Methods
-        private void checkForOpenWith()
+        protected void getStartupFile()
         {
-            startupFile = getStartupFile();
-            if (startupFile != "")
+            if (startupFilePath != "")
             {
-                SetBusyStatus("Loading " + startupFile, false);
+                SetBusyStatus("Loading " + startupFilePath, false);
                 try
                 {
-                    loadFromPath(startupFile);
+                    if (File.Exists(startupFilePath))
+                    {
+                        workingScopeManager = loadFromPath(startupFilePath);
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Startup file doesn't exist. Path: " + startupFilePath);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -238,7 +249,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 ResetStatus();
             }
-            clearStartupFile();
+            startupFilePath = "";
         }
         private void getLogo()
         {
@@ -258,8 +269,6 @@ namespace TECUserControlLibrary.ViewModels
             IsReady = true;
             UserCanInteract = true;
         }
-        protected abstract string getStartupFile();
-        protected abstract void clearStartupFile();
 
         #region Setup
         private void setupVMs()
