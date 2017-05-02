@@ -27,13 +27,14 @@ namespace EstimatingUtilitiesLibrary
 
         static private SQLiteDatabase SQLiteDB;
 
-        static private Dictionary<TableBase, StackItem> indexesToUpdate;
+        static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
 
         #region Public Functions
         static public TECScopeManager Load(string path)
         {
             TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
 
             var tableNames = getAllTableNames();
             if (tableNames.Contains("TECBidInfo"))
@@ -49,6 +50,7 @@ namespace EstimatingUtilitiesLibrary
                 throw new NotImplementedException();
             }
 
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -63,11 +65,12 @@ namespace EstimatingUtilitiesLibrary
             var watch = System.Diagnostics.Stopwatch.StartNew();
             
             SQLiteDB = new SQLiteDatabase(path);
-            indexesToUpdate = new Dictionary<TableBase, StackItem>();
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
 
             if (File.Exists(path))
             { SQLiteDB.overwriteFile(); }
-            if(scopeManager is TECBid)
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            if (scopeManager is TECBid)
             {
                 createAllBidTables();
                 saveCompleteBid(scopeManager as TECBid);
@@ -76,10 +79,8 @@ namespace EstimatingUtilitiesLibrary
                 createAllTemplateTables();
                 saveCompleteTemplate(scopeManager as TECTemplates);
             }
-            foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
-            {
-                updateIndexedRelation(item.Key, item.Value);
-            }
+            saveIndexRelationships(indexesToUpdate);
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
             
             GC.Collect();
@@ -98,7 +99,8 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(path, tempPath);
 
             SQLiteDB = new SQLiteDatabase(tempPath);
-            indexesToUpdate = new Dictionary<TableBase, StackItem>();
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
             var cleansedStack = cleanseStack(changeStack.SaveStack);
             foreach (StackItem change in cleansedStack)
             {
@@ -127,11 +129,8 @@ namespace EstimatingUtilitiesLibrary
                     removeRelationship(change);
                 }
             }
-            foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
-            {
-                updateIndexedRelation(item.Key, item.Value);
-            }
-
+            saveIndexRelationships(indexesToUpdate);
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -146,6 +145,7 @@ namespace EstimatingUtilitiesLibrary
         static public void UpdateCatalogs(string path, TECTemplates templates)
         {
             SQLiteDB = new SQLiteDatabase(path);
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = getBidInfo();
             updateCatalogs(bid, templates);
@@ -169,7 +169,7 @@ namespace EstimatingUtilitiesLibrary
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
-
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
 
             GC.Collect();
@@ -2430,6 +2430,7 @@ namespace EstimatingUtilitiesLibrary
                 addRelationship(new StackItem(Change.Add, netConnect, controller, typeof(TECNetworkConnection), typeof (TECController)));
             }
         }
+
         #endregion
 
         #region Generic Add Methods
@@ -2437,15 +2438,7 @@ namespace EstimatingUtilitiesLibrary
         {
             //ObjectsToAdd = [targetObject, referenceObject];
             var relevantTables = getRelevantTablesForAddRemove(item);
-            foreach (TableBase table in relevantTables)
-            {
-                var tableInfo = new TableInfo(table);
-                if (tableInfo.IsRelationTable)
-                { indexesToUpdate[table] = item; }
-                //{ updateIndexedRelation(table, item); }
-                else
-                { addObjectToTable(table, item); } 
-            } 
+            addToTables(item, relevantTables);
         }
         private static void addObjectToTable(TableBase table, StackItem item)
         {
@@ -2464,7 +2457,7 @@ namespace EstimatingUtilitiesLibrary
         private static void updateIndexedRelation(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
-            var referenceCopy = (item.ReferenceObject as TECScope).Copy();
+            var referenceCopy = (item.ReferenceObject as TECObject).Copy();
 
             var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy);
             
@@ -2501,15 +2494,56 @@ namespace EstimatingUtilitiesLibrary
         {
             //ObjectsToAdd = [targetObject, referenceObject];
             var relevantTables = getRelevantTablesForAddRemoveRelationship(item);
-            foreach (TableBase table in relevantTables)
+            addToTables(item, relevantTables);
+        }
+
+        private static void addToTables(StackItem item, List<TableBase> tables)
+        {
+            foreach (TableBase table in tables)
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
-                { updateIndexedRelation(table, item); }
+                { addToIndexUpdates(indexesToUpdate, item, table); }
+                //{ updateIndexedRelation(table, item); }
                 else
                 { addObjectToTable(table, item); }
             }
         }
+        private static void addToIndexUpdates(Dictionary<TableBase, List<StackItem>> updates, StackItem item, TableBase table)
+        {
+            if(!updates.ContainsKey(table))
+            {
+                var stackForTable = new List<StackItem>();
+                stackForTable.Add(item);
+                updates[table] = stackForTable;
+            }
+            else
+            {
+                bool alreadyRepresented = false;
+                foreach(StackItem updateItem in updates[table])
+                {
+                    if(updateItem.ReferenceObject == item.ReferenceObject)
+                    {
+                        alreadyRepresented = true;
+                    }
+                }
+                if (!alreadyRepresented)
+                {
+                    updates[table].Add(item);
+                }
+            }
+        }
+        private static void saveIndexRelationships(Dictionary<TableBase, List<StackItem>> updates)
+        {
+            foreach (KeyValuePair<TableBase, List<StackItem>> item in indexesToUpdate)
+            {
+                foreach (StackItem stackItem in item.Value)
+                {
+                    updateIndexedRelation(item.Key, stackItem);
+                }
+            }
+        }
+
         #endregion
 
         #region Generic Remove Methods
