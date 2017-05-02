@@ -125,8 +125,6 @@ namespace Scope_Builder.ViewModel
         {
             isEstimate = false;
             programName = "Scope Builder";
-
-            setupAll();
             DGTabIndex = GridIndex.Scope;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
@@ -306,8 +304,9 @@ namespace Scope_Builder.ViewModel
         #endregion //Helper Functions
 
         #region Setup Extensions
-        private void setupAll()
+        override protected void setupExtensions()
         {
+            base.setupExtensions();
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();
@@ -315,10 +314,13 @@ namespace Scope_Builder.ViewModel
         }
         override protected void refresh()
         {
-            ScopeDataGrid.Refresh(Bid);
-            LocationDataGrid.Refresh(Bid);
-            BudgetVM.Refresh(Bid);
-            ScopeCollection.Refresh(Templates);
+            if (Bid != null && Templates != null)
+            {
+                ScopeDataGrid.Refresh(Bid);
+                LocationDataGrid.Refresh(Bid);
+                BudgetVM.Refresh(Bid);
+                ScopeCollection.Refresh(Templates);
+            }
         }
         private void setupScopeDataGrid()
         {
