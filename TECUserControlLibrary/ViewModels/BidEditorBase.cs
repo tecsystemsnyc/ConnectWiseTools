@@ -59,14 +59,6 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 workingScopeManager = value;
-                if (Templates != null)
-                {
-                    Bid.Catalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
-                }
-                if (isNew)
-                {
-                    Bid.Labor.UpdateConstants(Templates.Labor);
-                }
                 refresh();
             }
         }
@@ -78,11 +70,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _templates = value;
                 RaisePropertyChanged("Templates");
-                Bid.Catalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
-                if (isNew)
-                {
-                    Bid.Labor.UpdateConstants(Templates.Labor);
-                }
+                
                 refresh();
             }
         }
@@ -194,6 +182,18 @@ namespace TECUserControlLibrary.ViewModels
             MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
+        }
+
+        private void updateBidWithTemplates()
+        {
+            if (Templates != null && Bid != null)
+            {
+                Bid.Catalogs = UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
+            }
+            if (isNew)
+            {
+                Bid.Labor.UpdateConstants(Templates.Labor);
+            }
         }
         #endregion
         #region Refresh

@@ -137,7 +137,10 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 base.templatesLoaded = value;
-                LaborVM.TemplatesLoaded = templatesLoaded;
+                if(LaborVM != null)
+                {
+                    LaborVM.TemplatesLoaded = templatesLoaded;
+                }
             }
         }
         #endregion Properties
