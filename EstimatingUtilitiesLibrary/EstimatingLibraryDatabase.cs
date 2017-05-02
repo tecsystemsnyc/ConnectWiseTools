@@ -76,10 +76,10 @@ namespace EstimatingUtilitiesLibrary
                 createAllTemplateTables();
                 saveCompleteTemplate(scopeManager as TECTemplates);
             }
-            //foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
-            //{
-            //    updateIndexedRelation(item.Key, item.Value);
-            //}
+            foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
+            {
+                updateIndexedRelation(item.Key, item.Value);
+            }
             SQLiteDB.Connection.Close();
             
             GC.Collect();
@@ -98,7 +98,7 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(path, tempPath);
 
             SQLiteDB = new SQLiteDatabase(tempPath);
-            //indexesToUpdate = new Dictionary<TableBase, StackItem>();
+            indexesToUpdate = new Dictionary<TableBase, StackItem>();
             var cleansedStack = cleanseStack(changeStack.SaveStack);
             foreach (StackItem change in cleansedStack)
             {
@@ -127,10 +127,10 @@ namespace EstimatingUtilitiesLibrary
                     removeRelationship(change);
                 }
             }
-            //foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
-            //{
-            //    updateIndexedRelation(item.Key, item.Value);
-            //}
+            foreach (KeyValuePair<TableBase, StackItem> item in indexesToUpdate)
+            {
+                updateIndexedRelation(item.Key, item.Value);
+            }
 
             SQLiteDB.Connection.Close();
 
@@ -2441,8 +2441,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 var tableInfo = new TableInfo(table);
                 if (tableInfo.IsRelationTable)
-                //{ indexesToUpdate[table] = item; }
-                { updateIndexedRelation(table, item); }
+                { indexesToUpdate[table] = item; }
+                //{ updateIndexedRelation(table, item); }
                 else
                 { addObjectToTable(table, item); } 
             } 
@@ -2464,8 +2464,9 @@ namespace EstimatingUtilitiesLibrary
         private static void updateIndexedRelation(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
+            var referenceCopy = (item.ReferenceObject as TECScope).Copy();
 
-            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, item.ReferenceObject);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy);
             
             foreach(TECObject child in (IList)childrenCollection)
             {

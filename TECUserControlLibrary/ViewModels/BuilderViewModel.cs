@@ -294,7 +294,6 @@ namespace TECUserControlLibrary.ViewModels
             SettingsVM = new SettingsViewModel(TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
         }
-
         
         #endregion
         #region Save/Load
@@ -322,8 +321,9 @@ namespace TECUserControlLibrary.ViewModels
                 { EstimatingLibraryDatabase.Update(path, saveStack); }
                 catch (Exception ex)
                 {
-                    DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
-                    EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                    throw ex;
+                    //DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
+                    //EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
                 }
             }
             else
