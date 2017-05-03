@@ -97,13 +97,12 @@ namespace TemplateBuilder.ViewModel
         {
             get
             {
-                return base.saveFilePath;
+                return TemplatesFilePath;
             }
 
             set
             {
                 TemplatesFilePath = value;
-                base.saveFilePath = value;
             }
         }
 
