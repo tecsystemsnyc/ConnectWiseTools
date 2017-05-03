@@ -112,6 +112,28 @@ namespace TECUserControlLibrary.Models
         {
             get { return isConnected(Controller); }
         }
+        public TECConduitType ConduitType
+        {
+            get
+            {
+                if (Controller.ParentConnection == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Controller.ParentConnection.ConduitType;
+                }
+            }
+            set
+            {
+                if (Controller.ParentConnection != null)
+                {
+                    Controller.ParentConnection.ConduitType = value;
+                }
+                RaisePropertyChanged("ConduitType");
+            }
+        }
         #endregion
 
         public BMSController(TECController controller, ObservableCollection<TECController> networkControllers)
