@@ -148,6 +148,8 @@ namespace Tests
             subScope1.Quantity = 654;
             subScope1.Location = location3;
             subScope1.AssociatedCosts.Add(testCost);
+            subScope1.AssociatedCosts.Add(testCost);
+            subScope1.AssociatedCosts.Add(testCost2);
             subScope1.Tags.Add(tag1);
 
             var subScope2 = new TECSubScope();
@@ -331,6 +333,8 @@ namespace Tests
             panel.Type = panelType;
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
+            panel.AssociatedCosts.Add(testCost);
+            panel.AssociatedCosts.Add(testCost);
 
             bid.Panels.Add(panel);
 
@@ -592,6 +596,8 @@ namespace Tests
             panel.Type = panelType;
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
+            panel.AssociatedCosts.Add(testAssociatedCost);
+            panel.AssociatedCosts.Add(testAssociatedCost);
 
             TECPanel controlledPanel = new TECPanel();
             controlledPanel.Type = panelType;
