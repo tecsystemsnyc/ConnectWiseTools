@@ -212,8 +212,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Bid = bid;
             ScopeSource = new ObservableCollection<TECControlledScope>();
             ScopeDataGrid.Refresh(Bid);
-
             setupCatalogCollections();
+            ModelLinkingHelper.LinkControlledScopeObjects(ControlledScope.Systems, ControlledScope.Controllers,
+                ControlledScope.Panels, Bid);
         }
         private void setupCatalogCollections()
         {
