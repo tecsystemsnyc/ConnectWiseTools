@@ -2600,10 +2600,7 @@ namespace EstimatingUtilitiesLibrary
             foreach (TableBase table in relevantTables)
             {
                 var tableInfo = new TableInfo(table);
-                if (tableInfo.IsRelationTable)
-                { updateIndexedRelation(table, item); }
-                else
-                { editObjectInTable(table, item); }
+                editObjectInTable(table, item);
                 
             }
         }
