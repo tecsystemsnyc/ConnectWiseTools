@@ -26,10 +26,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             get { return _bid; }
             private set
             {
-                _bid = value;
-                registerBidChanges();
-                RaisePropertyChanged("Bid");
                 unregisterBidChanges();
+                _bid = value;
+                RaisePropertyChanged("Bid");
+                registerBidChanges();
             }
         }
         
@@ -176,8 +176,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void unregisterBidChanges()
         {
-            Bid.Controllers.CollectionChanged -= collectionChanged;
-            Bid.Panels.CollectionChanged -= collectionChanged;
+            if(Bid != null)
+            {
+                Bid.Controllers.CollectionChanged -= collectionChanged;
+                Bid.Panels.CollectionChanged -= collectionChanged;
+            }
         }
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
