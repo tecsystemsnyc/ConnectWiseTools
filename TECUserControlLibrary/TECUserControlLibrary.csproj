@@ -172,6 +172,7 @@
     <Compile Include="DataGrids\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NoneObjects.cs" />
     <Compile Include="PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>
     </Compile>

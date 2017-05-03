@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         protected FileDialogParameters workingFileParameters;
+        public NoneObjects NoneContainer;
 
         abstract protected string defaultSaveFileName
         {
@@ -211,6 +212,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public BuilderViewModel()
         {
+            NoneContainer = new NoneObjects();
             setupCommands();
             setupExtensions();
             getStartupFile();

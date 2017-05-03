@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("ParentSystem");
             }
         }
-
+        
         private TECEquipment _parentEquipment;
         public TECEquipment ParentEquipment
         {
