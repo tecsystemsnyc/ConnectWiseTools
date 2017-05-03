@@ -200,7 +200,6 @@ namespace EstimateBuilder.ViewModel
         public void DragOver(IDropInfo dropInfo)
         {
         }
-
         public void Drop(IDropInfo dropInfo)
         {
         }

@@ -130,8 +130,7 @@ namespace TECUserControlLibrary.HelperConverters
                 return "None";
             }
         }
-
-
+        
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string inString = (string)value;
@@ -168,9 +167,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-
             return value;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -203,7 +200,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -370,7 +367,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -408,7 +405,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -536,7 +533,6 @@ namespace TECUserControlLibrary.HelperConverters
     public class SelectedItemToIOModuleConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
@@ -555,7 +551,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
