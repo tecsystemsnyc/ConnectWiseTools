@@ -193,7 +193,6 @@ namespace TECUserControlLibrary
                 handleReorderDrop(dropInfo);
             }
         }
-
         private static void handleReorderDrop(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;

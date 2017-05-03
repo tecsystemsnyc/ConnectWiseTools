@@ -446,7 +446,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {

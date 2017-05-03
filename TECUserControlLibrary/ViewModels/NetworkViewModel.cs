@@ -447,14 +447,14 @@ namespace TECUserControlLibrary.ViewModels
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if (((sourceItem is TECController) || (sourceItem is BMSController)) && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController))))
+                if (((targetType == typeof(TECController)) || (targetType == typeof(BMSController)) 
+                    && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController)))))
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Move;
                 }
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
@@ -462,122 +462,136 @@ namespace TECUserControlLibrary.ViewModels
                 object sourceItem = dropInfo.Data;
                 object targetCollection = dropInfo.TargetCollection;
                 object sourceCollection = dropInfo.DragInfo.SourceCollection;
-
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                //Handle removal from source collection
-                if (sourceCollection == ServerControllers)
+                
+                if (sourceItem is IList)
                 {
-                    ServerControllers.Remove(sourceItem as TECController);
-                }
-                else if (sourceCollection == BMSControllers)
-                {
-                    BMSControllers.Remove(sourceItem as BMSController);
-                }
-                else if (sourceCollection == StandaloneControllers)
-                {
-                    StandaloneControllers.Remove(sourceItem as TECController);
-                }
-                else if (sourceType == typeof(TECConnection))
-                {
-                    return;
+                    foreach (object item in ((IList)sourceItem))
+                    {
+                        handleDropItem(item, sourceCollection, targetCollection);
+                    }
                 }
                 else
                 {
-                    bool foundCollection = false;
-                    List<TECController> parentControllers = new List<TECController>();
-                    foreach (TECController control in ServerControllers)
+                    handleDropItem(sourceItem, sourceCollection, targetCollection);
+                }
+            }
+        }
+        
+        private void handleDropItem(object sourceItem, object sourceCollection, object targetCollection)
+        {
+            Type sourceType = sourceItem.GetType();
+            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+
+            //Handle removal from source collection
+            if (sourceCollection == ServerControllers)
+            {
+                ServerControllers.Remove(sourceItem as TECController);
+            }
+            else if (sourceCollection == BMSControllers)
+            {
+                BMSControllers.Remove(sourceItem as BMSController);
+            }
+            else if (sourceCollection == StandaloneControllers)
+            {
+                StandaloneControllers.Remove(sourceItem as TECController);
+            }
+            else if (sourceType == typeof(TECConnection))
+            {
+                return;
+            }
+            else
+            {
+                bool foundCollection = false;
+                List<TECController> parentControllers = new List<TECController>();
+                foreach (TECController control in ServerControllers)
+                {
+                    parentControllers.Add(control);
+                }
+                foreach (BMSController control in BMSControllers)
+                {
+                    parentControllers.Add(control.Controller);
+                }
+                //See if source collection is a child controller connection
+                foreach (TECController parent in parentControllers)
+                {
+                    foreach (TECConnection connection in parent.ChildrenConnections)
                     {
-                        parentControllers.Add(control);
-                    }
-                    foreach (BMSController control in BMSControllers)
-                    {
-                        parentControllers.Add(control.Controller);
-                    }
-                    //See if source collection is a child controller connection
-                    foreach (TECController parent in parentControllers)
-                    {
-                        foreach (TECConnection connection in parent.ChildrenConnections)
+                        if (connection is TECNetworkConnection)
                         {
-                            if (connection is TECNetworkConnection)
+                            TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                            if (sourceCollection == netConnect.ChildrenControllers)
                             {
-                                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                                if (sourceCollection == netConnect.ChildrenControllers)
-                                {
-                                    foundCollection = true;
-                                    parent.RemoveController(sourceItem as TECController);
-                                    break;
-                                }
+                                foundCollection = true;
+                                parent.RemoveController(sourceItem as TECController);
+                                break;
                             }
                         }
-                        if (foundCollection) break;
                     }
-                    if (!foundCollection)
-                    {
-                        throw new NotImplementedException();
-                    }
+                    if (foundCollection) break;
                 }
-
-                //Handle addition to target collection
-                TECController sourceController = null;
-                if (sourceItem is TECController)
-                {
-                    sourceController = (sourceItem as TECController);
-                }
-                else if (sourceItem is BMSController)
-                {
-                    sourceController = (sourceItem as BMSController).Controller;
-                }
-
-                if (targetType == typeof(TECController))
-                {
-                    if (targetCollection == ServerControllers)
-                    {
-                        sourceController.Type = ControllerType.IsServer;
-                        sortAndAddController(sourceController);
-                    }
-                    else if (targetCollection == StandaloneControllers)
-                    {
-                        sourceController.Type = ControllerType.IsStandalone;
-                        sortAndAddController(sourceController);
-                    }
-                    else
-                    {
-                        bool foundCollection = false;
-                        //See if target collection is a child controller connection
-                        foreach (BMSController bmsController in BMSControllers)
-                        {
-                            foreach (TECNetworkConnection connection in bmsController.Controller.ChildrenConnections)
-                            {
-                                if (targetCollection == connection.ChildrenControllers)
-                                {
-                                    foundCollection = true;
-                                    sourceController.Type = ControllerType.IsNetworked;
-                                    connection.ChildrenControllers.Add(sourceController);
-                                    break;
-                                }
-                            }
-                            if (foundCollection) break;
-                        }
-                    }
-                }
-                else if (targetType == typeof(BMSController))
-                {
-                    sourceController.Type = ControllerType.IsBMS;
-                    sortAndAddController(sourceController);
-                }
-                else if (targetType == typeof(TECConnection))
-                {
-                    return;
-                }
-                else
+                if (!foundCollection)
                 {
                     throw new NotImplementedException();
                 }
             }
-        }
 
+            //Handle addition to target collection
+            TECController sourceController = null;
+            if (sourceItem is TECController)
+            {
+                sourceController = (sourceItem as TECController);
+            }
+            else if (sourceItem is BMSController)
+            {
+                sourceController = (sourceItem as BMSController).Controller;
+            }
+
+            if (targetType == typeof(TECController))
+            {
+                if (targetCollection == ServerControllers)
+                {
+                    sourceController.Type = ControllerType.IsServer;
+                    sortAndAddController(sourceController);
+                }
+                else if (targetCollection == StandaloneControllers)
+                {
+                    sourceController.Type = ControllerType.IsStandalone;
+                    sortAndAddController(sourceController);
+                }
+                else
+                {
+                    bool foundCollection = false;
+                    //See if target collection is a child controller connection
+                    foreach (BMSController bmsController in BMSControllers)
+                    {
+                        foreach (TECNetworkConnection connection in bmsController.Controller.ChildrenConnections)
+                        {
+                            if (targetCollection == connection.ChildrenControllers)
+                            {
+                                foundCollection = true;
+                                sourceController.Type = ControllerType.IsNetworked;
+                                connection.ChildrenControllers.Add(sourceController);
+                                break;
+                            }
+                        }
+                        if (foundCollection) break;
+                    }
+                }
+            }
+            else if (targetType == typeof(BMSController))
+            {
+                sourceController.Type = ControllerType.IsBMS;
+                sortAndAddController(sourceController);
+            }
+            else if (targetType == typeof(TECConnection))
+            {
+                return;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion
     }
 }
