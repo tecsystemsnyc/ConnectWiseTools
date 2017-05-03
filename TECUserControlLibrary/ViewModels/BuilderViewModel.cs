@@ -221,7 +221,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 isNew = true;
             }
-
             getLogo();
         }
 
@@ -268,6 +267,7 @@ namespace TECUserControlLibrary.ViewModels
             IsReady = true;
             UserCanInteract = true;
         }
+        abstract protected void buildTitleString();
 
         #region Setup
         virtual protected void setupExtensions()

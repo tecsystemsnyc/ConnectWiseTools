@@ -29,10 +29,8 @@ namespace TemplateBuilder.ViewModel
         //Initializer
         public MainViewModel() : base()
         {
-            TitleString = "Template Builder";
-
             getTemplates();
-
+            buildTitleString();
             setupCommands();
             setupVMs();
             DGTabIndex = TemplateGridIndex.ControlledScope;
@@ -123,7 +121,6 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private TemplateGridIndex _DGTabIndex;
-
         #endregion //Tab Indexes
 
         #endregion //Interface Properties
@@ -608,6 +605,11 @@ namespace TemplateBuilder.ViewModel
             MenuVM.RedoCommand = RedoCommand;
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
             MenuVM.LoadTemplatesCommand = LoadCommand;
+        }
+
+        protected override void buildTitleString()
+        {
+            TitleString = "Template Builder";
         }
         #endregion //Helper Methods
         #endregion //Methods

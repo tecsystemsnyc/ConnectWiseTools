@@ -206,9 +206,14 @@ namespace TECUserControlLibrary.ViewModels
         protected abstract void refresh();
         #endregion
         #region Helper Functions
-        private void buildTitleString()
+        protected override void buildTitleString()
         {
-            TitleString = Bid.Name + " - " + programName;
+            string bidName = "";
+            if (Bid != null)
+            {
+                bidName = Bid.Name;
+            }
+            TitleString = bidName + " - " + programName;
         }
         private void loadTemplates(string TemplatesFilePath)
         {

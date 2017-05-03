@@ -125,6 +125,7 @@ namespace Scope_Builder.ViewModel
         {
             isEstimate = false;
             programName = "Scope Builder";
+            buildTitleString();
             DGTabIndex = GridIndex.Scope;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);

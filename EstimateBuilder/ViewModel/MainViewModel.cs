@@ -35,6 +35,7 @@ namespace EstimateBuilder.ViewModel
         {
             isEstimate = true;
             programName = "Estimate Builder";
+            buildTitleString();
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
