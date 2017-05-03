@@ -47,10 +47,16 @@ namespace TECUserControlLibrary.ViewModels
             { return base.workingScopeManager; }
             set
             {
+                if (Bid != null)
+                {
+                    Bid.PropertyChanged -= Bid_PropertyChanged;
+                }
                 base.workingScopeManager = value;
                 RaisePropertyChanged("Bid");
                 Bid.PropertyChanged += Bid_PropertyChanged;
                 buildTitleString();
+                updateBidWithTemplates();
+                refresh();
             }
         }
         public TECBid Bid
@@ -59,8 +65,6 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 workingScopeManager = value;
-                updateBidWithTemplates();
-                refresh();
             }
         }
         private TECTemplates _templates;
