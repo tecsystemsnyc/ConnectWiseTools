@@ -137,7 +137,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             populateControllerCollection();
             populatePanelSelections();
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
         }
 
         private void populateControllerCollection()
