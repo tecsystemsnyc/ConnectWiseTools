@@ -57,7 +57,7 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_conduitType, value); 
+                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
                 var temp = Copy();
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
@@ -113,7 +113,7 @@ namespace EstimatingLibrary
             { guidDictionary[_guid] = connectionSource.Guid; }
 
             _length = connectionSource.Length;
-            _conduitLength = connectionSource.ConduitLength;          
+            _conduitLength = connectionSource.ConduitLength;
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }

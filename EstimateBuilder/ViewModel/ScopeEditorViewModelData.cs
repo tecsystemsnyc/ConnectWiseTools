@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace EstimateBuilder
 {
-    public class ScopeEditorViewModelData: INotifyPropertyChanged
+    public class ScopeEditorViewModelData : INotifyPropertyChanged
     {
         private ObservableCollection<TECSystem> _systemItemsCollection;
-        public ObservableCollection<TECSystem> SystemItemsCollection {
+        public ObservableCollection<TECSystem> SystemItemsCollection
+        {
             get { return _systemItemsCollection; }
             set
             {
@@ -54,7 +55,7 @@ namespace EstimateBuilder
                 RaisePropertyChanged("DevicesItemsCollection");
             }
         }
-        
+
         private string _searchString;
         public string SearchString
         {
@@ -88,7 +89,7 @@ namespace EstimateBuilder
                 RaisePropertyChanged("SearchButtonText");
             }
         }
-        
+
         public ScopeEditorViewModelData()
         {
             SystemItemsCollection = new ObservableCollection<TECSystem>();

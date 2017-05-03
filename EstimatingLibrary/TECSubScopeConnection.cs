@@ -43,14 +43,14 @@ namespace EstimatingLibrary
             get
             {
                 var outConnectionTypes = new ObservableCollection<TECConnectionType>();
-                if(SubScope != null)
+                if (SubScope != null)
                 {
                     foreach (TECDevice dev in SubScope.Devices)
                     {
                         outConnectionTypes.Add(dev.ConnectionType);
                     }
                 }
-                
+
                 return outConnectionTypes;
             }
         }
@@ -59,7 +59,7 @@ namespace EstimatingLibrary
             get
             {
                 var outIOTypes = new ObservableCollection<IOType>();
-                
+
                 foreach (TECDevice dev in SubScope.Devices)
                 {
                     outIOTypes.Add(dev.IOType);
@@ -82,10 +82,10 @@ namespace EstimatingLibrary
         {
             _includeStubUp = false;
         }
-        public TECSubScopeConnection() : base (Guid.NewGuid()) { }
+        public TECSubScopeConnection() : base(Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
-            if(connectionSource._subScope != null)
+            if (connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
             _includeStubUp = connectionSource.IncludeStubUp;
         }
@@ -103,7 +103,7 @@ namespace EstimatingLibrary
         private int getTerminations()
         {
             int terms = 0;
-            foreach(TECConnectionType type in ConnectionTypes)
+            foreach (TECConnectionType type in ConnectionTypes)
             {
                 terms += 2;
             }

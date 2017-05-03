@@ -52,7 +52,7 @@ namespace EstimatingUtilitiesLibrary
             //file is not locked
             return false;
         }
-        
+
         public static string CommaSeparatedString(List<string> strings)
         {
             int i = 0;
@@ -105,7 +105,7 @@ namespace EstimatingUtilitiesLibrary
             bi.StreamSource = ms;
             bi.EndInit();
             bi.Freeze();
-            
+
             destBitmap.Dispose();
 
             return bi;
@@ -215,8 +215,8 @@ namespace EstimatingUtilitiesLibrary
         private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
         {
             ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
-            
-            foreach(T templateItem in templateItems)
+
+            foreach (T templateItem in templateItems)
             {
                 foreach (T item in bidItems)
                 {
@@ -226,11 +226,11 @@ namespace EstimatingUtilitiesLibrary
                     }
                 }
             }
-            foreach(T item in itemsToRemove)
+            foreach (T item in itemsToRemove)
             {
                 bidItems.Remove(item);
             }
-            foreach(T item in templateItems)
+            foreach (T item in templateItems)
             {
                 bidItems.Add(item);
             }
@@ -242,28 +242,29 @@ namespace EstimatingUtilitiesLibrary
             char delimiter = '.';
             var currentStrings = currentVersion.Split(delimiter);
             var sampleStrings = sampleVersion.Split(delimiter);
-            if(sampleStrings.Length != 4 )
+            if (sampleStrings.Length != 4)
             {
                 return true;
             }
-            else if(currentStrings[0].ToInt() > sampleStrings[0].ToInt())
+            else if (currentStrings[0].ToInt() > sampleStrings[0].ToInt())
             {
                 return true;
             }
             else if (currentStrings[0].ToInt() == sampleStrings[0].ToInt())
             {
-                if(currentStrings[1].ToInt() > sampleStrings[1].ToInt())
+                if (currentStrings[1].ToInt() > sampleStrings[1].ToInt())
                 {
                     return true;
-                } else if(currentStrings[1].ToInt() == sampleStrings[1].ToInt())
+                }
+                else if (currentStrings[1].ToInt() == sampleStrings[1].ToInt())
                 {
-                    if(currentStrings[2].ToInt() > sampleStrings[2].ToInt())
+                    if (currentStrings[2].ToInt() > sampleStrings[2].ToInt())
                     {
                         return true;
                     }
                     else if (currentStrings[2].ToInt() == sampleStrings[2].ToInt())
                     {
-                        if(currentStrings[3].ToInt() > sampleStrings[3].ToInt())
+                        if (currentStrings[3].ToInt() > sampleStrings[3].ToInt())
                         {
                             return true;
                         }
@@ -271,13 +272,13 @@ namespace EstimatingUtilitiesLibrary
 
                 }
             }
-            
+
             return isLowerVersion;
         }
         public static bool StringContainsStrings(string reference, string[] criteria)
         {
             bool containsAll = true;
-            foreach(string critereon in criteria)
+            foreach (string critereon in criteria)
             {
                 if (!reference.Contains(critereon))
                 {
@@ -293,6 +294,6 @@ namespace EstimatingUtilitiesLibrary
     public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc, Settings };
     public enum TemplateGridIndex { None, ControlledScope, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
     public enum ScopeCollectionIndex { None, ControlledScope, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
-    public enum LocationScopeType { System, Equipment, SubScope};
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts};
+    public enum LocationScopeType { System, Equipment, SubScope };
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
 }

@@ -88,10 +88,10 @@ namespace EstimatingLibrary
         static private void linkScopeChildrenInSystem(TECSystem system, TECScopeManager scopeManager)
         {
             linkScopeChildren(system, scopeManager);
-            foreach(TECEquipment equip in system.Equipment)
+            foreach (TECEquipment equip in system.Equipment)
             {
                 linkScopeChildren(equip, scopeManager);
-                foreach(TECSubScope ss in equip.SubScope)
+                foreach (TECSubScope ss in equip.SubScope)
                 {
                     linkScopeChildren(ss, scopeManager);
                 }
@@ -101,13 +101,13 @@ namespace EstimatingLibrary
         static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
         {
             //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
-            foreach(TECDrawing drawing in bidDrawings)
+            foreach (TECDrawing drawing in bidDrawings)
             {
-                foreach(TECPage page in drawing.Pages)
+                foreach (TECPage page in drawing.Pages)
                 {
-                    foreach(TECVisualScope vs in page.PageScope)
+                    foreach (TECVisualScope vs in page.PageScope)
                     {
-                        foreach(TECSystem system in bidSystems)
+                        foreach (TECSystem system in bidSystems)
                         {
                             if (vs.Scope.Guid == system.Guid)
                             {
@@ -116,7 +116,7 @@ namespace EstimatingLibrary
                             }
                             else
                             {
-                                foreach(TECEquipment equipment in system.Equipment)
+                                foreach (TECEquipment equipment in system.Equipment)
                                 {
                                     if (vs.Scope.Guid == equipment.Guid)
                                     {
@@ -125,7 +125,7 @@ namespace EstimatingLibrary
                                     }
                                     else
                                     {
-                                        foreach(TECSubScope subScope in equipment.SubScope)
+                                        foreach (TECSubScope subScope in equipment.SubScope)
                                         {
                                             if (vs.Scope.Guid == subScope.Guid)
                                             {
@@ -138,9 +138,9 @@ namespace EstimatingLibrary
                             }
 
                         }
-                        foreach(TECController controller in bidControllers)
+                        foreach (TECController controller in bidControllers)
                         {
-                            if(vs.Scope.Guid == controller.Guid)
+                            if (vs.Scope.Guid == controller.Guid)
                             {
                                 vs.Scope = controller;
                             }
@@ -183,15 +183,15 @@ namespace EstimatingLibrary
         }
         static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            foreach(TECSystem system in systems)
+            foreach (TECSystem system in systems)
             {
-                foreach(TECEquipment equipment in system.Equipment)
+                foreach (TECEquipment equipment in system.Equipment)
                 {
-                    foreach(TECSubScope subScope in equipment.SubScope)
+                    foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        foreach(TECController controller in controllers)
+                        foreach (TECController controller in controllers)
                         {
-                            foreach(TECConnection connection in controller.ChildrenConnections)
+                            foreach (TECConnection connection in controller.ChildrenConnections)
                             {
                                 if (connection is TECSubScopeConnection)
                                 {
@@ -310,7 +310,7 @@ namespace EstimatingLibrary
         {
             foreach (TECController controller in controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections) 
+                foreach (TECConnection connection in controller.ChildrenConnections)
                 {
                     if (connection is TECNetworkConnection)
                     {
@@ -529,10 +529,10 @@ namespace EstimatingLibrary
             }
             scope.AssociatedCosts = costsToAssign;
         }
-       
+
         static private void linkConduitTypeWithConnections(ObservableCollection<TECConduitType> conduitTypes, ObservableCollection<TECController> controllers)
         {
-            foreach(TECController controller in controllers)
+            foreach (TECController controller in controllers)
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
@@ -551,9 +551,9 @@ namespace EstimatingLibrary
         }
         static private void linkPanelTypesInPanel(ObservableCollection<TECPanelType> panelTypes, ObservableCollection<TECPanel> panels)
         {
-            foreach(TECPanel panel in panels)
+            foreach (TECPanel panel in panels)
             {
-                foreach(TECPanelType type in panelTypes)
+                foreach (TECPanelType type in panelTypes)
                 {
                     if (panel.Type != null)
                     {
@@ -568,7 +568,7 @@ namespace EstimatingLibrary
         }
         static private void linkControlledScope(ObservableCollection<TECControlledScope> controlledScope, TECTemplates templates)
         {
-            foreach(TECControlledScope scope in controlledScope)
+            foreach (TECControlledScope scope in controlledScope)
             {
                 linkAllDevicesFromSystems(scope.Systems, templates.Catalogs.Devices);
                 linkPanelTypesInPanel(templates.Catalogs.PanelTypes, scope.Panels);
@@ -593,12 +593,12 @@ namespace EstimatingLibrary
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            foreach(TECPanel panel in panels)
+            foreach (TECPanel panel in panels)
             {
                 ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
-                foreach(TECController panelController in panel.Controllers)
+                foreach (TECController panelController in panel.Controllers)
                 {
-                    foreach(TECController controller in controllers)
+                    foreach (TECController controller in controllers)
                     {
                         if (panelController.Guid == controller.Guid)
                         {
@@ -617,11 +617,11 @@ namespace EstimatingLibrary
         }
         static private void linkIOModules(ObservableCollection<TECController> controllers, ObservableCollection<TECIOModule> ioModules)
         {
-            foreach(TECController controller in controllers)
+            foreach (TECController controller in controllers)
             {
-                foreach(TECIO io in controller.IO)
+                foreach (TECIO io in controller.IO)
                 {
-                    if(io.IOModule != null)
+                    if (io.IOModule != null)
                     {
                         foreach (TECIOModule module in ioModules)
                         {
@@ -632,17 +632,17 @@ namespace EstimatingLibrary
                             }
                         }
                     }
-                    
+
                 }
             }
         }
         static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
         {
-            foreach(TECIOModule module in ioModules)
+            foreach (TECIOModule module in ioModules)
             {
                 foreach (TECManufacturer manufacturer in manufacturers)
                 {
-                    if(module.Manufacturer.Guid == manufacturer.Guid)
+                    if (module.Manufacturer.Guid == manufacturer.Guid)
                     {
                         module.Manufacturer = manufacturer;
                     }

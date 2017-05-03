@@ -62,7 +62,7 @@ namespace TECUserControlLibrary.Models
                         }
                     }
                 }
-                
+
                 _possibleParents = newParents;
                 RaisePropertyChanged("PossibleParents");
             }

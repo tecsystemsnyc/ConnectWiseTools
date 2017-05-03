@@ -49,7 +49,7 @@ namespace EstimatingLibrary
             _cost = connectionTypeSource.Cost;
             _labor = connectionTypeSource.Labor;
         }
-        
+
         public override object Copy()
         {
             var outType = new TECConnectionType();

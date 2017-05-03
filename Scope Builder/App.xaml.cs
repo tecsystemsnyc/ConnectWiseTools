@@ -41,10 +41,10 @@ namespace Scope_Builder
                     }
                 }
             }
-            
+
             base.OnStartup(args);
 
         }
-        
+
     }
 }

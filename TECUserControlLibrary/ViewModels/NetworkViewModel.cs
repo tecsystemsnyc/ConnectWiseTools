@@ -165,7 +165,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        
+
 
         private void sortAndAddController(TECController controller)
         {
@@ -190,7 +190,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        
+
 
         private void removeController(TECController controller)
         {
@@ -447,7 +447,7 @@ namespace TECUserControlLibrary.ViewModels
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if (((targetType == typeof(TECController)) || (targetType == typeof(BMSController)) 
+                if (((targetType == typeof(TECController)) || (targetType == typeof(BMSController))
                     && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController)))))
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
@@ -462,7 +462,7 @@ namespace TECUserControlLibrary.ViewModels
                 object sourceItem = dropInfo.Data;
                 object targetCollection = dropInfo.TargetCollection;
                 object sourceCollection = dropInfo.DragInfo.SourceCollection;
-                
+
                 if (sourceItem is IList)
                 {
                     foreach (object item in ((IList)sourceItem))
@@ -476,7 +476,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        
+
         private void handleDropItem(object sourceItem, object sourceCollection, object targetCollection)
         {
             Type sourceType = sourceItem.GetType();

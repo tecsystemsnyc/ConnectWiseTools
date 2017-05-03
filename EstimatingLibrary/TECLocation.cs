@@ -33,7 +33,7 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECLocation( Guid guid)
+        public TECLocation(Guid guid)
         {
             _name = "";
             _guid = guid;

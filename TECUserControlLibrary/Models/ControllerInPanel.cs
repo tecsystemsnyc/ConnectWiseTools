@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
-{ 
+{
     public class ControllerInPanel : TECObject
     {
         private TECPanel _panel;
@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("Controller");
             }
         }
-        
+
         public ControllerInPanel(TECController controller, TECPanel panel)
         {
             _controller = controller;
@@ -46,7 +46,7 @@ namespace TECUserControlLibrary.Models
             }
             else if (selectedPanel == null)
             {
-                if(originalPanel != null)
+                if (originalPanel != null)
                 {
                     originalPanel.Controllers.Remove(Controller);
                 }

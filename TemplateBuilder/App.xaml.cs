@@ -38,13 +38,13 @@ namespace TemplateBuilder
                     }
                     catch (Exception exc)
                     {
-                        DebugHandler.LogError("Could not open startup file. Exception: " +exc.Message);
+                        DebugHandler.LogError("Could not open startup file. Exception: " + exc.Message);
                     }
                 }
             }
 
             base.OnStartup(e);
         }
-        
+
     }
 }

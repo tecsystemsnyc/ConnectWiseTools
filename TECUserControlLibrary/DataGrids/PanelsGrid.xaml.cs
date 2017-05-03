@@ -55,7 +55,7 @@ namespace TECUserControlLibrary.DataGrids
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(PanelsGrid));
-        
+
         #endregion
         public PanelsGrid()
         {

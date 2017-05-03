@@ -23,7 +23,7 @@ namespace TECUserControlLibrary.DataGrids
     public partial class ConnectionGrid : UserControl
     {
         #region DPs
-        
+
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>

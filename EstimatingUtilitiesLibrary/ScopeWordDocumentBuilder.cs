@@ -33,12 +33,12 @@ namespace EstimatingUtilitiesLibrary
         {
             _bid = bid;
             CreatePackage(path);
-        //    // Create a document by supplying the filepath. 
-        //    using (WordprocessingDocument wordDocument =
-        //        WordprocessingDocument.Create(path, WordprocessingDocumentType.Document))
-        //    {
-        //        // Add a main document part. 
-        //        MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
+            //    // Create a document by supplying the filepath. 
+            //    using (WordprocessingDocument wordDocument =
+            //        WordprocessingDocument.Create(path, WordprocessingDocumentType.Document))
+            //    {
+            //        // Add a main document part. 
+            //        MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
 
             //        // Create the document structure and add some text.
             //        mainPart.Document = new Document();
@@ -1457,7 +1457,7 @@ namespace EstimatingUtilitiesLibrary
             table2.Append(tableRow6);
 
             var scopeParagraphs = new List<Paragraph>();
-            foreach(TECScopeBranch branch in _bid.ScopeTree)
+            foreach (TECScopeBranch branch in _bid.ScopeTree)
             {
                 Paragraph paragraph32 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 scopeParagraphs.Add(paragraph32);
@@ -1489,7 +1489,7 @@ namespace EstimatingUtilitiesLibrary
 
                 run46.Append(runProperties46);
                 run46.Append(text29);
-                
+
                 paragraph32.Append(paragraphProperties32);
                 paragraph32.Append(run46);
 
@@ -1559,7 +1559,7 @@ namespace EstimatingUtilitiesLibrary
 
 
             var poposalScopeParagraphs = new List<Paragraph>();
-            foreach(TECProposalScope scope in _bid.ProposalScope)
+            foreach (TECProposalScope scope in _bid.ProposalScope)
             {
                 Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 poposalScopeParagraphs.Add(paragraph35);
@@ -1599,7 +1599,7 @@ namespace EstimatingUtilitiesLibrary
                 paragraph35.Append(paragraphProperties35);
                 paragraph35.Append(run51);
 
-                foreach(TECProposalScope equipScope in scope.Children)
+                foreach (TECProposalScope equipScope in scope.Children)
                 {
                     Paragraph paragraph38 = new Paragraph() { RsidParagraphAddition = "0064096A", RsidParagraphProperties = "0064096A", RsidRunAdditionDefault = "0064096A" };
                     poposalScopeParagraphs.Add(paragraph38);
@@ -1644,9 +1644,9 @@ namespace EstimatingUtilitiesLibrary
                     paragraph38.Append(proofError4);
 
                 }
-                
+
             }
-            
+
             Paragraph paragraph40 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00B23CE5", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "00B23CE5" };
 
             ParagraphProperties paragraphProperties40 = new ParagraphProperties();
@@ -1659,7 +1659,7 @@ namespace EstimatingUtilitiesLibrary
             paragraphProperties40.Append(paragraphMarkRunProperties37);
 
             paragraph40.Append(paragraphProperties40);
-            
+
             Paragraph paragraph42 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
 
             ParagraphProperties paragraphProperties42 = new ParagraphProperties();
@@ -1672,7 +1672,7 @@ namespace EstimatingUtilitiesLibrary
             paragraphProperties42.Append(paragraphMarkRunProperties39);
 
             paragraph42.Append(paragraphProperties42);
-            
+
             Paragraph paragraph54 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
 
             ParagraphProperties paragraphProperties54 = new ParagraphProperties();
@@ -1924,7 +1924,7 @@ namespace EstimatingUtilitiesLibrary
             priceRunProperties.Append(priceFontSize);
             Text priceText = new Text();
             //priceText.Text = _bid.TotalPrice.ToString("N");
-        
+
             priceRun.Append(priceRunProperties);
             priceRun.Append(priceText);
 
@@ -2386,7 +2386,7 @@ namespace EstimatingUtilitiesLibrary
             paragraph75.Append(paragraphProperties75);
 
             var exclusionParagraphs = new List<Paragraph>();
-            foreach(TECExclusion exclusion in _bid.Exclusions)
+            foreach (TECExclusion exclusion in _bid.Exclusions)
             {
                 Paragraph paragraph76 = new Paragraph() { RsidParagraphMarkRevision = "001B6681", RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 exclusionParagraphs.Add(paragraph76);
@@ -2430,7 +2430,7 @@ namespace EstimatingUtilitiesLibrary
                 paragraph76.Append(paragraphProperties76);
                 paragraph76.Append(run77);
             }
-            
+
             BookmarkEnd bookmarkEnd2 = new BookmarkEnd() { Id = "1" };
 
             Paragraph paragraph87 = new Paragraph() { RsidParagraphMarkRevision = "00A61B35", RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "00A61B35", RsidRunAdditionDefault = "00A61B35" };

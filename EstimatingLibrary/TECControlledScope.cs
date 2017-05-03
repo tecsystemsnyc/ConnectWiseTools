@@ -56,7 +56,7 @@ namespace EstimatingLibrary
                 {
                     Panels.CollectionChanged -= CollectionChanged;
                 }
-                
+
                 _panels = value;
                 Panels.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Panels", temp, this);
@@ -90,17 +90,17 @@ namespace EstimatingLibrary
                 _panels.Add(new TECPanel(panel, guidDictionary));
             }
         }
-        
+
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    if(item != null)
+                    if (item != null)
                     {
                         NotifyPropertyChanged("Add", this, item);
-                        if(item is TECSystem)
+                        if (item is TECSystem)
                         {
                             (item as TECSystem).PropertyChanged += System_PropertyChanged;
                         }
@@ -145,20 +145,20 @@ namespace EstimatingLibrary
                 }
             }
         }
-        
+
         public override object Copy()
         {
             var outScope = new TECControlledScope(_guid);
             outScope.copyPropertiesFromScope(this);
-            foreach(TECController controller in Controllers)
+            foreach (TECController controller in Controllers)
             {
                 outScope.Controllers.Add(controller.Copy() as TECController);
             }
-            foreach(TECPanel panel in Panels)
+            foreach (TECPanel panel in Panels)
             {
                 outScope.Panels.Add(panel.Copy() as TECPanel);
             }
-            foreach(TECSystem system in Systems)
+            foreach (TECSystem system in Systems)
             {
                 outScope.Systems.Add(system.Copy() as TECSystem);
             }

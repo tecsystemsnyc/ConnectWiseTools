@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EstimatingLibrary
-{ 
+{
     public class TECCost : TECScope
     {
         #region Properties
@@ -38,7 +38,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(cost);
             _cost = cost.Cost;
         }
-        
+
         public override object Copy()
         {
             var outCost = new TECCost();

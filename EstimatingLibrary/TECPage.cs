@@ -50,7 +50,7 @@ namespace EstimatingLibrary
         }
         private ObservableCollection<TECVisualConnection> _connections;
         #endregion
-        
+
         public TECPage(Guid guid)
         {
             Guid = guid;

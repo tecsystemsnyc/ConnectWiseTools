@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("Controller");
             }
         }
-        
+
         private TECSystem _parentSystem;
         public TECSystem ParentSystem
         {
@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("ParentSystem");
             }
         }
-        
+
         private TECEquipment _parentEquipment;
         public TECEquipment ParentEquipment
         {
@@ -74,12 +74,12 @@ namespace TECUserControlLibrary.Models
 
             }
         }
-        
+
         public SubScopeConnection(TECSubScope subscope)
         {
             _subScope = subscope;
             _controller = null;
-            if(subscope.Connection != null)
+            if (subscope.Connection != null)
             {
                 _controller = SubScope.Connection.ParentController;
             }
@@ -93,7 +93,7 @@ namespace TECUserControlLibrary.Models
             }
             else
             {
-                if(SubScope.Connection != null)
+                if (SubScope.Connection != null)
                 {
                     Controller.RemoveSubScope(SubScope);
                 }

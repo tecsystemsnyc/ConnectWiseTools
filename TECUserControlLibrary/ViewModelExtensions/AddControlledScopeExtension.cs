@@ -103,7 +103,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ScopeSource");
             }
         }
-        
+
         private ObservableCollection<TECController> _controllerSelections;
         public ObservableCollection<TECController> ControllerSelections
         {
@@ -400,9 +400,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     else if (item is TECController)
                     {
                         ControllerSelections.Remove(item as TECController);
-                        foreach(ControllerInPanel controllerInPanel in ControllerCollection)
+                        foreach (ControllerInPanel controllerInPanel in ControllerCollection)
                         {
-                            if(controllerInPanel.Controller == item as TECController)
+                            if (controllerInPanel.Controller == item as TECController)
                             {
                                 ControllerCollection.Add(controllerInPanel);
                                 break;
@@ -468,7 +468,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
         }
-       
+
         private void addControlledScopeExecute()
         {
             //var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -485,7 +485,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool addControlledScopeCanExecute()
         {
-            if(ControlledScope != null && ControlledScopeQuantity > 0)
+            if (ControlledScope != null && ControlledScopeQuantity > 0)
             {
                 return true;
             }
@@ -500,7 +500,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Type sourceType = sourceItem.GetType();
 
             var targetCollection = dropInfo.TargetCollection;
-            if(sourceType == typeof(TECController) && ControlledScope != null)
+            if (sourceType == typeof(TECController) && ControlledScope != null)
             {
                 UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
@@ -535,7 +535,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 UIHelpers.StandardDrop(dropInfo);
             }
-            
+
         }
         #endregion
     }

@@ -114,7 +114,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Tags", temp, this);
             }
         }
-        
+
         public TECCatalogs()
         {
             instantiateCOllections();

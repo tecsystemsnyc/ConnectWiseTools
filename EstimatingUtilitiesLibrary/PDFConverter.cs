@@ -35,7 +35,7 @@ namespace EstimatingUtilitiesLibrary
 
             int pageNum = 1;
 
-            foreach(MagickImage page in pdf)
+            foreach (MagickImage page in pdf)
             {
                 string pngPath = name + "_" + pageNum + ".png";
                 pngPath = Path.Combine(directory, pngPath);

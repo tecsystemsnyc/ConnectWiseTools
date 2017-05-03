@@ -19,9 +19,9 @@ namespace EstimatingLibrary
         {
             OldValue = oldValue;
             NewValue = newValue;
-            if(OldValue != null) { OldType = OldValue.GetType(); }
-            if(NewValue != null) { NewType = NewValue.GetType(); }
-            
+            if (OldValue != null) { OldType = OldValue.GetType(); }
+            if (NewValue != null) { NewType = NewValue.GetType(); }
+
         }
 
         public PropertyChangedExtendedEventArgs(string propertyName, T oldValue, T newValue, Type oldType, Type newType)

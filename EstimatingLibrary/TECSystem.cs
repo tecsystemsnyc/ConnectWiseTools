@@ -22,9 +22,9 @@ namespace EstimatingLibrary
                 {
                     Equipment.CollectionChanged -= Equipment_CollectionChanged;
                 }
-                    _equipment = value;
-                    NotifyPropertyChanged("Equipment", temp, this);
-                    subscribeToEquipment();
+                _equipment = value;
+                NotifyPropertyChanged("Equipment", temp, this);
+                subscribeToEquipment();
                 Equipment.CollectionChanged += Equipment_CollectionChanged;
             }
         }
@@ -40,7 +40,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                if(_budgetPriceModifier != value)
+                if (_budgetPriceModifier != value)
                 {
                     if (value < 0)
                     {
@@ -63,7 +63,7 @@ namespace EstimatingLibrary
             {
                 double price = 0;
                 bool priceExists = false;
-                if (BudgetPriceModifier >= 0 )
+                if (BudgetPriceModifier >= 0)
                 {
                     price += BudgetPriceModifier;
                     priceExists = true;
@@ -90,7 +90,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _quantity = value;
                 NotifyPropertyChanged("Quantity", temp, this);
-                RaisePropertyChanged("TotalBudgetPrice");             
+                RaisePropertyChanged("TotalBudgetPrice");
             }
         }
         public int EquipmentQuantity
@@ -142,9 +142,9 @@ namespace EstimatingLibrary
             get
             {
                 var outSubScope = new ObservableCollection<TECSubScope>();
-                foreach(TECEquipment equip in Equipment)
+                foreach (TECEquipment equip in Equipment)
                 {
-                    foreach(TECSubScope sub in equip.SubScope)
+                    foreach (TECSubScope sub in equip.SubScope)
                     {
                         outSubScope.Add(sub);
                     }
@@ -223,7 +223,7 @@ namespace EstimatingLibrary
         private double getMaterialCost()
         {
             double matCost = 0;
-            foreach(TECEquipment equipment in this.Equipment)
+            foreach (TECEquipment equipment in this.Equipment)
             {
                 matCost += equipment.MaterialCost;
             }
@@ -246,25 +246,26 @@ namespace EstimatingLibrary
             }
             return cost;
         }
-        
+
         private void Equipment_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("EquipmentQuantity");
             RaisePropertyChanged("BudgetUnitPrice");
             RaisePropertyChanged("SubScopeQuantity");
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("Add", this, item);
                     checkForTotalsInEquipment(item as TECEquipment);
-                    if((item as TECEquipment).Location == null)
+                    if ((item as TECEquipment).Location == null)
                     {
                         (item as TECEquipment).SetLocationFromParent(this.Location);
                     }
                 }
 
-            } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
@@ -319,23 +320,24 @@ namespace EstimatingLibrary
             else if (name == "SubLength")
             {
                 RaisePropertyChanged("SubLength");
-            } else if (name == "RemovedSubScope")
+            }
+            else if (name == "RemovedSubScope")
             {
                 var args = e as PropertyChangedExtendedEventArgs<object>;
                 NotifyPropertyChanged("RemovedSubScope", this, args.NewValue);
             }
-          
+
         }
-        
+
         private void TECSystem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "ObjectPropertyChanged")
+            if (e.PropertyName == "ObjectPropertyChanged")
             {
                 var args = e as PropertyChangedExtendedEventArgs<object>;
                 var oldNew = args.NewValue as Tuple<object, object>;
-                foreach(TECEquipment equipment in this.Equipment)
+                foreach (TECEquipment equipment in this.Equipment)
                 {
-                    if(equipment.Location == oldNew.Item1)
+                    if (equipment.Location == oldNew.Item1)
                     {
                         equipment.SetLocationFromParent(this.Location);
                     }
@@ -361,7 +363,7 @@ namespace EstimatingLibrary
         private int getPointNumber()
         {
             var totalPoints = 0;
-            foreach(TECEquipment equipment in Equipment)
+            foreach (TECEquipment equipment in Equipment)
             {
                 totalPoints += equipment.PointNumber;
             }

@@ -734,7 +734,7 @@ namespace Tests
                         break;
                     }
                 }
-                
+
             }
 
             //Assert
@@ -1145,7 +1145,7 @@ namespace Tests
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
             int oldNumDevices = 0;
-            
+
             foreach (TECDevice dev in ssToModify.Devices)
             {
                 if (dev.Guid == deviceToRemove.Guid) oldNumDevices++;
@@ -1760,7 +1760,7 @@ namespace Tests
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
             //Assert
-            foreach(TECScopeBranch branch in actualBid.ScopeTree)
+            foreach (TECScopeBranch branch in actualBid.ScopeTree)
             {
                 if (branch.Guid == branchToRemove.Guid) Assert.Fail();
             }
@@ -1781,7 +1781,7 @@ namespace Tests
                     branchToModify = branch;
                     break;
                 }
-            } 
+            }
 
             int oldNumBranches = branchToModify.Branches.Count();
             TECScopeBranch branchToRemove = branchToModify.Branches[0];
@@ -2423,7 +2423,7 @@ namespace Tests
             Assert.AreEqual((oldNumControllers - 1), actualBid.Controllers.Count);
 
         }
-        
+
         [TestMethod]
         public void Save_Bid_Controller_Name()
         {
@@ -2604,7 +2604,7 @@ namespace Tests
             }
         }
         #endregion Controller IO
-        
+
         #endregion
 
         #region Save Proposal Scope
@@ -3288,7 +3288,7 @@ namespace Tests
             expectedSubScope.Name = "CSSUBSCOPE";
             expectedEquipment.SubScope.Add(expectedSubScope);
             expectedSystem.Equipment.Add(expectedEquipment);
-            
+
             var expectedPanel = new TECPanel();
             expectedPanel.Name = "CSPANEL";
             expectedPanel.Type = bid.Catalogs.PanelTypes[0];
@@ -3296,7 +3296,7 @@ namespace Tests
             expectedController.Name = "CSCONTROLLER";
             expectedController.Manufacturer = bid.Catalogs.Manufacturers[0];
             expectedPanel.Controllers.Add(expectedController);
-            
+
             var expectedConnection = new TECSubScopeConnection();
             expectedConnection.Length = 1212;
             expectedConnection.ParentController = expectedController;
@@ -3361,6 +3361,6 @@ namespace Tests
             Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
         }
         #endregion
-        
+
     }
 }

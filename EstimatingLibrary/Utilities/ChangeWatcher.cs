@@ -16,7 +16,7 @@ namespace EstimatingLibrary.Utilities
 
         public ChangeWatcher(TECScopeManager scopeManager)
         {
-            if(scopeManager is TECBid)
+            if (scopeManager is TECBid)
             {
                 registerBidChanges(scopeManager as TECBid);
             }
@@ -25,7 +25,7 @@ namespace EstimatingLibrary.Utilities
                 registerTemplatesChanges(scopeManager as TECTemplates);
             }
         }
-        
+
         private void registerBidChanges(TECBid Bid)
         {
             registerScopeManager(Bid);
@@ -224,7 +224,7 @@ namespace EstimatingLibrary.Utilities
         {
             foreach (TECEquipment newEquipment in system.Equipment)
             {
-                if(change == Change.Add)
+                if (change == Change.Add)
                 {
                     newEquipment.PropertyChanged += Object_PropertyChanged;
                 }
@@ -252,7 +252,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void handleSubScopeChildren(TECSubScope subScope, Change change)
         {
-           
+
             foreach (TECPoint newPoint in subScope.Points)
             {
                 if (change == Change.Add)
@@ -264,9 +264,9 @@ namespace EstimatingLibrary.Utilities
                     newPoint.PropertyChanged -= Object_PropertyChanged;
                 }
             }
-            
+
         }
-        
+
         private void handleControlledScope(TECControlledScope scope, Change change)
         {
             foreach (TECSystem system in scope.Systems)
@@ -304,7 +304,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-        
+
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(e);
@@ -352,13 +352,13 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
-                
+
             }
             else
             {
                 message = "Property not compatible: " + e.PropertyName;
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-               
+
             }
         }
     }

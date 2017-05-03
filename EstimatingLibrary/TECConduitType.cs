@@ -10,7 +10,7 @@ namespace EstimatingLibrary
     public class TECConduitType : TECCost
     {
         #region Properties
-       
+
         protected double _labor;
         public double Labor
         {

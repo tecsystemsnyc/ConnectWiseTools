@@ -247,7 +247,7 @@ namespace EstimatingLibrary
             {
                 message = "Property not compatible: " + e.PropertyName;
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                
+
             }
         }
 
@@ -259,26 +259,26 @@ namespace EstimatingLibrary
             electricalLaborHours = 0;
             electricalMaterialCost = 0;
 
-            foreach(TECSystem system in bid.Systems)
+            foreach (TECSystem system in bid.Systems)
             {
                 addCost(system);
                 addPoints(system);
             }
-            foreach(TECPanel panel in bid.Panels)
+            foreach (TECPanel panel in bid.Panels)
             {
                 addCost(panel);
             }
-            foreach(TECController controller in bid.Controllers)
+            foreach (TECController controller in bid.Controllers)
             {
                 addCost(controller);
             }
-            
+
         }
 
         #region Update From Changes
         private void addCost(object item)
         {
-            if(item is CostComponent)
+            if (item is CostComponent)
             {
                 var cost = item as CostComponent;
                 tecMaterialCost += cost.MaterialCost;
@@ -310,7 +310,7 @@ namespace EstimatingLibrary
                 if (cost.Cost != 0)
                 { raiseElectricalMaterial(); }
             }
-            
+
         }
         private void removeCost(object item)
         {
@@ -347,20 +347,20 @@ namespace EstimatingLibrary
         }
         private void editCost(object newValue, object oldValue)
         {
-            if(newValue.GetType() == oldValue.GetType())
+            if (newValue is TECConnection || newValue is TECMiscCost
+                || newValue is TECMiscWiring || newValue is TECDevice)
             {
-                if(newValue is TECConnection || newValue is TECMiscCost
-                    || newValue is TECMiscWiring || newValue is TECDevice)
+                if (newValue.GetType() == oldValue.GetType())
                 {
                     addCost(newValue);
                     removeCost(oldValue);
                 }
             }
         }
-        
+
         private void addPoints(object item)
         {
-            if(item is PointComponent)
+            if (item is PointComponent)
             {
                 pointNumber += (item as PointComponent).PointNumber;
                 if ((item as PointComponent).PointNumber != 0)
@@ -398,7 +398,7 @@ namespace EstimatingLibrary
             double shipping = 0.03;
             double warranty = 0.06;
             double cost = tecMaterialCost;
-            
+
             cost += cost * shipping + cost * warranty;
             return cost;
         }
@@ -460,7 +460,7 @@ namespace EstimatingLibrary
             double cost = electricalMaterialCost;
             double shipping = 0.03;
             double warranty = 0.05;
-            
+
             cost += cost * shipping + cost * warranty;
             return cost;
         }
@@ -638,7 +638,7 @@ namespace EstimatingLibrary
             outCost += GetMaterialLabor(bid);
             return outCost;
         }
-        
+
         /// <summary>
         /// Returns the Journeyman electrical labor cost
         /// </summary>
@@ -735,7 +735,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the total cost
         /// </summary>
-        public  double GetTotalCost(TECBid bid)
+        public double GetTotalCost(TECBid bid)
         {
             return GetSubcontractorCost(bid) + GetTECCost(bid);
         }
@@ -925,7 +925,6 @@ namespace EstimatingLibrary
         {
             throw new NotImplementedException();
         }
-        
+
     }
 }
- 

@@ -37,7 +37,7 @@ namespace EstimatingLibrary
                 Controllers.CollectionChanged += collectionChanged;
             }
         }
-        
+
         public double MaterialCost
         {
             get { return getMaterialCost(); }
@@ -75,7 +75,7 @@ namespace EstimatingLibrary
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
-            foreach(TECController controller in panel.Controllers)
+            foreach (TECController controller in panel.Controllers)
             {
                 _controllers.Add(new TECController(controller, guidDictionary));
             }
@@ -86,7 +86,7 @@ namespace EstimatingLibrary
         {
             var outPanel = new TECPanel(this);
             outPanel._controllers = new ObservableCollection<TECController>();
-            foreach(TECController controller in this.Controllers)
+            foreach (TECController controller in this.Controllers)
             {
                 outPanel.Controllers.Add(controller.Copy() as TECController);
             }
@@ -99,12 +99,12 @@ namespace EstimatingLibrary
             var outPanel = new TECPanel(this);
             return outPanel;
         }
-        
+
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
                     NotifyPropertyChanged("AddRelationship", this, item);
                 }
@@ -117,16 +117,16 @@ namespace EstimatingLibrary
                 }
             }
         }
-        
+
         private double getMaterialCost()
         {
             double matCost = 0;
 
-            if(Type != null)
+            if (Type != null)
             {
                 matCost += Type.Cost;
             }
-            
+
             foreach (TECAssociatedCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
@@ -137,7 +137,7 @@ namespace EstimatingLibrary
         private double getLaborCost()
         {
             double lCost = 0;
-            
+
 
             foreach (TECAssociatedCost cost in this.AssociatedCosts)
             {

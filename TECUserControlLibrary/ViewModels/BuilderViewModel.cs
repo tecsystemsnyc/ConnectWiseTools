@@ -129,7 +129,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
-        
+
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
         #endregion
 
@@ -221,7 +221,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 isNew = true;
             }
-            
+
             getLogo();
         }
 
@@ -304,7 +304,7 @@ namespace TECUserControlLibrary.ViewModels
             SettingsVM = new SettingsViewModel(TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
         }
-        
+
         #endregion
 
         #region Save/Load

@@ -63,7 +63,7 @@ namespace Tests
         #endregion
 
         #region Undo
-        
+
         [TestMethod]
         public void Undo_Template_Systems()
         {
@@ -279,7 +279,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-        
+
         [TestMethod]
         public void Undo_Template_System_Name()
         {
@@ -808,7 +808,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             TECPanel expected = Template.PanelTemplates[0];
             string expectedName = expected.Name;
-            
+
             string edit = "edit";
 
             //Act
@@ -1047,7 +1047,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-        
+
         [TestMethod]
         public void Redo_Template_Tags()
         {
@@ -1071,7 +1071,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-        
+
         [TestMethod]
         public void Redo_Template_System_Name()
         {

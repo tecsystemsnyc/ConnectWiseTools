@@ -81,10 +81,10 @@ namespace DebugLibrary
         }
 
         private static void addToLog(string message)
-            //Adds a line to the current log file. File will be stored in Appdata\TECSystems\Logs using the date folder hieararcy and the time of the first message as the file name. 
+        //Adds a line to the current log file. File will be stored in Appdata\TECSystems\Logs using the date folder hieararcy and the time of the first message as the file name. 
         {
             if (logPath == null)
-                //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
+            //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
                 logPath = createLogPath();
                 File.Create(logPath).Close();

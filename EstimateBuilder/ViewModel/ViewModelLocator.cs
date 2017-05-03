@@ -83,7 +83,7 @@ namespace EstimateBuilder.ViewModel
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
         public DrawingViewModel Drawing
-{
+        {
             get
             {
                 return ServiceLocator.Current.GetInstance<DrawingViewModel>();

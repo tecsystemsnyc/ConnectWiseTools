@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("Templates");
             }
         }
-        
+
         public ScopeCollectionIndex TabIndex
         {
             get { return _tabIndex; }
@@ -327,7 +327,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private string _deviceDescription;
-        
+
         public double DeviceCost
         {
             get { return _deviceCost; }
@@ -439,7 +439,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("ControllerIOQTY");
             }
         }
-        
+
         public ObservableCollection<TECIO> ControllerIO
         {
             get { return _controllerIO; }
@@ -454,7 +454,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ObservableCollection<TECTag> ControllerTags
         {
             get { return _controllerTags; }
-            set {
+            set
+            {
                 _controllerTags = value;
                 RaisePropertyChanged("ControllerTags");
             }
@@ -991,7 +992,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool canAddTag()
         {
-            if(TagName != "") { return true; }
+            if (TagName != "") { return true; }
             else { return false; }
         }
 
@@ -1004,7 +1005,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool CanAddManufacturer()
         {
-            if(ManufacturerName != "")
+            if (ManufacturerName != "")
             { return true; }
             else { return false; }
         }
@@ -1058,7 +1059,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool CanAddController()
         {
-            if(ControllerManufacturer != null)
+            if (ControllerManufacturer != null)
             {
                 return true;
             }
@@ -1165,11 +1166,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelName = "";
             PanelDescription = "";
             PanelTags = new ObservableCollection<TECTag>();
-            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>(); 
+            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
         }
         private bool AddPanelCanExecute()
         {
-            if(SelectedPanelType != null && PanelName != "")
+            if (SelectedPanelType != null && PanelName != "")
             {
                 return true;
             }
@@ -1217,19 +1218,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 EquipmentItemsCollection.Add(equip);
             }
-            foreach(TECSubScope ss in Templates.SubScopeTemplates)
+            foreach (TECSubScope ss in Templates.SubScopeTemplates)
             {
                 SubScopeItemsCollection.Add(ss);
             }
-            foreach(TECDevice dev in Templates.Catalogs.Devices)
+            foreach (TECDevice dev in Templates.Catalogs.Devices)
             {
                 DevicesItemsCollection.Add(dev);
             }
-            foreach(TECController control in Templates.ControllerTemplates)
+            foreach (TECController control in Templates.ControllerTemplates)
             {
                 ControllersItemsCollection.Add(control);
             }
-            foreach(TECAssociatedCost assCost in Templates.Catalogs.AssociatedCosts)
+            foreach (TECAssociatedCost assCost in Templates.Catalogs.AssociatedCosts)
             {
                 AssociatedCostsItemsCollection.Add(assCost);
             }
@@ -1241,11 +1242,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 ControlledScopeItemsCollection.Add(controlScope);
             }
-            foreach(TECPanel panel in Templates.PanelTemplates)
+            foreach (TECPanel panel in Templates.PanelTemplates)
             {
                 PanelsItemsCollection.Add(panel);
             }
-            foreach(TECMiscWiring wiring in Templates.MiscWiringTemplates)
+            foreach (TECMiscWiring wiring in Templates.MiscWiringTemplates)
             {
                 MiscWiringCollection.Add(wiring);
             }
@@ -1285,7 +1286,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
             Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
         }
-        
+
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
@@ -1294,7 +1295,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             DropHandler(dropInfo);
         }
-        
+
         #endregion
 
         #region Event Handlers
@@ -1302,14 +1303,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
                     SystemItemsCollection.Add(item as TECSystem);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach(object item in e.OldItems)
+                foreach (object item in e.OldItems)
                 {
                     SystemItemsCollection.Remove(item as TECSystem);
                 }

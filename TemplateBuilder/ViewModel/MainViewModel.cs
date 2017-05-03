@@ -32,7 +32,7 @@ namespace TemplateBuilder.ViewModel
             TitleString = "Template Builder";
 
             getTemplates();
-            
+
             setupCommands();
             setupVMs();
             DGTabIndex = TemplateGridIndex.ControlledScope;
@@ -123,7 +123,7 @@ namespace TemplateBuilder.ViewModel
             }
         }
         private TemplateGridIndex _DGTabIndex;
-        
+
         #endregion //Tab Indexes
 
         #endregion //Interface Properties
@@ -192,7 +192,7 @@ namespace TemplateBuilder.ViewModel
         #region Methods
         private void refresh()
         {
-            if(ScopeCollection != null)
+            if (ScopeCollection != null)
             {
                 ScopeCollection.Refresh(Templates);
                 ScopeDataGrid.Refresh(Templates);

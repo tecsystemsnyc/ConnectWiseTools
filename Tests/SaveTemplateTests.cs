@@ -297,7 +297,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
         }
-        
+
 
         #endregion Save Labor
 
@@ -535,7 +535,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
-            foreach(TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
                 if (sys.Guid == sysToModify.Guid)
                 {
@@ -592,12 +592,12 @@ namespace Tests
 
             //Assert
             TECSystem actualSystem = null;
-            foreach(TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
                 if (sys.Guid == sysToModify.Guid)
                 {
                     actualSystem = sys;
-                    foreach(TECEquipment equip in actualSystem.Equipment)
+                    foreach (TECEquipment equip in actualSystem.Equipment)
                     {
                         if (equip.Guid == equipToRemove.Guid)
                         {
@@ -831,7 +831,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
         }
-        
+
         [TestMethod]
         public void Save_Templates_SubScope_AssociatedCosts()
         {
@@ -868,7 +868,7 @@ namespace Tests
             Assert.AreEqual(expectedNumCosts, actualSubScope.AssociatedCosts.Count);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            
+
         }
         #endregion Save SubScope
 
@@ -1109,7 +1109,7 @@ namespace Tests
             Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
 
         }
-        
+
         [TestMethod]
         public void Save_Templates_Controller_Name()
         {
@@ -1345,7 +1345,7 @@ namespace Tests
             Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.Catalogs.Manufacturers.Count);
 
         }
-        
+
         [TestMethod]
         public void Save_Templates_Manufacturer_Name()
         {
@@ -1439,7 +1439,7 @@ namespace Tests
             EstimatingLibraryDatabase.Update(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-            
+
             //Assert
             foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
@@ -1704,7 +1704,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
-        
+
         #endregion
 
         #region Save Misc Wiring
@@ -2132,7 +2132,7 @@ namespace Tests
             scopePanel.Name = "Test Scope Name";
             scopePanel.Type = templates.Catalogs.PanelTypes[0];
             expectedScope.Panels.Add(scopePanel);
-            
+
             EstimatingLibraryDatabase.Update(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;

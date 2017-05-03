@@ -43,9 +43,9 @@ namespace EstimateBuilder.View
         {
             Thumb thumb = (Thumb)sender;
             TECVisualScope scope = (TECVisualScope)thumb.DataContext;
-            
+
             // Update the the position of the rectangle in the view-model.
-            
+
             scope.X += e.HorizontalChange;
             scope.Y += e.VerticalChange;
         }

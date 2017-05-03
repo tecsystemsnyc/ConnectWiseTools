@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace TemplateBuilder
 {
-    public class MainViewModelData: INotifyPropertyChanged
+    public class MainViewModelData : INotifyPropertyChanged
     {
         private ObservableCollection<TECSystem> _systemItemsCollection;
-        public ObservableCollection<TECSystem> SystemItemsCollection {
+        public ObservableCollection<TECSystem> SystemItemsCollection
+        {
             get { return _systemItemsCollection; }
             set
             {

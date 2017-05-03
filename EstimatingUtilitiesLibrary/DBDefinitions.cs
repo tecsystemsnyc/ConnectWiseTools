@@ -69,7 +69,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"));
         public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"));
         public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.GetProperty("RequiresWrapUp"));
-        
+
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             ParamtersID
@@ -462,7 +462,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECConnectionType";
         public static Type ObjectType = typeof(TECConnectionType);
-        
+
         public static TableField ConnectionTypeID = new TableField("ConnectionTypeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
@@ -519,7 +519,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECProposalScopeTECScopeBranch";
         public static Type ObjectType = typeof(TECProposalScope);
-        public static  Type ReferenceType = typeof(TECScopeBranch);
+        public static Type ReferenceType = typeof(TECScopeBranch);
 
         public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -652,12 +652,12 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECPanel";
         public static Type ObjectType = typeof(TECPanel);
-        
+
         public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-        
+
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             PanelID
@@ -895,11 +895,11 @@ namespace EstimatingUtilitiesLibrary
         public static Type BidType = typeof(TECBid);
 
         public static Type Helpers = typeof(HelperProperties);
-        
+
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
-        
+
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             SystemID,
@@ -988,7 +988,7 @@ namespace EstimatingUtilitiesLibrary
         public static Type ReferenceType = typeof(TECPoint);
 
         public static Type HelperType = typeof(HelperProperties);
-        
+
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
@@ -1355,7 +1355,7 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
-    public class IOModuleManufacturerTable: TableBase
+    public class IOModuleManufacturerTable : TableBase
     {
         public static new string TableName = "TECIOModuleTECManufacturer";
         public static Type ObjectType = typeof(TECIOModule);
@@ -1573,7 +1573,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static string TableName;
         public static List<Type> Types;
-        
+
         public static List<TableField> PrimaryKey;
     }
 
@@ -1594,7 +1594,7 @@ namespace EstimatingUtilitiesLibrary
             Property = property;
         }
     }
-    
+
     public class HelperProperties
     {
         public bool Index { get; set; }
@@ -1665,7 +1665,7 @@ namespace EstimatingUtilitiesLibrary
                 }
 
             }
-            
+
             Name = tableName;
             Fields = fields;
             PrimaryFields = primaryKey;

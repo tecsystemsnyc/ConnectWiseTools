@@ -47,7 +47,7 @@ namespace EstimateBuilder.ViewModel
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        
+
         #region Properties
 
         private GridIndex _dGTabIndex;
@@ -67,12 +67,12 @@ namespace EstimateBuilder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public EditTabExtension EditTab { get; set; }
-        public ControllersPanelsViewModel ControllersPanelsTab { get; set; } 
+        public ControllersPanelsViewModel ControllersPanelsTab { get; set; }
         public AddControlledScopeExtension AddControlledScopeTab { get; set; }
         #endregion
 
         #region Interface Properties
-        
+
         #region Scope Properties
         public TECTemplates Templates
         {
@@ -96,7 +96,7 @@ namespace EstimateBuilder.ViewModel
         }
         private TECBid _bid;
         #endregion Scope Properties
-        
+
         #endregion //Interface Properties
 
         #region Visibility Properties
@@ -128,7 +128,7 @@ namespace EstimateBuilder.ViewModel
             LocationDataGrid.Refresh(Bid);
             ControllersPanelsTab.Refresh(Bid);
             AddControlledScopeTab.Refresh(Bid);
-            
+
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
 
@@ -184,7 +184,7 @@ namespace EstimateBuilder.ViewModel
             AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         #endregion
-        
+
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {

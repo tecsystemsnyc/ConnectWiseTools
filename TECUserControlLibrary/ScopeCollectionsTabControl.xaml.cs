@@ -37,7 +37,7 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(ScopeCollectionsTabControl));
-        
+
         #endregion
         public ScopeCollectionsTabControl()
         {

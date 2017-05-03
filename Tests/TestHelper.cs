@@ -90,7 +90,7 @@ namespace Tests
             location2.Name = "2nd Floor";
             var location3 = new TECLocation();
             location3.Name = "3rd Floor";
-            
+
             bid.Locations.Add(cellar);
             bid.Locations.Add(location1);
             bid.Locations.Add(location2);
@@ -103,7 +103,7 @@ namespace Tests
             system1.BudgetPriceModifier = 234.5;
             system1.Quantity = 2345;
             system1.Location = location1;
-            
+
             system1.Tags.Add(tag1);
 
             var system2 = new TECSystem();
@@ -117,12 +117,12 @@ namespace Tests
             system3.Name = "System 3";
             system3.Description = "No Location";
             system3.BudgetPriceModifier = 349;
-            
+
             //Add to bid
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);
             bid.Systems.Add(system3);
-            
+
             //Equipment
             var equipment1 = new TECEquipment();
             equipment1.Name = "Equipment 1";
@@ -130,7 +130,7 @@ namespace Tests
             equipment1.BudgetUnitPrice = 123.4;
             equipment1.Quantity = 1234;
             equipment1.Location = location1;
-           
+
             equipment1.Tags.Add(tag1);
 
             var equipment2 = new TECEquipment();
@@ -173,7 +173,7 @@ namespace Tests
             conduitType2.Labor = 14;
 
             bid.Catalogs.ConduitTypes.Add(conduitType2);
-           
+
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
@@ -198,12 +198,12 @@ namespace Tests
             subScope1.Devices.Add(device1);
             subScope1.Devices.Add(device1);
 
-            
+
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
             manufacturer1.Multiplier = 0.8;
-            
+
             device1.Manufacturer = manufacturer1;
             bid.Catalogs.Manufacturers.Add(manufacturer1);
 
@@ -225,7 +225,7 @@ namespace Tests
             //var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
             //drawing1.Name = "Test";
             //drawing1.Description = "Desc";
-            
+
             //bid.Drawings.Add(drawing1);
 
             //drawing1.Pages[0].PageScope.Add(vScope);
@@ -255,7 +255,7 @@ namespace Tests
             bid.ScopeTree.Add(branch1);
             branch1.Branches.Add(branch2);
             branch2.Branches.Add(branch3);
-            
+
             //Notes
             var note1 = new TECNote();
             note1.Text = "Note 1";
@@ -459,14 +459,14 @@ namespace Tests
             testDev.Cost = 20.3;
             testDev.Manufacturer = testDevMan;
             testDev.ConnectionType = testDevConnType;
-            
+
             TECDevice childDev = new TECDevice(Guid.NewGuid());
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Cost = 54.1;
             childDev.Manufacturer = childDevMan;
             childDev.ConnectionType = childDevConnType;
-            
+
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
 

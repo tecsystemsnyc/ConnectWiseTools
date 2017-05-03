@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 registerBidChanges();
             }
         }
-        
+
         private TECController _selectedController;
         public TECController SelectedController
         {
@@ -138,7 +138,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             populateControllerCollection();
             populatePanelSelections();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
-        } 
+        }
 
         private void populateControllerCollection()
         {
@@ -176,7 +176,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void unregisterBidChanges()
         {
-            if(Bid != null)
+            if (Bid != null)
             {
                 Bid.Controllers.CollectionChanged -= collectionChanged;
                 Bid.Panels.CollectionChanged -= collectionChanged;
@@ -187,12 +187,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
-                    if(item is TECController)
+                    if (item is TECController)
                     {
                         addController(item as TECController);
-                    } else if (item is TECPanel)
+                    }
+                    else if (item is TECPanel)
                     {
                         addPanel(item as TECPanel);
                     }
@@ -224,14 +225,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 }
             }
         }
-        
+
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.ControllerInPanelDragOver(dropInfo);
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if(dropInfo.Data is TECController)
+            if (dropInfo.Data is TECController)
             {
                 UIHelpers.ControllerInPanelDrop(dropInfo, Bid.Controllers);
             }
@@ -261,9 +262,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void removeController(TECController controller)
         {
-            foreach(ControllerInPanel controllerInPanel in ControllerCollection)
+            foreach (ControllerInPanel controllerInPanel in ControllerCollection)
             {
-                if(controllerInPanel.Controller == controller)
+                if (controllerInPanel.Controller == controller)
                 {
                     ControllerCollection.Remove(controllerInPanel);
                     return;

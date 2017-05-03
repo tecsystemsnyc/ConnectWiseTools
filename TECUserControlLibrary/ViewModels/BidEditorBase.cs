@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     abstract public class BidEditorBase : BuilderViewModel
     {
         #region Properties
-        
+
         private bool _templatesLoaded;
         virtual protected bool templatesLoaded
         {
@@ -94,7 +94,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        
+
         #endregion
 
         #region Command Properties
@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels
         public BidEditorBase() : base()
         {
             workingFileParameters = BidFileParameters;
-            
+
             setupData();
         }
 
@@ -292,7 +292,7 @@ namespace TECUserControlLibrary.ViewModels
                 isNew = true;
                 Bid = new TECBid();
             }
-            
+
         }
         private void DocumentExecute()
         {

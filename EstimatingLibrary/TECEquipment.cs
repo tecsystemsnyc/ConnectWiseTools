@@ -132,7 +132,7 @@ namespace EstimatingLibrary
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
-        
+
         public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
@@ -171,7 +171,7 @@ namespace EstimatingLibrary
         private double getMaterialCost()
         {
             double matCost = 0;
-            foreach(TECSubScope sub in this.SubScope)
+            foreach (TECSubScope sub in this.SubScope)
             {
                 matCost += sub.MaterialCost;
             }
@@ -194,7 +194,7 @@ namespace EstimatingLibrary
             }
             return cost;
         }
-        
+
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("SubScopeQuantity");
@@ -215,7 +215,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("Remove", this, item);
-                    NotifyPropertyChanged("RemovedSubScope", this, item); 
+                    NotifyPropertyChanged("RemovedSubScope", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -231,14 +231,14 @@ namespace EstimatingLibrary
             {
                 RaisePropertyChanged("SubScopeQuantity");
             }
-            else if(name == "TotalPoints")
+            else if (name == "TotalPoints")
             {
                 RaisePropertyChanged("TotalPoints");
             }
             else if (name == "TotalDevices")
             {
                 RaisePropertyChanged("TotalDevices");
-            } 
+            }
             else if (name == "Length")
             {
                 RaisePropertyChanged("SubLength");
@@ -264,7 +264,7 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalDevices");
             }
         }
-        
+
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ObjectPropertyChanged")
@@ -284,7 +284,7 @@ namespace EstimatingLibrary
         private int getPointNumber()
         {
             var totalPoints = 0;
-            foreach(TECSubScope subScope in SubScope)
+            foreach (TECSubScope subScope in SubScope)
             {
                 totalPoints += subScope.PointNumber;
             }

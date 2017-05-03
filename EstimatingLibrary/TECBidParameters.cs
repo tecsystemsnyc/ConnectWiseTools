@@ -21,12 +21,12 @@ namespace EstimatingLibrary
         private bool _hasBMS;
 
         private Guid _guid;
-        
+
         public Guid Guid
         {
             get { return _guid; }
         }
-        
+
         public double Escalation
         {
             get { return _escalation; }
@@ -119,7 +119,7 @@ namespace EstimatingLibrary
             }
         }
         #endregion
-        
+
         public TECBidParameters(Guid guid)
         {
             _guid = guid;

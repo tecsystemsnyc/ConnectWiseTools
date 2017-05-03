@@ -99,7 +99,8 @@ namespace TECUserControlLibrary.HelperConverters
             if ((Visibility)value == Visibility.Visible)
             {
                 return "-";
-            } else
+            }
+            else
             {
                 return "+";
             }
@@ -119,7 +120,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            
+
             if (((double)value) >= 0)
             {
                 return value;
@@ -130,11 +131,11 @@ namespace TECUserControlLibrary.HelperConverters
             }
         }
 
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string inString = (string)value;
-            inString = inString.Trim(new Char[] { ' ','$', ',', '.' });
+            inString = inString.Trim(new Char[] { ' ', '$', ',', '.' });
 
             return inString.ToDouble(-1);
         }
@@ -149,7 +150,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             return value;
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string inString = (string)value;
@@ -167,14 +168,14 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            
+
             return value;
 
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-             return value;
+            return value;
         }
 
         #endregion
@@ -197,7 +198,7 @@ namespace TECUserControlLibrary.HelperConverters
                 return value;
             }
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
@@ -254,7 +255,7 @@ namespace TECUserControlLibrary.HelperConverters
             return value;
         }
     }
-    
+
     public class PercentageConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
@@ -303,7 +304,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
+            if (value == null)
             {
                 return Visibility.Visible;
             }
@@ -311,7 +312,7 @@ namespace TECUserControlLibrary.HelperConverters
             {
                 return Visibility.Collapsed;
             }
-            
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -329,7 +330,7 @@ namespace TECUserControlLibrary.HelperConverters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             Console.WriteLine("Converting");
-            if(value == null)
+            if (value == null)
             {
                 return true;
             }
@@ -552,7 +553,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
+            if (value == null)
             {
                 return value;
             }
@@ -567,7 +568,7 @@ namespace TECUserControlLibrary.HelperConverters
                     return value;
                 }
             }
-            
+
         }
         #endregion
     }
@@ -577,7 +578,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value.ToString() == "{NewItemPlaceholder}")
+            if (value.ToString() == "{NewItemPlaceholder}")
             {
                 return false;
             }

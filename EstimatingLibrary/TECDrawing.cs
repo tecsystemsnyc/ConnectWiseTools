@@ -97,7 +97,7 @@ namespace EstimatingLibrary
         {
             _description = drawingSource.Description;
             Guid = drawingSource.Guid;
-            foreach(TECPage page in drawingSource.Pages)
+            foreach (TECPage page in drawingSource.Pages)
             {
                 _pages.Add(new TECPage(page));
             }

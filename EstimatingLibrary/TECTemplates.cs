@@ -19,7 +19,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscCost> _miscCostTemplates;
         private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
-        
+
         public ObservableCollection<TECSystem> SystemTemplates
         {
             get { return _systemTemplates; }
@@ -119,7 +119,7 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECTemplates() : this(Guid.NewGuid()) {}
+        public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
         {
             _labor = new TECLabor();
@@ -145,7 +145,8 @@ namespace EstimatingLibrary
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
             if (_labor != null)
-            { _labor = templatesSource.Labor;
+            {
+                _labor = templatesSource.Labor;
             }
             foreach (TECSystem system in templatesSource.SystemTemplates)
             { SystemTemplates.Add(new TECSystem(system)); }
@@ -153,21 +154,21 @@ namespace EstimatingLibrary
             { EquipmentTemplates.Add(new TECEquipment(equip)); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
             { SubScopeTemplates.Add(new TECSubScope(subScope)); }
-            foreach(TECController controller in templatesSource.ControllerTemplates)
+            foreach (TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(new TECController(controller)); }
-            foreach(TECMiscCost cost in templatesSource.MiscCostTemplates)
+            foreach (TECMiscCost cost in templatesSource.MiscCostTemplates)
             {
                 MiscCostTemplates.Add(new TECMiscCost(cost));
             }
-            foreach(TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
+            foreach (TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
             {
                 MiscWiringTemplates.Add(new TECMiscWiring(wiring));
             }
-            foreach(TECPanel panel in templatesSource.PanelTemplates)
+            foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
                 PanelTemplates.Add(new TECPanel(panel));
             }
-            foreach(TECControlledScope scope in templatesSource.ControlledScopeTemplates)
+            foreach (TECControlledScope scope in templatesSource.ControlledScopeTemplates)
             {
                 ControlledScopeTemplates.Add(new TECControlledScope(scope));
             }

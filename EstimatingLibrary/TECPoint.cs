@@ -36,7 +36,8 @@ namespace EstimatingLibrary
                 if (convertStringToType(value) != 0)
                 {
                     Type = convertStringToType(value);
-                } else
+                }
+                else
                 {
                     string message = "TypeString set failed in TECPoint. Unrecognized TypeString.";
                     throw new InvalidCastException(message);
@@ -56,7 +57,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECPoint(Guid guid) : base(guid) { }
         public TECPoint() : this(Guid.NewGuid()) { }
-        
+
         public TECPoint(TECPoint pointSource) : this()
         {
             _type = pointSource.Type;

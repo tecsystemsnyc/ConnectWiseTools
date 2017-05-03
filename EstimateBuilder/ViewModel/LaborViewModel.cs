@@ -51,7 +51,7 @@ namespace EstimateBuilder.ViewModel
 
             ReloadCommand = new RelayCommand(ReloadExecute);
         }
-        
+
         public void Refresh(TECBid bid, TECTemplates templates)
         {
             Bid = bid;

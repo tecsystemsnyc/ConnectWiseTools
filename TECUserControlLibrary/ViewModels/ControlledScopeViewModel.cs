@@ -57,7 +57,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedControllerInPanel = value;
                 RaisePropertyChanged("SelectedControllerInPanel");
                 TECController senderObject = null;
-                if(_selectedControllerInPanel != null)
+                if (_selectedControllerInPanel != null)
                 {
                     senderObject = _selectedControllerInPanel.Controller;
                 }
@@ -95,7 +95,8 @@ namespace TECUserControlLibrary.ViewModels
         public ObservableCollection<TECController> ControllerSelections
         {
             get { return _controllerSelections; }
-            set {
+            set
+            {
                 _controllerSelections = value;
                 RaisePropertyChanged("ControllerSelections");
             }
@@ -150,7 +151,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConduitTypeSelections");
             }
         }
-        
+
         private TECControlledScope _selectedControlledScope;
         public TECControlledScope SelectedControlledScope
         {
@@ -159,7 +160,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 unregisterChanges();
                 _selectedControlledScope = value;
-                
+
                 updateCollections();
                 registerChanges();
                 RaisePropertyChanged("SelectedControlledScope");
@@ -233,7 +234,7 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
-            if(sourceItem is TECController)
+            if (sourceItem is TECController)
             {
                 UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
@@ -248,7 +249,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UIHelpers.ControlledScopeDrop(dropInfo, Templates);
             }
-            else if(dropInfo.Data is TECController)
+            else if (dropInfo.Data is TECController)
             {
                 UIHelpers.ControllerInPanelDrop(dropInfo, SelectedControlledScope.Controllers);
             }
@@ -261,7 +262,7 @@ namespace TECUserControlLibrary.ViewModels
         private void updateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
-            if(SelectedControlledScope != null)
+            if (SelectedControlledScope != null)
             {
                 var noneController = new TECController();
                 noneController.Name = "None";
@@ -275,7 +276,7 @@ namespace TECUserControlLibrary.ViewModels
         private void updateControllerCollection()
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            if(SelectedControlledScope != null)
+            if (SelectedControlledScope != null)
             {
                 foreach (TECController controller in SelectedControlledScope.Controllers)
                 {
@@ -311,7 +312,7 @@ namespace TECUserControlLibrary.ViewModels
         private void updateSubScopeConnections()
         {
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
-            if(SelectedControlledScope != null)
+            if (SelectedControlledScope != null)
             {
                 foreach (TECSystem system in SelectedControlledScope.Systems)
                 {
@@ -330,15 +331,15 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        
+
         private void registerChanges()
         {
-            if(SelectedControlledScope != null)
+            if (SelectedControlledScope != null)
             {
                 SelectedControlledScope.Systems.CollectionChanged += collectionChanged;
                 SelectedControlledScope.Controllers.CollectionChanged += collectionChanged;
                 SelectedControlledScope.Panels.CollectionChanged += collectionChanged;
-                foreach(TECSystem system in SelectedControlledScope.Systems)
+                foreach (TECSystem system in SelectedControlledScope.Systems)
                 {
                     system.PropertyChanged += System_PropertyChanged;
                 }
@@ -370,12 +371,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
-                    if(item is TECSystem)
+                    if (item is TECSystem)
                     {
                         (item as TECSystem).PropertyChanged += System_PropertyChanged;
                     }
@@ -383,19 +384,20 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach(object item in e.OldItems)
+                foreach (object item in e.OldItems)
                 {
-                    if(item is ControllerInPanel)
+                    if (item is ControllerInPanel)
                     {
-                        foreach(TECPanel panel in SelectedControlledScope.Panels)
+                        foreach (TECPanel panel in SelectedControlledScope.Panels)
                         {
-                            if(panel.Controllers.Contains((item as ControllerInPanel).Controller))
+                            if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
                             {
                                 panel.Controllers.Remove((item as ControllerInPanel).Controller);
                             }
                         }
                         SelectedControlledScope.Controllers.Remove((item as ControllerInPanel).Controller);
-                    } else if(item is TECSystem)
+                    }
+                    else if (item is TECSystem)
                     {
                         checkForRemovedSubScope();
                     }
@@ -403,7 +405,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             updateCollections();
         }
-        
+
         private void updateCollections()
         {
             ControllerCollection.CollectionChanged -= collectionChanged;

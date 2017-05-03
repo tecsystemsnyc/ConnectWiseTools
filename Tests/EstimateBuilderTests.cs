@@ -14,7 +14,7 @@ namespace Tests
     [TestClass]
     public class EstimateBuilderTests
     {
-        static EstimateBuilder.ViewModel.MainViewModel mainVM; 
+        static EstimateBuilder.ViewModel.MainViewModel mainVM;
 
         public EstimateBuilderTests()
         {

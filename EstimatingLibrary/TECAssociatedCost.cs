@@ -9,7 +9,7 @@ namespace EstimatingLibrary
     public class TECAssociatedCost : TECCost
     {
         #region Properties
-        
+
         private double _labor;
         public double Labor
         {
@@ -38,7 +38,7 @@ namespace EstimatingLibrary
             _labor = this.Labor;
         }
         #endregion
-        
+
         public override object Copy()
         {
             var outCost = new TECAssociatedCost();

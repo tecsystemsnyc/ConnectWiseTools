@@ -39,7 +39,7 @@ namespace EstimateBuilder.ViewModel
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
         }
-        
+
         #region Properties
 
         #region SettingsProperties
@@ -135,7 +135,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 base.templatesLoaded = value;
-                if(LaborVM != null)
+                if (LaborVM != null)
                 {
                     LaborVM.TemplatesLoaded = templatesLoaded;
                 }
@@ -216,7 +216,8 @@ namespace EstimateBuilder.ViewModel
                     SetBusyStatus("Loading drawings from file: " + path, true);
                     var worker = new BackgroundWorker();
 
-                    worker.DoWork += (s, e) => {
+                    worker.DoWork += (s, e) =>
+                    {
                         TECDrawing drawing = PDFConverter.convertPDFToDrawing(path);
                         e.Result = drawing;
                     };
@@ -269,7 +270,7 @@ namespace EstimateBuilder.ViewModel
         }
         override protected void refresh()
         {
-            if(Bid != null && Templates != null)
+            if (Bid != null && Templates != null)
             {
                 ScopeEditorVM.Refresh(Bid, Templates);
                 DrawingVM.Bid = Bid;
@@ -332,7 +333,7 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
-        
+
         #endregion
     }
 }

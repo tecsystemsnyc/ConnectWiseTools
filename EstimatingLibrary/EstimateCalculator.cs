@@ -71,7 +71,7 @@ namespace EstimatingLibrary
 
         //    return outTax;
         //}
-        
+
         ///// <summary>
         ///// Returns cost of all TEC material and labor with escalation, overhead, and tax
         ///// </summary>
@@ -94,7 +94,7 @@ namespace EstimatingLibrary
         //    outCost += GetTECCost(bid);
         //    outCost += outCost * bid.Parameters.Overhead / 100;
         //    outCost += outCost * bid.Parameters.Profit / 100;
-            
+
         //    return outCost;
         //}
 
@@ -184,7 +184,7 @@ namespace EstimatingLibrary
         //public static double GetPMPointHours(TECBid bid)
         //{
         //    double hours = bid.TotalPointNumber * bid.Labor.PMCoef;
-           
+
         //    return hours;
         //}
         ///// <summary>
@@ -194,7 +194,7 @@ namespace EstimatingLibrary
         //{
         //    double hours = GetPMPointHours(bid);
         //    hours += bid.Labor.PMExtraHours;
-            
+
         //    return hours;
         //}
         ///// <summary>
@@ -419,7 +419,7 @@ namespace EstimatingLibrary
         //public static double GetElectricalSuperLaborHours(TECBid bid)
         //{
         //    double laborHours = GetElectricalLaborHours(bid);
-            
+
         //    return laborHours / 7;
         //}
         ///// <summary>

@@ -15,7 +15,7 @@ namespace Tests
     public class SaveAsBidTests
     {
         private const bool DEBUG = true;
-        
+
         static TECBid expectedBid;
         static TECLabor expectedLabor;
         static TECSystem expectedSystem;
@@ -245,7 +245,7 @@ namespace Tests
             //        break;
             //    }
             //}
-            
+
             foreach (TECController con in actualBid.Controllers)
             {
                 if (con.Guid == expectedController.Guid)
@@ -380,9 +380,9 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             int actualQuantity = 0;
-            foreach(TECDevice device in actualDevices)
+            foreach (TECDevice device in actualDevices)
             {
-                if(device.Guid == actualDevice.Guid)
+                if (device.Guid == actualDevice.Guid)
                 {
                     actualQuantity++;
                 }
@@ -564,7 +564,7 @@ namespace Tests
             Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
             Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
-            
+
         }
 
         [TestMethod]

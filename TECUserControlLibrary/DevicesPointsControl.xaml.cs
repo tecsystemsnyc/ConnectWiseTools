@@ -72,7 +72,7 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(DevicesPointsControl));
-        
+
         #endregion
         public DevicesPointsControl()
         {

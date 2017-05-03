@@ -129,12 +129,12 @@ namespace Scope_Builder.ViewModel
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
-            
+
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        
+
         #endregion
 
         #region Commands Methods
@@ -278,7 +278,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setContextText(object selected)
         {
-            if(selected is TECScope && selected != null)
+            if (selected is TECScope && selected != null)
             {
                 StatusBarVM.ContextText = makeContextString(selected as TECScope);
             }
@@ -288,7 +288,7 @@ namespace Scope_Builder.ViewModel
             var outString = "";
 
             outString += scope.Name + ": ";
-            if(scope.Location != null)
+            if (scope.Location != null)
             {
                 outString += scope.Location;
                 outString += " is in bid: ";
@@ -298,7 +298,7 @@ namespace Scope_Builder.ViewModel
             {
                 outString += "No location";
             }
-            
+
             return outString;
         }
         #endregion //Helper Functions
@@ -348,7 +348,7 @@ namespace Scope_Builder.ViewModel
             BudgetVM = new BudgetViewModel(new TECBid());
         }
         #endregion
-        
+
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {

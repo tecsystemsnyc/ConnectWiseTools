@@ -41,16 +41,16 @@ namespace Tests
             //Assert
             string expectedName = "Unit Testimate";
             Assert.AreEqual(expectedName, actualBid.Name);
-            
+
             string expectedNumber = "1701-117";
             Assert.AreEqual(expectedNumber, actualBid.BidNumber);
-            
+
             DateTime expectedDueDate = new DateTime(1969, 7, 20);
             Assert.AreEqual(expectedDueDate, actualBid.DueDate);
-            
+
             string expectedSales = "Mrs. Test";
             Assert.AreEqual(expectedSales, actualBid.Salesperson);
-            
+
             string expectedEstimator = "Mr. Test";
             Assert.AreEqual(expectedEstimator, actualBid.Estimator);
         }
@@ -129,13 +129,13 @@ namespace Tests
             //Assert
             string expectedName = "Test System";
             Assert.AreEqual(expectedName, actualSystem.Name);
-            
+
             string expectedDescription = "Test System Description";
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-            
+
             int expectedQuantity = 123;
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
-            
+
             double expectedBP = 123;
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
         }
@@ -149,13 +149,13 @@ namespace Tests
             //Assert
             string expectedName = "Test Equipment";
             Assert.AreEqual(expectedName, actualEquipment.Name);
-            
+
             string expectedDescription = "Test Equipment Description";
             Assert.AreEqual(expectedDescription, actualEquipment.Description);
-            
+
             int expectedQuantity = 456;
             Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
-            
+
             double expectedBP = 456;
             Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
         }
@@ -170,10 +170,10 @@ namespace Tests
             //Assert
             string expectedName = "Test SubScope";
             Assert.AreEqual(expectedName, actualSubScope.Name);
-            
+
             string expectedDescription = "Test SubScope Description";
             Assert.AreEqual(expectedDescription, actualSubScope.Description);
-            
+
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
             Assert.AreEqual(actualConnection, actualSubScope.Connection);
@@ -191,24 +191,24 @@ namespace Tests
             //Assert
             string expectedName = "Test Device";
             Assert.AreEqual(expectedName, actualDevice.Name);
-            
+
             string expectedDescription = "Test Device Description";
             Assert.AreEqual(expectedDescription, actualDevice.Description);
-            
+
             int expectedQuantity = 3;
             int actualQuantity = 0;
-            foreach(TECDevice device in actualDevices)
+            foreach (TECDevice device in actualDevices)
             {
-                if(device.Guid == actualDevice.Guid)
+                if (device.Guid == actualDevice.Guid)
                 {
                     actualQuantity++;
                 }
             }
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            
+
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
-            
+
             Assert.AreEqual("ThreeC18", actualDevice.ConnectionType.Name);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
@@ -241,13 +241,13 @@ namespace Tests
             //Assert
             string expectedName = "Test Point";
             Assert.AreEqual(expectedName, actualPoint.Name);
-            
+
             string expectedDescription = "Test Point Description";
             Assert.AreEqual(expectedDescription, actualPoint.Description);
-            
+
             int expectedQuantity = 321;
             Assert.AreEqual(expectedQuantity, actualPoint.Quantity);
-            
+
             PointTypes expectedType = PointTypes.Serial;
             Assert.AreEqual(expectedType, actualPoint.Type);
         }
@@ -449,16 +449,16 @@ namespace Tests
                     break;
                 }
             }
-             
+
 
             double expectedLength = 493.45;
-            
+
             bool hasSubScope = false;
             if (actualConnection.SubScope == expectedSubScope)
             {
                 hasSubScope = true;
             }
-            
+
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
@@ -518,7 +518,7 @@ namespace Tests
             string expectedName = "Test ConduitType";
             Assert.AreEqual(expectedName, actualConduitType.Name);
         }
-        
+
         [TestMethod]
         public void Load_Bid_MiscCost()
         {
@@ -587,7 +587,7 @@ namespace Tests
                     }
                 }
             }
-            
+
             Assert.IsTrue(true, "All Devices Linked");
         }
 
@@ -626,7 +626,7 @@ namespace Tests
                     }
                 }
             }
-           
+
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 foreach (TECAssociatedCost cost in device.AssociatedCosts)
@@ -694,7 +694,7 @@ namespace Tests
                     { Assert.Fail("Conduit types in connection not linked"); }
                 }
             }
-            
+
             Assert.IsTrue(true, "All conduit types Linked");
         }
 
@@ -733,7 +733,7 @@ namespace Tests
                     }
                 }
             }
-            
+
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 foreach (TECTag tag in device.Tags)
@@ -778,6 +778,6 @@ namespace Tests
                 }
             }
         }
-        
+
     }
 }

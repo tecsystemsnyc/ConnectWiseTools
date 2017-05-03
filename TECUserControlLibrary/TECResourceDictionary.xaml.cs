@@ -16,10 +16,10 @@ namespace TECUserControlLibrary
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
-            if(e.ClickCount == 3 && cell.Column is DataGridTextColumn)
+            if (e.ClickCount == 3 && cell.Column is DataGridTextColumn)
             {
                 var textBox = FindVisualChild<TextBox>(cell);
-                if(textBox != null)
+                if (textBox != null)
                 {
                     textBox.SelectAll();
                 }
@@ -58,8 +58,8 @@ namespace TECUserControlLibrary
             DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
             DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
             Button button = FindVisualParent<Button>(ogSource as UIElement);
-            if (parentRow == null || 
-                (childRow!= null && childRow.IsSelected == true) ||
+            if (parentRow == null ||
+                (childRow != null && childRow.IsSelected == true) ||
                 (childRow == null && button == null))
             {
                 return;
@@ -78,12 +78,12 @@ namespace TECUserControlLibrary
 
         private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount == 3)
+            if (e.ClickCount == 3)
             {
                 (sender as TextBox).SelectAll();
             }
         }
-        
+
         private void SelectRow(object sender, MouseButtonEventArgs e)
         {
             var ogSource = e.OriginalSource;
@@ -91,9 +91,9 @@ namespace TECUserControlLibrary
             DataGridRow row = sender as DataGridRow;
             DataGrid grid = FindVisualParent<DataGrid>(row);
             grid.SelectedItem = grid.SelectedItem;
-            
+
         }
-        
+
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             //e.Handled = true;
@@ -180,7 +180,7 @@ namespace TECUserControlLibrary
                         child = null;
                     }
                 }
-                
+
             }
             return null;
         }
@@ -190,7 +190,7 @@ namespace TECUserControlLibrary
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
                 UIElement child = VisualTreeHelper.GetChild(element, i) as UIElement;
-                
+
                 T correctlyTyped = child as T;
                 if (correctlyTyped != null)
                 {
@@ -199,7 +199,8 @@ namespace TECUserControlLibrary
                     {
                         children.Add(childOfChild);
                     }
-                } else if (child != null)
+                }
+                else if (child != null)
                 {
                     foreach (T childOfChild in FindVisualChildren<T>(child))
                     {

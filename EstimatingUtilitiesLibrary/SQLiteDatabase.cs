@@ -31,7 +31,7 @@ namespace EstimatingUtilitiesLibrary
                     DebugHandler.LogDebugMessage("Database File Created");
                     SQLiteConnection.CreateFile(DBPath);
                 }
-                
+
                 Connection = buildConnection(DBPath);
                 Connection.Open();
             }
@@ -81,7 +81,7 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteCommand command = new SQLiteCommand(Connection);
 
-            foreach (KeyValuePair<string,string> stringParam in stringData)
+            foreach (KeyValuePair<string, string> stringParam in stringData)
             {
                 colNames.Add(stringParam.Key);
                 stringVals.Add("'" + doubleApostraphes(stringParam.Value) + "'");
@@ -142,7 +142,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues) 
+        public bool Delete(string tableName, Dictionary<string, string> primaryKeyValues)
         {
             string commandString = "DELETE FROM " + tableName + " WHERE " + "(";
             bool first = true;
@@ -198,7 +198,7 @@ namespace EstimatingUtilitiesLibrary
 
             string query = "select " + fieldString;
             query += "from " + tableName;
-            
+
             data = getDataFromCommand(query);
 
             return data;

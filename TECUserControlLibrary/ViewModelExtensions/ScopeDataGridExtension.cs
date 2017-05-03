@@ -251,7 +251,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void refresh(object bidOrTemplates)
         {
-            if(bidOrTemplates is TECBid)
+            if (bidOrTemplates is TECBid)
             {
                 var bid = bidOrTemplates as TECBid;
                 Bid = bid;
@@ -293,7 +293,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
-        
+
         private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
         {
             //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
@@ -334,7 +334,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             //        SelectedPanel = null;
             //    }
             //}
-            
+
         }
 
         private void populateLocationSelections()
@@ -343,12 +343,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
             var noneLocation = new TECLocation();
             noneLocation.Name = "None";
             LocationSelections.Add(noneLocation);
-            foreach(TECLocation location in Bid.Locations)
+            foreach (TECLocation location in Bid.Locations)
             {
                 LocationSelections.Add(location);
             }
         }
-        
+
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);

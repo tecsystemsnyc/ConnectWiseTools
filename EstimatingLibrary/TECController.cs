@@ -118,7 +118,7 @@ namespace EstimatingLibrary
         {
             get { return getAvailableIO(); }
         }
-        
+
         public ObservableCollection<IOType> NetworkIO
         {
             get
@@ -129,7 +129,7 @@ namespace EstimatingLibrary
         public TECController ParentController
         {
             get
-            { 
+            {
                 if (ParentConnection == null)
                 {
                     return null;
@@ -162,7 +162,7 @@ namespace EstimatingLibrary
                 ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
                 foreach (TECConnection connection in ChildrenConnections)
                 {
-                    if(connection is TECNetworkConnection)
+                    if (connection is TECNetworkConnection)
                     {
                         networkConnections.Add(connection as TECNetworkConnection);
                     }
@@ -201,7 +201,7 @@ namespace EstimatingLibrary
         }
 
         #endregion
-        
+
         #region Constructors
         public TECController(Guid guid) : base(guid)
         {
@@ -211,7 +211,7 @@ namespace EstimatingLibrary
             ChildrenConnections.CollectionChanged += collectionChanged;
             IO.CollectionChanged += IO_CollectionChanged;
         }
-        
+
         public TECController() : this(Guid.NewGuid()) { }
         public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
@@ -242,20 +242,20 @@ namespace EstimatingLibrary
             _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
-        
-        #endregion 
+
+        #endregion
 
         #region Event Handlers
         private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(Object item in e.NewItems)
+                foreach (Object item in e.NewItems)
                 {
-                    if(item is TECIO)
+                    if (item is TECIO)
                     {
                         NotifyPropertyChanged("Add", this, item);
-                    } 
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -342,7 +342,7 @@ namespace EstimatingLibrary
             TECNetworkConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
             {
-                if(connection is TECNetworkConnection)
+                if (connection is TECNetworkConnection)
                 {
                     var netConnect = connection as TECNetworkConnection;
                     if (netConnect.ChildrenControllers.Contains(controller))
@@ -356,7 +356,7 @@ namespace EstimatingLibrary
                         connectionToRemove = netConnect;
                     }
                 }
-                
+
             }
             if (connectionToRemove != null)
             {
@@ -372,7 +372,7 @@ namespace EstimatingLibrary
             TECSubScopeConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
             {
-                if(connection is TECSubScopeConnection)
+                if (connection is TECSubScopeConnection)
                 {
                     var subConnect = connection as TECSubScopeConnection;
                     if (subConnect.SubScope == subScope)
@@ -425,7 +425,7 @@ namespace EstimatingLibrary
             var availableIO = new ObservableCollection<IOType>();
             foreach (TECIO type in this.IO)
             {
-                for(var x = 0; x < type.Quantity; x++)
+                for (var x = 0; x < type.Quantity; x++)
                 {
                     availableIO.Add(type.Type);
                 }
@@ -433,7 +433,7 @@ namespace EstimatingLibrary
 
             foreach (TECSubScopeConnection connected in ChildrenConnections)
             {
-                foreach(TECDevice device in connected.SubScope.Devices)
+                foreach (TECDevice device in connected.SubScope.Devices)
                 {
                     availableIO.Remove(device.IOType);
                 }
@@ -446,7 +446,7 @@ namespace EstimatingLibrary
             foreach (TECIO io in this.IO)
             {
                 var type = io.Type;
-                if(type != IOType.AI && type != IOType.AO && type != IOType.DI && type != IOType.DO)
+                if (type != IOType.AI && type != IOType.AO && type != IOType.DI && type != IOType.DO)
                 {
                     for (var x = 0; x < io.Quantity; x++)
                     {
@@ -461,9 +461,9 @@ namespace EstimatingLibrary
         {
             int outNum = 0;
 
-            foreach(TECIO type in IO)
+            foreach (TECIO type in IO)
             {
-                if(type.Type == ioType)
+                if (type.Type == ioType)
                 {
                     outNum = type.Quantity;
                 }
@@ -475,7 +475,7 @@ namespace EstimatingLibrary
         {
             var outList = new List<IOType>();
 
-            foreach(TECIO io in this.IO)
+            foreach (TECIO io in this.IO)
             {
                 if (!outList.Contains(io.Type))
                 {
@@ -508,7 +508,7 @@ namespace EstimatingLibrary
         {
             double cost = 0;
             var terminations = 0;
-            
+
             foreach (TECConnection connection in ChildrenConnections)
             {
                 var length = connection.Length;
@@ -574,7 +574,7 @@ namespace EstimatingLibrary
         {
             double laborHours = 0;
             var terminations = 0;
-            
+
             foreach (TECConnection connection in ChildrenConnections)
             {
                 var length = connection.Length;
@@ -614,7 +614,7 @@ namespace EstimatingLibrary
                     throw new NotImplementedException();
                 }
             }
-                
+
             //Labor hours should be a stored, user-editable value
             laborHours += terminations * .1;
             return laborHours;

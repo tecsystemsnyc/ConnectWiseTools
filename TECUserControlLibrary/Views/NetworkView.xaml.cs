@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     /// 
 
-    
+
     public partial class NetworkView : UserControl
     {
         /// <summary>

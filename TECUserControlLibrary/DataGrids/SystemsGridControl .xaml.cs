@@ -78,7 +78,7 @@ namespace TECUserControlLibrary.DataGrids
 
         public SystemsGridControl()
         {
-                InitializeComponent();
+            InitializeComponent();
         }
     }
 }

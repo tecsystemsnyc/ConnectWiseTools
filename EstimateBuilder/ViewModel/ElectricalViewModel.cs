@@ -97,14 +97,14 @@ namespace EstimateBuilder.ViewModel
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
-                    if(item is TECSystem)
+                    if (item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged += collectionChanged;
-                        foreach(TECEquipment equip in (item as TECSystem).Equipment)
+                        foreach (TECEquipment equip in (item as TECSystem).Equipment)
                         {
                             equip.SubScope.CollectionChanged += collectionChanged;
                         }
@@ -115,7 +115,7 @@ namespace EstimateBuilder.ViewModel
                     }
                 }
             }
-            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
@@ -131,7 +131,7 @@ namespace EstimateBuilder.ViewModel
             }
             updateCollections();
         }
-        
+
         private void updateCollections()
         {
             updateSubScopeConnections();

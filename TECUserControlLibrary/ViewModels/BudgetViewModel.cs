@@ -83,11 +83,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return (ManualAdjustmentAmount/BudgetSubTotal)*100;
+                return (ManualAdjustmentAmount / BudgetSubTotal) * 100;
             }
             set
             {
-                _manualAdjustmentAmount = Math.Ceiling(BudgetSubTotal*(value/100));
+                _manualAdjustmentAmount = Math.Ceiling(BudgetSubTotal * (value / 100));
                 raiseBudgetChanges();
             }
         }
@@ -117,10 +117,10 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     return ManualAdjustmentAmount;
                 }
-                
+
             }
         }
-        
+
         public ICommand ExportBudgetCommand { get; private set; }
 
         #endregion 
@@ -131,7 +131,7 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
             setupBid(Bid);
             ExportBudgetCommand = new RelayCommand(ExportBudgetExecute);
-            
+
             ManualAdjustmentPercentage = 0;
         }
 
@@ -197,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     CSVWriter writer = new CSVWriter(path);
-                    writer.BudgetToCSV(Bid.Systems, ManualAdjustmentPercentage/100);
+                    writer.BudgetToCSV(Bid.Systems, ManualAdjustmentPercentage / 100);
                 }
                 else
                 {

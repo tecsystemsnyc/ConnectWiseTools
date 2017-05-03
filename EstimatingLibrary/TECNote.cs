@@ -39,7 +39,7 @@ namespace EstimatingLibrary
             _text = "";
             _guid = guid;
         }
-        public TECNote() : this( Guid.NewGuid()) { }
+        public TECNote() : this(Guid.NewGuid()) { }
 
         public TECNote(TECNote sourceNote) : this()
         {

@@ -44,7 +44,7 @@ namespace TECUserControlLibrary.DataGrids
 
         public TagsGridControl()
         {
-                InitializeComponent();
+            InitializeComponent();
         }
     }
 }

@@ -118,7 +118,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-        
+
         [TestMethod]
         public void Undo_Bid_ScopeTree()
         {
@@ -611,7 +611,7 @@ namespace Tests
         #endregion
 
         #region Location Properties
-        
+
         [TestMethod]
         public void Undo_Location_Name()
         {
@@ -1310,7 +1310,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Systems.Add(edit);
             var expected = new ObservableCollection<TECSystem>();
-            foreach(TECSystem item in Bid.Systems)
+            foreach (TECSystem item in Bid.Systems)
             {
                 expected.Add(item);
             }
@@ -1563,7 +1563,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-        
+
         [TestMethod]
         public void Redo_Location_Name()
         {
@@ -1582,7 +1582,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-        
+
         [TestMethod]
         public void Redo_Labor_PM()
         {

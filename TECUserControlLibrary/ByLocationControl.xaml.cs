@@ -41,7 +41,7 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty LocationSourceProperty =
             DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLocation>),
               typeof(ByLocationControl), new PropertyMetadata(default(ObservableCollection<TECLocation>)));
-        
+
         /// <summary>
         /// Gets or sets the SystemSource which is displayed
         /// </summary>

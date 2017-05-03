@@ -23,7 +23,8 @@ namespace EstimatingLibrary
         protected ObservableCollection<TECTag> _tags;
         protected ObservableCollection<TECAssociatedCost> _associatedCosts;
 
-        public string Name {
+        public string Name
+        {
             get { return _name; }
             set
             {
@@ -33,7 +34,8 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Name", temp, this);
             }
         }
-        public string Description {
+        public string Description
+        {
             get { return _description; }
             set
             {
@@ -41,7 +43,7 @@ namespace EstimatingLibrary
                 _description = value;
                 // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("Description", temp, this);
-            
+
             }
         }
         public Guid Guid
@@ -57,7 +59,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _quantity = value;
                 NotifyPropertyChanged("Quantity", temp, this);
-                
+
             }
         }
         public ObservableCollection<TECTag> Tags
@@ -126,7 +128,7 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += collectionChanged;
             AssociatedCosts.CollectionChanged += collectionChanged;
         }
-        
+
         abstract public Object DragDropCopy();
         #endregion //Constructors
 

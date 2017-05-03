@@ -135,7 +135,7 @@ namespace TECUserControlLibrary
 
         public static void FileDragOver(IDropInfo dropInfo)
         {
-            if(dropInfo.Data is DataObject)
+            if (dropInfo.Data is DataObject)
             {
                 var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
                 if (dragFileList.Count() == 1)
@@ -156,11 +156,13 @@ namespace TECUserControlLibrary
                 if (Path.GetExtension(dragFileList.First()) == ".bdb")
                 {
                     return dragFileList.First();
-                }else
+                }
+                else
                 {
                     return null;
                 }
-            }else
+            }
+            else
             {
                 return null;
             }

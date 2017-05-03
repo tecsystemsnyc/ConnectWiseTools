@@ -31,7 +31,7 @@ namespace EstimatingLibrary
             _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
-        
+
         public TECScopeBranch() : this(Guid.NewGuid()) { }
 
         //Copy Constructor

@@ -195,7 +195,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
-        public ICommand AddAssociatedCostCommand { get; private set; } 
+        public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
 
@@ -214,14 +214,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             setupCommands();
             setupInterfaceDefaults();
         }
-        
+
         #region Methods
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
             setupInterfaceDefaults();
         }
-        
+
         private void setupCommands()
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
@@ -266,7 +266,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool canAddAssociatedCost()
         {
-            if(AssociatedCostName == "")
+            if (AssociatedCostName == "")
             {
                 return false;
             }
@@ -287,7 +287,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool canAddPanelTypeExecute()
         {
-            if(PanelTypeName != "")
+            if (PanelTypeName != "")
             {
                 return true;
             }

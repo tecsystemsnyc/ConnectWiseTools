@@ -45,9 +45,10 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Points", temp, this);
             }
         }
-        
+
         private TECSubScopeConnection _connection { get; set; }
-        public TECSubScopeConnection Connection {
+        public TECSubScopeConnection Connection
+        {
             get { return _connection; }
             set
             {
@@ -114,20 +115,20 @@ namespace EstimatingLibrary
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
-        
+
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
-            if(guidDictionary != null)
+            if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-            
-            foreach(TECDevice device in sourceSubScope.Devices)
+
+            foreach (TECDevice device in sourceSubScope.Devices)
             { Devices.Add(new TECDevice(device)); }
-            foreach(TECPoint point in sourceSubScope.Points)
+            foreach (TECPoint point in sourceSubScope.Points)
             { Points.Add(new TECPoint(point)); }
-            
+
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
@@ -144,7 +145,7 @@ namespace EstimatingLibrary
         public int BI { get { return _bi; } }
         public int BO { get { return _bo; } }
         public int Serial { get { return _serial; } }
-        
+
         #endregion //Num Point Types
 
         #region Event Handlers
@@ -155,9 +156,9 @@ namespace EstimatingLibrary
             _bi = 0;
             _bo = 0;
             _serial = 0;
-            foreach(TECPoint point in Points)
+            foreach (TECPoint point in Points)
             {
-                if      (point.Type == PointTypes.AI) { _ai++; }
+                if (point.Type == PointTypes.AI) { _ai++; }
                 else if (point.Type == PointTypes.AO) { _ao++; }
                 else if (point.Type == PointTypes.BI) { _bi++; }
                 else if (point.Type == PointTypes.BO) { _bo++; }
@@ -189,7 +190,7 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("Edit", this, sender);
             }
-        } 
+        }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -214,7 +215,7 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("Edit", this, sender);
             }
-        } 
+        }
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -248,7 +249,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
             var outTypes = new ObservableCollection<TECConnectionType>();
-            foreach(TECDevice device in Devices)
+            foreach (TECDevice device in Devices)
             {
                 outTypes.Add(device.ConnectionType);
             }
@@ -259,15 +260,15 @@ namespace EstimatingLibrary
         {
             double matCost = 0;
 
-            foreach(TECDevice device in this.Devices)
+            foreach (TECDevice device in this.Devices)
             {
                 matCost += device.Cost * device.Manufacturer.Multiplier;
-                foreach(TECAssociatedCost cost in device.AssociatedCosts)
+                foreach (TECAssociatedCost cost in device.AssociatedCosts)
                 {
                     matCost += cost.Cost;
                 }
             }
-            foreach(TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECAssociatedCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
             }
@@ -292,7 +293,7 @@ namespace EstimatingLibrary
 
         private void subscribeToDevices()
         {
-            foreach(TECDevice item in this._devices)
+            foreach (TECDevice item in this._devices)
             {
                 item.PropertyChanged += DeviceChanged;
             }
@@ -319,18 +320,18 @@ namespace EstimatingLibrary
         {
             var allPointTypes = new ObservableCollection<PointTypes>();
 
-            foreach(TECPoint point in Points)
+            foreach (TECPoint point in Points)
             {
                 allPointTypes.Add(point.Type);
             }
-            
+
             return allPointTypes;
         }
         private ObservableCollection<IOType> getAllIOTypes()
         {
             var allIOTypes = new ObservableCollection<IOType>();
 
-            foreach(TECDevice device in Devices)
+            foreach (TECDevice device in Devices)
             {
                 allIOTypes.Add(device.IOType);
             }
@@ -340,7 +341,7 @@ namespace EstimatingLibrary
         private int getPointNumber()
         {
             var totalPoints = 0;
-            foreach(TECPoint point in Points)
+            foreach (TECPoint point in Points)
             {
                 totalPoints += point.PointNumber;
             }

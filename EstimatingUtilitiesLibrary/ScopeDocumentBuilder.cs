@@ -26,7 +26,7 @@ namespace EstimatingUtilitiesLibrary
     {
         private const string tabSize = "0.5cm";
         private const string beforeParagraphSize = "0.5cm";
-        private static List<string> itemLetters = new List<string>(new string[] 
+        private static List<string> itemLetters = new List<string>(new string[]
         {
             "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP"
         });
@@ -50,7 +50,7 @@ namespace EstimatingUtilitiesLibrary
             //{ createPricing(scopeDocument, bid.TotalPrice); }
             //else
             //{ createPricing(scopeDocument, bid.BudgetPrice); }
-            
+
             createNotesAndExclusions(scopeDocument, bid.Notes.ToList(), bid.Exclusions.ToList());
             createSignature(scopeDocument, bid.Salesperson);
             createFooter(scopeDocument);
@@ -63,7 +63,8 @@ namespace EstimatingUtilitiesLibrary
 
             var fileName = pathstring[pathstringlength - 1];
             var onlyPath = "";
-            foreach (string pathChunk in pathstring){
+            foreach (string pathChunk in pathstring)
+            {
                 if (pathChunk != fileName)
                 {
                     onlyPath += pathChunk;
@@ -211,7 +212,7 @@ namespace EstimatingUtilitiesLibrary
                 paragraph.AddSpace(2);
             }
             paragraph.AddFormattedText(scopeString);
-            
+
             foreach (TECScopeBranch childBranch in branch.Branches)
             {
                 paragraph = document.LastSection.AddParagraph();
@@ -270,12 +271,12 @@ namespace EstimatingUtilitiesLibrary
                             paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
                             paragraph.AddFormattedText(equipmentString);
 
-                            foreach(TECScopeBranch branch in equipProp.Notes)
+                            foreach (TECScopeBranch branch in equipProp.Notes)
                             {
                                 paragraph = document.LastSection.AddParagraph();
                                 addScopeBranch(branch, document, paragraph, 3);
                             }
-                            
+
                             int ssIndex = 0;
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
@@ -291,7 +292,7 @@ namespace EstimatingUtilitiesLibrary
                                     paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
                                     paragraph.AddFormattedText(subScopeString);
 
-                                    foreach(TECScopeBranch branch in ssProp.Notes)
+                                    foreach (TECScopeBranch branch in ssProp.Notes)
                                     {
                                         paragraph = document.LastSection.AddParagraph();
                                         addScopeBranch(branch, document, paragraph, 4);
@@ -301,12 +302,12 @@ namespace EstimatingUtilitiesLibrary
                             }
                             equipIndex++;
                         }
-                        
+
                     }
                     paragraph.AddLineBreak();
                     sysNum++;
                 }
-                
+
             }
         }
         private static void createPricing(Document document, double price)
@@ -314,7 +315,7 @@ namespace EstimatingUtilitiesLibrary
             Paragraph paragraph = document.LastSection.AddParagraph("Pricing:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             Table table = new Table();
             table.Borders.Width = 0;
 
@@ -339,16 +340,16 @@ namespace EstimatingUtilitiesLibrary
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             foreach (TECNote note in notes)
             {
                 paragraph = document.LastSection.AddParagraph();
                 paragraph.AddFormattedText("•   " + note.Text);
             }
-            paragraph=document.LastSection.AddParagraph("Exclusions:", "Heading2");
+            paragraph = document.LastSection.AddParagraph("Exclusions:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             foreach (TECExclusion exclusion in exclusions)
             {
                 paragraph = document.LastSection.AddParagraph();
@@ -430,7 +431,7 @@ namespace EstimatingUtilitiesLibrary
             style = document.Styles.AddStyle("TOC", "Normal");
             style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right, TabLeader.Dots);
             style.ParagraphFormat.Font.Color = Colors.Blue;
-            
+
             //List Style
             style = document.AddStyle("BulletList", "Normal");
             style.ParagraphFormat.LeftIndent = "0.5cm";
@@ -448,6 +449,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return fileLines;
         }
-        
+
     }
 }

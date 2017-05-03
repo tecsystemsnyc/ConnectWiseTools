@@ -28,17 +28,17 @@ namespace TECUserControlLibrary
             get { return (Object)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
-        
+
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(AddAssociatedCostsControl));
-        
+
         public ICommand AddAssociatedCostCommand
         {
             get { return (ICommand)GetValue(AddAssociatedCostCommandProperty); }
             set { SetValue(AddAssociatedCostCommandProperty, value); }
         }
-        
+
         public static readonly DependencyProperty AddAssociatedCostCommandProperty =
             DependencyProperty.Register("AddAssociatedCostCommand", typeof(ICommand),
               typeof(AddAssociatedCostsControl));

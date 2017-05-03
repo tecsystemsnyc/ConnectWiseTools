@@ -18,19 +18,19 @@ namespace EstimatingUtilitiesLibrary
         public static void Export(TECBid bid, string path)
         {
             File.Copy(@"C:\Users\dtaylor\Dropbox (TEC Systems)\Sales\Estimating tools\REV.5.Estimate 2017.01.xlsx", path);
-            using(SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(path, true))
+            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(path, true))
             {
                 WorksheetPart worksheetPart = GetWorksheetPartByName(spreadSheet, "Points List");
                 if (worksheetPart != null)
                 {
                     int x = 5;
-                    foreach(TECSystem system in bid.Systems)
+                    foreach (TECSystem system in bid.Systems)
                     {
                         var currentSystem = system;
-                        foreach(TECEquipment equipment in system.Equipment)
+                        foreach (TECEquipment equipment in system.Equipment)
                         {
                             var currentEquipment = equipment;
-                            foreach(TECSubScope subScope in equipment.SubScope)
+                            foreach (TECSubScope subScope in equipment.SubScope)
                             {
                                 worksheetPart.Worksheet.InsertAt(new Row(), x);
                                 var subScopeInsert = new SubScopeRow();
@@ -83,7 +83,7 @@ namespace EstimatingUtilitiesLibrary
             if (row == null)
                 return null;
 
-            return row.Elements<Cell>().Where(c => string.Compare (c.CellReference.Value, columnName + rowIndex, true) == 0).First();
+            return row.Elements<Cell>().Where(c => string.Compare(c.CellReference.Value, columnName + rowIndex, true) == 0).First();
         }
 
         // Given a worksheet and a row index, return the row.
@@ -100,7 +100,7 @@ namespace EstimatingUtilitiesLibrary
                 cell.CellValue = new CellValue(subScope.SubScope.Connection.ParentController.Name.ToString());
                 cell.DataType = new EnumValue<CellValues>(CellValues.String);
             }
-            
+
             cell = GetCell(workSheet, "B", rowIndex);
             cell.CellValue = new CellValue(subScope.System.Name.ToString());
             cell.DataType = new EnumValue<CellValues>(CellValues.String);
@@ -111,7 +111,7 @@ namespace EstimatingUtilitiesLibrary
 
             cell = GetCell(workSheet, "D", rowIndex);
             string deviceString = "";
-            foreach(TECDevice device in subScope.SubScope.Devices)
+            foreach (TECDevice device in subScope.SubScope.Devices)
             {
                 deviceString += "(";
                 deviceString += device.Name;
@@ -122,9 +122,9 @@ namespace EstimatingUtilitiesLibrary
 
             cell = GetCell(workSheet, "E", rowIndex);
             int num = 0;
-            foreach(TECPoint point in subScope.SubScope.Points)
+            foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if(point.Type == PointTypes.AI)
+                if (point.Type == PointTypes.AI)
                 {
                     num += point.Quantity;
                 }
@@ -187,10 +187,10 @@ namespace EstimatingUtilitiesLibrary
 
             var conduitString = "";
             var flexNum = 0;
-            if(subScope.SubScope.Connection.ConduitType != null)
+            if (subScope.SubScope.Connection.ConduitType != null)
             {
                 conduitString = subScope.SubScope.Connection.ConduitType.Name;
-                foreach(TECAssociatedCost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
+                foreach (TECAssociatedCost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
                 {
                     if (cost.Name.ToUpper().Contains("FLEX"))
                     {
@@ -245,14 +245,14 @@ namespace EstimatingUtilitiesLibrary
             cell.DataType = new EnumValue<CellValues>(CellValues.String);
 
             double length = 0;
-            foreach(TECConnectionType type in subScope.SubScope.Connection.ConnectionTypes)
+            foreach (TECConnectionType type in subScope.SubScope.Connection.ConnectionTypes)
             {
                 length += subScope.SubScope.Connection.Length;
             }
             cell = GetCell(workSheet, "R", rowIndex);
             cell.CellValue = new CellValue(length.ToString());
             cell.DataType = new EnumValue<CellValues>(CellValues.Number);
-            
+
         }
 
     }
