@@ -63,7 +63,7 @@ namespace TECUserControlLibrary
                     {
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Add(item);
+                            ((IList)dropInfo.TargetCollection).Add(((TECScope)item).DragDropCopy());
                         }
                     }
                     else
@@ -78,13 +78,13 @@ namespace TECUserControlLibrary
                         var x = dropInfo.InsertIndex;
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Insert(x, item);
+                            ((IList)dropInfo.TargetCollection).Insert(x, ((TECScope)item).DragDropCopy());
                             x += 1;
                         }
                     }
                     else
                     {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, ((TECScope)sourceItem).DragDropCopy());
 
                     }
                 }
@@ -114,7 +114,7 @@ namespace TECUserControlLibrary
         }
         public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers)
         {
-            var sourceItem = dropInfo.Data;
+            var sourceItem = (dropInfo.Data as TECScope).DragDropCopy();
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
