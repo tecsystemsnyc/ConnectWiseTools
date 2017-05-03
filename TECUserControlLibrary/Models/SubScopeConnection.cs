@@ -15,8 +15,22 @@ namespace TECUserControlLibrary.Models
             get { return _subScope; }
             set
             {
+                SubScope.PropertyChanged -= SubScope_PropertyChanged;
                 _subScope = value;
                 RaisePropertyChanged("Subscope");
+                SubScope.PropertyChanged += SubScope_PropertyChanged;
+            }
+        }
+
+        private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Connection")
+            {
+                if(SubScope.Connection != null)
+                {
+                    SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
+
+                }
             }
         }
 
@@ -75,15 +89,23 @@ namespace TECUserControlLibrary.Models
 
             }
         }
-
-
+        
         public SubScopeConnection(TECSubScope subscope)
         {
             _subScope = subscope;
             _controller = null;
             if(subscope.Connection != null)
             {
+                subscope.Connection.PropertyChanged += Connection_PropertyChanged;
                 _controller = SubScope.Connection.ParentController;
+            }
+        }
+
+        private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "ConduitType")
+            {
+                RaisePropertyChanged("ConduitType");
             }
         }
 

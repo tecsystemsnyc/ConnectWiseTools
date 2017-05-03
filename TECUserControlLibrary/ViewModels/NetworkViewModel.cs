@@ -436,16 +436,22 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            object sourceItem = dropInfo.Data;
-            object targetCollection = dropInfo.TargetCollection;
+            var sourceItem = dropInfo.Data;
+            Type sourceType;
+            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
+            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            else
+            { sourceType = sourceItem.GetType(); }
 
-            Type sourceType = sourceItem.GetType();
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (((sourceItem is TECController) || (sourceItem is BMSController)) && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController))))
+            var targetCollection = dropInfo.TargetCollection;
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Move;
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+                if (((sourceItem is TECController) || (sourceItem is BMSController)) && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController))))
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Move;
+                }
             }
         }
 
