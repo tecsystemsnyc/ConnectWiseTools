@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -220,7 +221,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach(T otherScope in scope2)
                 {
-                    if((scope as TECScope).Guid == (scope as TECScope).Guid)
+                    if((scope as GuidObject).Guid == (scope as GuidObject).Guid)
                     {
                         outScope.Add(otherScope);
                         break;
