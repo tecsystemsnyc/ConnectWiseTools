@@ -194,6 +194,7 @@ namespace TECUserControlLibrary.ViewModels
             if (Templates != null && Bid != null)
             {
                 UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
+                ModelLinkingHelper.LinkBid(Bid);
                 if (isNew)
                 {
                     Bid.Labor.UpdateConstants(Templates.Labor);

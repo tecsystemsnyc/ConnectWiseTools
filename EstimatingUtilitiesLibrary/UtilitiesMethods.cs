@@ -202,7 +202,6 @@ namespace EstimatingUtilitiesLibrary
 
         public static void UnionizeCatalogs(TECCatalogs bidCatalog, TECCatalogs templateCatalog)
         {
-            TECCatalogs outCatalogs = new TECCatalogs();
             unionizeScope(bidCatalog.Devices, templateCatalog.Devices);
             unionizeScope(bidCatalog.Manufacturers, templateCatalog.Manufacturers);
             unionizeScope(bidCatalog.ConnectionTypes, templateCatalog.ConnectionTypes);
