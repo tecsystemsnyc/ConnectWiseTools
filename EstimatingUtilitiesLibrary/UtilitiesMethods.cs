@@ -200,42 +200,41 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
 
-        public static TECCatalogs UnionizeCatalogs(TECCatalogs catalog1, TECCatalogs catalog2)
+        public static void UnionizeCatalogs(TECCatalogs bidCatalog, TECCatalogs templateCatalog)
         {
             TECCatalogs outCatalogs = new TECCatalogs();
-            outCatalogs.Devices = unionizeScope(catalog1.Devices, catalog2.Devices);
-            outCatalogs.Manufacturers = unionizeScope(catalog1.Manufacturers, catalog2.Manufacturers);
-            outCatalogs.ConnectionTypes = unionizeScope(catalog1.ConnectionTypes, catalog2.ConnectionTypes);
-            outCatalogs.ConduitTypes = unionizeScope(catalog1.ConduitTypes, catalog2.ConduitTypes);
-            outCatalogs.PanelTypes = unionizeScope(catalog1.PanelTypes, catalog2.PanelTypes);
-            outCatalogs.IOModules = unionizeScope(catalog1.IOModules, catalog2.IOModules);
-            outCatalogs.Tags = unionizeScope(catalog1.Tags, catalog2.Tags);
-            outCatalogs.AssociatedCosts = unionizeScope(catalog1.AssociatedCosts, catalog2.AssociatedCosts);
-            return outCatalogs;
+            unionizeScope(bidCatalog.Devices, templateCatalog.Devices);
+            unionizeScope(bidCatalog.Manufacturers, templateCatalog.Manufacturers);
+            unionizeScope(bidCatalog.ConnectionTypes, templateCatalog.ConnectionTypes);
+            unionizeScope(bidCatalog.ConduitTypes, templateCatalog.ConduitTypes);
+            unionizeScope(bidCatalog.PanelTypes, templateCatalog.PanelTypes);
+            unionizeScope(bidCatalog.IOModules, templateCatalog.IOModules);
+            unionizeScope(bidCatalog.Tags, templateCatalog.Tags);
+            unionizeScope(bidCatalog.AssociatedCosts, templateCatalog.AssociatedCosts);
 
         }
-        private static ObservableCollection<T> unionizeScope<T>(ObservableCollection<T> scope1, ObservableCollection<T> scope2)
+        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
         {
-            ObservableCollection<T> outScope = new ObservableCollection<T>();
-            foreach(T scope in scope1)
+            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
+            
+            foreach(T templateItem in templateItems)
             {
-                foreach(T otherScope in scope2)
+                foreach (T item in bidItems)
                 {
-                    if((scope as GuidObject).Guid == (scope as GuidObject).Guid)
+                    if ((item as GuidObject).Guid == (templateItem as GuidObject).Guid)
                     {
-                        outScope.Add(otherScope);
-                        break;
+                        itemsToRemove.Add(item);
                     }
                 }
             }
-            foreach(T scope in scope2)
+            foreach(T item in itemsToRemove)
             {
-                if (!outScope.Contains(scope))
-                {
-                    outScope.Add(scope);
-                }
+                bidItems.Remove(item);
             }
-            return outScope;
+            foreach(T item in templateItems)
+            {
+                bidItems.Add(item);
+            }
         }
 
         public static bool IsLowerVersion(string currentVersion, string sampleVersion)

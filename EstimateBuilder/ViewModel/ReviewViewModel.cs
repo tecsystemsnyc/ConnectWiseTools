@@ -19,9 +19,9 @@ namespace EstimateBuilder.ViewModel
             get { return _bid; }
             set
             {
-                Bid.PropertyChanged -= Bid_PropertyChanged;
+                Bid.Estimate.PropertyChanged -= Bid_PropertyChanged;
                 _bid = value;
-                Bid.PropertyChanged += Bid_PropertyChanged;
+                Bid.Estimate.PropertyChanged += Bid_PropertyChanged;
                 RaisePropertyChanged("Bid");
             }
         }
