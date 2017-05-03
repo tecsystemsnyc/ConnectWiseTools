@@ -54,6 +54,29 @@ namespace TECUserControlLibrary.Models
             }
         }
 
+        public TECConduitType ConduitType
+        {
+            get
+            {
+                if (SubScope.Connection == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return SubScope.Connection.ConduitType;
+                }
+                
+            }
+            set
+            {
+                handleConduitSelection(value);
+                RaisePropertyChanged("ConduitType");
+
+            }
+        }
+
+
         public SubScopeConnection(TECSubScope subscope)
         {
             _subScope = subscope;
@@ -76,6 +99,14 @@ namespace TECUserControlLibrary.Models
                 {
                     Controller.RemoveSubScope(SubScope);
                 }
+            }
+        }
+
+        private void handleConduitSelection(TECConduitType conduitType)
+        {
+            if (SubScope.Connection != null)
+            {
+                SubScope.Connection.ConduitType = conduitType;
             }
         }
 

@@ -27,7 +27,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             private set
             {
                 _bid = value;
+                registerBidChanges();
                 RaisePropertyChanged("Bid");
+                unregisterBidChanges();
             }
         }
         
@@ -119,7 +121,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Constructor
         public ControllersPanelsViewModel(TECBid bid)
         {
-            _bid = bid;
+            Bid = bid;
             setup();
         }
         #endregion
@@ -133,7 +135,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void setup()
         {
-            registerChanges();
             populateControllerCollection();
             populatePanelSelections();
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
@@ -168,10 +169,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 PanelSelections.Add(panel);
             }
         }
-        private void registerChanges()
+        private void registerBidChanges()
         {
             Bid.Controllers.CollectionChanged += collectionChanged;
             Bid.Panels.CollectionChanged += collectionChanged;
+        }
+        private void unregisterBidChanges()
+        {
+            Bid.Controllers.CollectionChanged -= collectionChanged;
+            Bid.Panels.CollectionChanged -= collectionChanged;
         }
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

@@ -34,8 +34,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             get { return _bid; }
             set
             {
+                Bid.Locations.CollectionChanged -= Locations_CollectionChanged;
                 _bid = value;
                 RaisePropertyChanged("Bid");
+                Bid.Locations.CollectionChanged += Locations_CollectionChanged;
                 populateLocationSelections();
             }
         }
@@ -337,7 +339,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void populateLocationSelections()
         {
-            Bid.Locations.CollectionChanged += Locations_CollectionChanged;
             LocationSelections = new ObservableCollection<TECLocation>();
             var noneLocation = new TECLocation();
             noneLocation.Name = "None";
