@@ -109,8 +109,7 @@ namespace EstimatingLibrary
 
         public override Object DragDropCopy()
         {
-            TECDevice outDevice = new TECDevice(this);
-            return outDevice;
+            return this;
         }
 
         private double getMaterialCost()

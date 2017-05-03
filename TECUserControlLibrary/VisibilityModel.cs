@@ -77,6 +77,17 @@ namespace TECUserControlLibrary
             }
         }
 
+        private Visibility _systemPointNumber;
+        public Visibility SystemPointNumber
+        {
+            get { return _systemPointNumber; }
+            set
+            {
+                _systemPointNumber = value;
+                RaisePropertyChanged("SystemPointNumber");
+            }
+        }
+
         private Visibility _systemModifierPrice;
         public Visibility SystemModifierPrice
         {
