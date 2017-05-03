@@ -164,9 +164,7 @@ namespace TECUserControlLibrary.ViewModels
                 PossibleConduitTypes.Add(type);
             }
         }
-
         
-
         private void sortAndAddController(TECController controller)
         {
             if (controller.IsServer)
@@ -189,9 +187,7 @@ namespace TECUserControlLibrary.ViewModels
                 controller.Type = ControllerType.IsNetworked;
             }
         }
-
         
-
         private void removeController(TECController controller)
         {
             controller.ParentConnection = null;

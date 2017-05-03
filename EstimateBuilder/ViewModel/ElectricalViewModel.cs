@@ -23,9 +23,15 @@ namespace EstimateBuilder.ViewModel
             get { return _bid; }
             set
             {
+                if(Bid != null)
+                {
+                    Bid.Controllers.CollectionChanged -= collectionChanged;
+                }
                 _bid = value;
                 registerSubScope();
                 RaisePropertyChanged("Bid");
+                Bid.Controllers.CollectionChanged += collectionChanged;
+
             }
         }
 
@@ -79,7 +85,7 @@ namespace EstimateBuilder.ViewModel
             {
                 ConduitTypeSelections.Add(type);
             }
-            Bid.Controllers.CollectionChanged += collectionChanged;
+            populateControllerSelections();
             updateCollections();
         }
         private void registerSubScope()
@@ -97,6 +103,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            bool updateScope = false;
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach(object item in e.NewItems)
@@ -108,10 +115,20 @@ namespace EstimateBuilder.ViewModel
                         {
                             equip.SubScope.CollectionChanged += collectionChanged;
                         }
+                        updateScope = true;
                     }
                     else if (item is TECEquipment)
                     {
                         (item as TECEquipment).SubScope.CollectionChanged += collectionChanged;
+                        updateScope = true;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        updateScope = true;
+                    }
+                    else if (item is TECController)
+                    {
+                        ControllerSelections.Add(item as TECController);
                     }
                 }
             }
@@ -122,23 +139,36 @@ namespace EstimateBuilder.ViewModel
                     if (item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged -= collectionChanged;
+                        updateScope = true;
                     }
                     else if (item is TECEquipment)
                     {
                         (item as TECEquipment).SubScope.CollectionChanged -= collectionChanged;
+                        updateScope = true;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        updateScope = true;
+                    }
+                    else if (item is TECController)
+                    {
+                        ControllerSelections.Remove(item as TECController);
                     }
                 }
             }
-            updateCollections();
+            if (updateScope)
+            {
+                updateCollections();
+            }
+            
         }
         
         private void updateCollections()
         {
             updateSubScopeConnections();
-            updateControllerSelections();
         }
 
-        private void updateControllerSelections()
+        private void populateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
             ControllerSelections.Add(NoneContainer.NoneController);
