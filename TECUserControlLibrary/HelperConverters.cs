@@ -705,7 +705,11 @@ namespace TECUserControlLibrary.HelperConverters
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             object outObject;
-            if((value as TECScope).Name == "None")
+            if(value == null)
+            {
+                outObject = DependencyProperty.UnsetValue;
+            }
+            else if((value as TECScope).Name == "None")
             {
                 outObject = null;
             }
