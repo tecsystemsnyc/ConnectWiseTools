@@ -53,6 +53,12 @@ namespace TECUserControlLibrary.Models
             }
         }
 
+        public void UpdatePanel(TECPanel panel)
+        {
+            _panel = panel;
+            RaisePropertyChanged("Panel");
+        }
+
         public override object Copy()
         {
             throw new NotImplementedException();
