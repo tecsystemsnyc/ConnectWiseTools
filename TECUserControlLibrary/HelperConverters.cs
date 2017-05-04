@@ -707,7 +707,7 @@ namespace TECUserControlLibrary.HelperConverters
             object outObject;
             if(value == null)
             {
-                outObject = DependencyProperty.UnsetValue;
+                outObject = System.Windows.Data.Binding.DoNothing;
             }
             else if((value as TECScope).Name == "None")
             {

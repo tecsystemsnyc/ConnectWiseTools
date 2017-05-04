@@ -84,6 +84,7 @@ namespace TECUserControlLibrary.Models
                 _controller = SubScope.Connection.ParentController;
             }
         }
+        
 
         private void handleControllerSelection(TECController controller)
         {

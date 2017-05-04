@@ -455,6 +455,10 @@ namespace EstimatingLibrary
                             removeProposalScope(sys);
                             handleSystemSubScopeRemoval(item as TECSystem);
                         }
+                        else if (item is TECController)
+                        {
+                            //(item as TECController).remove
+                        }
                     }
                 }
             }
