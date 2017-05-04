@@ -190,13 +190,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void Panel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            //if (e.PropertyName == "AddRelationship")
-            //{
-            //    foreach(TECController controller in (sender as TECPanel).Controllers)
-            //    {
-            //        controllersIndex[controller].Panel = sender as TECPanel;
-            //    }
-            //}
+            if (e.PropertyName == "AddRelationship")
+            {
+                foreach (TECController controller in (sender as TECPanel).Controllers)
+                {
+                    controllersIndex[controller].UpdatePanel(sender as TECPanel);
+                }
+            }
         }
         
         private void registerBidChanges()
@@ -286,12 +286,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private void addPanel(TECPanel panel)
         {
             PanelSelections.Add(panel);
-            //foreach(TECController controller in panel.Controllers)
-            //{
-            //    ControllerCollection.Remove(controllersIndex[controller]);
-            //    controllersIndex[controller] = new ControllerInPanel(controller, panel);
-            //    ControllerCollection.Add(controllersIndex[controller]);
-            //}
+            foreach (TECController controller in panel.Controllers)
+            {
+                controllersIndex[controller].UpdatePanel(panel);
+            }
         }
         private void removeController(TECController controller)
         {
