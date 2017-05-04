@@ -133,7 +133,16 @@ namespace TECUserControlLibrary.ViewModels
             if (oldBid != null)
             {
                 oldBid.Controllers.CollectionChanged -= Controllers_CollectionChanged;
+                foreach(TECController controller in oldBid.Controllers)
+                {
+                    controller.PropertyChanged -= Controller_PropertyChanged;
+                }
                 oldBid.Catalogs.ConduitTypes.CollectionChanged -= ConduitTypes_CollectionChanged;
+            }
+            
+            foreach (TECController controller in Bid.Controllers)
+            {
+                controller.PropertyChanged += Controller_PropertyChanged;
             }
 
             //Reset Collections
@@ -179,7 +188,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (controller.ParentConnection == null)
             {
-                StandaloneControllers.Add(controller);
+                if (!StandaloneControllers.Contains(controller))
+                {
+                    StandaloneControllers.Add(controller);
+                }
                 controller.Type = ControllerType.IsStandalone;
             }
             else
@@ -265,6 +277,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is TECController)
                     {
                         sortAndAddController(item as TECController);
+                        (item as TECController).PropertyChanged += Controller_PropertyChanged;
                     }
                 }
             }
@@ -275,6 +288,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is TECController)
                     {
                         removeController(item as TECController);
+                        (item as TECController).PropertyChanged -= Controller_PropertyChanged;
                     }
                 }
             }
@@ -393,7 +407,7 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "ParentController")
             {
                 TECController controller = (sender as TECController);
-                if (controller.ParentConnection != null)
+                if (controller.ParentController != null)
                 {
                     if (controller.ParentConnection.PossibleIO.Count > 0)
                     {
@@ -422,6 +436,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     bmsController.RaiseIsConnected();
                     bmsController.PossibleParents = NetworkControllers;
+                }
+            }
+        }
+
+        private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                TECController controller = (sender as TECController);
+                if (!controller.IsBMS && (controller.ParentController == null))
+                {
+                    sortAndAddController(controller);
                 }
             }
         }

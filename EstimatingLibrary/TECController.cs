@@ -405,9 +405,14 @@ namespace EstimatingLibrary
             {
                 if (connectToRemove is TECNetworkConnection)
                 {
+                    ObservableCollection<TECController> controllersToRemove = new ObservableCollection<TECController>();
                     foreach(TECController controller in (connectToRemove as TECNetworkConnection).ChildrenControllers)
                     {
                         controller.ParentConnection = null;
+                        controllersToRemove.Add(controller);
+                    }
+                    foreach(TECController controller in controllersToRemove)
+                    {
                         (connectToRemove as TECNetworkConnection).ChildrenControllers.Remove(controller);
                     }
                 }
