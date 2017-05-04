@@ -238,7 +238,16 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECEstimator Estimate { get; set; }
+        private TECEstimator _estimate;
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -261,6 +270,7 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
+            _estimate = new TECEstimator(this);
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -277,7 +287,6 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += CollectionChanged;
 
             registerSystems();
-            Estimate = new TECEstimator(this);
         }
 
         public TECBid() : this(Guid.NewGuid())

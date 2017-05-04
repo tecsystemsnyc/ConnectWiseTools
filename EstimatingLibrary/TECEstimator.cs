@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -241,6 +242,19 @@ namespace EstimatingLibrary
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     editCost(newValue, oldValue);
                     editPoints(newValue, oldValue);
+
+                    if(bid.GetType().GetProperty(e.PropertyName) != null)
+                    {
+                        var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
+                        if (list != null)
+                        {
+                            foreach (object item in list)
+                            {
+                                addCost(newValue);
+                                addPoints(newValue);
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -921,6 +935,7 @@ namespace EstimatingLibrary
             RaisePropertyChanged("Margin");
         }
         #endregion
+
         public override object Copy()
         {
             throw new NotImplementedException();
