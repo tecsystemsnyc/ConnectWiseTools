@@ -10,7 +10,8 @@
 
     <Menu Background="{Binding ElementName=parent, Path=BackgroundColor}"
           DataContext="{Binding ElementName=parent, Path=ViewModel}"
-          ItemsSource="{Binding ElementName=parent, Path=ViewModel.Menu}">
+          ItemsSource="{Binding ElementName=parent, Path=ViewModel.Menu}"
+          KeyDown="Menu_KeyDown">
         <Menu.ItemContainerStyle>
             <Style TargetType="{x:Type MenuItem}">
                 <Style.Triggers>

@@ -31,7 +31,8 @@
                   SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}"
-                  Grid.Row="1">
+                  Grid.Row="1"
+                  IsEnabledChanged="DataGrid_IsEnabledChanged">
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
