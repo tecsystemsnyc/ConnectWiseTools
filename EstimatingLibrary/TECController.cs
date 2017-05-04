@@ -396,7 +396,11 @@ namespace EstimatingLibrary
 
         public void RemoveAllConnections()
         {
-            ObservableCollection<TECConnection> connectionsToRemove = ChildrenConnections;
+            ObservableCollection<TECConnection> connectionsToRemove = new ObservableCollection<TECConnection>();
+            foreach(TECConnection connection in ChildrenConnections)
+            {
+                connectionsToRemove.Add(connection);
+            }
             foreach(TECConnection connectToRemove in connectionsToRemove)
             {
                 if (connectToRemove is TECNetworkConnection)

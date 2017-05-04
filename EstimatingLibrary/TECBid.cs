@@ -457,7 +457,7 @@ namespace EstimatingLibrary
                         }
                         else if (item is TECController)
                         {
-                            //(item as TECController).remove
+                            (item as TECController).RemoveAllConnections();
                         }
                     }
                 }
