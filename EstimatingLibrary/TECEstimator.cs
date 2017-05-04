@@ -250,8 +250,8 @@ namespace EstimatingLibrary
                         {
                             foreach (object item in list)
                             {
-                                addCost(newValue);
-                                addPoints(newValue);
+                                addCost(item);
+                                addPoints(item);
                             }
                         }
                     }
