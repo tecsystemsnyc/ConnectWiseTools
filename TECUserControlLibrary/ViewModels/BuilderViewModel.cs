@@ -516,7 +516,7 @@ namespace TECUserControlLibrary.ViewModels
         protected string getLoadPath(FileDialogParameters fileParams, string initialDirectory = null)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (initialDirectory != null && !isNew)
+            if (initialDirectory != null)
             {
                 openFileDialog.InitialDirectory = initialDirectory;
             }
@@ -564,7 +564,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    load(false);
+                    load(true);
                 }
                 else
                 {
@@ -573,7 +573,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                load(false);
+                load(true);
             }
         }
         protected void SaveExecute()
