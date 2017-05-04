@@ -393,6 +393,34 @@ namespace EstimatingLibrary
                 throw new ArgumentOutOfRangeException("Passed subscope does not exist in any connection in controller.");
             }
         }
+
+        public void RemoveAllConnections()
+        {
+            ObservableCollection<TECConnection> connectionsToRemove = ChildrenConnections;
+            foreach(TECConnection connectToRemove in connectionsToRemove)
+            {
+                if (connectToRemove is TECNetworkConnection)
+                {
+                    foreach(TECController controller in (connectToRemove as TECNetworkConnection).ChildrenControllers)
+                    {
+                        controller.ParentConnection = null;
+                        (connectToRemove as TECNetworkConnection).ChildrenControllers.Remove(controller);
+                    }
+                }
+                else if (connectToRemove is TECSubScopeConnection)
+                {
+                    (connectToRemove as TECSubScopeConnection).SubScope.Connection = null;
+                    (connectToRemove as TECSubScopeConnection).SubScope = null;
+                    connectToRemove.ParentController = null;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                ChildrenConnections.Remove(connectToRemove);
+            }
+            ParentController = null;
+        }
         #endregion
 
         #region Methods
