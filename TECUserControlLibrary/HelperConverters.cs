@@ -688,19 +688,33 @@ namespace TECUserControlLibrary.HelperConverters
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if(values[0] == DependencyProperty.UnsetValue)
+            {
+                return System.Windows.Data.Binding.DoNothing;
+            }
             if (values[0] != null)
             {
                 return values[0];
             }
             else
             {
-                return values[0];
+                return values[1];
             }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            object outObject;
+            if((value as TECScope).Name == "None")
+            {
+                outObject = null;
+            }
+            else
+            {
+                outObject = value;
+            }
+
+            return new object[] { outObject, System.Windows.Data.Binding.DoNothing };
         }
         
     }

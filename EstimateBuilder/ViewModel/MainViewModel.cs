@@ -186,7 +186,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupElectricalVM(TECBid bid)
         {
-            ElectricalVM = new ElectricalViewModel(bid, NoneContainer);
+            ElectricalVM = new ElectricalViewModel(bid);
         }
         private void setupMenuVM()
         {

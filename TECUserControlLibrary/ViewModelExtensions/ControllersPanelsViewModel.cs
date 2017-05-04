@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
@@ -109,6 +110,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanel _nonePanel;
+        public TECPanel NonePanel
+        {
+            get { return _nonePanel; }
+            set
+            {
+                _nonePanel = value;
+                RaisePropertyChanged("NonePanel");
+            }
+        }
+
+        private Dictionary<TECController, ControllerInPanel> controllersIndex;
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -142,6 +156,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private void populateControllerCollection()
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
+            controllersIndex = new Dictionary<TECController, ControllerInPanel>();
             foreach (TECController controller in Bid.Controllers)
             {
                 TECController controllerToAdd = controller;
@@ -154,7 +169,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         break;
                     }
                 }
-                ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
+                var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
+                ControllerCollection.Add(controllerInPanelToAdd);
+                controllersIndex[controller] = controllerInPanelToAdd;
             }
         }
         private void populatePanelSelections()
@@ -162,12 +179,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelSelections = new ObservableCollection<TECPanel>();
             var nonePanel = new TECPanel();
             nonePanel.Name = "None";
-            PanelSelections.Add(nonePanel);
+            NonePanel = nonePanel;
+            PanelSelections.Add(NonePanel);
             foreach (TECPanel panel in Bid.Panels)
             {
                 PanelSelections.Add(panel);
+                panel.PropertyChanged += Panel_PropertyChanged;
             }
         }
+
+        private void Panel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "AddRelationship")
+            {
+                foreach(TECController controller in (sender as TECPanel).Controllers)
+                {
+                    controllersIndex[controller].Panel = sender as TECPanel;
+                }
+            }
+        }
+        
         private void registerBidChanges()
         {
             Bid.Controllers.CollectionChanged += collectionChanged;
@@ -195,6 +226,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     else if (item is TECPanel)
                     {
                         addPanel(item as TECPanel);
+                        (item as TECPanel).PropertyChanged += Panel_PropertyChanged;
                     }
                 }
             }
@@ -220,6 +252,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     else if (item is TECPanel)
                     {
                         removePanel(item as TECPanel);
+                        (item as TECPanel).PropertyChanged -= Panel_PropertyChanged;
                     }
                 }
             }
@@ -245,30 +278,25 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             TECController controllerToAdd = controller;
             TECPanel panelToAdd = null;
-            foreach (TECPanel panel in Bid.Panels)
-            {
-                if (panel.Controllers.Contains(controller))
-                {
-                    panelToAdd = panel;
-                    break;
-                }
-            }
-            ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
+            
+            var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
+            ControllerCollection.Add(controllerInPanelToAdd);
+            controllersIndex[controller] = controllerInPanelToAdd;
         }
         private void addPanel(TECPanel panel)
         {
             PanelSelections.Add(panel);
+            foreach(TECController controller in panel.Controllers)
+            {
+                ControllerCollection.Remove(controllersIndex[controller]);
+                controllersIndex[controller] = new ControllerInPanel(controller, panel);
+                ControllerCollection.Add(controllersIndex[controller]);
+            }
         }
         private void removeController(TECController controller)
         {
-            foreach (ControllerInPanel controllerInPanel in ControllerCollection)
-            {
-                if (controllerInPanel.Controller == controller)
-                {
-                    ControllerCollection.Remove(controllerInPanel);
-                    return;
-                }
-            }
+            ControllerCollection.Remove(controllersIndex[controller]);
+            controllersIndex.Remove(controller);
         }
         private void removePanel(TECPanel panel)
         {

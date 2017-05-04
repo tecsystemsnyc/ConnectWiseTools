@@ -66,11 +66,30 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private NoneObjects NoneContainer;
-
-        public ElectricalViewModel(TECBid bid, NoneObjects noneContainer)
+        private TECController _noneController;
+        public TECController NoneController
         {
-            NoneContainer = noneContainer;
+            get { return _noneController; }
+            set
+            {
+                _noneController = value;
+                RaisePropertyChanged("NoneController");
+            }
+        }
+        private TECConduitType _noneConduitType;
+        public TECConduitType NoneConduitType
+        {
+            get { return _noneConduitType; }
+            set
+            {
+                _noneConduitType = value;
+                RaisePropertyChanged("NoneConduitType");
+            }
+        }
+
+        public ElectricalViewModel(TECBid bid)
+        {
+            setupNoneObjetcs();
             Refresh(bid);
         }
 
@@ -78,9 +97,8 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = bid;
             ConduitTypeSelections = new ObservableCollection<TECConduitType>();
-            var noneConduit = new TECConduitType();
-            noneConduit.Name = "None";
-            ConduitTypeSelections.Add(noneConduit);
+            
+            ConduitTypeSelections.Add(NoneConduitType);
             foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
@@ -171,7 +189,7 @@ namespace EstimateBuilder.ViewModel
         private void populateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
-            ControllerSelections.Add(NoneContainer.NoneController);
+            ControllerSelections.Add(NoneController);
             foreach (TECController controller in Bid.Controllers)
             {
                 ControllerSelections.Add(controller);
@@ -195,6 +213,17 @@ namespace EstimateBuilder.ViewModel
                     }
                 }
             }
+        }
+
+        private void setupNoneObjetcs()
+        {
+            TECController noneController = new TECController();
+            noneController.Name = "None";
+            NoneController = noneController;
+
+            TECConduitType noneConduitType = new TECConduitType();
+            noneConduitType.Name = "None";
+            NoneConduitType = noneConduitType;
         }
 
         public void DragOver(IDropInfo dropInfo)

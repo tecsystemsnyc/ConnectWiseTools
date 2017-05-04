@@ -180,6 +180,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         public ICommand AddControlledScopeCommand { get; private set; }
 
+        private TECController _noneController;
+        public TECController NoneController
+        {
+            get { return _noneController; }
+            set
+            {
+                _noneController = value;
+                RaisePropertyChanged("NoneController");
+            }
+        }
+        private TECConduitType _noneConduitType;
+        public TECConduitType NoneConduitType
+        {
+            get { return _noneConduitType; }
+            set
+            {
+                _noneConduitType = value;
+                RaisePropertyChanged("NoneConduitType");
+            }
+        }
+
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         #endregion
@@ -224,7 +245,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ConduitTypeSelections = new ObservableCollection<TECConduitType>();
             var noneConduit = new TECConduitType();
             noneConduit.Name = "None";
-            ConduitTypeSelections.Add(noneConduit);
+            NoneConduitType = noneConduit;
+            ConduitTypeSelections.Add(NoneConduitType);
             foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
@@ -237,7 +259,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 var noneController = new TECController();
                 noneController.Name = "None";
-                ControllerSelections.Add(noneController);
+                NoneController = noneController;
+                ControllerSelections.Add(NoneController);
                 foreach (TECController controller in ControlledScope.Controllers)
                 {
                     ControllerSelections.Add(controller);

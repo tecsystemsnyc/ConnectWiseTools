@@ -26,16 +26,15 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
-                                        Converter={cnvt:SelectedItemToControllerConverter}}"
+                <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
                                         Header="Controller" Width="Auto" MinWidth="60"
                                         DisplayMemberPath="Name">
-                    <DataGridComboBoxColumn.ItemsSource>
-                        <MultiBinding Converter="{StaticResource NoneValueConverter}">
-                            <Binding Path="Data.ControllerSelections, Source={StaticResource proxy}"/>
-                            <Binding Path="Data.NoneController, Source={StaticResource proxy}"/>
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Controller"/>
+                            <Binding Path="Data.NoneController" Source="{StaticResource proxy}"/>
                         </MultiBinding>
-                    </DataGridComboBoxColumn.ItemsSource>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
                 </DataGridComboBoxColumn>
                 <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding ParentEquipment.Name}" Header="Equipment" Width="Auto" MinWidth="70" IsReadOnly="True"/>
@@ -43,9 +42,15 @@
                 <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Wire (ft)" Width="Auto" MinWidth="50"/>
                 <DataGridTextColumn Binding="{Binding SubScope.Connection.ConduitLength, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Conduit (ft)" Width="Auto" MinWidth="60"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
                                         Header="Conduit Type" Width="Auto" MinWidth="80"
-                                        DisplayMemberPath="Name"/>
+                                        DisplayMemberPath="Name">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="ConduitType"/>
+                            <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
                 <DataGridCheckBoxColumn Header="Stub Up Only" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
