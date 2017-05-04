@@ -286,12 +286,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private void addPanel(TECPanel panel)
         {
             PanelSelections.Add(panel);
-            foreach(TECController controller in panel.Controllers)
-            {
-                ControllerCollection.Remove(controllersIndex[controller]);
-                controllersIndex[controller] = new ControllerInPanel(controller, panel);
-                ControllerCollection.Add(controllersIndex[controller]);
-            }
+            //foreach(TECController controller in panel.Controllers)
+            //{
+            //    ControllerCollection.Remove(controllersIndex[controller]);
+            //    controllersIndex[controller] = new ControllerInPanel(controller, panel);
+            //    ControllerCollection.Add(controllersIndex[controller]);
+            //}
         }
         private void removeController(TECController controller)
         {
