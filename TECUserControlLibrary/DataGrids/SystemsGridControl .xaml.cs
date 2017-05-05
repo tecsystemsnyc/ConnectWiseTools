@@ -80,14 +80,6 @@ namespace TECUserControlLibrary.DataGrids
         {
             InitializeComponent();
         }
-
-        private void DataGrid_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var wasEnabled = (bool)e.OldValue;
-            if (wasEnabled)
-            {
-                (sender as DataGrid).CancelEdit();
-            }
-        }
+        
     }
 }

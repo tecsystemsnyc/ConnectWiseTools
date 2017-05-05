@@ -116,6 +116,14 @@ namespace TECUserControlLibrary
             }
         }
 
+        private void DataGrid_LostFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!(sender as DataGrid).IsKeyboardFocusWithin)
+            {
+                (sender as DataGrid).CommitEdit(DataGridEditingUnit.Row, true);
+            }
+        }
+
         static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
             UIElement parent = element;

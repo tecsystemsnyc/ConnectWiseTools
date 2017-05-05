@@ -72,6 +72,8 @@
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
         <!--<Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>-->
         <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
+        <!--<EventSetter Event="LostFocus" Handler="DataGrid_LostFocus"/>-->
+        <EventSetter Event="LostKeyboardFocus" Handler="DataGrid_LostFocus"/>
     </Style>
 
     <Style TargetType="DataGridColumnHeader">

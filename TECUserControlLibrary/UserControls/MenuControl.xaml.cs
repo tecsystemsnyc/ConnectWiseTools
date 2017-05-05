@@ -43,10 +43,6 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty BackgroundColorProperty =
             DependencyProperty.Register("BackgroundColor", typeof(Brush),
               typeof(MenuControl));
-
-        private void Menu_KeyDown(object sender, KeyEventArgs e)
-        {
-            (sender as UIElement).Focus();
-        }
+        
     }
 }
