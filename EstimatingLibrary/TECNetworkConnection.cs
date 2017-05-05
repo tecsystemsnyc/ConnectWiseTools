@@ -127,16 +127,16 @@ namespace EstimatingLibrary
             {
                 TECConnectionType type = ConnectionType;
                 cost += Length * type.Cost;
-                terminations += 2;
+                terminations += 2 * ChildrenControllers.Count;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                { cost += associatedCost.Cost; }
+                { cost += associatedCost.Cost * ChildrenControllers.Count; }
             }
             if (ConduitType != null)
             {
                 cost += ConduitLength * ConduitType.Cost;
                 foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
                 {
-                    cost += associatedCost.Cost;
+                    cost += associatedCost.Cost * ChildrenControllers.Count;
                 }
             }
             cost += terminations * .25;
@@ -148,18 +148,18 @@ namespace EstimatingLibrary
             var terminations = 0;
             if (ConnectionType != null)
             {
-                terminations += 2;
+                terminations += 2 * ChildrenControllers.Count;
                 TECConnectionType type = ConnectionType;
                 laborHours += Length * type.Labor;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                { laborHours += associatedCost.Labor; }
+                { laborHours += associatedCost.Labor * ChildrenControllers.Count; }
             }
             if (ConduitType != null)
             {
                 laborHours += Length * ConduitType.Labor;
                 foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
                 {
-                    laborHours += associatedCost.Labor;
+                    laborHours += associatedCost.Labor * ChildrenControllers.Count;
                 }
             }
             laborHours += terminations * .1;

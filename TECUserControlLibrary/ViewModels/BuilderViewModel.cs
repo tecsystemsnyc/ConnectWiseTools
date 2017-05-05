@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         protected FileDialogParameters workingFileParameters;
+        protected int loadedStackLength;
 
         abstract protected string defaultSaveFileName
         {
@@ -407,6 +408,14 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             workingScopeManager = loadingScopeManager;
                         }
+                        if(isNew)
+                        {
+                            loadedStackLength = stack.SaveStack.Count;
+                        }
+                        else
+                        {
+                            loadedStackLength = 0;
+                        }
                         isNew = false;
                         ResetStatus();
                     };
@@ -540,7 +549,7 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
 
-            if (stack.SaveStack.Count > 0)
+            if (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -613,7 +622,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (IsReady)
             {
-                bool changesExist = (stack.SaveStack.Count > 0);
+                bool changesExist = (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength);
                 if (changesExist)
                 {
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
