@@ -26,9 +26,13 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
-                handleControllerSelection(value);
-                _controller = value;
-                RaisePropertyChanged("Controller");
+                if (value != Controller)
+                {
+                    handleControllerSelection(value);
+                    _controller = value;
+                    RaisePropertyChanged("Controller");
+                }
+                
             }
         }
 
@@ -97,18 +101,17 @@ namespace TECUserControlLibrary.Models
 
         private void handleControllerSelection(TECController controller)
         {
+            if (Controller != null)
+            {
+                Controller.RemoveSubScope(SubScope);
+            }
             if (controller != null)
             {
                 controller.AddSubScope(SubScope);
                 SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
-            else
-            {
-                if (SubScope.Connection != null)
-                {
-                    Controller.RemoveSubScope(SubScope);
-                }
-            }
+            
+            
         }
 
         private void handleConduitSelection(TECConduitType conduitType)

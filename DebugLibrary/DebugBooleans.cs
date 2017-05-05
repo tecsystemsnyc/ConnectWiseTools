@@ -14,5 +14,6 @@ namespace DebugLibrary
         public static bool Generic = false;
         public static bool Stack = false;
         public static bool Tests = false;
+        public static bool SaveDelta = true;
     }
 }
