@@ -67,6 +67,22 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("PossibleParents");
             }
         }
+
+        private ObservableCollection<TECNetworkConnection> _networkConnections;
+        public ObservableCollection<TECNetworkConnection> NetworkConnections
+        {
+            get { return _networkConnections; }
+            set
+            {
+                if(NetworkConnections != null)
+                {
+                    NetworkConnections.CollectionChanged -= ChildNetworkConnections_CollectionChanged;
+                }
+                _networkConnections = value;
+                NetworkConnections.CollectionChanged += ChildNetworkConnections_CollectionChanged;
+                RaisePropertyChanged("NetworkConnections");
+            }
+        }
         
         //---Derived---
         public TECController ParentController
@@ -140,13 +156,47 @@ namespace TECUserControlLibrary.Models
         {
             Controller = controller;
             PossibleParents = networkControllers;
+            populateNetworkConnections(Controller);
             
             Controller.PropertyChanged += Controller_PropertyChanged;
+            Controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
 
             ClearParentControllerCommand = new RelayCommand(ClearParentControllerExecute);
         }
 
+        private void ChildrenConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(TECConnection item in e.NewItems)
+                {
+                    if(item is TECNetworkConnection)
+                    {
+                        NetworkConnections.Add(item as TECNetworkConnection);
+                    }
+                }
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECConnection item in e.OldItems)
+                {
+                    if (item is TECNetworkConnection)
+                    {
+                        NetworkConnections.Remove(item as TECNetworkConnection);
+                    }
+                }
+            }
+        }
+
         #region Methods
+        private void populateNetworkConnections(TECController controller)
+        {
+            NetworkConnections = new ObservableCollection<TECNetworkConnection>();
+            foreach(TECNetworkConnection connection in controller.ChildNetworkConnections)
+            {
+                _networkConnections.Add(connection);
+            }
+        }
         public void RaiseIsConnected()
         {
             RaisePropertyChanged("IsConnected");
@@ -210,6 +260,23 @@ namespace TECUserControlLibrary.Models
             {
                 RaisePropertyChanged("ParentController");
                 RaisePropertyChanged("IsConnected");
+            }
+        }
+        private void ChildNetworkConnections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if ((item as TECNetworkConnection).ChildrenControllers.Count == 0)
+                    {
+                        Controller.ChildrenConnections.Remove(item as TECConnection);
+                    }
+                    foreach (TECController controller in (item as TECNetworkConnection).ChildrenControllers)
+                    {
+                        Controller.RemoveController(controller);
+                    }
+                }
             }
         }
         #endregion

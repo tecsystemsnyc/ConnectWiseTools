@@ -278,7 +278,7 @@
                                     CommandParameter="{Binding Controller}"
                                     Margin="5"/>
                                 </Grid>
-                                <DataGrid ItemsSource="{Binding Controller.ChildNetworkConnections}"
+                                <DataGrid ItemsSource="{Binding NetworkConnections}"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False">
                                     <DataGrid.Columns>

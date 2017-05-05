@@ -159,15 +159,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
-                foreach (TECConnection connection in ChildrenConnections)
-                {
-                    if (connection is TECNetworkConnection)
-                    {
-                        networkConnections.Add(connection as TECNetworkConnection);
-                    }
-                }
-                return networkConnections;
+                return getNetworkConnections();
             }
         }
 
@@ -429,6 +421,19 @@ namespace EstimatingLibrary
                 ChildrenConnections.Remove(connectToRemove);
             }
             ParentController = null;
+        }
+
+        private ObservableCollection<TECNetworkConnection> getNetworkConnections()
+        {
+            ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                if (connection is TECNetworkConnection)
+                {
+                    networkConnections.Add(connection as TECNetworkConnection);
+                }
+            }
+            return networkConnections;
         }
         #endregion
 
