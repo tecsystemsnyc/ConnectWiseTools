@@ -226,15 +226,22 @@ namespace EstimatingLibrary
                 {
                     message = "Add change: " + oldValue;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    addCost(newValue);
-                    addPoints(newValue);
+                    if(!(oldValue is TECCatalogs))
+                    {
+                        addCost(newValue);
+                        addPoints(newValue);
+                    }
+                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     message = "Remove change: " + oldValue;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    removeCost(newValue);
-                    removePoints(newValue);
+                    if (!(oldValue is TECCatalogs))
+                    {
+                        removeCost(newValue);
+                        removePoints(newValue);
+                    }
                 }
                 else
                 {
