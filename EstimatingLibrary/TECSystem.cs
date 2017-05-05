@@ -309,9 +309,9 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalBudgetPrice");
                 RaisePropertyChanged("BudgetUnitPrice");
             }
-            else if (name == "TotalPoints")
+            else if (name == "PointNumber")
             {
-                RaisePropertyChanged("TotalPoints");
+                RaisePropertyChanged("PointNumber");
             }
             else if (name == "TotalDevices")
             {
@@ -351,7 +351,7 @@ namespace EstimatingLibrary
             {
                 if (sub.Points.Count > 0)
                 {
-                    RaisePropertyChanged("TotalPoints");
+                    RaisePropertyChanged("PointNumber");
                 }
                 if (sub.Devices.Count > 0)
                 {

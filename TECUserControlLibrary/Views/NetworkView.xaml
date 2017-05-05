@@ -17,6 +17,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
             <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
             <DataTemplate x:Key="ClearButton">
                 <StackPanel DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -118,9 +119,16 @@
                                     <DataGridTextColumn Binding="{Binding ConduitLength}" Header="Conduit Length"
                                                             />
                                     <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
-                                        Width="Auto" MinWidth="60"/>
+                                        Width="Auto" MinWidth="60">
+                                        <DataGridComboBoxColumn.SelectedItemBinding>
+                                            <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding Path="ConduitType"/>
+                                                <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                                            </MultiBinding>
+                                        </DataGridComboBoxColumn.SelectedItemBinding>
+                                    </DataGridComboBoxColumn>
                                 </DataGrid.Columns>
                                 <DataGrid.RowDetailsTemplate>
                                     <DataTemplate>
@@ -219,9 +227,16 @@
                                     Binding="{Binding Path=Controller.ParentConnection.ConduitLength, Mode=TwoWay}"
                                     Width="Auto" MinWidth="80"/>
                         <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" 
                                         DisplayMemberPath="Name"
-                                        Width="Auto" MinWidth="60"/>
+                                        Width="Auto" MinWidth="60">
+                            <DataGridComboBoxColumn.SelectedItemBinding>
+                                <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="ConduitType"/>
+                                    <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                                </MultiBinding>
+                            </DataGridComboBoxColumn.SelectedItemBinding>
+                        </DataGridComboBoxColumn>
                         <DataGridCheckBoxColumn Header="Connected"
                                         Binding="{Binding IsConnected, Mode=OneWay}"
                                         IsReadOnly="True"
@@ -281,9 +296,16 @@
                                         <DataGridTextColumn Binding="{Binding ConduitLength}" Header="Conduit Length"
                                                             />
                                         <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" SelectedItemBinding="{Binding Path=ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
+                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" 
                                         DisplayMemberPath="Name"
-                                        Width="Auto" MinWidth="60"/>
+                                        Width="Auto" MinWidth="60">
+                                            <DataGridComboBoxColumn.SelectedItemBinding>
+                                                <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                                                    <Binding Path="ConduitType"/>
+                                                    <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                                                </MultiBinding>
+                                            </DataGridComboBoxColumn.SelectedItemBinding>
+                                        </DataGridComboBoxColumn>
                                     </DataGrid.Columns>
                                     <DataGrid.RowDetailsTemplate>
                                         <DataTemplate>

@@ -176,7 +176,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Add", this, item);
                 }
-                RaisePropertyChanged("TotalPoints");
+                RaisePropertyChanged("PointNumber");
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -184,7 +184,7 @@ namespace EstimatingLibrary
                 {
                     NotifyPropertyChanged("Remove", this, item);
                 }
-                RaisePropertyChanged("TotalPoints");
+                RaisePropertyChanged("PointNumber");
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {

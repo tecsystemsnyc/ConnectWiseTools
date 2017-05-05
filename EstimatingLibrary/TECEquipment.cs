@@ -231,9 +231,9 @@ namespace EstimatingLibrary
             {
                 RaisePropertyChanged("SubScopeQuantity");
             }
-            else if (name == "TotalPoints")
+            else if (name == "PointNumber")
             {
-                RaisePropertyChanged("TotalPoints");
+                RaisePropertyChanged("PointNumber");
             }
             else if (name == "TotalDevices")
             {
@@ -257,7 +257,7 @@ namespace EstimatingLibrary
         {
             if (subScope.Points.Count > 0)
             {
-                RaisePropertyChanged("TotalPoints");
+                RaisePropertyChanged("PointNumber");
             }
             if (subScope.Devices.Count > 0)
             {

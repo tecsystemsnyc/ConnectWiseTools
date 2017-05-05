@@ -67,7 +67,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("PossibleParents");
             }
         }
-
+        
         //---Derived---
         public TECController ParentController
         {
@@ -140,7 +140,7 @@ namespace TECUserControlLibrary.Models
         {
             Controller = controller;
             PossibleParents = networkControllers;
-
+            
             Controller.PropertyChanged += Controller_PropertyChanged;
 
             ClearParentControllerCommand = new RelayCommand(ClearParentControllerExecute);

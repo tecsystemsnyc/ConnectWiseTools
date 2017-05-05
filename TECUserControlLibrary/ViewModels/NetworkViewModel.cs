@@ -104,6 +104,17 @@ namespace TECUserControlLibrary.ViewModels
 
         public IOType SelectedIO { get; set; }
         public TECConnectionType SelectedWire { get; set; }
+
+        private TECConduitType _noneConduitType;
+        public TECConduitType NoneConduitType
+        {
+            get { return _noneConduitType; }
+            set
+            {
+                _noneConduitType = value;
+                RaisePropertyChanged("NoneConduitType");
+            }
+        }
         #endregion
 
         #region Commands
@@ -119,7 +130,7 @@ namespace TECUserControlLibrary.ViewModels
 
             update();
 
-            AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x));
+            AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x), x => CanAddConnectionExecute());
         }
 
         #region Methods
@@ -167,7 +178,8 @@ namespace TECUserControlLibrary.ViewModels
 
             TECConduitType noneConduit = new TECConduitType();
             noneConduit.Name = "None";
-            PossibleConduitTypes.Add(noneConduit);
+            NoneConduitType = noneConduit;
+            PossibleConduitTypes.Add(NoneConduitType);
             foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 PossibleConduitTypes.Add(type);
@@ -254,20 +266,27 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddConnectionExecute(TECController controller)
         {
-            if (SelectedIO != 0 && SelectedWire != null)
-            {
                 TECNetworkConnection newConnection = new TECNetworkConnection();
                 newConnection.IOType = SelectedIO;
                 newConnection.ConnectionType = SelectedWire;
                 newConnection.ParentController = controller;
                 controller.ChildrenConnections.Add(newConnection);
+        }
+        private bool CanAddConnectionExecute()
+        {
+            if (SelectedIO != 0 && SelectedWire != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         #endregion
 
         #region Event Handlers
-
         private void Controllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -455,7 +474,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Drag Drop
-
         public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
