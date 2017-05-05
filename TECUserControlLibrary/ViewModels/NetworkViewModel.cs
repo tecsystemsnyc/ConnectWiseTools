@@ -615,12 +615,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (targetType == typeof(TECController))
             {
-                if (targetCollection == ServerControllers)
-                {
-                    sourceController.Type = ControllerType.IsServer;
-                    sortAndAddController(sourceController);
-                }
-                else if (targetCollection == StandaloneControllers)
+                if (targetCollection == StandaloneControllers)
                 {
                     sourceController.Type = ControllerType.IsStandalone;
                     sortAndAddController(sourceController);
@@ -647,7 +642,15 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (targetType == typeof(BMSController))
             {
-                sourceController.Type = ControllerType.IsBMS;
+                if (targetCollection == ServerControllers)
+                {
+                    sourceController.Type = ControllerType.IsServer;
+                }
+                else if (targetCollection == BMSControllers)
+                {
+                    sourceController.Type = ControllerType.IsBMS;
+                }
+                
                 sortAndAddController(sourceController);
             }
             else if (targetType == typeof(TECConnection))
