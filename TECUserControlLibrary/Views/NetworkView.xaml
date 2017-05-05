@@ -27,7 +27,6 @@
                         Margin="5"
                         />
                 </StackPanel>
-                
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -286,7 +285,5 @@
         <Border Grid.Column="1" Grid.RowSpan="3"
                 BorderBrush="Black"
                 BorderThickness="1 1 1 1"/>
-
-
     </Grid>
 </UserControl>

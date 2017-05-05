@@ -19,6 +19,7 @@
             <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
+    
     <StackPanel DataContext="{Binding ElementName=parent, Path=ControllerSource}">
         <i:Interaction.Behaviors>
             <cLib:BubbleScrollEvent/>
