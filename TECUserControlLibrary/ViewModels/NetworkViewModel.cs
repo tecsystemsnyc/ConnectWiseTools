@@ -36,8 +36,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECController> _serverControllers;
-        public ObservableCollection<TECController> ServerControllers
+        private ObservableCollection<BMSController> _serverControllers;
+        public ObservableCollection<BMSController> ServerControllers
         {
             get { return _serverControllers; }
             set
@@ -157,7 +157,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             //Reset Collections
-            ServerControllers = new ObservableCollection<TECController>();
+            ServerControllers = new ObservableCollection<BMSController>();
             BMSControllers = new ObservableCollection<BMSController>();
             StandaloneControllers = new ObservableCollection<TECController>();
             NetworkControllers = new ObservableCollection<TECController>();
@@ -190,7 +190,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (controller.IsServer)
             {
-                ServerControllers.Add(controller);
+                BMSController newBMSController = new BMSController(controller, new ObservableCollection<TECController>());
+                ServerControllers.Add(newBMSController);
             }
             else if (controller.IsBMS || controller.ChildNetworkConnections.Count > 0)
             {
@@ -217,13 +218,39 @@ namespace TECUserControlLibrary.ViewModels
             controller.ParentConnection = null;
 
             //Remove from server controllers
-            if (ServerControllers.Contains(controller))
+            BMSController controllerToRemove = null;
+            foreach (BMSController serverController in ServerControllers)
             {
-                ServerControllers.Remove(controller);
+                if (serverController.Controller == controller)
+                {
+                    controllerToRemove = serverController;
+                    List<TECController> childrenToRemove = new List<TECController>();
+                    foreach (TECNetworkConnection netConnect in controller.ChildNetworkConnections)
+                    {
+                        foreach (TECController control in netConnect.ChildrenControllers)
+                        {
+                            if (control.Type == ControllerType.IsNetworked)
+                            {
+                                childrenToRemove.Add(control);
+                            }
+                        }
+                    }
+                    foreach (TECController control in childrenToRemove)
+                    {
+                        controller.RemoveController(control);
+                        sortAndAddController(control);
+                    }
+
+                    break;
+                }
+            }
+            if (controllerToRemove != null)
+            {
+                BMSControllers.Remove(controllerToRemove);
             }
 
             //Remove from BMS controllers
-            BMSController controllerToRemove = null;
+            controllerToRemove = null;
             foreach (BMSController bmsController in BMSControllers)
             {
                 if (bmsController.Controller == controller)
@@ -525,7 +552,7 @@ namespace TECUserControlLibrary.ViewModels
             //Handle removal from source collection
             if (sourceCollection == ServerControllers)
             {
-                ServerControllers.Remove(sourceItem as TECController);
+                ServerControllers.Remove(sourceItem as BMSController);
             }
             else if (sourceCollection == BMSControllers)
             {
@@ -543,9 +570,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 bool foundCollection = false;
                 List<TECController> parentControllers = new List<TECController>();
-                foreach (TECController control in ServerControllers)
+                foreach (BMSController control in ServerControllers)
                 {
-                    parentControllers.Add(control);
+                    parentControllers.Add(control.Controller);
                 }
                 foreach (BMSController control in BMSControllers)
                 {
