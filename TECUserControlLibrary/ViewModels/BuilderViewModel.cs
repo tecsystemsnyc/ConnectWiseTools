@@ -455,7 +455,7 @@ namespace TECUserControlLibrary.ViewModels
                     EstimatingLibraryDatabase.Update(path, saveStack);
                     return true;
                 }
-                catch (Exception ex) when (!DebugBooleans.SaveDelta)
+                catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
                 {
                     DebugHandler.LogError("Save delta failed. Saving to new file. Exception: " + ex.Message);
                     return saveNewToPath(path);
