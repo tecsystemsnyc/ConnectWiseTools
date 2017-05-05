@@ -198,6 +198,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (isNew)
                 {
                     Bid.Labor.UpdateConstants(Templates.Labor);
+                    loadedStackLength = stack.SaveStack.Count;
                 }
             }
         }
@@ -261,7 +262,7 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            if (stack.SaveStack.Count > 0)
+            if (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength)
             {
                 string message = "Would you like to save your changes before creating a new scope?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
