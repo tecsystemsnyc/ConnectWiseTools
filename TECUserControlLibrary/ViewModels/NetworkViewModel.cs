@@ -487,8 +487,8 @@ namespace TECUserControlLibrary.ViewModels
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if (((targetType == typeof(TECController)) || (targetType == typeof(BMSController))
-                    && ((sourceType == typeof(TECController)) || (sourceType == typeof(BMSController)))))
+                if ((targetType == typeof(TECController) || targetType == typeof(BMSController))
+                    && ((sourceType == typeof(TECController) || sourceType == typeof(BMSController))))
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Move;
