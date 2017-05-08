@@ -190,14 +190,37 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (controller.IsServer)
             {
-                BMSController newBMSController = new BMSController(controller, new ObservableCollection<TECController>());
-                ServerControllers.Add(newBMSController);
+                bool controllerExists = false;
+                foreach(BMSController serverController in ServerControllers)
+                {
+                    if (serverController.Controller == controller)
+                    {
+                        controllerExists = true;
+                    }
+                }
+                if (!controllerExists)
+                {
+                    BMSController newBMSController = new BMSController(controller, new ObservableCollection<TECController>());
+                    ServerControllers.Add(newBMSController);
+                }
+                
             }
             else if (controller.IsBMS || controller.ChildNetworkConnections.Count > 0)
             {
-                controller.Type = ControllerType.IsBMS;
-                BMSController newBMSController = new BMSController(controller, NetworkControllers);
-                BMSControllers.Add(newBMSController);
+                bool controllerExists = false;
+                foreach (BMSController bmsController in BMSControllers)
+                {
+                    if (bmsController.Controller == controller)
+                    {
+                        controllerExists = true;
+                    }
+                }
+                if (!controllerExists)
+                {
+                    controller.Type = ControllerType.IsBMS;
+                    BMSController newBMSController = new BMSController(controller, NetworkControllers);
+                    BMSControllers.Add(newBMSController);
+                }
             }
             else if (controller.ParentConnection == null)
             {
@@ -497,9 +520,9 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "ParentController")
             {
                 TECController controller = (sender as TECController);
-                if (!controller.IsBMS && (controller.ParentController == null))
+                if (!controller.IsStandalone && (controller.ParentController == null))
                 {
-                    sortAndAddController(controller);
+                    StandaloneControllers.Add(controller);
                 }
             }
         }
@@ -623,7 +646,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (targetCollection == StandaloneControllers)
                 {
-                    sourceController.ParentController.RemoveController(sourceController);
+                    removeController(sourceController);
                     sourceController.Type = ControllerType.IsStandalone;
                     sortAndAddController(sourceController);
                 }
@@ -673,6 +696,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     sourceController.Type = ControllerType.IsBMS;
                 }
+
+                StandaloneControllers.Remove(sourceController);
                 
                 sortAndAddController(sourceController);
             }
