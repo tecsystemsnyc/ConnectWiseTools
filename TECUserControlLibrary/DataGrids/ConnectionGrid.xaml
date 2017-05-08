@@ -30,7 +30,8 @@
                                         Header="Controller" Width="Auto" MinWidth="60"
                                         DisplayMemberPath="Name">
                     <DataGridComboBoxColumn.SelectedItemBinding>
-                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
                             <Binding Path="Controller"/>
                             <Binding Path="Data.NoneController" Source="{StaticResource proxy}"/>
                         </MultiBinding>
@@ -45,7 +46,8 @@
                                         Header="Conduit Type" Width="Auto" MinWidth="80"
                                         DisplayMemberPath="Name">
                     <DataGridComboBoxColumn.SelectedItemBinding>
-                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
                             <Binding Path="ConduitType"/>
                             <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
                         </MultiBinding>

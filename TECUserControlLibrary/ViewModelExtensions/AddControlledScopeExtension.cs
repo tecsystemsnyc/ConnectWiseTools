@@ -200,6 +200,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("NoneConduitType");
             }
         }
+        private TECPanel _nonePanel;
+        public TECPanel NonePanel
+        {
+            get
+            {
+                return _nonePanel;
+            }
+            set
+            {
+                _nonePanel = value;
+                RaisePropertyChanged("NonePanel");
+            }
+        }
 
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
@@ -296,7 +309,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 PanelsCollection = ControlledScope.Panels;
                 var nonePanel = new TECPanel();
                 nonePanel.Name = "None";
-                PanelSelections.Add(nonePanel);
+                NonePanel = nonePanel;
+                PanelSelections.Add(NonePanel);
                 foreach (TECPanel panel in ControlledScope.Panels)
                 {
                     PanelSelections.Add(panel);

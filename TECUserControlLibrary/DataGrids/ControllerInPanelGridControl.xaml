@@ -27,12 +27,11 @@
                       CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.PanelSelections, Source={StaticResource proxy}}"
-                                        DisplayIndex="0"
-                                        DisplayMemberPath="Name"
-                                        Header="Containing Panel"
+                                        Header="Containing Panel" DisplayMemberPath="Name"
                                         MinWidth="100">
                     <DataGridComboBoxColumn.SelectedItemBinding>
-                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
                             <Binding Path="Panel"/>
                             <Binding Path="Data.NonePanel" Source="{StaticResource proxy}"/>
                         </MultiBinding>
