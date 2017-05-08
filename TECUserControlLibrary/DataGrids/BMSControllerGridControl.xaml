@@ -10,16 +10,16 @@
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
+
     <UserControl.Resources>
         <ResourceDictionary>
+            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
-            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <StackPanel DataContext="{Binding ElementName=parent, Path=ControllerSource}">
         <i:Interaction.Behaviors>
             <cLib:BubbleScrollEvent/>
@@ -38,17 +38,17 @@
             <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center"/>
             <ComboBox Grid.Column="2"
                                           ItemsSource="{Binding Controller.NetworkIO}"
-                                          SelectedItem="{Binding Data.SelectedIO, Source={StaticResource proxy}}"
+                                          SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedIO}"
                                           Margin="5"/>
             <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
             <ComboBox Grid.Column="4"
-                                          ItemsSource="{Binding Data.Bid.Catalogs.ConnectionTypes, Source={StaticResource proxy}}"
-                                          SelectedItem="{Binding Data.SelectedWire, Source={StaticResource proxy}}"
+                                          ItemsSource="{Binding ElementName=parent, Path=ViewModel.Bid.Catalogs.ConnectionTypes}"
+                                          SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedWire}"
                                                   DisplayMemberPath="Name"
                                           Margin="5"/>
             <Button Grid.Column="5"
                                         Content="Add"
-                                        Command="{Binding Data.AddConnectionCommand, Source={StaticResource proxy}}"
+                                        Command="{Binding ElementName=parent, Path=ViewModel.AddConnectionCommand}"
                                         CommandParameter="{Binding Controller}"
                                         Margin="5"/>
         </Grid>
@@ -70,13 +70,13 @@
                 <DataGridTextColumn Binding="{Binding ConduitLength}" Header="Conduit Length"
                                                             />
                 <DataGridComboBoxColumn Header="Conduit"
-                                        ItemsSource="{Binding Data.PossibleConduitTypes, Source={StaticResource proxy}}" 
+                                        ItemsSource="{Binding ElementName=parent, Path=ViewModel.PossibleConduitTypes}" 
                                         DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="60">
                     <DataGridComboBoxColumn.SelectedItemBinding>
                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged">
                             <Binding Path="ConduitType"/>
-                            <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                            <Binding ElementName="parent" Path="ViewModel.NoneConduitType"/>
                         </MultiBinding>
                     </DataGridComboBoxColumn.SelectedItemBinding>
                 </DataGridComboBoxColumn>

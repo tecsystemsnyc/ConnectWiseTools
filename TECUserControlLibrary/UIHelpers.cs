@@ -150,22 +150,29 @@ namespace TECUserControlLibrary
         }
         public static string FileDrop(IDropInfo dropInfo)
         {
-            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
-            if (dragFileList.Count() == 1)
+            if(dropInfo.Data is IEnumerable)
             {
-                if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+                if (dragFileList.Count() == 1)
                 {
-                    return dragFileList.First();
+                    if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                    {
+                        return dragFileList.First();
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
                     return null;
                 }
-            }
-            else
+            }else
             {
                 return null;
             }
+            
         }
 
         public static void ControlledScopeDrop(IDropInfo dropInfo, TECScopeManager scopeManager)

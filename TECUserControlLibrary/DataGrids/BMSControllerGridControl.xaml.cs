@@ -34,7 +34,7 @@ namespace TECUserControlLibrary.DataGrids
             get { return (Object)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
-
+        
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(BMSControllerGridControl));

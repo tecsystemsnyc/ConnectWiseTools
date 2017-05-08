@@ -245,7 +245,7 @@
                     </DataGrid.Columns>
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <grids:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                            <grids:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding Data, Source={StaticResource proxy}}"/>
                         </DataTemplate>
                     </DataGrid.RowDetailsTemplate>
                 </DataGrid>
