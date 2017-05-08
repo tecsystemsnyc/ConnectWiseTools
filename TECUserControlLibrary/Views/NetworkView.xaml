@@ -59,7 +59,8 @@
             <DataGrid Grid.Row="1" ItemsSource="{Binding ServerControllers}"
                     AutoGenerateColumns="False"
                       dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
-                      IsReadOnly="True">
+                      CanUserAddRows="False"
+                          CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                     <DataGridTextColumn Header="Controller"
@@ -92,7 +93,8 @@
                 <DataGrid ItemsSource="{Binding BMSControllers}"
                           AutoGenerateColumns="False"
                           dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}"
-                          IsReadOnly="True">
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                         <DataGridTextColumn Header="Controller"
@@ -184,7 +186,8 @@
             <DataGrid Grid.Row="1"
                       ItemsSource="{Binding StandaloneControllers}"
                       AutoGenerateColumns="False"
-                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
                       dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"

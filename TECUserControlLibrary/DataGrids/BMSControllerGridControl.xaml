@@ -91,7 +91,8 @@
                         <Label Content="Controllers" FontSize="10"/>
                         <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
                                   MinHeight="50"
                                   dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}">
                             <DataGrid.Columns>
