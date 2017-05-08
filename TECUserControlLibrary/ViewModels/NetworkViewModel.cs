@@ -287,6 +287,18 @@ namespace TECUserControlLibrary.ViewModels
                 StandaloneControllers.Remove(controller);
             }
         }
+
+        private void updatePossibleParents()
+        {
+            foreach(BMSController serverController in ServerControllers)
+            {
+                serverController.PossibleParents = NetworkControllers;
+            }
+            foreach(BMSController bmsController in BMSControllers)
+            {
+                bmsController.PossibleParents = NetworkControllers;
+            }
+        }
         #endregion
 
         #region Commands Methods
@@ -370,9 +382,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECController)
+                    if (item is BMSController)
                     {
-                        NetworkControllers.Add(item as TECController);
+                        NetworkControllers.Add((item as BMSController).Controller);
                     }
                 }
             }
@@ -380,9 +392,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECController)
+                    if (item is BMSController)
                     {
-                        NetworkControllers.Remove(item as TECController);
+                        NetworkControllers.Remove((item as BMSController).Controller);
                     }
                 }
             }
@@ -425,10 +437,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is TECController)
                     {
                         (item as TECController).PropertyChanged += NetworkController_PropertyChanged;
-                        foreach (BMSController bmsController in BMSControllers)
-                        {
-                            bmsController.PossibleParents = NetworkControllers;
-                        }
+                        updatePossibleParents();
                     }
                 }
             }
@@ -439,10 +448,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is TECController)
                     {
                         (item as TECController).PropertyChanged -= NetworkController_PropertyChanged;
-                        foreach (BMSController bmsController in BMSControllers)
-                        {
-                            bmsController.PossibleParents = NetworkControllers;
-                        }
+                        updatePossibleParents();
                     }
                 }
             }
@@ -617,6 +623,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (targetCollection == StandaloneControllers)
                 {
+                    sourceController.ParentController.RemoveController(sourceController);
                     sourceController.Type = ControllerType.IsStandalone;
                     sortAndAddController(sourceController);
                 }
