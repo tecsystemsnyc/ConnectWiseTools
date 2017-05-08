@@ -90,7 +90,7 @@
                         <Label Content="Controllers" FontSize="10"/>
                         <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                                   AutoGenerateColumns="False"
-                                                  CanUserAddRows="False"
+                                                  IsReadOnly="True"
                                                           MinHeight="50">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Name"

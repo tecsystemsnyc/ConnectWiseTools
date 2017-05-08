@@ -266,6 +266,7 @@ namespace TECUserControlLibrary.Models
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                List<TECController> controllersToRemove = new List<TECController>();
                 foreach (object item in e.OldItems)
                 {
                     if ((item as TECNetworkConnection).ChildrenControllers.Count == 0)
@@ -274,8 +275,12 @@ namespace TECUserControlLibrary.Models
                     }
                     foreach (TECController controller in (item as TECNetworkConnection).ChildrenControllers)
                     {
-                        Controller.RemoveController(controller);
+                        controllersToRemove.Add(controller);
                     }
+                }
+                foreach(TECController controller in controllersToRemove)
+                {
+                    Controller.RemoveController(controller);
                 }
             }
         }
