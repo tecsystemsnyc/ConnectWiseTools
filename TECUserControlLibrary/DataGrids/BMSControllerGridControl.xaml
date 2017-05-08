@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
@@ -89,9 +90,10 @@
                         </i:Interaction.Behaviors>
                         <Label Content="Controllers" FontSize="10"/>
                         <DataGrid ItemsSource="{Binding ChildrenControllers}"
-                                                  AutoGenerateColumns="False"
-                                                  IsReadOnly="True"
-                                                          MinHeight="50">
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  MinHeight="50"
+                                  dd:DragDrop.DropHandler="{Binding ViewModel, ElementName=parent}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Name"
                                                                     Binding="{Binding Name}"

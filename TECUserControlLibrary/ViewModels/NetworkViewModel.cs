@@ -624,19 +624,35 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     bool foundCollection = false;
                     //See if target collection is a child controller connection
+                    List<BMSController> parentControllers = new List<BMSController>();
                     foreach (BMSController bmsController in BMSControllers)
                     {
-                        foreach (TECNetworkConnection connection in bmsController.Controller.ChildrenConnections)
+                        parentControllers.Add(bmsController);
+                    }
+                    foreach (BMSController serverController in ServerControllers)
+                    {
+                        parentControllers.Add(serverController);
+                    }
+                    foreach (BMSController parentController in parentControllers)
+                    {
+                        foreach (TECConnection connection in parentController.Controller.ChildrenConnections)
                         {
-                            if (targetCollection == connection.ChildrenControllers)
+                            if (connection is TECNetworkConnection)
                             {
-                                foundCollection = true;
-                                sourceController.Type = ControllerType.IsNetworked;
-                                connection.ChildrenControllers.Add(sourceController);
-                                break;
+                                if (targetCollection == (connection as TECNetworkConnection).ChildrenControllers)
+                                {
+                                    foundCollection = true;
+                                    sourceController.Type = ControllerType.IsNetworked;
+                                    (connection as TECNetworkConnection).ChildrenControllers.Add(sourceController);
+                                    break;
+                                }
                             }
                         }
                         if (foundCollection) break;
+                    }
+                    if (!foundCollection)
+                    {
+                        throw new NotImplementedException();
                     }
                 }
             }
