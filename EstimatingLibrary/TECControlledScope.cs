@@ -28,6 +28,17 @@ namespace EstimatingLibrary
             }
         }
 
+        private ObservableCollection<TECSystem> _systemInstances;
+        public ObservableCollection<TECSystem> SystemInstances
+        {
+            get { return _systemInstances; }
+            set
+            {
+                _systemInstances = value;
+                RaisePropertyChanged("SystemInstances");
+            }
+        }
+
         private ObservableCollection<TECController> _controllers { get; set; }
         public ObservableCollection<TECController> Controllers
         {
@@ -42,6 +53,17 @@ namespace EstimatingLibrary
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
+            }
+        }
+
+        private ObservableCollection<TECController> _controllerInstances;
+        public ObservableCollection<TECController> ControllerInstances
+        {
+            get { return _controllerInstances; }
+            set
+            {
+                _controllerInstances = value;
+                RaisePropertyChanged("ControllerInstances");
             }
         }
 
@@ -60,6 +82,17 @@ namespace EstimatingLibrary
                 _panels = value;
                 Panels.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Panels", temp, this);
+            }
+        }
+
+        private ObservableCollection<TECPanel> _panelInstances;
+        public ObservableCollection<TECPanel> PanelInstances
+        {
+            get { return _panelInstances; }
+            set
+            {
+                _panelInstances = value;
+                RaisePropertyChanged("PanelInstances");
             }
         }
 

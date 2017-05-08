@@ -60,6 +60,8 @@ namespace EstimatingLibrary.Utilities
             { wiring.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
+            foreach(TECControlledScope scope in Bid.ControlledScope)
+            { registerControlledScope(scope); }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {

@@ -1355,6 +1355,26 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
+    public class ControlledScopeScopeInstanceTable : TableBase
+    {
+        public static new string TableName = "TECControlledScopeTECScope";
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static Type ScopeType = typeof(TECScope);
+
+        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControlledScopeID,
+            ScopeID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ControlledScopeType,
+            ScopeType
+        };
+    }
+
     public class IOModuleManufacturerTable : TableBase
     {
         public static new string TableName = "TECIOModuleTECManufacturer";
@@ -1404,6 +1424,7 @@ namespace EstimatingUtilitiesLibrary
             new NetworkConnectionTable(),
             new IOTable(),
             new IOModuleTable(),
+            new ControlledScopeTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1432,6 +1453,10 @@ namespace EstimatingUtilitiesLibrary
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
+            new ControlledScopeControllerTable(),
+            new ControlledScopePanelTable(),
+            new ControlledScopeSystemTable(),
+            new ControlledScopeScopeInstanceTable(),
             new BidBidParametersTable(),
             new BidMiscCostTable(),
             new BidMiscWiringTable(),
@@ -1488,6 +1513,7 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeScopeInstanceTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new IOModuleManufacturerTable()
