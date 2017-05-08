@@ -17,6 +17,8 @@ namespace EstimatingLibrary
         TECBid bid;
         ChangeWatcher watcher;
 
+        const double ZERO = 0;
+
         #region Cost Base
         private double tecLaborHours;
         private double tecMaterialCost;
@@ -141,7 +143,7 @@ namespace EstimatingLibrary
         }
         public double ElectricalSuperLaborHours
         {
-            get { return GetElectricalSuperLaborHours(bid); }
+            get { return GetElectricalSuperLaborHours(); }
         }
         public double ElectricalSuperLaborCost
         {
@@ -160,7 +162,7 @@ namespace EstimatingLibrary
         public double ElectricalMaterialCost
         {
             get
-            { return GetElectricalMaterialCost(bid); }
+            { return GetElectricalMaterialCost(); }
         }
         public double SubcontractorSubtotal
         {
@@ -312,13 +314,13 @@ namespace EstimatingLibrary
                 electricalMaterialCost += cost.ElectricalCost;
                 electricalLaborHours += cost.ElectricalLabor;
 
-                if (cost.MaterialCost != 0)
+                if (Math.Abs(cost.MaterialCost) > ZERO)
                 { raiseMaterial(); }
-                if (cost.LaborCost != 0)
+                if (Math.Abs(cost.LaborCost) > ZERO)
                 { raiseTECLabor(); }
-                if (cost.ElectricalCost != 0)
+                if (Math.Abs(cost.ElectricalCost) > ZERO)
                 { raiseElectricalMaterial(); }
-                if (cost.ElectricalLabor != 0)
+                if (Math.Abs(cost.ElectricalLabor) > ZERO)
                 { raiseElectricalLabor(); }
 
             }
@@ -326,14 +328,14 @@ namespace EstimatingLibrary
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost += cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost += cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseElectricalMaterial(); }
             }
 
@@ -347,27 +349,27 @@ namespace EstimatingLibrary
                 tecLaborHours -= cost.LaborCost;
                 electricalMaterialCost -= cost.ElectricalCost;
                 electricalLaborHours -= cost.ElectricalLabor;
-                if (cost.MaterialCost != 0)
+                if (Math.Abs(cost.MaterialCost) > ZERO)
                 { raiseMaterial(); }
-                if (cost.LaborCost != 0)
+                if (Math.Abs(cost.LaborCost) > ZERO)
                 { raiseTECLabor(); }
-                if (cost.ElectricalCost != 0)
+                if (Math.Abs(cost.ElectricalCost) > ZERO)
                 { raiseElectricalMaterial(); }
-                if (cost.ElectricalLabor != 0)
+                if (Math.Abs(cost.ElectricalLabor) > ZERO)
                 { raiseElectricalLabor(); }
             }
             else if (item is TECMiscCost)
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost -= cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost -= cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseElectricalMaterial(); }
             }
         }
@@ -481,7 +483,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical material cost of all wire, conduit, and their associated costs 
         /// </summary>
-        public double GetElectricalMaterialCost(TECBid bid)
+        public double GetElectricalMaterialCost()
         {
             double cost = electricalMaterialCost;
             double shipping = 0.03;
@@ -677,7 +679,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical super labor hours
         /// </summary>
-        public double GetElectricalSuperLaborHours(TECBid bid)
+        public double GetElectricalSuperLaborHours()
         {
             double laborHours = electricalLaborHours;
 
@@ -688,16 +690,16 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetElectricalSuperLaborCost(TECBid bid)
         {
-            double cost = GetElectricalSuperLaborHours(bid) * bid.Labor.ElectricalSuperEffectiveRate;
+            double cost = GetElectricalSuperLaborHours() * bid.Labor.ElectricalSuperEffectiveRate;
 
             return cost;
         }
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
         /// </summary>
-        public double GetTotalElectricalLaborHours(TECBid bid)
+        public double GetTotalElectricalLaborHours()
         {
-            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours(bid);
+            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours();
             return laborCost;
         }
         /// <summary>
@@ -714,7 +716,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetSubcontractorLaborHours(TECBid bid)
         {
-            double laborHours = GetTotalElectricalLaborHours(bid);
+            double laborHours = GetTotalElectricalLaborHours();
             return laborHours;
         }
         /// <summary>
@@ -743,7 +745,7 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetSubcontractorLaborCost(bid);
-            outCost += GetElectricalMaterialCost(bid);
+            outCost += GetElectricalMaterialCost();
             outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
 
             return outCost;
