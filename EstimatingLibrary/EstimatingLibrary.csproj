@@ -102,7 +102,6 @@
   <ItemGroup>
     <Compile Include="Defaults.cs" />
     <Compile Include="EstimateCalculator.cs" />
-    <Compile Include="InstanceOfSystem.cs" />
     <Compile Include="Interfaces\CostComponent.cs" />
     <Compile Include="Interfaces\GuidObject.cs" />
     <Compile Include="Interfaces\PointComponent.cs" />
