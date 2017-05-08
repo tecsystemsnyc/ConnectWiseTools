@@ -231,7 +231,6 @@ namespace EstimatingLibrary
                         addCost(newValue);
                         addPoints(newValue);
                     }
-                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -261,6 +260,12 @@ namespace EstimatingLibrary
                                 addPoints(item);
                             }
                         }
+                    }
+                    if(newValue is TECBidParameters)
+                    {
+                        raiseMaterial();
+                        raiseTECTotals();
+                        raiseSubcontractorTotals();
                     }
                 }
             }
