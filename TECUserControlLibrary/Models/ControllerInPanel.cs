@@ -15,9 +15,12 @@ namespace TECUserControlLibrary.Models
             get { return _panel; }
             set
             {
-                handlePanelSelection(_panel, value);
-                _panel = value;
-                RaisePropertyChanged("Panel");
+                if(value != Panel)
+                {
+                    handlePanelSelection(_panel, value);
+                    _panel = value;
+                    RaisePropertyChanged("Panel");
+                }
             }
         }
 
@@ -40,16 +43,13 @@ namespace TECUserControlLibrary.Models
 
         private void handlePanelSelection(TECPanel originalPanel, TECPanel selectedPanel)
         {
+            if (originalPanel != null)
+            {
+                originalPanel.Controllers.Remove(Controller);
+            }
             if (selectedPanel != null)
             {
                 selectedPanel.Controllers.Add(Controller);
-            }
-            else if (selectedPanel == null)
-            {
-                if (originalPanel != null)
-                {
-                    originalPanel.Controllers.Remove(Controller);
-                }
             }
         }
 

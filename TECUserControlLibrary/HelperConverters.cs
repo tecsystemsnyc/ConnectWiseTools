@@ -592,6 +592,45 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
+    public class NoneValueConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (values[0] == DependencyProperty.UnsetValue)
+            {
+                return System.Windows.Data.Binding.DoNothing;
+            }
+            if (values[0] != null)
+            {
+                return values[0];
+            }
+            else
+            {
+                return values[1];
+            }
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            object outObject;
+            if (value == null)
+            {
+                outObject = System.Windows.Data.Binding.DoNothing;
+            }
+            else if ((value as TECScope).Name == "None")
+            {
+                outObject = null;
+            }
+            else
+            {
+                outObject = value;
+            }
+
+            return new object[] { outObject, System.Windows.Data.Binding.DoNothing };
+        }
+
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
@@ -684,43 +723,6 @@ namespace TECUserControlLibrary.HelperConverters
         #endregion
     }
 
-    public class NoneValueConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if(values[0] == DependencyProperty.UnsetValue)
-            {
-                return System.Windows.Data.Binding.DoNothing;
-            }
-            if (values[0] != null)
-            {
-                return values[0];
-            }
-            else
-            {
-                return values[1];
-            }
-        }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            object outObject;
-            if(value == null)
-            {
-                outObject = System.Windows.Data.Binding.DoNothing;
-            }
-            else if((value as TECScope).Name == "None")
-            {
-                outObject = null;
-            }
-            else
-            {
-                outObject = value;
-            }
-
-            return new object[] { outObject, System.Windows.Data.Binding.DoNothing };
-        }
-        
-    }
     #endregion
 }
