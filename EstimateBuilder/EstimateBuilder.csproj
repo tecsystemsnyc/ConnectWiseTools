@@ -173,7 +173,9 @@
     <Compile Include="Helpers\HelperConverters.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\DeviceSummaryItem.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="ViewModel\DeviceSummaryViewModel.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
     <Compile Include="ViewModel\ElectricalViewModel.cs" />
     <Compile Include="ViewModel\LaborViewModel.cs" />
@@ -184,6 +186,9 @@
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\DeviceListView.xaml.cs">
+      <DependentUpon>DeviceListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +200,9 @@
     </Compile>
     <Compile Include="View\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReviewTabControl.xaml.cs">
+      <DependentUpon>ReviewTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
@@ -218,6 +226,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\DeviceListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DrawingView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ProposalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReviewTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
