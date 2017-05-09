@@ -175,6 +175,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\DeviceSummaryItem.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="Model\LengthSummaryItem.cs" />
     <Compile Include="ViewModel\DeviceSummaryViewModel.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
     <Compile Include="ViewModel\ElectricalViewModel.cs" />
@@ -203,6 +204,9 @@
     </Compile>
     <Compile Include="View\ReviewTabControl.xaml.cs">
       <DependentUpon>ReviewTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Review\ElectricalMaterialView.xaml.cs">
+      <DependentUpon>ElectricalMaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Review\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
@@ -247,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ReviewTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\ElectricalMaterialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
