@@ -11,9 +11,23 @@ namespace EstimateBuilder.ViewModel
 {
     public class DeviceSummaryViewModel : ViewModelBase
     {
+        #region Properties
         private ChangeWatcher _changeWatcher;
+        private ChangeWatcher changeWatcher
+        {
+            get { return _changeWatcher; }
+            set
+            {
+                if (_changeWatcher != null)
+                {
+                    _changeWatcher.Changed -= bidChanged;
+                }
+                _changeWatcher = value;
+                _changeWatcher.Changed += bidChanged;
+            }
+        }
 
-        private Dictionary<TECDevice, DeviceSummaryItem> _deviceDictionary;
+        private Dictionary<Guid, DeviceSummaryItem> _deviceDictionary;
 
         private ObservableCollection<DeviceSummaryItem> _deviceSummaryItems;
         public ObservableCollection<DeviceSummaryItem> DeviceSummaryItems
@@ -25,6 +39,21 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DeviceSummaryItems");
             }
         }
+
+        private double _totalDevicePrice;
+        public double TotalDevicePrice
+        {
+            get
+            {
+                return _totalDevicePrice;
+            }
+            set
+            {
+                _totalDevicePrice = value;
+                RaisePropertyChanged("TotalDevicePrice");
+            }
+        }
+        #endregion
 
         public DeviceSummaryViewModel(TECBid bid)
         {
@@ -39,17 +68,19 @@ namespace EstimateBuilder.ViewModel
         private void reinitialize(TECBid bid)
         {
             DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
-            _deviceDictionary = new Dictionary<TECDevice, DeviceSummaryItem>();
+            _deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
 
-            foreach(TECSystem sys in bid.Systems)
+            TotalDevicePrice = 0;
+
+            foreach (TECSystem sys in bid.Systems)
             {
                 addSystem(sys);
             }
 
-            _changeWatcher = new ChangeWatcher(bid);
-            _changeWatcher.Changed += bidChanged;
+            changeWatcher = new ChangeWatcher(bid);
         }
 
+        #region Event Handlers
         private void bidChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -99,26 +130,55 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private void DeviceItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+
+                if (args.PropertyName == "Total")
+                {
+                    TotalDevicePrice -= (double)args.OldValue;
+                    TotalDevicePrice += (double)args.NewValue;
+                }
+            }
+                
+        }
+        #endregion
+
+        #region Add/Remove
         private void addDevice(TECDevice device)
         {
-            if (_deviceDictionary.ContainsKey(device))
+            bool containsDevice = _deviceDictionary.ContainsKey(device.Guid);
+            if (containsDevice)
             {
-                _deviceDictionary[device].Quantity++;
+                TotalDevicePrice -= _deviceDictionary[device.Guid].Total;
+                _deviceDictionary[device.Guid].Quantity++;
+                TotalDevicePrice += _deviceDictionary[device.Guid].Total;
             }
             else
             {
-                _deviceDictionary.Add(device, new DeviceSummaryItem(device));
+                DeviceSummaryItem deviceItem = new DeviceSummaryItem(device);
+                deviceItem.PropertyChanged += DeviceItem_PropertyChanged;
+                _deviceDictionary.Add(device.Guid, deviceItem);
+                DeviceSummaryItems.Add(deviceItem);
+                TotalDevicePrice += deviceItem.Total;
             }
         }
 
         private void removeDevice(TECDevice device)
         {
-            if (_deviceDictionary.ContainsKey(device))
+            if (_deviceDictionary.ContainsKey(device.Guid))
             {
-                _deviceDictionary[device].Quantity--;
-                if (_deviceDictionary[device].Quantity < 1)
+                TotalDevicePrice -= _deviceDictionary[device.Guid].Total;
+                _deviceDictionary[device.Guid].Quantity--;
+                TotalDevicePrice += _deviceDictionary[device.Guid].Total;
+                
+                if (_deviceDictionary[device.Guid].Quantity < 1)
                 {
-                    _deviceDictionary.Remove(device);
+                    _deviceDictionary[device.Guid].PropertyChanged -= DeviceItem_PropertyChanged;
+                    DeviceSummaryItems.Remove(_deviceDictionary[device.Guid]);
+                    _deviceDictionary.Remove(device.Guid);
                 }
             }
             else
@@ -174,5 +234,6 @@ namespace EstimateBuilder.ViewModel
                 removeEquipment(equip);
             }
         }
+        #endregion
     }
 }

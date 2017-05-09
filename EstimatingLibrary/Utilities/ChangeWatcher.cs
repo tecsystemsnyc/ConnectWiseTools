@@ -308,7 +308,7 @@ namespace EstimatingLibrary.Utilities
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(e);
-            Changed(sender, e);
+            Changed?.Invoke(sender, e);
         }
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {

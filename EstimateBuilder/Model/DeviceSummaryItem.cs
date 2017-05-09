@@ -23,15 +23,22 @@ namespace EstimateBuilder.Model
             {
                 _quantity = value;
                 RaisePropertyChanged("Quantity");
-                RaisePropertyChanged("Total");
+                updateTotal();
             }
         }
 
+        private double _total;
         public double Total
         {
             get
             {
-                return (Device.Cost * Device.Manufacturer.Multiplier * Quantity);
+                return _total;
+            }
+            set
+            {
+                double old = _total;
+                _total = value;
+                NotifyPropertyChanged("Total", old, _total);
             }
         }
 
@@ -41,13 +48,19 @@ namespace EstimateBuilder.Model
             _quantity = 1;
             device.PropertyChanged += Device_PropertyChanged;
             device.Manufacturer.PropertyChanged += Device_PropertyChanged;
+            updateTotal();
+        }
+
+        private void updateTotal()
+        {
+            Total = (Device.Cost * Device.Manufacturer.Multiplier * Quantity);
         }
 
         private void Device_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Cost" || e.PropertyName == "Multiplier" || e.PropertyName == "Manufacturer")
             {
-                RaisePropertyChanged("Total");
+                updateTotal();
             }
         }
 
