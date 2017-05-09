@@ -1588,6 +1588,7 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeScopeInstanceTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),

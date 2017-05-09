@@ -348,8 +348,7 @@ namespace EstimatingLibrary
             {
             }
         }
-
-
+        
         private void handleAdd(object targetObject, object referenceObject)
         {
             if(targetObject is TECEquipment && referenceObject is TECSystem)
@@ -415,6 +414,40 @@ namespace EstimatingLibrary
                         }
                         CharactersticInstances[characteristicPoint].Add(pointToAdd);
                         subScope.Points.Add(pointToAdd);
+                    }
+                }
+            }
+            else if(targetObject is TECSubScopeConnection && referenceObject is TECController)
+            {
+                var characteristicConnection = targetObject as TECSubScopeConnection;
+                var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
+                var characteristicController = (referenceObject as TECController);
+                if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
+                {
+                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    {
+                        TECSubScope subScopeToConnect = null;
+                        foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                        {
+                            foreach (TECSystem system in controlledScope.Systems)
+                            {
+                                if (system.SubScope.Contains(subScope))
+                                {
+                                    subScopeToConnect = subScope;
+                                    break;
+                                }
+                            }
+                        }
+                        foreach (TECController controller in CharactersticInstances[characteristicController])
+                        {
+                            if (controlledScope.Controllers.Contains(controller))
+                            {
+                                var connection = controller.AddSubScope(subScopeToConnect);
+                                connection.Length = characteristicConnection.Length;
+                                connection.ConduitLength = characteristicConnection.ConduitLength;
+                                connection.ConduitType = characteristicConnection.ConduitType;
+                            }
+                        }
                     }
                 }
             }
@@ -499,6 +532,37 @@ namespace EstimatingLibrary
                         foreach (TECPoint point in pointsToRemove)
                         {
                             subScope.Points.Remove(point);
+                        }
+                    }
+                }
+            }
+            else if (targetObject is TECSubScopeConnection && referenceObject is TECController)
+            {
+                var characteristicConnection = targetObject as TECSubScopeConnection;
+                var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
+                var characteristicController = (referenceObject as TECController);
+                if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
+                {
+                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    {
+                        TECSubScope subScopeToRemove = null;
+                        foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                        {
+                            foreach (TECSystem system in controlledScope.Systems)
+                            {
+                                if (system.SubScope.Contains(subScope))
+                                {
+                                    subScopeToRemove = subScope;
+                                    break;
+                                }
+                            }
+                        }
+                        foreach (TECController controller in CharactersticInstances[characteristicController])
+                        {
+                            if (controlledScope.Controllers.Contains(controller))
+                            {
+                                controller.RemoveSubScope(subScopeToRemove);
+                            }
                         }
                     }
                 }

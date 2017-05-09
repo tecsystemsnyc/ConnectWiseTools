@@ -197,6 +197,7 @@ namespace EstimatingUtilitiesLibrary
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
+            bid.ControlledScope = getControlledScope();
 
             ModelLinkingHelper.LinkBid(bid);
             getUserAdjustments(bid);

@@ -418,7 +418,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 foreach (object item in e.NewItems)
                 {
-                    handleAddition(item);
                     if (item is TECSystem)
                     {
                         (item as TECSystem).PropertyChanged += System_PropertyChanged;
@@ -440,7 +439,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 foreach (object item in e.OldItems)
                 {
-                    handleRemoval(item);
                     if (item is TECSystem)
                     {
                         (item as TECSystem).PropertyChanged -= System_PropertyChanged;
@@ -615,28 +613,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
 
         }
-
-        private void handleAddition(object item)
-        {
-            if(item is TECSystem)
-            {
-                foreach(TECControlledScope instances in SelectedControlledScope.ScopeInstances)
-                {
-                    //var 
-                    //instances.Systems
-                }
-            }
-        }
-        private void handleRemoval(object item)
-        {
-            //if (item is TECSystem)
-            //{
-            //    foreach(TECSystem system in SelectedControlledScope.CharactersticInstances[(item as TECSystem)])
-            //    {
-            //        Bid.Systems.Remove(system);
-            //    }
-            //}
-        }
+        
         #endregion
     }
 }

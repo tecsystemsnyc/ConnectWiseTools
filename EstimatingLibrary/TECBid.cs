@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -251,6 +252,8 @@ namespace EstimatingLibrary
             }
         }
 
+        private ChangeWatcher watcher;
+
         private TECEstimator _estimate;
         public TECEstimator Estimate
         {
@@ -285,6 +288,8 @@ namespace EstimatingLibrary
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             _estimate = new TECEstimator(this);
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += Object_PropertyChanged;
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -539,6 +544,194 @@ namespace EstimatingLibrary
             }
         }
 
+        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                object oldValue = args.OldValue;
+                object newValue = args.NewValue;
+                if (e.PropertyName == "Add")
+                {
+                    handleAdd(newValue, oldValue);
+                }
+                else if (e.PropertyName == "Remove")
+                {
+                    handleRemove(newValue, oldValue);
+                }
+                else if (e.PropertyName == "Edit")
+                {
+                }
+                else if (e.PropertyName == "ChildChanged")
+                {
+
+                }
+                else if (e.PropertyName == "ObjectPropertyChanged")
+                {
+
+                }
+                else if (e.PropertyName == "RelationshipPropertyChanged")
+                {
+
+                }
+                else if (e.PropertyName == "MetaAdd")
+                {
+
+                }
+                else if (e.PropertyName == "MetaRemove")
+                {
+
+                }
+                else if (e.PropertyName == "AddRelationship")
+                {
+
+                }
+                else if (e.PropertyName == "RemoveRelationship")
+                {
+
+                }
+                else if (e.PropertyName == "RemovedSubScope") { }
+                else if (e.PropertyName == "AddCatalog")
+                {
+
+                }
+                else if (e.PropertyName == "RemoveCatalog")
+                {
+
+                }
+                else if (e.PropertyName == "Catalogs")
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+            }
+        }
+        
+        private void handleRemove(object newValue, object oldValue)
+        {
+            if (newValue is TECSystem && oldValue is TECControlledScope)
+            {
+                var characteristicSystem = newValue as TECSystem;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicSystem))
+                {
+                    foreach (TECSystem system in characteristicControlledScope.CharactersticInstances[characteristicSystem])
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Systems.Contains(system))
+                            {
+                                controlledScope.Systems.Remove(system);
+                            }
+                        }
+                        Systems.Remove(system);
+                    }
+                }
+                
+            }
+            else if (newValue is TECController && oldValue is TECControlledScope)
+            {
+                var characteristicController = newValue as TECController;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicController))
+                {
+                    foreach (TECController controller in characteristicControlledScope.CharactersticInstances[characteristicController])
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Controllers.Contains(controller))
+                            {
+                                controlledScope.Controllers.Remove(controller);
+                            }
+                        }
+                        Controllers.Remove(controller);
+                    }
+                }
+
+            }
+            else if (newValue is TECPanel && oldValue is TECControlledScope)
+            {
+                var characteristicPanel = newValue as TECPanel;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicPanel))
+                {
+                    foreach (TECPanel panel in characteristicControlledScope.CharactersticInstances[characteristicPanel])
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Panels.Contains(panel))
+                            {
+                                controlledScope.Panels.Remove(panel);
+                            }
+                        }
+                        Panels.Remove(panel);
+                    }
+                }
+
+            }
+        }
+
+        private void handleAdd(object newValue, object oldValue)
+        {
+            if (newValue is TECSystem && oldValue is TECControlledScope)
+            {
+                var characteristicSystem = newValue as TECSystem;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var systemToAdd = new TECSystem(characteristicSystem);
+                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicSystem))
+                    {
+                        characteristicControlledScope.CharactersticInstances[characteristicSystem] = new List<TECScope>();
+                    }
+                    characteristicControlledScope.CharactersticInstances[characteristicSystem].Add(systemToAdd);
+                    controlledScope.Systems.Add(systemToAdd);
+                    Systems.Add(systemToAdd);
+                }
+            }
+            else if (newValue is TECController && oldValue is TECControlledScope)
+            {
+                var characteristicController = newValue as TECController;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var controllerToAdd = new TECController(characteristicController);
+                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicController))
+                    {
+                        characteristicControlledScope.CharactersticInstances[characteristicController] = new List<TECScope>();
+                    }
+                    characteristicControlledScope.CharactersticInstances[characteristicController].Add(controllerToAdd);
+                    controlledScope.Controllers.Add(controllerToAdd);
+                    Controllers.Add(controllerToAdd);
+                }
+            }
+            else if (newValue is TECPanel && oldValue is TECControlledScope)
+            {
+                var characteristicPanel = newValue as TECPanel;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var panelToAdd = new TECPanel(characteristicPanel);
+                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicPanel))
+                    {
+                        characteristicControlledScope.CharactersticInstances[characteristicPanel] = new List<TECScope>();
+                    }
+                    characteristicControlledScope.CharactersticInstances[characteristicPanel].Add(characteristicPanel);
+                    controlledScope.Panels.Add(characteristicPanel);
+                    Panels.Add(characteristicPanel);
+                }
+            }
+        }
         #endregion
 
         private int getPointNumber()
