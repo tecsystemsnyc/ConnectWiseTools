@@ -42,6 +42,12 @@ namespace EstimatingLibrary
             linkControlledScope(templates.ControlledScopeTemplates, templates);
             linkIOModules(templates.ControllerTemplates, templates.Catalogs.IOModules);
         }
+        public static void linkControlledScope(TECControlledScope controlledScope,
+            TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+            LinkControlledScopeObjects(controlledScope.Systems, controlledScope.Controllers,
+                controlledScope.Panels, scopeManager, guidDictionary);
+        }
         public static void LinkControlledScopeObjects(ObservableCollection<TECSystem> systems, ObservableCollection<TECController> controllers,
             ObservableCollection<TECPanel> panels, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary = null)
         {

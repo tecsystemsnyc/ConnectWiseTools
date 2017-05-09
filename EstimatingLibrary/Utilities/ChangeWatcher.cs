@@ -25,6 +25,10 @@ namespace EstimatingLibrary.Utilities
                 registerTemplatesChanges(scopeManager as TECTemplates);
             }
         }
+        public ChangeWatcher(TECControlledScope controlledScope)
+        {
+            registerControlledScope(controlledScope);
+        }
 
         private void registerBidChanges(TECBid Bid)
         {

@@ -374,59 +374,71 @@ namespace EstimatingLibrary
 
         #region Methods
 
-        public void addControlledScope(TECControlledScope controlledScope)
+        public void addControlledScope(TECControlledScope controlledScope, int quantity)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var systemCollection = new ObservableCollection<TECSystem>();
-            var controllerCollection = new ObservableCollection<TECController>();
-            var panelCollection = new ObservableCollection<TECPanel>();
-            foreach (TECSystem system in controlledScope.Systems)
+            for(int x = 0; x < quantity; x++)
             {
-                systemCollection.Add(new TECSystem(system, guidDictionary));
-            }
-            foreach (TECController controller in controlledScope.Controllers)
-            {
-                controllerCollection.Add(new TECController(controller, guidDictionary));
-            }
-            foreach (TECPanel panel in controlledScope.Panels)
-            {
-                panelCollection.Add(new TECPanel(panel, guidDictionary));
-            }
-            //watch.Stop();
-            //Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
+                Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+                var systemCollection = new ObservableCollection<TECSystem>();
+                var controllerCollection = new ObservableCollection<TECController>();
+                var panelCollection = new ObservableCollection<TECPanel>();
+                foreach (TECSystem system in controlledScope.Systems)
+                {
+                    if(!controlledScope.CharactersticInstances.ContainsKey(system))
+                    {
+                        controlledScope.CharactersticInstances[system] = new List<TECScope>();
+                    }
+                    var toAdd = new TECSystem(system, guidDictionary, controlledScope.CharactersticInstances);
+                    controlledScope.CharactersticInstances[system].Add(toAdd);
+                    systemCollection.Add(toAdd);
+                }
+                foreach (TECController controller in controlledScope.Controllers)
+                {
+                    
+                    if (!controlledScope.CharactersticInstances.ContainsKey(controller))
+                    {
+                        controlledScope.CharactersticInstances[controller] = new List<TECScope>();
+                    }
+                    var toAdd = new TECController(controller, guidDictionary);
+                    controlledScope.CharactersticInstances[controller].Add(toAdd);
+                    controllerCollection.Add(toAdd);
+                }
+                foreach (TECPanel panel in controlledScope.Panels)
+                {
+                    
+                    if (!controlledScope.CharactersticInstances.ContainsKey(panel))
+                    {
+                        controlledScope.CharactersticInstances[panel] = new List<TECScope>();
+                    }
+                    var toAdd = new TECPanel(panel, guidDictionary);
+                    controlledScope.CharactersticInstances[panel].Add(toAdd);
+                    panelCollection.Add(toAdd);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-              panelCollection, this, guidDictionary);
-            //watch.Stop();
-            //Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
+                ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+                  panelCollection, this, guidDictionary);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECController controller in controllerCollection)
-            {
-                Controllers.Add(controller);
-            }
-            //watch.Stop();
-            //Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
+                foreach (TECController controller in controllerCollection)
+                {
+                    Controllers.Add(controller);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECPanel panel in panelCollection)
-            {
-                Panels.Add(panel);
-            }
-            //watch.Stop();
-            //Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
+                foreach (TECPanel panel in panelCollection)
+                {
+                    Panels.Add(panel);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECSystem system in systemCollection)
-            {
-                Systems.Add(system);
+                foreach (TECSystem system in systemCollection)
+                {
+                    Systems.Add(system);
+                }
+                var instanceControlledScope = new TECControlledScope();
+                instanceControlledScope.Systems = systemCollection;
+                instanceControlledScope.Controllers = controllerCollection;
+                instanceControlledScope.Panels = panelCollection;
+                controlledScope.ScopeInstances.Add(instanceControlledScope);
             }
-            //watch.Stop();
-            //Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
         }
-
         #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

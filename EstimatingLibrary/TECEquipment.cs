@@ -136,13 +136,26 @@ namespace EstimatingLibrary
         public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null, 
+            Dictionary<TECScope, List<TECScope>> characteristicReference = null) : this()
         {
+            if (characteristicReference == null)
+            {
+                characteristicReference = new Dictionary<TECScope, List<TECScope>>();
+            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
 
             foreach (TECSubScope subScope in equipmentSource.SubScope)
-            { SubScope.Add(new TECSubScope(subScope, guidDictionary)); }
+            {
+                if (!characteristicReference.ContainsKey(subScope))
+                {
+                    characteristicReference[subScope] = new List<TECScope>();
+                }
+                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
+                characteristicReference[subScope].Add(toAdd);
+                SubScope.Add(toAdd);
+            }
             _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
 
             this.copyPropertiesFromScope(equipmentSource);

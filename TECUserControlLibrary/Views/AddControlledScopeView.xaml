@@ -30,8 +30,12 @@
                 <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
             <Label Content="Drag Controlled Scope Here"/>
-            <ItemsControl ItemsSource="{Binding ScopeSource}" dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                      dd:DragDrop.IsDragSource="True"
+            <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
+                                           ViewModel="{Binding}"
+                                           Grid.Row="1"/>
+            <!--<ItemsControl ItemsSource="{Binding ScopeSource}" 
+                          dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                            dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.IsDropTarget="True"
                           Grid.Row="1"
                           Background="{StaticResource SectionBackgroundBrush}">
@@ -40,7 +44,7 @@
                         <UniformGrid Columns="2" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            </ItemsControl>-->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -90,7 +94,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Systems"/>
-            <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.ControlledScope.Systems}"
+            <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"
                                   Margin="5"/>
