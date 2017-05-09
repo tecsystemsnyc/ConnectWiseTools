@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:review="clr-namespace:EstimateBuilder.View.Review"
              xmlns:local="clr-namespace:EstimateBuilder.View"
              mc:Ignorable="d"
              x:Name="parent"
@@ -11,10 +12,10 @@
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>
             <TabItem Header="Device List">
-                <local:DeviceListView ViewModel="{Binding DeviceVM}"/>
+                <review:DeviceListView ViewModel="{Binding DeviceVM}"/>
             </TabItem>
             <TabItem Header="Summary">
-                <local:ReviewView ViewModel="{Binding ReviewVM}"/>
+                <review:ReviewView ViewModel="{Binding ReviewVM}"/>
             </TabItem>
         </TabControl>
             

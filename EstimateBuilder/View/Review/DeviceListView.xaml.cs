@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EstimateBuilder.View
+namespace EstimateBuilder.View.Review
 {
     /// <summary>
     /// Interaction logic for DeviceListView.xaml

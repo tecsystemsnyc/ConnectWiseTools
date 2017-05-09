@@ -186,7 +186,7 @@
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\DeviceListView.xaml.cs">
+    <Compile Include="View\Review\DeviceListView.xaml.cs">
       <DependentUpon>DeviceListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DrawingView.xaml.cs">
@@ -204,7 +204,7 @@
     <Compile Include="View\ReviewTabControl.xaml.cs">
       <DependentUpon>ReviewTabControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReviewView.xaml.cs">
+    <Compile Include="View\Review\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
@@ -226,7 +226,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\DeviceListView.xaml">
+    <Page Include="View\Review\DeviceListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,7 +250,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReviewView.xaml">
+    <Page Include="View\Review\ReviewView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
