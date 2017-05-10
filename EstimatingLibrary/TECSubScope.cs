@@ -120,11 +120,11 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
-            Dictionary<TECScope, List<TECScope>> characteristicReference = null) : this()
+            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
             if (characteristicReference == null)
             {
-                characteristicReference = new Dictionary<TECScope, List<TECScope>>();
+                characteristicReference = new ObservableItemToInstanceList<TECScope>();
             }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
@@ -133,12 +133,8 @@ namespace EstimatingLibrary
             { Devices.Add(new TECDevice(device)); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
-                if (!characteristicReference.ContainsKey(point))
-                {
-                    characteristicReference[point] = new List<TECScope>();
-                }
                 var toAdd = new TECPoint(point);
-                characteristicReference[point].Add(toAdd);
+                characteristicReference.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
 

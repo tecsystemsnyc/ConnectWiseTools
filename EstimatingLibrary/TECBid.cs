@@ -389,34 +389,20 @@ namespace EstimatingLibrary
                 var panelCollection = new ObservableCollection<TECPanel>();
                 foreach (TECSystem system in controlledScope.Systems)
                 {
-                    if(!controlledScope.CharactersticInstances.ContainsKey(system))
-                    {
-                        controlledScope.CharactersticInstances[system] = new List<TECScope>();
-                    }
                     var toAdd = new TECSystem(system, guidDictionary, controlledScope.CharactersticInstances);
-                    controlledScope.CharactersticInstances[system].Add(toAdd);
+                    controlledScope.CharactersticInstances.AddItem(system, toAdd);
                     systemCollection.Add(toAdd);
                 }
                 foreach (TECController controller in controlledScope.Controllers)
                 {
-                    
-                    if (!controlledScope.CharactersticInstances.ContainsKey(controller))
-                    {
-                        controlledScope.CharactersticInstances[controller] = new List<TECScope>();
-                    }
                     var toAdd = new TECController(controller, guidDictionary);
-                    controlledScope.CharactersticInstances[controller].Add(toAdd);
+                    controlledScope.CharactersticInstances.AddItem(controller, toAdd);
                     controllerCollection.Add(toAdd);
                 }
                 foreach (TECPanel panel in controlledScope.Panels)
                 {
-                    
-                    if (!controlledScope.CharactersticInstances.ContainsKey(panel))
-                    {
-                        controlledScope.CharactersticInstances[panel] = new List<TECScope>();
-                    }
                     var toAdd = new TECPanel(panel, guidDictionary);
-                    controlledScope.CharactersticInstances[panel].Add(toAdd);
+                    controlledScope.CharactersticInstances.AddItem(panel, toAdd);
                     panelCollection.Add(toAdd);
                 }
 
@@ -623,7 +609,7 @@ namespace EstimatingLibrary
 
                 if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicSystem))
                 {
-                    foreach (TECSystem system in characteristicControlledScope.CharactersticInstances[characteristicSystem])
+                    foreach (TECSystem system in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicSystem))
                     {
                         foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                         {
@@ -644,7 +630,7 @@ namespace EstimatingLibrary
 
                 if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicController))
                 {
-                    foreach (TECController controller in characteristicControlledScope.CharactersticInstances[characteristicController])
+                    foreach (TECController controller in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicController))
                     {
                         foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                         {
@@ -665,7 +651,7 @@ namespace EstimatingLibrary
 
                 if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicPanel))
                 {
-                    foreach (TECPanel panel in characteristicControlledScope.CharactersticInstances[characteristicPanel])
+                    foreach (TECPanel panel in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicPanel))
                     {
                         foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                         {
@@ -689,12 +675,9 @@ namespace EstimatingLibrary
                 var characteristicControlledScope = oldValue as TECControlledScope;
                 foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                 {
-                    var systemToAdd = new TECSystem(characteristicSystem);
-                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicSystem))
-                    {
-                        characteristicControlledScope.CharactersticInstances[characteristicSystem] = new List<TECScope>();
-                    }
-                    characteristicControlledScope.CharactersticInstances[characteristicSystem].Add(systemToAdd);
+                    var systemToAdd = new TECSystem(characteristicSystem,
+                        characteristicReference: characteristicControlledScope.CharactersticInstances);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicSystem, systemToAdd);
                     controlledScope.Systems.Add(systemToAdd);
                     Systems.Add(systemToAdd);
                 }
@@ -706,11 +689,7 @@ namespace EstimatingLibrary
                 foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                 {
                     var controllerToAdd = new TECController(characteristicController);
-                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicController))
-                    {
-                        characteristicControlledScope.CharactersticInstances[characteristicController] = new List<TECScope>();
-                    }
-                    characteristicControlledScope.CharactersticInstances[characteristicController].Add(controllerToAdd);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicController, controllerToAdd);
                     controlledScope.Controllers.Add(controllerToAdd);
                     Controllers.Add(controllerToAdd);
                 }
@@ -722,11 +701,7 @@ namespace EstimatingLibrary
                 foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                 {
                     var panelToAdd = new TECPanel(characteristicPanel);
-                    if (!characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicPanel))
-                    {
-                        characteristicControlledScope.CharactersticInstances[characteristicPanel] = new List<TECScope>();
-                    }
-                    characteristicControlledScope.CharactersticInstances[characteristicPanel].Add(characteristicPanel);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicPanel, characteristicPanel);
                     controlledScope.Panels.Add(characteristicPanel);
                     Panels.Add(characteristicPanel);
                 }

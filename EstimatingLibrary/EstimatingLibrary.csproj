@@ -105,6 +105,7 @@
     <Compile Include="Interfaces\CostComponent.cs" />
     <Compile Include="Interfaces\GuidObject.cs" />
     <Compile Include="Interfaces\PointComponent.cs" />
+    <Compile Include="ObservableItemToInstanceList.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECControlledScope.cs" />
     <Compile Include="TECEstimator.cs" />

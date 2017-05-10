@@ -80,6 +80,11 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ScopeInstances", temp, this);
             }
         }
+
+        public ObservableItemToInstanceList<TECScope> CharactersticInstances;
+        private ChangeWatcher watcher;
+
+        #region Derived
         public ObservableCollection<TECSystem> SystemInstances
         {
             get { return getSystemInstances(); }
@@ -92,9 +97,7 @@ namespace EstimatingLibrary
         {
             get { return getPanelInstances(); }
         }
-
-        public Dictionary<TECScope, List<TECScope>> CharactersticInstances;
-        private ChangeWatcher watcher;
+        #endregion
 
         public TECControlledScope(Guid guid) : base(guid)
         {
@@ -102,7 +105,7 @@ namespace EstimatingLibrary
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _scopeInstances = new ObservableCollection<TECControlledScope>();
-            CharactersticInstances = new Dictionary<TECScope, List<TECScope>>();
+            CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             Systems.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
@@ -357,14 +360,10 @@ namespace EstimatingLibrary
                 var characteristicSystem = referenceObject as TECSystem;
                 if (CharactersticInstances.ContainsKey(characteristicSystem))
                 {
-                    foreach (TECSystem system in CharactersticInstances[characteristicSystem])
+                    foreach (TECSystem system in CharactersticInstances.GetInstances(characteristicSystem))
                     {
-                        var equipmentToAdd = new TECEquipment(characteristicEquipment);
-                        if (!CharactersticInstances.ContainsKey(characteristicEquipment))
-                        {
-                            CharactersticInstances[characteristicEquipment] = new List<TECScope>();
-                        }
-                        CharactersticInstances[characteristicEquipment].Add(equipmentToAdd);
+                        var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: CharactersticInstances);
+                        CharactersticInstances.AddItem(characteristicEquipment, equipmentToAdd);
                         system.Equipment.Add(equipmentToAdd);
                     }
                 }
@@ -375,14 +374,10 @@ namespace EstimatingLibrary
                 var characteristicSubScope = targetObject as TECSubScope;
                 if (CharactersticInstances.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in CharactersticInstances[characteristicEquipment])
+                    foreach (TECEquipment equipment in CharactersticInstances.GetInstances(characteristicEquipment))
                     {
-                        var subScopeToAdd = new TECSubScope(characteristicSubScope);
-                        if (!CharactersticInstances.ContainsKey(characteristicSubScope))
-                        {
-                            CharactersticInstances[characteristicSubScope] = new List<TECScope>();
-                        }
-                        CharactersticInstances[characteristicSubScope].Add(subScopeToAdd);
+                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: CharactersticInstances);
+                        CharactersticInstances.AddItem(characteristicSubScope, subScopeToAdd);
                         equipment.SubScope.Add(subScopeToAdd);
                     }
                 }
@@ -393,7 +388,7 @@ namespace EstimatingLibrary
                 var device = targetObject as TECDevice;
                 if (CharactersticInstances.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Add(device);
                     }
@@ -405,14 +400,10 @@ namespace EstimatingLibrary
                 var characteristicPoint = targetObject as TECPoint;
                 if (CharactersticInstances.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                     {
                         var pointToAdd = new TECPoint(characteristicPoint);
-                        if (!CharactersticInstances.ContainsKey(characteristicPoint))
-                        {
-                            CharactersticInstances[characteristicPoint] = new List<TECScope>();
-                        }
-                        CharactersticInstances[characteristicPoint].Add(pointToAdd);
+                        CharactersticInstances.AddItem(characteristicPoint, pointToAdd);
                         subScope.Points.Add(pointToAdd);
                     }
                 }
@@ -427,7 +418,7 @@ namespace EstimatingLibrary
                     foreach (TECControlledScope controlledScope in ScopeInstances)
                     {
                         TECSubScope subScopeToConnect = null;
-                        foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                        foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                         {
                             foreach (TECSystem system in controlledScope.Systems)
                             {
@@ -438,7 +429,7 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach (TECController controller in CharactersticInstances[characteristicController])
+                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                         {
                             if (controlledScope.Controllers.Contains(controller))
                             {
@@ -461,12 +452,12 @@ namespace EstimatingLibrary
                 var characteristicSystem = referenceObject as TECSystem;
                 if (CharactersticInstances.ContainsKey(characteristicSystem))
                 {
-                    foreach (TECSystem system in CharactersticInstances[characteristicSystem])
+                    foreach (TECSystem system in CharactersticInstances.GetInstances(characteristicSystem))
                     {
                         var equipmentToRemove = new List<TECEquipment>();
                         foreach (TECEquipment equipment in system.Equipment)
                         {
-                            if (CharactersticInstances[characteristicEquipment].Contains(equipment))
+                            if (CharactersticInstances.GetInstances(characteristicEquipment).Contains(equipment))
                             {
                                 equipmentToRemove.Add(equipment);
                             }
@@ -484,12 +475,12 @@ namespace EstimatingLibrary
                 var characteristicSubScope = targetObject as TECSubScope;
                 if (CharactersticInstances.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in CharactersticInstances[characteristicEquipment])
+                    foreach (TECEquipment equipment in CharactersticInstances.GetInstances(characteristicEquipment))
                     {
                         var subScopeToRemove = new List<TECSubScope>();
                         foreach (TECSubScope subScope in equipment.SubScope)
                         {
-                            if (CharactersticInstances[characteristicSubScope].Contains(subScope))
+                            if (CharactersticInstances.GetInstances(characteristicSubScope).Contains(subScope))
                             {
                                 subScopeToRemove.Add(subScope);
                             }
@@ -507,7 +498,7 @@ namespace EstimatingLibrary
                 var device = targetObject as TECDevice;
                 if (CharactersticInstances.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Remove(device);
                     }
@@ -519,12 +510,12 @@ namespace EstimatingLibrary
                 var characteristicPoint = targetObject as TECPoint;
                 if (CharactersticInstances.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                     {
                         var pointsToRemove = new List<TECPoint>();
                         foreach (TECPoint point in subScope.Points)
                         {
-                            if (CharactersticInstances[characteristicPoint].Contains(point))
+                            if (CharactersticInstances.GetInstances(characteristicPoint).Contains(point))
                             {
                                 pointsToRemove.Add(point);
                             }
@@ -546,7 +537,7 @@ namespace EstimatingLibrary
                     foreach (TECControlledScope controlledScope in ScopeInstances)
                     {
                         TECSubScope subScopeToRemove = null;
-                        foreach (TECSubScope subScope in CharactersticInstances[characteristicSubScope])
+                        foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                         {
                             foreach (TECSystem system in controlledScope.Systems)
                             {
@@ -557,7 +548,7 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach (TECController controller in CharactersticInstances[characteristicController])
+                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                         {
                             if (controlledScope.Controllers.Contains(controller))
                             {

@@ -2159,6 +2159,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, bid);
             }
+            foreach (TECControlledScope conScope in bid.ControlledScope)
+            {
+                saveFullControlledScope(conScope, bid);
+            }
 
         }
         private static void saveCompleteTemplate(TECTemplates templates)
@@ -2241,9 +2245,9 @@ namespace EstimatingUtilitiesLibrary
             { addObject(new StackItem(Change.Add, catalogs, associatedCost)); }
         }
 
-        private static void saveFullControlledScope(TECControlledScope conScope, TECTemplates templates)
+        private static void saveFullControlledScope(TECControlledScope conScope, TECScopeManager scopeManager)
         {
-            addObject(new StackItem(Change.Add, templates, conScope));
+            addObject(new StackItem(Change.Add, scopeManager, conScope));
             saveScopeChildProperties(conScope);
             foreach (TECSystem system in conScope.Systems)
             {
