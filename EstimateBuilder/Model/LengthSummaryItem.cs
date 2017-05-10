@@ -24,6 +24,53 @@ namespace EstimateBuilder.Model
             {
                 _length = value;
                 RaisePropertyChanged("Length");
+                updateTotals();
+            }
+        }
+
+        private double _totalCost;
+        public double TotalCost
+        {
+            get { return _totalCost; }
+            set
+            {
+                double old = _totalCost;
+                _totalCost = value;
+                NotifyPropertyChanged("TotalCost", old, _totalCost);
+            }
+        }
+
+        private double _totalLabor;
+        public double TotalLabor
+        {
+            get { return _totalLabor; }
+            set
+            {
+                double old = _totalLabor;
+                _totalLabor = value;
+                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+            }
+        }
+
+        public LengthSummaryItem(ElectricalMaterialComponent material)
+        {
+            _material = material;
+            _length = 0;
+            material.PropertyChanged += Material_PropertyChanged;
+            updateTotals();
+        }
+
+        private void updateTotals()
+        {
+            TotalCost = (Material.Cost * Length);
+            TotalLabor = (Material.Labor * Length);
+        }
+
+        private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
+            {
+                updateTotals();
             }
         }
 

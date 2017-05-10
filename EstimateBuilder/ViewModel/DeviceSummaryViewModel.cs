@@ -142,7 +142,6 @@ namespace EstimateBuilder.ViewModel
                     TotalDevicePrice += (double)args.NewValue;
                 }
             }
-                
         }
         #endregion
 

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
+             x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -36,48 +37,40 @@
 
         <!--Wire Summary-->
         <TextBlock Text="Wire" Foreground="Black" FontSize="20"/>
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="4"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
-            
-        </DataGrid>
-
+        <local:LengthSummaryDataGrid Grid.Row="1" Grid.ColumnSpan="4"
+                                     LengthSummaryItemsSource="{Binding WireSummaryItems}"/>
         <TextBlock Text="Total Wire Cost:" Grid.Row="2" Foreground="Black"/>
         <TextBlock Text="{Binding TotalWireCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
         <TextBlock Text="Total Wire Hours:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalWireHours, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalWireHours}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
 
         <!--Conduit Summary-->
         <TextBlock Text="Conduit" Foreground="Black" FontSize="20" Grid.Row="3"/>
-        <DataGrid Grid.ColumnSpan="4" Grid.Row="4"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
-
-        </DataGrid>
-
+        <local:LengthSummaryDataGrid Grid.ColumnSpan="4" Grid.Row="4"
+                                     LengthSummaryItemsSource="{Binding ConduitSummaryItems}"/>
         <TextBlock Text="Total Conduit Cost:" Grid.Row="5" Foreground="Black"/>
         <TextBlock Text="{Binding TotalConduitCost, StringFormat={} {0:C}}" Grid.Row="5" Grid.Column="1" Foreground="Black"/>
         <TextBlock Text="Total Conduit Hours:" Grid.Row="5" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalConduitHours, StringFormat={} {0:C}}" Grid.Row="5" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalConduitHours}" Grid.Row="5" Grid.Column="3" Foreground="Black"/>
 
         <!--Associated Cost Summary-->
         <TextBlock Text="Misc" Foreground="Black" FontSize="20" Grid.Row="6"/>
-        <DataGrid Grid.ColumnSpan="4" Grid.Row="7"
+        <!--<DataGrid Grid.ColumnSpan="4" Grid.Row="7"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
 
-        </DataGrid>
+        </DataGrid>-->
 
         <TextBlock Text="Total Electrical Associated Cost:" Grid.Row="8" Foreground="Black"/>
         <TextBlock Text="{Binding TotalElectricalAssociatedCost, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>
         <TextBlock Text="Total Electrical Associated Hours:" Grid.Row="8" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalElectricalAssociatedHours, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalElectricalAssociatedHours}" Grid.Row="8" Grid.Column="3" Foreground="Black"/>
         
         <!--Totals-->
         <TextBlock Text="Total Electrical Material Cost:" Grid.Row="9" Foreground="Black"/>
         <TextBlock Text="{Binding TotalElectricalCost, StringFormat={} {0:C}}" Grid.Row="9" Grid.Column="1" Foreground="Black"/>
         <TextBlock Text="Total Electrical Hours:" Grid.Row="9" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalElectricalHours, StringFormat={} {0:C}}" Grid.Row="9" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalElectricalHours}" Grid.Row="9" Grid.Column="3" Foreground="Black"/>
 
         <Border Grid.RowSpan="3" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1"/>
         <Border Grid.RowSpan="3" Grid.ColumnSpan="4" Grid.Row="3" BorderBrush="Black" BorderThickness="1"/>

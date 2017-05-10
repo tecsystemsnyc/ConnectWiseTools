@@ -107,6 +107,7 @@ namespace EstimateBuilder.ViewModel
         public ElectricalViewModel ElectricalVM { get; set; }
         public NetworkViewModel NetworkVM { get; set; }
         public DeviceSummaryViewModel DeviceVM { get; set; }
+        public ElectricalMaterialSummaryViewModel ElectricalMaterialVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -202,6 +203,10 @@ namespace EstimateBuilder.ViewModel
         {
             DeviceVM = new DeviceSummaryViewModel(bid);
         }
+        private void setupElectricalMaterialVM(TECBid bid)
+        {
+            ElectricalMaterialVM = new ElectricalMaterialSummaryViewModel(bid);
+        }
         #endregion
 
         #region Commands Methods
@@ -274,6 +279,7 @@ namespace EstimateBuilder.ViewModel
             setupMenuVM();
             setupNetworkVM(new TECBid());
             setupDeviceVM(new TECBid());
+            setupElectricalMaterialVM(new TECBid());
         }
         override protected void refresh()
         {
@@ -287,6 +293,7 @@ namespace EstimateBuilder.ViewModel
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid);
                 DeviceVM.Refresh(Bid);
+                ElectricalMaterialVM.Refresh(Bid);
             }
         }
         private string getLoadDrawingsPath()

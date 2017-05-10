@@ -20,6 +20,16 @@ namespace EstimateBuilder.View.Review
     /// </summary>
     public partial class ElectricalMaterialView : UserControl
     {
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(ElectricalMaterialView));
+
         public ElectricalMaterialView()
         {
             InitializeComponent();
