@@ -37,11 +37,11 @@ namespace EstimatingUtilitiesLibrary
             var tableNames = getAllTableNames();
             if (tableNames.Contains("TECBidInfo"))
             {
-                workingScopeManager = loadBid(path);
+                workingScopeManager = loadBid();
             }
             else if (tableNames.Contains("TECTemplatesInfo"))
             {
-                workingScopeManager = loadTemplates(path);
+                workingScopeManager = loadTemplates();
             }
             else
             {
@@ -152,7 +152,7 @@ namespace EstimatingUtilitiesLibrary
             getScopeManagerProperties(bid);
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
+            bid.Systems = getAllSystemsInBid();
             bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
@@ -177,7 +177,7 @@ namespace EstimatingUtilitiesLibrary
         #endregion Public Functions
 
         #region Loading from DB Methods
-        static private TECBid loadBid(string path)
+        static private TECBid loadBid()
         {
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = getBidInfo();
@@ -186,7 +186,7 @@ namespace EstimatingUtilitiesLibrary
             getScopeManagerProperties(bid);
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
+            bid.Systems = getAllSystemsInBid();
             bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
@@ -198,15 +198,16 @@ namespace EstimatingUtilitiesLibrary
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
             bid.ControlledScope = getControlledScope();
+            var placeholderDict = getCharacteristicInstancesList();
 
-            ModelLinkingHelper.LinkBid(bid);
+            ModelLinkingHelper.LinkBid(bid, placeholderDict);
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
             return bid;
         }
-        static private TECTemplates loadTemplates(string path)
+        static private TECTemplates loadTemplates()
         {
             checkAndUpdateDB(typeof(TECTemplates));
 
@@ -503,7 +504,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return systems;
         }
-        static private ObservableCollection<TECSystem> getAllSystemsInBid(TECBid bid)
+        static private ObservableCollection<TECSystem> getAllSystemsInBid()
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
@@ -1110,7 +1111,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 controlledScope.Add(getControlledScopeFromRow(row));
             }
-
             return controlledScope;
         }
 
@@ -1240,6 +1240,16 @@ namespace EstimatingUtilitiesLibrary
             { return getPlaceholderIOModuleFromRow(moduleTable.Rows[0]); }
             else
             { return null; }
+        }
+        static private Dictionary<Guid, List<Guid>> getCharacteristicInstancesList()
+        {
+            Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
+            DataTable dictDT = SQLiteDB.getDataFromTable(CharacteristicScopeInstanceScopeTable.TableName);
+            foreach(DataRow row in dictDT.Rows)
+            {
+                addRowToPlaceholderDict(row, outDict);
+            }
+            return outDict;
         }
 
         static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
@@ -2029,6 +2039,17 @@ namespace EstimatingUtilitiesLibrary
             module.Description = "placeholder";
             module.Manufacturer = new TECManufacturer();
             return module;
+        }
+        private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
+        {
+            Guid key = new Guid(row[CharacteristicScopeInstanceScopeTable.CharacteristicID.Name].ToString());
+            Guid value = new Guid(row[CharacteristicScopeInstanceScopeTable.InstanceID.Name].ToString());
+
+            if (!dict.ContainsKey(key))
+            {
+                dict[key] = new List<Guid>();
+            }
+            dict[key].Add(value);
         }
         #endregion
 

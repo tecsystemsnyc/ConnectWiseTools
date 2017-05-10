@@ -23,13 +23,13 @@ namespace EstimatingLibrary
                 charactersticInstances[key] = new List<T>();
             }
             charactersticInstances[key].Add(value);
-            NotifyPropertyChanged("Add", key, value);
+            NotifyPropertyChanged("AddRelationship", key as object, value as object, typeof(T), typeof(T));
         }
 
         public void RemoveItem(T key, T value)
         {
             charactersticInstances[key].Remove(value);
-            NotifyPropertyChanged("Remove", key, value);
+            NotifyPropertyChanged("RemoveRelationship", key as object, value as object, typeof(T), typeof(T));
         }
 
         public List<T> GetInstances(T key)

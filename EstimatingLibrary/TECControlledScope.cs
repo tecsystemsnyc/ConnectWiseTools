@@ -70,14 +70,8 @@ namespace EstimatingLibrary
             get { return _scopeInstances; }
             set
             {
-                var temp = this.Copy();
-                if (Panels != null)
-                {
-                    ScopeInstances.CollectionChanged -= CollectionChanged;
-                }
                 _scopeInstances = value;
-                ScopeInstances.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ScopeInstances", temp, this);
+                RaisePropertyChanged("ScopeInstances");
             }
         }
 
@@ -106,14 +100,20 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _scopeInstances = new ObservableCollection<TECControlledScope>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
+            CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Systems.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
-            ScopeInstances.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
             registerSystems();
         }
+
+        private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaiseExtendedPropertyChanged(sender, e);
+        }
+
         public TECControlledScope() : this(Guid.NewGuid()) { }
         public TECControlledScope(TECControlledScope source, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {

@@ -1355,22 +1355,40 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
-    public class ControlledScopeScopeInstanceTable : TableBase
+    wetwertgwe
+    public class ControlledScopeHierarchyTable : TableBase
     {
-        public static new string TableName = "TECControlledScopeTECScope";
+        public static new string TableName = "TECControlledScopeHierarchy";
         public static Type ControlledScopeType = typeof(TECControlledScope);
-        public static Type ScopeType = typeof(TECScope);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
-        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField ControlledScopeParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ControlledScopeChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeID,
-            ScopeID
+            ControlledScopeParentID,
+            ControlledScopeChildID
             };
         public static new List<Type> Types = new List<Type>()
         {
             ControlledScopeType,
+            ControlledScopeType
+        };
+    }
+    public class CharacteristicScopeInstanceScopeTable : TableBase
+    {
+        public static new string TableName = "CharacteristicScopeInstanceScope";
+        public static Type ScopeType = typeof(TECScope);
+
+        public static TableField CharacteristicID = new TableField("CharacteristicID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField InstanceID = new TableField("InstanceID", "TEXT", ScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            CharacteristicID,
+            InstanceID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ScopeType,
             ScopeType
         };
     }
@@ -1456,7 +1474,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
-            new ControlledScopeScopeInstanceTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new BidBidParametersTable(),
             new BidMiscCostTable(),
             new BidMiscWiringTable(),
@@ -1513,7 +1532,7 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
-            new ControlledScopeScopeInstanceTable(),
+            new ControlledScopeHierarchyTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new IOModuleManufacturerTable()
@@ -1588,7 +1607,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
-            new ControlledScopeScopeInstanceTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),

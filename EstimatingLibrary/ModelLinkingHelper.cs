@@ -1,4 +1,5 @@
 ﻿using DebugLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +13,12 @@ namespace EstimatingLibrary
     public static class ModelLinkingHelper
     {
         #region Public Methods
-        public static void LinkBid(TECBid bid)
+        public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict = null)
         {
+            if(placeholderDict != null)
+            {
+                linkControlledScopeWithInstances(bid, placeholderDict);
+            }
             linkCatalogs(bid.Catalogs);
             linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
             linkAllLocations(bid.Locations, bid.Systems);
@@ -28,6 +33,83 @@ namespace EstimatingLibrary
             linkIOModules(bid.Controllers, bid.Catalogs.IOModules);
             linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
         }
+
+        private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
+        {
+            foreach (TECControlledScope scope in bid.ControlledScope)
+            {
+                foreach(TECSystem system in scope.Systems)
+                {
+                    linkCharacteristicSystemWithSystems(scope.CharactersticInstances, placeholderDict, system, bid.Systems);
+                }
+                foreach(TECController controller in scope.Controllers)
+                {
+                    linkCharacteristicScopeWithScope(scope.CharactersticInstances, placeholderDict, controller, bid.Controllers);
+                }
+                foreach (TECPanel panel in scope.Panels)
+                {
+                    linkCharacteristicScopeWithScope(scope.CharactersticInstances, placeholderDict, panel, bid.Panels);
+                }
+            }
+        }
+        private static void linkCharacteristicSystemWithSystems(ObservableItemToInstanceList<TECScope> characteristicList, Dictionary<Guid, List<Guid>> placeholderList,
+            TECScope characteristicScope, ObservableCollection<TECSystem> systemInstances)
+        {
+            foreach (KeyValuePair<Guid, List<Guid>> item in placeholderList)
+            {
+                if (item.Key == characteristicScope.Guid)
+                {
+                    foreach (TECSystem system in systemInstances)
+                    {
+                        foreach (Guid guid in item.Value)
+                        {
+                            if (system.Guid == guid)
+                            {
+                                characteristicList.AddItem(characteristicScope, system);
+                            }
+                            break;
+                        }
+                        foreach(TECEquipment equipment in system.Equipment)
+                        {
+                            linkCharacteristicScopeWithScope(characteristicList, placeholderList, equipment, system.Equipment);
+                            foreach(TECSubScope subscope in equipment.SubScope)
+                            {
+                                linkCharacteristicScopeWithScope(characteristicList, placeholderList, subscope, equipment.SubScope);
+                                foreach(TECPoint point in subscope.Points)
+                                {
+                                    linkCharacteristicScopeWithScope(characteristicList, placeholderList, point, subscope.Points);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        private static void linkCharacteristicScopeWithScope(ObservableItemToInstanceList<TECScope> characteristicList, Dictionary<Guid, List<Guid>> placeholderList,
+            TECScope characteristicScope, IList scopeInstances)
+        {
+            foreach (KeyValuePair<Guid, List<Guid>> item in placeholderList)
+            {
+                if(item.Key == characteristicScope.Guid)
+                {
+                    foreach(TECScope scope in scopeInstances)
+                    {
+                        foreach(Guid guid in item.Value)
+                        {
+                            if(scope.Guid == guid)
+                            {
+                                characteristicList.AddItem(characteristicScope, scope);
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
         public static void LinkTemplates(TECTemplates templates)
         {
             linkCatalogs(templates.Catalogs);
