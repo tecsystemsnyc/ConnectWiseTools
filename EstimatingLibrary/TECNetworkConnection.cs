@@ -122,12 +122,10 @@ namespace EstimatingLibrary
         protected override double getElectricalCost()
         {
             double cost = 0;
-            var terminations = 0;
             if (ConnectionType != null)
             {
                 TECConnectionType type = ConnectionType;
                 cost += Length * type.Cost;
-                terminations += 2 * ChildrenControllers.Count;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                 { cost += associatedCost.Cost * ChildrenControllers.Count; }
             }
@@ -139,16 +137,13 @@ namespace EstimatingLibrary
                     cost += associatedCost.Cost * ChildrenControllers.Count;
                 }
             }
-            cost += terminations * .25;
             return cost;
         }
         protected override double getElectricalLabor()
         {
             double laborHours = 0;
-            var terminations = 0;
             if (ConnectionType != null)
             {
-                terminations += 2 * ChildrenControllers.Count;
                 TECConnectionType type = ConnectionType;
                 laborHours += Length * type.Labor;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
@@ -162,7 +157,6 @@ namespace EstimatingLibrary
                     laborHours += associatedCost.Labor * ChildrenControllers.Count;
                 }
             }
-            laborHours += terminations * .1;
             return laborHours;
         }
         #endregion Methods

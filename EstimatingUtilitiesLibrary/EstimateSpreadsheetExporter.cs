@@ -181,9 +181,9 @@ namespace EstimatingUtilitiesLibrary
             cell.CellValue = new CellValue(num.ToString());
             cell.DataType = new EnumValue<CellValues>(CellValues.Number);
 
-            cell = GetCell(workSheet, "J", rowIndex);
-            cell.CellValue = new CellValue(subScope.SubScope.Connection.Terminations.ToString());
-            cell.DataType = new EnumValue<CellValues>(CellValues.Number);
+            //cell = GetCell(workSheet, "J", rowIndex);
+            //cell.CellValue = new CellValue(subScope.SubScope.Connection.Terminations.ToString());
+            //cell.DataType = new EnumValue<CellValues>(CellValues.Number);
 
             var conduitString = "";
             var flexNum = 0;

@@ -49,8 +49,20 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private ObservableCollection<AssociatedCostSummaryItem> _associatedCostSummaryItems;
+        public ObservableCollection<AssociatedCostSummaryItem> AssociatedCostSummaryItems
+        {
+            get { return _associatedCostSummaryItems; }
+            set
+            {
+                _associatedCostSummaryItems = value;
+                RaisePropertyChanged("AssociatedCostSummaryItems");
+            }
+        }
+
         private Dictionary<Guid, LengthSummaryItem> wireDictionary;
         private Dictionary<Guid, LengthSummaryItem> conduitDictionary;
+        private Dictionary<Guid, AssociatedCostSummaryItem> associatedCostDictionary;
 
         private double _totalWireCost;
         public double TotalWireCost
@@ -113,7 +125,7 @@ namespace EstimateBuilder.ViewModel
         }
 
         private double _totalAssociatedHours;
-        public double TotalAsscociatedHours
+        public double TotalAssociatedHours
         {
             get { return _totalAssociatedHours; }
             set
@@ -131,7 +143,7 @@ namespace EstimateBuilder.ViewModel
 
         public double TotalElectricalHours
         {
-            get { return (TotalWireHours + TotalConduitHours + TotalAsscociatedHours); }
+            get { return (TotalWireHours + TotalConduitHours + TotalAssociatedHours); }
         }
         #endregion
 
@@ -149,16 +161,18 @@ namespace EstimateBuilder.ViewModel
         {
             WireSummaryItems = new ObservableCollection<LengthSummaryItem>();
             ConduitSummaryItems = new ObservableCollection<LengthSummaryItem>();
+            AssociatedCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
 
             wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
             conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
+            associatedCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
 
             TotalWireCost = 0;
             TotalWireHours = 0;
             TotalConduitCost = 0;
             TotalConduitHours = 0;
             TotalAssociatedCost = 0;
-            TotalAsscociatedHours = 0;
+            TotalAssociatedHours = 0;
 
             foreach(TECController controller in bid.Controllers)
             {
@@ -179,11 +193,71 @@ namespace EstimateBuilder.ViewModel
 
                 if (args.PropertyName == "Add")
                 {
-                    
+                    if (targetObject is TECController && referenceObject is TECBid)
+                    {
+                        addController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECConnection && referenceObject is TECController)
+                    {
+                        addConnection(targetObject as TECConnection);
+                    }
+                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
+                    {
+                        if ((referenceObject as TECSubScope).Connection != null)
+                        {
+                            addLengthToWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                        }
+                    }
+                    else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
+                    {
+                        addAssociatedCost(targetObject as TECAssociatedCost);
+                    }
+                    else if (targetObject is TECAssociatedCost && referenceObject is TECConduitType)
+                    {
+                        addAssociatedCost(targetObject as TECAssociatedCost);
+                    }
                 }
                 else if (args.PropertyName == "Remove")
                 {
-                    
+                    if (targetObject is TECController && referenceObject is TECBid)
+                    {
+                        removeController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECConnection && referenceObject is TECController)
+                    {
+                        removeConnection(targetObject as TECConnection);
+                    }
+                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
+                    {
+                        if ((referenceObject as TECSubScope).Connection != null)
+                        {
+                            removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                        }
+                    }
+                    else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
+                    {
+                        removeAssociatedCost(targetObject as TECAssociatedCost);
+                    }
+                    else if (targetObject is TECAssociatedCost && referenceObject is TECConduitType)
+                    {
+                        removeAssociatedCost(targetObject as TECAssociatedCost);
+                    }
+                }
+                else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConduitType")
+                {
+                    if (args.OldValue is TECConnection && args.NewValue is TECConnection)
+                    {
+                        removeConnection(args.OldValue as TECConnection);
+                        addConnection(args.NewValue as TECConnection);
+                    }
+                }
+                else if (args.PropertyName == "ConnectionType")
+                {
+                    if (args.OldValue is TECNetworkConnection && args.NewValue is TECNetworkConnection)
+                    {
+                        removeConnection(args.OldValue as TECConnection);
+                        addConnection(args.NewValue as TECConnection);
+                    }
                 }
             }
         }
@@ -222,6 +296,25 @@ namespace EstimateBuilder.ViewModel
                 {
                     TotalConduitHours -= (double)args.OldValue;
                     TotalConduitHours += (double)args.NewValue;
+                }
+            }
+        }
+
+        private void CostItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+
+                if (args.PropertyName == "TotalCost")
+                {
+                    TotalAssociatedCost -= (double)args.OldValue;
+                    TotalAssociatedCost += (double)args.NewValue;
+                }
+                else if (args.PropertyName == "TotalLabor")
+                {
+                    TotalAssociatedHours -= (double)args.OldValue;
+                    TotalAssociatedHours += (double)args.NewValue;
                 }
             }
         }
@@ -328,6 +421,53 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private void addAssociatedCost(TECAssociatedCost assCost)
+        {
+            bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
+            if (containsAssCost)
+            {
+                TotalAssociatedCost -= associatedCostDictionary[assCost.Guid].TotalCost;
+                TotalAssociatedHours -= associatedCostDictionary[assCost.Guid].TotalLabor;
+                associatedCostDictionary[assCost.Guid].Quantity++;
+                TotalAssociatedCost += associatedCostDictionary[assCost.Guid].TotalCost;
+                TotalAssociatedHours += associatedCostDictionary[assCost.Guid].TotalLabor;
+            }
+            else
+            {
+                AssociatedCostSummaryItem costItem = new AssociatedCostSummaryItem(assCost);
+                costItem.PropertyChanged += CostItem_PropertyChanged;
+                associatedCostDictionary.Add(assCost.Guid, costItem);
+                AssociatedCostSummaryItems.Add(costItem);
+                TotalAssociatedCost += costItem.TotalCost;
+                TotalAssociatedHours += costItem.TotalLabor;
+            }
+        }
+
+        private void removeAssociatedCost(TECAssociatedCost assCost)
+        {
+            bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
+            if (containsAssCost)
+            {
+                AssociatedCostSummaryItem costItem = associatedCostDictionary[assCost.Guid];
+                TotalAssociatedCost -= costItem.TotalCost;
+                TotalAssociatedHours -= costItem.TotalLabor;
+                costItem.Quantity--;
+                TotalAssociatedCost += costItem.TotalCost;
+                TotalAssociatedHours += costItem.TotalLabor;
+
+                if (costItem.Quantity < 1)
+                {
+                    costItem.PropertyChanged -= CostItem_PropertyChanged;
+                    AssociatedCostSummaryItems.Remove(costItem);
+                    associatedCostDictionary.Remove(assCost.Guid);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Associated cost not found in associated cost dictionary.");
+            }
+        }
+
         private void addConnection(TECConnection connection)
         {
             //Add Wire
@@ -338,6 +478,10 @@ namespace EstimateBuilder.ViewModel
                 foreach(TECConnectionType type in ssConnect.ConnectionTypes)
                 {
                     addLengthToWireType(connection.Length, type);
+                    foreach(TECAssociatedCost cost in type.AssociatedCosts)
+                    {
+                        addAssociatedCost(cost);
+                    }
                 }
             }
             else if (connection is TECNetworkConnection)
@@ -345,6 +489,11 @@ namespace EstimateBuilder.ViewModel
                 TECNetworkConnection netConnect = connection as TECNetworkConnection;
 
                 addLengthToWireType(connection.Length, netConnect.ConnectionType);
+                
+                foreach(TECAssociatedCost cost in netConnect.ConnectionType.AssociatedCosts)
+                {
+                    addAssociatedCost(cost);
+                }
             }
             else
             {
@@ -353,6 +502,13 @@ namespace EstimateBuilder.ViewModel
 
             //Add Conduit
             addLengthToConduitType(connection.ConduitLength, connection.ConduitType);
+            if (connection.ConduitType != null)
+            {
+                foreach (TECAssociatedCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    addAssociatedCost(cost);
+                }
+            }
         }
 
         private void removeConnection(TECConnection connection)
@@ -365,6 +521,10 @@ namespace EstimateBuilder.ViewModel
                 foreach (TECConnectionType type in ssConnect.ConnectionTypes)
                 {
                     removeLengthFromWireType(connection.Length, type);
+                    foreach(TECAssociatedCost cost in type.AssociatedCosts)
+                    {
+                        removeAssociatedCost(cost);
+                    }
                 }
             }
             else if (connection is TECNetworkConnection)
@@ -372,6 +532,11 @@ namespace EstimateBuilder.ViewModel
                 TECNetworkConnection netConnect = connection as TECNetworkConnection;
 
                 removeLengthFromWireType(connection.Length, netConnect.ConnectionType);
+
+                foreach(TECAssociatedCost cost in netConnect.ConnectionType.AssociatedCosts)
+                {
+                    removeAssociatedCost(cost);
+                }
             }
             else
             {
@@ -380,6 +545,13 @@ namespace EstimateBuilder.ViewModel
 
             //Remove Conduit
             removeLengthFromConduitType(connection.ConduitLength, connection.ConduitType);
+            if (connection.ConduitType != null)
+            {
+                foreach (TECAssociatedCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    removeAssociatedCost(cost);
+                }
+            }
         }
 
         private void addController(TECController controller)

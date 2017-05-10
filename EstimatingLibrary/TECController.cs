@@ -588,14 +588,7 @@ namespace EstimatingLibrary
                     }
                     if (connection.ConduitType != null)
                     {
-                        if ((connection as TECSubScopeConnection).IncludeStubUp)
-                        {
-                            cost += 15 * connection.ConduitType.Cost;
-                        }
-                        else
-                        {
-                            cost += conduitLength * connection.ConduitType.Cost;
-                        }
+                        cost += conduitLength * connection.ConduitType.Cost;
                         foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
                         {
                             cost += associatedCost.Cost;

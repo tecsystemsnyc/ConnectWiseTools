@@ -219,6 +219,10 @@ namespace EstimatingLibrary.Utilities
                     page.PropertyChanged += Object_PropertyChanged;
                 }
             }
+            else if (newItem is TECController)
+            {
+                handleControllerChildren(newItem as TECController, change);
+            }
         }
         private void handleSystemChildren(TECSystem system, Change change)
         {
@@ -265,6 +269,17 @@ namespace EstimatingLibrary.Utilities
                 }
             }
 
+        }
+        private void handleControllerChildren(TECController controller, Change change)
+        {
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach (TECIO io in controller.IO)
+            {
+                io.PropertyChanged += Object_PropertyChanged;
+            }
         }
 
         private void handleControlledScope(TECControlledScope scope, Change change)

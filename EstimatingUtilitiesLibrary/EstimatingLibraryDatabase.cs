@@ -1886,7 +1886,6 @@ namespace EstimatingUtilitiesLibrary
             connection.ConduitLength = row[SubScopeConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
-            connection.IncludeStubUp = row[SubScopeConnectionTable.IncludeStubUp.Name].ToString().ToInt(0).ToBool();
             return connection;
         }
         private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row)

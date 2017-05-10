@@ -12,12 +12,12 @@
               AutoGenerateColumns="False"
               IsReadOnly="True">
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Name" Binding="{Binding Material.Name}" Width="Auto" MinWidth="40"/>
-            <DataGridTextColumn Header="Total Length" Binding="{Binding Length}" Width="Auto" MinWidth="40"/>
-            <DataGridTextColumn Header="Unit Cost" Binding="{Binding Material.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="40"/>
-            <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="40"/>
-            <DataGridTextColumn Header="Unit Labor" Binding="{Binding Material.Labor}" Width="Auto" MinWidth="40"/>
-            <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="40"/>
+            <DataGridTextColumn Header="Name" Binding="{Binding Material.Name}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Length" Binding="{Binding Length}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Unit Cost" Binding="{Binding Material.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Unit Labor" Binding="{Binding Material.Labor}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="60"/>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>
