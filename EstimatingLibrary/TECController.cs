@@ -549,7 +549,6 @@ namespace EstimatingLibrary
         private double getElectricalCost()
         {
             double cost = 0;
-            var terminations = 0;
 
             foreach (TECConnection connection in ChildrenConnections)
             {
@@ -562,7 +561,6 @@ namespace EstimatingLibrary
                     {
                         TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                         cost += length * type.Cost;
-                        terminations += 2;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                         { cost += associatedCost.Cost; }
                     }
@@ -580,7 +578,6 @@ namespace EstimatingLibrary
                     foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                     {
                         cost += length * type.Cost;
-                        terminations += 2;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                         {
                             cost += associatedCost.Cost;
@@ -600,15 +597,12 @@ namespace EstimatingLibrary
                     throw new NotImplementedException();
                 }
             }
-            //Termination cost should be a stored, user-editable value.
-            cost += terminations * .25;
             return cost;
         }
 
         private double getElectricalLabor()
         {
             double laborHours = 0;
-            var terminations = 0;
 
             foreach (TECConnection connection in ChildrenConnections)
             {
@@ -627,7 +621,6 @@ namespace EstimatingLibrary
                 {
                     if ((connection as TECNetworkConnection).ConnectionType != null)
                     {
-                        terminations += 2;
                         TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
                         laborHours += length * type.Labor;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
@@ -638,7 +631,6 @@ namespace EstimatingLibrary
                 {
                     foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                     {
-                        terminations += 2;
                         laborHours += length * type.Labor;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                         { laborHours += associatedCost.Labor; }
@@ -649,9 +641,6 @@ namespace EstimatingLibrary
                     throw new NotImplementedException();
                 }
             }
-
-            //Labor hours should be a stored, user-editable value
-            laborHours += terminations * .1;
             return laborHours;
         }
         #endregion

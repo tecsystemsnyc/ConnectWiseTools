@@ -162,7 +162,15 @@ namespace EstimatingLibrary
         public double ElectricalMaterialCost
         {
             get
-            { return GetElectricalMaterialCost(); }
+            { return electricalMaterialCost; }
+        }
+        public double ElectricalShipping
+        {
+            get { return GetElectricalShipping(); }
+        }
+        public double ElectricalWarranty
+        {
+            get { return GetElectricalWarranty(); }
         }
         public double SubcontractorSubtotal
         {
@@ -480,18 +488,21 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        
 
-        /// <summary>
-        /// Returns the electrical material cost of all wire, conduit, and their associated costs 
-        /// </summary>
-        public double GetElectricalMaterialCost()
+        public double GetElectricalShipping()
         {
-            double cost = electricalMaterialCost;
-            double shipping = 0.03;
-            double warranty = 0.05;
+            return (ElectricalMaterialCost * 0.03);
+        }
 
-            cost += cost * shipping + cost * warranty;
-            return cost;
+        public double GetElectricalWarranty()
+        {
+            return (ElectricalMaterialCost * 0.05);
+        }
+
+        public double GetExtendedElectricalMaterialCost()
+        {
+            return (ElectricalMaterialCost + ElectricalShipping + ElectricalWarranty);
         }
 
         #region Labor
@@ -746,7 +757,7 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetSubcontractorLaborCost(bid);
-            outCost += GetElectricalMaterialCost();
+            outCost += GetExtendedElectricalMaterialCost();
             outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
 
             return outCost;
@@ -834,6 +845,8 @@ namespace EstimatingLibrary
         private void raiseElectricalMaterial()
         {
             RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("ElectricalShipping");
+            RaisePropertyChanged("ElectricalWarranty");
             raiseSubcontractorTotals();
         }
         private void raiseMaterial()
