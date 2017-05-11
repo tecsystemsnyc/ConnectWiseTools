@@ -209,6 +209,7 @@ namespace EstimatingLibrary
         public TECEstimator(TECBid Bid)
         {
             bid = Bid;
+            getInitialValues();
             watcher = new ChangeWatcher(bid);
             watcher.Changed += Object_PropertyChanged;
         }
