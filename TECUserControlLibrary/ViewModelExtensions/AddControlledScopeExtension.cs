@@ -34,6 +34,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
                 setupCollections();
                 registerChanges();
+                ControllersPanelsVM.Refresh(SelectedControlledScope);
                 RaisePropertyChanged("SelectedControlledScope");
             }
         }
@@ -233,6 +234,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
+        public ControllersPanelsViewModel ControllersPanelsVM { get; set; }
         #endregion
 
         #region Delegates
@@ -251,7 +253,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
-            ControlledScope = new TECControlledScope();
+            _selectedControlledScope = new TECControlledScope();
             setupCatalogCollections();
             setupVMs();
         }
@@ -336,28 +338,28 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void populateSubScopeConnections()
         {
-            if (SelectedControlledScope != null && SubScopeConnectionCollection != null)
-            {
-                var currentSubScope = new ObservableCollection<TECSubScope>();
+            //if (SelectedControlledScope != null && SubScopeConnectionCollection != null)
+            //{
+            //    var currentSubScope = new ObservableCollection<TECSubScope>();
 
-                foreach (TECSystem system in SelectedControlledScope.Systems)
-                {
-                    foreach (TECEquipment equipment in system.Equipment)
-                    {
-                        foreach (TECSubScope subScope in equipment.SubScope)
-                        {
-                            currentSubScope.Add(subScope);
-                        }
-                    }
-                }
-                foreach (SubScopeConnection connection in SubScopeConnectionCollection)
-                {
-                    if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
-                    {
-                        connection.Controller.RemoveSubScope(connection.SubScope);
-                    }
-                }
-            }
+            //    foreach (TECSystem system in SelectedControlledScope.Systems)
+            //    {
+            //        foreach (TECEquipment equipment in system.Equipment)
+            //        {
+            //            foreach (TECSubScope subScope in equipment.SubScope)
+            //            {
+            //                currentSubScope.Add(subScope);
+            //            }
+            //        }
+            //    }
+            //    foreach (SubScopeConnection connection in SubScopeConnectionCollection)
+            //    {
+            //        if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
+            //        {
+            //            connection.Controller.RemoveSubScope(connection.SubScope);
+            //        }
+            //    }
+            //}
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             if (SelectedControlledScope != null)
             {
@@ -541,6 +543,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+
+            ControllersPanelsVM = new ControllersPanelsViewModel(SelectedControlledScope);
         }
 
         private void addControlledScopeExecute()
@@ -611,7 +615,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 UIHelpers.StandardDrop(dropInfo);
             }
-
         }
         
         #endregion

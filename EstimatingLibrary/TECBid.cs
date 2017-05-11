@@ -115,6 +115,7 @@ namespace EstimatingLibrary
                 _scopeTree = value;
                 ScopeTree.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("ScopeTree", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECSystem> Systems
@@ -128,6 +129,7 @@ namespace EstimatingLibrary
                 registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECNote> Notes
@@ -140,6 +142,7 @@ namespace EstimatingLibrary
                 _notes = value;
                 Notes.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Notes", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECExclusion> Exclusions
@@ -152,6 +155,7 @@ namespace EstimatingLibrary
                 _exclusions = value;
                 Exclusions.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Exclusions", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECDrawing> Drawings
@@ -164,6 +168,7 @@ namespace EstimatingLibrary
                 _drawings = value;
                 Drawings.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Drawings", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECLocation> Locations
@@ -176,6 +181,7 @@ namespace EstimatingLibrary
                 _locations = value;
                 Locations.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Locations", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECController> Controllers
@@ -188,6 +194,7 @@ namespace EstimatingLibrary
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECProposalScope> ProposalScope
@@ -205,6 +212,7 @@ namespace EstimatingLibrary
                 _miscCosts = value;
                 MiscCosts.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("MiscCosts", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECMiscWiring> MiscWiring
@@ -217,6 +225,7 @@ namespace EstimatingLibrary
                 _miscWiring = value;
                 MiscWiring.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("MiscWiring", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECPanel> Panels
@@ -229,6 +238,7 @@ namespace EstimatingLibrary
                 _panels = value;
                 Panels.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Panels", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECControlledScope> ControlledScope
@@ -241,6 +251,7 @@ namespace EstimatingLibrary
                 _controlledScope = value;
                 ControlledScope.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("ControlledScope", temp, this);
+                reWatch();
             }
         }
 
@@ -423,7 +434,7 @@ namespace EstimatingLibrary
                 {
                     Systems.Add(system);
                 }
-                var instanceControlledScope = new TECControlledScope();
+                var instanceControlledScope = new TECControlledScope(true);
                 instanceControlledScope.Systems = systemCollection;
                 instanceControlledScope.Controllers = controllerCollection;
                 instanceControlledScope.Panels = panelCollection;
@@ -765,6 +776,12 @@ namespace EstimatingLibrary
             foreach (TECPanel panel in this.Panels)
             { bid.Panels.Add(panel.Copy() as TECPanel); }
             return bid;
+        }
+        
+        private void reWatch()
+        {
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += Object_PropertyChanged;
         }
 
         private void checkForVisualsToRemove(TECScope item)

@@ -67,7 +67,7 @@ namespace Tests
         [TestMethod]
         public void Estimate_ElectricalMaterialCost()
         {
-            Assert.AreEqual(260, bid.Estimate.ElectricalLaborCost);
+            Assert.AreEqual(260 * 1.03 * 1.05, bid.Estimate.ElectricalMaterialCost);
         }
     }
 }

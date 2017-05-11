@@ -72,7 +72,7 @@
             </Grid.RowDefinitions>
             <Label Content="Panels"/>
             <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
-                              ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
                                Margin="5" Grid.Row="1"/>
         </Grid>
         <GridSplitter Grid.Row="0" Grid.Column="2" Background="{DynamicResource TextInputBrush}"
@@ -84,7 +84,7 @@
             </Grid.RowDefinitions>
             <Label Content="Controllers"/>
             <grids:ControllerInPanelGridControl Grid.Row="1" Margin="5" 
-                                            ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                            ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
         </Grid>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
                       HorizontalAlignment="Stretch"/>

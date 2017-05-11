@@ -27,12 +27,27 @@ namespace TECUserControlLibrary.ViewModelExtensions
             get { return _bid; }
             private set
             {
-                unregisterBidChanges();
+                unregisterChanges();
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                registerBidChanges();
+                registerChanges();
             }
         }
+        private TECControlledScope _controlledScope;
+        public TECControlledScope ControlledScope
+        {
+            get { return _controlledScope; }
+            private set
+            {
+                unregisterChanges();
+                _controlledScope = value;
+                RaisePropertyChanged("ControlledScope");
+                registerChanges();
+            }
+        }
+
+        private ObservableCollection<TECController> sourceControllers;
+        private ObservableCollection<TECPanel> sourcePanels;
 
         private TECController _selectedController;
         public TECController SelectedController
@@ -135,7 +150,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Constructor
         public ControllersPanelsViewModel(TECBid bid)
         {
+            sourceControllers = bid.Controllers;
+            sourcePanels = bid.Panels;
             Bid = bid;
+            setup();
+        }
+        public ControllersPanelsViewModel(TECControlledScope controlledScope)
+        {
+            sourceControllers = controlledScope.Controllers;
+            sourcePanels = controlledScope.Panels;
+            ControlledScope = controlledScope;
             setup();
         }
         #endregion
@@ -143,7 +167,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Methods
         public void Refresh(TECBid bid)
         {
+            sourceControllers = bid.Controllers;
+            sourcePanels = bid.Panels;
             Bid = bid;
+            setup();
+        }
+        public void Refresh(TECControlledScope controlledScope)
+        {
+            sourceControllers = controlledScope.Controllers;
+            sourcePanels = controlledScope.Panels;
+            ControlledScope = controlledScope;
             setup();
         }
 
@@ -157,7 +190,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
             controllersIndex = new Dictionary<TECController, ControllerInPanel>();
-            foreach (TECController controller in Bid.Controllers)
+            foreach (TECController controller in sourceControllers)
             {
                 TECController controllerToAdd = controller;
                 TECPanel panelToAdd = null;
@@ -181,7 +214,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             nonePanel.Name = "None";
             NonePanel = nonePanel;
             PanelSelections.Add(NonePanel);
-            foreach (TECPanel panel in Bid.Panels)
+            foreach (TECPanel panel in sourcePanels)
             {
                 PanelSelections.Add(panel);
                 panel.PropertyChanged += Panel_PropertyChanged;
@@ -197,19 +230,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     controllersIndex[controller].UpdatePanel(sender as TECPanel);
                 }
             }
+            if (e.PropertyName == "RemoveRelationship")
+            {
+                foreach (TECController controller in (sender as TECPanel).Controllers)
+                {
+                    controllersIndex[controller].UpdatePanel(null);
+                }
+            }
         }
         
-        private void registerBidChanges()
+        private void registerChanges()
         {
-            Bid.Controllers.CollectionChanged += collectionChanged;
-            Bid.Panels.CollectionChanged += collectionChanged;
+            sourceControllers.CollectionChanged += collectionChanged;
+            sourcePanels.CollectionChanged += collectionChanged;
         }
-        private void unregisterBidChanges()
+        private void unregisterChanges()
         {
-            if (Bid != null)
+            if(sourceControllers != null && sourcePanels != null)
             {
-                Bid.Controllers.CollectionChanged -= collectionChanged;
-                Bid.Panels.CollectionChanged -= collectionChanged;
+                sourceControllers.CollectionChanged -= collectionChanged;
+                sourcePanels.CollectionChanged -= collectionChanged;
             }
         }
 

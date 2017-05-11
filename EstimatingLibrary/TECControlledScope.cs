@@ -11,6 +11,17 @@ namespace EstimatingLibrary
 {
     public class TECControlledScope : TECScope
     {
+        bool _isChild;
+        public bool IsChild
+        {
+            get { return _isChild; }
+            set
+            {
+                _isChild = value;
+                RaisePropertyChanged("IsChild");
+            }
+        }
+
         private ObservableCollection<TECSystem> _systems { get; set; }
         public ObservableCollection<TECSystem> Systems
         {
@@ -70,8 +81,15 @@ namespace EstimatingLibrary
             get { return _scopeInstances; }
             set
             {
+                var temp = this.Copy();
+                if (Panels != null)
+                {
+                    ScopeInstances.CollectionChanged -= CollectionChanged;
+                }
+
                 _scopeInstances = value;
-                RaisePropertyChanged("ScopeInstances");
+                ScopeInstances.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ScopeInstances", temp, this);
             }
         }
 
@@ -93,8 +111,9 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECControlledScope(Guid guid) : base(guid)
+        public TECControlledScope(Guid guid, bool isChild = false) : base(guid)
         {
+            _isChild = isChild;
             _systems = new ObservableCollection<TECSystem>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
@@ -104,18 +123,13 @@ namespace EstimatingLibrary
             Systems.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
+            ScopeInstances.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
             registerSystems();
         }
-
-        private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            RaiseExtendedPropertyChanged(sender, e);
-        }
-
-        public TECControlledScope() : this(Guid.NewGuid()) { }
-        public TECControlledScope(TECControlledScope source, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECControlledScope(bool isChild = false) : this(Guid.NewGuid(), isChild) { }
+        public TECControlledScope(TECControlledScope source, Dictionary<Guid, Guid> guidDictionary = null, bool isChild = false) : this(isChild)
         {
             copyPropertiesFromScope(source);
             foreach (TECSystem system in source._systems)
@@ -140,11 +154,19 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        NotifyPropertyChanged("Add", this, item);
-                        if (item is TECSystem)
+                        if (_isChild)
                         {
-                            (item as TECSystem).PropertyChanged += System_PropertyChanged;
+                            NotifyPropertyChanged("AddRelationship", this, item);
                         }
+                        else
+                        {
+                            NotifyPropertyChanged("Add", this, item);
+                            if (item is TECSystem)
+                            {
+                                (item as TECSystem).PropertyChanged += System_PropertyChanged;
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -154,10 +176,17 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        NotifyPropertyChanged("Remove", this, item);
-                        if (item is TECSystem)
+                        if (_isChild)
                         {
-                            (item as TECSystem).PropertyChanged -= System_PropertyChanged;
+                            NotifyPropertyChanged("RemoveRelationship", this, item);
+                        }
+                        else
+                        {
+                            NotifyPropertyChanged("Remove", this, item);
+                            if (item is TECSystem)
+                            {
+                                (item as TECSystem).PropertyChanged -= System_PropertyChanged;
+                            }
                         }
                     }
                 }
@@ -205,7 +234,6 @@ namespace EstimatingLibrary
             }
             return outScope;
         }
-
         public override object DragDropCopy()
         {
             var outScope = new TECControlledScope(this);
@@ -351,7 +379,11 @@ namespace EstimatingLibrary
             {
             }
         }
-        
+        private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaiseExtendedPropertyChanged(sender, e);
+        }
+
         private void handleAdd(object targetObject, object referenceObject)
         {
             if(targetObject is TECEquipment && referenceObject is TECSystem)
@@ -442,8 +474,37 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            else if (targetObject is TECController && referenceObject is TECPanel)
+            {
+                var characteristicController = targetObject as TECController;
+                var characteristicPanel = referenceObject as TECPanel;
+                if (CharactersticInstances.ContainsKey(characteristicPanel) && CharactersticInstances.ContainsKey(characteristicController))
+                {
+                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    {
+                        TECController controllerToConnect = null;
+                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        {
+                            foreach (TECPanel panel in controlledScope.Panels)
+                            {
+                                if (panel.Controllers.Contains(controller))
+                                {
+                                    controllerToConnect = controller;
+                                    break;
+                                }
+                            }
+                        }
+                        foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                        {
+                            if (controlledScope.Panels.Contains(panel))
+                            {
+                                panel.Controllers.Add(controllerToConnect);
+                            }
+                        }
+                    }
+                }
+            }
         }
-
         private void handleRemove(object targetObject, object referenceObject)
         {
             if (targetObject is TECEquipment && referenceObject is TECSystem)
@@ -553,6 +614,36 @@ namespace EstimatingLibrary
                             if (controlledScope.Controllers.Contains(controller))
                             {
                                 controller.RemoveSubScope(subScopeToRemove);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (targetObject is TECController && referenceObject is TECPanel)
+            {
+                var characteristicController = targetObject as TECController;
+                var characteristicPanel = referenceObject as TECPanel;
+                if (CharactersticInstances.ContainsKey(characteristicController) && CharactersticInstances.ContainsKey(characteristicPanel))
+                {
+                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    {
+                        TECController controllerToRemove = null;
+                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        {
+                            foreach (TECPanel panel in controlledScope.Panels)
+                            {
+                                if (panel.Controllers.Contains(controller))
+                                {
+                                    controllerToRemove = controller;
+                                    break;
+                                }
+                            }
+                        }
+                        foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                        {
+                            if (controlledScope.Panels.Contains(panel))
+                            {
+                                panel.Controllers.Remove(controllerToRemove);
                             }
                         }
                     }

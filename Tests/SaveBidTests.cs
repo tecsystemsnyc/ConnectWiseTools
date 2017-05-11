@@ -3308,7 +3308,7 @@ namespace Tests
             scope.Panels.Add(expectedPanel);
             scope.Controllers.Add(expectedController);
 
-            bid.addControlledScope(scope);
+            bid.addControlledScope(scope, 1);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 

@@ -1355,18 +1355,18 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
-    wetwertgwe
+    
     public class ControlledScopeHierarchyTable : TableBase
     {
         public static new string TableName = "TECControlledScopeHierarchy";
         public static Type ControlledScopeType = typeof(TECControlledScope);
 
-        public static TableField ControlledScopeParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
-        public static TableField ControlledScopeChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeParentID,
-            ControlledScopeChildID
+            ParentID,
+            ChildID
             };
         public static new List<Type> Types = new List<Type>()
         {

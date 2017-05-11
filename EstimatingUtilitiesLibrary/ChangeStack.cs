@@ -672,26 +672,55 @@ namespace EstimatingUtilitiesLibrary
         private void handleControlledScope(TECControlledScope scope, Change change)
         {
             StackItem item;
-            foreach (TECSystem system in scope.Systems)
+            if (!scope.IsChild)
             {
-                handleScopeChildren(system as TECScope, change);
-                item = new StackItem(change, (object)scope, (object)system);
-                SaveStack.Add(item);
-                handleSystemChildren(system, change);
+                foreach (TECSystem system in scope.Systems)
+                {
+                    handleScopeChildren(system as TECScope, change);
+                    item = new StackItem(change, (object)scope, (object)system);
+                    SaveStack.Add(item);
+                    handleSystemChildren(system, change);
+                }
+                foreach (TECController controller in scope.Controllers)
+                {
+                    handleScopeChildren(controller as TECScope, change);
+                    item = new StackItem(change, (object)scope, (object)controller);
+                    SaveStack.Add(item);
+                    handleControllerChildren(controller, change);
+                }
+                foreach (TECPanel panel in scope.Panels)
+                {
+                    handleScopeChildren(panel as TECScope, change);
+                    item = new StackItem(change, (object)scope, (object)panel);
+                    SaveStack.Add(item);
+                }
             }
-            foreach (TECController controller in scope.Controllers)
+            else
             {
-                handleScopeChildren(controller as TECScope, change);
-                item = new StackItem(change, (object)scope, (object)controller);
-                SaveStack.Add(item);
-                handleControllerChildren(controller, change);
+                if(change == Change.Add)
+                {
+                    change = Change.AddRelationship;
+                }else if(change == Change.Remove)
+                {
+                    change = Change.RemoveRelationship;
+                }
+                foreach (TECSystem system in scope.Systems)
+                {
+                    item = new StackItem(change, (object)scope, (object)system);
+                    SaveStack.Add(item);
+                }
+                foreach (TECController controller in scope.Controllers)
+                {
+                    item = new StackItem(change, (object)scope, (object)controller);
+                    SaveStack.Add(item);
+                }
+                foreach (TECPanel panel in scope.Panels)
+                {
+                    item = new StackItem(change, (object)scope, (object)panel);
+                    SaveStack.Add(item);
+                }
             }
-            foreach (TECPanel panel in scope.Panels)
-            {
-                handleScopeChildren(panel as TECScope, change);
-                item = new StackItem(change, (object)scope, (object)panel);
-                SaveStack.Add(item);
-            }
+            
         }
         private void handlePanelChildren(TECPanel panel, Change change)
         {

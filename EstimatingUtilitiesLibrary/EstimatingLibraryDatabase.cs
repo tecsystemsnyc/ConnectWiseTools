@@ -1106,14 +1106,39 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECControlledScope> controlledScope = new ObservableCollection<TECControlledScope>();
 
-            DataTable panelTypesDT = SQLiteDB.getDataFromTable(ControlledScopeTable.TableName);
-            foreach (DataRow row in panelTypesDT.Rows)
+            string command = "select * from " + ControlledScopeTable.TableName;
+            command += " where " + ControlledScopeTable.ControlledScopeID.Name;
+            command += " in (select " + ControlledScopeTable.ControlledScopeID.Name;
+            command += " from " + ControlledScopeTable.TableName + " where " + ControlledScopeTable.ControlledScopeID.Name + " not in ";
+            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName + "))";
+
+            DataTable controlledScopeDT = SQLiteDB.getDataFromCommand(command);
+
+            foreach (DataRow row in controlledScopeDT.Rows)
             {
                 controlledScope.Add(getControlledScopeFromRow(row));
             }
             return controlledScope;
         }
+        static private ObservableCollection<TECControlledScope> getChildrenControlledScope(Guid parentID)
+        {
+            ObservableCollection<TECControlledScope> children = new ObservableCollection<TECControlledScope>();
 
+            string command = "select * from " + ControlledScopeTable.TableName;
+            command += " where " + ControlledScopeTable.ControlledScopeID.Name + " in ";
+            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName;
+            command += " where " + ControlledScopeHierarchyTable.ParentID.Name + " = '";
+            command += parentID;
+            command += "')";
+
+            DataTable childDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in childDT.Rows)
+            {
+                children.Add(getControlledScopeFromRow(row, true));
+            }
+
+            return children;
+        }
         static private TECPanelType getPanelTypeInPanel(Guid guid)
         {
             string command = "select * from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
@@ -1957,16 +1982,20 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
 
-        private static TECControlledScope getControlledScopeFromRow(DataRow row)
+        private static TECControlledScope getControlledScopeFromRow(DataRow row, bool isChild = false)
         {
             Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
-            TECControlledScope controlledScope = new TECControlledScope(guid);
+            TECControlledScope controlledScope = new TECControlledScope(guid, isChild);
 
             controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
             controlledScope.Description = row[ControlledScopeTable.Description.Name].ToString();
             controlledScope.Controllers = getControllersInControlledScope(guid);
             controlledScope.Systems = getSystemsInControlledScope(guid);
             controlledScope.Panels = getPanelsInControlledScope(guid);
+            if (!isChild)
+            {
+                controlledScope.ScopeInstances = getChildrenControlledScope(guid);
+            }
 
             return controlledScope;
         }
