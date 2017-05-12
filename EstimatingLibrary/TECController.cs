@@ -246,7 +246,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Add", this, item);
+                        NotifyPropertyChanged("Add", this, (item as TECObject).Copy());
                     }
                 }
             }
@@ -256,7 +256,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Remove", this, item);
+                        NotifyPropertyChanged("Remove", this, (item as TECObject).Copy());
                     }
                 }
             }

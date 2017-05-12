@@ -619,6 +619,7 @@ namespace Tests
             var controlledScopeSystem = controlledSystem.DragDropCopy() as TECSystem;
             testConScope.Systems.Add(controlledScopeSystem);
             var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
+            controlledScopePanel.Type = panelType;
             testConScope.Panels.Add(controlledScopePanel);
             var controlledScopeController = controlledController.DragDropCopy() as TECController;
             controlledScopePanel.Controllers.Add(controlledScopeController);

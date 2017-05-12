@@ -205,6 +205,7 @@ namespace Tests
                 expected.Add(item);
             }
             TECDevice edit = new TECDevice();
+            edit.ConnectionType = Bid.Catalogs.ConnectionTypes[0];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1329,6 +1330,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECDevice edit = new TECDevice();
+            edit.ConnectionType = Bid.Catalogs.ConnectionTypes[0];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
