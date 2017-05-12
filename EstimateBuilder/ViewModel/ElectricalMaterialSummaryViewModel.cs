@@ -60,9 +60,32 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private ObservableCollection<TECMiscWiring> _miscWiring;
+        public ObservableCollection<TECMiscWiring> MiscWiring
+        {
+            get { return _miscWiring; }
+            set
+            {
+                _miscWiring = value;
+                RaisePropertyChanged("MiscWiring");
+            }
+        }
+        
         private Dictionary<Guid, LengthSummaryItem> wireDictionary;
         private Dictionary<Guid, LengthSummaryItem> conduitDictionary;
         private Dictionary<Guid, AssociatedCostSummaryItem> associatedCostDictionary;
+
+        private double _totalMiscWiring;
+        public double TotalMiscWiring
+        {
+            get { return _totalMiscWiring; }
+            set
+            {
+                _totalMiscWiring = value;
+                RaisePropertyChanged("TotalMiscWiring");
+                RaisePropertyChanged("TotalElectricalCost");
+            }
+        }
 
         private double _totalWireCost;
         public double TotalWireCost
@@ -138,7 +161,7 @@ namespace EstimateBuilder.ViewModel
 
         public double TotalElectricalCost
         {
-            get { return (TotalWireCost + TotalConduitCost + TotalAssociatedCost); }
+            get { return (TotalWireCost + TotalConduitCost + TotalAssociatedCost + TotalMiscWiring); }
         }
 
         public double TotalElectricalHours
@@ -162,11 +185,12 @@ namespace EstimateBuilder.ViewModel
             WireSummaryItems = new ObservableCollection<LengthSummaryItem>();
             ConduitSummaryItems = new ObservableCollection<LengthSummaryItem>();
             AssociatedCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            MiscWiring = new ObservableCollection<TECMiscWiring>();
 
             wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
             conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
             associatedCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-
+            
             TotalWireCost = 0;
             TotalWireHours = 0;
             TotalConduitCost = 0;
@@ -178,10 +202,14 @@ namespace EstimateBuilder.ViewModel
             {
                 addController(controller);
             }
+            foreach(TECMiscWiring miscWiring in bid.MiscWiring)
+            {
+                addMiscWiring(miscWiring);
+            }
 
             changeWatcher = new ChangeWatcher(bid);
         }
-
+        
         #region Event Handlers
         private void bidChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -216,6 +244,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         addAssociatedCost(targetObject as TECAssociatedCost);
                     }
+                    else if (targetObject is TECMiscWiring && referenceObject is TECBid) 
+                    {
+                        addMiscWiring(targetObject as TECMiscWiring);
+                    }
                 }
                 else if (args.PropertyName == "Remove")
                 {
@@ -242,6 +274,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         removeAssociatedCost(targetObject as TECAssociatedCost);
                     }
+                    else if (targetObject is TECMiscWiring && referenceObject is TECBid)
+                    {
+                        removeMiscWiring(targetObject as TECMiscWiring);
+                    }
                 }
                 else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConduitType")
                 {
@@ -259,7 +295,17 @@ namespace EstimateBuilder.ViewModel
                         addConnection(args.NewValue as TECConnection);
                     }
                 }
+                else if (targetObject is TECMiscWiring && referenceObject is TECMiscWiring)
+                {
+                    editMiscWiring(targetObject as TECMiscWiring, referenceObject as TECMiscWiring);
+                }
             }
+        }
+
+        private void editMiscWiring(TECMiscWiring newWiring, TECMiscWiring oldWiring)
+        {
+            TotalMiscWiring -= oldWiring.Cost * oldWiring.Quantity;
+            TotalMiscWiring += newWiring.Cost * newWiring.Quantity;
         }
 
         private void WireItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -568,6 +614,18 @@ namespace EstimateBuilder.ViewModel
             {
                 removeConnection(connection);
             }
+        }
+
+        private void addMiscWiring(TECMiscWiring miscWiring)
+        {
+            TotalMiscWiring += miscWiring.Cost * miscWiring.Quantity;
+            MiscWiring.Add(miscWiring);
+        }
+
+        private void removeMiscWiring(TECMiscWiring miscWiring)
+        {
+            TotalMiscWiring -= miscWiring.Cost * miscWiring.Quantity;
+            MiscWiring.Remove(miscWiring);
         }
         #endregion
 

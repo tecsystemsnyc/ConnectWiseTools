@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -32,6 +33,8 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -72,7 +75,21 @@
         <TextBlock Text="{Binding TotalAssociatedCost, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>
         <TextBlock Text="Total Electrical Associated Hours:" Grid.Row="8" Grid.Column="2" Foreground="Black"/>
         <TextBlock Text="{Binding TotalAssociatedHours}" Grid.Row="8" Grid.Column="3" Foreground="Black"/>
-        
+
+        <!--Misc Wiring-->
+        <TextBlock Text="Misc. Wiring" Foreground="Black" FontSize="20" Grid.Column="4" Grid.ColumnSpan="2"/>
+        <DataGrid ItemsSource="{Binding MiscWiring}"
+                  Grid.Row="1" Grid.Column="4" Grid.RowSpan="7"
+                  Grid.ColumnSpan="2"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Text="Total Misc.:" Grid.Row="8" Grid.Column="4" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalMiscWiring, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="5" Foreground="Black"/>
         <!--Totals-->
         <TextBlock Text="Total Electrical Material Cost:" Grid.Row="9" Foreground="Black"/>
         <TextBlock Text="{Binding TotalElectricalCost, StringFormat={} {0:C}}" Grid.Row="9" Grid.Column="1" Foreground="Black"/>
@@ -82,5 +99,7 @@
         <Border Grid.RowSpan="3" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1"/>
         <Border Grid.RowSpan="3" Grid.ColumnSpan="4" Grid.Row="3" BorderBrush="Black" BorderThickness="1"/>
         <Border Grid.RowSpan="3" Grid.ColumnSpan="4" Grid.Row="6" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="9" Grid.ColumnSpan="2" Grid.Column="4" BorderBrush="Black" BorderThickness="1"/>
+        
     </Grid>
 </UserControl>
