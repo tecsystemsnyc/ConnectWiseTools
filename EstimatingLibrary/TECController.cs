@@ -268,14 +268,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Add", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Remove", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
                 }
             }
             if (sender == ChildrenConnections)
@@ -369,9 +369,6 @@ namespace EstimatingLibrary
                     var subConnect = connection as TECSubScopeConnection;
                     if (subConnect.SubScope == subScope)
                     {
-                        subScope.Connection = null;
-                        subConnect.SubScope = null;
-                        connection.ParentController = null;
                         connectionToRemove = subConnect;
                     }
                 }
@@ -379,6 +376,9 @@ namespace EstimatingLibrary
             if (connectionToRemove != null)
             {
                 ChildrenConnections.Remove(connectionToRemove);
+                subScope.Connection = null;
+                connectionToRemove.SubScope = null;
+                connectionToRemove.ParentController = null;
             }
             else
             {
