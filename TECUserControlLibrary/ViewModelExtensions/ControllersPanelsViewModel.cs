@@ -194,7 +194,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 TECController controllerToAdd = controller;
                 TECPanel panelToAdd = null;
-                foreach (TECPanel panel in Bid.Panels)
+                foreach (TECPanel panel in sourcePanels)
                 {
                     if (panel.Controllers.Contains(controller))
                     {

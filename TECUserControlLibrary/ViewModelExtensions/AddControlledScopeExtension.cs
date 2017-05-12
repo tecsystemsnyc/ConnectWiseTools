@@ -34,8 +34,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
                 setupCollections();
                 registerChanges();
-                ControllersPanelsVM.Refresh(SelectedControlledScope);
+                refreshSelected(value);
+                
                 RaisePropertyChanged("SelectedControlledScope");
+            }
+        }
+
+        private void refreshSelected(TECControlledScope selected)
+        {
+            if(ControllersPanelsVM != null)
+            {
+                if (selected != null)
+                {
+                    ControllersPanelsVM.Refresh(SelectedControlledScope);
+                }
+                else
+                {
+                    ControllersPanelsVM.Refresh(new TECControlledScope());
+
+                }
+                
             }
         }
 
@@ -544,7 +562,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
-            ControllersPanelsVM = new ControllersPanelsViewModel(SelectedControlledScope);
+            ControllersPanelsVM = new ControllersPanelsViewModel(new TECControlledScope());
         }
 
         private void addControlledScopeExecute()
