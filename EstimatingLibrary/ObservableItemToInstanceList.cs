@@ -50,6 +50,11 @@ namespace EstimatingLibrary
             
         }
 
+        public Dictionary<T, List<T>> GetFullDictionary()
+        {
+            return charactersticInstances;
+        }
+
         public override object Copy()
         {
             throw new NotImplementedException();

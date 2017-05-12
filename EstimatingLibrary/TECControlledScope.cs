@@ -350,11 +350,11 @@ namespace EstimatingLibrary
                 }
                 else if (e.PropertyName == "AddRelationship")
                 {
-                    
+                    handleAdd(newValue, oldValue);
                 }
                 else if (e.PropertyName == "RemoveRelationship")
                 {
-                    
+                    handleRemove(newValue, oldValue);
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
                 else if (e.PropertyName == "AddCatalog")
@@ -461,16 +461,20 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        if(subScopeToConnect != null)
                         {
-                            if (controlledScope.Controllers.Contains(controller))
+                            foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                             {
-                                var connection = controller.AddSubScope(subScopeToConnect);
-                                connection.Length = characteristicConnection.Length;
-                                connection.ConduitLength = characteristicConnection.ConduitLength;
-                                connection.ConduitType = characteristicConnection.ConduitType;
+                                if (controlledScope.Controllers.Contains(controller))
+                                {
+                                    var connection = controller.AddSubScope(subScopeToConnect);
+                                    connection.Length = characteristicConnection.Length;
+                                    connection.ConduitLength = characteristicConnection.ConduitLength;
+                                    connection.ConduitType = characteristicConnection.ConduitType;
+                                }
                             }
                         }
+                        
                     }
                 }
             }
@@ -485,22 +489,23 @@ namespace EstimatingLibrary
                         TECController controllerToConnect = null;
                         foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                         {
-                            foreach (TECPanel panel in controlledScope.Panels)
+                            if (controlledScope.Controllers.Contains(controller))
                             {
-                                if (panel.Controllers.Contains(controller))
+                                controllerToConnect = controller;
+                                break;
+                            }
+                        }
+                        if(controllerToConnect != null)
+                        {
+                            foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                            {
+                                if (controlledScope.Panels.Contains(panel))
                                 {
-                                    controllerToConnect = controller;
-                                    break;
+                                    panel.Controllers.Add(controllerToConnect);
                                 }
                             }
                         }
-                        foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
-                        {
-                            if (controlledScope.Panels.Contains(panel))
-                            {
-                                panel.Controllers.Add(controllerToConnect);
-                            }
-                        }
+                        
                     }
                 }
             }
@@ -609,11 +614,14 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        if(subScopeToRemove != null)
                         {
-                            if (controlledScope.Controllers.Contains(controller))
+                            foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                             {
-                                controller.RemoveSubScope(subScopeToRemove);
+                                if (controlledScope.Controllers.Contains(controller))
+                                {
+                                    controller.RemoveSubScope(subScopeToRemove);
+                                }
                             }
                         }
                     }
@@ -639,13 +647,18 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                        if(controllerToRemove != null)
                         {
-                            if (controlledScope.Panels.Contains(panel))
+                            foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
                             {
-                                panel.Controllers.Remove(controllerToRemove);
+                                if (controlledScope.Panels.Contains(panel))
+                                {
+                                    panel.Controllers.Remove(controllerToRemove);
+                                    break;
+                                }
                             }
                         }
+                       
                     }
                 }
             }

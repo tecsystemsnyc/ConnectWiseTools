@@ -193,7 +193,7 @@ namespace EstimatingUtilitiesLibrary
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
+            bid.Controllers = getOrphanControllers();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
@@ -2295,15 +2295,26 @@ namespace EstimatingUtilitiesLibrary
             { addObject(new StackItem(Change.Add, catalogs, associatedCost)); }
         }
 
-        private static void saveFullControlledScope(TECControlledScope conScope, TECScopeManager scopeManager)
+        private static void saveFullControlledScope(TECControlledScope conScope, TECScopeManager scopeManager, bool isRelationship = false)
         {
-            addObject(new StackItem(Change.Add, scopeManager, conScope));
+            var change = Change.Add;
+            if(isRelationship)
+            {
+                change = Change.AddRelationship;
+            }else
+            {
+                addObject(new StackItem(change, scopeManager, conScope));
+            }
             saveScopeChildProperties(conScope);
             foreach (TECSystem system in conScope.Systems)
             {
-                addObject(new StackItem(Change.Add, conScope, system));
-                saveScopeChildProperties(system);
-                saveCompleteEquipment(system);
+                addObject(new StackItem(change, conScope, system));
+                if (!isRelationship)
+                {
+                    saveScopeChildProperties(system);
+                    saveCompleteEquipment(system);
+                }
+                
             }
             foreach (TECPanel panel in conScope.Panels)
             {
@@ -2311,9 +2322,24 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECController controller in conScope.Controllers)
             {
-                addObject(new StackItem(Change.Add, conScope, controller));
-                saveScopeChildProperties(controller);
-                saveControllerChildProperties(controller);
+                if (!isRelationship)
+                {
+                    saveScopeChildProperties(controller);
+                    saveControllerChildProperties(controller);
+                }
+                addObject(new StackItem(change, conScope, controller));
+                
+            }
+            foreach(TECControlledScope childScope in conScope.ScopeInstances)
+            {
+                addObject(new StackItem(change, conScope, childScope));
+            }
+            foreach(KeyValuePair<TECScope, List<TECScope>> item in conScope.CharactersticInstances.GetFullDictionary())
+            {
+                foreach(TECScope value in item.Value)
+                {
+                    addRelationship(new StackItem(Change.AddRelationship, item.Key, value, typeof(TECScope), typeof(TECScope)));
+                }
             }
         }
 

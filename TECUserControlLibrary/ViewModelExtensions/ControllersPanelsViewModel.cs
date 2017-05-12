@@ -276,14 +276,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 {
                     if (item is ControllerInPanel)
                     {
-                        foreach (TECPanel panel in Bid.Panels)
+                        foreach (TECPanel panel in sourcePanels)
                         {
                             if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
                             {
                                 panel.Controllers.Remove((item as ControllerInPanel).Controller);
                             }
                         }
-                        Bid.Controllers.Remove((item as ControllerInPanel).Controller);
+                        sourceControllers.Remove((item as ControllerInPanel).Controller);
                     }
                     if (item is TECController)
                     {

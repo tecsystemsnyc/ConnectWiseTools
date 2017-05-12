@@ -677,7 +677,6 @@ namespace EstimatingLibrary
 
             }
         }
-
         private void handleAdd(object newValue, object oldValue)
         {
             if (newValue is TECSystem && oldValue is TECControlledScope)
@@ -712,9 +711,9 @@ namespace EstimatingLibrary
                 foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                 {
                     var panelToAdd = new TECPanel(characteristicPanel);
-                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicPanel, characteristicPanel);
-                    controlledScope.Panels.Add(characteristicPanel);
-                    Panels.Add(characteristicPanel);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicPanel, panelToAdd);
+                    controlledScope.Panels.Add(panelToAdd);
+                    Panels.Add(panelToAdd);
                 }
             }
         }
