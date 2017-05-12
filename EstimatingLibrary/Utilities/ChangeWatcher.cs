@@ -367,6 +367,16 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
+                else
+                {
+                    if(oldValue is TECBid && newValue is TECBid)
+                    {
+                        if(e.PropertyName == "Parameters")
+                        {
+                            (newValue as TECBid).Parameters.PropertyChanged += Object_PropertyChanged;
+                        }
+                    }
+                }
 
             }
             else
