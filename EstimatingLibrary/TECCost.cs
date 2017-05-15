@@ -22,6 +22,18 @@ namespace EstimatingLibrary
             }
         }
 
+        protected double _labor;
+        public double Labor
+        {
+            get { return _labor; }
+            set
+            {
+                var temp = this.Copy();
+                _labor = value;
+                NotifyPropertyChanged("Labor", temp, this);
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -37,6 +49,7 @@ namespace EstimatingLibrary
         {
             copyPropertiesFromScope(cost);
             _cost = cost.Cost;
+            _labor = cost.Labor;
         }
 
         public override object Copy()
