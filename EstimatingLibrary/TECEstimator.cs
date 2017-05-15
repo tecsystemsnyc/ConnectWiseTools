@@ -17,6 +17,8 @@ namespace EstimatingLibrary
         TECBid bid;
         ChangeWatcher watcher;
 
+        const double ZERO = 0;
+
         #region Cost Base
         private double tecLaborHours;
         private double tecMaterialCost;
@@ -111,12 +113,20 @@ namespace EstimatingLibrary
             get { return GetTECCost(bid); }
         }
 
-        public double MaterialCost
+        public double TECMaterialCost
         {
             get
             {
-                return GetMaterialCost();
+                return tecMaterialCost;
             }
+        }
+        public double TECShipping
+        {
+            get { return GetTECShipping(); }
+        }
+        public double TECWarranty
+        {
+            get { return GetTECWarranty(); }
         }
         public double Tax
         {
@@ -141,7 +151,7 @@ namespace EstimatingLibrary
         }
         public double ElectricalSuperLaborHours
         {
-            get { return GetElectricalSuperLaborHours(bid); }
+            get { return GetElectricalSuperLaborHours(); }
         }
         public double ElectricalSuperLaborCost
         {
@@ -160,7 +170,15 @@ namespace EstimatingLibrary
         public double ElectricalMaterialCost
         {
             get
-            { return GetElectricalMaterialCost(bid); }
+            { return electricalMaterialCost; }
+        }
+        public double ElectricalShipping
+        {
+            get { return GetElectricalShipping(); }
+        }
+        public double ElectricalWarranty
+        {
+            get { return GetElectricalWarranty(); }
         }
         public double SubcontractorSubtotal
         {
@@ -207,6 +225,7 @@ namespace EstimatingLibrary
         public TECEstimator(TECBid Bid)
         {
             bid = Bid;
+            getInitialValues();
             watcher = new ChangeWatcher(bid);
             watcher.Changed += Object_PropertyChanged;
         }
@@ -231,7 +250,6 @@ namespace EstimatingLibrary
                         addCost(newValue);
                         addPoints(newValue);
                     }
-                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -261,6 +279,12 @@ namespace EstimatingLibrary
                                 addPoints(item);
                             }
                         }
+                    }
+                    if(newValue is TECBidParameters)
+                    {
+                        raiseMaterial();
+                        raiseTECTotals();
+                        raiseSubcontractorTotals();
                     }
                 }
             }
@@ -293,6 +317,14 @@ namespace EstimatingLibrary
             {
                 addCost(controller);
             }
+            foreach (TECMiscCost miscCost in bid.MiscCosts)
+            {
+                addCost(miscCost);
+            }
+            foreach (TECMiscWiring miscWiring in bid.MiscWiring)
+            {
+                addCost(miscWiring);
+            }
 
         }
 
@@ -307,13 +339,13 @@ namespace EstimatingLibrary
                 electricalMaterialCost += cost.ElectricalCost;
                 electricalLaborHours += cost.ElectricalLabor;
 
-                if (cost.MaterialCost != 0)
+                if (Math.Abs(cost.MaterialCost) > ZERO)
                 { raiseMaterial(); }
-                if (cost.LaborCost != 0)
+                if (Math.Abs(cost.LaborCost) > ZERO)
                 { raiseTECLabor(); }
-                if (cost.ElectricalCost != 0)
+                if (Math.Abs(cost.ElectricalCost) > ZERO)
                 { raiseElectricalMaterial(); }
-                if (cost.ElectricalLabor != 0)
+                if (Math.Abs(cost.ElectricalLabor) > ZERO)
                 { raiseElectricalLabor(); }
 
             }
@@ -321,14 +353,14 @@ namespace EstimatingLibrary
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost += cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost += cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseElectricalMaterial(); }
             }
 
@@ -342,34 +374,34 @@ namespace EstimatingLibrary
                 tecLaborHours -= cost.LaborCost;
                 electricalMaterialCost -= cost.ElectricalCost;
                 electricalLaborHours -= cost.ElectricalLabor;
-                if (cost.MaterialCost != 0)
+                if (Math.Abs(cost.MaterialCost) > ZERO)
                 { raiseMaterial(); }
-                if (cost.LaborCost != 0)
+                if (Math.Abs(cost.LaborCost) > ZERO)
                 { raiseTECLabor(); }
-                if (cost.ElectricalCost != 0)
+                if (Math.Abs(cost.ElectricalCost) > ZERO)
                 { raiseElectricalMaterial(); }
-                if (cost.ElectricalLabor != 0)
+                if (Math.Abs(cost.ElectricalLabor) > ZERO)
                 { raiseElectricalLabor(); }
             }
             else if (item is TECMiscCost)
             {
                 var cost = item as TECMiscCost;
                 tecMaterialCost -= cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseMaterial(); }
             }
             else if (item is TECMiscWiring)
             {
                 var cost = item as TECMiscWiring;
                 electricalMaterialCost -= cost.Cost * cost.Quantity;
-                if (cost.Cost != 0)
+                if (Math.Abs(cost.Cost) > ZERO)
                 { raiseElectricalMaterial(); }
             }
         }
         private void editCost(object newValue, object oldValue)
         {
             if (newValue is TECConnection || newValue is TECMiscCost
-                || newValue is TECMiscWiring || newValue is TECDevice)
+                || newValue is TECMiscWiring || newValue is TECSubScope)
             {
                 if (newValue.GetType() == oldValue.GetType())
                 {
@@ -411,17 +443,22 @@ namespace EstimatingLibrary
         #endregion
 
         #region Calculate Derivatives
+        public double GetTECShipping()
+        {
+            return (TECMaterialCost * 0.03);
+        }
+
+        public double GetTECWarranty()
+        {
+            return (TECMaterialCost * 0.05);
+        }
+
         /// <summary>
         /// Returns TEC material costs of devices and their associated costs
         /// </summary>
-        public double GetMaterialCost()
+        public double GetExtendedMaterialCost()
         {
-            double shipping = 0.03;
-            double warranty = 0.06;
-            double cost = tecMaterialCost;
-
-            cost += cost * shipping + cost * warranty;
-            return cost;
+            return (TECMaterialCost + TECShipping + TECWarranty);
         }
         /// <summary>
         /// Returns TEC labor costs of associated costs
@@ -441,7 +478,7 @@ namespace EstimatingLibrary
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * GetMaterialCost();
+                outTax += .0875 * GetExtendedMaterialCost();
             }
 
             return outTax;
@@ -455,6 +492,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += GetTECLaborCost(bid);
             outCost += GetMaterialLabor(bid);
+            outCost += GetExtendedMaterialCost();
             outCost += outCost * bid.Parameters.Escalation / 100;
             outCost += GetTax(bid);
 
@@ -472,18 +510,21 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        
 
-        /// <summary>
-        /// Returns the electrical material cost of all wire, conduit, and their associated costs 
-        /// </summary>
-        public double GetElectricalMaterialCost(TECBid bid)
+        public double GetElectricalShipping()
         {
-            double cost = electricalMaterialCost;
-            double shipping = 0.03;
-            double warranty = 0.05;
+            return (ElectricalMaterialCost * 0.03);
+        }
 
-            cost += cost * shipping + cost * warranty;
-            return cost;
+        public double GetElectricalWarranty()
+        {
+            return (ElectricalMaterialCost * 0.05);
+        }
+
+        public double GetExtendedElectricalMaterialCost()
+        {
+            return (ElectricalMaterialCost + ElectricalShipping + ElectricalWarranty);
         }
 
         #region Labor
@@ -672,7 +713,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical super labor hours
         /// </summary>
-        public double GetElectricalSuperLaborHours(TECBid bid)
+        public double GetElectricalSuperLaborHours()
         {
             double laborHours = electricalLaborHours;
 
@@ -683,16 +724,16 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetElectricalSuperLaborCost(TECBid bid)
         {
-            double cost = GetElectricalSuperLaborHours(bid) * bid.Labor.ElectricalSuperEffectiveRate;
+            double cost = GetElectricalSuperLaborHours() * bid.Labor.ElectricalSuperEffectiveRate;
 
             return cost;
         }
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
         /// </summary>
-        public double GetTotalElectricalLaborHours(TECBid bid)
+        public double GetTotalElectricalLaborHours()
         {
-            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours(bid);
+            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours();
             return laborCost;
         }
         /// <summary>
@@ -709,7 +750,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetSubcontractorLaborHours(TECBid bid)
         {
-            double laborHours = GetTotalElectricalLaborHours(bid);
+            double laborHours = GetTotalElectricalLaborHours();
             return laborHours;
         }
         /// <summary>
@@ -738,7 +779,7 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += GetSubcontractorLaborCost(bid);
-            outCost += GetElectricalMaterialCost(bid);
+            outCost += GetExtendedElectricalMaterialCost();
             outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
 
             return outCost;
@@ -826,11 +867,15 @@ namespace EstimatingLibrary
         private void raiseElectricalMaterial()
         {
             RaisePropertyChanged("ElectricalMaterialCost");
+            RaisePropertyChanged("ElectricalShipping");
+            RaisePropertyChanged("ElectricalWarranty");
             raiseSubcontractorTotals();
         }
         private void raiseMaterial()
         {
-            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("TECMaterialCost");
+            RaisePropertyChanged("TECShipping");
+            RaisePropertyChanged("TECWarranty");
             RaisePropertyChanged("Tax");
             raiseTECTotals();
         }
@@ -858,8 +903,8 @@ namespace EstimatingLibrary
 
             RaisePropertyChanged("TECLaborHours");
             RaisePropertyChanged("TECLaborCost");
-            RaisePropertyChanged("TECSubtotal");
             raiseTECTotals();
+            raiseLabor();
         }
         private void raiseElectricalLabor()
         {

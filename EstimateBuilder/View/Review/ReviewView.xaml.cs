@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EstimateBuilder.View
+namespace EstimateBuilder.View.Review
 {
     /// <summary>
     /// Description for ReviewView.

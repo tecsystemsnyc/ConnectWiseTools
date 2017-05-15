@@ -29,11 +29,6 @@ namespace EstimatingLibrary
             }
         }
 
-        private void Equipment_CollectionChanged1(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         public double BudgetPriceModifier
         {
             get { return _budgetPriceModifier; }

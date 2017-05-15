@@ -171,10 +171,15 @@
     <Compile Include="Helpers\BaseConverter.cs" />
     <Compile Include="Helpers\EnumBindingSourceExtension.cs" />
     <Compile Include="Helpers\HelperConverters.cs" />
+    <Compile Include="Model\AssociatedCostSummaryItem.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\DeviceSummaryItem.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="Model\LengthSummaryItem.cs" />
+    <Compile Include="ViewModel\DeviceSummaryViewModel.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
+    <Compile Include="ViewModel\ElectricalMaterialSummaryViewModel.cs" />
     <Compile Include="ViewModel\ElectricalViewModel.cs" />
     <Compile Include="ViewModel\LaborViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -184,6 +189,9 @@
     <Compile Include="ViewModel\ScopeEditorViewModel.cs" />
     <Compile Include="ViewModel\ScopeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Review\DeviceListView.xaml.cs">
+      <DependentUpon>DeviceListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
     </Compile>
@@ -196,7 +204,16 @@
     <Compile Include="View\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReviewView.xaml.cs">
+    <Compile Include="View\ReviewTabControl.xaml.cs">
+      <DependentUpon>ReviewTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Review\ElectricalMaterialView.xaml.cs">
+      <DependentUpon>ElectricalMaterialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Review\LengthSummaryDataGrid.xaml.cs">
+      <DependentUpon>LengthSummaryDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Review\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
@@ -218,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Review\DeviceListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DrawingView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -234,7 +255,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReviewView.xaml">
+    <Page Include="View\ReviewTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\ElectricalMaterialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\LengthSummaryDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\ReviewView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

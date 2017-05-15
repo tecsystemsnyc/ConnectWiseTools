@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConduitType : TECCost
+    public class TECConduitType : TECCost, ElectricalMaterialComponent
     {
         #region Properties
 
@@ -33,14 +34,12 @@ namespace EstimatingLibrary
         public TECConduitType() : this(Guid.NewGuid()) { }
         public TECConduitType(TECConduitType conduitSource) : this()
         {
-            copyPropertiesFromScope(conduitSource);
             copyPropertiesFromCost(conduitSource);
             _labor = conduitSource.Labor;
         }
         public override object Copy()
         {
             var outType = new TECConduitType();
-            outType.copyPropertiesFromScope(this);
             outType.copyPropertiesFromCost(this);
             outType._guid = this._guid;
             outType._labor = this._labor;

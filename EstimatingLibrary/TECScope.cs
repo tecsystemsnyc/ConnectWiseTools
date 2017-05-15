@@ -80,10 +80,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                AssociatedCosts.CollectionChanged -= collectionChanged;
+                AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
                 _associatedCosts = value;
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
-                AssociatedCosts.CollectionChanged += collectionChanged;
+                AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             }
         }
 
@@ -140,10 +140,14 @@ namespace EstimatingLibrary
             _quantity = scope.Quantity;
             if (scope.Location != null)
             { _location = scope.Location.Copy() as TECLocation; }
+            var tags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)
-            { _tags.Add(tag.Copy() as TECTag); }
+            { tags.Add(tag.Copy() as TECTag); }
+            _tags = tags;
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)
-            { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            { associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            _associatedCosts = associatedCosts;
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -159,6 +163,48 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged("RemoveCatalog", this, item, typeof(TECScope), item.GetType());
+                }
+            }
+        }
+
+        private void AssociatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e);
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    var assCost = item as TECAssociatedCost;
+                    assCost.PropertyChanged += AssCost_PropertyChanged;
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Remove(item as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    var assCost = item as TECAssociatedCost;
+                    assCost.PropertyChanged -= AssCost_PropertyChanged;
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Add(item as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
+        }
+
+        private void AssCost_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<object>)
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                if ((args.PropertyName == "Cost") || (args.PropertyName == "Labor"))
+                {
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Remove(args.NewValue as TECAssociatedCost);
+                    old.AssociatedCosts.Add(args.OldValue as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
                 }
             }
         }

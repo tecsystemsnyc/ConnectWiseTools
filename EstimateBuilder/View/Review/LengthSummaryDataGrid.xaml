@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="EstimateBuilder.View.Review.LengthSummaryDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DataGrid DataContext="{Binding ElementName=parent}"
+              ItemsSource="{Binding Path=LengthSummaryItemsSource}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding Material.Name}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Length" Binding="{Binding Length}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Unit Cost" Binding="{Binding Material.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Unit Labor" Binding="{Binding Material.Labor}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="60"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

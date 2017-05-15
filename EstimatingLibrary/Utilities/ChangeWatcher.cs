@@ -219,6 +219,10 @@ namespace EstimatingLibrary.Utilities
                     page.PropertyChanged += Object_PropertyChanged;
                 }
             }
+            else if (newItem is TECController)
+            {
+                handleControllerChildren(newItem as TECController, change);
+            }
         }
         private void handleSystemChildren(TECSystem system, Change change)
         {
@@ -266,6 +270,17 @@ namespace EstimatingLibrary.Utilities
             }
 
         }
+        private void handleControllerChildren(TECController controller, Change change)
+        {
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                connection.PropertyChanged += Object_PropertyChanged;
+            }
+            foreach (TECIO io in controller.IO)
+            {
+                io.PropertyChanged += Object_PropertyChanged;
+            }
+        }
 
         private void handleControlledScope(TECControlledScope scope, Change change)
         {
@@ -308,7 +323,7 @@ namespace EstimatingLibrary.Utilities
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(e);
-            Changed(sender, e);
+            Changed?.Invoke(sender, e);
         }
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
@@ -352,6 +367,16 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
+                else
+                {
+                    if(oldValue is TECBid && newValue is TECBid)
+                    {
+                        if(e.PropertyName == "Parameters")
+                        {
+                            (newValue as TECBid).Parameters.PropertyChanged += Object_PropertyChanged;
+                        }
+                    }
+                }
 
             }
             else

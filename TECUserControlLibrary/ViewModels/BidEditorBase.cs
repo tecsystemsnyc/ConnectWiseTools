@@ -200,6 +200,7 @@ namespace TECUserControlLibrary.ViewModels
                     Bid.Labor.UpdateConstants(Templates.Labor);
                     loadedStackLength = stack.SaveStack.Count;
                 }
+                Bid.RefreshEstimate();
             }
         }
         #endregion

@@ -97,8 +97,8 @@
                         ViewModel="{Binding ProposalVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewView
-                        ViewModel="{Binding ReviewVM}"/>
+                    <view:ReviewTabControl
+                        ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
                     <cLibView:SettingsView

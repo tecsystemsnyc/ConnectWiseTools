@@ -200,6 +200,9 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("AddCatalog", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Remove(item as TECDevice);
+                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -209,6 +212,9 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("RemoveCatalog", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Add(item as TECDevice);
+                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -223,6 +229,16 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
+            if(args != null)
+            {
+                if(e.PropertyName == "Cost" || e.PropertyName == "Manufacturer")
+                {
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Remove(args.NewValue as TECDevice);
+                    old.Devices.Add(args.OldValue as TECDevice);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
         }
         #endregion
 
@@ -232,10 +248,14 @@ namespace EstimatingLibrary
         {
             TECSubScope outScope = new TECSubScope();
             outScope._guid = Guid;
+            var devices = new ObservableCollection<TECDevice>();
             foreach (TECDevice device in this.Devices)
-            { outScope.Devices.Add(device.Copy() as TECDevice); }
+            { devices.Add(device); }
+            outScope._devices = devices;
+            var points = new ObservableCollection<TECPoint>();
             foreach (TECPoint point in this.Points)
-            { outScope.Points.Add(point.Copy() as TECPoint); }
+            { points.Add(point.Copy() as TECPoint); }
+            outScope._points = points;
 
             outScope.copyPropertiesFromScope(this);
             return outScope;

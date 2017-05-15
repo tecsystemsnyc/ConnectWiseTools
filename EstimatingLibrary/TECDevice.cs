@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECScope, CostComponent
+    public class TECDevice : TECScope
     {
         #region Properties
         private double _cost;

@@ -19,21 +19,24 @@ namespace EstimatingLibrary
             {
                 var oldNew = Tuple.Create<Object, Object>(_subScope, value);
                 var temp = Copy();
+                if(SubScope != null)
+                { SubScope.PropertyChanged -= SubScope_PropertyChanged; }
                 _subScope = value;
+                if (SubScope != null)
+                { SubScope.PropertyChanged += SubScope_PropertyChanged; }
                 RaisePropertyChanged("SubScope");
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
             }
         }
 
-        private bool _includeStubUp;
-        public bool IncludeStubUp
+        private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            get { return _includeStubUp; }
-            set
+            var args = e as PropertyChangedExtendedEventArgs<object>;
+            if(e.PropertyName == "CostComponentChanged" && args != null)
             {
-                var temp = Copy();
-                _includeStubUp = value;
-                NotifyPropertyChanged("IncludeStubUp", temp, this);
+                var old = this.Copy() as TECSubScopeConnection;
+                old.SubScope = args.OldValue as TECSubScope;
+                NotifyPropertyChanged("CostComponentChanged", old, this);
             }
         }
 
@@ -68,26 +71,17 @@ namespace EstimatingLibrary
                 return outIOTypes;
             }
         }
-        public int Terminations
-        {
-            get
-            {
-                return getTerminations();
-            }
-        }
         #endregion
 
         #region Constructors
         public TECSubScopeConnection(Guid guid) : base(guid)
-        {
-            _includeStubUp = false;
+        { 
         }
         public TECSubScopeConnection() : base(Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
             if (connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
-            _includeStubUp = connectionSource.IncludeStubUp;
         }
         #endregion Constructors
 
@@ -100,25 +94,14 @@ namespace EstimatingLibrary
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
         }
-        private int getTerminations()
-        {
-            int terms = 0;
-            foreach (TECConnectionType type in ConnectionTypes)
-            {
-                terms += 2;
-            }
-            return terms;
-        }
 
         protected override double getElectricalCost()
         {
             double cost = 0;
-            var terminations = 0;
 
             foreach (TECConnectionType type in ConnectionTypes)
             {
                 cost += Length * type.Cost;
-                terminations += 2;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                 {
                     cost += associatedCost.Cost;
@@ -126,27 +109,18 @@ namespace EstimatingLibrary
             }
             if (ConduitType != null)
             {
-                if (IncludeStubUp)
-                {
-                    cost += 15 * ConduitType.Cost;
-                }
-                else
-                {
-                    cost += ConduitLength * ConduitType.Cost;
-                }
+                cost += ConduitLength * ConduitType.Cost;
                 foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
                 {
                     cost += associatedCost.Cost;
                 }
             }
-
-            cost += terminations * .25;
+            
             return cost;
         }
         protected override double getElectricalLabor()
         {
             double laborHours = 0;
-            var terminations = 0;
             if (ConduitType != null)
             {
                 laborHours += ConduitLength * ConduitType.Labor;
@@ -157,12 +131,10 @@ namespace EstimatingLibrary
             }
             foreach (TECConnectionType type in ConnectionTypes)
             {
-                terminations += 2;
                 laborHours += Length * type.Labor;
                 foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                 { laborHours += associatedCost.Labor; }
             }
-            laborHours += terminations * .1;
             return laborHours;
         }
         #endregion

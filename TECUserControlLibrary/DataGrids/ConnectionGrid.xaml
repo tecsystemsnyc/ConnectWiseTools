@@ -53,7 +53,6 @@
                         </MultiBinding>
                     </DataGridComboBoxColumn.SelectedItemBinding>
                 </DataGridComboBoxColumn>
-                <DataGridCheckBoxColumn Header="Stub Up Only" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

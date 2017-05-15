@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="EstimateBuilder.View.Review.ElectricalMaterialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="720" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{DynamicResource SectionBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Wire Summary-->
+        <TextBlock Text="Wire" Foreground="Black" FontSize="20"/>
+        <local:LengthSummaryDataGrid Grid.Row="1" Grid.ColumnSpan="4"
+                                     LengthSummaryItemsSource="{Binding WireSummaryItems}"/>
+        <TextBlock Text="Total Wire Cost:" Grid.Row="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalWireCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="Total Wire Hours:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalWireHours}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
+
+        <!--Conduit Summary-->
+        <TextBlock Text="Conduit" Foreground="Black" FontSize="20" Grid.Row="3"/>
+        <local:LengthSummaryDataGrid Grid.ColumnSpan="4" Grid.Row="4"
+                                     LengthSummaryItemsSource="{Binding ConduitSummaryItems}"/>
+        <TextBlock Text="Total Conduit Cost:" Grid.Row="5" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalConduitCost, StringFormat={} {0:C}}" Grid.Row="5" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="Total Conduit Hours:" Grid.Row="5" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalConduitHours}" Grid.Row="5" Grid.Column="3" Foreground="Black"/>
+
+        <!--Associated Cost Summary-->
+        <TextBlock Text="Misc" Foreground="Black" FontSize="20" Grid.Row="6"/>
+        <DataGrid Grid.ColumnSpan="4" Grid.Row="7" ItemsSource="{Binding AssociatedCostSummaryItems}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding AssociatedCost.Name}" Width="Auto" MinWidth="60"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="60"/>
+                <DataGridTextColumn Header="Unit Cost" Binding="{Binding AssociatedCost.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+                <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
+                <DataGridTextColumn Header="Unit Labor" Binding="{Binding AssociatedCost.Labor}" Width="Auto" MinWidth="60"/>
+                <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="60"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Text="Total Electrical Associated Cost:" Grid.Row="8" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalAssociatedCost, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="Total Electrical Associated Hours:" Grid.Row="8" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalAssociatedHours}" Grid.Row="8" Grid.Column="3" Foreground="Black"/>
+
+        <!--Misc Wiring-->
+        <TextBlock Text="Misc. Wiring" Foreground="Black" FontSize="20" Grid.Column="4" Grid.ColumnSpan="2"/>
+        <DataGrid ItemsSource="{Binding MiscWiring}"
+                  Grid.Row="1" Grid.Column="4" Grid.RowSpan="7"
+                  Grid.ColumnSpan="2"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Text="Total Misc.:" Grid.Row="8" Grid.Column="4" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalMiscWiring, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="5" Foreground="Black"/>
+        <!--Totals-->
+        <TextBlock Text="Total Electrical Material Cost:" Grid.Row="9" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalElectricalCost, StringFormat={} {0:C}}" Grid.Row="9" Grid.Column="1" Foreground="Black"/>
+        <TextBlock Text="Total Electrical Hours:" Grid.Row="9" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalElectricalHours}" Grid.Row="9" Grid.Column="3" Foreground="Black"/>
+
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="4" Grid.Row="3" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="4" Grid.Row="6" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="9" Grid.ColumnSpan="2" Grid.Column="4" BorderBrush="Black" BorderThickness="1"/>
+        
+    </Grid>
+</UserControl>
