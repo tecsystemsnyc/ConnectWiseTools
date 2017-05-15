@@ -9,7 +9,12 @@ using System.ComponentModel;
 
 namespace EstimateBuilder.ViewModel
 {
-    public class DeviceSummaryViewModel : ViewModelBase
+    public enum TECMaterialIndex
+    {
+        Devices, Controllers, Panels, MiscCosts
+    }
+
+    public class TECMaterialViewModel : ViewModelBase
     {
         #region Properties
         private ChangeWatcher _changeWatcher;
@@ -156,7 +161,7 @@ namespace EstimateBuilder.ViewModel
         }
         #endregion
 
-        public DeviceSummaryViewModel(TECBid bid)
+        public TECMaterialViewModel(TECBid bid)
         {
             reinitialize(bid);
         }
