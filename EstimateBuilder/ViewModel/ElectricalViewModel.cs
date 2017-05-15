@@ -89,7 +89,7 @@ namespace EstimateBuilder.ViewModel
 
         public ElectricalViewModel(TECBid bid)
         {
-            setupNoneObjetcs();
+            setupNoneObjects();
             Refresh(bid);
         }
 
@@ -215,7 +215,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void setupNoneObjetcs()
+        private void setupNoneObjects()
         {
             TECController noneController = new TECController(new TECManufacturer());
             noneController.Name = "None";

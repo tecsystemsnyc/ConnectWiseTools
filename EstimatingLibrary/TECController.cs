@@ -192,11 +192,14 @@ namespace EstimatingLibrary
             }
         }
 
+        public bool IsGlobal;
+
         #endregion
 
         #region Constructors
         public TECController(Guid guid, TECManufacturer manufacturer) : base(guid)
         {
+            IsGlobal = true;
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();

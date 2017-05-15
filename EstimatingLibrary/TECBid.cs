@@ -699,6 +699,7 @@ namespace EstimatingLibrary
                 foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
                 {
                     var controllerToAdd = new TECController(characteristicController);
+                    controllerToAdd.IsGlobal = false;
                     characteristicControlledScope.CharactersticInstances.AddItem(characteristicController, controllerToAdd);
                     controlledScope.Controllers.Add(controllerToAdd);
                     Controllers.Add(controllerToAdd);
@@ -882,8 +883,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         #endregion
-
     }
 }

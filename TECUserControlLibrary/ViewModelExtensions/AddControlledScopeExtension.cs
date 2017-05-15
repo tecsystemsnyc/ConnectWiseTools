@@ -250,6 +250,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private Visibility _debugVisibility;
+        public Visibility DebugVisibility
+        {
+            get { return _debugVisibility; }
+            set
+            {
+                _debugVisibility = value;
+            }
+        }
+
+
         #region VM Extenstions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public ControllersPanelsViewModel ControllersPanelsVM { get; set; }
@@ -272,6 +283,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
             _selectedControlledScope = new TECControlledScope();
+            DebugVisibility = Visibility.Collapsed;
             setupCatalogCollections();
             setupVMs();
         }
@@ -310,6 +322,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 var noneController = new TECController(new TECManufacturer());
                 noneController.Name = "None";
                 NoneController = noneController;
+                foreach(TECController controller in Bid.Controllers)
+                {
+                    if (controller.IsGlobal)
+                    {
+                        ControllerSelections.Add(controller);
+                    }
+                }
                 ControllerSelections.Add(NoneController);
                 foreach (TECController controller in SelectedControlledScope.Controllers)
                 {
