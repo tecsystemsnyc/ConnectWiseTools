@@ -1354,6 +1354,44 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
+    
+    public class ControlledScopeHierarchyTable : TableBase
+    {
+        public static new string TableName = "TECControlledScopeHierarchy";
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+
+        public static TableField ParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ParentID,
+            ChildID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ControlledScopeType,
+            ControlledScopeType
+        };
+    }
+    public class CharacteristicScopeInstanceScopeTable : TableBase
+    {
+        public static new string TableName = "CharacteristicScopeInstanceScope";
+        public static Type ScopeType = typeof(TECScope);
+
+        public static TableField CharacteristicID = new TableField("CharacteristicID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField InstanceID = new TableField("InstanceID", "TEXT", ScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            CharacteristicID,
+            InstanceID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ScopeType,
+            ScopeType
+        };
+    }
+
     public class IOModuleManufacturerTable : TableBase
     {
         public static new string TableName = "TECIOModuleTECManufacturer";
@@ -1403,6 +1441,7 @@ namespace EstimatingUtilitiesLibrary
             new NetworkConnectionTable(),
             new IOTable(),
             new IOModuleTable(),
+            new ControlledScopeTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1431,6 +1470,11 @@ namespace EstimatingUtilitiesLibrary
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
+            new ControlledScopeControllerTable(),
+            new ControlledScopePanelTable(),
+            new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new BidBidParametersTable(),
             new BidMiscCostTable(),
             new BidMiscWiringTable(),
@@ -1487,6 +1531,7 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new IOModuleManufacturerTable()
@@ -1561,6 +1606,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),

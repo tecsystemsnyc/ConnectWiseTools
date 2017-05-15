@@ -264,7 +264,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerSelections = new ObservableCollection<TECController>();
             if (SelectedControlledScope != null)
             {
-                var noneController = new TECController();
+                var noneController = new TECController(new TECManufacturer());
                 noneController.Name = "None";
                 ControllerSelections.Add(noneController);
                 foreach (TECController controller in SelectedControlledScope.Controllers)
@@ -300,7 +300,7 @@ namespace TECUserControlLibrary.ViewModels
             if (SelectedControlledScope != null)
             {
                 PanelsCollection = SelectedControlledScope.Panels;
-                var nonePanel = new TECPanel();
+                var nonePanel = new TECPanel(new TECPanelType());
                 nonePanel.Name = "None";
                 PanelSelections.Add(nonePanel);
                 foreach (TECPanel panel in SelectedControlledScope.Panels)

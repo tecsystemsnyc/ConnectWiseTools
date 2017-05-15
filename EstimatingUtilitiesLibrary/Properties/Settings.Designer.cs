@@ -8,32 +8,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EstimatingUtilitiesLibrary.Properties
-{
-
-
+namespace EstimatingUtilitiesLibrary.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
             }
         }
-
+        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.3.0.43")]
-        public string Version
-        {
-            get
-            {
+        [global::System.Configuration.DefaultSettingValueAttribute("1.4.0.2")]
+        public string Version {
+            get {
                 return ((string)(this["Version"]));
             }
         }

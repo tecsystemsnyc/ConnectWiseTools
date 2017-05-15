@@ -146,7 +146,8 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+                Template.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -786,7 +787,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel();
+            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1005,7 +1006,8 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+                Template.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1321,7 +1323,8 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+                Template.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1522,7 +1525,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel();
+            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);

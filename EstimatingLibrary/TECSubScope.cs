@@ -119,15 +119,24 @@ namespace EstimatingLibrary
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
+            if (characteristicReference == null)
+            {
+                characteristicReference = new ObservableItemToInstanceList<TECScope>();
+            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
 
             foreach (TECDevice device in sourceSubScope.Devices)
             { Devices.Add(new TECDevice(device)); }
             foreach (TECPoint point in sourceSubScope.Points)
-            { Points.Add(new TECPoint(point)); }
+            {
+                var toAdd = new TECPoint(point);
+                characteristicReference.AddItem(point,toAdd);
+                Points.Add(toAdd);
+            }
 
             this.copyPropertiesFromScope(sourceSubScope);
         }

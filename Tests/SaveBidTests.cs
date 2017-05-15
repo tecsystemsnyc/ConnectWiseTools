@@ -2373,11 +2373,10 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid());
+            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.Manufacturers[0]);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 100;
-            expectedController.Manufacturer = bid.Catalogs.Manufacturers[0];
 
             bid.Controllers.Add(expectedController);
 
@@ -3198,10 +3197,9 @@ namespace Tests
         public void Save_Bid_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel();
+            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-            expectedPanel.Type = bid.Catalogs.PanelTypes[0];
             bid.Panels.Add(expectedPanel);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -3289,12 +3287,10 @@ namespace Tests
             expectedEquipment.SubScope.Add(expectedSubScope);
             expectedSystem.Equipment.Add(expectedEquipment);
 
-            var expectedPanel = new TECPanel();
+            var expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "CSPANEL";
-            expectedPanel.Type = bid.Catalogs.PanelTypes[0];
-            var expectedController = new TECController();
+            var expectedController = new TECController(bid.Catalogs.Manufacturers[0]);
             expectedController.Name = "CSCONTROLLER";
-            expectedController.Manufacturer = bid.Catalogs.Manufacturers[0];
             expectedPanel.Controllers.Add(expectedController);
 
             var expectedConnection = new TECSubScopeConnection();
@@ -3308,7 +3304,7 @@ namespace Tests
             scope.Panels.Add(expectedPanel);
             scope.Controllers.Add(expectedController);
 
-            bid.addControlledScope(scope);
+            bid.addControlledScope(scope, 1);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 

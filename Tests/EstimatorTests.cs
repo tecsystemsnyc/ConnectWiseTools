@@ -7,12 +7,14 @@ using EstimatingLibrary;
 namespace Tests
 {
     /// <summary>
-    /// Summary description for ModelTests
+    /// Summary description for EstimatorTests
     /// </summary>
     [TestClass]
-    public class ModelTests
+    public class EstimatorTests
     {
-        public ModelTests()
+        TECBid bid;
+
+        public EstimatorTests()
         {
             //
             // TODO: Add constructor logic here
@@ -50,40 +52,22 @@ namespace Tests
         // public static void MyClassCleanup() { }
         //
         // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            bid = TestHelper.CreateEstimatorBid();
+        }
+
         // Use TestCleanup to run code after each test has run
         // [TestCleanup()]
         // public void MyTestCleanup() { }
         //
         #endregion
 
-        #region Controller 
         [TestMethod]
-        public void Controller_AddSubScope()
+        public void Estimate_ElectricalMaterialCost()
         {
-            TECController controller = new TECController(new TECManufacturer());
-            TECSubScope subScope = new TECSubScope();
-
-            controller.AddSubScope(subScope);
-
-            Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
-            Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
+            Assert.AreEqual(260 * 1.03 * 1.05, bid.Estimate.ElectricalMaterialCost);
         }
-
-        [TestMethod]
-        public void Controller_RemoveSubScope()
-        {
-            TECController controller = new TECController(new TECManufacturer());
-            TECSubScope subScope = new TECSubScope();
-
-            controller.AddSubScope(subScope);
-            controller.RemoveSubScope(subScope);
-
-            Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
-            Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");
-        }
-        #endregion
     }
 }

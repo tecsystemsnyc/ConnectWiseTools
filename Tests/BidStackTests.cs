@@ -204,7 +204,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -457,7 +457,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel();
+            TECPanel edit = new TECPanel(Bid.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -942,7 +942,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1328,7 +1328,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1805,15 +1805,18 @@ namespace Tests
             TECLocation edit = new TECLocation();
             edit.Name = "Floor 42";
 
+            var system = new TECSystem();
+            Bid.Systems.Add(system);
+
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Location = edit;
+            system.Location = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECLocation actual = Bid.Systems[0].Location;
-            Assert.AreEqual(edit, actual, "Not Undone");
+            TECLocation actual = system.Location;
+            Assert.AreEqual(edit, actual, "Not Redone");
 
         }
 
@@ -1990,7 +1993,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECDevice edit = new TECDevice();
+            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);

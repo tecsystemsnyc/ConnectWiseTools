@@ -37,11 +37,11 @@ namespace EstimatingUtilitiesLibrary
             var tableNames = getAllTableNames();
             if (tableNames.Contains("TECBidInfo"))
             {
-                workingScopeManager = loadBid(path);
+                workingScopeManager = loadBid();
             }
             else if (tableNames.Contains("TECTemplatesInfo"))
             {
-                workingScopeManager = loadTemplates(path);
+                workingScopeManager = loadTemplates();
             }
             else
             {
@@ -152,7 +152,7 @@ namespace EstimatingUtilitiesLibrary
             getScopeManagerProperties(bid);
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
+            bid.Systems = getAllSystemsInBid();
             bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
@@ -177,7 +177,7 @@ namespace EstimatingUtilitiesLibrary
         #endregion Public Functions
 
         #region Loading from DB Methods
-        static private TECBid loadBid(string path)
+        static private TECBid loadBid()
         {
             checkAndUpdateDB(typeof(TECBid));
             TECBid bid = getBidInfo();
@@ -186,26 +186,28 @@ namespace EstimatingUtilitiesLibrary
             getScopeManagerProperties(bid);
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid(bid);
+            bid.Systems = getAllSystemsInBid();
             bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
+            bid.Controllers = getOrphanControllers();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
+            bid.ControlledScope = getControlledScope();
+            var placeholderDict = getCharacteristicInstancesList();
 
-            ModelLinkingHelper.LinkBid(bid);
+            ModelLinkingHelper.LinkBid(bid, placeholderDict);
             getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
             return bid;
         }
-        static private TECTemplates loadTemplates(string path)
+        static private TECTemplates loadTemplates()
         {
             checkAndUpdateDB(typeof(TECTemplates));
 
@@ -502,7 +504,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return systems;
         }
-        static private ObservableCollection<TECSystem> getAllSystemsInBid(TECBid bid)
+        static private ObservableCollection<TECSystem> getAllSystemsInBid()
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
@@ -943,7 +945,7 @@ namespace EstimatingUtilitiesLibrary
             var tables = getAllTableNames();
             if (tables.Contains(SubScopeConnectionTable.TableName) || tables.Contains(NetworkConnectionTable.TableName))
             {
-                var outController = new TECController();
+                var outController = new TECController(new TECManufacturer());
                 string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
                 command += "(select " + ControllerConnectionTable.ControllerID.Name + " from " + ControllerConnectionTable.TableName + " where ";
                 command += ControllerConnectionTable.ConnectionID.Name + " = '" + connectionID;
@@ -1104,15 +1106,39 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECControlledScope> controlledScope = new ObservableCollection<TECControlledScope>();
 
-            DataTable panelTypesDT = SQLiteDB.getDataFromTable(ControlledScopeTable.TableName);
-            foreach (DataRow row in panelTypesDT.Rows)
+            string command = "select * from " + ControlledScopeTable.TableName;
+            command += " where " + ControlledScopeTable.ControlledScopeID.Name;
+            command += " in (select " + ControlledScopeTable.ControlledScopeID.Name;
+            command += " from " + ControlledScopeTable.TableName + " where " + ControlledScopeTable.ControlledScopeID.Name + " not in ";
+            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName + "))";
+
+            DataTable controlledScopeDT = SQLiteDB.getDataFromCommand(command);
+
+            foreach (DataRow row in controlledScopeDT.Rows)
             {
                 controlledScope.Add(getControlledScopeFromRow(row));
             }
-
             return controlledScope;
         }
+        static private ObservableCollection<TECControlledScope> getChildrenControlledScope(Guid parentID)
+        {
+            ObservableCollection<TECControlledScope> children = new ObservableCollection<TECControlledScope>();
 
+            string command = "select * from " + ControlledScopeTable.TableName;
+            command += " where " + ControlledScopeTable.ControlledScopeID.Name + " in ";
+            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName;
+            command += " where " + ControlledScopeHierarchyTable.ParentID.Name + " = '";
+            command += parentID;
+            command += "')";
+
+            DataTable childDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in childDT.Rows)
+            {
+                children.Add(getControlledScopeFromRow(row, true));
+            }
+
+            return children;
+        }
         static private TECPanelType getPanelTypeInPanel(Guid guid)
         {
             string command = "select * from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
@@ -1239,6 +1265,16 @@ namespace EstimatingUtilitiesLibrary
             { return getPlaceholderIOModuleFromRow(moduleTable.Rows[0]); }
             else
             { return null; }
+        }
+        static private Dictionary<Guid, List<Guid>> getCharacteristicInstancesList()
+        {
+            Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
+            DataTable dictDT = SQLiteDB.getDataFromTable(CharacteristicScopeInstanceScopeTable.TableName);
+            foreach(DataRow row in dictDT.Rows)
+            {
+                addRowToPlaceholderDict(row, outDict);
+            }
+            return outDict;
         }
 
         static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
@@ -1713,12 +1749,12 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getDeviceFromRow(DataRow row)
         {
             Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-            TECDevice deviceToAdd = new TECDevice(deviceID);
+            TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
+            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+            TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
             deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
             deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
             deviceToAdd.Cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
-            deviceToAdd.Manufacturer = getManufacturerInDevice(deviceID);
-            deviceToAdd.ConnectionType = getConnectionTypeInDevice(deviceID);
             deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
             deviceToAdd.AssociatedCosts = getAssociatedCostsInScope(deviceToAdd.Guid);
             return deviceToAdd;
@@ -1842,12 +1878,12 @@ namespace EstimatingUtilitiesLibrary
         private static TECPanel getPanelFromRow(DataRow row)
         {
             Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
-            TECPanel panel = new TECPanel(guid);
+            TECPanelType type = getPanelTypeInPanel(guid);
+            TECPanel panel = new TECPanel(guid, type);
 
             panel.Name = row[PanelTable.Name.Name].ToString();
             panel.Description = row[PanelTable.Description.Name].ToString();
             panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
-            panel.Type = getPanelTypeInPanel(guid);
             panel.Controllers = getControllersInPanel(guid);
             panel.AssociatedCosts = getAssociatedCostsInScope(panel.Guid);
 
@@ -1856,7 +1892,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECController getControllerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-            TECController controller = new TECController(guid);
+            TECController controller = new TECController(guid, getManufacturerInController(guid));
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
@@ -1864,7 +1900,6 @@ namespace EstimatingUtilitiesLibrary
             controller.Type = UtilitiesMethods.StringToEnum<ControllerType>(row[ControllerTable.Type.Name].ToString(), ControllerType.IsStandalone);
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
-            controller.Manufacturer = getManufacturerInController(guid);
             controller.AssociatedCosts = getAssociatedCostsInScope(guid);
             controller.ChildrenConnections = getConnectionsInController(controller);
             return controller;
@@ -1945,16 +1980,20 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
 
-        private static TECControlledScope getControlledScopeFromRow(DataRow row)
+        private static TECControlledScope getControlledScopeFromRow(DataRow row, bool isChild = false)
         {
             Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
-            TECControlledScope controlledScope = new TECControlledScope(guid);
+            TECControlledScope controlledScope = new TECControlledScope(guid, isChild);
 
             controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
             controlledScope.Description = row[ControlledScopeTable.Description.Name].ToString();
             controlledScope.Controllers = getControllersInControlledScope(guid);
             controlledScope.Systems = getSystemsInControlledScope(guid);
             controlledScope.Panels = getPanelsInControlledScope(guid);
+            if (!isChild)
+            {
+                controlledScope.ScopeInstances = getChildrenControlledScope(guid);
+            }
 
             return controlledScope;
         }
@@ -1968,7 +2007,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECController getControllerPlaceholderFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-            TECController controller = new TECController(guid);
+            TECController controller = new TECController(guid, new TECManufacturer());
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
@@ -1996,10 +2035,10 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
-            TECDevice device = new TECDevice(guid);
+            TECConnectionType connectionType = new TECConnectionType();
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECDevice device = new TECDevice(guid, connectionType, manufacturer);
             device.Description = "placeholder";
-            device.Manufacturer = new TECManufacturer();
-            device.ConnectionType = new TECConnectionType();
             return device;
         }
         private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
@@ -2027,6 +2066,17 @@ namespace EstimatingUtilitiesLibrary
             module.Description = "placeholder";
             module.Manufacturer = new TECManufacturer();
             return module;
+        }
+        private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
+        {
+            Guid key = new Guid(row[CharacteristicScopeInstanceScopeTable.CharacteristicID.Name].ToString());
+            Guid value = new Guid(row[CharacteristicScopeInstanceScopeTable.InstanceID.Name].ToString());
+
+            if (!dict.ContainsKey(key))
+            {
+                dict[key] = new List<Guid>();
+            }
+            dict[key].Add(value);
         }
         #endregion
 
@@ -2157,6 +2207,10 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, bid);
             }
+            foreach (TECControlledScope conScope in bid.ControlledScope)
+            {
+                saveFullControlledScope(conScope, bid);
+            }
 
         }
         private static void saveCompleteTemplate(TECTemplates templates)
@@ -2239,15 +2293,26 @@ namespace EstimatingUtilitiesLibrary
             { addObject(new StackItem(Change.Add, catalogs, associatedCost)); }
         }
 
-        private static void saveFullControlledScope(TECControlledScope conScope, TECTemplates templates)
+        private static void saveFullControlledScope(TECControlledScope conScope, TECScopeManager scopeManager, bool isRelationship = false)
         {
-            addObject(new StackItem(Change.Add, templates, conScope));
+            var change = Change.Add;
+            if(isRelationship)
+            {
+                change = Change.AddRelationship;
+            }else
+            {
+                addObject(new StackItem(change, scopeManager, conScope));
+            }
             saveScopeChildProperties(conScope);
             foreach (TECSystem system in conScope.Systems)
             {
-                addObject(new StackItem(Change.Add, conScope, system));
-                saveScopeChildProperties(system);
-                saveCompleteEquipment(system);
+                addObject(new StackItem(change, conScope, system));
+                if (!isRelationship)
+                {
+                    saveScopeChildProperties(system);
+                    saveCompleteEquipment(system);
+                }
+                
             }
             foreach (TECPanel panel in conScope.Panels)
             {
@@ -2255,9 +2320,24 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECController controller in conScope.Controllers)
             {
-                addObject(new StackItem(Change.Add, conScope, controller));
-                saveScopeChildProperties(controller);
-                saveControllerChildProperties(controller);
+                if (!isRelationship)
+                {
+                    saveScopeChildProperties(controller);
+                    saveControllerChildProperties(controller);
+                }
+                addObject(new StackItem(change, conScope, controller));
+                
+            }
+            foreach(TECControlledScope childScope in conScope.ScopeInstances)
+            {
+                addObject(new StackItem(change, conScope, childScope));
+            }
+            foreach(KeyValuePair<TECScope, List<TECScope>> item in conScope.CharactersticInstances.GetFullDictionary())
+            {
+                foreach(TECScope value in item.Value)
+                {
+                    addRelationship(new StackItem(Change.AddRelationship, item.Key, value, typeof(TECScope), typeof(TECScope)));
+                }
             }
         }
 

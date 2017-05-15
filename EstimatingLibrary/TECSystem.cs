@@ -184,13 +184,20 @@ namespace EstimatingLibrary
         public TECSystem() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSystem(TECSystem sourceSystem, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECSystem(TECSystem sourceSystem, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
+            if (characteristicReference == null)
+            {
+                characteristicReference = new ObservableItemToInstanceList<TECScope>();
+            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSystem.Guid; }
             foreach (TECEquipment equipment in sourceSystem.Equipment)
             {
-                Equipment.Add(new TECEquipment(equipment, guidDictionary));
+                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference);
+                characteristicReference.AddItem(equipment, toAdd);
+                Equipment.Add(toAdd);
             }
             _budgetPriceModifier = sourceSystem.BudgetPriceModifier;
             this.copyPropertiesFromScope(sourceSystem);

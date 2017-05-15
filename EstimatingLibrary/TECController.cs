@@ -192,20 +192,24 @@ namespace EstimatingLibrary
             }
         }
 
+        public bool IsGlobal;
+
         #endregion
 
         #region Constructors
-        public TECController(Guid guid) : base(guid)
+        public TECController(Guid guid, TECManufacturer manufacturer) : base(guid)
         {
+            IsGlobal = true;
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
+            _manufacturer = manufacturer;
             ChildrenConnections.CollectionChanged += collectionChanged;
             IO.CollectionChanged += IO_CollectionChanged;
         }
 
-        public TECController() : this(Guid.NewGuid()) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECController(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Manufacturer)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -231,7 +235,6 @@ namespace EstimatingLibrary
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
-            _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
 
@@ -246,7 +249,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Add", this, item);
+                        NotifyPropertyChanged("Add", this, (item as TECObject).Copy());
                     }
                 }
             }
@@ -256,7 +259,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Remove", this, item);
+                        NotifyPropertyChanged("Remove", this, (item as TECObject).Copy());
                     }
                 }
             }
@@ -268,14 +271,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Add", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Remove", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
                 }
             }
             if (sender == ChildrenConnections)
@@ -369,9 +372,6 @@ namespace EstimatingLibrary
                     var subConnect = connection as TECSubScopeConnection;
                     if (subConnect.SubScope == subScope)
                     {
-                        subScope.Connection = null;
-                        subConnect.SubScope = null;
-                        connection.ParentController = null;
                         connectionToRemove = subConnect;
                     }
                 }
@@ -379,6 +379,9 @@ namespace EstimatingLibrary
             if (connectionToRemove != null)
             {
                 ChildrenConnections.Remove(connectionToRemove);
+                subScope.Connection = null;
+                connectionToRemove.SubScope = null;
+                connectionToRemove.ParentController = null;
             }
             else
             {
@@ -440,10 +443,9 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Guid);
+            TECController outController = new TECController(this.Guid, Manufacturer);
             outController.copyPropertiesFromScope(this);
             outController._cost = Cost;
-            outController._manufacturer = Manufacturer;
             foreach (TECIO io in this.IO)
             {
                 outController.IO.Add(io.Copy() as TECIO);
