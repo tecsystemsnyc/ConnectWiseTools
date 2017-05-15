@@ -223,6 +223,16 @@ namespace EstimatingLibrary
             {
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
+            if(args != null)
+            {
+                if(e.PropertyName == "Cost" || e.PropertyName == "Manufacturer")
+                {
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Remove(args.NewValue as TECDevice);
+                    old.Devices.Add(args.OldValue as TECDevice);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
         }
         #endregion
 
