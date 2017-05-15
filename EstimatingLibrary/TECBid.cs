@@ -670,6 +670,11 @@ namespace EstimatingLibrary
             }
         }
 
+        public void RefreshEstimate()
+        {
+            Estimate = new TECEstimator(this);
+        }
+
         #endregion
 
     }

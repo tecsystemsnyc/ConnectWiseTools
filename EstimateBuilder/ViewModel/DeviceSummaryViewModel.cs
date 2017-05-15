@@ -89,7 +89,7 @@ namespace EstimateBuilder.ViewModel
                 var targetObject = args.NewValue;
                 var referenceObject = args.OldValue;
 
-                if(args.PropertyName == "Add")
+                if(args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
@@ -108,7 +108,7 @@ namespace EstimateBuilder.ViewModel
                         addDevice(targetObject as TECDevice);
                     }
                 }
-                else if (args.PropertyName == "Remove")
+                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
