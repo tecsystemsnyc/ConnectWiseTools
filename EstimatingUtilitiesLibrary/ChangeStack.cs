@@ -312,7 +312,7 @@ namespace EstimatingUtilitiesLibrary
             else if (item.Change == Change.Edit)
             {
                 int index = UndoStack.IndexOf(item);
-                RedoStack.Add(new StackItem(Change.Edit, copy(item.TargetObject), item.TargetObject));
+                RedoStack.Add(new StackItem(Change.Edit, (item.TargetObject as TECObject).Copy(), item.TargetObject));
                 handleEdit(item);
                 for (int x = (UndoStack.Count - 1); x >= index; x--)
                 {

@@ -139,7 +139,7 @@ namespace EstimatingLibrary
             _description = scope.Description;
             _quantity = scope.Quantity;
             if (scope.Location != null)
-            { _location = scope.Location.Copy() as TECLocation; }
+            { _location = scope.Location; }
             foreach (TECTag tag in scope.Tags)
             { _tags.Add(tag.Copy() as TECTag); }
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)

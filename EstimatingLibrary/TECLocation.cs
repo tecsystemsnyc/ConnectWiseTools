@@ -44,6 +44,8 @@ namespace EstimatingLibrary
         {
             _name = sourceLocation.Name;
         }
+        
+        #endregion //Constructors
 
         public override object Copy()
         {
@@ -51,6 +53,5 @@ namespace EstimatingLibrary
             Location._guid = Guid;
             return Location;
         }
-        #endregion //Constructors
     }
 }

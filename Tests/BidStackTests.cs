@@ -1805,15 +1805,18 @@ namespace Tests
             TECLocation edit = new TECLocation();
             edit.Name = "Floor 42";
 
+            var system = new TECSystem();
+            Bid.Systems.Add(system);
+
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Location = edit;
+            system.Location = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECLocation actual = Bid.Systems[0].Location;
-            Assert.AreEqual(edit, actual, "Not Undone");
+            TECLocation actual = system.Location;
+            Assert.AreEqual(edit, actual, "Not Redone");
 
         }
 
