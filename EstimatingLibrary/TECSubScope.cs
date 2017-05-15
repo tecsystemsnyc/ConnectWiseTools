@@ -250,7 +250,7 @@ namespace EstimatingLibrary
             outScope._guid = Guid;
             var devices = new ObservableCollection<TECDevice>();
             foreach (TECDevice device in this.Devices)
-            { devices.Add(device.Copy() as TECDevice); }
+            { devices.Add(device); }
             outScope._devices = devices;
             var points = new ObservableCollection<TECPoint>();
             foreach (TECPoint point in this.Points)
