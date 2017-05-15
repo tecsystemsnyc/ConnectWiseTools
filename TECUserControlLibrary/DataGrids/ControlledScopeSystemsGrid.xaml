@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"             
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d" 
@@ -18,18 +19,29 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
-        <DataGrid ItemsSource="{Binding ElementName=parent, Path=ControlledScopeSource}" AutoGenerateColumns="False"
+    
+    
+    <Grid DataContext="{Binding ElementName=parent}">
+        <DataGrid ItemsSource="{Binding ElementName=parent, Path=ControlledScopeSource}" 
+                  AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedControlledScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
-                  dd:DragDrop.DropHandler="{Binding}">
+                  dd:DragDrop.DropHandler="{Binding}"
+                  IsReadOnly="True">
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <local:SystemsGridControl SystemsSource="{Binding SystemInstances}" 
+                    <StackPanel>
+                        <i:Interaction.Behaviors>
+                            <cLib:BubbleScrollEvent/>
+                        </i:Interaction.Behaviors>
+                        <Label Content="Systems" FontSize="10"/>
+                        <local:SystemsGridControl SystemsSource="{Binding SystemInstances}" 
                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                    </StackPanel>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>

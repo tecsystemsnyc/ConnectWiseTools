@@ -52,8 +52,17 @@
                 <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
             </TabItem>
             <TabItem Header="Systems" HorizontalAlignment="Left" Width="53">
-                <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
+                <TabControl>
+                    <TabItem Header="Group By Controlled Scope">
+                        <grids:ControlledScopeSystemsGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
+                                                  ViewModel="{Binding ScopeDataGrid}"/>
+                    </TabItem>
+                    <TabItem Header="All">
+                        <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>
+                    </TabItem>
+                </TabControl>
+                
 
             </TabItem>
             

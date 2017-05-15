@@ -96,20 +96,36 @@ namespace EstimatingLibrary
         public ObservableItemToInstanceList<TECScope> CharactersticInstances;
         private ChangeWatcher watcher;
 
-        #region Derived
+        private ObservableCollection<TECSystem> _systemInstances;
+        private ObservableCollection<TECController> _controllerInstances;
+        private ObservableCollection<TECPanel> _panelInstances;
         public ObservableCollection<TECSystem> SystemInstances
         {
-            get { return getSystemInstances(); }
+            get { return _systemInstances; }
+            set
+            {
+                _systemInstances = value;
+                RaisePropertyChanged("SystemInstances");
+            }
         }
         public ObservableCollection<TECController> ControllerInstances
         {
-            get { return getControllerInstances(); }
+            get { return _controllerInstances; }
+            set
+            {
+                _controllerInstances = value;
+                RaisePropertyChanged("ControllerInstances");
+            }
         }
         public ObservableCollection<TECPanel> PanelInstances
         {
-            get { return getPanelInstances(); }
+            get { return _panelInstances; }
+            set
+            {
+                _panelInstances = value;
+                RaisePropertyChanged("PanelInstances");
+            }
         }
-        #endregion
 
         public TECControlledScope(Guid guid, bool isChild = false) : base(guid)
         {
@@ -118,6 +134,9 @@ namespace EstimatingLibrary
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _scopeInstances = new ObservableCollection<TECControlledScope>();
+            _systemInstances = new ObservableCollection<TECSystem>();
+            _controllerInstances = new ObservableCollection<TECController>();
+            _panelInstances = new ObservableCollection<TECPanel>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Systems.CollectionChanged += CollectionChanged;
@@ -164,6 +183,10 @@ namespace EstimatingLibrary
                             if (item is TECSystem)
                             {
                                 (item as TECSystem).PropertyChanged += System_PropertyChanged;
+                            } else if (item is TECControlledScope)
+                            {
+                                handleAddChild(item as TECControlledScope);
+                                (item as TECControlledScope).PropertyChanged += TECControlledScope_PropertyChanged;
                             }
                         }
                         
@@ -187,9 +210,83 @@ namespace EstimatingLibrary
                             {
                                 (item as TECSystem).PropertyChanged -= System_PropertyChanged;
                             }
+                            else if (item is TECControlledScope)
+                            {
+                                handleRemoveChild(item as TECControlledScope);
+                                (item as TECControlledScope).PropertyChanged -= TECControlledScope_PropertyChanged;
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        private void TECControlledScope_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var args = e as PropertyChangedExtendedEventArgs<object>;
+            if(args != null)
+            {
+                if(e.PropertyName == "Add")
+                {
+                    if(args.NewValue is TECSystem)
+                    {
+                        SystemInstances.Add(args.NewValue as TECSystem);
+                    }
+                    else if (args.NewValue is TECController)
+                    {
+                        ControllerInstances.Add(args.NewValue as TECController);
+                    }
+                    else if (args.NewValue is TECPanel)
+                    {
+                        PanelInstances.Add(args.NewValue as TECPanel);
+                    }
+                }
+                else if (e.PropertyName == "Remove")
+                {
+                    if (args.NewValue is TECSystem)
+                    {
+                        SystemInstances.Remove(args.NewValue as TECSystem);
+                    }
+                    else if (args.NewValue is TECController)
+                    {
+                        ControllerInstances.Remove(args.NewValue as TECController);
+                    }
+                    else if (args.NewValue is TECPanel)
+                    {
+                        PanelInstances.Remove(args.NewValue as TECPanel);
+                    }
+                }
+            }
+        }
+
+        private void handleRemoveChild(TECControlledScope scope)
+        {
+            foreach(TECSystem system in scope.Systems)
+            {
+                SystemInstances.Remove(system);
+            }
+            foreach(TECController controller in scope.Controllers)
+            {
+                ControllerInstances.Remove(controller);
+            }
+            foreach(TECPanel panel in scope.Panels)
+            {
+                PanelInstances.Remove(panel);
+            }
+        }
+        private void handleAddChild(TECControlledScope scope)
+        {
+            foreach (TECSystem system in scope.Systems)
+            {
+                SystemInstances.Add(system);
+            }
+            foreach (TECController controller in scope.Controllers)
+            {
+                ControllerInstances.Add(controller);
+            }
+            foreach (TECPanel panel in scope.Panels)
+            {
+                PanelInstances.Add(panel);
             }
         }
 
@@ -272,44 +369,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private ObservableCollection<TECSystem> getSystemInstances()
-        {
-            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
-            foreach(TECControlledScope scope in ScopeInstances)
-            {
-                foreach(TECSystem system in scope.Systems)
-                {
-                    systems.Add(system);
-                }
-            }
-            return systems;
-        }
-        private ObservableCollection<TECController> getControllerInstances()
-        {
-            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            foreach (TECControlledScope scope in ScopeInstances)
-            {
-                foreach (TECController controller in scope.Controllers)
-                {
-                    controllers.Add(controller);
-                }
-            }
-            return controllers;
-        }
-        private ObservableCollection<TECPanel> getPanelInstances()
-        {
-            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            foreach (TECControlledScope scope in ScopeInstances)
-            {
-                foreach (TECPanel panel in scope.Panels)
-                {
-                    panels.Add(panel);
-                }
-            }
-            return panels;
-        }
-
+        
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object> && ScopeInstances.Count > 0)
