@@ -877,12 +877,12 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = new TECDevice(Guid.NewGuid());
+            TECDevice expectedDevice = new TECDevice(Guid.NewGuid(), 
+                templates.Catalogs.ConnectionTypes[0],
+                templates.Catalogs.Manufacturers[0]);
             expectedDevice.Name = "New Device";
             expectedDevice.Description = "New Device desc";
             expectedDevice.Cost = 11.54;
-            expectedDevice.Manufacturer = templates.Catalogs.Manufacturers[0];
-            expectedDevice.ConnectionType = templates.Catalogs.ConnectionTypes[0];
 
             templates.Catalogs.Devices.Add(expectedDevice);
 
@@ -1059,7 +1059,7 @@ namespace Tests
         public void Save_Templates_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid());
+            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.Manufacturers[0]);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 100;
@@ -2034,10 +2034,9 @@ namespace Tests
         public void Save_Templates_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel();
+            TECPanel expectedPanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-            expectedPanel.Type = templates.Catalogs.PanelTypes[0];
             templates.PanelTemplates.Add(expectedPanel);
 
             EstimatingLibraryDatabase.Update(path, testStack);
@@ -2122,15 +2121,13 @@ namespace Tests
 
             expectedScope.Systems.Add(scopeSystem);
 
-            var scopeController = new TECController();
+            var scopeController = new TECController(templates.Catalogs.Manufacturers[0]);
             scopeController.Name = "Test Scope Controller";
-            scopeController.Manufacturer = templates.Catalogs.Manufacturers[0];
             expectedScope.Controllers.Add(scopeController);
             scopeController.AddSubScope(scopeSystem.Equipment[0].SubScope[0]);
 
-            var scopePanel = new TECPanel();
+            var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             scopePanel.Name = "Test Scope Name";
-            scopePanel.Type = templates.Catalogs.PanelTypes[0];
             expectedScope.Panels.Add(scopePanel);
 
             EstimatingLibraryDatabase.Update(path, testStack);

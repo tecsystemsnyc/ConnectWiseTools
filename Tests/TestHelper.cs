@@ -185,26 +185,25 @@ namespace Tests
             bid.Catalogs.ConnectionTypes.Add(connectionType1);
             bid.Catalogs.ConnectionTypes.Add(connectionType2);
 
-            //Devices
-            TECDevice device1 = new TECDevice(Guid.NewGuid());
-            device1.Name = "Device 1";
-            device1.Description = "Description 1";
-            device1.Cost = 987.6;
-            device1.Tags.Add(tag1);
-            device1.ConnectionType = connectionType1;
-
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-
-
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
             manufacturer1.Multiplier = 0.8;
-
-            device1.Manufacturer = manufacturer1;
             bid.Catalogs.Manufacturers.Add(manufacturer1);
+
+            //Devices
+            TECDevice device1 = new TECDevice(Guid.NewGuid(),
+                connectionType1,
+                manufacturer1);
+            device1.Name = "Device 1";
+            device1.Description = "Description 1";
+            device1.Cost = 987.6;
+            device1.Tags.Add(tag1);
+
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+            
 
             //Points
             var point1 = new TECPoint();
@@ -230,13 +229,12 @@ namespace Tests
             //drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
-            TECDevice deviceC1 = new TECDevice(Guid.NewGuid());
+            TECDevice deviceC1 = new TECDevice(Guid.NewGuid(), connectionType2, manufacturer1);
             deviceC1.Name = "Device C1";
             deviceC1.Description = "Description C1";
             deviceC1.Cost = 987.6;
 
             deviceC1.Manufacturer = manufacturer1;
-            deviceC1.ConnectionType = connectionType2;
             bid.Catalogs.Devices.Add(deviceC1);
             bid.Catalogs.Devices.Add(device1);
 
@@ -268,7 +266,7 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid());
+            TECController expectedController = new TECController(Guid.NewGuid(), manufacturer1);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
@@ -328,8 +326,7 @@ namespace Tests
             bid.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
-            TECPanel panel = new TECPanel();
-            panel.Type = panelType;
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testCost);
@@ -452,19 +449,15 @@ namespace Tests
             templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
-            TECDevice testDev = new TECDevice(Guid.NewGuid());
+            TECDevice testDev = new TECDevice(Guid.NewGuid(), testDevConnType, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Cost = 20.3;
-            testDev.Manufacturer = testDevMan;
-            testDev.ConnectionType = testDevConnType;
 
-            TECDevice childDev = new TECDevice(Guid.NewGuid());
+            TECDevice childDev = new TECDevice(Guid.NewGuid(), childDevConnType, childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Cost = 54.1;
-            childDev.Manufacturer = childDevMan;
-            childDev.ConnectionType = childDevConnType;
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
@@ -546,12 +539,12 @@ namespace Tests
             templates.SubScopeTemplates.Add(subScope);
 
             //Controller
-            TECController expectedController = new TECController();
+            TECController expectedController = new TECController(testMan);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
 
-            TECController controlledController = new TECController();
+            TECController controlledController = new TECController(testMan);
             controlledController.Name = "Controlled Controller";
 
             TECIO ioToAdd = new TECIO();
@@ -559,13 +552,9 @@ namespace Tests
             ioToAdd.Quantity = 5;
 
             expectedController.IO.Add(ioToAdd);
-            expectedController.Manufacturer = testMan;
-
             controlledController.IO.Add(ioToAdd);
-            controlledController.Manufacturer = testMan;
 
             templates.ControllerTemplates.Add(expectedController);
-
 
             //Misc Cost
             TECMiscCost cost = new TECMiscCost();
@@ -591,15 +580,13 @@ namespace Tests
             templates.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
-            TECPanel panel = new TECPanel();
-            panel.Type = panelType;
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testAssociatedCost);
             panel.AssociatedCosts.Add(testAssociatedCost);
 
-            TECPanel controlledPanel = new TECPanel();
-            controlledPanel.Type = panelType;
+            TECPanel controlledPanel = new TECPanel(panelType);
             controlledPanel.Name = "Controlled Panel";
 
             templates.PanelTemplates.Add(panel);
@@ -657,8 +644,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController();
-            controller.Manufacturer = bid.Catalogs.Manufacturers[0];
+            TECController controller = new TECController(bid.Catalogs.Manufacturers[0]);
             bid.Controllers.Add(controller);
             controller.AddSubScope(subScope);
             subScope.Connection.Length = 10;
@@ -714,13 +700,11 @@ namespace Tests
             outCatalogs.Manufacturers.Add(manufacturer1);
 
             //Devices
-            TECDevice device1 = new TECDevice(Guid.NewGuid());
+            TECDevice device1 = new TECDevice(Guid.NewGuid(), connectionType1, manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
             device1.Cost = 987.6;
             device1.Tags.Add(tag1);
-            device1.ConnectionType = connectionType1;
-            device1.Manufacturer = manufacturer1;
 
             outCatalogs.Devices.Add(device1);
 

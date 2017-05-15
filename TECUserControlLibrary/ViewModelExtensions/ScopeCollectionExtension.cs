@@ -1012,12 +1012,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void AddDeviceExecute()
         {
-            var newDevice = new TECDevice();
+            var newDevice = new TECDevice(DeviceConnectionType, DeviceManufacturer);
             newDevice.Name = DeviceName;
             newDevice.Description = DeviceDescription;
             newDevice.Cost = DeviceCost;
-            newDevice.ConnectionType = DeviceConnectionType;
-            newDevice.Manufacturer = DeviceManufacturer;
             newDevice.Tags = DeviceTags;
             Templates.Catalogs.Devices.Add(newDevice);
             DeviceName = "";
@@ -1042,13 +1040,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void AddControllerExecute()
         {
-            var newController = new TECController();
+            var newController = new TECController(ControllerManufacturer);
             newController.Name = ControllerName;
             newController.Description = ControllerDescription;
             newController.Cost = ControllerCost;
             newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
-            newController.Manufacturer = ControllerManufacturer;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
@@ -1155,8 +1152,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddPanelExecute()
         {
-            var panel = new TECPanel();
-            panel.Type = SelectedPanelType;
+            var panel = new TECPanel(SelectedPanelType);
             panel.Name = PanelName;
             panel.Description = PanelDescription;
             panel.Tags = PanelTags;

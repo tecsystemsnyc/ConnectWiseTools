@@ -195,17 +195,18 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid) : base(guid)
+        public TECController(Guid guid, TECManufacturer manufacturer) : base(guid)
         {
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
+            _manufacturer = manufacturer;
             ChildrenConnections.CollectionChanged += collectionChanged;
             IO.CollectionChanged += IO_CollectionChanged;
         }
 
-        public TECController() : this(Guid.NewGuid()) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECController(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Manufacturer)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -231,7 +232,6 @@ namespace EstimatingLibrary
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
-            _manufacturer = controllerSource.Manufacturer;
             _cost = controllerSource.Cost;
         }
 
@@ -440,10 +440,9 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Guid);
+            TECController outController = new TECController(this.Guid, Manufacturer);
             outController.copyPropertiesFromScope(this);
             outController._cost = Cost;
-            outController._manufacturer = Manufacturer;
             foreach (TECIO io in this.IO)
             {
                 outController.IO.Add(io.Copy() as TECIO);

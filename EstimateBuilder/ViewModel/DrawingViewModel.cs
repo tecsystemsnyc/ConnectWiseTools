@@ -37,6 +37,7 @@ namespace EstimateBuilder.ViewModel
         private ObservableCollection<TECVisualConnection> _displayConnections;
         private string _controllerName;
         private TECController _selectedControllerTemplate;
+        private TECManufacturer _controllerManufacturer;
 
         private Tuple<TECObject, TECVisualScope, string> connectionStart;
 
@@ -195,6 +196,15 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("SelectedControllerTemplate");
             }
         }
+        public TECManufacturer ControllerManufacturer
+        {
+            get { return _controllerManufacturer; }
+            set
+            {
+                _controllerManufacturer = value;
+                RaisePropertyChanged("ControllerManufacturer");
+            }
+        }
 
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
@@ -337,7 +347,7 @@ namespace EstimateBuilder.ViewModel
 
         private void AddControllerExecute()
         {
-            var newController = new TECController();
+            var newController = new TECController(ControllerManufacturer);
             newController.Name = ControllerName;
             newController.IO = SelectedControllerTemplate.IO;
             newController.Tags = SelectedControllerTemplate.Tags;

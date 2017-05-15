@@ -80,23 +80,21 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid) : base(guid)
+        public TECDevice(Guid guid, TECConnectionType connectionType, TECManufacturer manufacturer) : base(guid)
         {
             _cost = 0;
-            _connectionType = new TECConnectionType();
+            _connectionType = connectionType;
+            _manufacturer = manufacturer;
         }
-        public TECDevice() : this(Guid.NewGuid()) { }
+        public TECDevice(TECConnectionType connectionType, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionType, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
-            : this(deviceSource.Guid)
+            : this(deviceSource.Guid, deviceSource.ConnectionType, deviceSource.Manufacturer)
         {
             this.copyPropertiesFromScope(deviceSource);
             _cost = deviceSource.Cost;
-            _manufacturer = deviceSource.Manufacturer;
-            _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
-
         }
         #endregion //Constructors
 

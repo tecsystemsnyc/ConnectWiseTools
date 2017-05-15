@@ -217,7 +217,7 @@ namespace EstimateBuilder.ViewModel
 
         private void setupNoneObjetcs()
         {
-            TECController noneController = new TECController();
+            TECController noneController = new TECController(new TECManufacturer());
             noneController.Name = "None";
             NoneController = noneController;
 

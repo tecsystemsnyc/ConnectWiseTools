@@ -63,7 +63,7 @@ namespace Tests
         [TestMethod]
         public void Controller_AddSubScope()
         {
-            TECController controller = new TECController();
+            TECController controller = new TECController(new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
 
             controller.AddSubScope(subScope);
@@ -75,7 +75,7 @@ namespace Tests
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
-            TECController controller = new TECController();
+            TECController controller = new TECController(new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
 
             controller.AddSubScope(subScope);

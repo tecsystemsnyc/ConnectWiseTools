@@ -64,8 +64,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_AddPanel()
         {
-            TECPanel panel = new TECPanel();
-            TECController controller = new TECController();
+            TECPanel panel = new TECPanel(new TECPanelType());
+            TECController controller = new TECController(new TECManufacturer());
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, null);
 
@@ -77,8 +77,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_RemovePanel()
         {
-            TECPanel panel = new TECPanel();
-            TECController controller = new TECController();
+            TECPanel panel = new TECPanel(new TECPanelType());
+            TECController controller = new TECController(new TECManufacturer());
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, panel);
 
@@ -93,7 +93,7 @@ namespace Tests
         public void SubScopeConnection_AddConnection()
         {
             TECSubScope subScope = new TECSubScope();
-            TECController controller = new TECController();
+            TECController controller = new TECController(new TECManufacturer());
 
             SubScopeConnection subScopeConnection = new SubScopeConnection(subScope);
             subScopeConnection.Controller = controller;
@@ -106,7 +106,7 @@ namespace Tests
         public void SubScopeConnection_RemoveConnection()
         {
             TECSubScope subScope = new TECSubScope();
-            TECController controller = new TECController();
+            TECController controller = new TECController(new TECManufacturer());
             controller.AddSubScope(subScope);
 
             SubScopeConnection subScopeConnection = new SubScopeConnection(subScope);

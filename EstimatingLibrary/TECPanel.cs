@@ -63,14 +63,15 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECPanel(Guid guid) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type) : base(guid)
         {
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
+            _type = type;
             Controllers.CollectionChanged += collectionChanged;
         }
-        public TECPanel() : this(Guid.NewGuid()) { }
-        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
@@ -79,7 +80,6 @@ namespace EstimatingLibrary
             {
                 _controllers.Add(new TECController(controller, guidDictionary));
             }
-            _type = panel.Type;
         }
 
         public override object Copy()

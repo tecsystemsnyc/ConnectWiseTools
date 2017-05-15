@@ -945,7 +945,7 @@ namespace EstimatingUtilitiesLibrary
             var tables = getAllTableNames();
             if (tables.Contains(SubScopeConnectionTable.TableName) || tables.Contains(NetworkConnectionTable.TableName))
             {
-                var outController = new TECController();
+                var outController = new TECController(new TECManufacturer());
                 string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
                 command += "(select " + ControllerConnectionTable.ControllerID.Name + " from " + ControllerConnectionTable.TableName + " where ";
                 command += ControllerConnectionTable.ConnectionID.Name + " = '" + connectionID;
@@ -1749,12 +1749,12 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getDeviceFromRow(DataRow row)
         {
             Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-            TECDevice deviceToAdd = new TECDevice(deviceID);
+            TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
+            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+            TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
             deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
             deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
             deviceToAdd.Cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
-            deviceToAdd.Manufacturer = getManufacturerInDevice(deviceID);
-            deviceToAdd.ConnectionType = getConnectionTypeInDevice(deviceID);
             deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
             deviceToAdd.AssociatedCosts = getAssociatedCostsInScope(deviceToAdd.Guid);
             return deviceToAdd;
@@ -1878,12 +1878,12 @@ namespace EstimatingUtilitiesLibrary
         private static TECPanel getPanelFromRow(DataRow row)
         {
             Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
-            TECPanel panel = new TECPanel(guid);
+            TECPanelType type = getPanelTypeInPanel(guid);
+            TECPanel panel = new TECPanel(guid, type);
 
             panel.Name = row[PanelTable.Name.Name].ToString();
             panel.Description = row[PanelTable.Description.Name].ToString();
             panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
-            panel.Type = getPanelTypeInPanel(guid);
             panel.Controllers = getControllersInPanel(guid);
             panel.AssociatedCosts = getAssociatedCostsInScope(panel.Guid);
 
@@ -1892,7 +1892,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECController getControllerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-            TECController controller = new TECController(guid);
+            TECController controller = new TECController(guid, getManufacturerInController(guid));
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
@@ -1900,7 +1900,6 @@ namespace EstimatingUtilitiesLibrary
             controller.Type = UtilitiesMethods.StringToEnum<ControllerType>(row[ControllerTable.Type.Name].ToString(), ControllerType.IsStandalone);
             controller.IO = getIOInController(guid);
             controller.Tags = getTagsInScope(guid);
-            controller.Manufacturer = getManufacturerInController(guid);
             controller.AssociatedCosts = getAssociatedCostsInScope(guid);
             controller.ChildrenConnections = getConnectionsInController(controller);
             return controller;
@@ -2009,7 +2008,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECController getControllerPlaceholderFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
-            TECController controller = new TECController(guid);
+            TECController controller = new TECController(guid, new TECManufacturer());
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
@@ -2037,10 +2036,10 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
-            TECDevice device = new TECDevice(guid);
+            TECConnectionType connectionType = new TECConnectionType();
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECDevice device = new TECDevice(guid, connectionType, manufacturer);
             device.Description = "placeholder";
-            device.Manufacturer = new TECManufacturer();
-            device.ConnectionType = new TECConnectionType();
             return device;
         }
         private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
