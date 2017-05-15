@@ -385,7 +385,7 @@ namespace EstimatingLibrary
         private void editCost(object newValue, object oldValue)
         {
             if (newValue is TECConnection || newValue is TECMiscCost
-                || newValue is TECMiscWiring || newValue is TECDevice)
+                || newValue is TECMiscWiring || newValue is TECSubScope)
             {
                 if (newValue.GetType() == oldValue.GetType())
                 {
