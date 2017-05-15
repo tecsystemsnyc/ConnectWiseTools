@@ -113,12 +113,20 @@ namespace EstimatingLibrary
             get { return GetTECCost(bid); }
         }
 
-        public double MaterialCost
+        public double TECMaterialCost
         {
             get
             {
-                return GetMaterialCost();
+                return tecMaterialCost;
             }
+        }
+        public double TECShipping
+        {
+            get { return GetTECShipping(); }
+        }
+        public double TECWarranty
+        {
+            get { return GetTECWarranty(); }
         }
         public double Tax
         {
@@ -309,6 +317,14 @@ namespace EstimatingLibrary
             {
                 addCost(controller);
             }
+            foreach (TECMiscCost miscCost in bid.MiscCosts)
+            {
+                addCost(miscCost);
+            }
+            foreach (TECMiscWiring miscWiring in bid.MiscWiring)
+            {
+                addCost(miscWiring);
+            }
 
         }
 
@@ -427,17 +443,22 @@ namespace EstimatingLibrary
         #endregion
 
         #region Calculate Derivatives
+        public double GetTECShipping()
+        {
+            return (TECMaterialCost * 0.03);
+        }
+
+        public double GetTECWarranty()
+        {
+            return (TECMaterialCost * 0.05);
+        }
+
         /// <summary>
         /// Returns TEC material costs of devices and their associated costs
         /// </summary>
-        public double GetMaterialCost()
+        public double GetExtendedMaterialCost()
         {
-            double shipping = 0.03;
-            double warranty = 0.06;
-            double cost = tecMaterialCost;
-
-            cost += cost * shipping + cost * warranty;
-            return cost;
+            return (TECMaterialCost + TECShipping + TECWarranty);
         }
         /// <summary>
         /// Returns TEC labor costs of associated costs
@@ -457,7 +478,7 @@ namespace EstimatingLibrary
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * GetMaterialCost();
+                outTax += .0875 * GetExtendedMaterialCost();
             }
 
             return outTax;
@@ -471,6 +492,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += GetTECLaborCost(bid);
             outCost += GetMaterialLabor(bid);
+            outCost += GetExtendedMaterialCost();
             outCost += outCost * bid.Parameters.Escalation / 100;
             outCost += GetTax(bid);
 
@@ -851,7 +873,9 @@ namespace EstimatingLibrary
         }
         private void raiseMaterial()
         {
-            RaisePropertyChanged("MaterialCost");
+            RaisePropertyChanged("TECMaterialCost");
+            RaisePropertyChanged("TECShipping");
+            RaisePropertyChanged("TECWarranty");
             RaisePropertyChanged("Tax");
             raiseTECTotals();
         }
@@ -879,8 +903,8 @@ namespace EstimatingLibrary
 
             RaisePropertyChanged("TECLaborHours");
             RaisePropertyChanged("TECLaborCost");
-            RaisePropertyChanged("TECSubtotal");
             raiseTECTotals();
+            raiseLabor();
         }
         private void raiseElectricalLabor()
         {

@@ -606,12 +606,11 @@ namespace EstimatingLibrary
 
             foreach (TECConnection connection in ChildrenConnections)
             {
-                var length = connection.Length;
-                if (connection.ConduitType != null)
-                { laborHours += connection.Length * connection.ConduitType.Labor; }
+                var wireLength = connection.Length;
+                var conduitLength = connection.ConduitLength;
                 if (connection.ConduitType != null)
                 {
-                    laborHours += length * connection.ConduitType.Labor;
+                    laborHours +=  conduitLength * connection.ConduitType.Labor;
                     foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
                     {
                         laborHours += associatedCost.Labor;
@@ -622,7 +621,7 @@ namespace EstimatingLibrary
                     if ((connection as TECNetworkConnection).ConnectionType != null)
                     {
                         TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
-                        laborHours += length * type.Labor;
+                        laborHours += wireLength * type.Labor;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                         { laborHours += associatedCost.Labor; }
                     }
@@ -631,7 +630,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
                     {
-                        laborHours += length * type.Labor;
+                        laborHours += wireLength * type.Labor;
                         foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
                         { laborHours += associatedCost.Labor; }
                     }
