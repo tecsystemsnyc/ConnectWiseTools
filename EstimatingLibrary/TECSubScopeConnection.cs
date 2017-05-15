@@ -19,9 +19,24 @@ namespace EstimatingLibrary
             {
                 var oldNew = Tuple.Create<Object, Object>(_subScope, value);
                 var temp = Copy();
+                if(SubScope != null)
+                { SubScope.PropertyChanged -= SubScope_PropertyChanged; }
                 _subScope = value;
+                if (SubScope != null)
+                { SubScope.PropertyChanged += SubScope_PropertyChanged; }
                 RaisePropertyChanged("SubScope");
                 NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
+            }
+        }
+
+        private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var args = e as PropertyChangedExtendedEventArgs<object>;
+            if(e.PropertyName == "CostComponentChanged" && args != null)
+            {
+                var old = this.Copy() as TECSubScopeConnection;
+                old.SubScope = args.OldValue as TECSubScope;
+                NotifyPropertyChanged("CostComponentChanged", old, this);
             }
         }
 
@@ -60,7 +75,7 @@ namespace EstimatingLibrary
 
         #region Constructors
         public TECSubScopeConnection(Guid guid) : base(guid)
-        {
+        { 
         }
         public TECSubScopeConnection() : base(Guid.NewGuid()) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)

@@ -140,10 +140,14 @@ namespace EstimatingLibrary
             _quantity = scope.Quantity;
             if (scope.Location != null)
             { _location = scope.Location.Copy() as TECLocation; }
+            var tags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)
-            { _tags.Add(tag.Copy() as TECTag); }
+            { tags.Add(tag.Copy() as TECTag); }
+            _tags = tags;
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)
-            { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            { associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            _associatedCosts = associatedCosts;
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

@@ -200,6 +200,9 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("AddCatalog", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Remove(item as TECDevice);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -209,6 +212,9 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("RemoveCatalog", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
+                    var old = this.Copy() as TECSubScope;
+                    old.Devices.Add(item as TECDevice);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
