@@ -248,10 +248,14 @@ namespace EstimatingLibrary
         {
             TECSubScope outScope = new TECSubScope();
             outScope._guid = Guid;
+            var devices = new ObservableCollection<TECDevice>();
             foreach (TECDevice device in this.Devices)
-            { outScope.Devices.Add(device.Copy() as TECDevice); }
+            { devices.Add(device.Copy() as TECDevice); }
+            outScope._devices = devices;
+            var points = new ObservableCollection<TECPoint>();
             foreach (TECPoint point in this.Points)
-            { outScope.Points.Add(point.Copy() as TECPoint); }
+            { points.Add(point.Copy() as TECPoint); }
+            outScope._points = points;
 
             outScope.copyPropertiesFromScope(this);
             return outScope;
