@@ -596,6 +596,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField MiscCostID = new TableField("MiscCostID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
@@ -616,6 +617,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField MiscWiringID = new TableField("MiscWiringID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()

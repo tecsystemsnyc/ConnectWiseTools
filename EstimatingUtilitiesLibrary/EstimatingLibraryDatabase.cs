@@ -1945,6 +1945,7 @@ namespace EstimatingUtilitiesLibrary
 
             cost.Name = row[MiscCostTable.Name.Name].ToString();
             cost.Cost = row[MiscCostTable.Cost.Name].ToString().ToDouble(0);
+            cost.Labor = row[MiscCostTable.Labor.Name].ToString().ToDouble(0);
             cost.Quantity = row[MiscCostTable.Quantity.Name].ToString().ToInt(1);
 
             return cost;
@@ -1956,6 +1957,7 @@ namespace EstimatingUtilitiesLibrary
 
             wiring.Name = row[MiscWiringTable.Name.Name].ToString();
             wiring.Cost = row[MiscWiringTable.Cost.Name].ToString().ToDouble(0);
+            wiring.Labor = row[MiscCostTable.Labor.Name].ToString().ToDouble(0);
             wiring.Quantity = row[MiscWiringTable.Quantity.Name].ToString().ToInt(1);
 
             return wiring;

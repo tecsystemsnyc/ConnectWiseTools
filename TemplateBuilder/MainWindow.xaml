@@ -43,7 +43,7 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding SaveCommand}"
                     Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveToCommand}"
+        <KeyBinding Command="{Binding SaveAsCommand}"
                     Gesture="SHIFT+CTRL+S" />
         <KeyBinding Command="{Binding UndoCommand}"
                     Gesture="CTRL+Z" />
