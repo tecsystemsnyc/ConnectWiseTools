@@ -27,7 +27,8 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private Dictionary<Guid, DeviceSummaryItem> _deviceDictionary;
+        #region Device View Properties
+        private Dictionary<Guid, DeviceSummaryItem> deviceDictionary;
 
         private ObservableCollection<DeviceSummaryItem> _deviceSummaryItems;
         public ObservableCollection<DeviceSummaryItem> DeviceSummaryItems
@@ -40,120 +41,217 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private double _totalDevicePrice;
-        public double TotalDevicePrice
+        private Dictionary<Guid, AssociatedCostSummaryItem> deviceAssCostDictionary;
+
+        private ObservableCollection<AssociatedCostSummaryItem> _deviceAssCostSummaryItems;
+        private ObservableCollection<AssociatedCostSummaryItem> DeviceAssCostSummaryItems
+        {
+            get { return _deviceAssCostSummaryItems; }
+            set
+            {
+                _deviceAssCostSummaryItems = value;
+                RaisePropertyChanged("DeviceAssCostSummaryItems");
+            }
+        }
+
+        private double _deviceSubTotal;
+        public double DeviceSubTotal
+        {
+            get { return _deviceSubTotal; }
+            set
+            {
+                _deviceSubTotal = value;
+                RaisePropertyChanged("DeviceSubToal");
+                RaisePropertyChanged("TotalDeviceCost");
+            }
+        }
+
+        private double _deviceAssCostSubTotalCost;
+        public double DeviceAssCostSubTotalCost
+        {
+            get { return _deviceAssCostSubTotalCost; }
+            set
+            {
+                _deviceAssCostSubTotalCost = value;
+                RaisePropertyChanged("DeviceAssCostSubTotalCost");
+                RaisePropertyChanged("TotalDeviceCost");
+            }
+        }
+
+        private double _deviceAssCostSubTotalLabor;
+        public double DeviceAssCostSubTotalLabor
+        {
+            get { return _deviceAssCostSubTotalLabor; }
+            set
+            {
+                _deviceAssCostSubTotalLabor = value;
+                RaisePropertyChanged("DeviceAssCostSubTotalLabor");
+                RaisePropertyChanged("TotalDeviceLabor");
+            }
+        }
+        #endregion
+
+        #region Controller View Properties
+        private Dictionary<Guid, AssociatedCostSummaryItem> controllerAssCostDictionary;
+
+        private ObservableCollection<AssociatedCostSummaryItem> _controllerAssCostSummaryItems;
+        public ObservableCollection<AssociatedCostSummaryItem> ControllerAssCostSummaryItems
         {
             get
             {
-                return _totalDevicePrice;
+                return _controllerAssCostSummaryItems;
             }
             set
             {
-                _totalDevicePrice = value;
-                RaisePropertyChanged("TotalDevicePrice");
-                raiseTotals();
+                _controllerAssCostSummaryItems = value;
+                RaisePropertyChanged("ControllerAssCostSummaryItems");
             }
         }
 
-        private double _deviceAssociatedCostsCost;
-        public double DeviceAssociatedCostsCost
+        private double _controllerSubTotal;
+        public double ControllerSubTotal
         {
-            get { return _deviceAssociatedCostsCost; }
+            get { return _controllerSubTotal; }
             set
             {
-                _deviceAssociatedCostsCost = value;
-                RaisePropertyChanged("DevicesAssociatedCostsCost");
-                raiseTotals();
+                _controllerSubTotal = value;
+                RaisePropertyChanged("ControllerSubTotal");
             }
         }
 
-        private double _deviceAssociatedCostsLabor;
-        public double DeviceAssociatedCostsLabor
+        private double _controllerAssCostSubTotalCost;
+        public double ControllerAssCostSubTotalCost
         {
-            get { return _deviceAssociatedCostsLabor; }
+            get { return _controllerAssCostSubTotalCost; }
             set
             {
-                _deviceAssociatedCostsLabor = value;
-                RaisePropertyChanged("DeviceAssociatedCostsLabor");
-                raiseTotals();
+                _controllerAssCostSubTotalCost = value;
+                RaisePropertyChanged("ControllerAssCostSubTotalCost");
             }
         }
 
-        private double _controllerCosts;
-        public double ControllerCosts
+        private double _controllerAssCostSubTotalLabor;
+        public double ControllerAssCostSubTotalLabor
         {
-            get { return _controllerCosts; }
+            get { return _controllerAssCostSubTotalLabor; }
             set
             {
-                _controllerCosts = value;
-                RaisePropertyChanged("ControllerCosts");
-                raiseTotals();
+                _controllerAssCostSubTotalLabor = value;
+                RaisePropertyChanged("ControllerAssCostSubTotalLabor");
             }
         }
+        #endregion
 
-        private double _controllerLabor;
-        public double ControllerLabor
-        {
-            get { return _controllerLabor; }
-            set
-            {
-                _controllerLabor = value;
-                RaisePropertyChanged("ControllerLabor");
-                raiseTotals();
-            }
-        }
+        #region Panel View Properties
+        private Dictionary<Guid, PanelTypeSummaryItem> panelTypeDictionary;
 
-        private double _panelCosts;
-        public double PanelCosts
-        {
-            get { return _panelCosts; }
-            set
-            {
-                _panelCosts = value;
-                RaisePropertyChanged("PanelCosts");
-                raiseTotals();
-            }
-        }
-
-        private double _panelLabor;
-        public double PanelLabor
-        {
-            get { return _panelLabor; }
-            set
-            {
-                _panelLabor = value;
-                RaisePropertyChanged("PanelLabor");
-                raiseTotals();
-            }
-        }
-
-        private double _miscCostsCost;
-        public double MiscCostsCost
-        {
-            get { return _miscCostsCost; }
-            set
-            {
-                _miscCostsCost = value;
-                RaisePropertyChanged("MiscCostsCost");
-                raiseTotals();
-            }
-        }
-
-        public double TotalCost
+        private ObservableCollection<PanelTypeSummaryItem> _panelTypeSummaryItems;
+        public ObservableCollection<PanelTypeSummaryItem> PanelTypeSummaryItems
         {
             get
             {
-                return (TotalDevicePrice + DeviceAssociatedCostsCost + ControllerCosts + PanelCosts + MiscCostsCost);
+                return _panelTypeSummaryItems;
+            }
+            set
+            {
+                _panelTypeSummaryItems = value;
+                RaisePropertyChanged("PanelTypeSummaryItems");
             }
         }
 
-        public double TotalLabor
+        private Dictionary<Guid, AssociatedCostSummaryItem> panelAssCostDictionary;
+
+        private ObservableCollection<AssociatedCostSummaryItem> _panelAssCostSummaryItems;
+        public ObservableCollection<AssociatedCostSummaryItem> PanelAssCostSummaryItems
+        {
+            get { return _panelAssCostSummaryItems; }
+            set
+            {
+                _panelAssCostSummaryItems = value;
+                RaisePropertyChanged("PanelAssCostSummaryItems");
+            }
+        }
+
+        private double _panelTypeSubTotal;
+        public double PanelTypeSubTotal
+        {
+            get { return _panelTypeSubTotal; }
+            set
+            {
+                _panelTypeSubTotal = value;
+                RaisePropertyChanged("PanelTypeSubTotal");
+            }
+        }
+
+        private double _panelAssCostSubTotalCost;
+        public double PanelAssCostSubTotalCost
+        {
+            get { return _panelAssCostSubTotalCost; }
+            set
+            {
+                _panelAssCostSubTotalCost = value;
+                RaisePropertyChanged("PanelAssCostSubTotalCost");
+            }
+        }
+
+        private double _panelAssCostSubTotalLabor;
+        public double PanelAssCostSubTotalLabor
+        {
+            get { return _panelAssCostSubTotalLabor; }
+            set
+            {
+                _panelAssCostSubTotalLabor = value;
+                RaisePropertyChanged("PanelAssCostSubTotalLabor");
+            }
+        }
+        #endregion
+
+        #region Misc Cost View Properties
+        //Not Done
+
+        private double _miscCostSubTotalCost;
+        public double MiscCostSubTotalCost
+        {
+            get { return _miscCostSubTotalCost; }
+            set
+            {
+                _miscCostSubTotalCost = value;
+                RaisePropertyChanged("MiscCostSubTotalCost");
+            }
+        }
+
+        private double _miscCostSubTotalLabor;
+        public double MiscCostSubTotalLabor
+        {
+            get { return _miscCostSubTotalLabor; }
+            set
+            {
+                _miscCostSubTotalLabor = value;
+                RaisePropertyChanged("MiscCostSubTotalLabor");
+            }
+        }
+        #endregion
+
+        #region Summary Totals
+        public double TotalDeviceCost
         {
             get
             {
-                return (DeviceAssociatedCostsLabor + ControllerLabor + PanelLabor);
+                return (DeviceSubTotal + DeviceAssCostSubTotalCost);
             }
         }
+
+        public double TotalDeviceLabor
+        {
+            get
+            {
+                return (DeviceAssCostSubTotalLabor);
+            }
+        }
+
+        //Not Done
+        #endregion
+
         #endregion
 
         public TECMaterialViewModel(TECBid bid)
@@ -169,16 +267,13 @@ namespace EstimateBuilder.ViewModel
         private void reinitialize(TECBid bid)
         {
             DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
-            _deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
+            deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
 
-            TotalDevicePrice = 0;
-            DeviceAssociatedCostsCost = 0;
-            DeviceAssociatedCostsLabor = 0;
-            ControllerCosts = 0;
-            ControllerLabor = 0;
-            PanelCosts = 0;
-            PanelLabor = 0;
-            MiscCostsCost = 0;
+            _deviceSubTotal = 0;
+            _deviceAssCostSubTotalCost = 0;
+            _deviceAssCostSubTotalLabor = 0;
+            _controllerAssCostSubTotalCost = 0;
+            _controllerAssCostSubTotalLabor = 0;
 
             foreach (TECSystem sys in bid.Systems)
             {
@@ -315,8 +410,8 @@ namespace EstimateBuilder.ViewModel
 
                 if (args.PropertyName == "Total")
                 {
-                    TotalDevicePrice -= (double)args.OldValue;
-                    TotalDevicePrice += (double)args.NewValue;
+                    DeviceSubTotal -= (double)args.OldValue;
+                    DeviceSubTotal += (double)args.NewValue;
                 }
             }
         }
@@ -331,47 +426,47 @@ namespace EstimateBuilder.ViewModel
         #region Add/Remove
         private void addDevice(TECDevice device)
         {
-            bool containsDevice = _deviceDictionary.ContainsKey(device.Guid);
+            bool containsDevice = deviceDictionary.ContainsKey(device.Guid);
             if (containsDevice)
             {
-                TotalDevicePrice -= _deviceDictionary[device.Guid].Total;
-                _deviceDictionary[device.Guid].Quantity++;
-                TotalDevicePrice += _deviceDictionary[device.Guid].Total;
+                DeviceSubTotal -= deviceDictionary[device.Guid].Total;
+                deviceDictionary[device.Guid].Quantity++;
+                DeviceSubTotal += deviceDictionary[device.Guid].Total;
             }
             else
             {
                 DeviceSummaryItem deviceItem = new DeviceSummaryItem(device);
                 deviceItem.PropertyChanged += DeviceItem_PropertyChanged;
-                _deviceDictionary.Add(device.Guid, deviceItem);
+                deviceDictionary.Add(device.Guid, deviceItem);
                 DeviceSummaryItems.Add(deviceItem);
-                TotalDevicePrice += deviceItem.Total;
+                DeviceSubTotal += deviceItem.Total;
             }
             foreach (TECAssociatedCost cost in device.AssociatedCosts)
             {
-                DeviceAssociatedCostsCost += cost.Cost;
-                DeviceAssociatedCostsLabor += cost.Labor;
+                DeviceAssCostSubTotalCost += cost.Cost;
+                DeviceAssCostSubTotalLabor += cost.Labor;
             }
         }
 
         private void removeDevice(TECDevice device)
         {
-            if (_deviceDictionary.ContainsKey(device.Guid))
+            if (deviceDictionary.ContainsKey(device.Guid))
             {
-                TotalDevicePrice -= _deviceDictionary[device.Guid].Total;
-                _deviceDictionary[device.Guid].Quantity--;
-                TotalDevicePrice += _deviceDictionary[device.Guid].Total;
+                DeviceSubTotal -= deviceDictionary[device.Guid].Total;
+                deviceDictionary[device.Guid].Quantity--;
+                DeviceSubTotal += deviceDictionary[device.Guid].Total;
                 
-                if (_deviceDictionary[device.Guid].Quantity < 1)
+                if (deviceDictionary[device.Guid].Quantity < 1)
                 {
-                    _deviceDictionary[device.Guid].PropertyChanged -= DeviceItem_PropertyChanged;
-                    DeviceSummaryItems.Remove(_deviceDictionary[device.Guid]);
-                    _deviceDictionary.Remove(device.Guid);
+                    deviceDictionary[device.Guid].PropertyChanged -= DeviceItem_PropertyChanged;
+                    DeviceSummaryItems.Remove(deviceDictionary[device.Guid]);
+                    deviceDictionary.Remove(device.Guid);
                 }
 
                 foreach (TECAssociatedCost cost in device.AssociatedCosts)
                 {
-                    DeviceAssociatedCostsCost -= cost.Cost;
-                    DeviceAssociatedCostsLabor -= cost.Labor;
+                    DeviceAssCostSubTotalCost -= cost.Cost;
+                    DeviceAssCostSubTotalLabor -= cost.Labor;
                 }
             }
             else
@@ -382,31 +477,31 @@ namespace EstimateBuilder.ViewModel
 
         private void addCostToDevices(TECAssociatedCost cost, TECDevice device)
         {
-            if (_deviceDictionary.ContainsKey(device.Guid))
+            if (deviceDictionary.ContainsKey(device.Guid))
             {
-                for (int i = 0; i < _deviceDictionary[device.Guid].Quantity; i++)
+                for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
-                    DeviceAssociatedCostsCost += cost.Cost;
-                    DeviceAssociatedCostsLabor += cost.Labor;
+                    DeviceAssCostSubTotalCost += cost.Cost;
+                    DeviceAssCostSubTotalLabor += cost.Labor;
                 }
             }
         }
 
         private void removeCostFromDevices(TECAssociatedCost cost, TECDevice device)
         {
-            if (_deviceDictionary.ContainsKey(device.Guid))
+            if (deviceDictionary.ContainsKey(device.Guid))
             {
-                for (int i = 0; i < _deviceDictionary[device.Guid].Quantity; i++)
+                for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
-                    DeviceAssociatedCostsCost -= cost.Cost;
-                    DeviceAssociatedCostsLabor -= cost.Labor;
+                    DeviceAssCostSubTotalCost -= cost.Cost;
+                    DeviceAssCostSubTotalLabor -= cost.Labor;
                 }
             }
         }
 
         private void addController(TECController controller)
         {
-            ControllerCosts += controller.Cost * controller.Manufacturer.Multiplier;
+            ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
             foreach(TECAssociatedCost cost in controller.AssociatedCosts)
             {
                 addCostToController(cost);
@@ -415,7 +510,7 @@ namespace EstimateBuilder.ViewModel
 
         private void removeController(TECController controller)
         {
-            ControllerCosts -= controller.Cost * controller.Manufacturer.Multiplier;
+            ControllerSubTotal -= controller.Cost * controller.Manufacturer.Multiplier;
             foreach(TECAssociatedCost cost in controller.AssociatedCosts)
             {
                 removeCostFromController(cost);
@@ -424,19 +519,19 @@ namespace EstimateBuilder.ViewModel
 
         private void addCostToController(TECAssociatedCost cost)
         {
-            ControllerCosts += cost.Cost;
-            ControllerLabor += cost.Labor;
+            ControllerAssCostSubTotalCost += cost.Cost;
+            ControllerAssCostSubTotalLabor += cost.Labor;
         }
 
         private void removeCostFromController(TECAssociatedCost cost)
         {
-            ControllerCosts -= cost.Cost;
-            ControllerLabor -= cost.Labor;
+            ControllerAssCostSubTotalCost -= cost.Cost;
+            ControllerAssCostSubTotalLabor -= cost.Labor;
         }
 
         private void addPanel(TECPanel panel)
         {
-            PanelCosts += panel.Type.Cost;
+            PanelTypeSubTotal += panel.Type.Cost;
             foreach(TECAssociatedCost cost in panel.AssociatedCosts)
             {
                 addCostToPanel(cost);
@@ -445,7 +540,7 @@ namespace EstimateBuilder.ViewModel
 
         private void removePanel(TECPanel panel)
         {
-            PanelCosts -= panel.Type.Cost;
+            PanelTypeSubTotal -= panel.Type.Cost;
             foreach (TECAssociatedCost cost in panel.AssociatedCosts)
             {
                 removeCostFromPanel(cost);
@@ -454,24 +549,26 @@ namespace EstimateBuilder.ViewModel
 
         private void addCostToPanel(TECAssociatedCost cost)
         {
-            PanelCosts += cost.Cost;
-            PanelLabor += cost.Labor;
+            PanelAssCostSubTotalCost += cost.Cost;
+            PanelAssCostSubTotalLabor += cost.Labor;
         }
 
         private void removeCostFromPanel(TECAssociatedCost cost)
         {
-            PanelCosts -= cost.Cost;
-            PanelLabor -= cost.Labor;
+            PanelAssCostSubTotalCost -= cost.Cost;
+            PanelAssCostSubTotalLabor -= cost.Labor;
         }
 
         private void addMiscCost(TECMiscCost cost)
         {
-            MiscCostsCost += cost.Cost * cost.Quantity;
+            MiscCostSubTotalCost += cost.Cost * cost.Quantity;
+            MiscCostSubTotalLabor += cost.Labor * cost.Quantity;
         }
 
         private void removeMiscCost(TECMiscCost cost)
         {
-            MiscCostsCost -= cost.Cost * cost.Quantity;
+            MiscCostSubTotalCost -= cost.Cost * cost.Quantity;
+            MiscCostSubTotalLabor -= cost.Labor * cost.Quantity;
         }
 
         private void addSubScope(TECSubScope ss)

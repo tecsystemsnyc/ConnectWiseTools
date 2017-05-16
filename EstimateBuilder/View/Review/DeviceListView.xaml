@@ -16,28 +16,16 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
 
         <DataGrid ItemsSource="{Binding DeviceSummaryItems}"
-                  Grid.ColumnSpan="10"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
@@ -49,36 +37,5 @@
                 <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={} {0:C}}" Width="Auto" MinWidth="40"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <TextBlock Text="Device Cost:" Grid.Row="1" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalDevicePrice, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="1" Foreground="Black"/>
-
-        <TextBlock Text="Assc. Device Costs:" Grid.Row="1" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding DeviceAssociatedCostsCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="3" Foreground="Black"/>
-
-        <TextBlock Text="Controller Costs:" Grid.Row="1" Grid.Column="4" Foreground="Black"/>
-        <TextBlock Text="{Binding ControllerCosts, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="5" Foreground="Black"/>
-
-        <TextBlock Text="Panel Costs:" Grid.Row="1" Grid.Column="6" Foreground="Black"/>
-        <TextBlock Text="{Binding PanelCosts, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="7" Foreground="Black"/>
-
-        <TextBlock Text="Misc. Costs:" Grid.Row="1" Grid.Column="8" Foreground="Black"/>
-        <TextBlock Text="{Binding MiscCostsCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="9" Foreground="Black"/>
-
-        <TextBlock Text="Total Costs:" Grid.Row="1" Grid.Column="10" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="11" Foreground="Black"/>
-
-        <TextBlock Text="Assc. Device Labor:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
-        <TextBlock Text="{Binding DeviceAssociatedCostsLabor}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
-
-        <TextBlock Text="Controller Labor:" Grid.Row="2" Grid.Column="4" Foreground="Black"/>
-        <TextBlock Text="{Binding ControllerLabor}" Grid.Row="2" Grid.Column="5" Foreground="Black"/>
-
-        <TextBlock Text="Panel Labor:" Grid.Row="2" Grid.Column="6" Foreground="Black"/>
-        <TextBlock Text="{Binding PanelLabor}" Grid.Row="2" Grid.Column="7" Foreground="Black"/>
-
-        <TextBlock Text="Total Labor:" Grid.Row="2" Grid.Column="10" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalLabor}" Grid.Row="2" Grid.Column="11" Foreground="Black"/>
-
     </Grid>
 </UserControl>

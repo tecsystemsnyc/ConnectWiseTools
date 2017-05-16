@@ -110,6 +110,9 @@
     <Compile Include="ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\AssociatedCostsSummaryGrid.xaml.cs">
+      <DependentUpon>AssociatedCostsSummaryGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\BMSControllerGridControl.xaml.cs">
       <DependentUpon>BMSControllerGridControl.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,7 @@
     <Compile Include="MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssociatedCostSummaryItem.cs" />
     <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
@@ -275,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ByLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\AssociatedCostsSummaryGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

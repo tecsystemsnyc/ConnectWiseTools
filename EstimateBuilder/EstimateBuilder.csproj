@@ -177,6 +177,7 @@
     <Compile Include="Model\DeviceSummaryItem.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\LengthSummaryItem.cs" />
+    <Compile Include="Model\PanelTypeSummaryItem.cs" />
     <Compile Include="ViewModel\TECMaterialViewModel.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
     <Compile Include="ViewModel\ElectricalMaterialSummaryViewModel.cs" />
