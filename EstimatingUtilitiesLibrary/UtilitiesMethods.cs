@@ -296,6 +296,6 @@ namespace EstimatingUtilitiesLibrary
     public enum ScopeCollectionIndex { None, ControlledScope, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
-    public enum ControlledScopeEditIndex { Add, Remove};
+    public enum ControlledScopeEditIndex { Edit, AddRemove };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
 }
