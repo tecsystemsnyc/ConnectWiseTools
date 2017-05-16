@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingUtilitiesLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,16 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(AddControlledScopeView));
+        
+        public ControlledScopeEditIndex SelectedEditIndex
+        {
+            get { return (ControlledScopeEditIndex)GetValue(SelectedEditIndexProperty); }
+            set { SetValue(SelectedEditIndexProperty, value); }
+        }
+        
+        public static readonly DependencyProperty SelectedEditIndexProperty =
+            DependencyProperty.Register("SelectedEditIndex", typeof(ControlledScopeEditIndex),
+              typeof(AddControlledScopeView), new PropertyMetadata(default(ControlledScopeEditIndex)));
 
         public AddControlledScopeView()
         {

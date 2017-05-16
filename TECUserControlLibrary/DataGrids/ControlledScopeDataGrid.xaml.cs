@@ -40,6 +40,18 @@ namespace TECUserControlLibrary.DataGrids
             DependencyProperty.Register("ControlledScopeSource", typeof(ObservableCollection<TECControlledScope>),
               typeof(ControlledScopeDataGrid), new PropertyMetadata(default(ObservableCollection<TECControlledScope>)));
 
+        public object SelectedItem
+        {
+            get { return GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ControlledScopeDataGrid), new FrameworkPropertyMetadata(null)
+        {
+            BindsTwoWayByDefault = true,
+            DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        });
+
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
@@ -60,6 +72,7 @@ namespace TECUserControlLibrary.DataGrids
         public ControlledScopeDataGrid()
         {
             InitializeComponent();
+           
         }
     }
 }

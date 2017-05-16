@@ -20,7 +20,7 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=ControlledScopeSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>

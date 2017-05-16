@@ -4,6 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:cLib="clr-namespace:TECUserControlLibrary"
+             xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="parent"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
@@ -23,16 +26,105 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <TabControl Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3"
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedEditIndex, Converter={cnvt:EditIndexToIntegerConverter}}">
+            <TabItem Header="Add/Edit" Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Panels"/>
+                        <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
+                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
+                              Grid.Row="1"/>
+                    </Grid>
+                    <GridSplitter Grid.Row="0" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+                    <Grid Grid.Row="0" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Controllers"/>
+                        <grids:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
+                    </Grid>
+                    <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+                    <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Systems"/>
+                        <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                                  ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                  Grid.Row="1"/>
+                    </Grid>
+                    <GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Background="{DynamicResource TextInputBrush}"
+                      HorizontalAlignment="Stretch"/>
+                    <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Connections"/>
+                        <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                  Grid.Row="1"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Remove" Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <grids:ControlledScopeDataGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                   ControlledScopeSource="{Binding SelectedControlledScope.ScopeInstances}"
+                                                   SelectedItem="{Binding SelectedChild}"/>
+                    <Button Grid.Row="1" Content="Delete Selected"
+                            Command="{Binding DeleteControlledScopeCommand}"
+                            Background="{DynamicResource AlertActionBrush}"
+                            Margin="3"/> 
+                </Grid>
+            </TabItem>
+        </TabControl>
         <Grid Grid.RowSpan="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
-            <Label Content="Controlled Scope"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Controlled Scope"/>
+                <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
+                          SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
+                          Grid.Column="1" Margin="2"
+                          VerticalContentAlignment="Center"/>
+            </Grid>
             <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
+                                           SelectedItem="{Binding SelectedControlledScope}"
                                            ViewModel="{Binding}"
                                            Grid.Row="1" />
+           
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -51,53 +143,6 @@
                     Margin="2" Command="{Binding AddControlledScopeCommand}"/>
             </Grid>
         </Grid>
-        
-
-        <Grid Grid.Row="0" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Panels"/>
-            <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
-                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
-                              Grid.Row="1"/>
-        </Grid>
-        <GridSplitter Grid.Row="0" Grid.Column="2" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-        <Grid Grid.Row="0" Grid.Column="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Controllers"/>
-            <grids:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
-        </Grid>
-        <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-        <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Systems"/>
-            <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
-                                  ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
-                                  Grid.Row="1"/>
-        </Grid>
-        <GridSplitter Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-        <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Connections"/>
-            <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                  Grid.Row="1"/>
-        </Grid>
-        
-        
         
     </Grid>
 </UserControl>

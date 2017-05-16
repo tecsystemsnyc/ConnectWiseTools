@@ -309,9 +309,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
-                    //var thing = new ScopeWordDocumentBuilder();
-                    //thing.CreateScopeWordDocument(Bid, path, isEstimate);
+                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    var builder = new ScopeWordDocumentBuilder();
+                    builder.CreateScopeWordDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
