@@ -106,7 +106,7 @@ namespace EstimateBuilder.ViewModel
         public ProposalViewModel ProposalVM { get; set; }
         public ElectricalViewModel ElectricalVM { get; set; }
         public NetworkViewModel NetworkVM { get; set; }
-        public TECMaterialViewModel DeviceVM { get; set; }
+        public TECMaterialViewModel TECMaterialVM { get; set; }
         public ElectricalMaterialSummaryViewModel ElectricalMaterialVM { get; set; }
         #endregion
 
@@ -201,7 +201,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupDeviceVM(TECBid bid)
         {
-            DeviceVM = new TECMaterialViewModel(bid);
+            TECMaterialVM = new TECMaterialViewModel(bid);
         }
         private void setupElectricalMaterialVM(TECBid bid)
         {
@@ -292,7 +292,7 @@ namespace EstimateBuilder.ViewModel
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid);
-                DeviceVM.Refresh(Bid);
+                TECMaterialVM.Refresh(Bid);
                 ElectricalMaterialVM.Refresh(Bid);
             }
         }

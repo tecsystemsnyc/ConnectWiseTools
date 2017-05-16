@@ -63,6 +63,7 @@ namespace EstimateBuilder.ViewModel
                 _deviceSubTotal = value;
                 RaisePropertyChanged("DeviceSubToal");
                 RaisePropertyChanged("TotalDeviceCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -75,6 +76,7 @@ namespace EstimateBuilder.ViewModel
                 _deviceAssCostSubTotalCost = value;
                 RaisePropertyChanged("DeviceAssCostSubTotalCost");
                 RaisePropertyChanged("TotalDeviceCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -87,6 +89,7 @@ namespace EstimateBuilder.ViewModel
                 _deviceAssCostSubTotalLabor = value;
                 RaisePropertyChanged("DeviceAssCostSubTotalLabor");
                 RaisePropertyChanged("TotalDeviceLabor");
+                RaisePropertyChanged("TotalLabor");
             }
         }
         #endregion
@@ -116,6 +119,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _controllerSubTotal = value;
                 RaisePropertyChanged("ControllerSubTotal");
+                RaisePropertyChanged("TotalControllerCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -127,6 +132,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _controllerAssCostSubTotalCost = value;
                 RaisePropertyChanged("ControllerAssCostSubTotalCost");
+                RaisePropertyChanged("TotalControllerCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -138,6 +145,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _controllerAssCostSubTotalLabor = value;
                 RaisePropertyChanged("ControllerAssCostSubTotalLabor");
+                RaisePropertyChanged("TotalControllerLabor");
+                RaisePropertyChanged("TotalLabor");
             }
         }
         #endregion
@@ -180,6 +189,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _panelTypeSubTotal = value;
                 RaisePropertyChanged("PanelTypeSubTotal");
+                RaisePropertyChanged("TotalPanelCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -191,6 +202,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _panelAssCostSubTotalCost = value;
                 RaisePropertyChanged("PanelAssCostSubTotalCost");
+                RaisePropertyChanged("TotalPanelCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -202,12 +215,23 @@ namespace EstimateBuilder.ViewModel
             {
                 _panelAssCostSubTotalLabor = value;
                 RaisePropertyChanged("PanelAssCostSubTotalLabor");
+                RaisePropertyChanged("TotalPanelLabor");
+                RaisePropertyChanged("TotalLabor");
             }
         }
         #endregion
 
         #region Misc Cost View Properties
-        //Not Done
+        private ObservableCollection<TECMiscCost> _miscCosts;
+        public ObservableCollection<TECMiscCost> MiscCosts
+        {
+            get { return _miscCosts; }
+            set
+            {
+                _miscCosts = value;
+                RaisePropertyChanged("MiscCosts");
+            }
+        }
 
         private double _miscCostSubTotalCost;
         public double MiscCostSubTotalCost
@@ -217,6 +241,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _miscCostSubTotalCost = value;
                 RaisePropertyChanged("MiscCostSubTotalCost");
+                RaisePropertyChanged("TotalMiscCost");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -228,6 +254,8 @@ namespace EstimateBuilder.ViewModel
             {
                 _miscCostSubTotalLabor = value;
                 RaisePropertyChanged("MiscCostSubTotalLabor");
+                RaisePropertyChanged("TotalMiscLabor");
+                RaisePropertyChanged("TotalLabor");
             }
         }
         #endregion
@@ -249,7 +277,48 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        //Not Done
+        public double TotalControllerCost
+        {
+            get
+            {
+                return (ControllerSubTotal + ControllerAssCostSubTotalCost);
+            }
+        }
+
+        public double TotalControllerLabor
+        {
+            get { return ControllerAssCostSubTotalLabor; }
+        }
+
+        public double TotalPanelCost
+        {
+            get { return (PanelTypeSubTotal + PanelAssCostSubTotalCost); }
+        }
+
+        public double TotalPanelLabor
+        {
+            get { return PanelAssCostSubTotalLabor; }
+        }
+
+        public double TotalMiscCost
+        {
+            get { return MiscCostSubTotalCost; }
+        }
+
+        public double TotalMiscLabor
+        {
+            get { return MiscCostSubTotalLabor; }
+        }
+
+        public double TotalCost
+        {
+            get { return (TotalDeviceCost + TotalControllerCost + TotalPanelCost + TotalMiscCost); }
+        }
+
+        public double TotalLabor
+        {
+            get { return (TotalDeviceLabor + TotalControllerLabor + TotalPanelLabor + TotalMiscLabor); }
+        }
         #endregion
 
         #endregion
