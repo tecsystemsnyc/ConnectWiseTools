@@ -67,18 +67,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("Bid");
             }
         }
-
-        private TECControlledScope _controlledScope;
-        public TECControlledScope ControlledScope
+        
+        private TECControlledScope _selectedChild;
+        public TECControlledScope SelectedChild
         {
-            get { return _controlledScope; }
+            get { return _selectedChild; }
             set
             {
-                unregisterChanges();
-                _controlledScope = value;
-                setupCollections();
-                registerChanges();
-                RaisePropertyChanged("ControlledScope");
+                _selectedChild = value;
+                RaisePropertyChanged("SelectedChild");
             }
         }
 
@@ -215,6 +212,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
 
         public ICommand AddControlledScopeCommand { get; private set; }
+        public ICommand DeleteControlledScopeCommand { get; private set; }
 
         private TECController _noneController;
         public TECController NoneController
@@ -282,11 +280,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
+            DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControllededScopeCanExecute);
             _selectedControlledScope = new TECControlledScope();
             DebugVisibility = Visibility.Collapsed;
             setupCatalogCollections();
             setupVMs();
         }
+
+        
         #endregion
 
         #region Methods
@@ -609,13 +610,42 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        private bool deleteControllededScopeCanExecute()
+        {
+            if (SelectedChild != null && SelectedControlledScope.ScopeInstances.Contains(SelectedChild))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void deleteControlledScopeExecute()
+        {
+            foreach (TECSystem system in SelectedChild.Systems)
+            {
+                Bid.Systems.Remove(system);
+            }
+            foreach (TECController controller in SelectedChild.Controllers)
+            {
+                Bid.Controllers.Remove(controller);
+            }
+            foreach (TECPanel panel in SelectedChild.Panels)
+            {
+                Bid.Panels.Remove(panel);
+            }
+            SelectedControlledScope.ScopeInstances.Remove(SelectedChild);
+
+        }
         public void DragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
             Type sourceType = sourceItem.GetType();
 
             var targetCollection = dropInfo.TargetCollection;
-            if (sourceType == typeof(TECController) && ControlledScope != null)
+            if (sourceType == typeof(TECController) && SelectedControlledScope != null)
             {
                 UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
