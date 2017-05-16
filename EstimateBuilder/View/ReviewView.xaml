@@ -18,6 +18,8 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+    <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible">
+        
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
@@ -340,4 +342,6 @@
             Grid.Column="4" Margin="5"
             HorizontalContentAlignment="Right"/>
     </Grid>
+
+    </ScrollViewer>
 </UserControl>
