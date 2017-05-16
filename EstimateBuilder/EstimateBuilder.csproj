@@ -31,7 +31,7 @@
     <ProductName>Estimate Builder</ProductName>
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.4.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -177,7 +177,7 @@
     <Compile Include="Model\DeviceSummaryItem.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\LengthSummaryItem.cs" />
-    <Compile Include="ViewModel\DeviceSummaryViewModel.cs" />
+    <Compile Include="ViewModel\TECMaterialViewModel.cs" />
     <Compile Include="ViewModel\DrawingViewModel.cs" />
     <Compile Include="ViewModel\ElectricalMaterialSummaryViewModel.cs" />
     <Compile Include="ViewModel\ElectricalViewModel.cs" />
@@ -215,6 +215,9 @@
     </Compile>
     <Compile Include="View\Review\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Review\TECMaterialView.xaml.cs">
+      <DependentUpon>TECMaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScopeEditorView.xaml.cs">
       <DependentUpon>ScopeEditorView.xaml</DependentUpon>
@@ -269,6 +272,10 @@
     </Page>
     <Page Include="View\Review\ReviewView.xaml">
       <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\TECMaterialView.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ScopeEditorView.xaml">

@@ -645,7 +645,5 @@ namespace TECUserControlLibrary.HelperConverters
 
         #endregion
     }
-
-
     #endregion
 }
