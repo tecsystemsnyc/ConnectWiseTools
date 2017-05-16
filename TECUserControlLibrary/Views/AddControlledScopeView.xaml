@@ -123,7 +123,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -139,7 +138,7 @@
             <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
                                            SelectedItem="{Binding SelectedControlledScope}"
                                            ViewModel="{Binding}"
-                                           Grid.Row="1" Grid.RowSpan="2"/>
+                                           Grid.Row="1"/>
            
             
         </Grid>
