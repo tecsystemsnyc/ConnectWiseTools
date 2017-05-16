@@ -77,7 +77,7 @@
                     Command="{Binding AddConnectionTypeCommand}"/>
                     </Grid>
                     <grids:ConnectionTypeGridControl Grid.Row="3" Margin="5"
-                                         ConnectionTypesSource="{Binding Templates.ConnectionTypeCatalog}"
+                                         ConnectionTypesSource="{Binding Templates.Catalogs.ConnectionTypes}"
                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
             </TabItem>
@@ -125,7 +125,7 @@
                     Command="{Binding AddConduitTypeCommand}"/>
                     </Grid>
                     <grids:ConduitTypeGridControl Grid.Row="3" Margin="5"
-                                      ConduitTypesSource="{Binding Templates.ConduitTypeCatalog}"
+                                      ConduitTypesSource="{Binding Templates.Catalogs.ConduitTypes}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
             </TabItem>
@@ -167,7 +167,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>
-                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.PanelTypeCatalog}"
+                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
                                     Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
@@ -215,7 +215,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddAssociatedCostCommand}"/>
                     </Grid>
-                    <local:AssociatedCostsGridControl CostsSource="{Binding Templates.AssociatedCostsCatalog}"
+                    <grids:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
                                           Grid.Row="3"
                                           Margin="5"/>
                 </Grid>
@@ -270,7 +270,7 @@
                         <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
                        VerticalAlignment="Center"
                                    Grid.Column="2"/>
-                        <ComboBox ItemsSource="{Binding Templates.ManufacturerCatalog}" SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="3" Margin="2"
+                        <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="3" Margin="2"
                       Text="{Binding IOModuleIOPerModule}"
                                   DisplayMemberPath="Name"/>
 
@@ -278,7 +278,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
-                    <grids:IOModuleGridControl IOModuleSource="{Binding Templates.IOModuleCatalog}"
+                    <grids:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
                                                Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>

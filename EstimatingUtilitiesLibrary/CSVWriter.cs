@@ -18,7 +18,8 @@ namespace EstimatingUtilitiesLibrary
     /// <summary>
     /// Class to write to a CSV
     /// </summary>
-    public class CSVWriter { 
+    public class CSVWriter
+    {
 
         public string Path { get; set; }
 
@@ -47,7 +48,7 @@ namespace EstimatingUtilitiesLibrary
             row.LineText = builder.ToString();
             writer.WriteLine(row.LineText);
         }
-        
+
         public void BidPointsToCSV(TECBid bid)
         {
             StreamWriter writer = new StreamWriter(Path);
@@ -55,18 +56,18 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (system.Equipment.Count > 0)
                 {
-                    foreach(TECEquipment equipment in system.Equipment)
+                    foreach (TECEquipment equipment in system.Equipment)
                     {
                         if (equipment.SubScope.Count > 0)
                         {
-                            foreach(TECSubScope subScope in equipment.SubScope)
+                            foreach (TECSubScope subScope in equipment.SubScope)
                             {
                                 CsvRow row = new CsvRow();
                                 row.Add(system.Name);
                                 row.Add(equipment.Name);
                                 row.Add(subScope.Name);
                                 string deviceString = "";
-                                foreach(TECDevice device in subScope.Devices)
+                                foreach (TECDevice device in subScope.Devices)
                                 {
                                     deviceString += " (";
                                     deviceString += device.Name;
@@ -81,7 +82,7 @@ namespace EstimatingUtilitiesLibrary
 
                                 foreach (TECPoint point in subScope.Points)
                                 {
-                                    if (point.Type == PointTypes.AI){ AI++; }
+                                    if (point.Type == PointTypes.AI) { AI++; }
                                     else if (point.Type == PointTypes.BI) { BI++; }
                                     else if (point.Type == PointTypes.AO) { AO++; }
                                     else if (point.Type == PointTypes.BO) { BO++; }
@@ -92,14 +93,15 @@ namespace EstimatingUtilitiesLibrary
                                 row.Add(AO.ToString());
                                 row.Add(BO.ToString());
                                 row.Add(serial.ToString());
-                                for(int x = 0; x < 22; x++)
+                                for (int x = 0; x < 22; x++)
                                 {
                                     row.Add("");
                                 }
                                 row.Add((subScope.Quantity * equipment.Quantity * system.Quantity).ToString());
                                 WriteRow(writer, row);
                             }
-                        } else
+                        }
+                        else
                         {
                             CsvRow row = new CsvRow();
                             row.Add(system.Name);
@@ -124,7 +126,7 @@ namespace EstimatingUtilitiesLibrary
                     row.Add((system.Quantity).ToString());
                     WriteRow(writer, row);
                 }
-                
+
             }
             writer.Close();
         }
@@ -172,7 +174,7 @@ namespace EstimatingUtilitiesLibrary
                             equipmentRow.Add("$0");
                             equipmentRow.Add("$0");
                         }
-                       
+
                         budgetedRows.Add(equipmentRow);
                     }
 
@@ -240,7 +242,7 @@ namespace EstimatingUtilitiesLibrary
 
             WriteRow(writer, blankRow);
 
-            
+
             row = new CsvRow();
             row.Add("Unbudgeted Systems");
             WriteRow(writer, row);

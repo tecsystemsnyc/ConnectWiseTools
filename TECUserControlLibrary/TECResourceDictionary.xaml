@@ -48,11 +48,18 @@
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
         <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
     </Style>
+    <Style TargetType="Button" x:Key="CollapseAll">
+        <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
+        <EventSetter Event="Click" Handler="CollapseAll_Clicked"/>
+    </Style>
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="local:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
+        <EventSetter Event="PreviewMouseDown" Handler="TextBox_PreviewMouseDown"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
@@ -65,6 +72,8 @@
         <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
         <!--<Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>-->
         <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
+        <!--<EventSetter Event="LostFocus" Handler="DataGrid_LostFocus"/>-->
+        <EventSetter Event="LostKeyboardFocus" Handler="DataGrid_LostFocus"/>
     </Style>
 
     <Style TargetType="DataGridColumnHeader">

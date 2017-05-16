@@ -26,12 +26,16 @@ namespace TECUserControlLibrary.Models
             get { return _controller; }
             set
             {
-                handleControllerSelection(value);
-                _controller = value;
-                RaisePropertyChanged("Controller");
+                if (value != Controller)
+                {
+                    handleControllerSelection(value);
+                    _controller = value;
+                    RaisePropertyChanged("Controller");
+                }
+                
             }
         }
-        
+
         private TECSystem _parentSystem;
         public TECSystem ParentSystem
         {
@@ -54,28 +58,67 @@ namespace TECUserControlLibrary.Models
             }
         }
 
+        public TECConduitType ConduitType
+        {
+            get
+            {
+                if (SubScope.Connection == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return SubScope.Connection.ConduitType;
+                }
+            }
+            set
+            {
+                handleConduitSelection(value);
+                RaisePropertyChanged("ConduitType");
+
+            }
+        }
+
         public SubScopeConnection(TECSubScope subscope)
         {
             _subScope = subscope;
             _controller = null;
-            if(subscope.Connection != null)
+            if (subscope.Connection != null)
             {
                 _controller = SubScope.Connection.ParentController;
+                SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
+            }
+        }
+
+        private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "ParentController")
+            {
+                _controller = (sender as TECSubScopeConnection).ParentController;
+                RaisePropertyChanged("Controller");
             }
         }
 
         private void handleControllerSelection(TECController controller)
         {
+            if (Controller != null)
+            {
+                Controller.RemoveSubScope(SubScope);
+            }
             if (controller != null)
             {
                 controller.AddSubScope(SubScope);
+                SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
-            else
+            
+            
+        }
+
+        private void handleConduitSelection(TECConduitType conduitType)
+        {
+            if (SubScope.Connection != null)
             {
-                if(SubScope.Connection != null)
-                {
-                    Controller.RemoveSubScope(SubScope);
-                }
+                SubScope.Connection.ConduitType = conduitType;
             }
         }
 

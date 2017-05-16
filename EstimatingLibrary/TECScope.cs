@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECScope : TECObject
+    public abstract class TECScope : TECObject, GuidObject
     {
         #region Properties
 
@@ -22,7 +23,8 @@ namespace EstimatingLibrary
         protected ObservableCollection<TECTag> _tags;
         protected ObservableCollection<TECAssociatedCost> _associatedCosts;
 
-        public string Name {
+        public string Name
+        {
             get { return _name; }
             set
             {
@@ -32,7 +34,8 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Name", temp, this);
             }
         }
-        public string Description {
+        public string Description
+        {
             get { return _description; }
             set
             {
@@ -40,7 +43,7 @@ namespace EstimatingLibrary
                 _description = value;
                 // Call RaisePropertyChanged whenever the property is updated
                 NotifyPropertyChanged("Description", temp, this);
-            
+
             }
         }
         public Guid Guid
@@ -56,7 +59,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _quantity = value;
                 NotifyPropertyChanged("Quantity", temp, this);
-                
+
             }
         }
         public ObservableCollection<TECTag> Tags
@@ -77,10 +80,10 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                AssociatedCosts.CollectionChanged -= collectionChanged;
+                AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
                 _associatedCosts = value;
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
-                AssociatedCosts.CollectionChanged += collectionChanged;
+                AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             }
         }
 
@@ -97,6 +100,9 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
             }
         }
+
+        //public abstract double MaterialCost { get; }
+        //public abstract double LaborCost { get; }
 
         public void SetLocationFromParent(TECLocation location)
         {
@@ -122,7 +128,7 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += collectionChanged;
             AssociatedCosts.CollectionChanged += collectionChanged;
         }
-        
+
         abstract public Object DragDropCopy();
         #endregion //Constructors
 
@@ -134,12 +140,15 @@ namespace EstimatingLibrary
             _quantity = scope.Quantity;
             if (scope.Location != null)
             { _location = scope.Location.Copy() as TECLocation; }
+            var tags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)
-            { _tags.Add(tag.Copy() as TECTag); }
+            { tags.Add(tag.Copy() as TECTag); }
+            _tags = tags;
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
             foreach (TECAssociatedCost cost in scope.AssociatedCosts)
-            { _associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            { associatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            _associatedCosts = associatedCosts;
         }
-
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -158,6 +167,47 @@ namespace EstimatingLibrary
             }
         }
 
+        private void AssociatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e);
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    var assCost = item as TECAssociatedCost;
+                    assCost.PropertyChanged += AssCost_PropertyChanged;
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Remove(item as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    var assCost = item as TECAssociatedCost;
+                    assCost.PropertyChanged -= AssCost_PropertyChanged;
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Add(item as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
+        }
+
+        private void AssCost_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<object>)
+            {
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+                if ((args.PropertyName == "Cost") || (args.PropertyName == "Labor"))
+                {
+                    var old = this.Copy() as TECScope;
+                    old.AssociatedCosts.Remove(args.NewValue as TECAssociatedCost);
+                    old.AssociatedCosts.Add(args.OldValue as TECAssociatedCost);
+                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                }
+            }
+        }
         #endregion Methods
     }
 }

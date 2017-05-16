@@ -41,7 +41,7 @@ namespace EstimateBuilder.ViewModel
         private Tuple<TECObject, TECVisualScope, string> connectionStart;
 
         private Dictionary<TECDrawing, int> pageIndexes;
-        
+
         public TECBid Bid
         {
             get { return _bid; }
@@ -91,7 +91,7 @@ namespace EstimateBuilder.ViewModel
                 {
                     CurrentImage = Image.FromFile(CurrentPage.Path);
                 }
-                
+
             }
         }
         public Image CurrentImage
@@ -177,7 +177,8 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("DisplayConnections");
             }
         }
-        public string ControllerName {
+        public string ControllerName
+        {
             get { return _controllerName; }
             set
             {
@@ -275,7 +276,7 @@ namespace EstimateBuilder.ViewModel
                 CurrentPage = CurrentDrawing.Pages[index];
             }
 
-            
+
         }
 
         private bool CanConnectExecute(Tuple<TECObject, TECVisualScope, string> arg)
@@ -331,9 +332,9 @@ namespace EstimateBuilder.ViewModel
         //        connectionStart = arg;
         //        isConnecting = true;
         //    }
-            
+
         //}
-        
+
         private void AddControllerExecute()
         {
             var newController = new TECController();
@@ -345,9 +346,9 @@ namespace EstimateBuilder.ViewModel
             Bid.Controllers.Add(newController);
         }
         #endregion
-        
+
         #region Drag Drop
-        void IDropTarget.DragOver(IDropInfo dropInfo)
+        public void DragOver(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             var targetCollection = dropInfo.TargetCollection;
@@ -358,7 +359,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        void IDropTarget.Drop(IDropInfo dropInfo)
+        public void Drop(IDropInfo dropInfo)
         {
             TECScope sourceItem = dropInfo.Data as TECScope;
             System.Windows.Point dropPoint = dropInfo.DropPosition;
@@ -375,18 +376,19 @@ namespace EstimateBuilder.ViewModel
             */
         }
         #endregion
-        
+
         #region Event Handlers
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach(TECScope item in e.OldItems)
+                foreach (TECScope item in e.OldItems)
                 {
-                    if(item is TECSystem)
+                    if (item is TECSystem)
                     {
                         DisplaySystems.Remove(item as TECSystem);
-                    } else if (item is TECEquipment)
+                    }
+                    else if (item is TECEquipment)
                     {
                         DisplayEquipment.Remove(item as TECEquipment);
                     }
@@ -394,9 +396,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         DisplaySubScope.Remove(item as TECSubScope);
                     }
-                  
+
                 }
-            } else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (Object item in e.NewItems)
                 {
@@ -445,7 +448,7 @@ namespace EstimateBuilder.ViewModel
             {
                 return 0;
             }
-            
+
         }
         private void registerBid()
         {
@@ -453,7 +456,7 @@ namespace EstimateBuilder.ViewModel
             foreach (TECSystem system in Bid.Systems)
             {
                 system.Equipment.CollectionChanged += collectionChanged;
-                foreach(TECEquipment equipment in system.Equipment)
+                foreach (TECEquipment equipment in system.Equipment)
                 {
                     equipment.SubScope.CollectionChanged += collectionChanged;
                 }
@@ -468,7 +471,7 @@ namespace EstimateBuilder.ViewModel
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     DisplayEquipment.Add(equipment);
-                    foreach(TECSubScope subScope  in equipment.SubScope)
+                    foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         DisplaySubScope.Add(subScope);
                     }
@@ -488,7 +491,7 @@ namespace EstimateBuilder.ViewModel
                     }
                 }
             }
-            
+
 
             if (Bid.Drawings.Count > 0)
             {
@@ -511,7 +514,7 @@ namespace EstimateBuilder.ViewModel
         //        var controller = item as TECController;
 
         //        var availableIO = controller.AvailableIO;
-                
+
         //        foreach(TECScope scope in connection.Scope)
         //        {
         //            if(scope is TECSubScope)
@@ -526,7 +529,7 @@ namespace EstimateBuilder.ViewModel
         //                    {
         //                        canConnect = false;
         //                    }
-                            
+
         //                }
         //            }
         //        }
@@ -614,7 +617,7 @@ namespace EstimateBuilder.ViewModel
         //            //    newConnection.ConnectionTypes.Add(type);
         //            //}
         //        }
-                
+
         //    }
         //    else
         //    {
@@ -659,7 +662,7 @@ namespace EstimateBuilder.ViewModel
                 CurrentBitmap = UtilitiesMethods.ResizeImage(CurrentImage, newWidth, newHeight);
             }
         }
-        
+
         #endregion Helper Methods
         #endregion
     }

@@ -9,13 +9,15 @@
         xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
-        Height="520" Width="900" 
+        Height="720"
+        Width="1200"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         xmlns:dd="urn:gong-wpf-dragdrop"
         MinHeight="300" MinWidth="535"
@@ -127,6 +129,7 @@
             </Grid>
         
             <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
+                                             Grid.Column="0"
                                              Grid.Row="1" Grid.RowSpan="2"/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
             <TabControl Grid.Row="1"
@@ -157,6 +160,11 @@
                 </TabItem>
                 <TabItem Header="Budget">
                     <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
+                </TabItem>
+                <!--Misc Tab-->
+                <TabItem Visibility="Collapsed"/>
+                <TabItem Header="Settings">
+                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
 

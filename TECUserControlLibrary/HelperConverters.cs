@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
@@ -100,7 +99,8 @@ namespace TECUserControlLibrary.HelperConverters
             if ((Visibility)value == Visibility.Visible)
             {
                 return "-";
-            } else
+            }
+            else
             {
                 return "+";
             }
@@ -120,7 +120,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            
+
             if (((double)value) >= 0)
             {
                 return value;
@@ -130,12 +130,11 @@ namespace TECUserControlLibrary.HelperConverters
                 return "None";
             }
         }
-
         
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string inString = (string)value;
-            inString = inString.Trim(new Char[] { ' ','$', ',', '.' });
+            inString = inString.Trim(new Char[] { ' ', '$', ',', '.' });
 
             return inString.ToDouble(-1);
         }
@@ -150,7 +149,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             return value;
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string inString = (string)value;
@@ -168,14 +167,12 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            
             return value;
-
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-             return value;
+            return value;
         }
 
         #endregion
@@ -198,12 +195,12 @@ namespace TECUserControlLibrary.HelperConverters
                 return value;
             }
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -255,7 +252,7 @@ namespace TECUserControlLibrary.HelperConverters
             return value;
         }
     }
-    
+
     public class PercentageConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
@@ -304,7 +301,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
+            if (value == null)
             {
                 return Visibility.Visible;
             }
@@ -312,7 +309,7 @@ namespace TECUserControlLibrary.HelperConverters
             {
                 return Visibility.Collapsed;
             }
-            
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -330,7 +327,7 @@ namespace TECUserControlLibrary.HelperConverters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             Console.WriteLine("Converting");
-            if(value == null)
+            if (value == null)
             {
                 return true;
             }
@@ -370,7 +367,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -408,7 +405,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -447,7 +444,7 @@ namespace TECUserControlLibrary.HelperConverters
         {
             if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -536,7 +533,6 @@ namespace TECUserControlLibrary.HelperConverters
     public class SelectedItemToIOModuleConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
@@ -553,9 +549,9 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value == null)
+            if (value == null)
             {
-                return value;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
@@ -568,7 +564,7 @@ namespace TECUserControlLibrary.HelperConverters
                     return value;
                 }
             }
-            
+
         }
         #endregion
     }
@@ -578,7 +574,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value.ToString() == "{NewItemPlaceholder}")
+            if (value.ToString() == "{NewItemPlaceholder}")
             {
                 return false;
             }
@@ -594,6 +590,45 @@ namespace TECUserControlLibrary.HelperConverters
 
         }
         #endregion
+    }
+
+    public class NoneValueConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (values[0] == DependencyProperty.UnsetValue)
+            {
+                return System.Windows.Data.Binding.DoNothing;
+            }
+            if (values[0] != null)
+            {
+                return values[0];
+            }
+            else
+            {
+                return values[1];
+            }
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            object outObject;
+            if (value == null)
+            {
+                outObject = System.Windows.Data.Binding.DoNothing;
+            }
+            else if ((value as TECScope).Name == "None")
+            {
+                outObject = null;
+            }
+            else
+            {
+                outObject = value;
+            }
+
+            return new object[] { outObject, System.Windows.Data.Binding.DoNothing };
+        }
+
     }
 
     #region Enumeration Converters
@@ -687,6 +722,7 @@ namespace TECUserControlLibrary.HelperConverters
 
         #endregion
     }
+
 
     #endregion
 }

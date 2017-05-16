@@ -9,7 +9,7 @@ using System.Windows.Interactivity;
 
 namespace TECUserControlLibrary
 {
-    public class TextBoxEnterKeyUpdateBehavior: AttachableForStyleBehavior<TextBox, TextBoxEnterKeyUpdateBehavior>
+    public class TextBoxEnterKeyUpdateBehavior : AttachableForStyleBehavior<TextBox, TextBoxEnterKeyUpdateBehavior>
     {
 
         protected override void OnAttached()

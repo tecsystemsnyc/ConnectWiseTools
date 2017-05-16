@@ -72,9 +72,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #endregion
 
         public LocationDataGridExtension(TECBid bid) : base(bid) { }
-        
+
         #region Methods
-        
+
         private void organizeByLocation()
         {
             SystemsByLocation = new ObservableCollection<TECSystem>();

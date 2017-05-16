@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -51,7 +52,7 @@ namespace EstimatingUtilitiesLibrary
             //file is not locked
             return false;
         }
-        
+
         public static string CommaSeparatedString(List<string> strings)
         {
             int i = 0;
@@ -104,7 +105,7 @@ namespace EstimatingUtilitiesLibrary
             bi.StreamSource = ms;
             bi.EndInit();
             bi.Freeze();
-            
+
             destBitmap.Dispose();
 
             return bi;
@@ -199,24 +200,100 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
 
-        public static void AddCatalogsToBid(TECBid bid, TECTemplates templates)
+        public static void UnionizeCatalogs(TECCatalogs bidCatalog, TECCatalogs templateCatalog)
         {
-            bid.DeviceCatalog = templates.DeviceCatalog;
-            bid.ManufacturerCatalog = templates.ManufacturerCatalog;
-            bid.PanelTypeCatalog = templates.PanelTypeCatalog;
-            bid.ConduitTypes = templates.ConduitTypeCatalog;
-            bid.ConnectionTypes = templates.ConnectionTypeCatalog;
-            bid.Tags = templates.Tags;
-            bid.IOModuleCatalog = templates.IOModuleCatalog;
-            bid.AssociatedCostsCatalog = templates.AssociatedCostsCatalog;
+            unionizeScope(bidCatalog.Devices, templateCatalog.Devices);
+            unionizeScope(bidCatalog.Manufacturers, templateCatalog.Manufacturers);
+            unionizeScope(bidCatalog.ConnectionTypes, templateCatalog.ConnectionTypes);
+            unionizeScope(bidCatalog.ConduitTypes, templateCatalog.ConduitTypes);
+            unionizeScope(bidCatalog.PanelTypes, templateCatalog.PanelTypes);
+            unionizeScope(bidCatalog.IOModules, templateCatalog.IOModules);
+            unionizeScope(bidCatalog.Tags, templateCatalog.Tags);
+            unionizeScope(bidCatalog.AssociatedCosts, templateCatalog.AssociatedCosts);
+
+        }
+        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
+        {
+            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
+
+            foreach (T templateItem in templateItems)
+            {
+                foreach (T item in bidItems)
+                {
+                    if ((item as GuidObject).Guid == (templateItem as GuidObject).Guid)
+                    {
+                        itemsToRemove.Add(item);
+                    }
+                }
+            }
+            foreach (T item in itemsToRemove)
+            {
+                bidItems.Remove(item);
+            }
+            foreach (T item in templateItems)
+            {
+                bidItems.Add(item);
+            }
+        }
+
+        public static bool IsLowerVersion(string currentVersion, string sampleVersion)
+        {
+            var isLowerVersion = false;
+            char delimiter = '.';
+            var currentStrings = currentVersion.Split(delimiter);
+            var sampleStrings = sampleVersion.Split(delimiter);
+            if (sampleStrings.Length != 4)
+            {
+                return true;
+            }
+            else if (currentStrings[0].ToInt() > sampleStrings[0].ToInt())
+            {
+                return true;
+            }
+            else if (currentStrings[0].ToInt() == sampleStrings[0].ToInt())
+            {
+                if (currentStrings[1].ToInt() > sampleStrings[1].ToInt())
+                {
+                    return true;
+                }
+                else if (currentStrings[1].ToInt() == sampleStrings[1].ToInt())
+                {
+                    if (currentStrings[2].ToInt() > sampleStrings[2].ToInt())
+                    {
+                        return true;
+                    }
+                    else if (currentStrings[2].ToInt() == sampleStrings[2].ToInt())
+                    {
+                        if (currentStrings[3].ToInt() > sampleStrings[3].ToInt())
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+
+            return isLowerVersion;
+        }
+        public static bool StringContainsStrings(string reference, string[] criteria)
+        {
+            bool containsAll = true;
+            foreach (string critereon in criteria)
+            {
+                if (!reference.Contains(critereon))
+                {
+                    return false;
+                }
+            }
+            return containsAll;
         }
 
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, Nothing };
-    public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc };
+    public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc, Settings };
     public enum TemplateGridIndex { None, ControlledScope, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
     public enum ScopeCollectionIndex { None, ControlledScope, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
-    public enum LocationScopeType { System, Equipment, SubScope};
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts};
+    public enum LocationScopeType { System, Equipment, SubScope };
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
 }

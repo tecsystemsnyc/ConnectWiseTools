@@ -31,7 +31,7 @@
                 <DataGridTextColumn Binding="{Binding Item3.Quantity, Mode=OneWay}" Header="Quantity" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Item3.Length}" Header="Length" Width="Auto"/>
                 <DataGridComboBoxColumn SelectedItemBinding="{Binding Item3.ConduitType}"
-                                        ItemsSource="{Binding Data.Bid.ConduitTypes, Source={StaticResource proxy}}"
+                                        ItemsSource="{Binding Data.Bid.Catalogs.ConduitTypes, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
                                         Header="Conduit" Width="Auto"/>
             </DataGrid.Columns>

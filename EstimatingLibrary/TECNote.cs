@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingLibrary
 {
-    public class TECNote : TECObject
+    public class TECNote : TECObject, GuidObject
     {
         #region Properties
 
@@ -38,7 +39,7 @@ namespace EstimatingLibrary
             _text = "";
             _guid = guid;
         }
-        public TECNote() : this( Guid.NewGuid()) { }
+        public TECNote() : this(Guid.NewGuid()) { }
 
         public TECNote(TECNote sourceNote) : this()
         {

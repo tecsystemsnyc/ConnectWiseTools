@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.DataGrids
             get { return (ObservableCollection<TECProposalScope>)GetValue(ProposalScopeSourceProperty); }
             set { SetValue(ProposalScopeSourceProperty, value); }
         }
-        
+
 
         public static readonly DependencyProperty ProposalScopeSourceProperty =
             DependencyProperty.Register("ProposalScopeSource", typeof(ObservableCollection<TECProposalScope>),

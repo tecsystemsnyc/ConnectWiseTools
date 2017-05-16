@@ -24,7 +24,7 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECManufacturer(Guid guid) : base (guid)
+        public TECManufacturer(Guid guid) : base(guid)
         {
             _multiplier = 1;
         }

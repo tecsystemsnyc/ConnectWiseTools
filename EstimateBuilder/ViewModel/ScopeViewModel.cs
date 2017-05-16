@@ -9,7 +9,8 @@ using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows;
 
-namespace EstimateBuilder.ViewModel { 
+namespace EstimateBuilder.ViewModel
+{
 
     public class ScopeViewModel : ViewModelBase
     {

@@ -19,13 +19,14 @@ using System.Drawing.Imaging;
 using System.Collections.ObjectModel;
 using DebugLibrary;
 
+
 namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
         private const string tabSize = "0.5cm";
         private const string beforeParagraphSize = "0.5cm";
-        private static List<string> itemLetters = new List<string>(new string[] 
+        private static List<string> itemLetters = new List<string>(new string[]
         {
             "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP"
         });
@@ -45,11 +46,11 @@ namespace EstimatingUtilitiesLibrary
             createIntroduction(scopeDocument);
             createDocumentList(scopeDocument, bid);
             createScope(scopeDocument, bid);
-            if (isEstimate)
-            { createPricing(scopeDocument, bid.TotalPrice); }
-            else
-            { createPricing(scopeDocument, bid.BudgetPrice); }
-            
+            //if (isEstimate)
+            //{ createPricing(scopeDocument, bid.TotalPrice); }
+            //else
+            //{ createPricing(scopeDocument, bid.BudgetPrice); }
+
             createNotesAndExclusions(scopeDocument, bid.Notes.ToList(), bid.Exclusions.ToList());
             createSignature(scopeDocument, bid.Salesperson);
             createFooter(scopeDocument);
@@ -62,7 +63,8 @@ namespace EstimatingUtilitiesLibrary
 
             var fileName = pathstring[pathstringlength - 1];
             var onlyPath = "";
-            foreach (string pathChunk in pathstring){
+            foreach (string pathChunk in pathstring)
+            {
                 if (pathChunk != fileName)
                 {
                     onlyPath += pathChunk;
@@ -73,7 +75,6 @@ namespace EstimatingUtilitiesLibrary
 
             rtfRenderer.Render(scopeDocument, fileName, onlyPath);
         }
-
         private static void createHeader(Document document)
         {
             //Add Logo
@@ -121,7 +122,6 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
             }
         }
-
         private static void createBidInfo(Document document, string bidName, string bidNo, string salesperson, string estimator)
         {
             //Add Name, Bid No and Date
@@ -136,7 +136,6 @@ namespace EstimatingUtilitiesLibrary
             infoParagraph.AddLineBreak();
             infoParagraph.AddLineBreak();
         }
-
         private static void createIntroduction(Document document)
         {
             Paragraph paragraph = document.LastSection.AddParagraph();
@@ -150,7 +149,6 @@ namespace EstimatingUtilitiesLibrary
                 " This proposal is based upon our review of the following documents:");
 
         }
-
         private static void createDocumentList(Document document, TECBid bid)
         {
             Table table = new Table();
@@ -175,7 +173,6 @@ namespace EstimatingUtilitiesLibrary
 
             document.LastSection.Add(table);
         }
-
         private static void createScope(Document document, TECBid bid)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Scope of Work:", "Heading2");
@@ -198,7 +195,6 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             createSystemTree(document, bid);
         }
-
         private static void addScopeBranch(TECScopeBranch branch, Document document, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
             string scopeString = branch.Name;
@@ -216,14 +212,13 @@ namespace EstimatingUtilitiesLibrary
                 paragraph.AddSpace(2);
             }
             paragraph.AddFormattedText(scopeString);
-            
+
             foreach (TECScopeBranch childBranch in branch.Branches)
             {
                 paragraph = document.LastSection.AddParagraph();
                 addScopeBranch(childBranch, document, paragraph, (tabs + 1));
             }
         }
-
         private static void createSystemTree(Document document, TECBid bid)
         {
             Paragraph paragraph = new Paragraph();
@@ -276,12 +271,12 @@ namespace EstimatingUtilitiesLibrary
                             paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
                             paragraph.AddFormattedText(equipmentString);
 
-                            foreach(TECScopeBranch branch in equipProp.Notes)
+                            foreach (TECScopeBranch branch in equipProp.Notes)
                             {
                                 paragraph = document.LastSection.AddParagraph();
                                 addScopeBranch(branch, document, paragraph, 3);
                             }
-                            
+
                             int ssIndex = 0;
                             foreach (TECProposalScope ssProp in equipProp.Children)
                             {
@@ -297,7 +292,7 @@ namespace EstimatingUtilitiesLibrary
                                     paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
                                     paragraph.AddFormattedText(subScopeString);
 
-                                    foreach(TECScopeBranch branch in ssProp.Notes)
+                                    foreach (TECScopeBranch branch in ssProp.Notes)
                                     {
                                         paragraph = document.LastSection.AddParagraph();
                                         addScopeBranch(branch, document, paragraph, 4);
@@ -307,21 +302,20 @@ namespace EstimatingUtilitiesLibrary
                             }
                             equipIndex++;
                         }
-                        
+
                     }
                     paragraph.AddLineBreak();
                     sysNum++;
                 }
-                
+
             }
         }
-
         private static void createPricing(Document document, double price)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Pricing:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             Table table = new Table();
             table.Borders.Width = 0;
 
@@ -341,22 +335,21 @@ namespace EstimatingUtilitiesLibrary
             cell.Add(paragraph);
             document.LastSection.Add(table);
         }
-
         private static void createNotesAndExclusions(Document document, List<TECNote> notes, List<TECExclusion> exclusions)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             foreach (TECNote note in notes)
             {
                 paragraph = document.LastSection.AddParagraph();
                 paragraph.AddFormattedText("•   " + note.Text);
             }
-            paragraph=document.LastSection.AddParagraph("Exclusions:", "Heading2");
+            paragraph = document.LastSection.AddParagraph("Exclusions:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
-            
+
             foreach (TECExclusion exclusion in exclusions)
             {
                 paragraph = document.LastSection.AddParagraph();
@@ -364,7 +357,6 @@ namespace EstimatingUtilitiesLibrary
                 paragraph.AddLineBreak();
             }
         }
-
         private static void createSignature(Document document, string salesperson)
         {
             Paragraph paragraph = document.LastSection.AddParagraph();
@@ -379,7 +371,6 @@ namespace EstimatingUtilitiesLibrary
             paragraph.AddLineBreak();
             paragraph.AddFormattedText(salesperson);
         }
-
         private static void createFooter(Document document)
         {
             try
@@ -395,7 +386,6 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
             }
         }
-
         private static void defineStyles(Document document)
         {
             // Get the predefined style Normal.
@@ -441,14 +431,13 @@ namespace EstimatingUtilitiesLibrary
             style = document.Styles.AddStyle("TOC", "Normal");
             style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right, TabLeader.Dots);
             style.ParagraphFormat.Font.Color = Colors.Blue;
-            
+
             //List Style
             style = document.AddStyle("BulletList", "Normal");
             style.ParagraphFormat.LeftIndent = "0.5cm";
             style.ParagraphFormat.Alignment = ParagraphAlignment.Left;
 
         }
-
         private static List<string> readFromFile(string path)
         {
             string line;
@@ -460,5 +449,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return fileLines;
         }
+
     }
 }

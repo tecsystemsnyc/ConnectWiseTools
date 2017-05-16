@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECScope
+    public class TECConnectionType : TECScope, ElectricalMaterialComponent
     {
         #region Properties
 
@@ -49,7 +50,7 @@ namespace EstimatingLibrary
             _cost = connectionTypeSource.Cost;
             _labor = connectionTypeSource.Labor;
         }
-        
+
         public override object Copy()
         {
             var outType = new TECConnectionType();

@@ -12,6 +12,7 @@
         xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
         xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -20,6 +21,8 @@
         
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
+        Height="720"
+        Width="1200"
         MinHeight="300" MinWidth="535"
         x:Name="root">
 
@@ -52,7 +55,7 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
@@ -93,7 +96,7 @@
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Devices">
-                    <grids:DevicesGridControl DevicesSource="{Binding Templates.DeviceCatalog}"
+                    <grids:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
@@ -123,6 +126,9 @@
                 </TabItem>
                 <TabItem Header="Constants">
                     <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                </TabItem>
+                <TabItem Header="Settings">
+                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
                 
             </TabControl>

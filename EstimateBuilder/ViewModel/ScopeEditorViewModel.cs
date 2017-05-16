@@ -47,7 +47,7 @@ namespace EstimateBuilder.ViewModel
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        
+
         #region Properties
 
         private GridIndex _dGTabIndex;
@@ -67,12 +67,12 @@ namespace EstimateBuilder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
         public EditTabExtension EditTab { get; set; }
-        public ControllersPanelsViewModel ControllersPanelsTab { get; set; } 
+        public ControllersPanelsViewModel ControllersPanelsTab { get; set; }
         public AddControlledScopeExtension AddControlledScopeTab { get; set; }
         #endregion
 
         #region Interface Properties
-        
+
         #region Scope Properties
         public TECTemplates Templates
         {
@@ -96,7 +96,7 @@ namespace EstimateBuilder.ViewModel
         }
         private TECBid _bid;
         #endregion Scope Properties
-        
+
         #endregion //Interface Properties
 
         #region Visibility Properties
@@ -128,7 +128,7 @@ namespace EstimateBuilder.ViewModel
             LocationDataGrid.Refresh(Bid);
             ControllersPanelsTab.Refresh(Bid);
             AddControlledScopeTab.Refresh(Bid);
-            
+
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
 
@@ -147,11 +147,20 @@ namespace EstimateBuilder.ViewModel
             ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
+
             ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupLocationDataGrid()
         {
             LocationDataGrid = new LocationDataGridExtension(Bid);
+            LocationDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
+            LocationDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
             LocationDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
             LocationDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
             LocationDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
@@ -184,67 +193,15 @@ namespace EstimateBuilder.ViewModel
             AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         #endregion
-        
+
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
-            {
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                bool isControllerInPanel = sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel);
-
-                if (sourceItem != null && sourceType == targetType || isControllerInPanel)
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
+            UIHelpers.StandardDragOver(dropInfo);
         }
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
-            Type sourceType = dropInfo.Data.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-            
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-
-                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                    Bid.Controllers.Add(sourceItem as TECController);
-                    sourceItem = controllerInPanel;
-                }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                }
-                else
-                {
-                    ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                }
-            }
-            else
-            {
-                sourceItem = dropInfo.Data;
-                
-                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int finalIndex = dropInfo.InsertIndex;
-                if (dropInfo.InsertIndex > currentIndex)
-                {
-                    finalIndex -= 1;
-                }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                {
-                    finalIndex = ((IList)dropInfo.TargetCollection).Count - 1;
-                }
-                
-                ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
-            }
+            UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
 

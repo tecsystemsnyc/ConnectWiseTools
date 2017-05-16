@@ -4,6 +4,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TECUserControlLibrary;
 using TECUserControlLibrary.Models;
 
 namespace EstimateBuilder.ViewModel
@@ -22,9 +23,15 @@ namespace EstimateBuilder.ViewModel
             get { return _bid; }
             set
             {
+                if(Bid != null)
+                {
+                    Bid.Controllers.CollectionChanged -= collectionChanged;
+                }
                 _bid = value;
                 registerSubScope();
                 RaisePropertyChanged("Bid");
+                Bid.Controllers.CollectionChanged += collectionChanged;
+
             }
         }
 
@@ -59,8 +66,30 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private TECController _noneController;
+        public TECController NoneController
+        {
+            get { return _noneController; }
+            set
+            {
+                _noneController = value;
+                RaisePropertyChanged("NoneController");
+            }
+        }
+        private TECConduitType _noneConduitType;
+        public TECConduitType NoneConduitType
+        {
+            get { return _noneConduitType; }
+            set
+            {
+                _noneConduitType = value;
+                RaisePropertyChanged("NoneConduitType");
+            }
+        }
+
         public ElectricalViewModel(TECBid bid)
         {
+            setupNoneObjetcs();
             Refresh(bid);
         }
 
@@ -68,14 +97,13 @@ namespace EstimateBuilder.ViewModel
         {
             Bid = bid;
             ConduitTypeSelections = new ObservableCollection<TECConduitType>();
-            var noneConduit = new TECConduitType();
-            noneConduit.Name = "None";
-            ConduitTypeSelections.Add(noneConduit);
-            foreach (TECConduitType type in Bid.ConduitTypes)
+            
+            ConduitTypeSelections.Add(NoneConduitType);
+            foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
             }
-            Bid.Controllers.CollectionChanged += collectionChanged;
+            populateControllerSelections();
             updateCollections();
         }
         private void registerSubScope()
@@ -93,53 +121,75 @@ namespace EstimateBuilder.ViewModel
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            bool updateScope = false;
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach(object item in e.NewItems)
+                foreach (object item in e.NewItems)
                 {
-                    if(item is TECSystem)
+                    if (item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged += collectionChanged;
-                        foreach(TECEquipment equip in (item as TECSystem).Equipment)
+                        foreach (TECEquipment equip in (item as TECSystem).Equipment)
                         {
                             equip.SubScope.CollectionChanged += collectionChanged;
                         }
+                        updateScope = true;
                     }
                     else if (item is TECEquipment)
                     {
                         (item as TECEquipment).SubScope.CollectionChanged += collectionChanged;
+                        updateScope = true;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        updateScope = true;
+                    }
+                    else if (item is TECController)
+                    {
+                        ControllerSelections.Add(item as TECController);
                     }
                 }
             }
-            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
                     if (item is TECSystem)
                     {
                         (item as TECSystem).Equipment.CollectionChanged -= collectionChanged;
+                        updateScope = true;
                     }
                     else if (item is TECEquipment)
                     {
                         (item as TECEquipment).SubScope.CollectionChanged -= collectionChanged;
+                        updateScope = true;
+                    }
+                    else if (item is TECSubScope)
+                    {
+                        updateScope = true;
+                    }
+                    else if (item is TECController)
+                    {
+                        ControllerSelections.Remove(item as TECController);
                     }
                 }
             }
-            updateCollections();
+            if (updateScope)
+            {
+                updateCollections();
+            }
+            
         }
         
         private void updateCollections()
         {
             updateSubScopeConnections();
-            updateControllerSelections();
         }
 
-        private void updateControllerSelections()
+        private void populateControllerSelections()
         {
             ControllerSelections = new ObservableCollection<TECController>();
-            var noneController = new TECController();
-            noneController.Name = "None";
-            ControllerSelections.Add(noneController);
+            ControllerSelections.Add(NoneController);
             foreach (TECController controller in Bid.Controllers)
             {
                 ControllerSelections.Add(controller);
@@ -165,10 +215,20 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
+        private void setupNoneObjetcs()
+        {
+            TECController noneController = new TECController();
+            noneController.Name = "None";
+            NoneController = noneController;
+
+            TECConduitType noneConduitType = new TECConduitType();
+            noneConduitType.Name = "None";
+            NoneConduitType = noneConduitType;
+        }
+
         public void DragOver(IDropInfo dropInfo)
         {
         }
-
         public void Drop(IDropInfo dropInfo)
         {
         }

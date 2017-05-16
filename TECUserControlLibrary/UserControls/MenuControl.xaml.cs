@@ -43,5 +43,6 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty BackgroundColorProperty =
             DependencyProperty.Register("BackgroundColor", typeof(Brush),
               typeof(MenuControl));
+        
     }
 }

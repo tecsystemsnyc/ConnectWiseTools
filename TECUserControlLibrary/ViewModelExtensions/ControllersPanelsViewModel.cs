@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
@@ -24,14 +25,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public TECBid Bid
         {
             get { return _bid; }
-            set
+            private set
             {
+                unregisterBidChanges();
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                registerChanges();
+                registerBidChanges();
             }
         }
-        
+
         private TECController _selectedController;
         public TECController SelectedController
         {
@@ -65,7 +67,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
             set
             {
                 _controllerCollection = value;
+                ControllerCollection.CollectionChanged -= collectionChanged;
                 RaisePropertyChanged("ControllerCollection");
+                ControllerCollection.CollectionChanged += collectionChanged;
             }
         }
 
@@ -106,6 +110,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanel _nonePanel;
+        public TECPanel NonePanel
+        {
+            get { return _nonePanel; }
+            set
+            {
+                _nonePanel = value;
+                RaisePropertyChanged("NonePanel");
+            }
+        }
+
+        private Dictionary<TECController, ControllerInPanel> controllersIndex;
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -118,11 +135,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Constructor
         public ControllersPanelsViewModel(TECBid bid)
         {
-            _bid = bid;
-            registerChanges();
-            populateControllerCollection();
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            updateCollections();
+            Bid = bid;
+            setup();
         }
         #endregion
 
@@ -130,14 +144,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Refresh(TECBid bid)
         {
             Bid = bid;
+            setup();
+        }
+
+        private void setup()
+        {
             populateControllerCollection();
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            updateCollections();
+            populatePanelSelections();
         }
 
         private void populateControllerCollection()
         {
             ControllerCollection = new ObservableCollection<ControllerInPanel>();
+            controllersIndex = new Dictionary<TECController, ControllerInPanel>();
             foreach (TECController controller in Bid.Controllers)
             {
                 TECController controllerToAdd = controller;
@@ -150,49 +169,66 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         break;
                     }
                 }
-                ControllerCollection.Add(new ControllerInPanel(controllerToAdd, panelToAdd));
-            }
-        }
-        private void updateControllerCollection()
-        {
-            ControllerCollection = new ObservableCollection<ControllerInPanel>();
-            foreach (TECController controller in Bid.Controllers)
-            {
-                TECPanel panelToAdd = null;
-                foreach (TECPanel panel in Bid.Panels)
-                {
-                    if (panel.Controllers.Contains(controller))
-                    {
-                        panelToAdd = panel;
-                    }
-                }
-                ControllerInPanel controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
+                var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
                 ControllerCollection.Add(controllerInPanelToAdd);
+                controllersIndex[controller] = controllerInPanelToAdd;
             }
         }
-        private void updatePanels()
+        private void populatePanelSelections()
         {
             PanelSelections = new ObservableCollection<TECPanel>();
             var nonePanel = new TECPanel();
             nonePanel.Name = "None";
-            PanelSelections.Add(nonePanel);
+            NonePanel = nonePanel;
+            PanelSelections.Add(NonePanel);
             foreach (TECPanel panel in Bid.Panels)
             {
                 PanelSelections.Add(panel);
+                panel.PropertyChanged += Panel_PropertyChanged;
             }
         }
-        private void registerChanges()
+
+        private void Panel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "AddRelationship")
+            {
+                foreach (TECController controller in (sender as TECPanel).Controllers)
+                {
+                    controllersIndex[controller].UpdatePanel(sender as TECPanel);
+                }
+            }
+        }
+        
+        private void registerBidChanges()
         {
             Bid.Controllers.CollectionChanged += collectionChanged;
             Bid.Panels.CollectionChanged += collectionChanged;
         }
+        private void unregisterBidChanges()
+        {
+            if (Bid != null)
+            {
+                Bid.Controllers.CollectionChanged -= collectionChanged;
+                Bid.Panels.CollectionChanged -= collectionChanged;
+            }
+        }
 
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateCollections();
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                
+                foreach (object item in e.NewItems)
+                {
+                    if (item is TECController)
+                    {
+                        addController(item as TECController);
+                    }
+                    else if (item is TECPanel)
+                    {
+                        addPanel(item as TECPanel);
+                        (item as TECPanel).PropertyChanged += Panel_PropertyChanged;
+                    }
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -209,69 +245,60 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                         Bid.Controllers.Remove((item as ControllerInPanel).Controller);
                     }
+                    if (item is TECController)
+                    {
+                        removeController(item as TECController);
+                    }
+                    else if (item is TECPanel)
+                    {
+                        removePanel(item as TECPanel);
+                        (item as TECPanel).PropertyChanged -= Panel_PropertyChanged;
+                    }
                 }
             }
-        }
-
-        private void updateCollections()
-        {
-            ControllerCollection.CollectionChanged -= collectionChanged;
-            updateControllerCollection();
-            updatePanels();
-            ControllerCollection.CollectionChanged += collectionChanged;
         }
 
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
-            {
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType || (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
-
+            UIHelpers.ControllerInPanelDragOver(dropInfo);
         }
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
-            sourceItem = dropInfo.Data;
-
-            var targetCollection = dropInfo.TargetCollection;
-
-            Type sourceType = sourceItem.GetType();
-            if (sourceItem is TECScope)
-            { sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(); }
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-            if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
+            if (dropInfo.Data is TECController)
             {
-                var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
-                Bid.Controllers.Add(sourceItem as TECController);
-                sourceItem = controllerInPanel;
-            }
-
-            if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-            {
-                ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
+                UIHelpers.ControllerInPanelDrop(dropInfo, Bid.Controllers);
             }
             else
             {
-                if (dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
-                { ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem); }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-
+                UIHelpers.StandardDrop(dropInfo);
             }
+        }
+
+        private void addController(TECController controller)
+        {
+            TECController controllerToAdd = controller;
+            TECPanel panelToAdd = null;
+            
+            var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
+            ControllerCollection.Add(controllerInPanelToAdd);
+            controllersIndex[controller] = controllerInPanelToAdd;
+        }
+        private void addPanel(TECPanel panel)
+        {
+            PanelSelections.Add(panel);
+            foreach (TECController controller in panel.Controllers)
+            {
+                controllersIndex[controller].UpdatePanel(panel);
+            }
+        }
+        private void removeController(TECController controller)
+        {
+            ControllerCollection.Remove(controllersIndex[controller]);
+            controllersIndex.Remove(controller);
+        }
+        private void removePanel(TECPanel panel)
+        {
+            PanelSelections.Remove(panel);
         }
         #endregion
     }

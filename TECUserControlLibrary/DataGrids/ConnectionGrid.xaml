@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -22,22 +23,36 @@
         <DataGrid ItemsSource="{Binding SubScopeConnectionCollection}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding Controller, UpdateSourceTrigger=PropertyChanged,
-                                        Converter={cnvt:SelectedItemToControllerConverter}}"
                                         Header="Controller" Width="Auto" MinWidth="60"
-                                        DisplayMemberPath="Name"/>
+                                        DisplayMemberPath="Name">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
+                            <Binding Path="Controller"/>
+                            <Binding Path="Data.NoneController" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
                 <DataGridTextColumn Binding="{Binding ParentSystem.Name}" Header="System" Width="Auto" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding ParentEquipment.Name}" Header="Equipment" Width="Auto" MinWidth="70" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding SubScope.Name, UpdateSourceTrigger=LostFocus}" Header="Point" Width="Auto" MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Length" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Connection.Length, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Wire (ft)" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Binding="{Binding SubScope.Connection.ConduitLength, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Header="Conduit (ft)" Width="Auto" MinWidth="60"/>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ConduitTypeSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding SubScope.Connection.ConduitType, UpdateSourceTrigger=PropertyChanged, Converter={cnvt:SelectedItemToConduitTypeConverter}}"
-                                        Header="Conduit" Width="Auto" MinWidth="50"
-                                        DisplayMemberPath="Name"/>
-                <DataGridCheckBoxColumn Header="Stub Up Conduit Only" Binding="{Binding SubScope.Connection.IncludeStubUp, UpdateSourceTrigger=PropertyChanged}"/>
+                                        Header="Conduit Type" Width="Auto" MinWidth="80"
+                                        DisplayMemberPath="Name">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
+                            <Binding Path="ConduitType"/>
+                            <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

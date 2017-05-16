@@ -50,20 +50,6 @@ namespace Scope_Builder.ViewModel
             }
         }
 
-        protected override string ScopeDirectoryPath
-        {
-            get
-            {
-                return Properties.Settings.Default.ScopeDirectoryPath;
-            }
-
-            set
-            {
-                Properties.Settings.Default.ScopeDirectoryPath = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-
         #region VMExtensions
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public LocationDataGridExtension LocationDataGrid { get; set; }
@@ -79,7 +65,7 @@ namespace Scope_Builder.ViewModel
 
         #region Visibility Properties
         private Visibility _templatesVisibility;
-        public Visibility TemplatesVisibility
+        override public Visibility TemplatesVisibility
         {
             get
             { return _templatesVisibility; }
@@ -90,34 +76,66 @@ namespace Scope_Builder.ViewModel
             }
         }
         #endregion Visibility Properties
+
+        #region SettingsProperties
+        override protected bool TemplatesHidden
+        {
+            get
+            {
+                return Properties.Settings.Default.TemplatesHidden;
+            }
+            set
+            {
+                if (Properties.Settings.Default.TemplatesHidden != value)
+                {
+                    Properties.Settings.Default.TemplatesHidden = value;
+                    RaisePropertyChanged("TemplatesHidden");
+                    TemplatesHiddenChanged();
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+        override protected string ScopeDirectoryPath
+        {
+            get { return Properties.Settings.Default.ScopeDirectoryPath; }
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+        protected override string startupFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.StartupFile;
+            }
+
+            set
+            {
+                Properties.Settings.Default.StartupFile = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
-        
+        #endregion
+
         #region Intitializer
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = false;
             programName = "Scope Builder";
-
-            setupAll();
+            buildTitleString();
             DGTabIndex = GridIndex.Scope;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;
 
-            startupFile = Properties.Settings.Default.StartupFile;
-            checkForOpenWith(Properties.Settings.Default.StartupFile);
-            Properties.Settings.Default.StartupFile = "";
-            Properties.Settings.Default.Save();
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesVisibilityCommand;
-
-            BidSet += () =>
-            { refreshAll(); };
-            TemplatesLoadedSet += () =>
-            { refreshTemplates(); };
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-        
+
         #endregion
 
         #region Commands Methods
@@ -134,7 +152,6 @@ namespace Scope_Builder.ViewModel
                 MenuVM.TemplatesHidden = false;
             }
         }
-
         #endregion //Commands Methods
 
         #region Helper Functions
@@ -155,6 +172,8 @@ namespace Scope_Builder.ViewModel
                 ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
@@ -235,6 +254,24 @@ namespace Scope_Builder.ViewModel
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.None;
             }
+            else if (DGTabIndex == GridIndex.Settings)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.None;
+            }
             else
             {
                 throw new NotImplementedException();
@@ -242,7 +279,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setContextText(object selected)
         {
-            if(selected is TECScope && selected != null)
+            if (selected is TECScope && selected != null)
             {
                 StatusBarVM.ContextText = makeContextString(selected as TECScope);
             }
@@ -252,7 +289,7 @@ namespace Scope_Builder.ViewModel
             var outString = "";
 
             outString += scope.Name + ": ";
-            if(scope.Location != null)
+            if (scope.Location != null)
             {
                 outString += scope.Location;
                 outString += " is in bid: ";
@@ -262,33 +299,33 @@ namespace Scope_Builder.ViewModel
             {
                 outString += "No location";
             }
-            
+
             return outString;
         }
         #endregion //Helper Functions
 
         #region Setup Extensions
-
-        private void setupAll()
+        override protected void setupExtensions()
         {
+            base.setupExtensions();
             setupScopeDataGrid();
             setupLocationDataGrid();
             setupScopeCollection();
             setupBudget();
         }
-        private void refreshAll()
+        override protected void refresh()
         {
-            ScopeDataGrid.Refresh(Bid);
-            LocationDataGrid.Refresh(Bid);
-            BudgetVM.Refresh(Bid);
-        }
-        private void refreshTemplates()
-        {
-            ScopeCollection.Refresh(Templates);
+            if (Bid != null && Templates != null)
+            {
+                ScopeDataGrid.Refresh(Bid);
+                LocationDataGrid.Refresh(Bid);
+                BudgetVM.Refresh(Bid);
+                ScopeCollection.Refresh(Templates);
+            }
         }
         private void setupScopeDataGrid()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(Bid);
+            ScopeDataGrid = new ScopeDataGridExtension(new TECBid());
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.SelectionChanged += setContextText;
@@ -297,66 +334,34 @@ namespace Scope_Builder.ViewModel
         }
         private void setupLocationDataGrid()
         {
-            LocationDataGrid = new LocationDataGridExtension(Bid);
+            LocationDataGrid = new LocationDataGridExtension(new TECBid());
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
         }
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionExtension(Templates);
+            ScopeCollection = new ScopeCollectionExtension(new TECTemplates());
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }
         private void setupBudget()
         {
-            BudgetVM = new BudgetViewModel(Bid);
+            BudgetVM = new BudgetViewModel(new TECBid());
         }
         #endregion
-        
+
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            Type sourceType = sourceItem.GetType();
-            Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (sourceItem != null && sourceType == targetType)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
+            UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
-            Object sourceItem;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-            }
-            else
-            {
-                sourceItem = dropInfo.Data;
-                int currentIndex = ((IList)dropInfo.TargetCollection).IndexOf(sourceItem);
-                int removeIndex = currentIndex;
-                if (dropInfo.InsertIndex < currentIndex)
-                { removeIndex += 1; }
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                { ((IList)dropInfo.TargetCollection).Add(sourceItem); }
-                else
-                { ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem); }
-                ((IList)dropInfo.TargetCollection).RemoveAt(removeIndex);
-            }
+            UIHelpers.StandardDrop(dropInfo);
         }
         #endregion
 
         #region Event Handlers
-
         private void LocationDataGrid_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedScopeType")
@@ -364,7 +369,6 @@ namespace Scope_Builder.ViewModel
                 updateVisibility();
             }
         }
-
         #endregion
     }
 }

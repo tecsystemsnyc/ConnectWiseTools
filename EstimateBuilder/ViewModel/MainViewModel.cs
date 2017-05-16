@@ -17,6 +17,9 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using TECUserControlLibrary.ViewModels;
 using DebugLibrary;
+using GongSolutions.Wpf.DragDrop;
+using System.Linq;
+using TECUserControlLibrary;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -28,31 +31,20 @@ namespace EstimateBuilder.ViewModel
     /// </summary>
     public class MainViewModel : BidEditorBase
     {
-        public MainViewModel()
+        public MainViewModel() : base()
         {
             isEstimate = true;
             programName = "Estimate Builder";
+            buildTitleString();
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
-            
-            BidSet += () =>
-            {
-                Refresh();
-            };
-            TemplatesLoadedSet += () =>
-            {
-                Refresh();
-            };
-            setupAll();
-
-            base.PropertyChanged += BidEditorBase_PropertyChanged;
         }
-        
+
         #region Properties
 
         #region SettingsProperties
-        public bool TemplatesHidden
+        override protected bool TemplatesHidden
         {
             get
             {
@@ -78,23 +70,80 @@ namespace EstimateBuilder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+        protected override string TemplatesFilePath
+        {
+            get
+            {
+                return base.TemplatesFilePath;
+            }
+
+            set
+            {
+                base.TemplatesFilePath = value;
+                SettingsVM.TemplatesLoadPath = TemplatesFilePath;
+            }
+        }
+        protected override string startupFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.StartupFile;
+            }
+
+            set
+            {
+                Properties.Settings.Default.StartupFile = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
 
         #region ViewModels
         public ScopeEditorViewModel ScopeEditorVM { get; set; }
         public DrawingViewModel DrawingVM { get; set; }
         public LaborViewModel LaborVM { get; set; }
-        public SettingsViewModel SettingsVM { get; set; }
         public ReviewViewModel ReviewVM { get; set; }
         public ProposalViewModel ProposalVM { get; set; }
         public ElectricalViewModel ElectricalVM { get; set; }
         public NetworkViewModel NetworkVM { get; set; }
+        public DeviceSummaryViewModel DeviceVM { get; set; }
+        public ElectricalMaterialSummaryViewModel ElectricalMaterialVM { get; set; }
         #endregion
 
         #region Command Properties
         public ICommand LoadDrawingCommand { get; private set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         #endregion Command Properties
+
+        public override Visibility TemplatesVisibility
+        {
+            get
+            {
+                return ScopeEditorVM.TemplatesVisibility;
+            }
+
+            set
+            {
+                ScopeEditorVM.TemplatesVisibility = value;
+            }
+        }
+
+        protected override bool templatesLoaded
+        {
+            get
+            {
+                return base.templatesLoaded;
+            }
+
+            set
+            {
+                base.templatesLoaded = value;
+                if (LaborVM != null)
+                {
+                    LaborVM.TemplatesLoaded = templatesLoaded;
+                }
+            }
+        }
         #endregion Properties
 
         #region Methods
@@ -127,17 +176,6 @@ namespace EstimateBuilder.ViewModel
             LaborVM.Templates = templates;
             LaborVM.LoadTemplates += LoadTemplatesExecute;
             LaborVM.TemplatesLoaded = templatesLoaded;
-            TemplatesLoadedSet += () => {
-                LaborVM.TemplatesLoaded = templatesLoaded;
-            };
-        }
-        private void setupSettingsVM()
-        {
-            SettingsVM = new SettingsViewModel();
-            SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
-            SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-            SettingsVM.TemplatesHidden = TemplatesHidden;
-            SettingsVM.ReloadTemplates += LoadTemplatesExecute;
         }
         private void setupReviewVM(TECBid bid)
         {
@@ -157,10 +195,17 @@ namespace EstimateBuilder.ViewModel
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
         }
-
-        private void setupNetworkVM()
+        private void setupNetworkVM(TECBid bid)
         {
-            NetworkVM = new NetworkViewModel(Bid);
+            NetworkVM = new NetworkViewModel(bid);
+        }
+        private void setupDeviceVM(TECBid bid)
+        {
+            DeviceVM = new DeviceSummaryViewModel(bid);
+        }
+        private void setupElectricalMaterialVM(TECBid bid)
+        {
+            ElectricalMaterialVM = new ElectricalMaterialSummaryViewModel(bid);
         }
         #endregion
 
@@ -179,10 +224,11 @@ namespace EstimateBuilder.ViewModel
 
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    SetBusyStatus("Loading drawings from file: " + path);
+                    SetBusyStatus("Loading drawings from file: " + path, true);
                     var worker = new BackgroundWorker();
 
-                    worker.DoWork += (s, e) => {
+                    worker.DoWork += (s, e) =>
+                    {
                         TECDrawing drawing = PDFConverter.convertPDFToDrawing(path);
                         e.Result = drawing;
                     };
@@ -221,30 +267,35 @@ namespace EstimateBuilder.ViewModel
         #endregion Commands Methods
 
         #region Helper Methods
-        private void setupAll()
+        override protected void setupExtensions()
         {
-            setupScopeEditorVM(Bid, Templates);
-            setupDrawingVM(Bid);
-            setupLaborVM(Bid, Templates);
-            setupReviewVM(Bid);
-            setupSettingsVM();
-            setupProposalVM(Bid);
-            setupElectricalVM(Bid);
+            base.setupExtensions();
+            setupScopeEditorVM(new TECBid(), new TECTemplates());
+            setupDrawingVM(new TECBid());
+            setupLaborVM(new TECBid(), new TECTemplates());
+            setupReviewVM(new TECBid());
+            setupProposalVM(new TECBid());
+            setupElectricalVM(new TECBid());
             setupMenuVM();
-            setupNetworkVM();
+            setupNetworkVM(new TECBid());
+            setupDeviceVM(new TECBid());
+            setupElectricalMaterialVM(new TECBid());
         }
-        public void Refresh()
+        override protected void refresh()
         {
-            ScopeEditorVM.Refresh(Bid, Templates);
-            DrawingVM.Bid = Bid;
-            LaborVM.Refresh(Bid, Templates);
-            ReviewVM.Refresh(Bid);
-            //SettingsVM.Bid = Bid;
-            ProposalVM.Refresh(Bid);
-            ElectricalVM.Refresh(Bid);
-            NetworkVM.Refresh(Bid);
+            if (Bid != null && Templates != null)
+            {
+                ScopeEditorVM.Refresh(Bid, Templates);
+                DrawingVM.Bid = Bid;
+                LaborVM.Refresh(Bid, Templates);
+                ReviewVM.Refresh(Bid);
+                ProposalVM.Refresh(Bid);
+                ElectricalVM.Refresh(Bid);
+                NetworkVM.Refresh(Bid);
+                DeviceVM.Refresh(Bid);
+                ElectricalMaterialVM.Refresh(Bid);
+            }
         }
-        
         private string getLoadDrawingsPath()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -268,31 +319,6 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region Event Handlers
-        private void TemplatesHiddenChanged()
-        {
-            SettingsVM.TemplatesHidden = TemplatesHidden;
-            if (TemplatesHidden)
-            {
-                ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
-                MenuVM.TemplatesHidden = true;
-            }
-            else
-            {
-                ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
-                MenuVM.TemplatesHidden = false;
-            }
-        }
-        private void BidEditorBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "TemplatesFilePath")
-            {
-                SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-            }
-            else if (e.PropertyName == "Templates")
-            {
-                Refresh();
-            }
-        }
         private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesHidden")
@@ -322,6 +348,7 @@ namespace EstimateBuilder.ViewModel
                 }
             }
         }
+
         #endregion
     }
 }

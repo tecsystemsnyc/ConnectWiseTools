@@ -22,18 +22,12 @@ namespace EstimatingLibrary
         }
         protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(sender, e);
+            PropertyChanged?.Invoke(sender, e);
         }
 
         protected void RaisePropertyChanged(string name)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         abstract public Object Copy();

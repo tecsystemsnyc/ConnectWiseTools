@@ -96,6 +96,15 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        //private TECMenuItem exportExcelMenuItem;
+        //public ICommand ExportExcelCommand
+        //{
+        //    set
+        //    {
+        //        exportExcelMenuItem.Command = value;
+        //    }
+        //}
+
         private TECMenuItem undoMenuItem;
         public ICommand UndoCommand
         {
@@ -126,6 +135,10 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 loadTemplatesMenuItem.Command = value;
+            }
+            get
+            {
+                return loadTemplatesMenuItem.Command;
             }
         }
 
@@ -173,6 +186,9 @@ namespace TECUserControlLibrary.ViewModels
                 exportPointsListMenuItem = new TECMenuItem("Points List", darkTextBrush);
                 ExportMenu.Items.Add(exportPointsListMenuItem);
 
+                //exportExcelMenuItem = new TECMenuItem("Excel", darkTextBrush);
+                //ExportMenu.Items.Add(exportExcelMenuItem);
+
                 FileMenu.Items.Add(ExportMenu);
             }
 
@@ -203,9 +219,10 @@ namespace TECUserControlLibrary.ViewModels
             //Templates
             TECMenuItem TemplatesMenu = new TECMenuItem("Templates", lightTextBrush);
 
+            loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
+
             if (type != MenuType.TB)
             {
-                loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
                 TemplatesMenu.Items.Add(loadTemplatesMenuItem);
             }
 

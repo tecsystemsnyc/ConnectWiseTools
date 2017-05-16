@@ -60,23 +60,23 @@ namespace EstimatingLibrary
                 if (ParentController != null)
                 {
                     //Start off with all IO in the parent controller
-                    foreach(IOType io in ParentController.NetworkIO)
+                    foreach (IOType io in ParentController.NetworkIO)
                     {
                         IO.Add(io);
                     }
 
                     //If any IO aren't in children controllers, remove them.
-                    foreach(TECController child in ChildrenControllers)
+                    foreach (TECController child in ChildrenControllers)
                     {
                         List<IOType> ioToRemove = new List<IOType>();
-                        foreach(IOType io in IO)
+                        foreach (IOType io in IO)
                         {
                             if (!child.NetworkIO.Contains(io))
                             {
                                 ioToRemove.Add(io);
                             }
                         }
-                        foreach(IOType io in ioToRemove)
+                        foreach (IOType io in ioToRemove)
                         {
                             IO.Remove(io);
                         }
@@ -97,7 +97,7 @@ namespace EstimatingLibrary
         public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
             _childrenControllers = new ObservableCollection<TECController>();
-            foreach(TECController controller in connectionSource.ChildrenControllers)
+            foreach (TECController controller in connectionSource.ChildrenControllers)
             {
                 _childrenControllers.Add(new TECController(controller, guidDictionary));
             }
@@ -116,8 +116,48 @@ namespace EstimatingLibrary
         {
             TECNetworkConnection connection = new TECNetworkConnection(this);
             connection._guid = this._guid;
-            
+
             return connection;
+        }
+        protected override double getElectricalCost()
+        {
+            double cost = 0;
+            if (ConnectionType != null)
+            {
+                TECConnectionType type = ConnectionType;
+                cost += Length * type.Cost;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                { cost += associatedCost.Cost * ChildrenControllers.Count; }
+            }
+            if (ConduitType != null)
+            {
+                cost += ConduitLength * ConduitType.Cost;
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    cost += associatedCost.Cost * ChildrenControllers.Count;
+                }
+            }
+            return cost;
+        }
+        protected override double getElectricalLabor()
+        {
+            double laborHours = 0;
+            if (ConnectionType != null)
+            {
+                TECConnectionType type = ConnectionType;
+                laborHours += Length * type.Labor;
+                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                { laborHours += associatedCost.Labor * ChildrenControllers.Count; }
+            }
+            if (ConduitType != null)
+            {
+                laborHours += Length * ConduitType.Labor;
+                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                {
+                    laborHours += associatedCost.Labor * ChildrenControllers.Count;
+                }
+            }
+            return laborHours;
         }
         #endregion Methods
 
@@ -141,6 +181,8 @@ namespace EstimatingLibrary
                 }
             }
         }
+
+
         #endregion
     }
 }

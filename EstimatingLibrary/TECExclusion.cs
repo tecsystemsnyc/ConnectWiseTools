@@ -36,9 +36,10 @@ namespace EstimatingLibrary
             _text = "";
             _guid = guid;
         }
-        public TECExclusion() : this( Guid.NewGuid()) { }
+        public TECExclusion() : this(Guid.NewGuid()) { }
 
-        public TECExclusion(TECExclusion exclusionSource) : this() {
+        public TECExclusion(TECExclusion exclusionSource) : this()
+        {
             _text = exclusionSource.Text;
         }
 

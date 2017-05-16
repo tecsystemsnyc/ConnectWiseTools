@@ -22,8 +22,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding Path=NameLabel}" Grid.Row="0"
-                        TextWrapping="Wrap" Margin="2"/>
+                       ToolTip="{Binding  Path=NameLabel}"
+                       TextWrapping="Wrap" Margin="2"/>
             <TextBlock Text="{Binding Path=DescriptionLabel}" Grid.Row="1"
+                       ToolTip="{Binding  Path=DescriptionLabel}"
                         FontSize="8" Margin="2" TextWrapping="Wrap"/>
     </Grid>
     </Border>

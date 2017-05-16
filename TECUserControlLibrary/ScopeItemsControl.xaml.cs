@@ -22,7 +22,7 @@ namespace TECUserControlLibrary
     public partial class ScopeItemsControl : UserControl
     {
         #region DPs
-        
+
         public Object ScopeSource
         {
             get { return (Object)GetValue(ScopeSourceProperty); }
@@ -32,7 +32,7 @@ namespace TECUserControlLibrary
         public static readonly DependencyProperty ScopeSourceProperty =
             DependencyProperty.Register("ScopeSource", typeof(Object),
               typeof(ScopeItemsControl));
-        
+
 
         #endregion
 

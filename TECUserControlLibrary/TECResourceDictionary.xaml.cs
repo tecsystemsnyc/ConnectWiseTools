@@ -16,7 +16,15 @@ namespace TECUserControlLibrary
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
-            if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
+            if (e.ClickCount == 3 && cell.Column is DataGridTextColumn)
+            {
+                var textBox = FindVisualChild<TextBox>(cell);
+                if (textBox != null)
+                {
+                    textBox.SelectAll();
+                }
+            }
+            else if (cell != null && !cell.IsEditing && !cell.IsReadOnly)
             {
                 if (!cell.IsFocused)
                 {
@@ -49,21 +57,31 @@ namespace TECUserControlLibrary
             var source = e.Source;
             DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
             DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
+            Button button = FindVisualParent<Button>(ogSource as UIElement);
+            if (parentRow == null ||
+                (childRow != null && childRow.IsSelected == true) ||
+                (childRow == null && button == null))
+            {
+                return;
+            }
+            parentRow.Focusable = true;
+            parentRow.Focus();
 
-            if (parentRow == null || (childRow!= null && childRow.IsSelected == true) || childRow == null)
-                {
-                    return;
-                }
-                parentRow.Focusable = true;
-                parentRow.Focus();
+            var focusDirection = FocusNavigationDirection.Next;
+            var request = new TraversalRequest(focusDirection);
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+            if (elementWithFocus != null)
+            {
+                elementWithFocus.MoveFocus(request);
+            }
+        }
 
-                var focusDirection = FocusNavigationDirection.Next;
-                var request = new TraversalRequest(focusDirection);
-                var elementWithFocus = Keyboard.FocusedElement as UIElement;
-                if (elementWithFocus != null)
-                {
-                    elementWithFocus.MoveFocus(request);
-                }
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 3)
+            {
+                (sender as TextBox).SelectAll();
+            }
         }
 
         private void SelectRow(object sender, MouseButtonEventArgs e)
@@ -73,13 +91,37 @@ namespace TECUserControlLibrary
             DataGridRow row = sender as DataGridRow;
             DataGrid grid = FindVisualParent<DataGrid>(row);
             grid.SelectedItem = grid.SelectedItem;
-            
-        }
 
+        }
 
         private void DataGrid_Documents_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             //e.Handled = true;
+        }
+
+        private void CollapseAll_Clicked(object sender, RoutedEventArgs e)
+        {
+            Grid grid = FindVisualParent<Grid>(sender as UIElement);
+            if (grid != null)
+            {
+                DataGrid dataGrid = FindVisualChildInGrid<DataGrid>(grid);
+                if (dataGrid != null)
+                {
+                    List<DataGridRow> rows = FindVisualChildren<DataGridRow>(dataGrid);
+                    foreach (DataGridRow row in rows)
+                    {
+                        row.DetailsVisibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
+
+        private void DataGrid_LostFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!(sender as DataGrid).IsKeyboardFocusWithin)
+            {
+                (sender as DataGrid).CommitEdit(DataGridEditingUnit.Row, true);
+            }
         }
 
         static T FindVisualParent<T>(UIElement element) where T : UIElement
@@ -97,7 +139,6 @@ namespace TECUserControlLibrary
             }
             return null;
         }
-
         static T FindVisualChild<T>(UIElement element) where T : UIElement
         {
             UIElement child = null;
@@ -123,6 +164,59 @@ namespace TECUserControlLibrary
                 }
             }
             return null;
+        }
+        static T FindVisualChildInGrid<T>(UIElement element) where T : UIElement
+        {
+            UIElement child = null;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                child = VisualTreeHelper.GetChild(element, i) as UIElement;
+                while (child != null)
+                {
+                    T correctlyTyped = child as T;
+                    if (correctlyTyped != null)
+                    {
+                        return correctlyTyped;
+                    }
+
+                    if (VisualTreeHelper.GetChildrenCount(child) > 0)
+                    {
+                        child = VisualTreeHelper.GetChild(child, 0) as UIElement;
+                    }
+                    else
+                    {
+                        child = null;
+                    }
+                }
+
+            }
+            return null;
+        }
+        static List<T> FindVisualChildren<T>(UIElement element) where T : UIElement
+        {
+            List<T> children = new List<T>();
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                UIElement child = VisualTreeHelper.GetChild(element, i) as UIElement;
+
+                T correctlyTyped = child as T;
+                if (correctlyTyped != null)
+                {
+                    children.Add(child as T);
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        children.Add(childOfChild);
+                    }
+                }
+                else if (child != null)
+                {
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        children.Add(childOfChild);
+                    }
+                }
+            }
+            return children;
         }
     }
 }

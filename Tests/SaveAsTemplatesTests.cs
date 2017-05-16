@@ -62,20 +62,20 @@ namespace Tests
             expectedSystem = expectedTemplates.SystemTemplates[0];
             expectedEquipment = expectedTemplates.EquipmentTemplates[0];
             expectedSubScope = expectedTemplates.SubScopeTemplates[0];
-            expectedDevice = expectedTemplates.DeviceCatalog[0];
-            expectedManufacturer = expectedTemplates.ManufacturerCatalog[0];
-            expectedTag = expectedTemplates.Tags[0];
+            expectedDevice = expectedTemplates.Catalogs.Devices[0];
+            expectedManufacturer = expectedTemplates.Catalogs.Manufacturers[0];
+            expectedTag = expectedTemplates.Catalogs.Tags[0];
             expectedController = expectedTemplates.ControllerTemplates[0];
-            expectedAssociatedCost = expectedTemplates.AssociatedCostsCatalog[0];
-            expectedConnectionType = expectedTemplates.ConnectionTypeCatalog[0];
-            expectedConduitType = expectedTemplates.ConduitTypeCatalog[0];
+            expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
+            expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
+            expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];
 
             path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, expectedTemplates);
+            EstimatingLibraryDatabase.SaveNew(path, expectedTemplates);
 
-            actualTemplates = EstimatingLibraryDatabase.LoadDBToTemplates(path);
+            actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
@@ -104,7 +104,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECDevice dev in actualTemplates.DeviceCatalog)
+            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid)
                 {
@@ -113,7 +113,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECManufacturer man in actualTemplates.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -122,7 +122,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualTemplates.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -140,7 +140,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECAssociatedCost cost in actualTemplates.AssociatedCostsCatalog)
+            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -149,7 +149,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECConnectionType connectionType in actualTemplates.ConnectionTypeCatalog)
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
@@ -158,7 +158,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECConduitType conduitType in actualTemplates.ConduitTypeCatalog)
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {
@@ -467,8 +467,8 @@ namespace Tests
         public void SaveAs_Templates_PanelType()
         {
             //Arrange
-            TECPanelType expectedPanelType = expectedTemplates.PanelTypeCatalog[0];
-            TECPanelType actualPanelType = actualTemplates.PanelTypeCatalog[0];
+            TECPanelType expectedPanelType = expectedTemplates.Catalogs.PanelTypes[0];
+            TECPanelType actualPanelType = actualTemplates.Catalogs.PanelTypes[0];
 
             Assert.AreEqual(expectedPanelType.Name, actualPanelType.Name);
             Assert.AreEqual(expectedPanelType.Cost, actualPanelType.Cost);
@@ -478,8 +478,8 @@ namespace Tests
         public void SaveAs_Templates_IOModule()
         {
             //Arrange
-            TECIOModule expectedIOModule = expectedTemplates.IOModuleCatalog[0];
-            TECIOModule actualIOModule = actualTemplates.IOModuleCatalog[0];
+            TECIOModule expectedIOModule = expectedTemplates.Catalogs.IOModules[0];
+            TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
 
             Assert.AreEqual(expectedIOModule.Name, actualIOModule.Name);
             Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost);

@@ -16,7 +16,6 @@ namespace Tests
     {
         private const bool DEBUG = true;
 
-
         static TECBid expectedBid;
         static TECLabor expectedLabor;
         static TECSystem expectedSystem;
@@ -30,9 +29,9 @@ namespace Tests
         static TECNote expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
-        static TECDrawing expectedDrawing;
-        static TECPage expectedPage;
-        static TECVisualScope expectedVisualScope;
+        //static TECDrawing expectedDrawing;
+        //static TECPage expectedPage;
+        //static TECVisualScope expectedVisualScope;
         static TECController expectedController;
         static TECProposalScope expectedPropScope;
 
@@ -52,9 +51,9 @@ namespace Tests
         static TECNote actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
-        static TECDrawing actualDrawing;
-        static TECPage actualPage;
-        static TECVisualScope actualVisualScope;
+        //static TECDrawing actualDrawing;
+        //static TECPage actualPage;
+        //static TECVisualScope actualVisualScope;
         static TECController actualController;
         static TECProposalScope actualPropScope;
 
@@ -83,7 +82,7 @@ namespace Tests
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
 
-            expectedManufacturer = expectedBid.ManufacturerCatalog[0];
+            expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
             expectedPoint = expectedSubScope.Points[0];
 
             expectedBranch = null;
@@ -98,7 +97,7 @@ namespace Tests
 
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
-            expectedTag = expectedBid.Tags[0];
+            expectedTag = expectedBid.Catalogs.Tags[0];
 
             //expectedDrawing = expectedBid.Drawings[0];
             //expectedPage = expectedDrawing.Pages[0];
@@ -119,8 +118,8 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveBidToNewDB(path, expectedBid);
-            actualBid = EstimatingLibraryDatabase.LoadDBToBid(path, new TECTemplates());
+            EstimatingLibraryDatabase.SaveNew(path, expectedBid);
+            actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
             actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
@@ -166,7 +165,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECManufacturer man in actualBid.ManufacturerCatalog)
+            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
                 {
@@ -211,7 +210,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualBid.Tags)
+            foreach (TECTag tag in actualBid.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -246,7 +245,7 @@ namespace Tests
             //        break;
             //    }
             //}
-            
+
             foreach (TECController con in actualBid.Controllers)
             {
                 if (con.Guid == expectedController.Guid)
@@ -381,9 +380,9 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             int actualQuantity = 0;
-            foreach(TECDevice device in actualDevices)
+            foreach (TECDevice device in actualDevices)
             {
-                if(device.Guid == actualDevice.Guid)
+                if (device.Guid == actualDevice.Guid)
                 {
                     actualQuantity++;
                 }
@@ -565,7 +564,7 @@ namespace Tests
             Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
             Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
-            
+
         }
 
         [TestMethod]
@@ -608,12 +607,12 @@ namespace Tests
         public void SaveAs_Bid_PanelType()
         {
             //Arrange
-            TECPanelType expectedCost = expectedBid.PanelTypeCatalog[0];
-            TECPanelType actualCost = expectedBid.PanelTypeCatalog[0];
+            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes[0];
+            TECPanelType actualCost = expectedBid.Catalogs.PanelTypes[0];
 
-            Assert.AreEqual(expectedCost.Guid, expectedBid.PanelTypeCatalog[0].Guid);
-            Assert.AreEqual(expectedCost.Name, expectedBid.PanelTypeCatalog[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedBid.PanelTypeCatalog[0].Cost);
+            Assert.AreEqual(expectedCost.Guid, expectedBid.Catalogs.PanelTypes[0].Guid);
+            Assert.AreEqual(expectedCost.Name, expectedBid.Catalogs.PanelTypes[0].Name);
+            Assert.AreEqual(expectedCost.Cost, expectedBid.Catalogs.PanelTypes[0].Cost);
         }
     }
 }

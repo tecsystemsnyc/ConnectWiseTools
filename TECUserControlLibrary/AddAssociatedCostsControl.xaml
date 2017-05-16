@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -22,7 +23,7 @@
         <Button Grid.Row="0" Grid.Column="1" Content="Associate Cost"
                             Command="{Binding ElementName=parent, Path=AddAssociatedCostCommand}"
                             Margin="5"/>
-        <local:AssociatedCostsGridControl Grid.Row="1" Grid.ColumnSpan="2"
+        <grids:AssociatedCostsGridControl Grid.Row="1" Grid.ColumnSpan="2"
                                           CostsSource="{Binding ElementName=parent, Path=AssociatedCostList}"/>
     </Grid>
 </UserControl>

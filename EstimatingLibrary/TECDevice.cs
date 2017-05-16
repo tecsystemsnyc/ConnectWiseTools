@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace EstimatingLibrary
         private IOType _ioType;
         private TECManufacturer _manufacturer;
 
-        public double Cost {
+        public double Cost
+        {
             get { return _cost; }
             set
             {
@@ -66,8 +68,16 @@ namespace EstimatingLibrary
         {
             get { return getLaborCost(); }
         }
-        #endregion//Properties
 
+        public double ElectricalCost
+        {
+            get { return 0; }
+        }
+        public double ElectricalLabor
+        {
+            get { return 0; }
+        }
+        #endregion//Properties
 
         #region Constructors
         public TECDevice(Guid guid) : base(guid)
@@ -76,9 +86,9 @@ namespace EstimatingLibrary
             _connectionType = new TECConnectionType();
         }
         public TECDevice() : this(Guid.NewGuid()) { }
-        
+
         //Copy Constructor
-        public TECDevice(TECDevice deviceSource) 
+        public TECDevice(TECDevice deviceSource)
             : this(deviceSource.Guid)
         {
             this.copyPropertiesFromScope(deviceSource);
@@ -86,7 +96,7 @@ namespace EstimatingLibrary
             _manufacturer = deviceSource.Manufacturer;
             _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
-            
+
         }
         #endregion //Constructors
 
@@ -99,8 +109,7 @@ namespace EstimatingLibrary
 
         public override Object DragDropCopy()
         {
-            TECDevice outDevice = new TECDevice(this);
-            return outDevice;
+            return this;
         }
 
         private double getMaterialCost()

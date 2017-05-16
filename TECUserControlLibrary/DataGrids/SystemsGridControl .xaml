@@ -21,11 +21,17 @@
     </UserControl.Resources>
     
     <Grid DataContext="{Binding ElementName=parent}">
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="30"/>-->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--<Button Style="{StaticResource CollapseAll}" Content="Collapse All"/>-->
         <DataGrid ItemsSource="{Binding Path=SystemsSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
-                  CanUserAddRows="{Binding Path=AllowAddingNew}">
+                  CanUserAddRows="{Binding Path=AllowAddingNew}"
+                  Grid.Row="1">
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
@@ -56,6 +62,10 @@
                 <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" MinWidth="80" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemSubScopeCount,
+                                    Source={StaticResource proxy}}"/>
+                <DataGridTextColumn Binding="{Binding PointNumber}" Header="IO" Width="Auto" MinWidth="20" IsReadOnly="True"
+                                    ElementStyle="{StaticResource RightCell}"
+                                    Visibility="{Binding Data.DataGridVisibilty.SystemPointNumber,
                                     Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding BudgetPriceModifier, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}, UpdateSourceTrigger=LostFocus}" 
                                     Header="Modifier"

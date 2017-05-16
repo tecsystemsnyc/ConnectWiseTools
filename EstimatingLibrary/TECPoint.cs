@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace EstimatingLibrary
 
     public enum PointTypes { AI = 1, AO, BI, BO, Serial };
 
-    public class TECPoint : TECScope
+    public class TECPoint : TECScope, PointComponent
     {
         #region Properties
         private PointTypes _type;
@@ -35,11 +36,20 @@ namespace EstimatingLibrary
                 if (convertStringToType(value) != 0)
                 {
                     Type = convertStringToType(value);
-                } else
+                }
+                else
                 {
                     string message = "TypeString set failed in TECPoint. Unrecognized TypeString.";
                     throw new InvalidCastException(message);
                 }
+            }
+        }
+
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
             }
         }
         #endregion //Properties
@@ -47,7 +57,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECPoint(Guid guid) : base(guid) { }
         public TECPoint() : this(Guid.NewGuid()) { }
-        
+
         public TECPoint(TECPoint pointSource) : this()
         {
             _type = pointSource.Type;
@@ -67,6 +77,11 @@ namespace EstimatingLibrary
         {
             TECPoint outPoint = new TECPoint(this);
             return outPoint;
+        }
+
+        private int getPointNumber()
+        {
+            return Quantity;
         }
         #region Conversion Methods
         public static PointTypes convertStringToType(string type)

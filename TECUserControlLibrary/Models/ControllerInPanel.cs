@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
-{ 
+{
     public class ControllerInPanel : TECObject
     {
         private TECPanel _panel;
@@ -15,9 +15,12 @@ namespace TECUserControlLibrary.Models
             get { return _panel; }
             set
             {
-                handlePanelSelection(_panel, value);
-                _panel = value;
-                RaisePropertyChanged("Panel");
+                if(value != Panel)
+                {
+                    handlePanelSelection(_panel, value);
+                    _panel = value;
+                    RaisePropertyChanged("Panel");
+                }
             }
         }
 
@@ -31,7 +34,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("Controller");
             }
         }
-        
+
         public ControllerInPanel(TECController controller, TECPanel panel)
         {
             _controller = controller;
@@ -40,17 +43,20 @@ namespace TECUserControlLibrary.Models
 
         private void handlePanelSelection(TECPanel originalPanel, TECPanel selectedPanel)
         {
+            if (originalPanel != null)
+            {
+                originalPanel.Controllers.Remove(Controller);
+            }
             if (selectedPanel != null)
             {
                 selectedPanel.Controllers.Add(Controller);
             }
-            else if (selectedPanel == null)
-            {
-                if(originalPanel != null)
-                {
-                    originalPanel.Controllers.Remove(Controller);
-                }
-            }
+        }
+
+        public void UpdatePanel(TECPanel panel)
+        {
+            _panel = panel;
+            RaisePropertyChanged("Panel");
         }
 
         public override object Copy()

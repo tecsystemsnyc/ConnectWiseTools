@@ -38,7 +38,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(cost);
             _cost = cost.Cost;
         }
-        
+
         public override object Copy()
         {
             var outCost = new TECCost();

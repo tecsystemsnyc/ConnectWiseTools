@@ -1,5 +1,6 @@
 ﻿using DebugLibrary;
 using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using System.Windows;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public enum Change {Add, Remove, Edit, AddRelationship, RemoveRelationship};
+    public enum Change { Add, Remove, Edit, AddRelationship, RemoveRelationship };
     public class ChangeStack
     {
         //List of change, target object, reference object
@@ -25,12 +26,9 @@ namespace EstimatingUtilitiesLibrary
         public TECBid Bid;
         public TECTemplates Templates;
 
-        private const bool DEBUG_PROPERTIES = false;
-        private const bool DEBUG_STACK = false;
-        private const bool DEBUG_REGISTER = false;
-        
         private bool isDoing = false;
-        
+        private ChangeWatcher watcher;
+
         #region Constructors
         public ChangeStack()
         {
@@ -39,15 +37,23 @@ namespace EstimatingUtilitiesLibrary
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
         }
-        public ChangeStack(TECBid bid) : this()
+        public ChangeStack(TECScopeManager scopeManager) : this()
         {
-            Bid = bid;
-            registerBidChanges(bid);
-        }
-        public ChangeStack(TECTemplates templates) : this()
-        {
-            Templates = templates;
-            registerTemplatesChanges(templates);
+            watcher = new ChangeWatcher(scopeManager);
+            watcher.Changed += Object_PropertyChanged;
+            if (scopeManager is TECBid)
+            {
+                Bid = scopeManager as TECBid;
+            }
+            else if (scopeManager is TECTemplates)
+            {
+                Templates = scopeManager as TECTemplates;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
         }
         #endregion
 
@@ -69,7 +75,7 @@ namespace EstimatingUtilitiesLibrary
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             if (!isDoing) { RedoStack.Clear(); }
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -81,57 +87,55 @@ namespace EstimatingUtilitiesLibrary
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
-                    item.TargetObject.PropertyChanged += Object_PropertyChanged;
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "Remove")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
-                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(item);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "Edit")
                 {
                     message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "ChildChanged")
                 {
                     message = "Child change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "ObjectPropertyChanged")
                 {
                     message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<StackItem>();
@@ -149,12 +153,12 @@ namespace EstimatingUtilitiesLibrary
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RelationshipPropertyChanged")
                 {
                     message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     var oldNew = newValue as Tuple<Object, Object>;
                     var toSave = new List<StackItem>();
@@ -172,105 +176,114 @@ namespace EstimatingUtilitiesLibrary
                     }
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "MetaAdd")
                 {
                     message = "MetaAdd change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
-                    ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "MetaRemove")
                 {
                     message = "MetaRemove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
-                    ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "AddRelationship")
                 {
                     message = "Add relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.AddRelationship, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemoveRelationship")
                 {
                     message = "Remove relationship change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.RemoveRelationship, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemovedSubScope") { }
                 else if (e.PropertyName == "AddCatalog")
                 {
                     message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Add, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else if (e.PropertyName == "RemoveCatalog")
                 {
                     message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Remove, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 //else if (e.PropertyName == "Index Changed")
                 //{
 
                 //}
+                else if (e.PropertyName == "Catalogs")
+                {
+                    message = "Catalog change: " + oldValue;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                    item = new StackItem(Change.Add, args);
+                    handleChildren(item);
+
+                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                }
                 else
                 {
                     message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                     item = new StackItem(Change.Edit, args);
                     UndoStack.Add(item);
                     SaveStack.Add(item);
 
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
-                
+
             }
             else
             {
                 message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         #endregion //Event Handlers
@@ -281,7 +294,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             StackItem item = UndoStack.Last();
-            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DEBUG_STACK);
+            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count(), DebugBooleans.Stack);
             if (item.Change == Change.Add || item.Change == Change.AddRelationship)
             {
                 handleAdd(item);
@@ -308,7 +321,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             string message = "After Undoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             isDoing = false;
         }
@@ -318,7 +331,7 @@ namespace EstimatingUtilitiesLibrary
             StackItem item = RedoStack.Last();
 
             string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count();
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             if (item.Change == Change.Add)
             {
@@ -347,7 +360,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             message = "After Redoing: " + item.Change.ToString() + "    #Undo: " + UndoStack.Count() + "    #Redo: " + RedoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
 
             isDoing = false;
         }
@@ -375,191 +388,6 @@ namespace EstimatingUtilitiesLibrary
             return outStack;
         }
 
-        private void registerBidChanges(TECBid Bid)
-        {
-            //Bid Changed
-            Bid.PropertyChanged += Object_PropertyChanged;
-            Bid.Labor.PropertyChanged += Object_PropertyChanged;
-            Bid.Parameters.PropertyChanged += Object_PropertyChanged;
-            //System Changed
-            foreach (TECScopeBranch branch in Bid.ScopeTree)
-            { registerScope(branch); }
-            //Notes changed
-            foreach (TECNote note in Bid.Notes)
-            { note.PropertyChanged += Object_PropertyChanged; }
-            //Exclusions changed
-            foreach (TECExclusion exclusion in Bid.Exclusions)
-            { exclusion.PropertyChanged += Object_PropertyChanged; }
-            //Locations changed
-            foreach (TECLocation location in Bid.Locations)
-            { location.PropertyChanged += Object_PropertyChanged; }
-            //Manufacturers Changed
-            foreach (TECManufacturer manufacturer in Bid.ManufacturerCatalog)
-            { manufacturer.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECSystem system in Bid.Systems)
-            { registerSystems(system); }
-            //Bid.Drawings.CollectionChanged += Bid_CollectionChanged;
-            foreach (TECDrawing drawing in Bid.Drawings)
-            {
-                drawing.PropertyChanged += Object_PropertyChanged;
-                foreach (TECPage page in drawing.Pages)
-                {
-                    page.PropertyChanged += Object_PropertyChanged;
-                    foreach (TECVisualScope vs in page.PageScope)
-                    { vs.PropertyChanged += Object_PropertyChanged; }
-                }
-            }
-            foreach (TECController controller in Bid.Controllers)
-            { registerController(controller); }
-            foreach (TECProposalScope propScope in Bid.ProposalScope)
-            { registerPropScope(propScope); }
-            foreach(TECConnectionType connectionType in Bid.ConnectionTypes)
-            { connectionType.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECConduitType conduitType in Bid.ConduitTypes)
-            { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECAssociatedCost cost in Bid.AssociatedCostsCatalog)
-            { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECMiscCost cost in Bid.MiscCosts)
-            { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscWiring wiring in Bid.MiscWiring)
-            { wiring.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType panelType in Bid.PanelTypeCatalog)
-            { panelType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanel panel in Bid.Panels)
-            { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECIOModule ioModule in Bid.IOModuleCatalog)
-            {
-                ioModule.PropertyChanged += Object_PropertyChanged;
-            }
-            foreach (TECDevice device in Bid.DeviceCatalog)
-            { device.PropertyChanged += Object_PropertyChanged; }
-        }
-        private void registerTemplatesChanges(TECTemplates Templates)
-        {
-            //Template Changed
-            Templates.PropertyChanged += Object_PropertyChanged;
-            foreach (TECSystem system in Templates.SystemTemplates)
-            { registerSystems(system); }
-            foreach (TECEquipment equipment in Templates.EquipmentTemplates)
-            { registerEquipment(equipment); }
-            foreach (TECSubScope subScope in Templates.SubScopeTemplates)
-            { registerSubScope(subScope); }
-            foreach (TECDevice device in Templates.DeviceCatalog)
-            { device.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECTag tag in Templates.Tags)
-            { tag.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECManufacturer manufacturer in Templates.ManufacturerCatalog)
-            { manufacturer.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECController controller in Templates.ControllerTemplates)
-            { registerController(controller); }
-            foreach (TECConnectionType connectionType in Templates.ConnectionTypeCatalog)
-            { connectionType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECConduitType conduitType in Templates.ConduitTypeCatalog)
-            { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECAssociatedCost cost in Templates.AssociatedCostsCatalog)
-            { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscCost addition in Templates.MiscCostTemplates)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscWiring addition in Templates.MiscWiringTemplates)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType addition in Templates.PanelTypeCatalog)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanel panel in Templates.PanelTemplates)
-            { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
-            { registerControlledScope(scope); }
-            foreach (TECIOModule ioModule in Templates.IOModuleCatalog)
-            {
-                ioModule.PropertyChanged += Object_PropertyChanged;
-            }
-        }
-        private void registerSubScope(TECSubScope subScope)
-        {
-            //Subscope Changed
-            subScope.PropertyChanged += Object_PropertyChanged;
-            foreach (TECPoint point in subScope.Points)
-            {
-                //Point Changed
-                point.PropertyChanged += Object_PropertyChanged;
-            }
-        }
-        private void registerEquipment(TECEquipment equipment)
-        {
-            //equipment Changed
-            equipment.PropertyChanged += Object_PropertyChanged;
-            foreach (TECSubScope subScope in equipment.SubScope)
-            {
-                registerSubScope(subScope);
-            }
-        }
-        private void registerSystems(TECSystem system)
-        {
-            //SystemChanged
-            system.PropertyChanged += Object_PropertyChanged;
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                registerEquipment(equipment);
-            }
-        }
-        private void registerScope(TECScopeBranch branch)
-        {
-
-            DebugHandler.LogDebugMessage(("Scope Branch Registered. Name: " + branch.Name), DEBUG_REGISTER);
-            branch.PropertyChanged += Object_PropertyChanged;
-            foreach(TECScopeBranch scope in branch.Branches)
-            {
-                registerScope(scope);
-            }
-        }
-        private void unregisterScope(TECScopeBranch branch)
-        {
-            foreach (TECScopeBranch scope in branch.Branches)
-            {
-                scope.PropertyChanged -= Object_PropertyChanged;
-                unregisterScope(scope);
-            }
-        }
-        private void registerPropScope(TECProposalScope pScope)
-        {
-            pScope.PropertyChanged += Object_PropertyChanged;
-            foreach(TECProposalScope child in pScope.Children)
-            {
-                registerPropScope(child);
-            }
-            foreach(TECScopeBranch child in pScope.Notes)
-            {
-                registerScope(child);
-            }
-        }
-        private void registerControlledScope(TECControlledScope scope)
-        {
-            scope.PropertyChanged += Object_PropertyChanged;
-            foreach(TECPanel panel in scope.Panels)
-            {
-                panel.PropertyChanged += Object_PropertyChanged;
-            }
-            foreach(TECController controller in scope.Controllers)
-            {
-                registerController(controller);
-            }
-            foreach(TECSystem system in scope.Systems)
-            {
-                registerSystems(system);
-            }
-        }
-        private void registerController(TECController controller)
-        {
-            controller.PropertyChanged += Object_PropertyChanged;
-            foreach(TECConnection connection in controller.ChildrenConnections)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
-            }
-            foreach(TECIO io in controller.IO)
-            {
-                io.PropertyChanged += Object_PropertyChanged;
-            }
-        }
-        
         private void handleAdd(StackItem item)
         {
             try
@@ -570,7 +398,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.ReferenceObject + " and reference object " + item.TargetObject + " not handled in add";
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         private void handleRemove(StackItem item)
@@ -583,7 +411,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.ReferenceObject + " and reference object " + item.TargetObject + " not handled in remove";
-                DebugHandler.LogDebugMessage(message, DEBUG_STACK);
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         private void handleEdit(StackItem item)
@@ -591,15 +419,15 @@ namespace EstimatingUtilitiesLibrary
             var newItem = item.TargetObject;
             var oldItem = item.ReferenceObject;
             var properties = newItem.GetType().GetProperties();
-            
+
             foreach (var property in properties)
             {
-                if(property.GetSetMethod() != null)
+                if (property.GetSetMethod() != null)
                 { property.SetValue(newItem, property.GetValue(oldItem)); }
                 else
                 {
                     string message = "Property could not be set: " + property.Name;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 }
             }
         }
@@ -620,33 +448,35 @@ namespace EstimatingUtilitiesLibrary
                 else
                 {
                     string message = "Property could not be set: " + property.Name;
-                    DebugHandler.LogDebugMessage(message, DEBUG_PROPERTIES);
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                 }
             }
             return outObj;
         }
-        
+
         private void handleChildren(StackItem item)
         {
             var newItem = item.TargetObject;
-            
+
             if (newItem is TECSystem)
             {
                 handleSystemChildren(newItem as TECSystem, item.Change);
-            } else if (newItem is TECEquipment)
+            }
+            else if (newItem is TECEquipment)
             {
                 handleEquipmentChildren(newItem as TECEquipment, item.Change);
-            } else if (newItem is TECSubScope)
+            }
+            else if (newItem is TECSubScope)
             {
                 handleSubScopeChildren(newItem as TECSubScope, item.Change);
             }
-            else if (newItem is TECController && (item.ReferenceObject is TECBid 
-                || item.ReferenceObject is TECTemplates 
+            else if (newItem is TECController && (item.ReferenceObject is TECBid
+                || item.ReferenceObject is TECTemplates
                 || item.ReferenceObject is TECControlledScope))
             {
                 handleControllerChildren(newItem as TECController, item.Change);
             }
-            else if (newItem is TECDevice && (item.ReferenceObject is TECBid || item.ReferenceObject is TECTemplates))
+            else if (newItem is TECDevice && (item.ReferenceObject is TECCatalogs))
             {
                 handleDeviceChildren(newItem as TECDevice, item.Change);
             }
@@ -654,7 +484,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleScopeChildren(newItem as TECScope, item.Change);
             }
-            else if (newItem is TECConnection || newItem is TECSubScopeConnection || newItem is TECNetworkConnection )
+            else if (newItem is TECConnection || newItem is TECSubScopeConnection || newItem is TECNetworkConnection)
             {
                 handleConnectionChildren(newItem as TECConnection, item.Change);
             }
@@ -671,11 +501,15 @@ namespace EstimatingUtilitiesLibrary
                 foreach (TECPage page in ((TECDrawing)newItem).Pages)
                 {
                     SaveStack.Add(new StackItem(Change.Add, newItem, page));
-                    page.PropertyChanged += Object_PropertyChanged;
                 }
-            } else if (newItem is TECIOModule)
+            }
+            else if (newItem is TECIOModule)
             {
                 handleIOModuelChildren(newItem as TECIOModule, item.Change);
+            }
+            else if (newItem is TECCatalogs)
+            {
+                handleCatalogsChildren(newItem as TECCatalogs, item.Change);
             }
         }
         private void handleSystemChildren(TECSystem system, Change change)
@@ -686,18 +520,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, (object)system, (object)newEquipment);
                 SaveStack.Add(item);
-                if (change == Change.Add)
-                {
-                    newEquipment.PropertyChanged += Object_PropertyChanged;
-                }
-                else if (change == Change.Remove)
-                {
-                    newEquipment.PropertyChanged -= Object_PropertyChanged;
-                }
-                else
-                {
-                    throw new ArgumentException("Change type not valid.");
-                }
 
                 handleEquipmentChildren(newEquipment, change);
             }
@@ -710,19 +532,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, (object)equipment, (object)newSubScope);
                 SaveStack.Add(item);
-                if (change == Change.Add)
-                {
-                    newSubScope.PropertyChanged += Object_PropertyChanged;
-                }
-                else if (change == Change.Remove)
-                {
-                    newSubScope.PropertyChanged -= Object_PropertyChanged;
-                }
-                else
-                {
-                    throw new ArgumentException("Change type not valid.");
-                }
-
                 handleSubScopeChildren(newSubScope, change);
             }
         }
@@ -735,19 +544,6 @@ namespace EstimatingUtilitiesLibrary
                 handleScopeChildren(newPoint as TECScope, change);
                 item = new StackItem(change, (object)subScope, (object)newPoint);
                 SaveStack.Add(item);
-                if (change == Change.Add)
-                {
-                    newPoint.PropertyChanged += Object_PropertyChanged;
-                }
-                else if (change == Change.Remove)
-                {
-                    newPoint.PropertyChanged -= Object_PropertyChanged;
-                }
-                
-                else
-                {
-                    throw new ArgumentException("Change type not valid.");
-                }
             }
             foreach (TECDevice newDevice in subScope.Devices)
             {
@@ -760,17 +556,18 @@ namespace EstimatingUtilitiesLibrary
             //Conduit Type
             if (connection.ConduitType != null)
             {
-                if(change == Change.Add)
+                if (change == Change.Add)
                 {
                     SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
 
-                } else if (change == Change.Remove)
+                }
+                else if (change == Change.Remove)
                 {
                     SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
 
                 }
             }
-            
+
             #region If Connection is NetworkConnection
             if (connection is TECNetworkConnection)
             {
@@ -835,7 +632,7 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(controller as TECScope, change);
             StackItem item;
-            if(controller.Manufacturer != null)
+            if (controller.Manufacturer != null)
             {
                 item = new StackItem(change, controller, controller.Manufacturer);
                 SaveStack.Add(item);
@@ -850,23 +647,23 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
                 SaveStack.Add(item);
-                if(io.IOModule != null)
+                if (io.IOModule != null)
                 {
                     item = new StackItem(change, io, io.IOModule);
                     SaveStack.Add(item);
                 }
-                
+
             }
         }
         private void handleScopeChildren(TECScope scope, Change change)
         {
             StackItem item;
-            foreach(TECAssociatedCost cost in scope.AssociatedCosts)
+            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECAssociatedCost));
                 SaveStack.Add(item);
             }
-            foreach(TECTag tag in scope.Tags)
+            foreach (TECTag tag in scope.Tags)
             {
                 item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECTag));
                 SaveStack.Add(item);
@@ -878,7 +675,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECSystem system in scope.Systems)
             {
                 handleScopeChildren(system as TECScope, change);
-                system.PropertyChanged += Object_PropertyChanged;
                 item = new StackItem(change, (object)scope, (object)system);
                 SaveStack.Add(item);
                 handleSystemChildren(system, change);
@@ -886,15 +682,13 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECController controller in scope.Controllers)
             {
                 handleScopeChildren(controller as TECScope, change);
-                controller.PropertyChanged += Object_PropertyChanged;
                 item = new StackItem(change, (object)scope, (object)controller);
                 SaveStack.Add(item);
                 handleControllerChildren(controller, change);
             }
-            foreach(TECPanel panel in scope.Panels)
+            foreach (TECPanel panel in scope.Panels)
             {
                 handleScopeChildren(panel as TECScope, change);
-                panel.PropertyChanged += Object_PropertyChanged;
                 item = new StackItem(change, (object)scope, (object)panel);
                 SaveStack.Add(item);
             }
@@ -923,24 +717,72 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(ioModule as TECScope, change);
             StackItem item;
-            if(ioModule.Manufacturer != null)
+            if (ioModule.Manufacturer != null)
             {
                 item = new StackItem(change, ioModule, ioModule.Manufacturer);
                 SaveStack.Add(item);
             }
         }
-        
+        private void handleCatalogsChildren(TECCatalogs catalogs, Change change)
+        {
+            foreach (TECDevice device in catalogs.Devices)
+            {
+                SaveStack.Add(new StackItem(Change.Add, device, catalogs));
+                handleDeviceChildren(device, change);
+            }
+            foreach (TECConnectionType type in catalogs.ConnectionTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECConduitType type in catalogs.ConduitTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
+            {
+                SaveStack.Add(new StackItem(Change.Add, cost, catalogs));
+                handleScopeChildren(cost, change);
+            }
+            foreach (TECPanelType type in catalogs.PanelTypes)
+            {
+                SaveStack.Add(new StackItem(Change.Add, type, catalogs));
+                handleScopeChildren(type, change);
+            }
+            foreach (TECIOModule ioModule in catalogs.IOModules)
+            {
+                SaveStack.Add(new StackItem(Change.Add, ioModule, catalogs));
+                handleIOModuelChildren(ioModule, change);
+            }
+            foreach (TECManufacturer manufacturer in catalogs.Manufacturers)
+            {
+                SaveStack.Add(new StackItem(Change.Add, manufacturer, catalogs));
+            }
+            foreach (TECTag tag in catalogs.Tags)
+            {
+                SaveStack.Add(new StackItem(Change.Add, tag, catalogs));
+            }
+
+        }
+
         private void registerGeneric(TECObject obj)
         {
             obj.PropertyChanged += Object_PropertyChanged;
             var properties = obj.GetType().GetProperties();
-            foreach(var property in properties)
+            foreach (var property in properties)
             {
-
+                if (property.GetSetMethod() != null)
+                {
+                    if (property.PropertyType is IList)
+                    {
+                        //foreach(object childObj in )
+                    }
+                }
             }
 
         }
         #endregion
-        
+
     }
 }

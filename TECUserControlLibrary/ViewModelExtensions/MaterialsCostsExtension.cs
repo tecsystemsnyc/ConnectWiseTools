@@ -195,7 +195,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
-        public ICommand AddAssociatedCostCommand { get; private set; } 
+        public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
 
@@ -214,14 +214,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             setupCommands();
             setupInterfaceDefaults();
         }
-        
+
         #region Methods
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
             setupInterfaceDefaults();
         }
-        
+
         private void setupCommands()
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
@@ -237,7 +237,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             connectionType.Name = ConnectionTypeName;
             connectionType.Cost = ConnectionTypeCost;
             connectionType.Labor = ConnectionTypeLabor;
-            Templates.ConnectionTypeCatalog.Add(connectionType);
+            Templates.Catalogs.ConnectionTypes.Add(connectionType);
             ConnectionTypeName = "";
             ConnectionTypeCost = 0;
             ConnectionTypeLabor = 0;
@@ -248,7 +248,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             conduitType.Name = ConduitTypeName;
             conduitType.Cost = ConduitTypeCost;
             conduitType.Labor = ConduitTypeLabor;
-            Templates.ConduitTypeCatalog.Add(conduitType);
+            Templates.Catalogs.ConduitTypes.Add(conduitType);
             ConduitTypeName = "";
             ConduitTypeCost = 0;
             ConduitTypeLabor = 0;
@@ -259,14 +259,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             associatedCost.Name = AssociatedCostName;
             associatedCost.Cost = AssociatedCostCost;
             associatedCost.Labor = AssociatedCostLabor;
-            Templates.AssociatedCostsCatalog.Add(associatedCost);
+            Templates.Catalogs.AssociatedCosts.Add(associatedCost);
             AssociatedCostName = "";
             AssociatedCostCost = 0;
             AssociatedCostLabor = 0;
         }
         private bool canAddAssociatedCost()
         {
-            if(AssociatedCostName == "")
+            if (AssociatedCostName == "")
             {
                 return false;
             }
@@ -281,13 +281,13 @@ namespace TECUserControlLibrary.ViewModelExtensions
             panelType.Name = PanelTypeName;
             panelType.Cost = PanelTypeCost;
 
-            Templates.PanelTypeCatalog.Add(panelType);
+            Templates.Catalogs.PanelTypes.Add(panelType);
             PanelTypeName = "";
             PanelTypeCost = 0;
         }
         private bool canAddPanelTypeExecute()
         {
-            if(PanelTypeName != "")
+            if (PanelTypeName != "")
             {
                 return true;
             }
@@ -305,7 +305,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ioModule.Description = IOModuleDescription;
             ioModule.Manufacturer = IOModuleManufacturer;
 
-            Templates.IOModuleCatalog.Add(ioModule);
+            Templates.Catalogs.IOModules.Add(ioModule);
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;

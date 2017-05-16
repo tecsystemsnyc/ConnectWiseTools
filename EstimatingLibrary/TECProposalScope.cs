@@ -61,7 +61,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                 throw new NotImplementedException();
+                throw new NotImplementedException();
             }
         }
         public TECProposalScope(TECScope scope, bool isProposed, ObservableCollection<TECScopeBranch> notes)
@@ -116,7 +116,7 @@ namespace EstimatingLibrary
                     {
                         removeProposalScope(item as TECScope);
                     }
-                    else if(item is TECProposalScope)
+                    else if (item is TECProposalScope)
                     {
                         NotifyPropertyChanged("MetaRemove", this, item);
                     }
@@ -130,19 +130,19 @@ namespace EstimatingLibrary
         {
             TECProposalScope pScopeToReturn = new TECProposalScope(this.Scope);
             pScopeToReturn._isProposed = IsProposed;
-            foreach(TECProposalScope child in Children)
+            foreach (TECProposalScope child in Children)
             {
                 pScopeToReturn.Children.Add(child.Copy() as TECProposalScope);
             }
 
-            foreach(TECScopeBranch branch in Notes)
+            foreach (TECScopeBranch branch in Notes)
             {
                 pScopeToReturn.Notes.Add(branch.Copy() as TECScopeBranch);
             }
 
             return pScopeToReturn;
         }
-        
+
         private void addProposalScope(TECScope scope)
         {
             this.Children.Add(new TECProposalScope(scope));

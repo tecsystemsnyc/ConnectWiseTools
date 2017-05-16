@@ -60,13 +60,13 @@ namespace EstimatingLibrary
         #region Methods
         private void scopeChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "X" || e.PropertyName == "Y")
+            if (e.PropertyName == "X" || e.PropertyName == "Y")
             {
-                foreach(TECConnection connection in Connections)
+                foreach (TECConnection connection in Connections)
                 {
                     connection.Length = getLength(Scope1, Scope2, 1);
                 }
-               
+
             }
         }
         double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
@@ -80,6 +80,6 @@ namespace EstimatingLibrary
             throw new NotImplementedException();
         }
         #endregion
-        
+
     }
 }

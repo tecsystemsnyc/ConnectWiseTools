@@ -41,16 +41,16 @@ namespace Tests
             //Assert
             string expectedName = "Unit Testimate";
             Assert.AreEqual(expectedName, actualBid.Name);
-            
+
             string expectedNumber = "1701-117";
             Assert.AreEqual(expectedNumber, actualBid.BidNumber);
-            
+
             DateTime expectedDueDate = new DateTime(1969, 7, 20);
             Assert.AreEqual(expectedDueDate, actualBid.DueDate);
-            
+
             string expectedSales = "Mrs. Test";
             Assert.AreEqual(expectedSales, actualBid.Salesperson);
-            
+
             string expectedEstimator = "Mr. Test";
             Assert.AreEqual(expectedEstimator, actualBid.Estimator);
         }
@@ -129,13 +129,13 @@ namespace Tests
             //Assert
             string expectedName = "Test System";
             Assert.AreEqual(expectedName, actualSystem.Name);
-            
+
             string expectedDescription = "Test System Description";
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-            
+
             int expectedQuantity = 123;
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
-            
+
             double expectedBP = 123;
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
         }
@@ -149,13 +149,13 @@ namespace Tests
             //Assert
             string expectedName = "Test Equipment";
             Assert.AreEqual(expectedName, actualEquipment.Name);
-            
+
             string expectedDescription = "Test Equipment Description";
             Assert.AreEqual(expectedDescription, actualEquipment.Description);
-            
+
             int expectedQuantity = 456;
             Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
-            
+
             double expectedBP = 456;
             Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
         }
@@ -170,10 +170,10 @@ namespace Tests
             //Assert
             string expectedName = "Test SubScope";
             Assert.AreEqual(expectedName, actualSubScope.Name);
-            
+
             string expectedDescription = "Test SubScope Description";
             Assert.AreEqual(expectedDescription, actualSubScope.Description);
-            
+
             int expectedQuantity = 789;
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
             Assert.AreEqual(actualConnection, actualSubScope.Connection);
@@ -186,29 +186,29 @@ namespace Tests
             //Arrange
             ObservableCollection<TECDevice> actualDevices = actualBid.Systems[0].Equipment[0].SubScope[0].Devices;
             TECDevice actualDevice = actualDevices[0];
-            TECManufacturer actualManufacturer = actualBid.ManufacturerCatalog[0];
+            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
 
             //Assert
             string expectedName = "Test Device";
             Assert.AreEqual(expectedName, actualDevice.Name);
-            
+
             string expectedDescription = "Test Device Description";
             Assert.AreEqual(expectedDescription, actualDevice.Description);
-            
+
             int expectedQuantity = 3;
             int actualQuantity = 0;
-            foreach(TECDevice device in actualDevices)
+            foreach (TECDevice device in actualDevices)
             {
-                if(device.Guid == actualDevice.Guid)
+                if (device.Guid == actualDevice.Guid)
                 {
                     actualQuantity++;
                 }
             }
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            
+
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
-            
+
             Assert.AreEqual("ThreeC18", actualDevice.ConnectionType.Name);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
@@ -218,7 +218,7 @@ namespace Tests
         public void Load_Bid_Manufacturer()
         {
             //Arrange
-            TECManufacturer actualManufacturer = actualBid.ManufacturerCatalog[0];
+            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
             TECDevice actualDevice = actualBid.Systems[0].Equipment[0].SubScope[0].Devices[0];
 
             //Assert
@@ -241,13 +241,13 @@ namespace Tests
             //Assert
             string expectedName = "Test Point";
             Assert.AreEqual(expectedName, actualPoint.Name);
-            
+
             string expectedDescription = "Test Point Description";
             Assert.AreEqual(expectedDescription, actualPoint.Description);
-            
+
             int expectedQuantity = 321;
             Assert.AreEqual(expectedQuantity, actualPoint.Quantity);
-            
+
             PointTypes expectedType = PointTypes.Serial;
             Assert.AreEqual(expectedType, actualPoint.Type);
         }
@@ -313,7 +313,7 @@ namespace Tests
         public void Load_Bid_Tag()
         {
             //Arrange
-            TECTag actualTag = actualBid.Tags[0];
+            TECTag actualTag = actualBid.Catalogs.Tags[0];
             TECSystem actualSystem = actualBid.Systems[0];
             TECEquipment actualEquipment = actualSystem.Equipment[0];
             TECSubScope actualSubScope = actualEquipment.SubScope[0];
@@ -449,16 +449,16 @@ namespace Tests
                     break;
                 }
             }
-             
+
 
             double expectedLength = 493.45;
-            
+
             bool hasSubScope = false;
             if (actualConnection.SubScope == expectedSubScope)
             {
                 hasSubScope = true;
             }
-            
+
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
@@ -490,7 +490,7 @@ namespace Tests
         public void Load_Bid_AssociatedCosts()
         {
             //Arrange
-            TECAssociatedCost actualAssociatedCost = actualBid.AssociatedCostsCatalog[0];
+            TECAssociatedCost actualAssociatedCost = actualBid.Catalogs.AssociatedCosts[0];
 
             //Assert
             string expectedName = "Test Cost";
@@ -501,7 +501,7 @@ namespace Tests
         public void Load_Bid_ConnectionType()
         {
             //Arrange
-            TECConnectionType actualConnectionType = actualBid.ConnectionTypes[0];
+            TECConnectionType actualConnectionType = actualBid.Catalogs.ConnectionTypes[0];
 
             //Assert
             string expectedName = "ThreeC18";
@@ -512,13 +512,13 @@ namespace Tests
         public void Load_Bid_ConduitType()
         {
             //Arrange
-            TECConduitType actualConduitType = actualBid.ConduitTypes[0];
+            TECConduitType actualConduitType = actualBid.Catalogs.ConduitTypes[0];
 
             //Assert
             string expectedName = "Test ConduitType";
             Assert.AreEqual(expectedName, actualConduitType.Name);
         }
-        
+
         [TestMethod]
         public void Load_Bid_MiscCost()
         {
@@ -549,7 +549,7 @@ namespace Tests
         public void Load_Bid_PanelType()
         {
             //Arrange
-            TECPanelType actualCost = actualBid.PanelTypeCatalog[0];
+            TECPanelType actualCost = actualBid.Catalogs.PanelTypes[0];
 
             //Assert
             Assert.AreEqual("Test Panel Type", actualCost.Name);
@@ -579,7 +579,7 @@ namespace Tests
                     {
                         foreach (TECDevice device in subScope.Devices)
                         {
-                            if (!actualBid.DeviceCatalog.Contains(device))
+                            if (!actualBid.Catalogs.Devices.Contains(device))
                             {
                                 Assert.Fail("Devices in systems not linked");
                             }
@@ -587,7 +587,7 @@ namespace Tests
                     }
                 }
             }
-            
+
             Assert.IsTrue(true, "All Devices Linked");
         }
 
@@ -598,56 +598,56 @@ namespace Tests
             {
                 foreach (TECAssociatedCost cost in system.AssociatedCosts)
                 {
-                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in system not linked"); }
                 }
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
                     {
-                        if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                        if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                         { Assert.Fail("Associated costs in equipment not linked"); }
                     }
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
                         {
-                            if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                            if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                             { Assert.Fail("Associated costs in subscope not linked"); }
                         }
                         foreach (TECDevice device in subScope.Devices)
                         {
                             foreach (TECAssociatedCost cost in device.AssociatedCosts)
                             {
-                                if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                                if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                                 { Assert.Fail("Associated costs in subscope not linked"); }
                             }
                         }
                     }
                 }
             }
-           
-            foreach (TECDevice device in actualBid.DeviceCatalog)
+
+            foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 foreach (TECAssociatedCost cost in device.AssociatedCosts)
                 {
-                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in device catalog not linked"); }
                 }
             }
-            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
             {
                 foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
                 {
-                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in conduit type catalog not linked"); }
                 }
             }
-            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
             {
                 foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
                 {
-                    if (!actualBid.AssociatedCostsCatalog.Contains(cost))
+                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in connection type catalog not linked"); }
                 }
             }
@@ -658,13 +658,13 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Linked_Manufacturers()
         {
-            foreach (TECDevice device in actualBid.DeviceCatalog)
+            foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 if (device.Manufacturer == null)
                 {
                     Assert.Fail("Device doesn't have manufacturer.");
                 }
-                if (!actualBid.ManufacturerCatalog.Contains(device.Manufacturer))
+                if (!actualBid.Catalogs.Manufacturers.Contains(device.Manufacturer))
                 {
                     Assert.Fail("Manufacturers not linked in device catalog");
                 }
@@ -675,7 +675,7 @@ namespace Tests
                 {
                     Assert.Fail("Controller doesn't have manufacturer.");
                 }
-                if (!actualBid.ManufacturerCatalog.Contains(controller.Manufacturer))
+                if (!actualBid.Catalogs.Manufacturers.Contains(controller.Manufacturer))
                 {
                     Assert.Fail("Manufacturers not linked in controllers");
                 }
@@ -690,11 +690,11 @@ namespace Tests
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (!actualBid.ConduitTypes.Contains(connection.ConduitType))
+                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType))
                     { Assert.Fail("Conduit types in connection not linked"); }
                 }
             }
-            
+
             Assert.IsTrue(true, "All conduit types Linked");
         }
 
@@ -705,56 +705,56 @@ namespace Tests
             {
                 foreach (TECTag tag in system.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in system templates not linked"); }
                 }
                 foreach (TECEquipment equipment in system.Equipment)
                 {
                     foreach (TECTag tag in equipment.Tags)
                     {
-                        if (!actualBid.Tags.Contains(tag))
+                        if (!actualBid.Catalogs.Tags.Contains(tag))
                         { Assert.Fail("Tags in system templates not linked"); }
                     }
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         foreach (TECTag tag in subScope.Tags)
                         {
-                            if (!actualBid.Tags.Contains(tag))
+                            if (!actualBid.Catalogs.Tags.Contains(tag))
                             { Assert.Fail("Tags in system templates not linked"); }
                         }
                         foreach (TECDevice device in subScope.Devices)
                         {
                             foreach (TECTag tag in device.Tags)
                             {
-                                if (!actualBid.Tags.Contains(tag))
+                                if (!actualBid.Catalogs.Tags.Contains(tag))
                                 { Assert.Fail("Tags in system templates not linked"); }
                             }
                         }
                     }
                 }
             }
-            
-            foreach (TECDevice device in actualBid.DeviceCatalog)
+
+            foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 foreach (TECTag tag in device.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in device catalog not linked"); }
                 }
             }
-            foreach (TECConduitType conduitType in actualBid.ConduitTypes)
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
             {
                 foreach (TECTag tag in conduitType.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in conduit type catalog not linked"); }
                 }
             }
-            foreach (TECConnectionType connectionType in actualBid.ConnectionTypes)
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
             {
                 foreach (TECTag tag in connectionType.Tags)
                 {
-                    if (!actualBid.Tags.Contains(tag))
+                    if (!actualBid.Catalogs.Tags.Contains(tag))
                     { Assert.Fail("Tags in connection type catalog not linked"); }
                 }
             }
@@ -765,19 +765,19 @@ namespace Tests
         [TestMethod]
         public void Load_Bid_Linked_ConnectionTypes()
         {
-            foreach (TECDevice device in actualBid.DeviceCatalog)
+            foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
                 if (device.ConnectionType == null)
                 {
                     Assert.Fail("Device doesn't have connectionType");
                 }
 
-                if (!actualBid.ConnectionTypes.Contains(device.ConnectionType))
+                if (!actualBid.Catalogs.ConnectionTypes.Contains(device.ConnectionType))
                 {
                     Assert.Fail("ConnectionTypes not linked in device catalog");
                 }
             }
         }
-        
+
     }
 }

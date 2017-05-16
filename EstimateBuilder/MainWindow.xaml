@@ -11,6 +11,7 @@
         xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         
         mc:Ignorable="d ignore"
         Height="720"
@@ -49,7 +50,6 @@
     </Window.InputBindings>
 
     <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-
         <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
@@ -97,8 +97,8 @@
                         ViewModel="{Binding ProposalVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewView
-                        ViewModel="{Binding ReviewVM}"/>
+                    <view:ReviewTabControl
+                        ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
                     <cLibView:SettingsView
@@ -106,7 +106,9 @@
                 </TabItem>
             </TabControl>
             <cLibControls:StatusBarControl ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
-                                           Grid.Row="3" Grid.ColumnSpan="3"/>
+                                           Grid.Row="3" Grid.ColumnSpan="3"
+                                           dd:DragDrop.IsDropTarget="True"
+                                           dd:DragDrop.DropHandler="{Binding}"/>
         </Grid>
     </DockPanel>
 </Window>

@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         private TECScope _scope;
         private double _x;
         private double _y;
-        
+
         public TECScope Scope
         {
             get { return _scope; }
@@ -47,7 +47,8 @@ namespace EstimatingLibrary
         }
         public ObservableCollection<Tuple<TECObject, TECVisualScope, string>> ConnectableScope
         {
-            get {
+            get
+            {
                 return getConnectableScope();
             }
         }
@@ -83,11 +84,11 @@ namespace EstimatingLibrary
             if (this.Scope is TECController)
             {
                 var controller = this.Scope as TECController;
-                foreach(IOType type in controller.getUniqueIO())
+                foreach (IOType type in controller.getUniqueIO())
                 {
                     outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(controller, this, TECIO.convertTypeToString(type)));
                 }
-                
+
             }
             else
             {

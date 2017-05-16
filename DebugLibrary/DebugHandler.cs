@@ -28,7 +28,8 @@ namespace DebugLibrary
             }
         }
 
-        private const bool DEBUG_CREATES_LOG = true;
+        private const bool RELEASE_CREATES_LOG = false;
+        private const bool DEBUG_CREATES_LOG = false;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -41,7 +42,10 @@ namespace DebugLibrary
             {
                 if (isReleased)
                 {
-                    addToLog(message);
+                    if (RELEASE_CREATES_LOG)
+                    {
+                        addToLog(message);
+                    }
                 }
                 else
                 {
@@ -61,8 +65,11 @@ namespace DebugLibrary
                 error = "ERROR: " + error;
                 if (isReleased)
                 {
-                    addToLog(error);
-                    MessageBox.Show(error);
+                    if (RELEASE_CREATES_LOG)
+                    {
+                        addToLog(error);
+                        MessageBox.Show(error);
+                    }
                 }
                 else
                 {
@@ -81,10 +88,10 @@ namespace DebugLibrary
         }
 
         private static void addToLog(string message)
-            //Adds a line to the current log file. File will be stored in Appdata\TECSystems\Logs using the date folder hieararcy and the time of the first message as the file name. 
+        //Adds a line to the current log file. File will be stored in Appdata\TECSystems\Logs using the date folder hieararcy and the time of the first message as the file name. 
         {
             if (logPath == null)
-                //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
+            //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
                 logPath = createLogPath();
                 File.Create(logPath).Close();

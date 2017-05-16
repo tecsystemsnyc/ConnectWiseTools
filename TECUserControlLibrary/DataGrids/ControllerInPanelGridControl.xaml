@@ -12,6 +12,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
+            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
             <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
@@ -26,11 +27,16 @@
                       CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.PanelSelections, Source={StaticResource proxy}}"
-                                        SelectedItemBinding="{Binding Panel, Converter={cnvt:SelectedItemToPanelConverter}}"
-                                        DisplayIndex="0"
-                                        DisplayMemberPath="Name"
-                                        Header="Containing Panel"
-                                        MinWidth="100"/>
+                                        Header="Containing Panel" DisplayMemberPath="Name"
+                                        MinWidth="100">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
+                            <Binding Path="Panel"/>
+                            <Binding Path="Data.NonePanel" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
                 <DataGridTextColumn Binding="{Binding Controller.Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Controller.Description}" Header="Description" Width="Auto" MinWidth="75"/>
             </DataGrid.Columns>

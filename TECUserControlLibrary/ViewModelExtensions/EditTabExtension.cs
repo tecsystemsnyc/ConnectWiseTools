@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private EditIndex _TabIndex;
-        
+
         public TECTemplates Templates
         {
             get { return _templates; }
@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECBid _bid;
-        
+
         public TECSystem SelectedSystem
         {
             get
@@ -199,7 +199,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ObservableCollection<TECTag> TagSelections
         {
             get { return _tagSelections; }
-            set {
+            set
+            {
                 _tagSelections = value;
                 RaisePropertyChanged("TagSelections");
             }
@@ -337,7 +338,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 var bid = bidOrTemplates as TECBid;
                 Bid = bid;
                 isBid = true;
-            } else if (bidOrTemplates is TECTemplates)
+            }
+            else if (bidOrTemplates is TECTemplates)
             {
                 var templates = bidOrTemplates as TECTemplates;
                 Templates = templates;
@@ -395,29 +397,29 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void setCatalogs(object type)
         {
-            if(type is TECBid)
+            if (type is TECBid)
             {
-                TagSelections = Bid.Tags;
-                ConduitTypeSelections = Bid.ConduitTypes;
-                AssociatedCostSelections = Bid.AssociatedCostsCatalog;
-                ManufacturerSelections = Bid.ManufacturerCatalog;
-                ConnectionTypeSelections = Bid.ConnectionTypes;
-                IOModuleSelections = Bid.IOModuleCatalog;
-                PanelTypeSelections = Bid.PanelTypeCatalog;
+                TagSelections = Bid.Catalogs.Tags;
+                ConduitTypeSelections = Bid.Catalogs.ConduitTypes;
+                AssociatedCostSelections = Bid.Catalogs.AssociatedCosts;
+                ManufacturerSelections = Bid.Catalogs.Manufacturers;
+                ConnectionTypeSelections = Bid.Catalogs.ConnectionTypes;
+                IOModuleSelections = Bid.Catalogs.IOModules;
+                PanelTypeSelections = Bid.Catalogs.PanelTypes;
             }
             else if (type is TECTemplates)
             {
-                TagSelections = Templates.Tags;
-                AssociatedCostSelections = Templates.AssociatedCostsCatalog;
-                ConduitTypeSelections = Templates.ConduitTypeCatalog;
-                ManufacturerSelections = Templates.ManufacturerCatalog;
-                ConnectionTypeSelections = Templates.ConnectionTypeCatalog;
-                IOModuleSelections = Templates.IOModuleCatalog;
-                PanelTypeSelections = Templates.PanelTypeCatalog;
+                TagSelections = Templates.Catalogs.Tags;
+                AssociatedCostSelections = Templates.Catalogs.AssociatedCosts;
+                ConduitTypeSelections = Templates.Catalogs.ConduitTypes;
+                ManufacturerSelections = Templates.Catalogs.Manufacturers;
+                ConnectionTypeSelections = Templates.Catalogs.ConnectionTypes;
+                IOModuleSelections = Templates.Catalogs.IOModules;
+                PanelTypeSelections = Templates.Catalogs.PanelTypes;
             }
 
         }
-        
+
         #region Commands
         private void AddTagToSystemExecute()
         {
@@ -425,11 +427,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private bool CanAddTagToSystem()
         {
-            if (SelectedTag != null 
-                && SelectedSystem != null 
+            if (SelectedTag != null
+                && SelectedSystem != null
                 && !SelectedSystem.Tags.Contains(SelectedTag))
             {
-                return true; 
+                return true;
             }
             else
             {
@@ -438,7 +440,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void AddTagToEquipmentExecute()
         {
-             SelectedEquipment.Tags.Add(SelectedTag);
+            SelectedEquipment.Tags.Add(SelectedTag);
         }
         private bool CanAddTagToEquipment()
         {
@@ -490,7 +492,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         private void AddTagToPointExecute()
         {
             SelectedPoint.Tags.Add(SelectedTag);
-            
+
         }
         private bool CanAddTagToPoint()
         {
@@ -552,14 +554,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
         private void DeleteSelectedSystemExecute()
         {
-            if(Templates != null)
+            if (Templates != null)
             {
                 Templates.SystemTemplates.Remove(SelectedSystem);
-            } else if(Bid != null)
+            }
+            else if (Bid != null)
             {
                 Bid.Systems.Remove(SelectedSystem);
             }
-            
+
             SelectedSystem = null;
         }
         private void DeleteSelectedEquipmentExecute()
@@ -594,7 +597,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
             else if (Templates != null)
             {
-                Templates.DeviceCatalog.Remove(SelectedDevice);
+                Templates.Catalogs.Devices.Remove(SelectedDevice);
             }
             SelectedDevice = null;
         }
@@ -633,9 +636,9 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void AddAssociatedCostToSystemExecute()
         {
-           
+
             SelectedSystem.AssociatedCosts.Add(SelectedAssociatedCost);
-            
+
         }
         private bool CanAddAssociatedCostToSystem()
         {
@@ -746,7 +749,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 { TabIndex = EditIndex.Nothing; }
                 else
                 { SelectedDevice = selection as TECDevice; }
-                
+
             }
             else if (selection is TECPoint)
             {
@@ -755,7 +758,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECController)
             {
                 SelectedController = selection as TECController;
-            } else if (selection is TECPanel)
+            }
+            else if (selection is TECPanel)
             {
                 SelectedPanel = selection as TECPanel;
             }
