@@ -383,7 +383,6 @@ namespace EstimatingLibrary.Utilities
                         }
                     }
                 }
-
             }
             else
             {

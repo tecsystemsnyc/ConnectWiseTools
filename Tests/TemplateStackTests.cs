@@ -664,17 +664,17 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            Guid expected = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0].Guid.ToString());
-            TECConnectionType edit = new TECConnectionType();
+            int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Count;
+            TECConnectionType edit = Template.Catalogs.ConnectionTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0] = edit;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Add(edit);
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0].Guid.ToString());
+            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
