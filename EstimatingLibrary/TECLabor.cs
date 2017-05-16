@@ -326,7 +326,7 @@ namespace EstimatingLibrary
 
                 if (ElectricalIsOnOvertime)
                 {
-                    return (rate * 1.5);
+                    return (rate * ElectricalSuperRatio);
                 }
                 else
                 {
@@ -360,6 +360,19 @@ namespace EstimatingLibrary
                 raiseEffectiveRateChanged();
             }
         }
+
+        private double _electricalSuperRatio;
+        public double ElectricalSuperRatio
+        {
+            get { return _electricalSuperRatio; }
+            set
+            {
+                var temp = this.Copy();
+                _electricalSuperRatio = value;
+                NotifyPropertyChanged("ElectricalSuperRatio", temp, this);
+            }
+        }
+
         #endregion Electrical
 
         #endregion
@@ -426,6 +439,7 @@ namespace EstimatingLibrary
             _electricalNonUnionRate = labor.ElectricalNonUnionRate;
             _electricalSuperRate = labor.ElectricalSuperRate;
             _electricalSuperNonUnionRate = labor.ElectricalSuperNonUnionRate;
+            _electricalSuperRatio = labor.ElectricalSuperRatio;
 
             _electricalIsOnOvertime = labor.ElectricalIsOnOvertime;
             _electricalIsUnion = labor.ElectricalIsUnion;
