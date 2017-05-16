@@ -286,6 +286,11 @@ namespace EstimatingLibrary
                         raiseTECTotals();
                         raiseSubcontractorTotals();
                     }
+                    else if (newValue is TECLabor)
+                    {
+                        raiseTECLabor();
+                        raiseElectricalLabor();
+                    }
                 }
             }
             else

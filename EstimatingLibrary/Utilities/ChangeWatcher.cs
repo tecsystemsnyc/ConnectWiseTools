@@ -278,14 +278,29 @@ namespace EstimatingLibrary.Utilities
         }
         private void handleControllerChildren(TECController controller, Change change)
         {
-            foreach (TECConnection connection in controller.ChildrenConnections)
+            if(change == Change.Add)
             {
-                connection.PropertyChanged += Object_PropertyChanged;
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    connection.PropertyChanged += Object_PropertyChanged;
+                }
+                foreach (TECIO io in controller.IO)
+                {
+                    io.PropertyChanged += Object_PropertyChanged;
+                }
             }
-            foreach (TECIO io in controller.IO)
+            else if(change == Change.Remove)
             {
-                io.PropertyChanged += Object_PropertyChanged;
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    connection.PropertyChanged -= Object_PropertyChanged;
+                }
+                foreach (TECIO io in controller.IO)
+                {
+                    io.PropertyChanged -= Object_PropertyChanged;
+                }
             }
+            
         }
 
         private void handleControlledScope(TECControlledScope scope, Change change)
@@ -380,6 +395,9 @@ namespace EstimatingLibrary.Utilities
                         if(e.PropertyName == "Parameters")
                         {
                             (newValue as TECBid).Parameters.PropertyChanged += Object_PropertyChanged;
+                        } else if(e.PropertyName == "Labor")
+                        {
+                            (newValue as TECBid).Labor.PropertyChanged += Object_PropertyChanged;
                         }
                     }
                 }
