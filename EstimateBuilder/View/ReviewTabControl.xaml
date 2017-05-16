@@ -11,8 +11,8 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>
-            <TabItem Header="Device List">
-                <review:DeviceListView ViewModel="{Binding DeviceVM}"/>
+            <TabItem Header="TEC Materials">
+                <review:TECMaterialView ViewModel="{Binding TECMaterialVM}"/>
             </TabItem>
             <TabItem Header="Electrical Materials">
                 <review:ElectricalMaterialView ViewModel="{Binding ElectricalMaterialVM}"/>

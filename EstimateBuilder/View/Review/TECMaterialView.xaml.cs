@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingUtilitiesLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,24 @@ namespace EstimateBuilder.View.Review
     /// </summary>
     public partial class TECMaterialView : UserControl
     {
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(TECMaterialView));
+
+        public TECMaterialIndex SelectedMaterialIndex
+        {
+            get { return (TECMaterialIndex)GetValue(SelectedMaterialIndexProperty); }
+            set { SetValue(SelectedMaterialIndexProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedMaterialIndexProperty =
+            DependencyProperty.Register("SelectedMaterialIndex", typeof(TECMaterialIndex),
+              typeof(TECMaterialView), new PropertyMetadata(default(TECMaterialIndex)));
+
         public TECMaterialView()
         {
             InitializeComponent();

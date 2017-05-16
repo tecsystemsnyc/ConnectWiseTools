@@ -8,6 +8,7 @@
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
+             x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,35 +19,38 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="75"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
-                  SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterial}"
+        <TextBlock Text="Category:" Foreground="Black"/>
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
+                  SelectedItem="{Binding ElementName=parent, Path=SelectedMaterial}"
                   Margin="5"
                   VerticalContentAlignment="Center"/>
 
-        <TabControl Grid.ColumnSpan="11" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterial, Converter={cnvt:TECMaterialIndexToIntegerConverter}}">
+        <TabControl Grid.Column="2" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterial, Converter={cnvt:TECMaterialIndexToIntegerConverter}}">
 
             <!--Device View-->
             <TabItem Visibility="Collapsed">
-                
+                <local:DeviceListView ViewModel="{Binding}"/>
             </TabItem>
             <!--Controller View-->
             <TabItem Visibility="Collapsed">
@@ -94,5 +98,7 @@
 
         <TextBlock Text="Total Labor:" Grid.Row="2" Grid.Column="9" Foreground="Black"/>
         <TextBlock Text="{Binding TotalLabor}" Grid.Row="2" Grid.Column="10" Foreground="Black"/>
+        
+        <Border Grid.ColumnSpan="11" Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1"/>
     </Grid>
 </UserControl>

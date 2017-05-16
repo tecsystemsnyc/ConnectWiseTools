@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EstimateBuilder.View"
+             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">
@@ -19,13 +20,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding DeviceSummaryItems}"
+        <!--Device Summary-->
+        <DataGrid Grid.ColumnSpan="2" ItemsSource="{Binding DeviceSummaryItems}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
@@ -37,5 +42,17 @@
                 <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={} {0:C}}" Width="Auto" MinWidth="40"/>
             </DataGrid.Columns>
         </DataGrid>
+        <!--Device Associated Costs Summary-->
+        <cLibGrids:AssociatedCostsSummaryGrid Grid.Column="2" Grid.ColumnSpan="2"
+                                              AssociatedCostSummaryItemsSource="{Binding DeviceAssCostSummaryItems}"/>
+        <!--Subtotals-->
+        <TextBlock Text="Device Subtotal:" Grid.Row="1" Foreground="Black"/>
+        <TextBlock Text="{Binding DeviceSubTotal}" Grid.Row="1" Grid.Column="1" Foreground="Black"/>
+
+        <TextBlock Text="Device Associated Costs Subtotal:" Grid.Row="1" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding DeviceAssCostSubTotalCost}" Grid.Row="1" Grid.Column="3" Foreground="Black"/>
+
+        <TextBlock Text="Device Associated Labor Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding DeviceAssCostSubTotalLabor}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
     </Grid>
 </UserControl>
