@@ -262,7 +262,10 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECDevice device in templates.Catalogs.Devices)
             {
                 editObject(new StackItem(Change.Edit, bid, device));
-                editObject(new StackItem(Change.Edit, device, device.ConnectionType));
+                foreach(TECConnectionType type in device.ConnectionTypes)
+                {
+                    editObject(new StackItem(Change.Edit, device, type));
+                }
                 editObject(new StackItem(Change.Edit, device, device.Manufacturer));
                 editScopeChildrenRelations(device);
             }
@@ -714,21 +717,22 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
-        static private TECConnectionType getConnectionTypeInDevice(Guid deviceID)
+        static private ObservableCollection<TECConnectionType> getConnectionTypesInDevice(Guid deviceID)
         {
-            //string command = "select * from "+ConnectionTypeTable.TableName+" where "+ ConnectionTypeTable .ConnectionTypeID.Name+ " in ";
-            //command += "(select "+DeviceConnectionTypeTable.TypeID.Name+" from "+ DeviceConnectionTypeTable.TableName+ " where ";
-            //command += DeviceConnectionTypeTable.DeviceID.Name + " = '" + deviceID;
-            //command += "')";
-            string command = "select " + DeviceConnectionTypeTable.TypeID.Name + " from " + DeviceConnectionTypeTable.TableName + " where ";
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
+            string command = "select * from " + DeviceConnectionTypeTable.TableName + " where ";
             command += DeviceConnectionTypeTable.DeviceID.Name + " = '" + deviceID;
             command += "'";
 
             DataTable connectionTypeTable = SQLiteDB.getDataFromCommand(command);
-            if (connectionTypeTable.Rows.Count > 0)
-            { return (getPlaceholderDeviceConnectionTypeFromRow(connectionTypeTable.Rows[0])); }
-            else
-            { return null; }
+            foreach (DataRow row in connectionTypeTable.Rows)
+            {
+                var connectionTypeToAdd = new TECConnectionType(new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString()));
+                int quantity = row[DeviceConnectionTypeTable.Quantity.Name].ToString().ToInt(1);
+                for (int x = 0; x < quantity; x++)
+                { connectionTypes.Add(connectionTypeToAdd); }
+            }
+            return connectionTypes;
         }
         static private TECConduitType getConduitTypeInConnection(Guid connectionID)
         {
@@ -1337,8 +1341,7 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
-
-
+        
         #endregion //Loading from DB Methods
 
         #region Populate Derived
@@ -1750,7 +1753,7 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getDeviceFromRow(DataRow row)
         {
             Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
-            TECConnectionType connectionType = getConnectionTypeInDevice(deviceID);
+            ObservableCollection<TECConnectionType> connectionType = getConnectionTypesInDevice(deviceID);
             TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
             TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
             deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
@@ -2038,9 +2041,9 @@ namespace EstimatingUtilitiesLibrary
         private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
-            TECConnectionType connectionType = new TECConnectionType();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECDevice device = new TECDevice(guid, connectionType, manufacturer);
+            TECDevice device = new TECDevice(guid, connectionTypes, manufacturer);
             device.Description = "placeholder";
             return device;
         }
@@ -2473,7 +2476,10 @@ namespace EstimatingUtilitiesLibrary
         private static void saveDeviceChildProperties(TECDevice device)
         {
             if (device.Manufacturer != null) { addObject(new StackItem(Change.Add, device, device.Manufacturer)); }
-            if (device.ConnectionType != null) { addObject(new StackItem(Change.Add, device, device.ConnectionType)); }
+            foreach(TECConnectionType type in device.ConnectionTypes)
+            {
+                addObject(new StackItem(Change.Add, device, type));
+            }
         }
         private static void savePanel(TECPanel panel, object parent)
         {

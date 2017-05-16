@@ -233,7 +233,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         if ((referenceObject as TECSubScope).Connection != null)
                         {
-                            addLengthToWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                            foreach(TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            {
+                                addLengthToWireType((referenceObject as TECSubScope).Connection.Length, type);
+                            }
                         }
                     }
                     else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
@@ -263,7 +266,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         if ((referenceObject as TECSubScope).Connection != null)
                         {
-                            removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                            foreach (TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            {
+                                removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, type);
+                            }
                         }
                     }
                     else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)

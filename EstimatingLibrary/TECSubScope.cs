@@ -280,7 +280,10 @@ namespace EstimatingLibrary
             var outTypes = new ObservableCollection<TECConnectionType>();
             foreach (TECDevice device in Devices)
             {
-                outTypes.Add(device.ConnectionType);
+                foreach(TECConnectionType type in device.ConnectionTypes)
+                {
+                    outTypes.Add(type);
+                }
             }
             return outTypes;
         }

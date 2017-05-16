@@ -1050,8 +1050,11 @@ namespace EstimatingUtilitiesLibrary
         public static Type ObjectType = typeof(TECDevice);
         public static Type ReferenceType = typeof(TECConnectionType);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {

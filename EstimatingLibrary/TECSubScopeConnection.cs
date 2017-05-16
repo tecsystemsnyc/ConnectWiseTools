@@ -50,7 +50,10 @@ namespace EstimatingLibrary
                 {
                     foreach (TECDevice dev in SubScope.Devices)
                     {
-                        outConnectionTypes.Add(dev.ConnectionType);
+                        foreach(TECConnectionType type in dev.ConnectionTypes)
+                        {
+                            outConnectionTypes.Add(type);
+                        }
                     }
                 }
 

@@ -877,8 +877,10 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(templates.Catalogs.ConnectionTypes[0]);
             TECDevice expectedDevice = new TECDevice(Guid.NewGuid(), 
-                templates.Catalogs.ConnectionTypes[0],
+                types,
                 templates.Catalogs.Manufacturers[0]);
             expectedDevice.Name = "New Device";
             expectedDevice.Description = "New Device desc";
@@ -904,7 +906,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType.Name, actualDevice.ConnectionType.Name);
+            Assert.AreEqual(expectedDevice.ConnectionTypes[0].Name, actualDevice.ConnectionTypes[0].Name);
             Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
         }
 
@@ -1008,7 +1010,7 @@ namespace Tests
             var testConnectionType = new TECConnectionType();
             testConnectionType.Name = "Test Add Connection Type Device";
             templates.Catalogs.ConnectionTypes.Add(testConnectionType);
-            expectedDevice.ConnectionType = testConnectionType;
+            expectedDevice.ConnectionTypes.Add(testConnectionType);
             EstimatingLibraryDatabase.Update(path, testStack);
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
@@ -1023,7 +1025,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
+            Assert.AreEqual(expectedDevice.ConnectionTypes[1].Guid, actualDevice.ConnectionTypes[1].Guid);
         }
 
         [TestMethod]

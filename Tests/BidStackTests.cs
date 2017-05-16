@@ -204,7 +204,9 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Bid.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -942,7 +944,9 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Bid.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1328,7 +1332,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Bid.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1993,7 +1999,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECDevice edit = new TECDevice(Bid.Catalogs.ConnectionTypes[0], Bid.Catalogs.Manufacturers[0]);
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Bid.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
