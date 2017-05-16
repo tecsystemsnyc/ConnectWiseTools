@@ -45,25 +45,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-
-        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(TECConnectionType type in e.NewItems)
-                {
-                    NotifyPropertyChanged<object>("AddCatalog", this, type);
-                }
-            }
-            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECConnectionType type in e.OldItems)
-                {
-                    NotifyPropertyChanged<object>("RemoveCatalog", this, type);
-                }
-            }
-        }
-
+        
         public IOType IOType
         {
             get { return _ioType; }
@@ -111,6 +93,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _connectionTypes = connectionTypes;
             _manufacturer = manufacturer;
+            ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
         }
         public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
@@ -154,6 +137,25 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECConnectionType type in e.NewItems)
+                {
+                    NotifyPropertyChanged<object>("AddCatalog", this, type);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECConnectionType type in e.OldItems)
+                {
+                    NotifyPropertyChanged<object>("RemoveCatalog", this, type);
+                }
+            }
+        }
+
         #endregion
     }
 }
