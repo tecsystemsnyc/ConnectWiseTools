@@ -435,6 +435,8 @@ namespace EstimatingLibrary
                     Systems.Add(system);
                 }
                 var instanceControlledScope = new TECControlledScope(true);
+                instanceControlledScope.Name = controlledScope.Name;
+                instanceControlledScope.Description = controlledScope.Description;
                 instanceControlledScope.Systems = systemCollection;
                 instanceControlledScope.Controllers = controllerCollection;
                 instanceControlledScope.Panels = panelCollection;
