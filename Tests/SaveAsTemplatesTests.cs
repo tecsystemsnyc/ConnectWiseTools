@@ -258,7 +258,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
+            Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
@@ -298,7 +298,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
+            Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
@@ -331,7 +331,7 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
-            Assert.AreEqual(expectedChildDevice.ConnectionType.Guid, actualChildDevice.ConnectionType.Guid);
+            Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
@@ -354,7 +354,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
+            Assert.AreEqual(expectedDevice.ConnectionTypes[0].Guid, actualDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 

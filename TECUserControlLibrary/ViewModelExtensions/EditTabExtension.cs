@@ -250,6 +250,17 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECConnectionType _selectedConnectionType;
+        public TECConnectionType SelectedConnectionType
+        {
+            get { return _selectedConnectionType; }
+            set
+            {
+                _selectedConnectionType = value;
+                RaisePropertyChanged("SelectedConnectionType");
+            }
+        }
+
         private ObservableCollection<TECIOModule> _ioModuleSelections;
         public ObservableCollection<TECIOModule> IOModuleSelections
         {
@@ -294,6 +305,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddAssociatedCostToDeviceCommand { get; private set; }
         public ICommand AddAssociatedCostToControllerCommand { get; private set; }
         public ICommand AddAssociatedCostToPanelCommand { get; private set; }
+        public ICommand AddConnectionTypeToDeviceCommand { get; private set; }
 
         #endregion
 
@@ -394,7 +406,26 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute, CanAddAssociatedCostToDevice);
             AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute, CanAddAssociatedCostToController);
             AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute, CanAddAssociatedCostToPanel);
+
+            AddConnectionTypeToDeviceCommand = new RelayCommand(AddConnectionTypeToDeviceExecute, CanAddConnectionTypeToDevice);
         }
+
+        private bool CanAddConnectionTypeToDevice()
+        {
+            if(SelectedConnectionType != null)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        private void AddConnectionTypeToDeviceExecute()
+        {
+            SelectedDevice.ConnectionTypes.Add(SelectedConnectionType);
+        }
+
         private void setCatalogs(object type)
         {
             if (type is TECBid)

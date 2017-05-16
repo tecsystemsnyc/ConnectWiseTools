@@ -192,8 +192,10 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer1);
 
             //Devices
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(connectionType1);
             TECDevice device1 = new TECDevice(Guid.NewGuid(),
-                connectionType1,
+                types,
                 manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
@@ -229,7 +231,9 @@ namespace Tests
             //drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
-            TECDevice deviceC1 = new TECDevice(Guid.NewGuid(), connectionType2, manufacturer1);
+            ObservableCollection<TECConnectionType> contypes = new ObservableCollection<TECConnectionType>();
+            types.Add(connectionType2);
+            TECDevice deviceC1 = new TECDevice(Guid.NewGuid(), contypes, manufacturer1);
             deviceC1.Name = "Device C1";
             deviceC1.Description = "Description C1";
             deviceC1.Cost = 987.6;
@@ -449,12 +453,16 @@ namespace Tests
             templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
-            TECDevice testDev = new TECDevice(Guid.NewGuid(), testDevConnType, testDevMan);
+            ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
+            contypes2.Add(testDevConnType);
+            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Cost = 20.3;
 
-            TECDevice childDev = new TECDevice(Guid.NewGuid(), childDevConnType, childDevMan);
+            ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
+            contypes3.Add(childDevConnType);
+            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Cost = 54.1;
@@ -700,7 +708,9 @@ namespace Tests
             outCatalogs.Manufacturers.Add(manufacturer1);
 
             //Devices
-            TECDevice device1 = new TECDevice(Guid.NewGuid(), connectionType1, manufacturer1);
+            ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
+            contypes4.Add(connectionType1);
+            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
             device1.Cost = 987.6;

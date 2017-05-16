@@ -136,6 +136,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagToPanelCommand { get; private set; }
         public ICommand AddAssociatedCostToPanelCommand { get; private set; }
         public ICommand AddPanelCommand { get; private set; }
+        public ICommand AddConnectionTypeToDeviceCommand { get; private set; }
         #endregion
 
         #region Visibility Properties
@@ -349,6 +350,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private TECConnectionType _deviceConnectionType;
+
+        private ObservableCollection<TECConnectionType> _deviceConnectionTypes;
+        public ObservableCollection<TECConnectionType> DeviceConnectionTypes
+        {
+            get { return _deviceConnectionTypes; }
+            set
+            {
+                _deviceConnectionTypes = value;
+                RaisePropertyChanged("DeviceConnectionTypes");
+            }
+        }
+
 
         public string DeviceButtonContent
         {
@@ -683,6 +696,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
             AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute);
             AddPanelCommand = new RelayCommand(AddPanelExecute, AddPanelCanExecute);
+            AddConnectionTypeToDeviceCommand = new RelayCommand(AddConnectionTypeToDeviceExecute, CanAddConnectionTypeToDevice);
 
             populateItemsCollections();
 
@@ -693,9 +707,12 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelTags = new ObservableCollection<TECTag>();
             PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
             ControllerIO = new ObservableCollection<TECIO>();
+            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
 
             setupInterfaceDefaults();
         }
+
+        
         #endregion
 
         #region Methods
@@ -1012,7 +1029,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         private void AddDeviceExecute()
         {
-            var newDevice = new TECDevice(DeviceConnectionType, DeviceManufacturer);
+            var newDevice = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
             newDevice.Name = DeviceName;
             newDevice.Description = DeviceDescription;
             newDevice.Cost = DeviceCost;
@@ -1022,6 +1039,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceDescription = "";
             DeviceCost = 0;
             DeviceConnectionType = null;
+            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
             DeviceManufacturer = null;
             DeviceTags = new ObservableCollection<TECTag>();
         }
@@ -1175,7 +1193,22 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        private bool CanAddConnectionTypeToDevice()
+        {
+            if (DeviceConnectionType != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        private void AddConnectionTypeToDeviceExecute()
+        {
+            DeviceConnectionTypes.Add(DeviceConnectionType);
+        }
         #endregion
 
         private void setupInterfaceDefaults()

@@ -349,20 +349,6 @@ namespace EstimatingLibrary
                 { raiseElectricalLabor(); }
 
             }
-            else if (item is TECMiscCost)
-            {
-                var cost = item as TECMiscCost;
-                tecMaterialCost += cost.Cost * cost.Quantity;
-                if (Math.Abs(cost.Cost) > ZERO)
-                { raiseMaterial(); }
-            }
-            else if (item is TECMiscWiring)
-            {
-                var cost = item as TECMiscWiring;
-                electricalMaterialCost += cost.Cost * cost.Quantity;
-                if (Math.Abs(cost.Cost) > ZERO)
-                { raiseElectricalMaterial(); }
-            }
 
         }
         private void removeCost(object item)
@@ -382,20 +368,6 @@ namespace EstimatingLibrary
                 { raiseElectricalMaterial(); }
                 if (Math.Abs(cost.ElectricalLabor) > ZERO)
                 { raiseElectricalLabor(); }
-            }
-            else if (item is TECMiscCost)
-            {
-                var cost = item as TECMiscCost;
-                tecMaterialCost -= cost.Cost * cost.Quantity;
-                if (Math.Abs(cost.Cost) > ZERO)
-                { raiseMaterial(); }
-            }
-            else if (item is TECMiscWiring)
-            {
-                var cost = item as TECMiscWiring;
-                electricalMaterialCost -= cost.Cost * cost.Quantity;
-                if (Math.Abs(cost.Cost) > ZERO)
-                { raiseElectricalMaterial(); }
             }
         }
         private void editCost(object newValue, object oldValue)
@@ -511,7 +483,6 @@ namespace EstimatingLibrary
             return outCost;
         }
         
-
         public double GetElectricalShipping()
         {
             return (ElectricalMaterialCost * 0.03);

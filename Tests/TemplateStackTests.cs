@@ -146,7 +146,9 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Template.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
@@ -549,7 +551,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Template);
             int beforeCount = testStack.UndoStack.Count;
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(Template.Catalogs.Devices[0]);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 2), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -662,17 +664,17 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            Guid expected = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType.Guid.ToString());
+            Guid expected = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0].Guid.ToString());
             TECConnectionType edit = new TECConnectionType();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType = edit;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0] = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionType.Guid.ToString());
+            Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes[0].Guid.ToString());
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -1006,7 +1008,9 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Template.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
@@ -1323,7 +1327,9 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECDevice edit = new TECDevice(Template.Catalogs.ConnectionTypes[0],
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(Template.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
 
             //Act

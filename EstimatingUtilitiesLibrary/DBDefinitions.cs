@@ -123,6 +123,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", LaborType.GetProperty("ElectricalSuperRate"));
         public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", LaborType.GetProperty("ElectricalNonUnionRate"));
         public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", LaborType.GetProperty("ElectricalSuperNonUnionRate"));
+        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", LaborType.GetProperty("ElectricalSuperRatio"));
 
         public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", LaborType.GetProperty("ElectricalIsOnOvertime"));
         public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", LaborType.GetProperty("ElectricalIsUnion"));
@@ -1043,18 +1044,22 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceConnectionTypeTable : TableBase
+    public class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECDeviceTECConnectionType";
         public static Type ObjectType = typeof(TECDevice);
         public static Type ReferenceType = typeof(TECConnectionType);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            DeviceID
+            DeviceID,
+            TypeID
         };
         public static new List<Type> Types = new List<Type>()
         {

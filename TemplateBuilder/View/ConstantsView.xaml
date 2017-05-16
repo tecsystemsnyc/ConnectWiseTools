@@ -27,6 +27,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -142,6 +144,11 @@
                  />
         <TextBox Text="{Binding Labor.ElectricalSuperNonUnionRate, StringFormat= {} {0:C}}"
                  Grid.Row="9" Grid.Column="2"
+                 Margin="2"/>
+        <TextBlock Text="Electrical Supervision Ratio:"
+                   Grid.Row="11"/>
+        <TextBox Text="{Binding Labor.ElectricalSuperRatio}"
+                 Grid.Row="11" Grid.Column="1"
                  Margin="2"/>
     </Grid>
 </UserControl>

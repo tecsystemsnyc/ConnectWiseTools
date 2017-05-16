@@ -153,7 +153,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("System Point", sysPoint.Name);
@@ -188,7 +188,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("Equipment Point", equipPoint.Name);
@@ -218,7 +218,7 @@ namespace Tests
             Assert.AreEqual("Child Device", childDevice.Name);
             Assert.AreEqual("Child Device", childDevice.Description);
             Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionType.Name);
+            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
             Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
 
             Assert.AreEqual("SubScope Point", ssPoint.Name);
@@ -240,7 +240,7 @@ namespace Tests
             Assert.AreEqual("Test Device", actualDevice.Name);
             Assert.AreEqual("Device Description", actualDevice.Description);
             Assert.AreEqual(72.9, actualDevice.Cost);
-            Assert.AreEqual("Cat6", actualDevice.ConnectionType.Name);
+            Assert.AreEqual("Cat6", actualDevice.ConnectionTypes[0].Name);
             Assert.AreEqual("Device Tag", actualDevice.Tags[0].Text);
 
             Assert.AreEqual("Child Manufacturer (Test Device)", childMan.Name);
@@ -699,9 +699,12 @@ namespace Tests
         {
             foreach (TECDevice device in actualTemplates.Catalogs.Devices)
             {
-                if (!actualTemplates.Catalogs.ConnectionTypes.Contains(device.ConnectionType))
+                foreach (TECConnectionType type in device.ConnectionTypes)
                 {
-                    Assert.Fail("ConnectionTypes not linked in device catalog");
+                    if (!actualTemplates.Catalogs.ConnectionTypes.Contains(type))
+                    {
+                        Assert.Fail("ConnectionTypes not linked in device catalog");
+                    }
                 }
             }
 

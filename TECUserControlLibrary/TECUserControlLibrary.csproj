@@ -140,6 +140,9 @@
     <Compile Include="DataGrids\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\DeviceConnectionTypeGrid.xaml.cs">
+      <DependentUpon>DeviceConnectionTypeGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\MiscWiringGridControl.xaml.cs">
       <DependentUpon>MiscWiringGridControl.xaml</DependentUpon>
     </Compile>
@@ -319,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ControllerInPanelGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\DeviceConnectionTypeGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

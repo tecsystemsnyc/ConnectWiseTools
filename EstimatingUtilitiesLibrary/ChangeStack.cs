@@ -566,8 +566,12 @@ namespace EstimatingUtilitiesLibrary
             StackItem item;
             item = new StackItem(change, (object)device, (object)device.Manufacturer);
             SaveStack.Add(item);
-            item = new StackItem(change, (object)device, (object)device.ConnectionType);
-            SaveStack.Add(item);
+            foreach(TECConnectionType type in device.ConnectionTypes)
+            {
+                item = new StackItem(change, (object)device, (object)type);
+                SaveStack.Add(item);
+            }
+            
         }
         private void handleControllerChildren(TECController controller, Change change)
         {

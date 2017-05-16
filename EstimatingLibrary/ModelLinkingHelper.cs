@@ -423,13 +423,18 @@ namespace EstimatingLibrary
         {
             foreach (TECDevice device in devices)
             {
-                foreach (TECConnectionType connectionType in connectionTypes)
+                ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+                foreach(TECConnectionType deviceType in device.ConnectionTypes)
                 {
-                    if (device.ConnectionType.Guid == connectionType.Guid)
+                    foreach (TECConnectionType connectionType in connectionTypes)
                     {
-                        device.ConnectionType = connectionType;
+                        if (deviceType.Guid == connectionType.Guid)
+                        {
+                            linkedTypes.Add(connectionType);
+                        }
                     }
                 }
+                device.ConnectionTypes = linkedTypes;
             }
         }
         static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
