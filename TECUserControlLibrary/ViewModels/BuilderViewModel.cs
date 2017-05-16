@@ -155,6 +155,17 @@ namespace TECUserControlLibrary.ViewModels
                 return fileParams;
             }
         }
+        protected FileDialogParameters EstimateFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "edb";
+                return fileParams;
+            }
+        }
         protected FileDialogParameters TemplatesFileParameters
         {
             get

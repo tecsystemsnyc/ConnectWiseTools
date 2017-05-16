@@ -111,8 +111,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public BidEditorBase() : base()
         {
-            workingFileParameters = BidFileParameters;
-
             setupData();
         }
 

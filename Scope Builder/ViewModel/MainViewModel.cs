@@ -127,6 +127,7 @@ namespace Scope_Builder.ViewModel
             programName = "Scope Builder";
             buildTitleString();
             DGTabIndex = GridIndex.Scope;
+            workingFileParameters = BidFileParameters;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
             TemplatesVisibility = Visibility.Visible;

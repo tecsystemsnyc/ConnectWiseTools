@@ -36,6 +36,7 @@ namespace EstimateBuilder.ViewModel
             isEstimate = true;
             programName = "Estimate Builder";
             buildTitleString();
+            workingFileParameters = EstimateFileParameters;
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
