@@ -9,11 +9,6 @@ using System.ComponentModel;
 
 namespace EstimateBuilder.ViewModel
 {
-    public enum TECMaterialIndex
-    {
-        Devices, Controllers, Panels, MiscCosts
-    }
-
     public class TECMaterialViewModel : ViewModelBase
     {
         #region Properties
