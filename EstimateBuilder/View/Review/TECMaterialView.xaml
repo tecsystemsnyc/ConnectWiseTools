@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
              xmlns:utilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
@@ -20,12 +21,13 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75"/>
-            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
@@ -40,26 +42,51 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Category:" Foreground="Black"/>
+        <TextBlock Text="Category:" Foreground="Black" VerticalAlignment="Center"/>
         <ComboBox Grid.Column="1" ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
-                  SelectedItem="{Binding ElementName=parent, Path=SelectedMaterial}"
+                  SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialIndex}"
                   Margin="5"
                   VerticalContentAlignment="Center"/>
 
-        <TabControl Grid.Column="2" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterial, Converter={cnvt:TECMaterialIndexToIntegerConverter}}">
+        <TabControl Grid.Column="2" Grid.RowSpan="14" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialIndex, Converter={cnvt:TECMaterialIndexToIntegerConverter}}">
 
             <!--Device View-->
             <TabItem Visibility="Collapsed">
                 <local:DeviceListView ViewModel="{Binding}"/>
             </TabItem>
+            
             <!--Controller View-->
             <TabItem Visibility="Collapsed">
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <cLibGrids:AssociatedCostsSummaryGrid Grid.ColumnSpan="4" AssociatedCostSummaryItemsSource="{Binding ControllerAssCostSummaryItems}"/>
+
+                    <TextBlock Text="Controller Subtotal:" Grid.Row="1" Foreground="Black"/>
+                    <TextBlock Text="{Binding ControllerSubTotal, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="1" Foreground="Black"/>
+
+                    <TextBlock Text="Controller Associated Costs Subtotal:" Grid.Row="1" Grid.Column="2" Foreground="Black"/>
+                    <TextBlock Text="{Binding ControllerAssCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="3" Foreground="Black"/>
+
+                    <TextBlock Text="Controller Associated Labor Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+                    <TextBlock Text="{Binding ControllerAssCostSubTotalLabor}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
+                </Grid>
             </TabItem>
+            
             <!--Panel View-->
             <TabItem Visibility="Collapsed">
                 
             </TabItem>
+            
             <!--Misc Costs View-->
             <TabItem Visibility="Collapsed">
                 
@@ -68,37 +95,37 @@
         </TabControl>
 
         <!--Cost Subtotals-->
-        <TextBlock Text="Device Cost:" Grid.Row="1" Grid.Column="1" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalDeviceCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="Device Costs:" Grid.Row="2" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalDeviceCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Controller Costs:" Grid.Row="1" Grid.Column="3" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalControllerCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="4" Foreground="Black"/>
+        <TextBlock Text="Controller Costs:" Grid.Row="3" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalControllerCost, StringFormat={} {0:C}}" Grid.Row="3" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Panel Costs:" Grid.Row="1" Grid.Column="5" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalPanelCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="6" Foreground="Black"/>
+        <TextBlock Text="Panel Costs:" Grid.Row="4" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalPanelCost, StringFormat={} {0:C}}" Grid.Row="4" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Misc. Costs:" Grid.Row="1" Grid.Column="7" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalMiscCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="8" Foreground="Black"/>
+        <TextBlock Text="Misc. Costs:" Grid.Row="5" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalMiscCost, StringFormat={} {0:C}}" Grid.Row="5" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Total Costs:" Grid.Row="1" Grid.Column="9" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="10" Foreground="Black"/>
+        <TextBlock Text="Total Costs:" Grid.Row="6" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalCost, StringFormat={} {0:C}}" Grid.Row="6" Grid.Column="1" Foreground="Black"/>
 
         <!--Labor Subtotals-->
-        <TextBlock Text="Device Labor:" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalDeviceLabor}" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="Device Labor:" Grid.Row="8" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalDeviceLabor}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Controller Labor:" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalControllerLabor}" Grid.Row="2" Grid.Column="4" Foreground="Black"/>
+        <TextBlock Text="Controller Labor:" Grid.Row="9" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalControllerLabor}" Grid.Row="9" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Panel Labor:" Grid.Row="2" Grid.Column="5" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalPanelLabor}" Grid.Row="2" Grid.Column="6" Foreground="Black"/>
+        <TextBlock Text="Panel Labor:" Grid.Row="10" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalPanelLabor}" Grid.Row="10" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Misc Labor:" Grid.Row="2" Grid.Column="7" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalMiscLabor}" Grid.Row="2" Grid.Column="8" Foreground="Black"/>
+        <TextBlock Text="Misc Labor:" Grid.Row="11" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalMiscLabor}" Grid.Row="11" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Total Labor:" Grid.Row="2" Grid.Column="9" Foreground="Black"/>
-        <TextBlock Text="{Binding TotalLabor}" Grid.Row="2" Grid.Column="10" Foreground="Black"/>
+        <TextBlock Text="Total Labor:" Grid.Row="12" Foreground="Black"/>
+        <TextBlock Text="{Binding TotalLabor}" Grid.Row="12" Grid.Column="1" Foreground="Black"/>
         
-        <Border Grid.ColumnSpan="11" Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="14" Grid.Column="2" BorderBrush="Black" BorderThickness="1"/>
     </Grid>
 </UserControl>
