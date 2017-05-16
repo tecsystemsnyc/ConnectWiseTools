@@ -103,7 +103,7 @@
             <Button Grid.Column="2" Content="Add Type" Margin="5"
                     Command="{Binding AddConnectionTypeToDeviceCommand}"/>
         </Grid>
-        <grids:ConnectionTypeGridControl ConnectionTypesSource="{Binding SelectedDevice.ConnectionTypes}"
+        <grids:DeviceConnectionTypeGrid ConnectionTypesSource="{Binding SelectedDevice.ConnectionTypes}"
                                          Grid.Row="2" Grid.ColumnSpan="2"/>
         <ComboBox Grid.Row="3" Margin="5" ItemsSource="{Binding TagSelections}"
                   SelectedItem="{Binding SelectedTag}"

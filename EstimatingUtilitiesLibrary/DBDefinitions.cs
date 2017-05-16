@@ -1044,7 +1044,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceConnectionTypeTable : TableBase
+    public class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECDeviceTECConnectionType";
         public static Type ObjectType = typeof(TECDevice);
@@ -1058,7 +1058,8 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            DeviceID
+            DeviceID,
+            TypeID
         };
         public static new List<Type> Types = new List<Type>()
         {

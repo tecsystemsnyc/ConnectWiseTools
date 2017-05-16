@@ -190,7 +190,7 @@
                         <Button Content="Add Type" Command="{Binding Path=ViewModel.AddConnectionTypeToDeviceCommand}"
                                 Grid.Column="2" Margin="2"/>
                     </Grid>
-                    <grids:ConnectionTypeGridControl ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
+                    <grids:DeviceConnectionTypeGrid ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
                                                      Grid.Row="4" Grid.ColumnSpan="2"/>
                     <Label Grid.Column="0"
                         Grid.Row="5"
