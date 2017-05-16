@@ -551,7 +551,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Template);
             int beforeCount = testStack.UndoStack.Count;
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(Template.Catalogs.Devices[0]);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 2), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
