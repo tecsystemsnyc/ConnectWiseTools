@@ -37,7 +37,7 @@ namespace TECUserControlLibrary
                 }
             }
         }
-        public static void StandardDrop(IDropInfo dropInfo)
+        public static void StandardDrop(IDropInfo dropInfo, bool newDevice = false)
         {
             var sourceItem = dropInfo.Data;
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -55,7 +55,15 @@ namespace TECUserControlLibrary
                 }
                 else
                 {
-                    sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                    if (newDevice && dropInfo.Data is TECDevice)
+                    {
+                        sourceItem = new TECDevice(dropInfo.Data as TECDevice);
+                    }
+                    else
+                    {
+                        sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+
+                    }
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {

@@ -369,7 +369,12 @@ namespace TemplateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo);
+            bool newDevice = false;
+            if(DGTabIndex == TemplateGridIndex.Devices)
+            {
+                newDevice = true;
+            }
+            UIHelpers.StandardDrop(dropInfo, newDevice);
         }
         #endregion
         #region Helper Methods
