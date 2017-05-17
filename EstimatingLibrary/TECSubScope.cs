@@ -76,7 +76,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return 0;
+                return getElectricalLabor();
             }
         }
 
@@ -321,6 +321,15 @@ namespace EstimatingLibrary
             }
 
             return labCost;
+        }
+        private double getElectricalLabor()
+        {
+            double mountingLabor = 0;
+            foreach(TECDevice device in Devices)
+            {
+                mountingLabor += .5;
+            }
+            return mountingLabor;
         }
 
         private void subscribeToDevices()

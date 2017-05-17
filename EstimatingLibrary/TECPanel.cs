@@ -53,12 +53,11 @@ namespace EstimatingLibrary
                 return 0;
             }
         }
-
         public double ElectricalLabor
         {
             get
             {
-                return 0;
+                return getElectricalLabor();
             }
         }
         #endregion
@@ -145,6 +144,13 @@ namespace EstimatingLibrary
             }
 
             return lCost;
+        }
+        private double getElectricalLabor()
+        {
+            double mountingLabor = 0;
+            mountingLabor += .5;
+
+            return mountingLabor;
         }
 
     }
