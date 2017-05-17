@@ -610,54 +610,94 @@ namespace EstimateBuilder.ViewModel
 
         private void addCostToController(TECAssociatedCost cost)
         {
-            ControllerAssCostSubTotalCost += cost.Cost;
-            ControllerAssCostSubTotalLabor += cost.Labor;
+            Tuple<double, double> delta = addCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
+            ControllerAssCostSubTotalCost += delta.Item1;
+            ControllerAssCostSubTotalLabor += delta.Item2;
         }
 
         private void removeCostFromController(TECAssociatedCost cost)
         {
-            ControllerAssCostSubTotalCost -= cost.Cost;
-            ControllerAssCostSubTotalLabor -= cost.Labor;
+            Tuple<double, double> delta = removeCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
+            ControllerAssCostSubTotalCost += delta.Item1;
+            ControllerAssCostSubTotalLabor += delta.Item2;
         }
 
         private void addPanel(TECPanel panel)
         {
-            PanelTypeSubTotal += panel.Type.Cost;
-            foreach(TECAssociatedCost cost in panel.AssociatedCosts)
+            bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
+            if (containsPanelType)
             {
-                addCostToPanel(cost);
+                PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
+                panelTypeDictionary[panel.Type.Guid].Quantity++;
+                PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
+            }
+            else
+            {
+                PanelTypeSummaryItem panelTypeItem = new PanelTypeSummaryItem(panel.Type);
+                panelTypeDictionary.Add(panel.Type.Guid, panelTypeItem);
+                PanelTypeSummaryItems.Add(panelTypeItem);
+                PanelTypeSubTotal += panelTypeItem.Total;
+            }
+            foreach (TECAssociatedCost cost in panel.AssociatedCosts)
+            {
+                Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+                PanelAssCostSubTotalCost += delta.Item1;
+                PanelAssCostSubTotalLabor += delta.Item2;
             }
         }
 
         private void removePanel(TECPanel panel)
         {
-            PanelTypeSubTotal -= panel.Type.Cost;
-            foreach (TECAssociatedCost cost in panel.AssociatedCosts)
+            bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
+            if (containsPanelType)
             {
-                removeCostFromPanel(cost);
+                PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
+                panelTypeDictionary[panel.Type.Guid].Quantity--;
+                PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
+
+                if (panelTypeDictionary[panel.Type.Guid].Quantity < 1)
+                {
+                    PanelTypeSummaryItems.Remove(panelTypeDictionary[panel.Type.Guid]);
+                    panelTypeDictionary.Remove(panel.Type.Guid);
+                }
+
+                foreach (TECAssociatedCost cost in panel.AssociatedCosts)
+                {
+                    Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+                    PanelAssCostSubTotalCost += delta.Item1;
+                    PanelAssCostSubTotalLabor += delta.Item2;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Panel type not found in panel type dictionary.");
             }
         }
 
         private void addCostToPanel(TECAssociatedCost cost)
         {
-            PanelAssCostSubTotalCost += cost.Cost;
-            PanelAssCostSubTotalLabor += cost.Labor;
+            Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+            PanelAssCostSubTotalCost += delta.Item1;
+            PanelAssCostSubTotalLabor += delta.Item2;
         }
 
         private void removeCostFromPanel(TECAssociatedCost cost)
         {
-            PanelAssCostSubTotalCost -= cost.Cost;
-            PanelAssCostSubTotalLabor -= cost.Labor;
+            Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+            PanelAssCostSubTotalCost += delta.Item1;
+            PanelAssCostSubTotalLabor += delta.Item2;
         }
 
         private void addMiscCost(TECMiscCost cost)
         {
+            MiscCosts.Add(cost);
             MiscCostSubTotalCost += cost.Cost * cost.Quantity;
             MiscCostSubTotalLabor += cost.Labor * cost.Quantity;
         }
 
         private void removeMiscCost(TECMiscCost cost)
         {
+            MiscCosts.Remove(cost);
             MiscCostSubTotalCost -= cost.Cost * cost.Quantity;
             MiscCostSubTotalLabor -= cost.Labor * cost.Quantity;
         }
