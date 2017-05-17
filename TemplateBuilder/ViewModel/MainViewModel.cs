@@ -374,7 +374,7 @@ namespace TemplateBuilder.ViewModel
         #region Helper Methods
         private void setVisibility(TemplateGridIndex gridIndex)
         {
-            nullifySelected();
+            ScopeDataGrid.NullifySelected();
 
             switch (gridIndex)
             {
@@ -563,8 +563,7 @@ namespace TemplateBuilder.ViewModel
 
                     break;
                 default:
-
-
+                    
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -585,14 +584,7 @@ namespace TemplateBuilder.ViewModel
                     break;
             }
         }
-        private void nullifySelected()
-        {
-            ScopeDataGrid.SelectedDevice = null;
-            ScopeDataGrid.SelectedPoint = null;
-            ScopeDataGrid.SelectedSubScope = null;
-            ScopeDataGrid.SelectedEquipment = null;
-            ScopeDataGrid.SelectedSystem = null;
-        }
+        
         protected override void setupMenu()
         {
             MenuVM = new MenuViewModel(MenuType.TB);
