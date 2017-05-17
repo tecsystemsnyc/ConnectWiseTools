@@ -17,7 +17,8 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=PanelTypeSource}"
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  SelectedItem="{Binding Path=ViewModel.SelectedPanelType}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" />
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"

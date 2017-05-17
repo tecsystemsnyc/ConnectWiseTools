@@ -162,6 +162,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanelType _selectedPanelType;
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+                TabIndex = EditIndex.PanelType;
+            }
+        }
+
         private IOType _controllerIO;
         public IOType ControllerIO
         {
@@ -291,6 +303,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand AddTagToPointCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
         public ICommand AddTagToPanelCommand { get; private set; }
+        public ICommand AddTagToPanelTypeCommand { get; private set; }
         public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
@@ -299,14 +312,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public ICommand DeleteSelectedPointCommand { get; private set; }
         public ICommand DeleteSelectedControllerCommand { get; private set; }
         public ICommand DeleteSelectedPanelCommand { get; private set; }
+        public ICommand DeleteSelectedPanelTypeCommand { get; private set; }
         public ICommand AddAssociatedCostToSystemCommand { get; private set; }
         public ICommand AddAssociatedCostToEquipmentCommand { get; private set; }
         public ICommand AddAssociatedCostToSubScopeCommand { get; private set; }
         public ICommand AddAssociatedCostToDeviceCommand { get; private set; }
         public ICommand AddAssociatedCostToControllerCommand { get; private set; }
         public ICommand AddAssociatedCostToPanelCommand { get; private set; }
+        public ICommand AddAssociatedCostToPanelTypeCommand { get; private set; }
         public ICommand AddConnectionTypeToDeviceCommand { get; private set; }
-
+        
         #endregion
 
         public Action<IDropInfo> DragHandler;
@@ -389,6 +404,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddTagToPointCommand = new RelayCommand(AddTagToPointExecute, CanAddTagToPoint);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute, CanAddTagToController);
             AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
+            AddTagToPanelTypeCommand = new RelayCommand(AddTagToPanelTypeExecute, CanAddTagToPanelType);
 
             AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, addIOCanExecute);
 
@@ -399,6 +415,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeleteSelectedPointCommand = new RelayCommand(DeleteSelectedPointExecute);
             DeleteSelectedControllerCommand = new RelayCommand(DeleteSelectedControllerExecute);
             DeleteSelectedPanelCommand = new RelayCommand(DeleteSelectedPanelExecute);
+            DeleteSelectedPanelTypeCommand = new RelayCommand(DeleteSelectedPanelTypeExecute);
 
             AddAssociatedCostToSystemCommand = new RelayCommand(AddAssociatedCostToSystemExecute, CanAddAssociatedCostToSystem);
             AddAssociatedCostToEquipmentCommand = new RelayCommand(AddAssociatedCostToEquipmentExecute, CanAddAssociatedCostToEquipment);
@@ -406,10 +423,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             AddAssociatedCostToDeviceCommand = new RelayCommand(AddAssociatedCostToDeviceExecute, CanAddAssociatedCostToDevice);
             AddAssociatedCostToControllerCommand = new RelayCommand(AddAssociatedCostToControllerExecute, CanAddAssociatedCostToController);
             AddAssociatedCostToPanelCommand = new RelayCommand(AddAssociatedCostToPanelExecute, CanAddAssociatedCostToPanel);
+            AddAssociatedCostToPanelTypeCommand = new RelayCommand(AddAssociatedCostToPanelTypeExecute, CanAddAssociatedCostToPanelType);
 
             AddConnectionTypeToDeviceCommand = new RelayCommand(AddConnectionTypeToDeviceExecute, CanAddConnectionTypeToDevice);
         }
-
+        
         private bool CanAddConnectionTypeToDevice()
         {
             if(SelectedConnectionType != null)
@@ -452,6 +470,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         }
 
         #region Commands
+        
         private void AddTagToSystemExecute()
         {
             SelectedSystem.Tags.Add(SelectedTag);
@@ -572,6 +591,23 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        private void AddTagToPanelTypeExecute()
+        {
+            SelectedPanelType.Tags.Add(SelectedTag);
+        }
+        private bool CanAddTagToPanelType()
+        {
+            if (SelectedTag != null
+                && SelectedPanelType != null
+                && !SelectedPanelType.Tags.Contains(SelectedTag))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         private void AddIOToControllerExecute()
         {
@@ -663,6 +699,18 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Bid.Panels.Remove(SelectedPanel);
             }
             SelectedPanel = null;
+        }
+        private void DeleteSelectedPanelTypeExecute()
+        {
+            if (SelectedPanelType != null && Templates != null)
+            {
+                Templates.Catalogs.PanelTypes.Remove(SelectedPanelType);
+            }
+            else if (SelectedPanelType != null && Bid != null)
+            {
+                Bid.Catalogs.PanelTypes.Remove(SelectedPanelType);
+            }
+            SelectedPanelType = null;
         }
 
         private void AddAssociatedCostToSystemExecute()
@@ -757,6 +805,21 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 return false;
             }
         }
+        private void AddAssociatedCostToPanelTypeExecute()
+        {
+            SelectedPanelType.AssociatedCosts.Add(SelectedAssociatedCost);
+        }
+        private bool CanAddAssociatedCostToPanelType()
+        {
+            if (SelectedAssociatedCost != null && SelectedPanelType != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region Events
@@ -793,6 +856,10 @@ namespace TECUserControlLibrary.ViewModelExtensions
             else if (selection is TECPanel)
             {
                 SelectedPanel = selection as TECPanel;
+            }
+            else if (selection is TECPanelType)
+            {
+                SelectedPanelType = selection as TECPanelType;
             }
             else
             {

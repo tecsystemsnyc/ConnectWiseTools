@@ -23,7 +23,7 @@ namespace EstimatingUtilitiesLibrary
         private const string DB_FMT = "O";
         //private const bool DEBUG = true;
 
-        static private SQLiteDatabase SQLiteDB;
+        static private SQLiteDatabase SQLiteDB; 
 
         static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
 

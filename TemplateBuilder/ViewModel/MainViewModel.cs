@@ -274,6 +274,7 @@ namespace TemplateBuilder.ViewModel
             MaterialsTab = new MaterialsCostsExtension(Templates);
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
+            MaterialsTab.SelectionChanged += EditTab.updateSelection;
         }
         private void setupControlledScopeTab()
         {
