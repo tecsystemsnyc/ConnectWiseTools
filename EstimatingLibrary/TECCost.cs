@@ -19,6 +19,7 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _cost = value;
                 NotifyPropertyChanged("Cost", temp, this);
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -31,7 +32,18 @@ namespace EstimatingLibrary
                 var temp = this.Copy();
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
+                RaisePropertyChanged("TotalLabor");
             }
+        }
+
+        public double TotalCost
+        {
+            get { return Cost * Quantity; }
+        }
+
+        public double TotalLabor
+        {
+            get { return Labor * Quantity; }
         }
 
         #endregion
@@ -40,6 +52,8 @@ namespace EstimatingLibrary
         public TECCost(Guid guid) : base(guid)
         {
             _cost = 0;
+            _labor = 0;
+            base.PropertyChanged += TECCost_PropertyChanged;
         }
 
         public TECCost() : this(Guid.NewGuid()) { }
@@ -63,6 +77,15 @@ namespace EstimatingLibrary
         public override object DragDropCopy()
         {
             throw new NotImplementedException();
+        }
+
+        private void TECCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Quantity")
+            {
+                RaisePropertyChanged("TotalCost");
+                RaisePropertyChanged("TotalLabor");
+            }
         }
     }
 }

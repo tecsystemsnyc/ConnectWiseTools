@@ -57,7 +57,7 @@
             
             <!--Controller View-->
             <TabItem Visibility="Collapsed">
-                <Grid>
+                <Grid Background="{DynamicResource SectionBackgroundBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -79,17 +79,51 @@
 
                     <TextBlock Text="Controller Associated Labor Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
                     <TextBlock Text="{Binding ControllerAssCostSubTotalLabor}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
+
+                    <Border Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1"/>
                 </Grid>
             </TabItem>
             
             <!--Panel View-->
             <TabItem Visibility="Collapsed">
-                
+                <local:PanelTypeListView ViewModel="{Binding}"/>
             </TabItem>
             
             <!--Misc Costs View-->
             <TabItem Visibility="Collapsed">
-                
+                <Grid Background="{DynamicResource SectionBackgroundBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid Grid.ColumnSpan="4" ItemsSource="{Binding MiscCosts}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Unit Cost" Binding="{Binding Cost}" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost}" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Unit Labor" Binding="{Binding Labor}" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="50"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Text="Misc Cost Subtotal:" Grid.Row="1" Foreground="Black"/>
+                    <TextBlock Text="{Binding MiscCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="1" Grid.Column="1" Foreground="Black"/>
+
+                    <TextBlock Text="Misc Labor Subtotal:" Grid.Row="1" Grid.Column="2" Foreground="Black"/>
+                    <TextBlock Text="{Binding MiscCostSubTotalLabor}" Grid.Row="1" Grid.Column="3" Foreground="Black"/>
+
+                    <Border Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="1"/>
+                </Grid>
             </TabItem>
             
         </TabControl>
@@ -126,6 +160,6 @@
         <TextBlock Text="Total Labor:" Grid.Row="12" Foreground="Black"/>
         <TextBlock Text="{Binding TotalLabor}" Grid.Row="12" Grid.Column="1" Foreground="Black"/>
         
-        <Border Grid.RowSpan="14" Grid.Column="2" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="14" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
     </Grid>
 </UserControl>

@@ -335,14 +335,31 @@ namespace EstimateBuilder.ViewModel
 
         private void reinitialize(TECBid bid)
         {
-            DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
             deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
+            DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
+            deviceAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
+            DeviceAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+
+            controllerAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
+            ControllerAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+
+            panelTypeDictionary = new Dictionary<Guid, PanelTypeSummaryItem>();
+            PanelTypeSummaryItems = new ObservableCollection<PanelTypeSummaryItem>();
+            panelAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
+            PanelAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+
+            MiscCosts = new ObservableCollection<TECMiscCost>();
 
             _deviceSubTotal = 0;
             _deviceAssCostSubTotalCost = 0;
             _deviceAssCostSubTotalLabor = 0;
             _controllerAssCostSubTotalCost = 0;
             _controllerAssCostSubTotalLabor = 0;
+            _panelTypeSubTotal = 0;
+            _panelAssCostSubTotalCost = 0;
+            _panelAssCostSubTotalLabor = 0;
+            _miscCostSubTotalCost = 0;
+            _miscCostSubTotalLabor = 0;
 
             foreach (TECSystem sys in bid.Systems)
             {

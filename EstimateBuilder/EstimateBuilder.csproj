@@ -214,6 +214,9 @@
     <Compile Include="View\Review\LengthSummaryDataGrid.xaml.cs">
       <DependentUpon>LengthSummaryDataGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Review\PanelTypeListView.xaml.cs">
+      <DependentUpon>PanelTypeListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Review\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
     </Compile>
@@ -268,6 +271,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Review\LengthSummaryDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Review\PanelTypeListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
