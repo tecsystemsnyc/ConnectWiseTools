@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
+             x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -14,12 +15,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DataGrid DataContext="{Binding ElementName=parent}"
-              ItemsSource="{Binding Path=AssociatedCostsSummaryItemsSource}"
+              ItemsSource="{Binding Path=AssociatedCostSummaryItemsSource}"
               AutoGenerateColumns="False"
               IsReadOnly="True">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Name" Binding="{Binding AssociatedCost.Name}" Width="Auto" MinWidth="60"/>
-            <DataGridTextColumn Header="Quantity" Binding="{Binding AssociatedCost.Quantity}" Width="Auto" MinWidth="60"/>
+            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="60"/>
             <DataGridTextColumn Header="Unit Cost" Binding="{Binding AssociatedCost.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
             <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
             <DataGridTextColumn Header="Unit Labor" Binding="{Binding AssociatedCost.Labor}" Width="Auto" MinWidth="60"/>

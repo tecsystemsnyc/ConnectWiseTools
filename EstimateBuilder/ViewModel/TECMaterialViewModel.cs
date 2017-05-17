@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TECUserControlLibrary.Models;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -44,7 +45,7 @@ namespace EstimateBuilder.ViewModel
         private Dictionary<Guid, AssociatedCostSummaryItem> deviceAssCostDictionary;
 
         private ObservableCollection<AssociatedCostSummaryItem> _deviceAssCostSummaryItems;
-        private ObservableCollection<AssociatedCostSummaryItem> DeviceAssCostSummaryItems
+        public ObservableCollection<AssociatedCostSummaryItem> DeviceAssCostSummaryItems
         {
             get { return _deviceAssCostSummaryItems; }
             set
@@ -61,7 +62,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 _deviceSubTotal = value;
-                RaisePropertyChanged("DeviceSubToal");
+                RaisePropertyChanged("DeviceSubTotal");
                 RaisePropertyChanged("TotalDeviceCost");
                 RaisePropertyChanged("TotalCost");
             }
@@ -529,8 +530,9 @@ namespace EstimateBuilder.ViewModel
             }
             foreach (TECAssociatedCost cost in device.AssociatedCosts)
             {
-                DeviceAssCostSubTotalCost += cost.Cost;
-                DeviceAssCostSubTotalLabor += cost.Labor;
+                Tuple<double, double> delta = addCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                DeviceAssCostSubTotalCost += delta.Item1;
+                DeviceAssCostSubTotalLabor += delta.Item2;
             }
         }
 
@@ -551,8 +553,9 @@ namespace EstimateBuilder.ViewModel
 
                 foreach (TECAssociatedCost cost in device.AssociatedCosts)
                 {
-                    DeviceAssCostSubTotalCost -= cost.Cost;
-                    DeviceAssCostSubTotalLabor -= cost.Labor;
+                    Tuple<double, double> delta = removeCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                    DeviceAssCostSubTotalCost += delta.Item1;
+                    DeviceAssCostSubTotalLabor += delta.Item2;
                 }
             }
             else
@@ -567,8 +570,9 @@ namespace EstimateBuilder.ViewModel
             {
                 for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
-                    DeviceAssCostSubTotalCost += cost.Cost;
-                    DeviceAssCostSubTotalLabor += cost.Labor;
+                    Tuple<double, double> delta = addCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                    DeviceAssCostSubTotalCost += delta.Item1;
+                    DeviceAssCostSubTotalLabor += delta.Item2;
                 }
             }
         }
@@ -579,8 +583,9 @@ namespace EstimateBuilder.ViewModel
             {
                 for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
-                    DeviceAssCostSubTotalCost -= cost.Cost;
-                    DeviceAssCostSubTotalLabor -= cost.Labor;
+                    Tuple<double, double> delta = removeCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                    DeviceAssCostSubTotalCost += delta.Item1;
+                    DeviceAssCostSubTotalLabor += delta.Item2;
                 }
             }
         }
@@ -702,6 +707,57 @@ namespace EstimateBuilder.ViewModel
             foreach (TECEquipment equip in sys.Equipment)
             {
                 removeEquipment(equip);
+            }
+        }
+
+        private Tuple<double, double> addCost(TECAssociatedCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        {
+            double costChange = 0;
+            double laborChange = 0;
+            bool containsCost = dictionary.ContainsKey(cost.Guid);
+            if (containsCost)
+            {
+                costChange -= dictionary[cost.Guid].TotalCost;
+                laborChange -= dictionary[cost.Guid].TotalLabor;
+                dictionary[cost.Guid].Quantity++;
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
+            }
+            else
+            {
+                AssociatedCostSummaryItem costItem = new AssociatedCostSummaryItem(cost);
+                dictionary.Add(cost.Guid, costItem);
+                collection.Add(costItem);
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
+            }
+            return Tuple.Create(costChange, laborChange);
+        }
+
+        private Tuple<double, double> removeCost(TECAssociatedCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        {
+            double costChange = 0;
+            double laborChange = 0;
+            bool containsCost = dictionary.ContainsKey(cost.Guid);
+            if (containsCost)
+            {
+                costChange -= dictionary[cost.Guid].TotalCost;
+                laborChange -= dictionary[cost.Guid].TotalLabor;
+                dictionary[cost.Guid].Quantity--;
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
+
+                if (dictionary[cost.Guid].Quantity < 1)
+                {
+                    collection.Remove(dictionary[cost.Guid]);
+                    dictionary.Remove(cost.Guid);
+                }
+
+                return Tuple.Create(costChange, laborChange);
+            }
+            else
+            {
+                throw new InvalidOperationException("Associated Cost not found in dictionary.");
             }
         }
         #endregion

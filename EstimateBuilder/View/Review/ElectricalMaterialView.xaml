@@ -58,18 +58,7 @@
 
         <!--Associated Cost Summary-->
         <TextBlock Text="Misc" Foreground="Black" FontSize="20" Grid.Row="6"/>
-        <DataGrid Grid.ColumnSpan="4" Grid.Row="7" ItemsSource="{Binding AssociatedCostSummaryItems}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding AssociatedCost.Name}" Width="Auto" MinWidth="60"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="60"/>
-                <DataGridTextColumn Header="Unit Cost" Binding="{Binding AssociatedCost.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
-                <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="60"/>
-                <DataGridTextColumn Header="Unit Labor" Binding="{Binding AssociatedCost.Labor}" Width="Auto" MinWidth="60"/>
-                <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="60"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <grids:AssociatedCostsSummaryGrid Grid.ColumnSpan="4" Grid.Row="7" AssociatedCostSummaryItemsSource="{Binding AssociatedCostSummaryItems}"/>
 
         <TextBlock Text="Total Electrical Associated Cost:" Grid.Row="8" Foreground="Black"/>
         <TextBlock Text="{Binding TotalAssociatedCost, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>

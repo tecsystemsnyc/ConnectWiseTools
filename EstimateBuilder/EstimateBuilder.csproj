@@ -171,7 +171,6 @@
     <Compile Include="Helpers\BaseConverter.cs" />
     <Compile Include="Helpers\EnumBindingSourceExtension.cs" />
     <Compile Include="Helpers\HelperConverters.cs" />
-    <Compile Include="Model\AssociatedCostSummaryItem.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\DeviceSummaryItem.cs" />
