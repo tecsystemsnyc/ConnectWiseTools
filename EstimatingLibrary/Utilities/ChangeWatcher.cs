@@ -339,6 +339,17 @@ namespace EstimatingLibrary.Utilities
                     panel.PropertyChanged -= Object_PropertyChanged;
                 }
             }
+            foreach(TECControlledScope instance in scope.ScopeInstances)
+            {
+                if (change == Change.Add)
+                {
+                    instance.PropertyChanged += Object_PropertyChanged;
+                }
+                else if (change == Change.Remove)
+                {
+                    instance.PropertyChanged -= Object_PropertyChanged;
+                }
+            }
         }
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -399,7 +410,7 @@ namespace EstimatingLibrary.Utilities
                         {
                             (newValue as TECBid).Labor.PropertyChanged += Object_PropertyChanged;
                         }
-                    }
+                    } 
                 }
             }
             else

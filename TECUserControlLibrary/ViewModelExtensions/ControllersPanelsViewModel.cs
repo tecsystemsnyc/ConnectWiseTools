@@ -306,7 +306,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, Bid.Controllers);
+                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers);
             }
             else
             {

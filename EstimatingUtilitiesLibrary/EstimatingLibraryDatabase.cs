@@ -2305,38 +2305,55 @@ namespace EstimatingUtilitiesLibrary
             if(isRelationship)
             {
                 change = Change.AddRelationship;
-            }else
+            }
+            else
             {
                 addObject(new StackItem(change, scopeManager, conScope));
             }
             saveScopeChildProperties(conScope);
             foreach (TECSystem system in conScope.Systems)
             {
-                addObject(new StackItem(change, conScope, system));
                 if (!isRelationship)
                 {
+                    addObject(new StackItem(change, conScope, system));
                     saveScopeChildProperties(system);
                     saveCompleteEquipment(system);
+                } else
+                {
+                    addRelationship(new StackItem(change, conScope, system));
                 }
                 
             }
             foreach (TECPanel panel in conScope.Panels)
             {
-                savePanel(panel, conScope);
+                if (!isRelationship)
+                {
+                    savePanel(panel, conScope);
+                }
+                else
+                {
+                    addRelationship(new StackItem(change, conScope, panel));
+                }
+                
             }
             foreach (TECController controller in conScope.Controllers)
             {
                 if (!isRelationship)
                 {
+                    addObject(new StackItem(change, conScope, controller));
                     saveScopeChildProperties(controller);
                     saveControllerChildProperties(controller);
                 }
-                addObject(new StackItem(change, conScope, controller));
-                
+                else
+                {
+                    addRelationship(new StackItem(change, conScope, controller));
+                }
+
             }
             foreach(TECControlledScope childScope in conScope.ScopeInstances)
             {
                 addObject(new StackItem(change, conScope, childScope));
+                saveFullControlledScope(childScope, scopeManager, true);
             }
             foreach(KeyValuePair<TECScope, List<TECScope>> item in conScope.CharactersticInstances.GetFullDictionary())
             {

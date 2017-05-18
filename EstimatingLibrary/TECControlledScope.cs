@@ -92,6 +92,29 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ScopeInstances", temp, this);
             }
         }
+        
+        private void populateInstances()
+        {
+            _systemInstances = new ObservableCollection<TECSystem>();
+            _controllerInstances = new ObservableCollection<TECController>();
+            _panelInstances = new ObservableCollection<TECPanel>();
+            foreach (TECControlledScope scope in ScopeInstances)
+            {
+                scope.PropertyChanged += TECControlledScope_PropertyChanged;
+                foreach (TECSystem system in scope.Systems)
+                {
+                    SystemInstances.Add(system);
+                }
+                foreach(TECController controller in scope.Controllers)
+                {
+                    ControllerInstances.Add(controller);
+                }
+                foreach(TECPanel panel in scope.Panels)
+                {
+                    PanelInstances.Add(panel);
+                }
+            }
+        }
 
         public ObservableItemToInstanceList<TECScope> CharactersticInstances;
         private ChangeWatcher watcher;
@@ -722,6 +745,13 @@ namespace EstimatingLibrary
                     }
                 }
             }
+        }
+
+        public void RefreshReferences()
+        {
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += Object_PropertyChanged;
+            populateInstances();
         }
     }
 }
