@@ -50,7 +50,7 @@ namespace TECUserControlLibrary
                     foreach (object item in ((IList)sourceItem))
                     {
                         outSource.Add(((TECScope)item).DragDropCopy());
-                    }
+                     }
                     sourceItem = outSource;
                 }
                 else
