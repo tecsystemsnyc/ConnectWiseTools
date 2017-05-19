@@ -34,6 +34,7 @@ namespace Tests
         //static TECVisualScope expectedVisualScope;
         static TECController expectedController;
         static TECProposalScope expectedPropScope;
+        static TECControlledScope expectedControlledScope;
 
         static string path;
 
@@ -56,6 +57,8 @@ namespace Tests
         //static TECVisualScope actualVisualScope;
         static TECController actualController;
         static TECProposalScope actualPropScope;
+        static TECControlledScope actualControlledScope;
+
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -81,6 +84,7 @@ namespace Tests
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
+            expectedControlledScope = expectedBid.ControlledScope[0];
 
             expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
             expectedPoint = expectedSubScope.Points[0];
@@ -260,6 +264,15 @@ namespace Tests
                 if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
                 {
                     actualPropScope = propScope;
+                    break;
+                }
+            }
+
+            foreach(TECControlledScope controlledScope in actualBid.ControlledScope)
+            {
+                if(controlledScope.Guid == expectedControlledScope.Guid)
+                {
+                    actualControlledScope = controlledScope;
                     break;
                 }
             }
@@ -629,6 +642,70 @@ namespace Tests
             Assert.AreEqual(expectedCost.Guid, expectedBid.Catalogs.PanelTypes[0].Guid);
             Assert.AreEqual(expectedCost.Name, expectedBid.Catalogs.PanelTypes[0].Name);
             Assert.AreEqual(expectedCost.Cost, expectedBid.Catalogs.PanelTypes[0].Cost);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_ControlledScope()
+        {
+            Assert.AreEqual(expectedControlledScope.Guid, actualControlledScope.Guid);
+            Assert.AreEqual(expectedControlledScope.Systems.Count, actualControlledScope.Systems.Count);
+            Assert.AreEqual(expectedControlledScope.Controllers.Count, actualControlledScope.Controllers.Count);
+            Assert.AreEqual(expectedControlledScope.Panels.Count, actualControlledScope.Panels.Count);
+
+            foreach(TECPanel panel in expectedControlledScope.Panels)
+            {
+                foreach(TECController controller in panel.Controllers)
+                {
+                    foreach(TECPanel obervedPanel in actualControlledScope.Panels)
+                    {
+                        if(obervedPanel.Guid == panel.Guid)
+                        {
+                            bool containsController = false;
+                            foreach(TECController observedController in obervedPanel.Controllers)
+                            {
+                                if(observedController.Guid == controller.Guid)
+                                {
+                                    containsController = true;
+                                }
+                            }
+                            Assert.IsTrue(containsController);
+                        }
+                    }
+                }
+            }
+            Assert.AreEqual(expectedControlledScope.Panels.Count, actualControlledScope.Panels.Count);
+
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_ControlledScopeInstances()
+        {
+            int quantity = 3;
+            TECBid saveBid = new TECBid();
+            saveBid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(saveBid.Catalogs);
+            saveBid.ControlledScope.Add(controlledScope);
+            saveBid.addControlledScope(controlledScope, quantity);
+            
+            //Act
+            path = Path.GetTempFileName();
+            EstimatingLibraryDatabase.SaveNew(path, saveBid);
+            TECBid loadedBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECControlledScope loadedControlledScope = loadedBid.ControlledScope[0];
+            
+            Assert.AreEqual(controlledScope.ScopeInstances.Count, loadedControlledScope.ScopeInstances.Count);
+            foreach(TECControlledScope loadedInstance in loadedControlledScope.ScopeInstances)
+            {
+                foreach(TECControlledScope saveInstance in controlledScope.ScopeInstances)
+                {
+                    if(loadedInstance.Guid == saveInstance.Guid)
+                    {
+                        Assert.AreEqual(loadedInstance.Systems.Count, saveInstance.Systems.Count);
+                        Assert.AreEqual(loadedInstance.Panels.Count, saveInstance.Panels.Count);
+                        Assert.AreEqual(loadedInstance.Controllers.Count, saveInstance.Controllers.Count);
+                    }
+                }
+            }
         }
     }
 }

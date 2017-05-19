@@ -84,6 +84,70 @@ namespace Tests
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");
         }
+
+        [TestMethod]
+        public void Bid_AddControlledScope()
+        {
+            int quantity = 3;
+            TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+
+            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(bid.Catalogs);
+            bid.ControlledScope.Add(controlledScope);
+
+            bid.addControlledScope(controlledScope, quantity);
+
+            Assert.AreEqual(quantity, bid.Systems.Count);
+            Assert.AreEqual(quantity, bid.Controllers.Count);
+            Assert.AreEqual(quantity, bid.Panels.Count);
+
+            foreach(TECPanel scopePanel in controlledScope.Panels)
+            {
+                foreach(TECPanel bidPanel in bid.Panels)
+                {
+                    Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
+                }
+            }
+            foreach (TECController scopeController in controlledScope.Controllers)
+            {
+                foreach (TECController bidController in bid.Controllers)
+                {
+                    Assert.AreEqual(scopeController.ChildrenConnections.Count, bidController.ChildrenConnections.Count);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Bid_RemoveControllerInPanel_ControlledScope()
+        {
+            int quantity = 3;
+            TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+
+            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(bid.Catalogs);
+            bid.ControlledScope.Add(controlledScope);
+            bid.addControlledScope(controlledScope, quantity);
+            controlledScope.Panels[0].Controllers.Remove(controlledScope.Controllers[0]);
+
+            Assert.AreEqual(quantity, bid.Systems.Count);
+            Assert.AreEqual(quantity, bid.Controllers.Count);
+            Assert.AreEqual(quantity, bid.Panels.Count);
+
+            foreach (TECPanel scopePanel in controlledScope.Panels)
+            {
+                foreach (TECPanel bidPanel in bid.Panels)
+                {
+                    Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
+                }
+            }
+            foreach (TECController scopeController in controlledScope.Controllers)
+            {
+                foreach (TECController bidController in bid.Controllers)
+                {
+                    Assert.AreEqual(scopeController.ChildrenConnections.Count, bidController.ChildrenConnections.Count);
+                }
+            }
+        }
         #endregion
     }
 }

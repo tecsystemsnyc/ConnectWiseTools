@@ -35,8 +35,7 @@ namespace EstimatingLibrary
             linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
             linkControlledScope(bid.ControlledScope, bid);
         }
-
-
+        
         public static void LinkTemplates(TECTemplates templates)
         {
             linkCatalogs(templates.Catalogs);
@@ -79,6 +78,11 @@ namespace EstimatingLibrary
                 linkScopeChildren(panel, scopeManager);
             }
             linkAllConnections(controllers, systems, guidDictionary);
+            if(scopeManager is TECBid)
+            {
+                var bid = scopeManager as TECBid;
+                linkAllGlobalConnections(bid.Controllers, systems, guidDictionary);
+            }
         }
         #endregion
 
@@ -241,6 +245,42 @@ namespace EstimatingLibrary
                         }
                     }
                     netConnect.ChildrenControllers = controllersToAdd;
+                }
+            }
+        }
+        static private void linkAllGlobalConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems, Dictionary<Guid, Guid> guidDictionary = null)
+        {
+            foreach (TECSystem system in systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECController controller in controllers)
+                        {
+                            if (controller.IsGlobal)
+                            {
+                                var subScopeToConnect = new List<TECSubScope>();
+                                foreach (TECConnection connection in controller.ChildrenConnections)
+                                {
+                                    if (connection is TECSubScopeConnection)
+                                    {
+                                        TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                                        bool isCopy = (guidDictionary != null && ssConnect.SubScope.Guid == guidDictionary[subScope.Guid]);
+                                        if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                                        {
+                                            subScopeToConnect.Add(subScope);
+                                        }
+                                    }
+                                }
+                                foreach(TECSubScope sub in subScopeToConnect)
+                                {
+                                    controller.AddSubScope(sub);
+                                }
+                            }
+                            
+                        }
+                    }
                 }
             }
         }
@@ -602,6 +642,7 @@ namespace EstimatingLibrary
                 linkControllersInPanels(scope.Controllers, scope.Panels);
                 foreach (TECController control in scope.Controllers)
                 {
+                    control.IsGlobal = false;
                     linkScopeChildren(control, scopeManager);
                 }
                 foreach (TECPanel panel in scope.Panels)
