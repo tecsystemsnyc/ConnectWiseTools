@@ -142,6 +142,13 @@
            
             
         </Grid>
-        
+        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
+                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
+                x:Name="placeholderCanvas">
+            <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
+          Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
+                <Label Content="Select a Controlled Scope to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Canvas>
     </Grid>
 </UserControl>

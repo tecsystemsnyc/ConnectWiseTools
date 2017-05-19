@@ -221,24 +221,24 @@ namespace TECUserControlLibrary
 
         private void ShowDetails_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            DataGridRow row = FindVisualParent<DataGridRow>(sender as UIElement);
-            if(row != null)
-            {
-                DataGrid grid = FindVisualParent<DataGrid>(row);
-                if(grid.SelectedItems != null && grid.SelectedItems.Count > 1)
-                {
-                    grid.SelectedItem = null;
-                    grid.SelectedItem = row;
-                    var focusDirection = FocusNavigationDirection.Next;
-                    var request = new TraversalRequest(focusDirection);
-                    var elementWithFocus = Keyboard.FocusedElement as UIElement;
-                    if (elementWithFocus != null)
-                    {
-                        elementWithFocus.MoveFocus(request);
-                    }
-                }
+            //DataGridRow row = FindVisualParent<DataGridRow>(e.OriginalSource as UIElement);
+            //if(row != null)
+            //{
+            //    DataGrid grid = FindVisualParent<DataGrid>(row);
+            //    if(grid.SelectedItems != null && grid.SelectedItems.Count > 1)
+            //    {
+            //        grid.SelectedItem = null;
+            //        grid.SelectedItem = row;
+            //        var focusDirection = FocusNavigationDirection.Next;
+            //        var request = new TraversalRequest(focusDirection);
+            //        var elementWithFocus = Keyboard.FocusedElement as UIElement;
+            //        if (elementWithFocus != null)
+            //        {
+            //            elementWithFocus.MoveFocus(request);
+            //        }
+            //    }
                 
-            }
+            //}
         }
     }
 }
