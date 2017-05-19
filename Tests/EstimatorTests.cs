@@ -64,10 +64,10 @@ namespace Tests
         //
         #endregion
 
-        [TestMethod]
-        public void Estimate_ElectricalMaterialCost()
-        {
-            Assert.AreEqual(260 * 1.03 * 1.05, bid.Estimate.ElectricalMaterialCost);
-        }
+        //[TestMethod]
+        //public void Estimate_ElectricalMaterialCost()
+        //{
+        //    Assert.AreEqual(260 * 1.03 * 1.05, bid.Estimate.ElectricalMaterialCost);
+        //}
     }
 }

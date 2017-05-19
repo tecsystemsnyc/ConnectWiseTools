@@ -105,7 +105,6 @@ namespace EstimatingLibrary
                 return 0;
             }
         }
-
         public double ElectricalLabor
         {
             get
@@ -233,7 +232,6 @@ namespace EstimatingLibrary
             }
             subscribeToSubScope();
         }
-
         private void SubScopeChanged(string name)
         {
             if (name == "Quantity")
@@ -253,7 +251,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("SubLength");
             }
         }
-
         private void subscribeToSubScope()
         {
             foreach (TECSubScope scope in this.SubScope)
@@ -273,7 +270,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalDevices");
             }
         }
-
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ObjectPropertyChanged")
@@ -289,7 +285,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private int getPointNumber()
         {
             var totalPoints = 0;

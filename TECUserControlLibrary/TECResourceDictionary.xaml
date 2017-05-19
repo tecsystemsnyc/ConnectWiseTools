@@ -149,7 +149,7 @@
                       IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DataContext, 
                                         Converter={cnvt:DataContextToEnableConverter}}"
-                    IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
                                         Converter={cnvt:VisbilityToBooleanConverter}, 
                                         Mode=TwoWay}"
