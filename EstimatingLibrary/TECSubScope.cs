@@ -115,7 +115,6 @@ namespace EstimatingLibrary
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
-
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
@@ -260,11 +259,12 @@ namespace EstimatingLibrary
             var devices = new ObservableCollection<TECDevice>();
             foreach (TECDevice device in this.Devices)
             { devices.Add(device); }
-            outScope._devices = devices;
+
             var points = new ObservableCollection<TECPoint>();
             foreach (TECPoint point in this.Points)
             { points.Add(point.Copy() as TECPoint); }
             outScope._points = points;
+            outScope.reSubscribeToCollections();
 
             outScope.copyPropertiesFromScope(this);
             return outScope;
@@ -387,6 +387,12 @@ namespace EstimatingLibrary
                 totalPoints += point.PointNumber;
             }
             return totalPoints;
+        }
+
+        private void reSubscribeToCollections()
+        {
+            Points.CollectionChanged += PointsCollectionChanged;
+            Devices.CollectionChanged += Devices_CollectionChanged;
         }
         #endregion
     }
