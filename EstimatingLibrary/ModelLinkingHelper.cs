@@ -15,6 +15,7 @@ namespace EstimatingLibrary
         #region Public Methods
         public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict = null)
         {
+            removeCharacteristicObjects(bid);
             if(placeholderDict != null)
             {
                 linkControlledScopeWithInstances(bid, placeholderDict);
@@ -34,6 +35,8 @@ namespace EstimatingLibrary
             linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
             linkControlledScope(bid.ControlledScope, bid);
         }
+
+
         public static void LinkTemplates(TECTemplates templates)
         {
             linkCatalogs(templates.Catalogs);
@@ -742,6 +745,59 @@ namespace EstimatingLibrary
                         }
                     }
                     break;
+                }
+            }
+        }
+
+        private static void removeCharacteristicObjects(TECBid bid)
+        {
+            foreach(TECControlledScope controlledScope in bid.ControlledScope)
+            {
+                List<TECSystem> systemsToRemove = new List<TECSystem>();
+                List<TECPanel> panelsToRemove = new List<TECPanel>();
+                List<TECController> controllersToRemove = new List<TECController>();
+
+                foreach(TECSystem system in bid.Systems)
+                {
+                    foreach (TECSystem cSystem in controlledScope.Systems)
+                    {
+                        if(system.Guid == cSystem.Guid)
+                        {
+                            systemsToRemove.Add(system);
+                        }
+                    }
+                }
+                foreach(TECPanel panel in bid.Panels)
+                {
+                    foreach (TECPanel cPanel in controlledScope.Panels)
+                    {
+                        if (panel.Guid == cPanel.Guid)
+                        {
+                            panelsToRemove.Add(panel);
+                        }
+                    }
+                }
+                foreach(TECController controller in bid.Controllers)
+                {
+                    foreach (TECController cController in controlledScope.Controllers)
+                    {
+                        if (controller.Guid == cController.Guid)
+                        {
+                            controllersToRemove.Add(controller);
+                        }
+                    }
+                }
+                foreach(TECSystem system in systemsToRemove)
+                {
+                    bid.Systems.Remove(system);
+                }
+                foreach(TECPanel panel in panelsToRemove)
+                {
+                    bid.Panels.Remove(panel);
+                }
+                foreach(TECController controller in controllersToRemove)
+                {
+                    bid.Controllers.Remove(controller);
                 }
             }
         }
