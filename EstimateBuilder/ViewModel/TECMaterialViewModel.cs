@@ -351,16 +351,17 @@ namespace EstimateBuilder.ViewModel
 
             MiscCosts = new ObservableCollection<TECMiscCost>();
 
-            _deviceSubTotal = 0;
-            _deviceAssCostSubTotalCost = 0;
-            _deviceAssCostSubTotalLabor = 0;
-            _controllerAssCostSubTotalCost = 0;
-            _controllerAssCostSubTotalLabor = 0;
-            _panelTypeSubTotal = 0;
-            _panelAssCostSubTotalCost = 0;
-            _panelAssCostSubTotalLabor = 0;
-            _miscCostSubTotalCost = 0;
-            _miscCostSubTotalLabor = 0;
+            DeviceSubTotal = 0;
+            DeviceAssCostSubTotalCost = 0;
+            DeviceAssCostSubTotalLabor = 0;
+            ControllerSubTotal = 0;
+            ControllerAssCostSubTotalCost = 0;
+            ControllerAssCostSubTotalLabor = 0;
+            PanelTypeSubTotal = 0;
+            PanelAssCostSubTotalCost = 0;
+            PanelAssCostSubTotalLabor = 0;
+            MiscCostSubTotalCost = 0;
+            MiscCostSubTotalLabor = 0;
 
             foreach (TECSystem sys in bid.Systems)
             {

@@ -191,7 +191,8 @@ namespace EstimateBuilder.ViewModel
             wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
             conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
             associatedCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            
+
+            TotalMiscWiring = 0;
             TotalWireCost = 0;
             TotalWireHours = 0;
             TotalConduitCost = 0;
