@@ -498,7 +498,7 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private TECScopeManager loadFromPath(string path)
+        protected TECScopeManager loadFromPath(string path)
         {
             saveFilePath = path;
             ScopeDirectoryPath = Path.GetDirectoryName(path);
