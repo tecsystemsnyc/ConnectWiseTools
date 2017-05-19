@@ -28,8 +28,8 @@ namespace DebugLibrary
             }
         }
 
-        private const bool RELEASE_CREATES_LOG = false;
-        private const bool DEBUG_CREATES_LOG = false;
+        private const bool RELEASE_CREATES_LOG = true;
+        private const bool DEBUG_CREATES_LOG = true;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -106,6 +106,7 @@ namespace DebugLibrary
                 dtfi.TimeSeparator = "-";
 
                 writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
+                writer.Close();
             }
         }
 
