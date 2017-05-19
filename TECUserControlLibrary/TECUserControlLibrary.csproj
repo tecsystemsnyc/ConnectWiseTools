@@ -110,6 +110,9 @@
     <Compile Include="ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\AssociatedCostsSummaryGrid.xaml.cs">
+      <DependentUpon>AssociatedCostsSummaryGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\BMSControllerGridControl.xaml.cs">
       <DependentUpon>BMSControllerGridControl.xaml</DependentUpon>
     </Compile>
@@ -128,11 +131,23 @@
     <Compile Include="ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataGrids\ControlledScopeSystemsGrid.xaml.cs">
+      <DependentUpon>ControlledScopeSystemsGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataGrids\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\DeviceConnectionTypeGrid.xaml.cs">
+      <DependentUpon>DeviceConnectionTypeGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\MiscWiringGridControl.xaml.cs">
+      <DependentUpon>MiscWiringGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataGrids\MiscCostGridControl.xaml.cs">
+      <DependentUpon>MiscCostGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataGrids\IOGridControl.xaml.cs">
       <DependentUpon>IOGridControl.xaml</DependentUpon>
@@ -167,6 +182,7 @@
     <Compile Include="MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssociatedCostSummaryItem.cs" />
     <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
@@ -177,6 +193,9 @@
     </Compile>
     <Compile Include="PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelTypeEditControl.xaml.cs">
+      <DependentUpon>PanelTypeEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
@@ -269,6 +288,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DataGrids\AssociatedCostsSummaryGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataGrids\BMSControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -293,11 +316,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DataGrids\ControlledScopeSystemsGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataGrids\ControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ControllerInPanelGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\DeviceConnectionTypeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataGrids\MiscWiringGridControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataGrids\MiscCostGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -366,6 +405,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PanelEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelTypeEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -274,6 +274,7 @@ namespace TemplateBuilder.ViewModel
             MaterialsTab = new MaterialsCostsExtension(Templates);
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
+            MaterialsTab.SelectionChanged += EditTab.updateSelection;
         }
         private void setupControlledScopeTab()
         {
@@ -368,13 +369,18 @@ namespace TemplateBuilder.ViewModel
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo);
+            bool newDevice = false;
+            if(DGTabIndex == TemplateGridIndex.Devices)
+            {
+                newDevice = true;
+            }
+            UIHelpers.StandardDrop(dropInfo, newDevice);
         }
         #endregion
         #region Helper Methods
         private void setVisibility(TemplateGridIndex gridIndex)
         {
-            nullifySelected();
+            ScopeDataGrid.NullifySelected();
 
             switch (gridIndex)
             {
@@ -563,8 +569,7 @@ namespace TemplateBuilder.ViewModel
 
                     break;
                 default:
-
-
+                    
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -585,14 +590,7 @@ namespace TemplateBuilder.ViewModel
                     break;
             }
         }
-        private void nullifySelected()
-        {
-            ScopeDataGrid.SelectedDevice = null;
-            ScopeDataGrid.SelectedPoint = null;
-            ScopeDataGrid.SelectedSubScope = null;
-            ScopeDataGrid.SelectedEquipment = null;
-            ScopeDataGrid.SelectedSystem = null;
-        }
+        
         protected override void setupMenu()
         {
             MenuVM = new MenuViewModel(MenuType.TB);

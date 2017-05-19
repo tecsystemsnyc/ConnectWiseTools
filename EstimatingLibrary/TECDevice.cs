@@ -12,7 +12,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _cost;
-        private TECConnectionType _connectionType;
+        private ObservableCollection<TECConnectionType> _connectionTypes;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
 
@@ -27,17 +27,25 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Cost", temp, this);
             }
         }
-        public TECConnectionType ConnectionType
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
-            get { return _connectionType; }
+            get { return _connectionTypes; }
             set
             {
+                if(ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged -= ConnectionTypes_CollectionChanged;
+                }
                 var temp = this.Copy();
-                _connectionType = value;
-                NotifyPropertyChanged("ConnectionType", temp, this);
+                _connectionTypes = value; if (ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
+                }
+                NotifyPropertyChanged("ConnectionTypes", temp, this);
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
+        
         public IOType IOType
         {
             get { return _ioType; }
@@ -80,23 +88,22 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid) : base(guid)
+        public TECDevice(Guid guid, ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : base(guid)
         {
             _cost = 0;
-            _connectionType = new TECConnectionType();
+            _connectionTypes = connectionTypes;
+            _manufacturer = manufacturer;
+            ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
         }
-        public TECDevice() : this(Guid.NewGuid()) { }
+        public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
-            : this(deviceSource.Guid)
+            : this(deviceSource.Guid, deviceSource.ConnectionTypes, deviceSource.Manufacturer)
         {
             this.copyPropertiesFromScope(deviceSource);
             _cost = deviceSource.Cost;
-            _manufacturer = deviceSource.Manufacturer;
-            _connectionType = deviceSource.ConnectionType;
             _ioType = deviceSource.IOType;
-
         }
         #endregion //Constructors
 
@@ -130,6 +137,25 @@ namespace EstimatingLibrary
             }
             return cost;
         }
+
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECConnectionType type in e.NewItems)
+                {
+                    NotifyPropertyChanged<object>("AddCatalog", this, type);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECConnectionType type in e.OldItems)
+                {
+                    NotifyPropertyChanged<object>("RemoveCatalog", this, type);
+                }
+            }
+        }
+
         #endregion
     }
 }

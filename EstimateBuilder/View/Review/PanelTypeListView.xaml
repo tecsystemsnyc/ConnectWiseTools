@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="EstimateBuilder.View.Review.PanelTypeListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{DynamicResource SectionBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Panel Types" Foreground="Black" FontSize="20"/>
+
+        <!--PanelType Summary-->
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding PanelTypeSummaryItems}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding PanelType.Name}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding PanelType.Description}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="List Price" Binding="{Binding PanelType.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Text="Panel Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
+
+        <!--Panel Associated Costs Summary-->
+        <cLibGrids:AssociatedCostsSummaryGrid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                              AssociatedCostSummaryItemsSource="{Binding PanelAssCostSummaryItems}"/>
+        <!--Subtotals-->
+        <TextBlock Text="Panel Type Subtotal:" Grid.Row="2" Foreground="Black"/>
+        <TextBlock Text="{Binding PanelTypeSubTotal, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
+
+        <TextBlock Text="Panel Associated Costs Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding PanelAssCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
+
+        <TextBlock Text="Panel Associated Labor Subtotal:" Grid.Row="3" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding PanelAssCostSubTotalLabor}" Grid.Row="3" Grid.Column="3" Foreground="Black"/>
+
+        <!--Borders-->
+        <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
+    </Grid>
+</UserControl>

@@ -123,6 +123,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", LaborType.GetProperty("ElectricalSuperRate"));
         public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", LaborType.GetProperty("ElectricalNonUnionRate"));
         public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", LaborType.GetProperty("ElectricalSuperNonUnionRate"));
+        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", LaborType.GetProperty("ElectricalSuperRatio"));
 
         public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", LaborType.GetProperty("ElectricalIsOnOvertime"));
         public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", LaborType.GetProperty("ElectricalIsUnion"));
@@ -596,6 +597,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField MiscCostID = new TableField("MiscCostID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
@@ -616,6 +618,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField MiscWiringID = new TableField("MiscWiringID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
@@ -1041,18 +1044,22 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceConnectionTypeTable : TableBase
+    public class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
         public static new string TableName = "TECDeviceTECConnectionType";
         public static Type ObjectType = typeof(TECDevice);
         public static Type ReferenceType = typeof(TECConnectionType);
 
+        public static Type HelperType = typeof(HelperProperties);
+
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            DeviceID
+            DeviceID,
+            TypeID
         };
         public static new List<Type> Types = new List<Type>()
         {
@@ -1354,6 +1361,44 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
+    
+    public class ControlledScopeHierarchyTable : TableBase
+    {
+        public static new string TableName = "TECControlledScopeHierarchy";
+        public static Type ControlledScopeType = typeof(TECControlledScope);
+
+        public static TableField ParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ParentID,
+            ChildID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ControlledScopeType,
+            ControlledScopeType
+        };
+    }
+    public class CharacteristicScopeInstanceScopeTable : TableBase
+    {
+        public static new string TableName = "CharacteristicScopeInstanceScope";
+        public static Type ScopeType = typeof(TECScope);
+
+        public static TableField CharacteristicID = new TableField("CharacteristicID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField InstanceID = new TableField("InstanceID", "TEXT", ScopeType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            CharacteristicID,
+            InstanceID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ScopeType,
+            ScopeType
+        };
+    }
+
     public class IOModuleManufacturerTable : TableBase
     {
         public static new string TableName = "TECIOModuleTECManufacturer";
@@ -1403,6 +1448,7 @@ namespace EstimatingUtilitiesLibrary
             new NetworkConnectionTable(),
             new IOTable(),
             new IOModuleTable(),
+            new ControlledScopeTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1431,6 +1477,11 @@ namespace EstimatingUtilitiesLibrary
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
+            new ControlledScopeControllerTable(),
+            new ControlledScopePanelTable(),
+            new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new BidBidParametersTable(),
             new BidMiscCostTable(),
             new BidMiscWiringTable(),
@@ -1487,6 +1538,7 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new IOModuleManufacturerTable()
@@ -1561,6 +1613,8 @@ namespace EstimatingUtilitiesLibrary
             new ControlledScopeControllerTable(),
             new ControlledScopePanelTable(),
             new ControlledScopeSystemTable(),
+            new ControlledScopeHierarchyTable(),
+            new CharacteristicScopeInstanceScopeTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),

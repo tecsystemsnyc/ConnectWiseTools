@@ -155,6 +155,17 @@ namespace TECUserControlLibrary.ViewModels
                 return fileParams;
             }
         }
+        protected FileDialogParameters EstimateFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "edb";
+                return fileParams;
+            }
+        }
         protected FileDialogParameters TemplatesFileParameters
         {
             get
@@ -174,6 +185,17 @@ namespace TECUserControlLibrary.ViewModels
                 fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
                 fileParams.DefaultExtension = "rtf";
+                return fileParams;
+            }
+        }
+        protected FileDialogParameters WordDocumentFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Word Documents (*.docx)|*.docx";
+                fileParams.DefaultExtension = "docx";
                 return fileParams;
             }
         }
@@ -476,7 +498,7 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private TECScopeManager loadFromPath(string path)
+        protected TECScopeManager loadFromPath(string path)
         {
             saveFilePath = path;
             ScopeDirectoryPath = Path.GetDirectoryName(path);

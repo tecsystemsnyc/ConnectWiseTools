@@ -144,6 +144,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
@@ -172,35 +173,44 @@
                             Text="{Binding Path=ViewModel.DeviceCost}"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0" Grid.ColumnSpan="2"/>
-                    <Label Grid.Column="0"
-                        Grid.Row="3"
+                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
                         Content="Wire Type:"/>
-                    <ComboBox Grid.Column="1"
-                            Grid.Row="3"
+                        <ComboBox Grid.Column="1"
                               ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.ConnectionTypes}"
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
                             VerticalAlignment="Top"
-                            Margin="5,5,5,0" Grid.ColumnSpan="2"/>
+                            Margin="5,5,5,0" />
+                        <Button Content="Add Type" Command="{Binding Path=ViewModel.AddConnectionTypeToDeviceCommand}"
+                                Grid.Column="2" Margin="2"/>
+                    </Grid>
+                    <grids:DeviceConnectionTypeGrid ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
+                                                     Grid.Row="4" Grid.ColumnSpan="2"/>
                     <Label Grid.Column="0"
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Content="Manufacturer:"/>
                     <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                             DisplayMemberPath="Name"
                             SelectedItem="{Binding Path=ViewModel.DeviceManufacturer}"
-                            Grid.Row="4" Grid.Column="1"
+                            Grid.Row="5" Grid.Column="1"
                             VerticalAlignment="Top"
                             Margin="5,5,5,0"/>
-                    <ComboBox Grid.Row="5" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
+                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                               SelectedItem="{Binding Path=ViewModel.SelectedTag}"
                               DisplayMemberPath="Text"/>
-                    <Button Grid.Row="5" Grid.Column="1" Content="Add Tag"
+                    <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
                             Margin="5"/>
-                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="6"
+                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
                                            TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
-                        Grid.Row="7"
+                        Grid.Row="8"
                         Grid.ColumnSpan="3"
                         Margin="2"
                         Content="Add"

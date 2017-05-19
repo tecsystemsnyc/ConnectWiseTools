@@ -53,24 +53,24 @@ namespace EstimatingLibrary
                 return 0;
             }
         }
-
         public double ElectricalLabor
         {
             get
             {
-                return 0;
+                return getElectricalLabor();
             }
         }
         #endregion
 
-        public TECPanel(Guid guid) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type) : base(guid)
         {
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
+            _type = type;
             Controllers.CollectionChanged += collectionChanged;
         }
-        public TECPanel() : this(Guid.NewGuid()) { }
-        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
@@ -79,7 +79,6 @@ namespace EstimatingLibrary
             {
                 _controllers.Add(new TECController(controller, guidDictionary));
             }
-            _type = panel.Type;
         }
 
         public override object Copy()
@@ -145,6 +144,13 @@ namespace EstimatingLibrary
             }
 
             return lCost;
+        }
+        private double getElectricalLabor()
+        {
+            double mountingLabor = 0;
+            mountingLabor += .5;
+
+            return mountingLabor;
         }
 
     }

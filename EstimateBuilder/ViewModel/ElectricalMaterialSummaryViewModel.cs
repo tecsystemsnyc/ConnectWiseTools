@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TECUserControlLibrary.Models;
 
 namespace EstimateBuilder.ViewModel
 {
@@ -190,7 +191,8 @@ namespace EstimateBuilder.ViewModel
             wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
             conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
             associatedCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            
+
+            TotalMiscWiring = 0;
             TotalWireCost = 0;
             TotalWireHours = 0;
             TotalConduitCost = 0;
@@ -233,7 +235,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         if ((referenceObject as TECSubScope).Connection != null)
                         {
-                            addLengthToWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                            foreach(TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            {
+                                addLengthToWireType((referenceObject as TECSubScope).Connection.Length, type);
+                            }
                         }
                     }
                     else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
@@ -263,7 +268,10 @@ namespace EstimateBuilder.ViewModel
                     {
                         if ((referenceObject as TECSubScope).Connection != null)
                         {
-                            removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, (targetObject as TECDevice).ConnectionType);
+                            foreach (TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            {
+                                removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, type);
+                            }
                         }
                     }
                     else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)

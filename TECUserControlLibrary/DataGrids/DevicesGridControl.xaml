@@ -29,7 +29,7 @@
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>
+                <!--<DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>-->
                 <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
             </DataGrid.Columns>
         </DataGrid>

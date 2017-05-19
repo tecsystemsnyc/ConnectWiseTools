@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimateBuilder.Model
+namespace TECUserControlLibrary.Models
 {
     public class AssociatedCostSummaryItem : TECObject
     {
@@ -30,39 +30,45 @@ namespace EstimateBuilder.Model
         private double _totalCost;
         public double TotalCost
         {
-            get { return _totalCost; }
+            get
+            {
+                return _totalCost;
+            }
             set
             {
                 double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("TotalCost", old, _totalCost);
+                NotifyPropertyChanged("Total", old, _totalCost);
             }
         }
 
         private double _totalLabor;
         public double TotalLabor
         {
-            get { return _totalLabor; }
+            get
+            {
+                return _totalLabor;
+            }
             set
             {
                 double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+                NotifyPropertyChanged("Total", old, _totalLabor);
             }
         }
 
-        public AssociatedCostSummaryItem(TECAssociatedCost associatedCost)
+        public AssociatedCostSummaryItem(TECAssociatedCost assCost)
         {
-            _associatedCost = associatedCost;
+            _associatedCost = assCost;
             _quantity = 1;
-            associatedCost.PropertyChanged += AssociatedCost_PropertyChanged;
+            AssociatedCost.PropertyChanged += AssociatedCost_PropertyChanged;
             updateTotals();
         }
 
         private void updateTotals()
         {
-            TotalCost = (Quantity * AssociatedCost.Cost);
-            TotalLabor = (Quantity * AssociatedCost.Labor);
+            TotalCost = (AssociatedCost.Cost * Quantity);
+            TotalLabor = (AssociatedCost.Labor * Quantity);
         }
 
         private void AssociatedCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

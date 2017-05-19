@@ -7,7 +7,7 @@ using System.Windows.Markup;
 
 namespace TECUserControlLibrary
 {
-    class EnumBindingSourceExtension : MarkupExtension
+    public class EnumBindingSourceExtension : MarkupExtension
     {
         private Type _enumType;
         public Type EnumType

@@ -105,7 +105,6 @@ namespace EstimatingLibrary
                 return 0;
             }
         }
-
         public double ElectricalLabor
         {
             get
@@ -136,13 +135,22 @@ namespace EstimatingLibrary
         public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
+            if (characteristicReference == null)
+            {
+                characteristicReference = new ObservableItemToInstanceList<TECScope>();
+            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
 
             foreach (TECSubScope subScope in equipmentSource.SubScope)
-            { SubScope.Add(new TECSubScope(subScope, guidDictionary)); }
+            {
+                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
+                characteristicReference.AddItem(subScope,toAdd);
+                SubScope.Add(toAdd);
+            }
             _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
 
             this.copyPropertiesFromScope(equipmentSource);
@@ -224,7 +232,6 @@ namespace EstimatingLibrary
             }
             subscribeToSubScope();
         }
-
         private void SubScopeChanged(string name)
         {
             if (name == "Quantity")
@@ -244,7 +251,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("SubLength");
             }
         }
-
         private void subscribeToSubScope()
         {
             foreach (TECSubScope scope in this.SubScope)
@@ -264,7 +270,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalDevices");
             }
         }
-
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ObjectPropertyChanged")
@@ -280,7 +285,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private int getPointNumber()
         {
             var totalPoints = 0;

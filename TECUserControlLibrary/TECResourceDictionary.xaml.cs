@@ -58,8 +58,9 @@ namespace TECUserControlLibrary
             DataGridRow parentRow = FindVisualParent<DataGridRow>(sender as DataGridDetailsPresenter);
             DataGridRow childRow = FindVisualParent<DataGridRow>(ogSource as UIElement);
             Button button = FindVisualParent<Button>(ogSource as UIElement);
+            DataGrid childGrid = FindVisualParent<DataGrid>(childRow);
             if (parentRow == null ||
-                (childRow != null && childRow.IsSelected == true) ||
+                (childRow != null && childRow.IsSelected == true && childGrid.SelectedItems.Count == 1) ||
                 (childRow == null && button == null))
             {
                 return;
@@ -218,5 +219,20 @@ namespace TECUserControlLibrary
             }
             return children;
         }
+
+        private void ShowDetails_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = FindVisualParent<DataGridRow>(e.OriginalSource as UIElement);
+            if (row != null)
+            {
+                DataGrid grid = FindVisualParent<DataGrid>(row);
+                if (grid.SelectedItems != null && grid.SelectedItems.Count > 1)
+                {
+                    grid.SelectedItem = row;
+                }
+
+            }
+        }
+
     }
 }

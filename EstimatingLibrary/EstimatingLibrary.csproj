@@ -106,7 +106,9 @@
     <Compile Include="Interfaces\ElectricalMaterialComponent.cs" />
     <Compile Include="Interfaces\GuidObject.cs" />
     <Compile Include="Interfaces\PointComponent.cs" />
+    <Compile Include="ObservableItemToInstanceList.cs" />
     <Compile Include="TECCatalogs.cs" />
+    <Compile Include="TECControlledScope.cs" />
     <Compile Include="TECEstimator.cs" />
     <Compile Include="TECIOModule.cs" />
     <Compile Include="ModelLinkingHelper.cs" />
@@ -117,7 +119,6 @@
     <Compile Include="TECConduitType.cs" />
     <Compile Include="TECConnection.cs" />
     <Compile Include="TECConnectionType.cs" />
-    <Compile Include="TECControlledScope.cs" />
     <Compile Include="TECController.cs" />
     <Compile Include="TECCost.cs" />
     <Compile Include="TECDevice.cs" />

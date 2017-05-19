@@ -209,7 +209,7 @@ namespace Tests
             double expectedCost = 654;
             Assert.AreEqual(expectedCost, actualDevice.Cost);
 
-            Assert.AreEqual("ThreeC18", actualDevice.ConnectionType.Name);
+            Assert.AreEqual("ThreeC18", actualDevice.ConnectionTypes[0].Name);
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }
@@ -767,14 +767,16 @@ namespace Tests
         {
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
-                if (device.ConnectionType == null)
+                if (device.ConnectionTypes.Count == 0)
                 {
                     Assert.Fail("Device doesn't have connectionType");
                 }
-
-                if (!actualBid.Catalogs.ConnectionTypes.Contains(device.ConnectionType))
+                foreach (TECConnectionType type in device.ConnectionTypes)
                 {
-                    Assert.Fail("ConnectionTypes not linked in device catalog");
+                    if (!actualBid.Catalogs.ConnectionTypes.Contains(type))
+                    {
+                        Assert.Fail("ConnectionTypes not linked in device catalog");
+                    }
                 }
             }
         }

@@ -82,11 +82,25 @@ namespace TECUserControlLibrary.Models
         public SubScopeConnection(TECSubScope subscope)
         {
             _subScope = subscope;
+            SubScope.PropertyChanged += SubScope_PropertyChanged;
             _controller = null;
             if (subscope.Connection != null)
             {
                 _controller = SubScope.Connection.ParentController;
                 SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
+            }
+        }
+
+        private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Connection")
+            {
+                if(SubScope.Connection != null)
+                {
+                    SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
+                    _controller = SubScope.Connection.ParentController;
+                }
+                RaisePropertyChanged("Controller");
             }
         }
 

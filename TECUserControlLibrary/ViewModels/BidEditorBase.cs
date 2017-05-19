@@ -94,7 +94,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         #endregion
 
         #region Command Properties
@@ -105,14 +104,13 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand ExcelExportCommand { get; private set; }
 
         public ICommand RefreshTemplatesCommand { get; private set; }
+        public ICommand RefreshBidCommand { get; private set; }
         #endregion
 
         #endregion
 
         public BidEditorBase() : base()
         {
-            workingFileParameters = BidFileParameters;
-
             setupData();
         }
 
@@ -127,6 +125,7 @@ namespace TECUserControlLibrary.ViewModels
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             ExcelExportCommand = new RelayCommand(ExcelExportExecute);
             RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
+            RefreshBidCommand = new RelayCommand(RefreshBidExecute, RefreshBidCanExecute);
         }
         private void setupData()
         {
@@ -185,6 +184,7 @@ namespace TECUserControlLibrary.ViewModels
             //MenuVM.ExportExcelCommand = ExcelExportCommand;
 
             MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
+            MenuVM.RefreshBidCommand = RefreshBidCommand;
 
             //Toggle Templates Command gets handled in each MainView model for ScopeBuilder and EstimateBuilder
         }
@@ -275,6 +275,7 @@ namespace TECUserControlLibrary.ViewModels
                         DebugHandler.LogDebugMessage("Creating new bid.");
                         isNew = true;
                         Bid = new TECBid();
+                        saveFilePath = null;
                     }
                     else
                     {
@@ -287,6 +288,7 @@ namespace TECUserControlLibrary.ViewModels
                     DebugHandler.LogDebugMessage("Creating new bid.");
                     isNew = true;
                     Bid = new TECBid();
+                    saveFilePath = null;
                 }
                 else
                 {
@@ -298,20 +300,21 @@ namespace TECUserControlLibrary.ViewModels
                 DebugHandler.LogDebugMessage("Creating new bid.");
                 isNew = true;
                 Bid = new TECBid();
+                saveFilePath = null;
             }
 
         }
         private void DocumentExecute()
         {
-            string path = getSavePath(DocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
+            string path = getSavePath(WordDocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
 
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
-                    //var thing = new ScopeWordDocumentBuilder();
-                    //thing.CreateScopeWordDocument(Bid, path, isEstimate);
+                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    var builder = new ScopeWordDocumentBuilder();
+                    builder.CreateScopeWordDocument(Bid, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else
@@ -386,6 +389,56 @@ namespace TECUserControlLibrary.ViewModels
             {
                 loadTemplates(TemplatesFilePath);
             }
+        }
+        private void RefreshBidExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            if (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength)
+            {
+                string message = "Would you like to save your changes before reloading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SetBusyStatus("Saving...", false);
+                    if (saveDelta(false))
+                    {
+                        SetBusyStatus("Loading...", false);
+                        DebugHandler.LogDebugMessage("Reloading bid.");
+                        refresh();
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Save unsuccessful. Reload bid did not occur..");
+                    }
+                    ResetStatus();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    SetBusyStatus("Loading...", false);
+                    DebugHandler.LogDebugMessage("Reloading bid.");
+                    Bid = loadFromPath(saveFilePath) as TECBid;
+                    ResetStatus();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                SetBusyStatus("Loading...", false);
+                DebugHandler.LogDebugMessage("Reloading bid.");
+                Bid = loadFromPath(saveFilePath) as TECBid;
+                ResetStatus();
+            }
+        }
+        private bool RefreshBidCanExecute()
+        {
+            return (!isNew);
         }
         #endregion
         #endregion

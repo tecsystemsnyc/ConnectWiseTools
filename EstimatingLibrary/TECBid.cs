@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -29,6 +30,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
         private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
+        private ObservableCollection<TECControlledScope> _controlledScope;
 
         public string Name
         {
@@ -113,6 +115,7 @@ namespace EstimatingLibrary
                 _scopeTree = value;
                 ScopeTree.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("ScopeTree", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECSystem> Systems
@@ -126,6 +129,7 @@ namespace EstimatingLibrary
                 registerSystems();
                 Systems.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Systems", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECNote> Notes
@@ -138,6 +142,7 @@ namespace EstimatingLibrary
                 _notes = value;
                 Notes.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Notes", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECExclusion> Exclusions
@@ -150,6 +155,7 @@ namespace EstimatingLibrary
                 _exclusions = value;
                 Exclusions.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Exclusions", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECDrawing> Drawings
@@ -162,6 +168,7 @@ namespace EstimatingLibrary
                 _drawings = value;
                 Drawings.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Drawings", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECLocation> Locations
@@ -174,6 +181,7 @@ namespace EstimatingLibrary
                 _locations = value;
                 Locations.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Locations", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECController> Controllers
@@ -186,6 +194,7 @@ namespace EstimatingLibrary
                 _controllers = value;
                 Controllers.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Controllers", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECProposalScope> ProposalScope
@@ -203,6 +212,7 @@ namespace EstimatingLibrary
                 _miscCosts = value;
                 MiscCosts.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("MiscCosts", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECMiscWiring> MiscWiring
@@ -215,6 +225,7 @@ namespace EstimatingLibrary
                 _miscWiring = value;
                 MiscWiring.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("MiscWiring", temp, this);
+                reWatch();
             }
         }
         public ObservableCollection<TECPanel> Panels
@@ -227,6 +238,20 @@ namespace EstimatingLibrary
                 _panels = value;
                 Panels.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("Panels", temp, this);
+                reWatch();
+            }
+        }
+        public ObservableCollection<TECControlledScope> ControlledScope
+        {
+            get { return _controlledScope; }
+            set
+            {
+                var temp = this.Copy();
+                ControlledScope.CollectionChanged -= CollectionChanged;
+                _controlledScope = value;
+                ControlledScope.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ControlledScope", temp, this);
+                reWatch();
             }
         }
 
@@ -237,6 +262,8 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
+
+        private ChangeWatcher watcher;
 
         private TECEstimator _estimate;
         public TECEstimator Estimate
@@ -268,9 +295,12 @@ namespace EstimatingLibrary
             _miscWiring = new ObservableCollection<TECMiscWiring>();
             _miscCosts = new ObservableCollection<TECMiscCost>();
             _panels = new ObservableCollection<TECPanel>();
+            _controlledScope = new ObservableCollection<TECControlledScope>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             _estimate = new TECEstimator(this);
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += Object_PropertyChanged;
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -285,6 +315,7 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += CollectionChanged;
             MiscWiring.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
+            ControlledScope.CollectionChanged += CollectionChanged;
 
             registerSystems();
         }
@@ -351,65 +382,67 @@ namespace EstimatingLibrary
             { MiscWiring.Add(new TECMiscWiring(wiring)); }
             foreach (TECPanel panel in bidSource.Panels)
             { Panels.Add(new TECPanel(panel)); }
+            foreach (TECControlledScope scope in bidSource.ControlledScope)
+            { ControlledScope.Add(new TECControlledScope(scope)); }
         }
 
         #endregion //Constructors
 
         #region Methods
 
-        public void addControlledScope(TECControlledScope controlledScope)
+        public void addControlledScope(TECControlledScope controlledScope, int quantity)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var systemCollection = new ObservableCollection<TECSystem>();
-            var controllerCollection = new ObservableCollection<TECController>();
-            var panelCollection = new ObservableCollection<TECPanel>();
-            foreach (TECSystem system in controlledScope.Systems)
+            for(int x = 0; x < quantity; x++)
             {
-                systemCollection.Add(new TECSystem(system, guidDictionary));
-            }
-            foreach (TECController controller in controlledScope.Controllers)
-            {
-                controllerCollection.Add(new TECController(controller, guidDictionary));
-            }
-            foreach (TECPanel panel in controlledScope.Panels)
-            {
-                panelCollection.Add(new TECPanel(panel, guidDictionary));
-            }
-            //watch.Stop();
-            //Console.WriteLine("Assemble Copy Data: " + watch.ElapsedMilliseconds);
+                Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+                var systemCollection = new ObservableCollection<TECSystem>();
+                var controllerCollection = new ObservableCollection<TECController>();
+                var panelCollection = new ObservableCollection<TECPanel>();
+                foreach (TECSystem system in controlledScope.Systems)
+                {
+                    var toAdd = new TECSystem(system, guidDictionary, controlledScope.CharactersticInstances);
+                    controlledScope.CharactersticInstances.AddItem(system, toAdd);
+                    systemCollection.Add(toAdd);
+                }
+                foreach (TECController controller in controlledScope.Controllers)
+                {
+                    var toAdd = new TECController(controller, guidDictionary);
+                    controlledScope.CharactersticInstances.AddItem(controller, toAdd);
+                    controllerCollection.Add(toAdd);
+                }
+                foreach (TECPanel panel in controlledScope.Panels)
+                {
+                    var toAdd = new TECPanel(panel, guidDictionary);
+                    controlledScope.CharactersticInstances.AddItem(panel, toAdd);
+                    panelCollection.Add(toAdd);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
-              panelCollection, this, guidDictionary);
-            //watch.Stop();
-            //Console.WriteLine("Link Data: " + watch.ElapsedMilliseconds);
+                ModelLinkingHelper.LinkControlledScopeObjects(systemCollection, controllerCollection,
+                  panelCollection, this, guidDictionary);
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECController controller in controllerCollection)
-            {
-                Controllers.Add(controller);
-            }
-            //watch.Stop();
-            //Console.WriteLine("Add Controllers: " + watch.ElapsedMilliseconds);
+                foreach (TECController controller in controllerCollection)
+                {
+                    Controllers.Add(controller);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECPanel panel in panelCollection)
-            {
-                Panels.Add(panel);
-            }
-            //watch.Stop();
-            //Console.WriteLine("Add Panels: " + watch.ElapsedMilliseconds);
+                foreach (TECPanel panel in panelCollection)
+                {
+                    Panels.Add(panel);
+                }
 
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            foreach (TECSystem system in systemCollection)
-            {
-                Systems.Add(system);
+                foreach (TECSystem system in systemCollection)
+                {
+                    Systems.Add(system);
+                }
+                var instanceControlledScope = new TECControlledScope(true);
+                instanceControlledScope.Name = controlledScope.Name;
+                instanceControlledScope.Description = controlledScope.Description;
+                instanceControlledScope.Systems = systemCollection;
+                instanceControlledScope.Controllers = controllerCollection;
+                instanceControlledScope.Panels = panelCollection;
+                controlledScope.ScopeInstances.Add(instanceControlledScope);
             }
-            //watch.Stop();
-            //Console.WriteLine("Add Systems: " + watch.ElapsedMilliseconds);
         }
-
         #region Event Handlers
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -510,6 +543,183 @@ namespace EstimatingLibrary
             }
         }
 
+        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                object oldValue = args.OldValue;
+                object newValue = args.NewValue;
+                if (e.PropertyName == "Add")
+                {
+                    handleAdd(newValue, oldValue);
+                }
+                else if (e.PropertyName == "Remove")
+                {
+                    handleRemove(newValue, oldValue);
+                }
+                else if (e.PropertyName == "Edit")
+                {
+                }
+                else if (e.PropertyName == "ChildChanged")
+                {
+
+                }
+                else if (e.PropertyName == "ObjectPropertyChanged")
+                {
+
+                }
+                else if (e.PropertyName == "RelationshipPropertyChanged")
+                {
+
+                }
+                else if (e.PropertyName == "MetaAdd")
+                {
+
+                }
+                else if (e.PropertyName == "MetaRemove")
+                {
+
+                }
+                else if (e.PropertyName == "AddRelationship")
+                {
+
+                }
+                else if (e.PropertyName == "RemoveRelationship")
+                {
+
+                }
+                else if (e.PropertyName == "RemovedSubScope") { }
+                else if (e.PropertyName == "AddCatalog")
+                {
+
+                }
+                else if (e.PropertyName == "RemoveCatalog")
+                {
+
+                }
+                else if (e.PropertyName == "Catalogs")
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+            }
+        }
+        
+        private void handleRemove(object newValue, object oldValue)
+        {
+            if (newValue is TECSystem && oldValue is TECControlledScope)
+            {
+                var characteristicSystem = newValue as TECSystem;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicSystem))
+                {
+                    foreach (TECSystem system in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicSystem))
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Systems.Contains(system))
+                            {
+                                controlledScope.Systems.Remove(system);
+                            }
+                        }
+                        Systems.Remove(system);
+                    }
+                }
+                
+            }
+            else if (newValue is TECController && oldValue is TECControlledScope)
+            {
+                var characteristicController = newValue as TECController;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicController))
+                {
+                    foreach (TECController controller in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicController))
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Controllers.Contains(controller))
+                            {
+                                controlledScope.Controllers.Remove(controller);
+                            }
+                        }
+                        Controllers.Remove(controller);
+                    }
+                }
+
+            }
+            else if (newValue is TECPanel && oldValue is TECControlledScope)
+            {
+                var characteristicPanel = newValue as TECPanel;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+
+                if (characteristicControlledScope.CharactersticInstances.ContainsKey(characteristicPanel))
+                {
+                    foreach (TECPanel panel in characteristicControlledScope.CharactersticInstances.GetInstances(characteristicPanel))
+                    {
+                        foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                        {
+                            if (controlledScope.Panels.Contains(panel))
+                            {
+                                controlledScope.Panels.Remove(panel);
+                            }
+                        }
+                        Panels.Remove(panel);
+                    }
+                }
+
+            }
+        }
+        private void handleAdd(object newValue, object oldValue)
+        {
+            if (newValue is TECSystem && oldValue is TECControlledScope)
+            {
+                var characteristicSystem = newValue as TECSystem;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var systemToAdd = new TECSystem(characteristicSystem,
+                        characteristicReference: characteristicControlledScope.CharactersticInstances);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicSystem, systemToAdd);
+                    controlledScope.Systems.Add(systemToAdd);
+                    Systems.Add(systemToAdd);
+                }
+            }
+            else if (newValue is TECController && oldValue is TECControlledScope)
+            {
+                var characteristicController = newValue as TECController;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var controllerToAdd = new TECController(characteristicController);
+                    controllerToAdd.IsGlobal = false;
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicController, controllerToAdd);
+                    controlledScope.Controllers.Add(controllerToAdd);
+                    Controllers.Add(controllerToAdd);
+                }
+            }
+            else if (newValue is TECPanel && oldValue is TECControlledScope)
+            {
+                var characteristicPanel = newValue as TECPanel;
+                var characteristicControlledScope = oldValue as TECControlledScope;
+                foreach (TECControlledScope controlledScope in characteristicControlledScope.ScopeInstances)
+                {
+                    var panelToAdd = new TECPanel(characteristicPanel);
+                    characteristicControlledScope.CharactersticInstances.AddItem(characteristicPanel, panelToAdd);
+                    controlledScope.Panels.Add(panelToAdd);
+                    Panels.Add(panelToAdd);
+                }
+            }
+        }
         #endregion
 
         private int getPointNumber()
@@ -568,6 +778,12 @@ namespace EstimatingLibrary
             foreach (TECPanel panel in this.Panels)
             { bid.Panels.Add(panel.Copy() as TECPanel); }
             return bid;
+        }
+        
+        private void reWatch()
+        {
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += Object_PropertyChanged;
         }
 
         private void checkForVisualsToRemove(TECScope item)
@@ -676,6 +892,5 @@ namespace EstimatingLibrary
         }
 
         #endregion
-
     }
 }

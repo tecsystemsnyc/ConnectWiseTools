@@ -397,7 +397,23 @@ namespace Tests
             }
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
-            Assert.AreEqual(expectedDevice.ConnectionType.Guid, actualDevice.ConnectionType.Guid);
+
+            foreach(TECConnectionType expectedConnectionType in expectedDevice.ConnectionTypes)
+            {
+                bool found = false;
+                foreach (TECConnectionType actualConnectionType in actualDevice.ConnectionTypes)
+                {
+                    if (actualConnectionType.Guid == expectedConnectionType.Guid)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    Assert.Fail("ConnectionType not found on device.");
+                }
+            }
 
             Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
         }

@@ -22,6 +22,7 @@ using Wvml = DocumentFormat.OpenXml.Vml.Wordprocessing;
 using Thm15 = DocumentFormat.OpenXml.Office2013.Theme;
 using Op = DocumentFormat.OpenXml.CustomProperties;
 using EstimatingLibrary;
+using System.Collections.ObjectModel;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -319,14 +320,12 @@ namespace EstimatingUtilitiesLibrary
             paragraphProperties4.Append(justification4);
             paragraphProperties4.Append(paragraphMarkRunProperties1);
 
+            #region Date
             Run run1 = new Run();
 
             RunProperties runProperties1 = new RunProperties();
-            Color color1 = new Color() { Val = "FF0000" };
-            FontSize fontSize2 = new FontSize() { Val = "20" };
 
-            runProperties1.Append(color1);
-            runProperties1.Append(fontSize2);
+            runProperties1.Append((FontSize)fontSize1.CloneNode(true));
             FieldChar fieldChar1 = new FieldChar() { FieldCharType = FieldCharValues.Begin };
 
             run1.Append(runProperties1);
@@ -335,11 +334,8 @@ namespace EstimatingUtilitiesLibrary
             Run run2 = new Run();
 
             RunProperties runProperties2 = new RunProperties();
-            Color color2 = new Color() { Val = "FF0000" };
-            FontSize fontSize3 = new FontSize() { Val = "20" };
 
-            runProperties2.Append(color2);
-            runProperties2.Append(fontSize3);
+            runProperties2.Append((FontSize)fontSize1.CloneNode(true));
             FieldCode fieldCode1 = new FieldCode() { Space = SpaceProcessingModeValues.Preserve };
             fieldCode1.Text = " DATE \\@ \"M/d/yyyy\" ";
 
@@ -349,11 +345,8 @@ namespace EstimatingUtilitiesLibrary
             Run run3 = new Run();
 
             RunProperties runProperties3 = new RunProperties();
-            Color color3 = new Color() { Val = "FF0000" };
-            FontSize fontSize4 = new FontSize() { Val = "20" };
 
-            runProperties3.Append(color3);
-            runProperties3.Append(fontSize4);
+            runProperties3.Append((FontSize)fontSize1.CloneNode(true));
             FieldChar fieldChar2 = new FieldChar() { FieldCharType = FieldCharValues.Separate };
 
             run3.Append(runProperties3);
@@ -363,12 +356,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties4 = new RunProperties();
             NoProof noProof1 = new NoProof();
-            Color color4 = new Color() { Val = "FF0000" };
-            FontSize fontSize5 = new FontSize() { Val = "20" };
 
             runProperties4.Append(noProof1);
-            runProperties4.Append(color4);
-            runProperties4.Append(fontSize5);
+            runProperties4.Append((FontSize)fontSize1.CloneNode(true));
             Text text1 = new Text();
             text1.Text = "4/18/2017";
 
@@ -378,11 +368,8 @@ namespace EstimatingUtilitiesLibrary
             Run run5 = new Run();
 
             RunProperties runProperties5 = new RunProperties();
-            Color color5 = new Color() { Val = "FF0000" };
-            FontSize fontSize6 = new FontSize() { Val = "20" };
 
-            runProperties5.Append(color5);
-            runProperties5.Append(fontSize6);
+            runProperties5.Append((FontSize)fontSize1.CloneNode(true));
             FieldChar fieldChar3 = new FieldChar() { FieldCharType = FieldCharValues.End };
 
             run5.Append(runProperties5);
@@ -391,121 +378,28 @@ namespace EstimatingUtilitiesLibrary
             Run run6 = new Run() { RsidRunProperties = "005A7D16", RsidRunAddition = "0021757F" };
 
             RunProperties runProperties6 = new RunProperties();
-            Color color6 = new Color() { Val = "FF0000" };
-            FontSize fontSize7 = new FontSize() { Val = "20" };
 
-            runProperties6.Append(color6);
-            runProperties6.Append(fontSize7);
+            runProperties6.Append((FontSize)fontSize1.CloneNode(true));
             TabChar tabChar1 = new TabChar();
 
             run6.Append(runProperties6);
             run6.Append(tabChar1);
 
-            Run run7 = new Run() { RsidRunAddition = "0021757F" };
+            #endregion
 
-            RunProperties runProperties7 = new RunProperties();
-            FontSize fontSize8 = new FontSize() { Val = "20" };
-
-            runProperties7.Append(fontSize8);
-            TabChar tabChar2 = new TabChar();
-
-            run7.Append(runProperties7);
-            run7.Append(tabChar2);
-
-            Run run8 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties8 = new RunProperties();
-            FontSize fontSize9 = new FontSize() { Val = "20" };
-
-            runProperties8.Append(fontSize9);
-            TabChar tabChar3 = new TabChar();
-
-            run8.Append(runProperties8);
-            run8.Append(tabChar3);
-
-            Run run9 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties9 = new RunProperties();
-            FontSize fontSize10 = new FontSize() { Val = "20" };
-
-            runProperties9.Append(fontSize10);
-            TabChar tabChar4 = new TabChar();
-
-            run9.Append(runProperties9);
-            run9.Append(tabChar4);
-
-            Run run10 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties10 = new RunProperties();
-            FontSize fontSize11 = new FontSize() { Val = "20" };
-
-            runProperties10.Append(fontSize11);
-            TabChar tabChar5 = new TabChar();
-
-            run10.Append(runProperties10);
-            run10.Append(tabChar5);
-
-            Run run11 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties11 = new RunProperties();
-            FontSize fontSize12 = new FontSize() { Val = "20" };
-
-            runProperties11.Append(fontSize12);
-            TabChar tabChar6 = new TabChar();
-
-            run11.Append(runProperties11);
-            run11.Append(tabChar6);
-
-            Run run12 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties12 = new RunProperties();
-            FontSize fontSize13 = new FontSize() { Val = "20" };
-
-            runProperties12.Append(fontSize13);
-            TabChar tabChar7 = new TabChar();
-
-            run12.Append(runProperties12);
-            run12.Append(tabChar7);
-
-            Run run13 = new Run() { RsidRunAddition = "0021757F" };
-
-            RunProperties runProperties13 = new RunProperties();
-            FontSize fontSize14 = new FontSize() { Val = "20" };
-
-            runProperties13.Append(fontSize14);
-            TabChar tabChar8 = new TabChar();
-            Text text2 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text2.Text = "           ";
-
-            run13.Append(runProperties13);
-            run13.Append(tabChar8);
-            run13.Append(text2);
-
+            #region Bid Number
             Run run14 = new Run() { RsidRunProperties = "0021757F", RsidRunAddition = "0021757F" };
 
             RunProperties runProperties14 = new RunProperties();
-            FontSize fontSize15 = new FontSize() { Val = "20" };
 
-            runProperties14.Append(fontSize15);
+            runProperties14.Append((FontSize)fontSize1.CloneNode(true));
             Text text3 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text3.Text = "TEC Bid No. " + _bid.BidNumber;
 
             run14.Append(runProperties14);
             run14.Append(text3);
 
-            Run run15 = new Run() { RsidRunProperties = "005A7D16", RsidRunAddition = "005A7D16" };
-
-            RunProperties runProperties15 = new RunProperties();
-            Color color7 = new Color() { Val = "FF0000" };
-            FontSize fontSize16 = new FontSize() { Val = "20" };
-
-            runProperties15.Append(color7);
-            runProperties15.Append(fontSize16);
-            Text text4 = new Text();
-            text4.Text = _bid.BidNumber;
-
-            run15.Append(runProperties15);
-            run15.Append(text4);
+            #endregion
 
             paragraph4.Append(paragraphProperties4);
             paragraph4.Append(run1);
@@ -514,15 +408,15 @@ namespace EstimatingUtilitiesLibrary
             paragraph4.Append(run4);
             paragraph4.Append(run5);
             paragraph4.Append(run6);
-            paragraph4.Append(run7);
-            paragraph4.Append(run8);
-            paragraph4.Append(run9);
-            paragraph4.Append(run10);
-            paragraph4.Append(run11);
-            paragraph4.Append(run12);
-            paragraph4.Append(run13);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
+            addTabRun(paragraph4, fontSize1);
             paragraph4.Append(run14);
-            paragraph4.Append(run15);
 
             Paragraph paragraph5 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00A01FB7", RsidParagraphProperties = "00A01FB7", RsidRunAdditionDefault = "001D3A65" };
 
@@ -547,70 +441,14 @@ namespace EstimatingUtilitiesLibrary
 
             run16.Append(runProperties16);
             run16.Append(tabChar9);
-
-            Run run17 = new Run() { RsidRunProperties = "00DC4F40" };
-
-            RunProperties runProperties17 = new RunProperties();
-            FontSizeComplexScript fontSizeComplexScript3 = new FontSizeComplexScript() { Val = "22" };
-
-            runProperties17.Append(fontSizeComplexScript3);
-            TabChar tabChar10 = new TabChar();
-
-            run17.Append(runProperties17);
-            run17.Append(tabChar10);
-
-            Run run18 = new Run() { RsidRunProperties = "00DC4F40" };
-
-            RunProperties runProperties18 = new RunProperties();
-            FontSizeComplexScript fontSizeComplexScript4 = new FontSizeComplexScript() { Val = "22" };
-
-            runProperties18.Append(fontSizeComplexScript4);
-            TabChar tabChar11 = new TabChar();
-
-            run18.Append(runProperties18);
-            run18.Append(tabChar11);
-
-            Run run19 = new Run() { RsidRunProperties = "00DC4F40" };
-
-            RunProperties runProperties19 = new RunProperties();
-            FontSizeComplexScript fontSizeComplexScript5 = new FontSizeComplexScript() { Val = "22" };
-
-            runProperties19.Append(fontSizeComplexScript5);
-            TabChar tabChar12 = new TabChar();
-
-            run19.Append(runProperties19);
-            run19.Append(tabChar12);
-
-            Run run20 = new Run() { RsidRunProperties = "00DC4F40" };
-
-            RunProperties runProperties20 = new RunProperties();
-            FontSizeComplexScript fontSizeComplexScript6 = new FontSizeComplexScript() { Val = "22" };
-
-            runProperties20.Append(fontSizeComplexScript6);
-            TabChar tabChar13 = new TabChar();
-
-            run20.Append(runProperties20);
-            run20.Append(tabChar13);
-
-            Run run21 = new Run() { RsidRunAddition = "00160AF1" };
-
-            RunProperties runProperties21 = new RunProperties();
-            FontSizeComplexScript fontSizeComplexScript7 = new FontSizeComplexScript() { Val = "22" };
-
-            runProperties21.Append(fontSizeComplexScript7);
-            Text text5 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text5.Text = "                       ";
-
-            run21.Append(runProperties21);
-            run21.Append(text5);
-
+            
             paragraph5.Append(paragraphProperties5);
             paragraph5.Append(run16);
-            paragraph5.Append(run17);
-            paragraph5.Append(run18);
-            paragraph5.Append(run19);
-            paragraph5.Append(run20);
-            paragraph5.Append(run21);
+            paragraph5.Append(run16.CloneNode(true));
+            paragraph5.Append(run16.CloneNode(true));
+            paragraph5.Append(run16.CloneNode(true));
+            paragraph5.Append(run16.CloneNode(true));
+            paragraph5.Append(run16.CloneNode(true));
 
             Paragraph paragraph6 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00F35AA0", RsidParagraphProperties = "00F35AA0", RsidRunAdditionDefault = "00F35AA0" };
 
@@ -618,9 +456,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification6 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties3 = new ParagraphMarkRunProperties();
-            FontSize fontSize17 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties3.Append(fontSize17);
+            paragraphMarkRunProperties3.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties6.Append(justification6);
             paragraphProperties6.Append(paragraphMarkRunProperties3);
@@ -633,9 +470,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification7 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties4 = new ParagraphMarkRunProperties();
-            FontSize fontSize18 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties4.Append(fontSize18);
+            paragraphMarkRunProperties4.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties7.Append(justification7);
             paragraphProperties7.Append(paragraphMarkRunProperties4);
@@ -644,10 +480,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties22 = new RunProperties();
             Bold bold1 = new Bold();
-            FontSize fontSize19 = new FontSize() { Val = "20" };
 
             runProperties22.Append(bold1);
-            runProperties22.Append(fontSize19);
+            runProperties22.Append((FontSize)fontSize1.CloneNode(true));
             Text text6 = new Text();
             text6.Text = "Re: " + _bid.Name;
 
@@ -658,31 +493,14 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties23 = new RunProperties();
             Bold bold2 = new Bold();
-            FontSize fontSize20 = new FontSize() { Val = "20" };
 
             runProperties23.Append(bold2);
-            runProperties23.Append(fontSize20);
+            runProperties23.Append((FontSize)fontSize1.CloneNode(true));
             TabChar tabChar14 = new TabChar();
 
             run23.Append(runProperties23);
             run23.Append(tabChar14);
-
-            Run run24 = new Run() { RsidRunAddition = "005A7D16" };
-
-            RunProperties runProperties24 = new RunProperties();
-            Bold bold3 = new Bold();
-            SnapToGrid snapToGrid1 = new SnapToGrid() { Val = false };
-            Color color8 = new Color() { Val = "FF0000" };
-
-            runProperties24.Append(bold3);
-            runProperties24.Append(snapToGrid1);
-            runProperties24.Append(color8);
-            Text text7 = new Text();
-            text7.Text = _bid.Name;
-
-            run24.Append(runProperties24);
-            run24.Append(text7);
-
+            
             Run run25 = new Run() { RsidRunProperties = "000238ED", RsidRunAddition = "005B129C" };
 
             RunProperties runProperties25 = new RunProperties();
@@ -700,7 +518,6 @@ namespace EstimatingUtilitiesLibrary
             paragraph7.Append(paragraphProperties7);
             paragraph7.Append(run22);
             paragraph7.Append(run23);
-            paragraph7.Append(run24);
             paragraph7.Append(run25);
 
             Paragraph paragraph8 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00F35AA0", RsidParagraphProperties = "00F35AA0", RsidRunAdditionDefault = "00F35AA0" };
@@ -709,9 +526,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification8 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties5 = new ParagraphMarkRunProperties();
-            FontSize fontSize21 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties5.Append(fontSize21);
+            paragraphMarkRunProperties5.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties8.Append(justification8);
             paragraphProperties8.Append(paragraphMarkRunProperties5);
@@ -724,9 +540,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification9 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties6 = new ParagraphMarkRunProperties();
-            FontSize fontSize22 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties6.Append(fontSize22);
+            paragraphMarkRunProperties6.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties9.Append(justification9);
             paragraphProperties9.Append(paragraphMarkRunProperties6);
@@ -734,9 +549,8 @@ namespace EstimatingUtilitiesLibrary
             Run run26 = new Run();
 
             RunProperties runProperties26 = new RunProperties();
-            FontSize fontSize23 = new FontSize() { Val = "20" };
 
-            runProperties26.Append(fontSize23);
+            runProperties26.Append((FontSize)fontSize1.CloneNode(true));
             Text text9 = new Text();
             text9.Text = "To All Bidders:";
 
@@ -752,9 +566,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification10 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties7 = new ParagraphMarkRunProperties();
-            FontSize fontSize24 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties7.Append(fontSize24);
+            paragraphMarkRunProperties7.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties10.Append(justification10);
             paragraphProperties10.Append(paragraphMarkRunProperties7);
@@ -768,9 +581,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification11 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties8 = new ParagraphMarkRunProperties();
-            FontSize fontSize25 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties8.Append(fontSize25);
+            paragraphMarkRunProperties8.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties11.Append(indentation1);
             paragraphProperties11.Append(justification11);
@@ -779,9 +591,8 @@ namespace EstimatingUtilitiesLibrary
             Run run27 = new Run() { RsidRunProperties = "00DC4F40" };
 
             RunProperties runProperties27 = new RunProperties();
-            FontSize fontSize26 = new FontSize() { Val = "20" };
 
-            runProperties27.Append(fontSize26);
+            runProperties27.Append((FontSize)fontSize1.CloneNode(true));
             Text text10 = new Text();
             text10.Text = intro;
 
@@ -797,9 +608,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification12 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties9 = new ParagraphMarkRunProperties();
-            FontSize fontSize37 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties9.Append(fontSize37);
+            paragraphMarkRunProperties9.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties12.Append(justification12);
             paragraphProperties12.Append(paragraphMarkRunProperties9);
@@ -812,15 +622,16 @@ namespace EstimatingUtilitiesLibrary
             Justification justification13 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties10 = new ParagraphMarkRunProperties();
-            FontSize fontSize38 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties10.Append(fontSize38);
+            paragraphMarkRunProperties10.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties13.Append(justification13);
             paragraphProperties13.Append(paragraphMarkRunProperties10);
 
             paragraph13.Append(paragraphProperties13);
 
+
+            #region Documents Table
             Table table1 = new Table();
 
             TableProperties tableProperties1 = new TableProperties();
@@ -858,9 +669,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification14 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties11 = new ParagraphMarkRunProperties();
-            FontSize fontSize39 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties11.Append(fontSize39);
+            paragraphMarkRunProperties11.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties14.Append(justification14);
             paragraphProperties14.Append(paragraphMarkRunProperties11);
@@ -868,9 +678,8 @@ namespace EstimatingUtilitiesLibrary
             Run run38 = new Run() { RsidRunProperties = "00DC4F40" };
 
             RunProperties runProperties38 = new RunProperties();
-            FontSize fontSize40 = new FontSize() { Val = "20" };
 
-            runProperties38.Append(fontSize40);
+            runProperties38.Append((FontSize)fontSize1.CloneNode(true));
             Text text21 = new Text();
             text21.Text = "Mechanical Drawings:";
 
@@ -880,9 +689,8 @@ namespace EstimatingUtilitiesLibrary
             Run run39 = new Run() { RsidRunAddition = "00423DD3" };
 
             RunProperties runProperties39 = new RunProperties();
-            FontSize fontSize41 = new FontSize() { Val = "20" };
 
-            runProperties39.Append(fontSize41);
+            runProperties39.Append((FontSize)fontSize1.CloneNode(true));
             Text text22 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text22.Text = "  ";
 
@@ -892,9 +700,8 @@ namespace EstimatingUtilitiesLibrary
             Run run40 = new Run() { RsidRunAddition = "00F5622B" };
 
             RunProperties runProperties40 = new RunProperties();
-            FontSize fontSize42 = new FontSize() { Val = "20" };
 
-            runProperties40.Append(fontSize42);
+            runProperties40.Append((FontSize)fontSize1.CloneNode(true));
             Text text23 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text23.Text = "                                      ";
 
@@ -923,10 +730,9 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties15 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties12 = new ParagraphMarkRunProperties();
-            FontSize fontSize43 = new FontSize() { Val = "20" };
             Highlight highlight1 = new Highlight() { Val = HighlightColorValues.Yellow };
 
-            paragraphMarkRunProperties12.Append(fontSize43);
+            paragraphMarkRunProperties12.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties12.Append(highlight1);
 
             paragraphProperties15.Append(paragraphMarkRunProperties12);
@@ -951,9 +757,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification15 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties13 = new ParagraphMarkRunProperties();
-            FontSize fontSize44 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties13.Append(fontSize44);
+            paragraphMarkRunProperties13.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties16.Append(justification15);
             paragraphProperties16.Append(paragraphMarkRunProperties13);
@@ -961,9 +766,8 @@ namespace EstimatingUtilitiesLibrary
             Run run41 = new Run();
 
             RunProperties runProperties41 = new RunProperties();
-            FontSize fontSize45 = new FontSize() { Val = "20" };
 
-            runProperties41.Append(fontSize45);
+            runProperties41.Append((FontSize)fontSize1.CloneNode(true));
             Text text24 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text24.Text = "Dated: ";
 
@@ -997,9 +801,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification16 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties14 = new ParagraphMarkRunProperties();
-            FontSize fontSize46 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties14.Append(fontSize46);
+            paragraphMarkRunProperties14.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties17.Append(justification16);
             paragraphProperties17.Append(paragraphMarkRunProperties14);
@@ -1023,10 +826,9 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties18 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties15 = new ParagraphMarkRunProperties();
-            FontSize fontSize47 = new FontSize() { Val = "20" };
             Highlight highlight2 = new Highlight() { Val = HighlightColorValues.Yellow };
 
-            paragraphMarkRunProperties15.Append(fontSize47);
+            paragraphMarkRunProperties15.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties15.Append(highlight2);
 
             paragraphProperties18.Append(paragraphMarkRunProperties15);
@@ -1051,9 +853,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification17 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties16 = new ParagraphMarkRunProperties();
-            FontSize fontSize48 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties16.Append(fontSize48);
+            paragraphMarkRunProperties16.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties19.Append(justification17);
             paragraphProperties19.Append(paragraphMarkRunProperties16);
@@ -1084,9 +885,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification18 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties17 = new ParagraphMarkRunProperties();
-            FontSize fontSize49 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties17.Append(fontSize49);
+            paragraphMarkRunProperties17.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties20.Append(justification18);
             paragraphProperties20.Append(paragraphMarkRunProperties17);
@@ -1094,9 +894,8 @@ namespace EstimatingUtilitiesLibrary
             Run run42 = new Run();
 
             RunProperties runProperties42 = new RunProperties();
-            FontSize fontSize50 = new FontSize() { Val = "20" };
 
-            runProperties42.Append(fontSize50);
+            runProperties42.Append((FontSize)fontSize1.CloneNode(true));
             Text text25 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text25.Text = "Specification Sections: ";
 
@@ -1123,10 +922,9 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties21 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties18 = new ParagraphMarkRunProperties();
-            FontSize fontSize51 = new FontSize() { Val = "20" };
             Highlight highlight3 = new Highlight() { Val = HighlightColorValues.Yellow };
 
-            paragraphMarkRunProperties18.Append(fontSize51);
+            paragraphMarkRunProperties18.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties18.Append(highlight3);
 
             paragraphProperties21.Append(paragraphMarkRunProperties18);
@@ -1151,9 +949,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification19 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties19 = new ParagraphMarkRunProperties();
-            FontSize fontSize52 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties19.Append(fontSize52);
+            paragraphMarkRunProperties19.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties22.Append(justification19);
             paragraphProperties22.Append(paragraphMarkRunProperties19);
@@ -1161,9 +958,8 @@ namespace EstimatingUtilitiesLibrary
             Run run43 = new Run();
 
             RunProperties runProperties43 = new RunProperties();
-            FontSize fontSize53 = new FontSize() { Val = "20" };
 
-            runProperties43.Append(fontSize53);
+            runProperties43.Append((FontSize)fontSize1.CloneNode(true));
             Text text26 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text26.Text = "Dated: ";
 
@@ -1197,9 +993,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification20 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties20 = new ParagraphMarkRunProperties();
-            FontSize fontSize54 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties20.Append(fontSize54);
+            paragraphMarkRunProperties20.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties23.Append(justification20);
             paragraphProperties23.Append(paragraphMarkRunProperties20);
@@ -1223,9 +1018,8 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties24 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties21 = new ParagraphMarkRunProperties();
-            FontSize fontSize55 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties21.Append(fontSize55);
+            paragraphMarkRunProperties21.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties24.Append(paragraphMarkRunProperties21);
 
@@ -1249,9 +1043,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification21 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties22 = new ParagraphMarkRunProperties();
-            FontSize fontSize56 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties22.Append(fontSize56);
+            paragraphMarkRunProperties22.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties25.Append(justification21);
             paragraphProperties25.Append(paragraphMarkRunProperties22);
@@ -1287,9 +1080,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification22 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties23 = new ParagraphMarkRunProperties();
-            FontSize fontSize57 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties23.Append(fontSize57);
+            paragraphMarkRunProperties23.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties26.Append(justification22);
             paragraphProperties26.Append(paragraphMarkRunProperties23);
@@ -1297,9 +1089,8 @@ namespace EstimatingUtilitiesLibrary
             Run run44 = new Run() { RsidRunProperties = "0021757F" };
 
             RunProperties runProperties44 = new RunProperties();
-            FontSize fontSize58 = new FontSize() { Val = "20" };
 
-            runProperties44.Append(fontSize58);
+            runProperties44.Append((FontSize)fontSize1.CloneNode(true));
             Text text27 = new Text();
             text27.Text = "Documents Prepared By:";
 
@@ -1326,9 +1117,8 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties27 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties24 = new ParagraphMarkRunProperties();
-            FontSize fontSize59 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties24.Append(fontSize59);
+            paragraphMarkRunProperties24.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties27.Append(paragraphMarkRunProperties24);
 
@@ -1352,9 +1142,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification23 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties25 = new ParagraphMarkRunProperties();
-            FontSize fontSize60 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties25.Append(fontSize60);
+            paragraphMarkRunProperties25.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties28.Append(justification23);
             paragraphProperties28.Append(paragraphMarkRunProperties25);
@@ -1377,15 +1166,16 @@ namespace EstimatingUtilitiesLibrary
             table1.Append(tableRow4);
             table1.Append(tableRow5);
 
+            #endregion
+
             Paragraph paragraph29 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
 
             ParagraphProperties paragraphProperties29 = new ParagraphProperties();
             Justification justification24 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties26 = new ParagraphMarkRunProperties();
-            FontSize fontSize61 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties26.Append(fontSize61);
+            paragraphMarkRunProperties26.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties29.Append(justification24);
             paragraphProperties29.Append(paragraphMarkRunProperties26);
@@ -1457,58 +1247,7 @@ namespace EstimatingUtilitiesLibrary
             table2.Append(tableRow6);
 
             var scopeParagraphs = new List<Paragraph>();
-            foreach (TECScopeBranch branch in _bid.ScopeTree)
-            {
-                Paragraph paragraph32 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
-                scopeParagraphs.Add(paragraph32);
-                ParagraphProperties paragraphProperties32 = new ParagraphProperties();
-
-                NumberingProperties numberingProperties1 = new NumberingProperties();
-                NumberingLevelReference numberingLevelReference1 = new NumberingLevelReference() { Val = 0 };
-                NumberingId numberingId1 = new NumberingId() { Val = 25 };
-
-                numberingProperties1.Append(numberingLevelReference1);
-                numberingProperties1.Append(numberingId1);
-
-                ParagraphMarkRunProperties paragraphMarkRunProperties29 = new ParagraphMarkRunProperties();
-                FontSize fontSize63 = new FontSize() { Val = "20" };
-
-                paragraphMarkRunProperties29.Append(fontSize63);
-
-                paragraphProperties32.Append(numberingProperties1);
-                paragraphProperties32.Append(paragraphMarkRunProperties29);
-
-                Run run46 = new Run() { RsidRunProperties = "00A61B35" };
-
-                RunProperties runProperties46 = new RunProperties();
-                FontSize fontSize64 = new FontSize() { Val = "20" };
-
-                runProperties46.Append(fontSize64);
-                Text text29 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-                text29.Text = branch.Name;
-
-                run46.Append(runProperties46);
-                run46.Append(text29);
-
-                paragraph32.Append(paragraphProperties32);
-                paragraph32.Append(run46);
-
-                Paragraph paragraph33 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "00A61B35", RsidRunAdditionDefault = "00A61B35" };
-                scopeParagraphs.Add(paragraph33);
-                ParagraphProperties paragraphProperties33 = new ParagraphProperties();
-                Indentation indentation2 = new Indentation() { Start = "360" };
-
-                ParagraphMarkRunProperties paragraphMarkRunProperties30 = new ParagraphMarkRunProperties();
-                FontSize fontSize67 = new FontSize() { Val = "20" };
-
-                paragraphMarkRunProperties30.Append(fontSize67);
-
-                paragraphProperties33.Append(indentation2);
-                paragraphProperties33.Append(paragraphMarkRunProperties30);
-
-                paragraph33.Append(paragraphProperties33);
-
-            }
+            addScopeBranchList(_bid.ScopeTree, scopeParagraphs, fontSize1, 0);
 
             Paragraph paragraph34 = new Paragraph() { RsidParagraphMarkRevision = "0064096A", RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "0064096A", RsidRunAdditionDefault = "00A61B35" };
 
@@ -1522,9 +1261,8 @@ namespace EstimatingUtilitiesLibrary
             numberingProperties2.Append(numberingId2);
 
             ParagraphMarkRunProperties paragraphMarkRunProperties31 = new ParagraphMarkRunProperties();
-            FontSize fontSize68 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties31.Append(fontSize68);
+            paragraphMarkRunProperties31.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties34.Append(numberingProperties2);
             paragraphProperties34.Append(paragraphMarkRunProperties31);
@@ -1532,9 +1270,8 @@ namespace EstimatingUtilitiesLibrary
             Run run49 = new Run();
 
             RunProperties runProperties49 = new RunProperties();
-            FontSize fontSize69 = new FontSize() { Val = "20" };
 
-            runProperties49.Append(fontSize69);
+            runProperties49.Append((FontSize)fontSize1.CloneNode(true));
             Text text32 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text32.Text = " ";
 
@@ -1544,9 +1281,8 @@ namespace EstimatingUtilitiesLibrary
             Run run50 = new Run() { RsidRunProperties = "00A61B35" };
 
             RunProperties runProperties50 = new RunProperties();
-            FontSize fontSize70 = new FontSize() { Val = "20" };
 
-            runProperties50.Append(fontSize70);
+            runProperties50.Append((FontSize)fontSize1.CloneNode(true));
             Text text33 = new Text();
             text33.Text = "Provide a BMS and Automatic Temperature functions for the following mechanical systems:";
 
@@ -1558,143 +1294,29 @@ namespace EstimatingUtilitiesLibrary
             paragraph34.Append(run50);
 
 
-            var poposalScopeParagraphs = new List<Paragraph>();
-            foreach (TECProposalScope scope in _bid.ProposalScope)
-            {
-                Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
-                poposalScopeParagraphs.Add(paragraph35);
-                ParagraphProperties paragraphProperties35 = new ParagraphProperties();
-
-                NumberingProperties numberingProperties3 = new NumberingProperties();
-                NumberingLevelReference numberingLevelReference3 = new NumberingLevelReference() { Val = 1 };
-                NumberingId numberingId3 = new NumberingId() { Val = 25 };
-
-                numberingProperties3.Append(numberingLevelReference3);
-                numberingProperties3.Append(numberingId3);
-
-                ParagraphMarkRunProperties paragraphMarkRunProperties32 = new ParagraphMarkRunProperties();
-                Color color9 = new Color() { Val = "FF0000" };
-                FontSize fontSize71 = new FontSize() { Val = "20" };
-
-                paragraphMarkRunProperties32.Append(color9);
-                paragraphMarkRunProperties32.Append(fontSize71);
-
-                paragraphProperties35.Append(numberingProperties3);
-                paragraphProperties35.Append(paragraphMarkRunProperties32);
-
-                Run run51 = new Run() { RsidRunProperties = "00A61B35" };
-
-                RunProperties runProperties51 = new RunProperties();
-                Color color10 = new Color() { Val = "FF0000" };
-                FontSize fontSize72 = new FontSize() { Val = "20" };
-
-                runProperties51.Append(color10);
-                runProperties51.Append(fontSize72);
-                Text text34 = new Text();
-                text34.Text = scope.Scope.Name;
-
-                run51.Append(runProperties51);
-                run51.Append(text34);
-
-                paragraph35.Append(paragraphProperties35);
-                paragraph35.Append(run51);
-
-                foreach (TECProposalScope equipScope in scope.Children)
-                {
-                    Paragraph paragraph38 = new Paragraph() { RsidParagraphAddition = "0064096A", RsidParagraphProperties = "0064096A", RsidRunAdditionDefault = "0064096A" };
-                    poposalScopeParagraphs.Add(paragraph38);
-                    ParagraphProperties paragraphProperties38 = new ParagraphProperties();
-
-                    NumberingProperties numberingProperties6 = new NumberingProperties();
-                    NumberingLevelReference numberingLevelReference6 = new NumberingLevelReference() { Val = 2 };
-                    NumberingId numberingId6 = new NumberingId() { Val = 25 };
-
-                    numberingProperties6.Append(numberingLevelReference6);
-                    numberingProperties6.Append(numberingId6);
-
-                    ParagraphMarkRunProperties paragraphMarkRunProperties35 = new ParagraphMarkRunProperties();
-                    Color color15 = new Color() { Val = "FF0000" };
-                    FontSize fontSize77 = new FontSize() { Val = "20" };
-
-                    paragraphMarkRunProperties35.Append(color15);
-                    paragraphMarkRunProperties35.Append(fontSize77);
-
-                    paragraphProperties38.Append(numberingProperties6);
-                    paragraphProperties38.Append(paragraphMarkRunProperties35);
-                    ProofError proofError3 = new ProofError() { Type = ProofingErrorValues.SpellStart };
-
-                    Run run54 = new Run();
-
-                    RunProperties runProperties54 = new RunProperties();
-                    Color color16 = new Color() { Val = "FF0000" };
-                    FontSize fontSize78 = new FontSize() { Val = "20" };
-
-                    runProperties54.Append(color16);
-                    runProperties54.Append(fontSize78);
-                    Text text37 = new Text();
-                    text37.Text = equipScope.Scope.Name;
-
-                    run54.Append(runProperties54);
-                    run54.Append(text37);
-                    ProofError proofError4 = new ProofError() { Type = ProofingErrorValues.SpellEnd };
-
-                    paragraph38.Append(paragraphProperties38);
-                    paragraph38.Append(proofError3);
-                    paragraph38.Append(run54);
-                    paragraph38.Append(proofError4);
-
-                }
-
-            }
+            var proposalScopeParagraphs = new List<Paragraph>();
+            addProposalScopeList(_bid.ProposalScope, proposalScopeParagraphs, fontSize1, 1);
 
             Paragraph paragraph40 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00B23CE5", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "00B23CE5" };
 
             ParagraphProperties paragraphProperties40 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties37 = new ParagraphMarkRunProperties();
-            FontSize fontSize81 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties37.Append(fontSize81);
+            paragraphMarkRunProperties37.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties40.Append(paragraphMarkRunProperties37);
 
             paragraph40.Append(paragraphProperties40);
-
-            Paragraph paragraph42 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
-
-            ParagraphProperties paragraphProperties42 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties39 = new ParagraphMarkRunProperties();
-            FontSize fontSize89 = new FontSize() { Val = "20" };
-
-            paragraphMarkRunProperties39.Append(fontSize89);
-
-            paragraphProperties42.Append(paragraphMarkRunProperties39);
-
-            paragraph42.Append(paragraphProperties42);
-
-            Paragraph paragraph54 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
-
-            ParagraphProperties paragraphProperties54 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties51 = new ParagraphMarkRunProperties();
-            FontSize fontSize112 = new FontSize() { Val = "20" };
-
-            paragraphMarkRunProperties51.Append(fontSize112);
-
-            paragraphProperties54.Append(paragraphMarkRunProperties51);
-
-            paragraph54.Append(paragraphProperties54);
-
+            
             Paragraph paragraph55 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
 
             ParagraphProperties paragraphProperties55 = new ParagraphProperties();
             Justification justification27 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties52 = new ParagraphMarkRunProperties();
-            FontSize fontSize113 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties52.Append(fontSize113);
+            paragraphMarkRunProperties52.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties55.Append(justification27);
             paragraphProperties55.Append(paragraphMarkRunProperties52);
@@ -1737,10 +1359,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties53 = new ParagraphMarkRunProperties();
             Bold bold7 = new Bold();
-            FontSize fontSize114 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties53.Append(bold7);
-            paragraphMarkRunProperties53.Append(fontSize114);
+            paragraphMarkRunProperties53.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties56.Append(justification28);
             paragraphProperties56.Append(paragraphMarkRunProperties53);
@@ -1749,10 +1370,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties73 = new RunProperties();
             Bold bold8 = new Bold();
-            FontSize fontSize115 = new FontSize() { Val = "20" };
 
             runProperties73.Append(bold8);
-            runProperties73.Append(fontSize115);
+            runProperties73.Append((FontSize)fontSize1.CloneNode(true));
             Text text56 = new Text();
             text56.Text = "PRICING:";
 
@@ -1777,15 +1397,15 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties54 = new ParagraphMarkRunProperties();
             Vanish vanish1 = new Vanish();
-            FontSize fontSize116 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties54.Append(vanish1);
-            paragraphMarkRunProperties54.Append(fontSize116);
+            paragraphMarkRunProperties54.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties57.Append(paragraphMarkRunProperties54);
 
             paragraph57.Append(paragraphProperties57);
 
+            #region Pricing Table
             Table table4 = new Table();
 
             TableProperties tableProperties4 = new TableProperties();
@@ -1823,10 +1443,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties55 = new ParagraphMarkRunProperties();
             Bold bold9 = new Bold();
-            FontSize fontSize117 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties55.Append(bold9);
-            paragraphMarkRunProperties55.Append(fontSize117);
+            paragraphMarkRunProperties55.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties58.Append(paragraphMarkRunProperties55);
 
@@ -1834,10 +1453,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties74 = new RunProperties();
             Bold bold10 = new Bold();
-            FontSize fontSize118 = new FontSize() { Val = "20" };
 
             runProperties74.Append(bold10);
-            runProperties74.Append(fontSize118);
+            runProperties74.Append((FontSize)fontSize1.CloneNode(true));
             Text text57 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text57.Text = "Base Scope  ";
 
@@ -1863,10 +1481,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties56 = new ParagraphMarkRunProperties();
             Bold bold11 = new Bold();
-            FontSize fontSize119 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties56.Append(bold11);
-            paragraphMarkRunProperties56.Append(fontSize119);
+            paragraphMarkRunProperties56.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties59.Append(paragraphMarkRunProperties56);
 
@@ -1874,10 +1491,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties75 = new RunProperties();
             Bold bold12 = new Bold();
-            FontSize fontSize120 = new FontSize() { Val = "20" };
 
             runProperties75.Append(bold12);
-            runProperties75.Append(fontSize120);
+            runProperties75.Append((FontSize)fontSize1.CloneNode(true));
             Text text58 = new Text();
             text58.Text = "$";
 
@@ -1904,10 +1520,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties57 = new ParagraphMarkRunProperties();
             Bold bold13 = new Bold();
-            FontSize fontSize121 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties57.Append(bold13);
-            paragraphMarkRunProperties57.Append(fontSize121);
+            paragraphMarkRunProperties57.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties60.Append(justification29);
             paragraphProperties60.Append(paragraphMarkRunProperties57);
@@ -1923,7 +1538,7 @@ namespace EstimatingUtilitiesLibrary
             priceRunProperties.Append(priceBold);
             priceRunProperties.Append(priceFontSize);
             Text priceText = new Text();
-            //priceText.Text = _bid.TotalPrice.ToString("N");
+            priceText.Text = _bid.Estimate.TotalPrice.ToString("N");
 
             priceRun.Append(priceRunProperties);
             priceRun.Append(priceText);
@@ -1952,10 +1567,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties58 = new ParagraphMarkRunProperties();
             Bold bold14 = new Bold();
-            FontSize fontSize122 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties58.Append(bold14);
-            paragraphMarkRunProperties58.Append(fontSize122);
+            paragraphMarkRunProperties58.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties61.Append(paragraphMarkRunProperties58);
 
@@ -1977,10 +1591,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties59 = new ParagraphMarkRunProperties();
             Bold bold15 = new Bold();
-            FontSize fontSize123 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties59.Append(bold15);
-            paragraphMarkRunProperties59.Append(fontSize123);
+            paragraphMarkRunProperties59.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties62.Append(paragraphMarkRunProperties59);
 
@@ -2003,10 +1616,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties60 = new ParagraphMarkRunProperties();
             Bold bold16 = new Bold();
-            FontSize fontSize124 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties60.Append(bold16);
-            paragraphMarkRunProperties60.Append(fontSize124);
+            paragraphMarkRunProperties60.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties63.Append(justification30);
             paragraphProperties63.Append(paragraphMarkRunProperties60);
@@ -2035,11 +1647,10 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties61 = new ParagraphMarkRunProperties();
             Bold bold17 = new Bold();
-            FontSize fontSize125 = new FontSize() { Val = "20" };
             Underline underline1 = new Underline() { Val = UnderlineValues.Single };
 
             paragraphMarkRunProperties61.Append(bold17);
-            paragraphMarkRunProperties61.Append(fontSize125);
+            paragraphMarkRunProperties61.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties61.Append(underline1);
 
             paragraphProperties64.Append(paragraphMarkRunProperties61);
@@ -2062,10 +1673,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties62 = new ParagraphMarkRunProperties();
             Bold bold18 = new Bold();
-            FontSize fontSize126 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties62.Append(bold18);
-            paragraphMarkRunProperties62.Append(fontSize126);
+            paragraphMarkRunProperties62.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties65.Append(paragraphMarkRunProperties62);
 
@@ -2088,10 +1698,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties63 = new ParagraphMarkRunProperties();
             Bold bold19 = new Bold();
-            FontSize fontSize127 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties63.Append(bold19);
-            paragraphMarkRunProperties63.Append(fontSize127);
+            paragraphMarkRunProperties63.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties66.Append(justification31);
             paragraphProperties66.Append(paragraphMarkRunProperties63);
@@ -2121,11 +1730,10 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties64 = new ParagraphMarkRunProperties();
             Bold bold20 = new Bold();
-            FontSize fontSize128 = new FontSize() { Val = "20" };
             Underline underline2 = new Underline() { Val = UnderlineValues.Single };
 
             paragraphMarkRunProperties64.Append(bold20);
-            paragraphMarkRunProperties64.Append(fontSize128);
+            paragraphMarkRunProperties64.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties64.Append(underline2);
 
             paragraphProperties67.Append(justification32);
@@ -2149,10 +1757,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties65 = new ParagraphMarkRunProperties();
             Bold bold21 = new Bold();
-            FontSize fontSize129 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties65.Append(bold21);
-            paragraphMarkRunProperties65.Append(fontSize129);
+            paragraphMarkRunProperties65.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties68.Append(paragraphMarkRunProperties65);
 
@@ -2175,10 +1782,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties66 = new ParagraphMarkRunProperties();
             Bold bold22 = new Bold();
-            FontSize fontSize130 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties66.Append(bold22);
-            paragraphMarkRunProperties66.Append(fontSize130);
+            paragraphMarkRunProperties66.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties69.Append(justification33);
             paragraphProperties69.Append(paragraphMarkRunProperties66);
@@ -2207,11 +1813,10 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties67 = new ParagraphMarkRunProperties();
             Bold bold23 = new Bold();
-            FontSize fontSize131 = new FontSize() { Val = "20" };
             Underline underline3 = new Underline() { Val = UnderlineValues.Single };
 
             paragraphMarkRunProperties67.Append(bold23);
-            paragraphMarkRunProperties67.Append(fontSize131);
+            paragraphMarkRunProperties67.Append((FontSize)fontSize1.CloneNode(true));
             paragraphMarkRunProperties67.Append(underline3);
 
             paragraphProperties70.Append(paragraphMarkRunProperties67);
@@ -2234,10 +1839,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties68 = new ParagraphMarkRunProperties();
             Bold bold24 = new Bold();
-            FontSize fontSize132 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties68.Append(bold24);
-            paragraphMarkRunProperties68.Append(fontSize132);
+            paragraphMarkRunProperties68.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties71.Append(paragraphMarkRunProperties68);
 
@@ -2260,10 +1864,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties69 = new ParagraphMarkRunProperties();
             Bold bold25 = new Bold();
-            FontSize fontSize133 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties69.Append(bold25);
-            paragraphMarkRunProperties69.Append(fontSize133);
+            paragraphMarkRunProperties69.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties72.Append(justification34);
             paragraphProperties72.Append(paragraphMarkRunProperties69);
@@ -2285,15 +1888,16 @@ namespace EstimatingUtilitiesLibrary
             table4.Append(tableRow11);
             table4.Append(tableRow12);
 
+            #endregion
+
             Paragraph paragraph73 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00FB4F08", RsidRunAdditionDefault = "00FB4F08" };
 
             ParagraphProperties paragraphProperties73 = new ParagraphProperties();
             Justification justification35 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties70 = new ParagraphMarkRunProperties();
-            FontSize fontSize134 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties70.Append(fontSize134);
+            paragraphMarkRunProperties70.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties73.Append(justification35);
             paragraphProperties73.Append(paragraphMarkRunProperties70);
@@ -2334,10 +1938,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties71 = new ParagraphMarkRunProperties();
             Bold bold26 = new Bold();
-            FontSize fontSize135 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties71.Append(bold26);
-            paragraphMarkRunProperties71.Append(fontSize135);
+            paragraphMarkRunProperties71.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties74.Append(justification36);
             paragraphProperties74.Append(paragraphMarkRunProperties71);
@@ -2346,10 +1949,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties76 = new RunProperties();
             Bold bold27 = new Bold();
-            FontSize fontSize136 = new FontSize() { Val = "20" };
 
             runProperties76.Append(bold27);
-            runProperties76.Append(fontSize136);
+            runProperties76.Append((FontSize)fontSize1.CloneNode(true));
             Text text59 = new Text();
             text59.Text = "WE EXCLUDE THE FOLLOWING:";
 
@@ -2375,10 +1977,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties72 = new ParagraphMarkRunProperties();
             ItalicComplexScript italicComplexScript1 = new ItalicComplexScript();
-            FontSize fontSize137 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties72.Append(italicComplexScript1);
-            paragraphMarkRunProperties72.Append(fontSize137);
+            paragraphMarkRunProperties72.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties75.Append(justification37);
             paragraphProperties75.Append(paragraphMarkRunProperties72);
@@ -2403,10 +2004,9 @@ namespace EstimatingUtilitiesLibrary
 
                 ParagraphMarkRunProperties paragraphMarkRunProperties73 = new ParagraphMarkRunProperties();
                 ItalicComplexScript italicComplexScript2 = new ItalicComplexScript();
-                FontSize fontSize138 = new FontSize() { Val = "20" };
 
                 paragraphMarkRunProperties73.Append(italicComplexScript2);
-                paragraphMarkRunProperties73.Append(fontSize138);
+                paragraphMarkRunProperties73.Append((FontSize)fontSize1.CloneNode(true));
 
                 paragraphProperties76.Append(paragraphStyleId1);
                 paragraphProperties76.Append(numberingProperties15);
@@ -2417,10 +2017,9 @@ namespace EstimatingUtilitiesLibrary
 
                 RunProperties runProperties77 = new RunProperties();
                 ItalicComplexScript italicComplexScript3 = new ItalicComplexScript();
-                FontSize fontSize139 = new FontSize() { Val = "20" };
 
                 runProperties77.Append(italicComplexScript3);
-                runProperties77.Append(fontSize139);
+                runProperties77.Append((FontSize)fontSize1.CloneNode(true));
                 Text text60 = new Text() { Space = SpaceProcessingModeValues.Preserve };
                 text60.Text = exclusion.Text;
 
@@ -2439,9 +2038,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification49 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties84 = new ParagraphMarkRunProperties();
-            FontSize fontSize160 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties84.Append(fontSize160);
+            paragraphMarkRunProperties84.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties87.Append(justification49);
             paragraphProperties87.Append(paragraphMarkRunProperties84);
@@ -2482,10 +2080,9 @@ namespace EstimatingUtilitiesLibrary
 
             ParagraphMarkRunProperties paragraphMarkRunProperties85 = new ParagraphMarkRunProperties();
             Bold bold28 = new Bold();
-            FontSize fontSize161 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties85.Append(bold28);
-            paragraphMarkRunProperties85.Append(fontSize161);
+            paragraphMarkRunProperties85.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties88.Append(justification50);
             paragraphProperties88.Append(paragraphMarkRunProperties85);
@@ -2494,10 +2091,9 @@ namespace EstimatingUtilitiesLibrary
 
             RunProperties runProperties88 = new RunProperties();
             Bold bold29 = new Bold();
-            FontSize fontSize162 = new FontSize() { Val = "20" };
 
             runProperties88.Append(bold29);
-            runProperties88.Append(fontSize162);
+            runProperties88.Append((FontSize)fontSize1.CloneNode(true));
             Text text71 = new Text();
             text71.Text = "NOTES AND CLARIFICATIONS:";
 
@@ -2522,9 +2118,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification51 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties86 = new ParagraphMarkRunProperties();
-            FontSize fontSize163 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties86.Append(fontSize163);
+            paragraphMarkRunProperties86.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties89.Append(justification51);
             paragraphProperties89.Append(paragraphMarkRunProperties86);
@@ -2547,9 +2142,8 @@ namespace EstimatingUtilitiesLibrary
                 Justification justification52 = new Justification() { Val = JustificationValues.Both };
 
                 ParagraphMarkRunProperties paragraphMarkRunProperties87 = new ParagraphMarkRunProperties();
-                FontSize fontSize164 = new FontSize() { Val = "20" };
 
-                paragraphMarkRunProperties87.Append(fontSize164);
+                paragraphMarkRunProperties87.Append((FontSize)fontSize1.CloneNode(true));
 
                 paragraphProperties90.Append(paragraphStyleId12);
                 paragraphProperties90.Append(numberingProperties26);
@@ -2559,9 +2153,8 @@ namespace EstimatingUtilitiesLibrary
                 Run run89 = new Run() { RsidRunProperties = "001B6681" };
 
                 RunProperties runProperties89 = new RunProperties();
-                FontSize fontSize165 = new FontSize() { Val = "20" };
 
-                runProperties89.Append(fontSize165);
+                runProperties89.Append((FontSize)fontSize1.CloneNode(true));
                 Text text72 = new Text();
                 text72.Text = note.Text;
 
@@ -2577,9 +2170,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification54 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties89 = new ParagraphMarkRunProperties();
-            FontSize fontSize168 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties89.Append(fontSize168);
+            paragraphMarkRunProperties89.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties92.Append(justification54);
             paragraphProperties92.Append(paragraphMarkRunProperties89);
@@ -2592,9 +2184,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification55 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties90 = new ParagraphMarkRunProperties();
-            FontSize fontSize169 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties90.Append(fontSize169);
+            paragraphMarkRunProperties90.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties93.Append(justification55);
             paragraphProperties93.Append(paragraphMarkRunProperties90);
@@ -2607,9 +2198,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification56 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties91 = new ParagraphMarkRunProperties();
-            FontSize fontSize170 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties91.Append(fontSize170);
+            paragraphMarkRunProperties91.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties94.Append(justification56);
             paragraphProperties94.Append(paragraphMarkRunProperties91);
@@ -2617,9 +2207,8 @@ namespace EstimatingUtilitiesLibrary
             Run run91 = new Run() { RsidRunProperties = "00795B63" };
 
             RunProperties runProperties91 = new RunProperties();
-            FontSize fontSize171 = new FontSize() { Val = "20" };
 
-            runProperties91.Append(fontSize171);
+            runProperties91.Append((FontSize)fontSize1.CloneNode(true));
             Text text74 = new Text();
             text74.Text = "If we can be of any further assistance, please contact our office.";
 
@@ -2635,9 +2224,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification57 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties92 = new ParagraphMarkRunProperties();
-            FontSize fontSize172 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties92.Append(fontSize172);
+            paragraphMarkRunProperties92.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties95.Append(justification57);
             paragraphProperties95.Append(paragraphMarkRunProperties92);
@@ -2650,9 +2238,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification58 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties93 = new ParagraphMarkRunProperties();
-            FontSize fontSize173 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties93.Append(fontSize173);
+            paragraphMarkRunProperties93.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties96.Append(justification58);
             paragraphProperties96.Append(paragraphMarkRunProperties93);
@@ -2660,9 +2247,8 @@ namespace EstimatingUtilitiesLibrary
             Run run92 = new Run() { RsidRunProperties = "00795B63" };
 
             RunProperties runProperties92 = new RunProperties();
-            FontSize fontSize174 = new FontSize() { Val = "20" };
 
-            runProperties92.Append(fontSize174);
+            runProperties92.Append((FontSize)fontSize1.CloneNode(true));
             Text text75 = new Text();
             text75.Text = "Very truly yours,";
 
@@ -2679,11 +2265,10 @@ namespace EstimatingUtilitiesLibrary
             ParagraphMarkRunProperties paragraphMarkRunProperties94 = new ParagraphMarkRunProperties();
             Bold bold30 = new Bold();
             BoldComplexScript boldComplexScript1 = new BoldComplexScript();
-            FontSize fontSize175 = new FontSize() { Val = "20" };
 
             paragraphMarkRunProperties94.Append(bold30);
             paragraphMarkRunProperties94.Append(boldComplexScript1);
-            paragraphMarkRunProperties94.Append(fontSize175);
+            paragraphMarkRunProperties94.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties97.Append(paragraphMarkRunProperties94);
 
@@ -2692,11 +2277,10 @@ namespace EstimatingUtilitiesLibrary
             RunProperties runProperties93 = new RunProperties();
             Bold bold31 = new Bold();
             BoldComplexScript boldComplexScript2 = new BoldComplexScript();
-            FontSize fontSize176 = new FontSize() { Val = "20" };
 
             runProperties93.Append(bold31);
             runProperties93.Append(boldComplexScript2);
-            runProperties93.Append(fontSize176);
+            runProperties93.Append((FontSize)fontSize1.CloneNode(true));
             Text text76 = new Text();
             text76.Text = "TEC Systems, Inc.";
 
@@ -2712,9 +2296,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification59 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties95 = new ParagraphMarkRunProperties();
-            FontSize fontSize177 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties95.Append(fontSize177);
+            paragraphMarkRunProperties95.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties98.Append(justification59);
             paragraphProperties98.Append(paragraphMarkRunProperties95);
@@ -2726,9 +2309,8 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties99 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties96 = new ParagraphMarkRunProperties();
-            FontSize fontSize178 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties96.Append(fontSize178);
+            paragraphMarkRunProperties96.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties99.Append(paragraphMarkRunProperties96);
 
@@ -2739,22 +2321,16 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties100 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties97 = new ParagraphMarkRunProperties();
-            Color color19 = new Color() { Val = "FF0000" };
-            FontSize fontSize179 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties97.Append(color19);
-            paragraphMarkRunProperties97.Append(fontSize179);
+            paragraphMarkRunProperties97.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties100.Append(paragraphMarkRunProperties97);
 
             Run run94 = new Run() { RsidRunProperties = "005A7D16" };
 
             RunProperties runProperties94 = new RunProperties();
-            Color color20 = new Color() { Val = "FF0000" };
-            FontSize fontSize180 = new FontSize() { Val = "20" };
 
-            runProperties94.Append(color20);
-            runProperties94.Append(fontSize180);
+            runProperties94.Append((FontSize)fontSize1.CloneNode(true));
             Text text77 = new Text();
             text77.Text = _bid.Salesperson;
 
@@ -2764,11 +2340,8 @@ namespace EstimatingUtilitiesLibrary
             Run run95 = new Run() { RsidRunProperties = "005A7D16", RsidRunAddition = "006B7321" };
 
             RunProperties runProperties95 = new RunProperties();
-            Color color21 = new Color() { Val = "FF0000" };
-            FontSize fontSize181 = new FontSize() { Val = "20" };
 
-            runProperties95.Append(color21);
-            runProperties95.Append(fontSize181);
+            runProperties95.Append((FontSize)fontSize1.CloneNode(true));
             Text text78 = new Text() { Space = SpaceProcessingModeValues.Preserve };
             text78.Text = " ";
 
@@ -2784,18 +2357,16 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties101 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties98 = new ParagraphMarkRunProperties();
-            FontSize fontSize182 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties98.Append(fontSize182);
+            paragraphMarkRunProperties98.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties101.Append(paragraphMarkRunProperties98);
 
             Run run96 = new Run();
 
             RunProperties runProperties96 = new RunProperties();
-            FontSize fontSize183 = new FontSize() { Val = "20" };
 
-            runProperties96.Append(fontSize183);
+            runProperties96.Append((FontSize)fontSize1.CloneNode(true));
             Text text79 = new Text();
             text79.Text = "Account Executive";
 
@@ -2810,9 +2381,8 @@ namespace EstimatingUtilitiesLibrary
             ParagraphProperties paragraphProperties102 = new ParagraphProperties();
 
             ParagraphMarkRunProperties paragraphMarkRunProperties99 = new ParagraphMarkRunProperties();
-            FontSize fontSize184 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties99.Append(fontSize184);
+            paragraphMarkRunProperties99.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties102.Append(paragraphMarkRunProperties99);
 
@@ -2824,9 +2394,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification60 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties100 = new ParagraphMarkRunProperties();
-            FontSize fontSize185 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties100.Append(fontSize185);
+            paragraphMarkRunProperties100.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties103.Append(justification60);
             paragraphProperties103.Append(paragraphMarkRunProperties100);
@@ -2839,9 +2408,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification61 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties101 = new ParagraphMarkRunProperties();
-            FontSize fontSize186 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties101.Append(fontSize186);
+            paragraphMarkRunProperties101.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties104.Append(justification61);
             paragraphProperties104.Append(paragraphMarkRunProperties101);
@@ -2854,9 +2422,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification62 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties102 = new ParagraphMarkRunProperties();
-            FontSize fontSize187 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties102.Append(fontSize187);
+            paragraphMarkRunProperties102.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties105.Append(justification62);
             paragraphProperties105.Append(paragraphMarkRunProperties102);
@@ -2869,9 +2436,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification63 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties103 = new ParagraphMarkRunProperties();
-            FontSize fontSize188 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties103.Append(fontSize188);
+            paragraphMarkRunProperties103.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties106.Append(justification63);
             paragraphProperties106.Append(paragraphMarkRunProperties103);
@@ -2884,9 +2450,8 @@ namespace EstimatingUtilitiesLibrary
             Justification justification64 = new Justification() { Val = JustificationValues.Both };
 
             ParagraphMarkRunProperties paragraphMarkRunProperties104 = new ParagraphMarkRunProperties();
-            FontSize fontSize189 = new FontSize() { Val = "20" };
 
-            paragraphMarkRunProperties104.Append(fontSize189);
+            paragraphMarkRunProperties104.Append((FontSize)fontSize1.CloneNode(true));
 
             paragraphProperties107.Append(justification64);
             paragraphProperties107.Append(paragraphMarkRunProperties104);
@@ -2933,13 +2498,13 @@ namespace EstimatingUtilitiesLibrary
                 body1.Append(para);
             }
             body1.Append(paragraph34);
-            foreach (Paragraph para in poposalScopeParagraphs)
+            foreach (Paragraph para in proposalScopeParagraphs)
             {
                 body1.Append(para);
             }
             body1.Append(paragraph40);
-            body1.Append(paragraph42);
-            body1.Append(paragraph54);
+            body1.Append(paragraph40.CloneNode(true));
+            body1.Append(paragraph40.CloneNode(true));
             body1.Append(paragraph55);
             body1.Append(table3);
             body1.Append(paragraph57);
@@ -13684,7 +13249,7 @@ namespace EstimatingUtilitiesLibrary
             document.PackageProperties.LastModifiedBy = "David Taylor";
             document.PackageProperties.LastPrinted = System.Xml.XmlConvert.ToDateTime("2016-05-17T14:11:00Z", System.Xml.XmlDateTimeSerializationMode.RoundtripKind);
         }
-
+        
         #region Binary Data
         private string imagePart1Data = "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";
 
@@ -13697,5 +13262,116 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
         #endregion
+
+        private void addTabRun(Paragraph paragraph, FontSize fontSize)
+        {
+            Run run = new Run() { RsidRunAddition = "0021757F" };
+
+            RunProperties runProperties = new RunProperties();
+
+            runProperties.Append((FontSize)fontSize.CloneNode(true));
+            TabChar tabChar = new TabChar();
+
+            run.Append(runProperties);
+            run.Append(tabChar);
+
+            paragraph.Append(run);
+        }
+
+        private void addScopeBranchList(ObservableCollection<TECScopeBranch> branches, List<Paragraph> scopeParagraphs, FontSize fontSize, int levelIndex)
+        {
+            foreach(TECScopeBranch branch in branches)
+            {
+                Paragraph paragraph32 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
+                scopeParagraphs.Add(paragraph32);
+                ParagraphProperties paragraphProperties32 = new ParagraphProperties();
+
+                NumberingProperties numberingProperties1 = new NumberingProperties();
+                NumberingLevelReference numberingLevelReference1 = new NumberingLevelReference() { Val = levelIndex };
+                NumberingId numberingId1 = new NumberingId() { Val = 25 };
+
+                numberingProperties1.Append(numberingLevelReference1);
+                numberingProperties1.Append(numberingId1);
+
+                ParagraphMarkRunProperties paragraphMarkRunProperties29 = new ParagraphMarkRunProperties();
+
+                paragraphMarkRunProperties29.Append((FontSize)fontSize.CloneNode(true));
+
+                paragraphProperties32.Append(numberingProperties1);
+                paragraphProperties32.Append(paragraphMarkRunProperties29);
+
+                Run run46 = new Run() { RsidRunProperties = "00A61B35" };
+
+                RunProperties runProperties46 = new RunProperties();
+
+                runProperties46.Append((FontSize)fontSize.CloneNode(true));
+                Text text29 = new Text() { Space = SpaceProcessingModeValues.Preserve };
+                text29.Text = branch.Name;
+
+                run46.Append(runProperties46);
+                run46.Append(text29);
+
+                paragraph32.Append(paragraphProperties32);
+                paragraph32.Append(run46);
+
+                Paragraph paragraph33 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "00A61B35", RsidRunAdditionDefault = "00A61B35" };
+                scopeParagraphs.Add(paragraph33);
+                ParagraphProperties paragraphProperties33 = new ParagraphProperties();
+                Indentation indentation2 = new Indentation() { Start = "360" };
+
+                ParagraphMarkRunProperties paragraphMarkRunProperties30 = new ParagraphMarkRunProperties();
+
+                paragraphMarkRunProperties30.Append((FontSize)fontSize.CloneNode(true));
+
+                paragraphProperties33.Append(indentation2);
+                paragraphProperties33.Append(paragraphMarkRunProperties30);
+
+                paragraph33.Append(paragraphProperties33);
+
+                addScopeBranchList(branch.Branches, scopeParagraphs, fontSize, levelIndex + 1);
+            }
+            
+        }
+
+        private void addProposalScopeList(ObservableCollection<TECProposalScope> proposalScope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        {
+            foreach(TECProposalScope scope in proposalScope)
+            {
+                Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
+                poposalScopeParagraphs.Add(paragraph35);
+                ParagraphProperties paragraphProperties35 = new ParagraphProperties();
+
+                NumberingProperties numberingProperties3 = new NumberingProperties();
+                NumberingLevelReference numberingLevelReference3 = new NumberingLevelReference() { Val = levelIndex };
+                NumberingId numberingId3 = new NumberingId() { Val = 25 };
+
+                numberingProperties3.Append(numberingLevelReference3);
+                numberingProperties3.Append(numberingId3);
+
+                ParagraphMarkRunProperties paragraphMarkRunProperties32 = new ParagraphMarkRunProperties();
+
+                paragraphMarkRunProperties32.Append((FontSize)fontSize.CloneNode(true));
+
+                paragraphProperties35.Append(numberingProperties3);
+                paragraphProperties35.Append(paragraphMarkRunProperties32);
+
+                Run run51 = new Run() { RsidRunProperties = "00A61B35" };
+
+                RunProperties runProperties51 = new RunProperties();
+
+                runProperties51.Append((FontSize)fontSize.CloneNode(true));
+                Text text34 = new Text();
+                text34.Text = scope.Scope.Name;
+
+                run51.Append(runProperties51);
+                run51.Append(text34);
+
+                paragraph35.Append(paragraphProperties35);
+                paragraph35.Append(run51);
+
+                addScopeBranchList(scope.Notes, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                addProposalScopeList(scope.Children, poposalScopeParagraphs, fontSize, levelIndex + 1);
+            }
+        }
     }
 }

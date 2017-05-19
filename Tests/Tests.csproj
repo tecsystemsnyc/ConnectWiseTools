@@ -95,6 +95,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EstimateBuilderTests.cs" />
+    <Compile Include="EstimatorTests.cs" />
     <Compile Include="LoadBidTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
     <Compile Include="ModelTests.cs" />

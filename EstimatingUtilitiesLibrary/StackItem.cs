@@ -15,28 +15,32 @@ namespace EstimatingUtilitiesLibrary
         public Type ReferenceType;
         public Type TargetType;
 
-        public StackItem(Change change, PropertyChangedExtendedEventArgs<object> e)
+        public StackItem(Change change)
         {
             Change = change;
-
+        }
+        public StackItem(Change change, PropertyChangedExtendedEventArgs<object> e) : this(change)
+        {
             ReferenceObject = e.OldValue as TECObject;
             ReferenceType = e.OldType;
 
             TargetObject = e.NewValue as TECObject;
             TargetType = e.NewType;
         }
-        public StackItem(Change change, object referenceObject, object targetObject)
+        public StackItem(Change change, object referenceObject, object targetObject) : this(change)
         {
-            Change = change;
+            if(targetObject == null || referenceObject == null)
+            {
+                throw new NotImplementedException();
+            }
             ReferenceObject = referenceObject as TECObject;
             if (referenceObject != null) { ReferenceType = referenceObject.GetType(); }
 
             TargetObject = targetObject as TECObject;
             if (TargetObject != null) { TargetType = targetObject.GetType(); }
         }
-        public StackItem(Change change, object referenceObject, object targetObject, Type referenceType, Type targetType)
+        public StackItem(Change change, object referenceObject, object targetObject, Type referenceType, Type targetType) : this(change)
         {
-            Change = change;
             ReferenceObject = referenceObject as TECObject;
             ReferenceType = referenceType;
 

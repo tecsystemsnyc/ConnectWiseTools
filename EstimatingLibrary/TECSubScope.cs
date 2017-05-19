@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,7 +77,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return 0;
+                return getElectricalLabor();
             }
         }
 
@@ -115,19 +116,27 @@ namespace EstimatingLibrary
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
-
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
+            if (characteristicReference == null)
+            {
+                characteristicReference = new ObservableItemToInstanceList<TECScope>();
+            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
 
             foreach (TECDevice device in sourceSubScope.Devices)
             { Devices.Add(new TECDevice(device)); }
             foreach (TECPoint point in sourceSubScope.Points)
-            { Points.Add(new TECPoint(point)); }
+            {
+                var toAdd = new TECPoint(point);
+                characteristicReference.AddItem(point,toAdd);
+                Points.Add(toAdd);
+            }
 
             this.copyPropertiesFromScope(sourceSubScope);
         }
@@ -200,8 +209,7 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("AddCatalog", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Remove(item as TECDevice);
+                    var old = generateOldCostComponent(Change.Add, item as TECDevice);
                     NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
@@ -212,8 +220,7 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("RemoveCatalog", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Add(item as TECDevice);
+                    var old = generateOldCostComponent(Change.Remove, item as TECDevice);
                     NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
@@ -256,6 +263,7 @@ namespace EstimatingLibrary
             foreach (TECPoint point in this.Points)
             { points.Add(point.Copy() as TECPoint); }
             outScope._points = points;
+            outScope.reSubscribeToCollections();
 
             outScope.copyPropertiesFromScope(this);
             return outScope;
@@ -271,7 +279,10 @@ namespace EstimatingLibrary
             var outTypes = new ObservableCollection<TECConnectionType>();
             foreach (TECDevice device in Devices)
             {
-                outTypes.Add(device.ConnectionType);
+                foreach(TECConnectionType type in device.ConnectionTypes)
+                {
+                    outTypes.Add(type);
+                }
             }
             return outTypes;
         }
@@ -309,6 +320,15 @@ namespace EstimatingLibrary
             }
 
             return labCost;
+        }
+        private double getElectricalLabor()
+        {
+            double mountingLabor = 0;
+            foreach(TECDevice device in Devices)
+            {
+                mountingLabor += .5;
+            }
+            return mountingLabor;
         }
 
         private void subscribeToDevices()
@@ -366,6 +386,32 @@ namespace EstimatingLibrary
                 totalPoints += point.PointNumber;
             }
             return totalPoints;
+        }
+
+        private void reSubscribeToCollections()
+        {
+            Points.CollectionChanged += PointsCollectionChanged;
+            subscribeToDevices();
+            Devices.CollectionChanged += Devices_CollectionChanged;
+        }
+
+        private TECSubScope generateOldCostComponent(Change change, TECDevice device)
+        {
+            var old = this.Copy() as TECSubScope;
+            var oldDevices = new ObservableCollection<TECDevice>();
+            foreach(TECDevice oldDevice in old.Devices)
+            {
+                oldDevices.Add(oldDevice);
+            }
+            if(change == Change.Add)
+            {
+                oldDevices.Remove(device);
+            } else
+            {
+                oldDevices.Add(device);
+            }
+            old._devices = oldDevices;
+            return old;
         }
         #endregion
     }

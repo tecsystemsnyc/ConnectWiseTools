@@ -79,8 +79,7 @@ namespace Tests
             var testCost2 = new TECAssociatedCost();
             testCost2.Name = "Other Cost";
             bid.Catalogs.AssociatedCosts.Add(testCost2);
-
-
+            
             //Locations
             var cellar = new TECLocation();
             cellar.Name = "Cellar";
@@ -176,7 +175,7 @@ namespace Tests
 
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
-            connectionType1.Name = "FourC18";
+            connectionType1.Name = "ThreeC18";
             connectionType1.Cost = 10;
             connectionType1.Labor = 12;
 
@@ -186,26 +185,27 @@ namespace Tests
             bid.Catalogs.ConnectionTypes.Add(connectionType1);
             bid.Catalogs.ConnectionTypes.Add(connectionType2);
 
-            //Devices
-            TECDevice device1 = new TECDevice(Guid.NewGuid());
-            device1.Name = "Device 1";
-            device1.Description = "Description 1";
-            device1.Cost = 987.6;
-            device1.Tags.Add(tag1);
-            device1.ConnectionType = connectionType1;
-
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-
-
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
             manufacturer1.Multiplier = 0.8;
-
-            device1.Manufacturer = manufacturer1;
             bid.Catalogs.Manufacturers.Add(manufacturer1);
+
+            //Devices
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            types.Add(connectionType1);
+            TECDevice device1 = new TECDevice(Guid.NewGuid(),
+                types,
+                manufacturer1);
+            device1.Name = "Device 1";
+            device1.Description = "Description 1";
+            device1.Cost = 987.6;
+            device1.Tags.Add(tag1);
+
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+            subScope1.Devices.Add(device1);
+            
 
             //Points
             var point1 = new TECPoint();
@@ -231,13 +231,14 @@ namespace Tests
             //drawing1.Pages[0].PageScope.Add(vScope);
 
             //Devices Catalog
-            TECDevice deviceC1 = new TECDevice(Guid.NewGuid());
+            ObservableCollection<TECConnectionType> contypes = new ObservableCollection<TECConnectionType>();
+            types.Add(connectionType2);
+            TECDevice deviceC1 = new TECDevice(Guid.NewGuid(), contypes, manufacturer1);
             deviceC1.Name = "Device C1";
             deviceC1.Description = "Description C1";
             deviceC1.Cost = 987.6;
 
             deviceC1.Manufacturer = manufacturer1;
-            deviceC1.ConnectionType = connectionType2;
             bid.Catalogs.Devices.Add(deviceC1);
             bid.Catalogs.Devices.Add(device1);
 
@@ -269,7 +270,7 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid());
+            TECController expectedController = new TECController(Guid.NewGuid(), manufacturer1);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
@@ -329,8 +330,7 @@ namespace Tests
             bid.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
-            TECPanel panel = new TECPanel();
-            panel.Type = panelType;
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testCost);
@@ -338,7 +338,7 @@ namespace Tests
 
             bid.Panels.Add(panel);
 
-            //Connections]
+            //Connections
             TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = conduitType1;
             testConnection.Length = 42;
@@ -453,19 +453,19 @@ namespace Tests
             templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
-            TECDevice testDev = new TECDevice(Guid.NewGuid());
+            ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
+            contypes2.Add(testDevConnType);
+            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Cost = 20.3;
-            testDev.Manufacturer = testDevMan;
-            testDev.ConnectionType = testDevConnType;
 
-            TECDevice childDev = new TECDevice(Guid.NewGuid());
+            ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
+            contypes3.Add(childDevConnType);
+            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Cost = 54.1;
-            childDev.Manufacturer = childDevMan;
-            childDev.ConnectionType = childDevConnType;
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
@@ -547,12 +547,12 @@ namespace Tests
             templates.SubScopeTemplates.Add(subScope);
 
             //Controller
-            TECController expectedController = new TECController();
+            TECController expectedController = new TECController(testMan);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
 
-            TECController controlledController = new TECController();
+            TECController controlledController = new TECController(testMan);
             controlledController.Name = "Controlled Controller";
 
             TECIO ioToAdd = new TECIO();
@@ -560,13 +560,9 @@ namespace Tests
             ioToAdd.Quantity = 5;
 
             expectedController.IO.Add(ioToAdd);
-            expectedController.Manufacturer = testMan;
-
             controlledController.IO.Add(ioToAdd);
-            controlledController.Manufacturer = testMan;
 
             templates.ControllerTemplates.Add(expectedController);
-
 
             //Misc Cost
             TECMiscCost cost = new TECMiscCost();
@@ -592,15 +588,13 @@ namespace Tests
             templates.Catalogs.PanelTypes.Add(panelType);
 
             //Panels
-            TECPanel panel = new TECPanel();
-            panel.Type = panelType;
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testAssociatedCost);
             panel.AssociatedCosts.Add(testAssociatedCost);
 
-            TECPanel controlledPanel = new TECPanel();
-            controlledPanel.Type = panelType;
+            TECPanel controlledPanel = new TECPanel(panelType);
             controlledPanel.Name = "Controlled Panel";
 
             templates.PanelTemplates.Add(panel);
@@ -620,6 +614,7 @@ namespace Tests
             var controlledScopeSystem = controlledSystem.DragDropCopy() as TECSystem;
             testConScope.Systems.Add(controlledScopeSystem);
             var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
+            controlledScopePanel.Type = panelType;
             testConScope.Panels.Add(controlledScopePanel);
             var controlledScopeController = controlledController.DragDropCopy() as TECController;
             controlledScopePanel.Controllers.Add(controlledScopeController);
@@ -642,6 +637,103 @@ namespace Tests
         public static TECTemplates LoadTestTemplates(string path)
         {
             return EstimatingLibraryDatabase.Load(path) as TECTemplates;
+        }
+
+        public static TECBid CreateEstimatorBid()
+        {
+            TECBid bid = new TECBid();
+            bid.Catalogs = CreateTestCatalogs();
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(bid.Catalogs.Devices[0]);
+            TECEquipment equipment = new TECEquipment();
+            equipment.SubScope.Add(subScope);
+            TECSystem system = new TECSystem();
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+
+            TECController controller = new TECController(bid.Catalogs.Manufacturers[0]);
+            bid.Controllers.Add(controller);
+            controller.AddSubScope(subScope);
+            subScope.Connection.Length = 10;
+            subScope.Connection.ConduitLength = 10;
+
+            return bid;
+        }
+
+        public static TECCatalogs CreateTestCatalogs()
+        {
+            TECCatalogs outCatalogs = new TECCatalogs();
+            //Tags
+            var tag1 = new TECTag();
+            tag1.Text = "Tag 1";
+            var tag2 = new TECTag();
+            tag2.Text = "Test Tag";
+
+            outCatalogs.Tags.Add(tag1);
+            outCatalogs.Tags.Add(tag2);
+
+            //Conduit Types
+            var conduitType1 = new TECConduitType();
+            conduitType1.Name = "Test Conduit 1";
+            conduitType1.Cost = 13;
+            conduitType1.Labor = 14;
+
+            outCatalogs.ConduitTypes.Add(conduitType1);
+
+            var conduitType2 = new TECConduitType();
+            conduitType2.Name = "Test Conduit 2";
+            conduitType2.Cost = 13;
+            conduitType2.Labor = 14;
+
+            outCatalogs.ConduitTypes.Add(conduitType2);
+
+            //ConnectionTypes
+            var connectionType1 = new TECConnectionType();
+            connectionType1.Name = "FourC18";
+            connectionType1.Cost = 10;
+            connectionType1.Labor = 12;
+
+            var connectionType2 = new TECConnectionType();
+            connectionType2.Name = "FourC18";
+
+            outCatalogs.ConnectionTypes.Add(connectionType1);
+            outCatalogs.ConnectionTypes.Add(connectionType2);
+
+            //Manufacturers
+            var manufacturer1 = new TECManufacturer();
+            manufacturer1.Name = "Test";
+            manufacturer1.Multiplier = 0.8;
+            
+            outCatalogs.Manufacturers.Add(manufacturer1);
+
+            //Devices
+            ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
+            contypes4.Add(connectionType1);
+            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
+            device1.Name = "Device 1";
+            device1.Description = "Description 1";
+            device1.Cost = 987.6;
+            device1.Tags.Add(tag1);
+
+            outCatalogs.Devices.Add(device1);
+
+            //IO Modules
+            TECIOModule testIOModule = new TECIOModule();
+            testIOModule.Name = "Test IO Module";
+            testIOModule.Cost = 42;
+            testIOModule.Manufacturer = manufacturer1;
+            outCatalogs.IOModules.Add(testIOModule);
+
+            //Panel Types
+            TECPanelType panelType = new TECPanelType();
+            panelType.Cost = 123.4;
+            panelType.Name = "Test Panel Type";
+
+            outCatalogs.PanelTypes.Add(panelType);
+
+            return outCatalogs;
+
         }
     }
 }

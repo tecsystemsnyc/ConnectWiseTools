@@ -52,6 +52,7 @@ namespace TECUserControlLibrary.Models
                 selectedPanel.Controllers.Add(Controller);
             }
         }
+        
 
         public void UpdatePanel(TECPanel panel)
         {

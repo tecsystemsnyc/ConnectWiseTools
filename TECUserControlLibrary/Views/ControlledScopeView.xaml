@@ -39,6 +39,7 @@
         <Label Content="Panels in Selected" Grid.Column="4"/>
         <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Templates.ControlledScopeTemplates}"
                                        ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope}"
                                        Grid.Row="1" Grid.RowSpan="4"
                                        x:Name="CSGrid" Margin="5"/>
         <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="1" BorderBrush="Black" BorderThickness="2"/>
