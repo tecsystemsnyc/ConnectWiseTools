@@ -175,7 +175,7 @@ namespace Tests
 
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
-            connectionType1.Name = "FourC18";
+            connectionType1.Name = "ThreeC18";
             connectionType1.Cost = 10;
             connectionType1.Labor = 12;
 
