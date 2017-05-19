@@ -633,23 +633,21 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach (TECSystem system in scope.Systems)
                 {
-                    handleScopeChildren(system as TECScope, change);
                     item = new StackItem(change, (object)scope, (object)system);
                     SaveStack.Add(item);
                     handleSystemChildren(system, change);
                 }
                 foreach (TECController controller in scope.Controllers)
                 {
-                    handleScopeChildren(controller as TECScope, change);
                     item = new StackItem(change, (object)scope, (object)controller);
                     SaveStack.Add(item);
                     handleControllerChildren(controller, change);
                 }
                 foreach (TECPanel panel in scope.Panels)
                 {
-                    handleScopeChildren(panel as TECScope, change);
                     item = new StackItem(change, (object)scope, (object)panel);
                     SaveStack.Add(item);
+                    handlePanelChildren(panel, change);
                 }
             }
             else

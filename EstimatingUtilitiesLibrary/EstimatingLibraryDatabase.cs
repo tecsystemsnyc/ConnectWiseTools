@@ -184,6 +184,7 @@ namespace EstimatingUtilitiesLibrary
             //updateCatalogs(bid, templates);
 
             getScopeManagerProperties(bid);
+            
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid();
@@ -193,7 +194,7 @@ namespace EstimatingUtilitiesLibrary
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Controllers = getOrphanControllers();
+            bid.Controllers = getControllers();
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();

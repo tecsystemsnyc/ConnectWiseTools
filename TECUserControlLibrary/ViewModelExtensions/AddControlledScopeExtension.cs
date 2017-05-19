@@ -281,12 +281,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
             DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControllededScopeCanExecute);
-            _selectedControlledScope = new TECControlledScope();
+            _selectedControlledScope = null;
             DebugVisibility = Visibility.Collapsed;
             setupCatalogCollections();
             setupVMs();
         }
-
         
         #endregion
 

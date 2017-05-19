@@ -107,7 +107,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Quantity: "/>
-                        <TextBox Text="{Binding ControlledScopeQuantity}" Grid.Column="1" Margin="2"/>
+                        <TextBox Text="{Binding ControlledScopeQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="2"/>
                         <Button Content="Add Quantity to Bid" Grid.Column="2" 
                     Margin="2" Command="{Binding AddControlledScopeCommand}"/>
                         <Button Grid.Column="3" Content="Delete Selected"
