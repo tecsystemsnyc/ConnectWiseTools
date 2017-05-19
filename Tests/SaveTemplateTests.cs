@@ -1025,7 +1025,22 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedDevice.ConnectionTypes[1].Guid, actualDevice.ConnectionTypes[1].Guid);
+            foreach(TECConnectionType expectedConnectionType in expectedDevice.ConnectionTypes)
+            {
+                bool found = false;
+                foreach(TECConnectionType actualConnectionType in actualDevice.ConnectionTypes)
+                {
+                    if (expectedConnectionType.Guid == actualConnectionType.Guid)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    Assert.Fail("Connectiontype not found in device.");
+                }
+            }
         }
 
         [TestMethod]
