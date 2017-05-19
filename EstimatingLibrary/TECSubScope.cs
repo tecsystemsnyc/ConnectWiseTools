@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -208,8 +209,7 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("AddCatalog", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Remove(item as TECDevice);
+                    var old = generateOldCostComponent(Change.Add, item as TECDevice);
                     NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
@@ -220,8 +220,7 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged("RemoveCatalog", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Add(item as TECDevice);
+                    var old = generateOldCostComponent(Change.Remove, item as TECDevice);
                     NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
@@ -394,6 +393,25 @@ namespace EstimatingLibrary
             Points.CollectionChanged += PointsCollectionChanged;
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
+        }
+
+        private TECSubScope generateOldCostComponent(Change change, TECDevice device)
+        {
+            var old = this.Copy() as TECSubScope;
+            var oldDevices = new ObservableCollection<TECDevice>();
+            foreach(TECDevice oldDevice in old.Devices)
+            {
+                oldDevices.Add(oldDevice);
+            }
+            if(change == Change.Add)
+            {
+                oldDevices.Remove(device);
+            } else
+            {
+                oldDevices.Add(device);
+            }
+            old._devices = oldDevices;
+            return old;
         }
         #endregion
     }
