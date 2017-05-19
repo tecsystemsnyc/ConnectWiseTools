@@ -188,6 +188,17 @@ namespace TECUserControlLibrary.ViewModels
                 return fileParams;
             }
         }
+        protected FileDialogParameters WordDocumentFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                fileParams.Filter = "Word Documents (*.docx)|*.docx";
+                fileParams.DefaultExtension = "docx";
+                return fileParams;
+            }
+        }
         protected FileDialogParameters CSVFileParameters
         {
             get

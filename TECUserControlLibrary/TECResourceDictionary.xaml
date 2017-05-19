@@ -156,6 +156,7 @@
                       Content="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
                                         Converter={cnvt:VisbilityToContentConverter}}"
+                      PreviewMouseDown="ShowDetails_PreviewMouseDown"
                     Margin="0"/>
     </DataTemplate>
     

@@ -208,6 +208,8 @@ namespace EstimateBuilder.ViewModel
         #region Helper Methods
         private void updateVisibility()
         {
+            ScopeDataGrid.NullifySelected();
+
             if (DGTabIndex == GridIndex.Scope)
             {
                 ScopeCollection.SystemsVisibility = Visibility.Visible;

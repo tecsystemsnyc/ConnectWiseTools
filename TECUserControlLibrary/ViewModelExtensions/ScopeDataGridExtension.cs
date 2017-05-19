@@ -337,6 +337,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         }
 
+        public void NullifySelected()
+        {
+            SelectedDevice = null;
+            SelectedPoint = null;
+            SelectedSubScope = null;
+            SelectedEquipment = null;
+            SelectedSystem = null;
+        }
+
         private void populateLocationSelections()
         {
             LocationSelections = new ObservableCollection<TECLocation>();

@@ -194,6 +194,9 @@
     <Compile Include="PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PanelTypeEditControl.xaml.cs">
+      <DependentUpon>PanelTypeEditControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
@@ -402,6 +405,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PanelEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelTypeEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

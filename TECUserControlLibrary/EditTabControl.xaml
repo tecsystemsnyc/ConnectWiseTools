@@ -58,6 +58,11 @@
                 <local:PanelEditControl
                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </TabItem>
+            <!--Panel Type Edit-->
+            <TabItem Visibility="Collapsed">
+                <local:PanelTypeEditControl
+                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+            </TabItem>
             <!--Choose Message-->
             <TabItem Visibility="Collapsed">
                 <Grid>

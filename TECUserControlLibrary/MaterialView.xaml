@@ -168,7 +168,8 @@
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>
                     <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
-                                    Grid.Row="3" Margin="5"/>
+                                                Grid.Row="3" Margin="5"
+                                                ViewModel="{Binding}"/>
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">

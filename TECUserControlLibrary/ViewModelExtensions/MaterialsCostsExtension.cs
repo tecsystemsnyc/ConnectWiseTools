@@ -192,6 +192,19 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
+        private TECPanelType _selectedPanelType;
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+
+
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
@@ -204,6 +217,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
+
+        public Action<Object> SelectionChanged;
         #endregion
 
         #endregion

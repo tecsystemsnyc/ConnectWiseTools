@@ -607,6 +607,7 @@ namespace EstimatingLibrary
                 }
                 linkAllConnections(scope.Controllers, scope.Systems);
                 linkControlledScope(scope.ScopeInstances, scopeManager);
+                scope.RefreshReferences();
             }
         }
         static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels, Dictionary<Guid, Guid> guidDictionary = null)

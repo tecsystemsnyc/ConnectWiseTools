@@ -20,7 +20,7 @@ namespace EstimatingUtilitiesLibrary
         //List of change, target object, reference object
         //Example: Add, Bid, System
         //Example: Edit, New Object, Old Object
-        public List<StackItem> UndoStack { get; set; }
+        public ObservableCollection<StackItem> UndoStack { get; set; }
         public List<StackItem> RedoStack { get; set; }
         public ObservableCollection<StackItem> SaveStack { get; set; }
         public TECBid Bid;
@@ -32,11 +32,13 @@ namespace EstimatingUtilitiesLibrary
         #region Constructors
         public ChangeStack()
         {
-            UndoStack = new List<StackItem>();
+            UndoStack = new ObservableCollection<StackItem>();
             RedoStack = new List<StackItem>();
             SaveStack = new ObservableCollection<StackItem>();
             SaveStack.CollectionChanged += SaveStack_CollectionChanged;
+            UndoStack.CollectionChanged += UndoStack_CollectionChanged;
         }
+        
         public ChangeStack(TECScopeManager scopeManager) : this()
         {
             watcher = new ChangeWatcher(scopeManager);
@@ -59,6 +61,16 @@ namespace EstimatingUtilitiesLibrary
 
         #region Collection Watching
         private void SaveStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    var obj = item;
+                }
+            }
+        }
+        private void UndoStack_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

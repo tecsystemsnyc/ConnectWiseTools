@@ -301,7 +301,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void DocumentExecute()
         {
-            string path = getSavePath(DocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
+            string path = getSavePath(WordDocumentFileParameters, defaultSaveFileName, ScopeDirectoryPath);
 
             if (path != null)
             {
