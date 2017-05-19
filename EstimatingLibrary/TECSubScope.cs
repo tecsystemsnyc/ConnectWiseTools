@@ -259,7 +259,7 @@ namespace EstimatingLibrary
             var devices = new ObservableCollection<TECDevice>();
             foreach (TECDevice device in this.Devices)
             { devices.Add(device); }
-
+            outScope._devices = devices;
             var points = new ObservableCollection<TECPoint>();
             foreach (TECPoint point in this.Points)
             { points.Add(point.Copy() as TECPoint); }
@@ -392,6 +392,7 @@ namespace EstimatingLibrary
         private void reSubscribeToCollections()
         {
             Points.CollectionChanged += PointsCollectionChanged;
+            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
         #endregion
