@@ -150,6 +150,15 @@ namespace TECUserControlLibrary.ViewModels
                 refreshTemplatesMenuItem.Command = value;
             }
         }
+
+        private TECMenuItem refreshBidMenuItem;
+        public ICommand RefreshBidCommand
+        {
+            set
+            {
+                refreshBidMenuItem.Command = value;
+            }
+        }
         #endregion
 
         #region Methods
@@ -177,6 +186,9 @@ namespace TECUserControlLibrary.ViewModels
 
             if (type != MenuType.TB)
             {
+                refreshBidMenuItem = new TECMenuItem("Refresh", darkTextBrush);
+                FileMenu.Items.Add(refreshBidMenuItem);
+
                 //Export
                 TECMenuItem ExportMenu = new TECMenuItem("Export", darkTextBrush);
 
