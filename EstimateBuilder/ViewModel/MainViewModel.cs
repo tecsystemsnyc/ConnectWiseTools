@@ -40,6 +40,7 @@ namespace EstimateBuilder.ViewModel
 
             LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
+            setupMenuVM();
         }
 
         #region Properties
@@ -126,6 +127,7 @@ namespace EstimateBuilder.ViewModel
             set
             {
                 ScopeEditorVM.TemplatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
             }
         }
 
