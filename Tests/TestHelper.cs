@@ -351,6 +351,9 @@ namespace Tests
             bid.Catalogs.IOModules.Add(testIOModule);
             ioToAdd.IOModule = testIOModule;
 
+            var controlledScope = CreateTestControlledScope(bid.Catalogs);
+            bid.ControlledScope.Add(controlledScope);
+
             //Bid
             return bid;
         }
@@ -734,6 +737,25 @@ namespace Tests
 
             return outCatalogs;
 
+        }
+
+        public static TECControlledScope CreateTestControlledScope(TECCatalogs catalogs)
+        {
+            TECControlledScope outScope = new TECControlledScope();
+
+            var panel = new TECPanel(catalogs.PanelTypes[0]);
+
+            outScope.Panels.Add(panel);
+
+            var system = new TECSystem();
+            outScope.Systems.Add(system);
+
+            var controller = new TECController(catalogs.Manufacturers[0]);
+            outScope.Controllers.Add(controller);
+
+            panel.Controllers.Add(controller);
+
+            return outScope;
         }
     }
 }
