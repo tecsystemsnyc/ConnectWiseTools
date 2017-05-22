@@ -42,6 +42,17 @@ namespace TECUserControlLibrary.DataGrids
             DependencyProperty.Register("DevicesSource", typeof(ObservableCollection<TECDevice>),
               typeof(DevicesGridControl), new PropertyMetadata(default(ObservableCollection<TECDevice>)));
 
+        public TECDevice SelectedDevice
+        {
+            get { return (TECDevice)GetValue(SelectedDeviceProperty); }
+            set { SetValue(SelectedDeviceProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedDeviceProperty = DependencyProperty.Register("SelectedDevice", typeof(TECDevice), typeof(DevicesGridControl), new FrameworkPropertyMetadata(null)
+        {
+            BindsTwoWayByDefault = true,
+            DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        });
 
         /// <summary>
         /// Gets or sets the ViewModel which is used

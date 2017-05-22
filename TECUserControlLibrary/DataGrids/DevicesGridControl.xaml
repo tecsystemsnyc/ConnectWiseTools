@@ -18,10 +18,11 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=DevicesSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=ViewModel.SelectedDevice}"
+                  SelectedItem="{Binding SelectedDevice, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                   x:Name="DeviceGrid"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserSortColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -33,18 +34,64 @@
         <TextBlock Text="Devices" Foreground="Black" FontSize="20"/>
 
         <!--Device Summary-->
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DeviceSummaryItems}"
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <DataGrid Grid.ColumnSpan="3" ItemsSource="{Binding DeviceSummaryItems}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Device.Name}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding Device.Description}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="List Price" Binding="{Binding Device.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Multiplier" Binding="{Binding Device.Manufacturer.Multiplier}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                  IsReadOnly="True"
+                      SelectedItem="{Binding SelectedDevice}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Device.Name}" Width="Auto" MinWidth="50"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Device.Description}" Width="Auto" MinWidth="50"/>
+                    <DataGridTextColumn Header="List Price" Binding="{Binding Device.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                    <DataGridTextColumn Header="Multiplier" Binding="{Binding Device.Manufacturer.Multiplier}" Width="Auto" MinWidth="50"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="50"/>
+                    <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button Content="Add" Command="{Binding AddDevice}" Grid.Row="1" Margin="5"/>
+            <Button Content="Remove" Command="{Binding RemoveDevice}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+            <Button Content="Replace" Command="{Binding ReplaceDevice}" Grid.Row="1" Grid.Column="2" Margin="5"/>
+
+            <Grid MaxHeight="300" Margin="5" Grid.Row="2" Grid.ColumnSpan="3" Visibility="{Binding IsExpanded, Converter={cnvt:BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <cLibGrids:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
+                
+                <TextBlock Grid.Row="1" Text="{Binding FirstString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.Device.Name, Converter={cnvt:StringToQuoteConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SecondString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding NewSelectedDevice.Name, Converter={cnvt:StringToQuoteConverter}}"
+                           Visibility="{Binding HasNew, Converter={cnvt:BooleanToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                <Button Content="Confirm" Command="{Binding Confirm}" Grid.Row="1" Grid.Column="4" Margin="5"/>
+                <Button Content="Cancel" Command="{Binding Cancel}" Grid.Row="1" Grid.Column="5" Margin="5"/>
+
+            </Grid>
+            <Border Margin="5" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1"/>
+        </Grid>
 
         <TextBlock Text="Device Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
 

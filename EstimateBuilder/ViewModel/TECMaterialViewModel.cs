@@ -2,10 +2,12 @@
 using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
 namespace EstimateBuilder.ViewModel
@@ -27,6 +29,8 @@ namespace EstimateBuilder.ViewModel
                 _changeWatcher.Changed += bidChanged;
             }
         }
+
+        public TECBid Bid { get; private set; }
 
         #region Device View Properties
         private Dictionary<Guid, DeviceSummaryItem> deviceDictionary;
@@ -93,6 +97,90 @@ namespace EstimateBuilder.ViewModel
                 RaisePropertyChanged("TotalLabor");
             }
         }
+
+        #region Device Add/Remove/Replace
+        private DeviceSummaryItem _selectedDevice;
+        public DeviceSummaryItem SelectedDevice
+        {
+            get { return _selectedDevice; }
+            set
+            {
+                _selectedDevice = value;
+                RaisePropertyChanged("SelectedDevice");
+            }
+        }
+
+        private TECDevice _newSelectedDevice;
+        public TECDevice NewSelectedDevice
+        {
+            get { return _newSelectedDevice; }
+            set
+            {
+                _newSelectedDevice = value;
+                RaisePropertyChanged("NewSelectedDevice");
+            }
+        }
+
+        public ICommand AddDevice { get; private set; }
+        public ICommand RemoveDevice { get; private set; }
+        public ICommand ReplaceDevice { get; private set; }
+
+        private ICommand _confirm;
+        public ICommand Confirm
+        {
+            get { return _confirm; }
+            set
+            {
+                _confirm = value;
+                RaisePropertyChanged("Confirm");
+            }
+        }
+        public ICommand Cancel { get; private set; }
+
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                _isExpanded = value;
+                RaisePropertyChanged("IsExpanded");
+            }
+        }
+
+        private bool _hasNew;
+        public bool HasNew
+        {
+            get { return _hasNew; }
+            private set
+            {
+                _hasNew = value;
+                RaisePropertyChanged("HasNew");
+            }
+        }
+
+        private string _firstString;
+        public string FirstString
+        {
+            get { return _firstString; }
+            private set
+            {
+                _firstString = value;
+                RaisePropertyChanged("FirstString");
+            }
+        }
+
+        private string _secondString;
+        public string SecondString
+        {
+            get { return _secondString; }
+            set
+            {
+                _secondString = value;
+                RaisePropertyChanged("SecondString");
+            }
+        }
+        #endregion
         #endregion
 
         #region Controller View Properties
@@ -327,6 +415,10 @@ namespace EstimateBuilder.ViewModel
         public TECMaterialViewModel(TECBid bid)
         {
             reinitialize(bid);
+            AddDevice = new RelayCommand(AddDeviceExecute);
+            RemoveDevice = new RelayCommand(RemoveDeviceExecute);
+            ReplaceDevice = new RelayCommand(ReplaceDeviceExecute);
+            Cancel = new RelayCommand(CancelExecute);
         }
 
         public void Refresh(TECBid bid)
@@ -336,6 +428,7 @@ namespace EstimateBuilder.ViewModel
 
         private void reinitialize(TECBid bid)
         {
+            Bid = bid;
             deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
             DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
             deviceAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
@@ -800,6 +893,126 @@ namespace EstimateBuilder.ViewModel
             {
                 throw new InvalidOperationException("Associated Cost not found in dictionary.");
             }
+        }
+        #endregion
+
+        #region Commands Methods
+        private void AddDeviceExecute()
+        {
+            Confirm = new RelayCommand(ConfirmAddDeviceExecute, AddDeviceCanConfirm);
+            FirstString = "For all";
+            SecondString = "add";
+            HasNew = true;
+            IsExpanded = true;
+        }
+        private void RemoveDeviceExecute()
+        {
+            Confirm = new RelayCommand(ConfirmRemoveDeviceExecute, RemoveDeviceCanConfirm);
+            FirstString = "Remove all";
+            SecondString = "from Bid";
+            HasNew = false;
+            IsExpanded = true;
+        }
+        private void ReplaceDeviceExecute()
+        {
+            Confirm = new RelayCommand(ConfirmReplaceDeviceExecute, ReplaceDeviceCanConfirm);
+            FirstString = "Replace all";
+            SecondString = "with";
+            HasNew = true;
+            IsExpanded = true;
+        }
+
+        private void ConfirmAddDeviceExecute()
+        {
+            foreach(TECSystem system in Bid.Systems)
+            {
+                foreach(TECEquipment equip in system.Equipment)
+                {
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        int devicesToAdd = 0;
+                        foreach(TECDevice dev in ss.Devices)
+                        {
+                            if (dev.Guid == SelectedDevice.Device.Guid)
+                            {
+                                devicesToAdd += 1;
+                            }
+                        }
+                        for (int i = 0; i < devicesToAdd; i++)
+                        {
+                            ss.Devices.Add(NewSelectedDevice);
+                        }
+                    }
+                }
+            }
+        }
+        private bool AddDeviceCanConfirm()
+        {
+            return ((SelectedDevice != null) && (NewSelectedDevice != null));
+        }
+
+        private void ConfirmRemoveDeviceExecute()
+        {
+            foreach(TECSystem system in Bid.Systems)
+            {
+                foreach(TECEquipment equip in system.Equipment)
+                {
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        List<TECDevice> devicesToRemove = new List<TECDevice>();
+                        foreach(TECDevice dev in ss.Devices)
+                        {
+                            if (dev.Guid == SelectedDevice.Device.Guid)
+                            {
+                                devicesToRemove.Add(dev);
+                            }
+                        }
+                        foreach(TECDevice dev in devicesToRemove)
+                        {
+                            ss.Devices.Remove(dev);
+                        }
+                    }
+                }
+            }
+        }
+        private bool RemoveDeviceCanConfirm()
+        {
+            return (SelectedDevice != null);
+        }
+
+        private void ConfirmReplaceDeviceExecute()
+        {
+            foreach (TECSystem system in Bid.Systems)
+            {
+                foreach (TECEquipment equip in system.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        List<TECDevice> devicesToRemove = new List<TECDevice>();
+                        foreach (TECDevice dev in ss.Devices)
+                        {
+                            if (dev.Guid == SelectedDevice.Device.Guid)
+                            {
+                                devicesToRemove.Add(dev);
+                            }
+                        }
+                        foreach (TECDevice dev in devicesToRemove)
+                        {
+                            ss.Devices.Remove(dev);
+                            ss.Devices.Add(NewSelectedDevice);
+                        }
+                    }
+                }
+            }
+        }
+        private bool ReplaceDeviceCanConfirm()
+        {
+            return ((NewSelectedDevice != null) && (SelectedDevice != null));
+        }
+
+        private void CancelExecute()
+        {
+            IsExpanded = false;
         }
         #endregion
     }
