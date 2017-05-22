@@ -8,7 +8,6 @@ namespace TECUserControlLibrary.Models
 {
     public struct FileDialogParameters
     {
-        public string DefaultDirectory;
         public string Filter;
         public string DefaultExtension;
     }

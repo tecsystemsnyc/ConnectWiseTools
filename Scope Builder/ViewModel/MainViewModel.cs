@@ -117,6 +117,19 @@ namespace Scope_Builder.ViewModel
                 Properties.Settings.Default.Save();
             }
         }
+        protected override string defaultDirectory
+        {
+            get
+            {
+                return (Properties.Settings.Default.DefaultDirectory);
+            }
+
+            set
+            {
+                Properties.Settings.Default.DefaultDirectory = value;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
         #endregion
 

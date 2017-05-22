@@ -149,7 +149,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
                 fileParams.DefaultExtension = "bdb";
                 return fileParams;
@@ -160,7 +159,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
                 fileParams.DefaultExtension = "edb";
                 return fileParams;
@@ -171,7 +169,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Templates Database Files (*.tdb)|*.tdb" + "|All Files (*.*)|*.*";
                 fileParams.DefaultExtension = "tdb";
                 return fileParams;
@@ -182,7 +179,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
                 fileParams.DefaultExtension = "rtf";
                 return fileParams;
@@ -193,7 +189,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Word Documents (*.docx)|*.docx";
                 fileParams.DefaultExtension = "docx";
                 return fileParams;
@@ -204,7 +199,6 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 FileDialogParameters fileParams;
-                fileParams.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 fileParams.Filter = "Comma Separated Values Files (*.csv)|*.csv";
                 fileParams.DefaultExtension = "csv";
                 return fileParams;
@@ -228,6 +222,7 @@ namespace TECUserControlLibrary.ViewModels
             get;
             set;
         }
+        abstract protected string defaultDirectory { get; set; }
         #endregion
 
         #endregion
@@ -322,7 +317,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupSettings()
         {
-            SettingsVM = new SettingsViewModel(TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
+            SettingsVM = new SettingsViewModel(defaultDirectory, TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
         }
 
@@ -523,7 +518,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                saveFileDialog.InitialDirectory = fileParams.DefaultDirectory;
+                saveFileDialog.InitialDirectory = defaultDirectory;
             }
             saveFileDialog.FileName = defaultFileName;
             saveFileDialog.Filter = fileParams.Filter;
@@ -546,7 +541,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                openFileDialog.InitialDirectory = fileParams.DefaultDirectory;
+                openFileDialog.InitialDirectory = defaultDirectory;
             }
             openFileDialog.Filter = fileParams.Filter;
             openFileDialog.DefaultExt = fileParams.DefaultExtension;
@@ -696,6 +691,10 @@ namespace TECUserControlLibrary.ViewModels
             if (e.PropertyName == "TemplatesHidden")
             {
                 TemplatesHidden = SettingsVM.TemplatesHidden;
+            }
+            else if (e.PropertyName == "DefaultDirectory")
+            {
+                defaultDirectory = SettingsVM.DefaultDirectory;
             }
         }
 
