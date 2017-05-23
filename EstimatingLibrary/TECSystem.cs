@@ -333,20 +333,6 @@ namespace EstimatingLibrary
             TECSystem outSystem = new TECSystem(this);
             return outSystem;
         }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-            foreach (TECEquipment equipment in this.Equipment)
-            {
-                matCost += equipment.MaterialCost;
-            }
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-            return matCost;
-        }
         
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
