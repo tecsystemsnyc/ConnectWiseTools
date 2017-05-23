@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMiscWiring : TECCost, CostComponent
+    public class TECMisc : TECCost, CostComponent
     {
         public double MaterialCost
         {
@@ -41,16 +41,16 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECMiscWiring(Guid guid) : base(guid) { }
-        public TECMiscWiring() : this(Guid.NewGuid()) { }
-        public TECMiscWiring(TECMiscWiring wiringSource) : this()
+        public TECMisc(Guid guid) : base(guid) { }
+        public TECMisc() : this(Guid.NewGuid()) { }
+        public TECMisc(TECMisc miscSource) : this()
         {
-            copyPropertiesFromCost(wiringSource);
+            copyPropertiesFromCost(miscSource);
         }
 
         public override object Copy()
         {
-            var outCost = new TECMiscWiring();
+            var outCost = new TECMisc();
             outCost.copyPropertiesFromCost(this);
             outCost._guid = this.Guid;
             return outCost;
@@ -58,7 +58,7 @@ namespace EstimatingLibrary
 
         public override object DragDropCopy()
         {
-            return new TECMiscWiring(this);
+            return new TECMisc(this);
         }
     }
 }

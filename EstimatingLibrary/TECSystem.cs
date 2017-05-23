@@ -232,7 +232,6 @@ namespace EstimatingLibrary
                 return getCosts();
             }
         }
-
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
@@ -398,14 +397,7 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        if (_isChild)
-                        {
-                            NotifyPropertyChanged("RemoveRelationship", this, item);
-                        }
-                        else
-                        {
-                            NotifyPropertyChanged("Remove", this, item);
-                        }
+                         NotifyPropertyChanged("Remove", this, item);
                     }
                 }
             }
