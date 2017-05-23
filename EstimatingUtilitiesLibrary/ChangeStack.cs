@@ -465,18 +465,6 @@ namespace EstimatingUtilitiesLibrary
                 handleCatalogsChildren(newItem as TECCatalogs, item.Change);
             }
         }
-        private void handleSystemChildren(TECSystem system, Change change)
-        {
-            handleScopeChildren(system as TECScope, change);
-            StackItem item;
-            foreach (TECEquipment newEquipment in system.Equipment)
-            {
-                item = new StackItem(change, (object)system, (object)newEquipment);
-                SaveStack.Add(item);
-
-                handleEquipmentChildren(newEquipment, change);
-            }
-        }
         private void handleEquipmentChildren(TECEquipment equipment, Change change)
         {
             handleScopeChildren(equipment as TECScope, change);
@@ -626,56 +614,33 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-        private void handleControlledScope(TECControlledScope scope, Change change)
+        private void handleSystem(TECSystem scope, Change change)
         {
             StackItem item;
-            if (!scope.IsChild)
+            foreach (TECEquipment equipment in scope.Equipment)
             {
-                foreach (TECSystem system in scope.Systems)
-                {
-                    item = new StackItem(change, (object)scope, (object)system);
-                    SaveStack.Add(item);
-                    handleSystemChildren(system, change);
-                }
-                foreach (TECController controller in scope.Controllers)
-                {
-                    item = new StackItem(change, (object)scope, (object)controller);
-                    SaveStack.Add(item);
-                    handleControllerChildren(controller, change);
-                }
-                foreach (TECPanel panel in scope.Panels)
-                {
-                    item = new StackItem(change, (object)scope, (object)panel);
-                    SaveStack.Add(item);
-                    handlePanelChildren(panel, change);
-                }
+                item = new StackItem(change, (object)scope, (object)equipment);
+                SaveStack.Add(item);
+                handleEquipmentChildren(equipment, change);
             }
-            else
+            foreach (TECController controller in scope.Controllers)
             {
-                if(change == Change.Add)
-                {
-                    change = Change.AddRelationship;
-                }else if(change == Change.Remove)
-                {
-                    change = Change.RemoveRelationship;
-                }
-                foreach (TECSystem system in scope.Systems)
-                {
-                    item = new StackItem(change, (object)scope, (object)system);
-                    SaveStack.Add(item);
-                }
-                foreach (TECController controller in scope.Controllers)
-                {
-                    item = new StackItem(change, (object)scope, (object)controller);
-                    SaveStack.Add(item);
-                }
-                foreach (TECPanel panel in scope.Panels)
-                {
-                    item = new StackItem(change, (object)scope, (object)panel);
-                    SaveStack.Add(item);
-                }
+                item = new StackItem(change, (object)scope, (object)controller);
+                SaveStack.Add(item);
+                handleControllerChildren(controller, change);
             }
-            
+            foreach (TECPanel panel in scope.Panels)
+            {
+                item = new StackItem(change, (object)scope, (object)panel);
+                SaveStack.Add(item);
+                handlePanelChildren(panel, change);
+            }
+            foreach(TECSystem system in scope.SystemInstances)
+            {
+                item = new StackItem(change, (object)scope, (object)system);
+                SaveStack.Add(item);
+                handleSystem(system, change);
+            }
         }
         private void handlePanelChildren(TECPanel panel, Change change)
         {
