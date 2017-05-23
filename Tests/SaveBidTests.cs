@@ -3273,11 +3273,6 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_ControlledScope()
         {
-            //Act
-            TECControlledScope scope = new TECControlledScope();
-            scope.Name = "Test Controlled Scope";
-            scope.Description = "Test description";
-
             var expectedSystem = new TECSystem();
             expectedSystem.Name = "CSSYSTEM";
             var expectedEquipment = new TECEquipment();
@@ -3299,12 +3294,9 @@ namespace Tests
             expectedConnection.SubScope = expectedSubScope;
             expectedController.ChildrenConnections.Add(expectedConnection);
             expectedSubScope.Connection = expectedConnection;
-
-            scope.Systems.Add(expectedSystem);
-            scope.Panels.Add(expectedPanel);
-            scope.Controllers.Add(expectedController);
-
-            bid.addControlledScope(scope, 1);
+            
+            expectedSystem.Panels.Add(expectedPanel);
+            expectedSystem.Controllers.Add(expectedController);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
