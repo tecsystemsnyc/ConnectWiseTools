@@ -322,11 +322,11 @@ namespace EstimatingLibrary
             {
                 addCost(controller);
             }
-            foreach (TECMiscCost miscCost in bid.MiscCosts)
+            foreach (TECMisc miscCost in bid.MiscCosts)
             {
                 addCost(miscCost);
             }
-            foreach (TECMiscWiring miscWiring in bid.MiscWiring)
+            foreach (TECMisc miscWiring in bid.MiscWiring)
             {
                 addCost(miscWiring);
             }
@@ -377,8 +377,8 @@ namespace EstimatingLibrary
         }
         private void editCost(object newValue, object oldValue)
         {
-            if (newValue is TECConnection || newValue is TECMiscCost
-                || newValue is TECMiscWiring || newValue is TECSubScope)
+            if (newValue is TECConnection || newValue is TECMisc
+                || newValue is TECSubScope)
             {
                 if (newValue.GetType() == oldValue.GetType())
                 {
