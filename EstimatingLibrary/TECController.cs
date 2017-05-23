@@ -159,28 +159,28 @@ namespace EstimatingLibrary
         {
             get
             {
-                return (Type == ControllerType.IsServer);
+                return (ControllerType == ControllerType.IsServer);
             }
         }
         public bool IsBMS
         {
             get
             {
-                return ((Type == ControllerType.IsServer) || (Type == ControllerType.IsBMS));
+                return ((ControllerType == ControllerType.IsServer) || (ControllerType == ControllerType.IsBMS));
             }
         }
         public bool IsNetworked
         {
             get
             {
-                return ((Type == ControllerType.IsServer) || (Type == ControllerType.IsBMS) || (Type == ControllerType.IsNetworked));
+                return ((ControllerType == ControllerType.IsServer) || (ControllerType == ControllerType.IsBMS) || (ControllerType == ControllerType.IsNetworked));
             }
         }
         public bool IsStandalone
         {
             get
             {
-                return (Type == ControllerType.IsStandalone);
+                return (ControllerType == ControllerType.IsStandalone);
             }
         }
 

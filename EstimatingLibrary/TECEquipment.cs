@@ -139,7 +139,7 @@ namespace EstimatingLibrary
                     outCosts.Add(cost);
                 }
             }
-            foreach(TECCost cost in Costs)
+            foreach(TECCost cost in AssociatedCosts)
             {
                 outCosts.Add(cost);
             }
@@ -199,33 +199,6 @@ namespace EstimatingLibrary
         {
             TECEquipment outEquip = new TECEquipment(this);
             return outEquip;
-        }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-            foreach (TECSubScope sub in this.SubScope)
-            {
-                matCost += sub.MaterialCost;
-            }
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double cost = 0;
-            foreach (TECSubScope sub in this.SubScope)
-            {
-                cost += sub.LaborCost;
-            }
-            foreach (TECCost assCost in this.AssociatedCosts)
-            {
-                cost += assCost.Labor;
-            }
-            return cost;
         }
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
