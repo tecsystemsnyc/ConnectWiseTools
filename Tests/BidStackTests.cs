@@ -986,7 +986,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             int expected = Bid.Systems[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
-            TECAssociatedCost edit = new TECAssociatedCost();
+            TECCost edit = new TECCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);

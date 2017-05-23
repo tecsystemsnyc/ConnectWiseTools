@@ -109,7 +109,7 @@ namespace EstimatingLibrary.Utilities
             { connectionType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECConduitType conduitType in catalogs.ConduitTypes)
             { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
+            foreach (TECCost cost in catalogs.AssociatedCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECTag tag in catalogs.Tags)
             { tag.PropertyChanged += Object_PropertyChanged; }

@@ -615,9 +615,9 @@ namespace EstimatingUtilitiesLibrary
         private void handleScopeChildren(TECScope scope, Change change)
         {
             StackItem item;
-            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
+            foreach (TECCost cost in scope.AssociatedCosts)
             {
-                item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECAssociatedCost));
+                item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECCost));
                 SaveStack.Add(item);
             }
             foreach (TECTag tag in scope.Tags)
@@ -724,7 +724,7 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(new StackItem(Change.Add, type, catalogs));
                 handleScopeChildren(type, change);
             }
-            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
+            foreach (TECCost cost in catalogs.AssociatedCosts)
             {
                 SaveStack.Add(new StackItem(Change.Add, cost, catalogs));
                 handleScopeChildren(cost, change);

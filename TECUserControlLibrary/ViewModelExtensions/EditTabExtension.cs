@@ -196,8 +196,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private TECAssociatedCost _selectedAssociatedCost;
-        public TECAssociatedCost SelectedAssociatedCost
+        private TECCost _selectedAssociatedCost;
+        public TECCost SelectedAssociatedCost
         {
             get { return _selectedAssociatedCost; }
             set
@@ -218,8 +218,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
-        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        private ObservableCollection<TECCost> _associatedCostSelections;
+        public ObservableCollection<TECCost> AssociatedCostSelections
         {
             get { return _associatedCostSelections; }
             set

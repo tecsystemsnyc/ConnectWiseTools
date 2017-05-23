@@ -500,7 +500,7 @@ namespace EstimatingUtilitiesLibrary
     public class AssociatedCostTable : CatalogTableBase
     {
         public static new string TableName = "TECAssociatedCost";
-        public static Type ObjectType = typeof(TECAssociatedCost);
+        public static Type ObjectType = typeof(TECCost);
 
         public static TableField AssociatedCostID = new TableField("AssociatedCostID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -1151,7 +1151,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECScopeTECAssociatedCost";
         public static Type ObjectType = typeof(TECScope);
-        public static Type ReferenceType = typeof(TECAssociatedCost);
+        public static Type ReferenceType = typeof(TECCost);
 
         public static Type HelperType = typeof(HelperProperties);
 

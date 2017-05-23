@@ -183,7 +183,7 @@ namespace EstimatingLibrary
             {
                 matCost += sub.MaterialCost;
             }
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
             }
@@ -196,7 +196,7 @@ namespace EstimatingLibrary
             {
                 cost += sub.LaborCost;
             }
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            foreach (TECCost assCost in this.AssociatedCosts)
             {
                 cost += assCost.Labor;
             }

@@ -294,12 +294,12 @@ namespace EstimatingLibrary
             foreach (TECDevice device in this.Devices)
             {
                 matCost += device.Cost * device.Manufacturer.Multiplier;
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                foreach (TECCost cost in device.AssociatedCosts)
                 {
                     matCost += cost.Cost;
                 }
             }
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
             }
@@ -314,7 +314,7 @@ namespace EstimatingLibrary
             {
                 labCost += device.LaborCost;
             }
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            foreach (TECCost assCost in this.AssociatedCosts)
             {
                 labCost += assCost.Labor;
             }

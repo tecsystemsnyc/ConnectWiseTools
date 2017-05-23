@@ -126,7 +126,7 @@ namespace EstimatingLibrary
                 matCost += Type.Cost;
             }
 
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
             }
@@ -138,7 +138,7 @@ namespace EstimatingLibrary
             double lCost = 0;
 
 
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECCost cost in this.AssociatedCosts)
             {
                 lCost += cost.Labor;
             }

@@ -518,12 +518,12 @@ namespace EstimatingLibrary
                 { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
             }
         }
-        static private void linkAssociatedCostsInDevice(ObservableCollection<TECAssociatedCost> costs, TECDevice device)
+        static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
         {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
             {
-                foreach (TECAssociatedCost devCost in device.AssociatedCosts)
+                foreach (TECCost devCost in device.AssociatedCosts)
                 {
                     if (devCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }
@@ -531,12 +531,12 @@ namespace EstimatingLibrary
             }
             device.AssociatedCosts = costsToAssign;
         }
-        static private void linkAssociatedCostsInSubScope(ObservableCollection<TECAssociatedCost> costs, TECSubScope subScope)
+        static private void linkAssociatedCostsInSubScope(ObservableCollection<TECCost> costs, TECSubScope subScope)
         {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
             {
-                foreach (TECAssociatedCost childCost in subScope.AssociatedCosts)
+                foreach (TECCost childCost in subScope.AssociatedCosts)
                 {
                     if (childCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }
@@ -546,12 +546,12 @@ namespace EstimatingLibrary
             foreach (TECDevice device in subScope.Devices)
             { linkAssociatedCostsInDevice(costs, device); }
         }
-        static private void linkAssociatedCostsInEquipment(ObservableCollection<TECAssociatedCost> costs, TECEquipment equipment)
+        static private void linkAssociatedCostsInEquipment(ObservableCollection<TECCost> costs, TECEquipment equipment)
         {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
             {
-                foreach (TECAssociatedCost childCost in equipment.AssociatedCosts)
+                foreach (TECCost childCost in equipment.AssociatedCosts)
                 {
                     if (childCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }
@@ -561,12 +561,12 @@ namespace EstimatingLibrary
             foreach (TECSubScope subScope in equipment.SubScope)
             { linkAssociatedCostsInSubScope(costs, subScope); }
         }
-        static private void linkAssociatedCostsInSystem(ObservableCollection<TECAssociatedCost> costs, TECSystem system)
+        static private void linkAssociatedCostsInSystem(ObservableCollection<TECCost> costs, TECSystem system)
         {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
             {
-                foreach (TECAssociatedCost childCost in system.AssociatedCosts)
+                foreach (TECCost childCost in system.AssociatedCosts)
                 {
                     if (childCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }
@@ -576,12 +576,12 @@ namespace EstimatingLibrary
             foreach (TECEquipment equipment in system.Equipment)
             { linkAssociatedCostsInEquipment(costs, equipment); }
         }
-        static private void linkAssociatedCostsInScope(ObservableCollection<TECAssociatedCost> costs, TECScope scope)
+        static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
         {
-            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in costs)
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
             {
-                foreach (TECAssociatedCost scopeCost in scope.AssociatedCosts)
+                foreach (TECCost scopeCost in scope.AssociatedCosts)
                 {
                     if (scopeCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }

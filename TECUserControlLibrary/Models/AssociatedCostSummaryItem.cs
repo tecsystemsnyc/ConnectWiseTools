@@ -9,8 +9,8 @@ namespace TECUserControlLibrary.Models
 {
     public class AssociatedCostSummaryItem : TECObject
     {
-        private TECAssociatedCost _associatedCost;
-        public TECAssociatedCost AssociatedCost
+        private TECCost _associatedCost;
+        public TECCost AssociatedCost
         {
             get { return _associatedCost; }
         }
@@ -57,7 +57,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public AssociatedCostSummaryItem(TECAssociatedCost assCost)
+        public AssociatedCostSummaryItem(TECCost assCost)
         {
             _associatedCost = assCost;
             _quantity = 1;

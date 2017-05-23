@@ -24,15 +24,15 @@ namespace TECUserControlLibrary.DataGrids
     {
         #region DPs
 
-        public ObservableCollection<TECAssociatedCost> CostsSource
+        public ObservableCollection<TECCost> CostsSource
         {
-            get { return (ObservableCollection<TECAssociatedCost>)GetValue(CostsSourceProperty); }
+            get { return (ObservableCollection<TECCost>)GetValue(CostsSourceProperty); }
             set { SetValue(CostsSourceProperty, value); }
         }
 
         public static readonly DependencyProperty CostsSourceProperty =
-            DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECAssociatedCost>),
-              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECAssociatedCost>)));
+            DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECCost>),
+              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECCost>)));
 
         public Object ViewModel
         {

@@ -838,7 +838,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
-            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[1];
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts[1];
             expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             EstimatingLibraryDatabase.Update(path, testStack);
@@ -846,13 +846,13 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            TECAssociatedCost actualCost = null;
+            TECCost actualCost = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
                     actualSubScope = SubScope;
-                    foreach (TECAssociatedCost cost in actualSubScope.AssociatedCosts)
+                    foreach (TECCost cost in actualSubScope.AssociatedCosts)
                     {
                         if (cost.Guid == expectedCost.Guid)
                         {
@@ -1479,7 +1479,7 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[0];
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts[0];
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
@@ -1488,7 +1488,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             TECConnectionType actualConnectionType = null;
-            TECAssociatedCost actualCost = null;
+            TECCost actualCost = null;
             foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
@@ -1573,7 +1573,7 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECAssociatedCost expectedAssociatedCost = new TECAssociatedCost();
+            TECCost expectedAssociatedCost = new TECCost();
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
@@ -1583,8 +1583,8 @@ namespace Tests
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECAssociatedCost actualCost = null;
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            TECCost actualCost = null;
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -1605,7 +1605,7 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
+            TECCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
             templates.Catalogs.AssociatedCosts.Remove(costToRemove);
 
@@ -1614,7 +1614,7 @@ namespace Tests
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }

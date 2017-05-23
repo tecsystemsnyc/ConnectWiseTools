@@ -127,13 +127,13 @@ namespace EstimatingLibrary
         //                    TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
         //                    cost += length * type.Cost;
         //                    terminations += 2;
-        //                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in type.AssociatedCosts)
         //                    { cost += associatedCost.Cost; }
         //                }
         //                if (connection.ConduitType != null)
         //                {
         //                    cost += conduitLength * connection.ConduitType.Cost;
-        //                    foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in connection.ConduitType.AssociatedCosts)
         //                    {
         //                        cost += associatedCost.Cost;
         //                    }
@@ -145,7 +145,7 @@ namespace EstimatingLibrary
         //                {
         //                    cost += length * type.Cost;
         //                    terminations += 2;
-        //                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in type.AssociatedCosts)
         //                    {
         //                        cost += associatedCost.Cost;
         //                    }
@@ -159,7 +159,7 @@ namespace EstimatingLibrary
         //                    {
         //                        cost += conduitLength * connection.ConduitType.Cost;
         //                    }
-        //                    foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in connection.ConduitType.AssociatedCosts)
         //                    {
         //                        cost += associatedCost.Cost;
         //                    }
@@ -367,7 +367,7 @@ namespace EstimatingLibrary
         //            if (connection.ConduitType != null)
         //            {
         //                laborHours += length * connection.ConduitType.Labor;
-        //                foreach (TECAssociatedCost associatedCost in connection.ConduitType.AssociatedCosts)
+        //                foreach (TECCost associatedCost in connection.ConduitType.AssociatedCosts)
         //                {
         //                    laborHours += associatedCost.Labor;
         //                }
@@ -379,7 +379,7 @@ namespace EstimatingLibrary
         //                    terminations += 2;
         //                    TECConnectionType type = (connection as TECNetworkConnection).ConnectionType;
         //                    laborHours += length * type.Labor;
-        //                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in type.AssociatedCosts)
         //                    { laborHours += associatedCost.Labor; }
         //                }
         //            }
@@ -389,7 +389,7 @@ namespace EstimatingLibrary
         //                {
         //                    terminations += 2;
         //                    laborHours += length * type.Labor;
-        //                    foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+        //                    foreach (TECCost associatedCost in type.AssociatedCosts)
         //                    { laborHours += associatedCost.Labor; }
         //                }
         //            }

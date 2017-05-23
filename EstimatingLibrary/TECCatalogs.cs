@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private ObservableCollection<TECConduitType> _conduitTypes;
-        private ObservableCollection<TECAssociatedCost> _associatedCosts;
+        private ObservableCollection<TECCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
         private ObservableCollection<TECIOModule> _ioModules;
         private ObservableCollection<TECDevice> _devices;
@@ -90,7 +90,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConduitTypes", temp, this);
             }
         }
-        public ObservableCollection<TECAssociatedCost> AssociatedCosts
+        public ObservableCollection<TECCost> AssociatedCosts
         {
             get { return _associatedCosts; }
             set
@@ -124,7 +124,7 @@ namespace EstimatingLibrary
         {
             _conduitTypes = new ObservableCollection<TECConduitType>();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            _associatedCosts = new ObservableCollection<TECCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
             _ioModules = new ObservableCollection<TECIOModule>();
             _devices = new ObservableCollection<TECDevice>();
@@ -148,8 +148,8 @@ namespace EstimatingLibrary
         public override object Copy()
         {
             TECCatalogs catalogs = new TECCatalogs();
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
-            { catalogs.AssociatedCosts.Add(cost.Copy() as TECAssociatedCost); }
+            foreach (TECCost cost in this.AssociatedCosts)
+            { catalogs.AssociatedCosts.Add(cost.Copy() as TECCost); }
             foreach (TECConduitType conduitType in this.ConduitTypes)
             { catalogs.ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
             foreach (TECConnectionType connectionType in this.ConnectionTypes)
