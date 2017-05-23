@@ -288,7 +288,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return containsAll;
         }
-        public static int randomIndex<T>(T list)
+        public static int RandomIndex<T>(T list)
         {
             int index = 0;
             var inList = list as IList;

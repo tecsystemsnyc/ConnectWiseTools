@@ -757,5 +757,62 @@ namespace Tests
 
             return outScope;
         }
+        public static TECDevice CreateTestDevice(TECCatalogs catalogs)
+        {
+            int connectionIndex = UtilitiesMethods.RandomIndex(catalogs.ConnectionTypes);
+            int manufacturerIndex = UtilitiesMethods.RandomIndex(catalogs.Manufacturers);
+
+            var connectionTypes = new ObservableCollection<TECConnectionType>();
+            connectionTypes.Add(catalogs.ConnectionTypes[connectionIndex]);
+            var manufacturer = catalogs.Manufacturers[manufacturerIndex];
+
+            double cost = (new Random()).Next(0, 1000) / (new Random()).Next(0, 10);
+
+            var assCosts = new ObservableCollection<TECAssociatedCost>();
+            int assIndex = UtilitiesMethods.RandomIndex(catalogs.AssociatedCosts);
+            int costNum = (new Random()).Next(1, 10);
+            for(int x = 0; x < costNum; x++)
+            {
+                assCosts.Add(catalogs.AssociatedCosts[assIndex]);
+            }
+
+            TECDevice device = new TECDevice(connectionTypes, manufacturer);
+            device.Cost = cost;
+            device.AssociatedCosts = assCosts;
+            return device;
+        }
+        public static TECSubScope CreateTestSubScope(TECCatalogs catalogs)
+        {
+            var deviceIndex = UtilitiesMethods.RandomIndex(catalogs.Devices);
+
+            var device = catalogs.Devices[deviceIndex];
+            var point = new TECPoint();
+            point.Type = PointTypes.AI;
+
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            subScope.Points.Add(point);
+            return subScope;
+        }
+        public static TECEquipment CreateTestEquipment(TECCatalogs catalogs)
+        {
+            var equipment = new TECEquipment();
+
+            int subNumber = (new Random()).Next(1, 10);
+            for(int x = 0; x < subNumber; x++)
+            {
+                equipment.SubScope.Add(CreateTestSubScope(catalogs));
+            }
+
+            return equipment;
+        }
+        public static TECController CreateTestController(TECCatalogs catalogs)
+        {
+            var manufacturerIndex = UtilitiesMethods.RandomIndex(catalogs.Manufacturers);
+            var manufacturer = catalogs.Manufacturers[manufacturerIndex];
+
+            var controlller = new TECController(manufacturer);
+            return controlller;
+        }
     }
 }
