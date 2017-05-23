@@ -288,22 +288,6 @@ namespace EstimatingUtilitiesLibrary
             }
             return containsAll;
         }
-        public static int RandomIndex<T>(T list)
-        {
-            int index = 0;
-            var inList = list as IList;
-            if(inList != null)
-            {
-                int maxIndex = inList.Count - 1;
-                Random rand = new Random();
-                index = rand.Next(0, maxIndex);
-                return index;
-            }
-            else
-            {
-                throw new Exception("list is not IList");
-            }
-        }
 
     }
 

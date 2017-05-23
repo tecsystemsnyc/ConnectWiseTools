@@ -7,6 +7,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Collections;
 
 namespace Tests
 {
@@ -759,21 +760,18 @@ namespace Tests
         }
         public static TECDevice CreateTestDevice(TECCatalogs catalogs)
         {
-            int connectionIndex = UtilitiesMethods.RandomIndex(catalogs.ConnectionTypes);
-            int manufacturerIndex = UtilitiesMethods.RandomIndex(catalogs.Manufacturers);
 
             var connectionTypes = new ObservableCollection<TECConnectionType>();
-            connectionTypes.Add(catalogs.ConnectionTypes[connectionIndex]);
-            var manufacturer = catalogs.Manufacturers[manufacturerIndex];
+            connectionTypes.Add(catalogs.ConnectionTypes.RandomObject());
+            var manufacturer = catalogs.Manufacturers.RandomObject();
 
             double cost = (new Random()).Next(0, 1000) / (new Random()).Next(0, 10);
 
             var assCosts = new ObservableCollection<TECAssociatedCost>();
-            int assIndex = UtilitiesMethods.RandomIndex(catalogs.AssociatedCosts);
             int costNum = (new Random()).Next(1, 10);
             for(int x = 0; x < costNum; x++)
             {
-                assCosts.Add(catalogs.AssociatedCosts[assIndex]);
+                assCosts.Add(catalogs.AssociatedCosts.RandomObject());
             }
 
             TECDevice device = new TECDevice(connectionTypes, manufacturer);
@@ -783,9 +781,7 @@ namespace Tests
         }
         public static TECSubScope CreateTestSubScope(TECCatalogs catalogs)
         {
-            var deviceIndex = UtilitiesMethods.RandomIndex(catalogs.Devices);
-
-            var device = catalogs.Devices[deviceIndex];
+            var device = catalogs.Devices.RandomObject();
             var point = new TECPoint();
             point.Type = PointTypes.AI;
 
@@ -803,16 +799,26 @@ namespace Tests
             {
                 equipment.SubScope.Add(CreateTestSubScope(catalogs));
             }
-
+            
             return equipment;
         }
         public static TECController CreateTestController(TECCatalogs catalogs)
         {
-            var manufacturerIndex = UtilitiesMethods.RandomIndex(catalogs.Manufacturers);
-            var manufacturer = catalogs.Manufacturers[manufacturerIndex];
+            var manufacturer = catalogs.Manufacturers.RandomObject();
 
             var controlller = new TECController(manufacturer);
             return controlller;
         }
+
+        public static T RandomObject<T>(this ObservableCollection<T> list)
+        {
+            int index = 0;
+            int maxIndex = list.Count - 1;
+            Random rand = new Random();
+            index = rand.Next(0, maxIndex);
+            return list[index];
+            
+        }
+
     }
 }
