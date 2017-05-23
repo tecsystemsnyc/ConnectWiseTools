@@ -61,8 +61,8 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private ObservableCollection<TECMiscWiring> _miscWiring;
-        public ObservableCollection<TECMiscWiring> MiscWiring
+        private ObservableCollection<TECMisc> _miscWiring;
+        public ObservableCollection<TECMisc> MiscWiring
         {
             get { return _miscWiring; }
             set
@@ -186,7 +186,7 @@ namespace EstimateBuilder.ViewModel
             WireSummaryItems = new ObservableCollection<LengthSummaryItem>();
             ConduitSummaryItems = new ObservableCollection<LengthSummaryItem>();
             AssociatedCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
-            MiscWiring = new ObservableCollection<TECMiscWiring>();
+            MiscWiring = new ObservableCollection<TECMisc>();
 
             wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
             conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
@@ -204,7 +204,7 @@ namespace EstimateBuilder.ViewModel
             {
                 addController(controller);
             }
-            foreach(TECMiscWiring miscWiring in bid.MiscWiring)
+            foreach(TECMisc miscWiring in bid.MiscWiring)
             {
                 addMiscWiring(miscWiring);
             }
@@ -249,9 +249,9 @@ namespace EstimateBuilder.ViewModel
                     {
                         addAssociatedCost(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMiscWiring && referenceObject is TECBid) 
+                    else if (targetObject is TECMisc && referenceObject is TECBid) 
                     {
-                        addMiscWiring(targetObject as TECMiscWiring);
+                        addMiscWiring(targetObject as TECMisc);
                     }
                 }
                 else if (args.PropertyName == "Remove")
@@ -282,9 +282,9 @@ namespace EstimateBuilder.ViewModel
                     {
                         removeAssociatedCost(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMiscWiring && referenceObject is TECBid)
+                    else if (targetObject is TECMisc && referenceObject is TECBid)
                     {
-                        removeMiscWiring(targetObject as TECMiscWiring);
+                        removeMiscWiring(targetObject as TECMisc);
                     }
                 }
                 else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConduitType")
@@ -303,14 +303,14 @@ namespace EstimateBuilder.ViewModel
                         addConnection(args.NewValue as TECConnection);
                     }
                 }
-                else if (targetObject is TECMiscWiring && referenceObject is TECMiscWiring)
+                else if (targetObject is TECMisc && referenceObject is TECMisc)
                 {
-                    editMiscWiring(targetObject as TECMiscWiring, referenceObject as TECMiscWiring);
+                    editMiscWiring(targetObject as TECMisc, referenceObject as TECMisc);
                 }
             }
         }
 
-        private void editMiscWiring(TECMiscWiring newWiring, TECMiscWiring oldWiring)
+        private void editMiscWiring(TECMisc newWiring, TECMisc oldWiring)
         {
             TotalMiscWiring -= oldWiring.Cost * oldWiring.Quantity;
             TotalMiscWiring += newWiring.Cost * newWiring.Quantity;
@@ -624,13 +624,13 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void addMiscWiring(TECMiscWiring miscWiring)
+        private void addMiscWiring(TECMisc miscWiring)
         {
             TotalMiscWiring += miscWiring.Cost * miscWiring.Quantity;
             MiscWiring.Add(miscWiring);
         }
 
-        private void removeMiscWiring(TECMiscWiring miscWiring)
+        private void removeMiscWiring(TECMisc miscWiring)
         {
             TotalMiscWiring -= miscWiring.Cost * miscWiring.Quantity;
             MiscWiring.Remove(miscWiring);

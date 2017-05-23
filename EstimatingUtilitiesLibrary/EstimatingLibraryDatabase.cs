@@ -198,7 +198,6 @@ namespace EstimatingUtilitiesLibrary
             bid.MiscWiring = getMiscWiring();
             bid.MiscCosts = getMiscCosts();
             bid.Panels = getPanels();
-            bid.ControlledScope = getControlledScope();
             var placeholderDict = getCharacteristicInstancesList();
 
             ModelLinkingHelper.LinkBid(bid, placeholderDict);
@@ -216,14 +215,13 @@ namespace EstimatingUtilitiesLibrary
 
             templates = getTemplatesInfo();
             getScopeManagerProperties(templates);
-            templates.SystemTemplates = getOrphanSystems();
+            templates.SystemTemplates = getSystems();
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.ControllerTemplates = getOrphanControllers();
             templates.MiscWiringTemplates = getMiscWiring();
             templates.MiscCostTemplates = getMiscCosts();
             templates.PanelTemplates = getOrphanPanels();
-            templates.ControlledScopeTemplates = getControlledScope();
 
             ModelLinkingHelper.LinkTemplates(templates);
             return templates;
@@ -1042,9 +1040,9 @@ namespace EstimatingUtilitiesLibrary
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
-        static private ObservableCollection<TECMiscCost> getMiscCosts()
+        static private ObservableCollection<TECMisc> getMiscCosts()
         {
-            ObservableCollection<TECMiscCost> costs = new ObservableCollection<TECMiscCost>();
+            ObservableCollection<TECMisc> costs = new ObservableCollection<TECMisc>();
 
             DataTable costsDT = SQLiteDB.getDataFromTable(MiscCostTable.TableName);
             foreach (DataRow row in costsDT.Rows)
@@ -1054,9 +1052,9 @@ namespace EstimatingUtilitiesLibrary
 
             return costs;
         }
-        static private ObservableCollection<TECMiscWiring> getMiscWiring()
+        static private ObservableCollection<TECMisc> getMiscWiring()
         {
-            ObservableCollection<TECMiscWiring> wiring = new ObservableCollection<TECMiscWiring>();
+            ObservableCollection<TECMisc> wiring = new ObservableCollection<TECMisc>();
 
             DataTable wiringDT = SQLiteDB.getDataFromTable(MiscWiringTable.TableName);
             foreach (DataRow row in wiringDT.Rows)
@@ -1108,9 +1106,9 @@ namespace EstimatingUtilitiesLibrary
 
             return panels;
         }
-        static private ObservableCollection<TECControlledScope> getControlledScope()
+        static private ObservableCollection<TECSystem> getSystems()
         {
-            ObservableCollection<TECControlledScope> controlledScope = new ObservableCollection<TECControlledScope>();
+            ObservableCollection<TECSystem> controlledScope = new ObservableCollection<TECSystem>();
 
             string command = "select * from " + ControlledScopeTable.TableName;
             command += " where " + ControlledScopeTable.ControlledScopeID.Name;
@@ -1122,13 +1120,13 @@ namespace EstimatingUtilitiesLibrary
 
             foreach (DataRow row in controlledScopeDT.Rows)
             {
-                controlledScope.Add(getControlledScopeFromRow(row));
+                controlledScope.Add(getSystemFromRow(row));
             }
             return controlledScope;
         }
-        static private ObservableCollection<TECControlledScope> getChildrenControlledScope(Guid parentID)
+        static private ObservableCollection<TECSystem> getChildrenSystems(Guid parentID)
         {
-            ObservableCollection<TECControlledScope> children = new ObservableCollection<TECControlledScope>();
+            ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
 
             string command = "select * from " + ControlledScopeTable.TableName;
             command += " where " + ControlledScopeTable.ControlledScopeID.Name + " in ";
@@ -1140,7 +1138,7 @@ namespace EstimatingUtilitiesLibrary
             DataTable childDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in childDT.Rows)
             {
-                children.Add(getControlledScopeFromRow(row, true));
+                children.Add(getSystemFromRow(row));
             }
 
             return children;
@@ -1187,9 +1185,9 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
-        static private ObservableCollection<TECSystem> getSystemsInControlledScope(Guid guid)
+        static private ObservableCollection<TECEquipment> getEquipmentInControlledScope(Guid guid)
         {
-            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+            ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
             string command = "select * from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " in ";
             command += "(select " + ControlledScopeSystemTable.SystemID.Name + " from " + ControlledScopeSystemTable.TableName + " where ";
             command += ControlledScopeSystemTable.ControlledScopeID.Name + " = '" + guid;
@@ -1197,9 +1195,9 @@ namespace EstimatingUtilitiesLibrary
 
             DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in pagesDT.Rows)
-            { systems.Add(getSystemFromRow(row)); }
+            { equipment.Add(getEquipmentFromRow(row)); }
 
-            return systems;
+            return equipment;
         }
         static private ObservableCollection<TECPanel> getPanelsInControlledScope(Guid guid)
         {
@@ -1663,20 +1661,20 @@ namespace EstimatingUtilitiesLibrary
 
         #region Table Row to Object Methods
         #region Base Scope
-        private static TECSystem getSystemFromRow(DataRow row)
-        {
-            Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
-            TECSystem system = new TECSystem(systemID);
-            system.Name = row[SystemTable.Name.Name].ToString();
-            system.Description = row[SystemTable.Description.Name].ToString();
-            system.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
-            system.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
-            system.Equipment = getEquipmentInSystem(systemID);
-            system.Tags = getTagsInScope(systemID);
-            system.Location = getLocationInScope(systemID);
-            system.AssociatedCosts = getAssociatedCostsInScope(systemID);
-            return system;
-        }
+        //private static TECSystem getSystemFromRow(DataRow row)
+        //{
+        //    Guid systemID = new Guid(row[SystemTable.SystemID.Name].ToString());
+        //    TECSystem system = new TECSystem(systemID);
+        //    system.Name = row[SystemTable.Name.Name].ToString();
+        //    system.Description = row[SystemTable.Description.Name].ToString();
+        //    system.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
+        //    system.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+        //    system.Equipment = getEquipmentInSystem(systemID);
+        //    system.Tags = getTagsInScope(systemID);
+        //    system.Location = getLocationInScope(systemID);
+        //    system.AssociatedCosts = getAssociatedCostsInScope(systemID);
+        //    return system;
+        //}
         private static TECEquipment getEquipmentFromRow(DataRow row)
         {
             Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
@@ -1943,10 +1941,10 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Misc
-        private static TECMiscCost getMiscCostFromRow(DataRow row)
+        private static TECMisc getMiscCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[MiscCostTable.MiscCostID.Name].ToString());
-            TECMiscCost cost = new TECMiscCost(guid);
+            TECMisc cost = new TECMisc(guid);
 
             cost.Name = row[MiscCostTable.Name.Name].ToString();
             cost.Cost = row[MiscCostTable.Cost.Name].ToString().ToDouble(0);
@@ -1955,10 +1953,10 @@ namespace EstimatingUtilitiesLibrary
 
             return cost;
         }
-        private static TECMiscWiring getMiscWiringFromRow(DataRow row)
+        private static TECMisc getMiscWiringFromRow(DataRow row)
         {
             Guid guid = new Guid(row[MiscWiringTable.MiscWiringID.Name].ToString());
-            TECMiscWiring wiring = new TECMiscWiring(guid);
+            TECMisc wiring = new TECMisc(guid);
 
             wiring.Name = row[MiscWiringTable.Name.Name].ToString();
             wiring.Cost = row[MiscWiringTable.Cost.Name].ToString().ToDouble(0);
@@ -1987,20 +1985,17 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
 
-        private static TECControlledScope getControlledScopeFromRow(DataRow row, bool isChild = false)
+        private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
-            TECControlledScope controlledScope = new TECControlledScope(guid, isChild);
+            TECSystem controlledScope = new TECSystem(guid);
 
             controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
             controlledScope.Description = row[ControlledScopeTable.Description.Name].ToString();
             controlledScope.Controllers = getControllersInControlledScope(guid);
-            controlledScope.Systems = getSystemsInControlledScope(guid);
+            controlledScope.Equipment = getEquipmentInControlledScope(guid);
             controlledScope.Panels = getPanelsInControlledScope(guid);
-            if (!isChild)
-            {
-                controlledScope.ScopeInstances = getChildrenControlledScope(guid);
-            }
+            controlledScope.SystemInstances = getChildrenSystems(guid);
 
             return controlledScope;
         }
@@ -2171,9 +2166,7 @@ namespace EstimatingUtilitiesLibrary
             addObject(new StackItem(Change.Add, bid, bid.Parameters));
             foreach (TECSystem system in bid.Systems)
             {
-                addObject(new StackItem(Change.Add, bid, system));
-                saveScopeChildProperties(system);
-                saveCompleteEquipment(system);
+                saveFullSystem(system, bid);
             }
             foreach (TECController controller in bid.Controllers)
             {
@@ -2202,21 +2195,17 @@ namespace EstimatingUtilitiesLibrary
                 addObject(new StackItem(Change.Add, bid, proposalScope));
                 saveCompleteProposalScope(proposalScope);
             }
-            foreach (TECMiscCost cost in bid.MiscCosts)
+            foreach (TECMisc cost in bid.MiscCosts)
             {
                 addObject(new StackItem(Change.Add, bid, cost));
             }
-            foreach (TECMiscWiring wiring in bid.MiscWiring)
+            foreach (TECMisc wiring in bid.MiscWiring)
             {
                 addObject(new StackItem(Change.Add, bid, wiring));
             }
             foreach (TECPanel panel in bid.Panels)
             {
                 savePanel(panel, bid);
-            }
-            foreach (TECControlledScope conScope in bid.ControlledScope)
-            {
-                saveFullControlledScope(conScope, bid);
             }
 
         }
@@ -2226,9 +2215,7 @@ namespace EstimatingUtilitiesLibrary
             saveScopeManagerProperties(templates);
             foreach (TECSystem system in templates.SystemTemplates)
             {
-                addObject(new StackItem(Change.Add, templates, system));
-                saveScopeChildProperties(system);
-                saveCompleteEquipment(system);
+                saveFullSystem(system, templates);
             }
             foreach (TECEquipment equipment in templates.EquipmentTemplates)
             {
@@ -2249,21 +2236,17 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach (TECMiscCost cost in templates.MiscCostTemplates)
+            foreach (TECMisc cost in templates.MiscCostTemplates)
             {
                 addObject(new StackItem(Change.Add, templates, cost));
             }
-            foreach (TECMiscWiring wiring in templates.MiscWiringTemplates)
+            foreach (TECMisc wiring in templates.MiscWiringTemplates)
             {
                 addObject(new StackItem(Change.Add, templates, wiring));
             }
             foreach (TECPanel panel in templates.PanelTemplates)
             {
                 savePanel(panel, templates);
-            }
-            foreach (TECControlledScope conScope in templates.ControlledScopeTemplates)
-            {
-                saveFullControlledScope(conScope, templates);
             }
         }
         private static void saveCompleteCatalogs(TECCatalogs catalogs)
@@ -2300,63 +2283,33 @@ namespace EstimatingUtilitiesLibrary
             { addObject(new StackItem(Change.Add, catalogs, associatedCost)); }
         }
 
-        private static void saveFullControlledScope(TECControlledScope conScope, TECScopeManager scopeManager, bool isRelationship = false)
+        private static void saveFullSystem(TECSystem system, TECScopeManager scopeManager)
         {
             var change = Change.Add;
-            if(isRelationship)
+            addObject(new StackItem(change, scopeManager, system));
+            saveScopeChildProperties(system);
+            foreach (TECEquipment equipment in system.Equipment)
             {
-                change = Change.AddRelationship;
+                addObject(new StackItem(change, system, equipment));
+                saveScopeChildProperties(system);
+                saveCompleteEquipment(system);
             }
-            else
+            foreach (TECPanel panel in system.Panels)
             {
-                addObject(new StackItem(change, scopeManager, conScope));
+                savePanel(panel, system);
             }
-            saveScopeChildProperties(conScope);
-            foreach (TECSystem system in conScope.Systems)
+            foreach (TECController controller in system.Controllers)
             {
-                if (!isRelationship)
-                {
-                    addObject(new StackItem(change, conScope, system));
-                    saveScopeChildProperties(system);
-                    saveCompleteEquipment(system);
-                } else
-                {
-                    addRelationship(new StackItem(change, conScope, system));
-                }
-                
+                addObject(new StackItem(change, system, controller));
+                saveScopeChildProperties(controller);
+                saveControllerChildProperties(controller);
             }
-            foreach (TECPanel panel in conScope.Panels)
+            foreach(TECSystem childScope in system.SystemInstances)
             {
-                if (!isRelationship)
-                {
-                    savePanel(panel, conScope);
-                }
-                else
-                {
-                    addRelationship(new StackItem(change, conScope, panel));
-                }
-                
+                addObject(new StackItem(change, system, childScope));
+                saveFullSystem(childScope, scopeManager);
             }
-            foreach (TECController controller in conScope.Controllers)
-            {
-                if (!isRelationship)
-                {
-                    addObject(new StackItem(change, conScope, controller));
-                    saveScopeChildProperties(controller);
-                    saveControllerChildProperties(controller);
-                }
-                else
-                {
-                    addRelationship(new StackItem(change, conScope, controller));
-                }
-
-            }
-            foreach(TECControlledScope childScope in conScope.ScopeInstances)
-            {
-                addObject(new StackItem(change, conScope, childScope));
-                saveFullControlledScope(childScope, scopeManager, true);
-            }
-            foreach(KeyValuePair<TECScope, List<TECScope>> item in conScope.CharactersticInstances.GetFullDictionary())
+            foreach(KeyValuePair<TECScope, List<TECScope>> item in system.CharactersticInstances.GetFullDictionary())
             {
                 foreach(TECScope value in item.Value)
                 {

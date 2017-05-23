@@ -311,8 +311,8 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region Misc Cost View Properties
-        private ObservableCollection<TECMiscCost> _miscCosts;
-        public ObservableCollection<TECMiscCost> MiscCosts
+        private ObservableCollection<TECMisc> _miscCosts;
+        public ObservableCollection<TECMisc> MiscCosts
         {
             get { return _miscCosts; }
             set
@@ -442,7 +442,7 @@ namespace EstimateBuilder.ViewModel
             panelAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
             PanelAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
 
-            MiscCosts = new ObservableCollection<TECMiscCost>();
+            MiscCosts = new ObservableCollection<TECMisc>();
 
             DeviceSubTotal = 0;
             DeviceAssCostSubTotalCost = 0;
@@ -468,7 +468,7 @@ namespace EstimateBuilder.ViewModel
             {
                 addPanel(panel);
             }
-            foreach(TECMiscCost cost in bid.MiscCosts)
+            foreach(TECMisc cost in bid.MiscCosts)
             {
                 addMiscCost(cost);
             }
@@ -523,9 +523,9 @@ namespace EstimateBuilder.ViewModel
                     {
                         addCostToPanel(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMiscCost && referenceObject is TECBid)
+                    else if (targetObject is TECMisc && referenceObject is TECBid)
                     {
-                        addMiscCost(targetObject as TECMiscCost);
+                        addMiscCost(targetObject as TECMisc);
                     }
  
                 }
@@ -567,17 +567,17 @@ namespace EstimateBuilder.ViewModel
                     {
                         removeCostFromPanel(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMiscCost && referenceObject is TECBid)
+                    else if (targetObject is TECMisc && referenceObject is TECBid)
                     {
-                        removeMiscCost(targetObject as TECMiscCost);
+                        removeMiscCost(targetObject as TECMisc);
                     }
                 }
                 else if (args.PropertyName == "Cost" || args.PropertyName == "Quantity")
                 {
-                    if (args.OldValue is TECMiscCost && args.NewValue is TECMiscCost)
+                    if (args.OldValue is TECMisc && args.NewValue is TECMisc)
                     {
-                        removeMiscCost(args.OldValue as TECMiscCost);
-                        addMiscCost(args.NewValue as TECMiscCost);
+                        removeMiscCost(args.OldValue as TECMisc);
+                        addMiscCost(args.NewValue as TECMisc);
                     }
                 }
             }
@@ -782,14 +782,14 @@ namespace EstimateBuilder.ViewModel
             PanelAssCostSubTotalLabor += delta.Item2;
         }
 
-        private void addMiscCost(TECMiscCost cost)
+        private void addMiscCost(TECMisc cost)
         {
             MiscCosts.Add(cost);
             MiscCostSubTotalCost += cost.Cost * cost.Quantity;
             MiscCostSubTotalLabor += cost.Labor * cost.Quantity;
         }
 
-        private void removeMiscCost(TECMiscCost cost)
+        private void removeMiscCost(TECMisc cost)
         {
             MiscCosts.Remove(cost);
             MiscCostSubTotalCost -= cost.Cost * cost.Quantity;

@@ -507,10 +507,10 @@ namespace EstimatingLibrary
             { bid.Controllers.Add(controller.Copy() as TECController); }
             foreach (TECProposalScope propScope in this.ProposalScope)
             { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
-            foreach (TECMiscCost cost in this.MiscCosts)
-            { bid.MiscCosts.Add(cost.Copy() as TECMiscCost); }
-            foreach (TECMiscWiring wiring in this.MiscWiring)
-            { bid.MiscWiring.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECMisc cost in this.MiscCosts)
+            { bid.MiscCosts.Add(cost.Copy() as TECMisc); }
+            foreach (TECMisc wiring in this.MiscWiring)
+            { bid.MiscWiring.Add(wiring.Copy() as TECMisc); }
             foreach (TECPanel panel in this.Panels)
             { bid.Panels.Add(panel.Copy() as TECPanel); }
             return bid;
