@@ -23,7 +23,7 @@ namespace Tests
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
         static TECController expectedController;
-        static TECAssociatedCost expectedAssociatedCost;
+        static TECCost expectedAssociatedCost;
         static TECConnectionType expectedConnectionType;
         static TECConduitType expectedConduitType;
 
@@ -37,7 +37,7 @@ namespace Tests
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
         static TECController actualController;
-        static TECAssociatedCost actualAssociatedCost;
+        static TECCost actualAssociatedCost;
         static TECConnectionType actualConnectionType;
         static TECConduitType actualConduitType;
 
@@ -140,7 +140,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {

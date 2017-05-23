@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
+    public enum CostType { TEC, Electrical }
+
     public class TECCost : TECScope
-    {
+    { 
         #region Properties
 
         protected double _cost;
@@ -33,6 +35,17 @@ namespace EstimatingLibrary
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
                 RaisePropertyChanged("TotalLabor");
+            }
+        }
+
+        protected CostType _type;
+        public CostType Type
+        {
+            get { return _type; }
+            set
+            {
+                _type = value;
+                RaisePropertyChanged("Type");
             }
         }
 

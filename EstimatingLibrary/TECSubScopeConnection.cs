@@ -105,7 +105,7 @@ namespace EstimatingLibrary
             foreach (TECConnectionType type in ConnectionTypes)
             {
                 cost += Length * type.Cost;
-                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                foreach (TECCost associatedCost in type.AssociatedCosts)
                 {
                     cost += associatedCost.Cost;
                 }
@@ -113,7 +113,7 @@ namespace EstimatingLibrary
             if (ConduitType != null)
             {
                 cost += ConduitLength * ConduitType.Cost;
-                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
                 {
                     cost += associatedCost.Cost;
                 }
@@ -127,7 +127,7 @@ namespace EstimatingLibrary
             if (ConduitType != null)
             {
                 laborHours += ConduitLength * ConduitType.Labor;
-                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
+                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
                 {
                     laborHours += associatedCost.Labor;
                 }
@@ -135,7 +135,7 @@ namespace EstimatingLibrary
             foreach (TECConnectionType type in ConnectionTypes)
             {
                 laborHours += Length * type.Labor;
-                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
+                foreach (TECCost associatedCost in type.AssociatedCosts)
                 { laborHours += associatedCost.Labor; }
             }
             return laborHours;

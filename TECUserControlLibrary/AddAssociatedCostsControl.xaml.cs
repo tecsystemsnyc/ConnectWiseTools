@@ -43,14 +43,14 @@ namespace TECUserControlLibrary
             DependencyProperty.Register("AddAssociatedCostCommand", typeof(ICommand),
               typeof(AddAssociatedCostsControl));
 
-        public ObservableCollection<TECAssociatedCost> AssociatedCostList
+        public ObservableCollection<TECCost> AssociatedCostList
         {
-            get { return (ObservableCollection<TECAssociatedCost>)GetValue(AssociatedCostListProperty); }
+            get { return (ObservableCollection<TECCost>)GetValue(AssociatedCostListProperty); }
             set { SetValue(AssociatedCostListProperty, value); }
         }
 
         public static readonly DependencyProperty AssociatedCostListProperty =
-            DependencyProperty.Register("AssociatedCostList", typeof(ObservableCollection<TECAssociatedCost>),
+            DependencyProperty.Register("AssociatedCostList", typeof(ObservableCollection<TECCost>),
               typeof(AddAssociatedCostsControl));
 
         public AddAssociatedCostsControl()

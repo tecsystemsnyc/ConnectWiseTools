@@ -490,7 +490,7 @@ namespace Tests
         public void Load_Bid_AssociatedCosts()
         {
             //Arrange
-            TECAssociatedCost actualAssociatedCost = actualBid.Catalogs.AssociatedCosts[0];
+            TECCost actualAssociatedCost = actualBid.Catalogs.AssociatedCosts[0];
 
             //Assert
             string expectedName = "Test Cost";
@@ -596,28 +596,28 @@ namespace Tests
         {
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach (TECAssociatedCost cost in system.AssociatedCosts)
+                foreach (TECCost cost in system.AssociatedCosts)
                 {
                     if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in system not linked"); }
                 }
                 foreach (TECEquipment equipment in system.Equipment)
                 {
-                    foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
+                    foreach (TECCost cost in equipment.AssociatedCosts)
                     {
                         if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                         { Assert.Fail("Associated costs in equipment not linked"); }
                     }
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                        foreach (TECCost cost in subScope.AssociatedCosts)
                         {
                             if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                             { Assert.Fail("Associated costs in subscope not linked"); }
                         }
                         foreach (TECDevice device in subScope.Devices)
                         {
-                            foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                            foreach (TECCost cost in device.AssociatedCosts)
                             {
                                 if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                                 { Assert.Fail("Associated costs in subscope not linked"); }
@@ -629,7 +629,7 @@ namespace Tests
 
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                foreach (TECCost cost in device.AssociatedCosts)
                 {
                     if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in device catalog not linked"); }
@@ -637,7 +637,7 @@ namespace Tests
             }
             foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
             {
-                foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
+                foreach (TECCost cost in conduitType.AssociatedCosts)
                 {
                     if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in conduit type catalog not linked"); }
@@ -645,7 +645,7 @@ namespace Tests
             }
             foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
             {
-                foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
+                foreach (TECCost cost in connectionType.AssociatedCosts)
                 {
                     if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
                     { Assert.Fail("Associated costs in connection type catalog not linked"); }

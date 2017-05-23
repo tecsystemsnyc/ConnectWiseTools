@@ -73,11 +73,11 @@ namespace Tests
 
 
             //Associated Costs
-            var testCost = new TECAssociatedCost();
+            var testCost = new TECCost();
             testCost.Name = "Test Cost";
             bid.Catalogs.AssociatedCosts.Add(testCost);
 
-            var testCost2 = new TECAssociatedCost();
+            var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
             bid.Catalogs.AssociatedCosts.Add(testCost2);
             
@@ -439,13 +439,13 @@ namespace Tests
             templates.Catalogs.ConduitTypes.Add(otherConduitType);
 
             //Associated Costs
-            TECAssociatedCost testAssociatedCost = new TECAssociatedCost();
+            TECCost testAssociatedCost = new TECCost();
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
 
             templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
-            var testCost2 = new TECAssociatedCost();
+            var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 

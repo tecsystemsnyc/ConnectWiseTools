@@ -86,8 +86,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private TECAssociatedCost _selectedAssociatedCost;
-        public TECAssociatedCost SelectedAssociatedCost
+        private TECCost _selectedAssociatedCost;
+        public TECCost SelectedAssociatedCost
         {
             get { return _selectedAssociatedCost; }
             set
@@ -97,8 +97,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECAssociatedCost> _associatedCostSelections;
-        public ObservableCollection<TECAssociatedCost> AssociatedCostSelections
+        private ObservableCollection<TECCost> _associatedCostSelections;
+        public ObservableCollection<TECCost> AssociatedCostSelections
         {
             get { return _associatedCostSelections; }
             set
@@ -520,8 +520,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("PanelDescription");
             }
         }
-        private ObservableCollection<TECAssociatedCost> _panelAssociatedCosts;
-        public ObservableCollection<TECAssociatedCost> PanelAssociatedCosts
+        private ObservableCollection<TECCost> _panelAssociatedCosts;
+        public ObservableCollection<TECCost> PanelAssociatedCosts
         {
             get { return _panelAssociatedCosts; }
             set
@@ -610,8 +610,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECAssociatedCost> _associatedCostsItemsCollection;
-        public ObservableCollection<TECAssociatedCost> AssociatedCostsItemsCollection
+        private ObservableCollection<TECCost> _associatedCostsItemsCollection;
+        public ObservableCollection<TECCost> AssociatedCostsItemsCollection
         {
             get { return _associatedCostsItemsCollection; }
             set
@@ -705,7 +705,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceTags = new ObservableCollection<TECTag>();
             ControllerTags = new ObservableCollection<TECTag>();
             PanelTags = new ObservableCollection<TECTag>();
-            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            PanelAssociatedCosts = new ObservableCollection<TECCost>();
             ControllerIO = new ObservableCollection<TECIO>();
             DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
 
@@ -725,7 +725,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DeviceTags = new ObservableCollection<TECTag>();
             ControllerTags = new ObservableCollection<TECTag>();
             PanelTags = new ObservableCollection<TECTag>();
-            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            PanelAssociatedCosts = new ObservableCollection<TECCost>();
             ControllerIO = new ObservableCollection<TECIO>();
         }
 
@@ -845,8 +845,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                         break;
                     case ScopeCollectionIndex.AssociatedCosts:
-                        AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
-                        foreach (TECAssociatedCost item in Templates.Catalogs.AssociatedCosts)
+                        AssociatedCostsItemsCollection = new ObservableCollection<TECCost>();
+                        foreach (TECCost item in Templates.Catalogs.AssociatedCosts)
                         {
                             if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
                                 UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
@@ -1180,7 +1180,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PanelName = "";
             PanelDescription = "";
             PanelTags = new ObservableCollection<TECTag>();
-            PanelAssociatedCosts = new ObservableCollection<TECAssociatedCost>();
+            PanelAssociatedCosts = new ObservableCollection<TECCost>();
         }
         private bool AddPanelCanExecute()
         {
@@ -1233,7 +1233,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             SubScopeItemsCollection = new ObservableCollection<TECSubScope>();
             DevicesItemsCollection = new ObservableCollection<TECDevice>();
             ControllersItemsCollection = new ObservableCollection<TECController>();
-            AssociatedCostsItemsCollection = new ObservableCollection<TECAssociatedCost>();
+            AssociatedCostsItemsCollection = new ObservableCollection<TECCost>();
             ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
             PanelsItemsCollection = new ObservableCollection<TECPanel>();
             MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
@@ -1259,7 +1259,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 ControllersItemsCollection.Add(control);
             }
-            foreach (TECAssociatedCost assCost in Templates.Catalogs.AssociatedCosts)
+            foreach (TECCost assCost in Templates.Catalogs.AssociatedCosts)
             {
                 AssociatedCostsItemsCollection.Add(assCost);
             }
@@ -1424,14 +1424,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 foreach (object item in e.NewItems)
                 {
-                    AssociatedCostsItemsCollection.Add(item as TECAssociatedCost);
+                    AssociatedCostsItemsCollection.Add(item as TECCost);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    AssociatedCostsItemsCollection.Remove(item as TECAssociatedCost);
+                    AssociatedCostsItemsCollection.Remove(item as TECCost);
                 }
             }
         }

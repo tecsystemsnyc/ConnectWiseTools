@@ -241,13 +241,13 @@ namespace EstimateBuilder.ViewModel
                             }
                         }
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
+                    else if (targetObject is TECCost && referenceObject is TECConnectionType)
                     {
-                        addAssociatedCost(targetObject as TECAssociatedCost);
+                        addAssociatedCost(targetObject as TECCost);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECConduitType)
+                    else if (targetObject is TECCost && referenceObject is TECConduitType)
                     {
-                        addAssociatedCost(targetObject as TECAssociatedCost);
+                        addAssociatedCost(targetObject as TECCost);
                     }
                     else if (targetObject is TECMiscWiring && referenceObject is TECBid) 
                     {
@@ -274,13 +274,13 @@ namespace EstimateBuilder.ViewModel
                             }
                         }
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECConnectionType)
+                    else if (targetObject is TECCost && referenceObject is TECConnectionType)
                     {
-                        removeAssociatedCost(targetObject as TECAssociatedCost);
+                        removeAssociatedCost(targetObject as TECCost);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECConduitType)
+                    else if (targetObject is TECCost && referenceObject is TECConduitType)
                     {
-                        removeAssociatedCost(targetObject as TECAssociatedCost);
+                        removeAssociatedCost(targetObject as TECCost);
                     }
                     else if (targetObject is TECMiscWiring && referenceObject is TECBid)
                     {
@@ -475,7 +475,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void addAssociatedCost(TECAssociatedCost assCost)
+        private void addAssociatedCost(TECCost assCost)
         {
             bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
             if (containsAssCost)
@@ -497,7 +497,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void removeAssociatedCost(TECAssociatedCost assCost)
+        private void removeAssociatedCost(TECCost assCost)
         {
             bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
             if (containsAssCost)
@@ -532,7 +532,7 @@ namespace EstimateBuilder.ViewModel
                 foreach(TECConnectionType type in ssConnect.ConnectionTypes)
                 {
                     addLengthToWireType(connection.Length, type);
-                    foreach(TECAssociatedCost cost in type.AssociatedCosts)
+                    foreach(TECCost cost in type.AssociatedCosts)
                     {
                         addAssociatedCost(cost);
                     }
@@ -544,7 +544,7 @@ namespace EstimateBuilder.ViewModel
 
                 addLengthToWireType(connection.Length, netConnect.ConnectionType);
                 
-                foreach(TECAssociatedCost cost in netConnect.ConnectionType.AssociatedCosts)
+                foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
                 {
                     addAssociatedCost(cost);
                 }
@@ -558,7 +558,7 @@ namespace EstimateBuilder.ViewModel
             addLengthToConduitType(connection.ConduitLength, connection.ConduitType);
             if (connection.ConduitType != null)
             {
-                foreach (TECAssociatedCost cost in connection.ConduitType.AssociatedCosts)
+                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
                 {
                     addAssociatedCost(cost);
                 }
@@ -575,7 +575,7 @@ namespace EstimateBuilder.ViewModel
                 foreach (TECConnectionType type in ssConnect.ConnectionTypes)
                 {
                     removeLengthFromWireType(connection.Length, type);
-                    foreach(TECAssociatedCost cost in type.AssociatedCosts)
+                    foreach(TECCost cost in type.AssociatedCosts)
                     {
                         removeAssociatedCost(cost);
                     }
@@ -587,7 +587,7 @@ namespace EstimateBuilder.ViewModel
 
                 removeLengthFromWireType(connection.Length, netConnect.ConnectionType);
 
-                foreach(TECAssociatedCost cost in netConnect.ConnectionType.AssociatedCosts)
+                foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
                 {
                     removeAssociatedCost(cost);
                 }
@@ -601,7 +601,7 @@ namespace EstimateBuilder.ViewModel
             removeLengthFromConduitType(connection.ConduitLength, connection.ConduitType);
             if (connection.ConduitType != null)
             {
-                foreach (TECAssociatedCost cost in connection.ConduitType.AssociatedCosts)
+                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
                 {
                     removeAssociatedCost(cost);
                 }

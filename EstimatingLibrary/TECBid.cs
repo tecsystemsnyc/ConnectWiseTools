@@ -30,7 +30,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMiscCost> _miscCosts { get; set; }
         private ObservableCollection<TECMiscWiring> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
-        private ObservableCollection<TECControlledScope> _controlledScope;
 
         public string Name
         {
@@ -241,19 +240,6 @@ namespace EstimatingLibrary
                 reWatch();
             }
         }
-        public ObservableCollection<TECControlledScope> ControlledScope
-        {
-            get { return _controlledScope; }
-            set
-            {
-                var temp = this.Copy();
-                ControlledScope.CollectionChanged -= CollectionChanged;
-                _controlledScope = value;
-                ControlledScope.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ControlledScope", temp, this);
-                reWatch();
-            }
-        }
 
         public int TotalPointNumber
         {
@@ -295,7 +281,6 @@ namespace EstimatingLibrary
             _miscWiring = new ObservableCollection<TECMiscWiring>();
             _miscCosts = new ObservableCollection<TECMiscCost>();
             _panels = new ObservableCollection<TECPanel>();
-            _controlledScope = new ObservableCollection<TECControlledScope>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
             _estimate = new TECEstimator(this);
@@ -315,7 +300,6 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += CollectionChanged;
             MiscWiring.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
-            ControlledScope.CollectionChanged += CollectionChanged;
 
             registerSystems();
         }
@@ -382,8 +366,6 @@ namespace EstimatingLibrary
             { MiscWiring.Add(new TECMiscWiring(wiring)); }
             foreach (TECPanel panel in bidSource.Panels)
             { Panels.Add(new TECPanel(panel)); }
-            foreach (TECControlledScope scope in bidSource.ControlledScope)
-            { ControlledScope.Add(new TECControlledScope(scope)); }
         }
 
         #endregion //Constructors

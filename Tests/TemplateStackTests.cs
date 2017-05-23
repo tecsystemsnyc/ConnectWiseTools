@@ -192,12 +192,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECAssociatedCost> expected = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost item in Template.Catalogs.AssociatedCosts)
+            ObservableCollection<TECCost> expected = new ObservableCollection<TECCost>();
+            foreach (TECCost item in Template.Catalogs.AssociatedCosts)
             {
                 expected.Add(item);
             }
-            TECAssociatedCost edit = new TECAssociatedCost();
+            TECCost edit = new TECCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -206,7 +206,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECAssociatedCost> actual = Template.Catalogs.AssociatedCosts;
+            ObservableCollection<TECCost> actual = Template.Catalogs.AssociatedCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -566,7 +566,7 @@ namespace Tests
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
             int expectedCount = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
-            TECAssociatedCost edit = new TECAssociatedCost();
+            TECCost edit = new TECCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);

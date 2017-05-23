@@ -503,9 +503,9 @@ namespace EstimateBuilder.ViewModel
                     {
                         addDevice(targetObject as TECDevice);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECDevice)
+                    else if (targetObject is TECCost && referenceObject is TECDevice)
                     {
-                        addCostToDevices(targetObject as TECAssociatedCost, referenceObject as TECDevice);
+                        addCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
                     else if (targetObject is TECController && referenceObject is TECBid)
                     {
@@ -515,13 +515,13 @@ namespace EstimateBuilder.ViewModel
                     {
                         addPanel(targetObject as TECPanel);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECController)
+                    else if (targetObject is TECCost && referenceObject is TECController)
                     {
-                        addCostToController(targetObject as TECAssociatedCost);
+                        addCostToController(targetObject as TECCost);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECPanel)
+                    else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
-                        addCostToPanel(targetObject as TECAssociatedCost);
+                        addCostToPanel(targetObject as TECCost);
                     }
                     else if (targetObject is TECMiscCost && referenceObject is TECBid)
                     {
@@ -547,9 +547,9 @@ namespace EstimateBuilder.ViewModel
                     {
                         removeDevice(targetObject as TECDevice);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECDevice)
+                    else if (targetObject is TECCost && referenceObject is TECDevice)
                     {
-                        removeCostFromDevices(targetObject as TECAssociatedCost, referenceObject as TECDevice);
+                        removeCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
                     else if (targetObject is TECController && referenceObject is TECBid)
                     {
@@ -559,13 +559,13 @@ namespace EstimateBuilder.ViewModel
                     {
                         removePanel(targetObject as TECPanel);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECController)
+                    else if (targetObject is TECCost && referenceObject is TECController)
                     {
-                        removeCostFromController(targetObject as TECAssociatedCost);
+                        removeCostFromController(targetObject as TECCost);
                     }
-                    else if (targetObject is TECAssociatedCost && referenceObject is TECPanel)
+                    else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
-                        removeCostFromPanel(targetObject as TECAssociatedCost);
+                        removeCostFromPanel(targetObject as TECCost);
                     }
                     else if (targetObject is TECMiscCost && referenceObject is TECBid)
                     {
@@ -622,7 +622,7 @@ namespace EstimateBuilder.ViewModel
                 DeviceSummaryItems.Add(deviceItem);
                 DeviceSubTotal += deviceItem.Total;
             }
-            foreach (TECAssociatedCost cost in device.AssociatedCosts)
+            foreach (TECCost cost in device.AssociatedCosts)
             {
                 Tuple<double, double> delta = addCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
                 DeviceAssCostSubTotalCost += delta.Item1;
@@ -645,7 +645,7 @@ namespace EstimateBuilder.ViewModel
                     deviceDictionary.Remove(device.Guid);
                 }
 
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
+                foreach (TECCost cost in device.AssociatedCosts)
                 {
                     Tuple<double, double> delta = removeCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
                     DeviceAssCostSubTotalCost += delta.Item1;
@@ -658,7 +658,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void addCostToDevices(TECAssociatedCost cost, TECDevice device)
+        private void addCostToDevices(TECCost cost, TECDevice device)
         {
             if (deviceDictionary.ContainsKey(device.Guid))
             {
@@ -671,7 +671,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void removeCostFromDevices(TECAssociatedCost cost, TECDevice device)
+        private void removeCostFromDevices(TECCost cost, TECDevice device)
         {
             if (deviceDictionary.ContainsKey(device.Guid))
             {
@@ -687,7 +687,7 @@ namespace EstimateBuilder.ViewModel
         private void addController(TECController controller)
         {
             ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
-            foreach(TECAssociatedCost cost in controller.AssociatedCosts)
+            foreach(TECCost cost in controller.AssociatedCosts)
             {
                 addCostToController(cost);
             }
@@ -696,20 +696,20 @@ namespace EstimateBuilder.ViewModel
         private void removeController(TECController controller)
         {
             ControllerSubTotal -= controller.Cost * controller.Manufacturer.Multiplier;
-            foreach(TECAssociatedCost cost in controller.AssociatedCosts)
+            foreach(TECCost cost in controller.AssociatedCosts)
             {
                 removeCostFromController(cost);
             }
         }
 
-        private void addCostToController(TECAssociatedCost cost)
+        private void addCostToController(TECCost cost)
         {
             Tuple<double, double> delta = addCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
             ControllerAssCostSubTotalCost += delta.Item1;
             ControllerAssCostSubTotalLabor += delta.Item2;
         }
 
-        private void removeCostFromController(TECAssociatedCost cost)
+        private void removeCostFromController(TECCost cost)
         {
             Tuple<double, double> delta = removeCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
             ControllerAssCostSubTotalCost += delta.Item1;
@@ -732,7 +732,7 @@ namespace EstimateBuilder.ViewModel
                 PanelTypeSummaryItems.Add(panelTypeItem);
                 PanelTypeSubTotal += panelTypeItem.Total;
             }
-            foreach (TECAssociatedCost cost in panel.AssociatedCosts)
+            foreach (TECCost cost in panel.AssociatedCosts)
             {
                 Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
                 PanelAssCostSubTotalCost += delta.Item1;
@@ -755,7 +755,7 @@ namespace EstimateBuilder.ViewModel
                     panelTypeDictionary.Remove(panel.Type.Guid);
                 }
 
-                foreach (TECAssociatedCost cost in panel.AssociatedCosts)
+                foreach (TECCost cost in panel.AssociatedCosts)
                 {
                     Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
                     PanelAssCostSubTotalCost += delta.Item1;
@@ -768,14 +768,14 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private void addCostToPanel(TECAssociatedCost cost)
+        private void addCostToPanel(TECCost cost)
         {
             Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
             PanelAssCostSubTotalCost += delta.Item1;
             PanelAssCostSubTotalLabor += delta.Item2;
         }
 
-        private void removeCostFromPanel(TECAssociatedCost cost)
+        private void removeCostFromPanel(TECCost cost)
         {
             Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
             PanelAssCostSubTotalCost += delta.Item1;
@@ -844,7 +844,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        private Tuple<double, double> addCost(TECAssociatedCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        private Tuple<double, double> addCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;
@@ -868,7 +868,7 @@ namespace EstimateBuilder.ViewModel
             return Tuple.Create(costChange, laborChange);
         }
 
-        private Tuple<double, double> removeCost(TECAssociatedCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        private Tuple<double, double> removeCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;

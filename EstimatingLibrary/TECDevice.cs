@@ -122,7 +122,7 @@ namespace EstimatingLibrary
         private double getMaterialCost()
         {
             double matCost = 0;
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach (TECCost cost in this.AssociatedCosts)
             {
                 matCost += cost.Cost;
             }
@@ -131,7 +131,7 @@ namespace EstimatingLibrary
         private double getLaborCost()
         {
             double cost = 0;
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
+            foreach (TECCost assCost in this.AssociatedCosts)
             {
                 cost += assCost.Labor;
             }

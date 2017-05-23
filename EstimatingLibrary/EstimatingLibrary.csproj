@@ -113,7 +113,6 @@
     <Compile Include="TECIOModule.cs" />
     <Compile Include="ModelLinkingHelper.cs" />
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
-    <Compile Include="TECAssociatedCost.cs" />
     <Compile Include="TECBid.cs" />
     <Compile Include="TECBidParameters.cs" />
     <Compile Include="TECConduitType.cs" />

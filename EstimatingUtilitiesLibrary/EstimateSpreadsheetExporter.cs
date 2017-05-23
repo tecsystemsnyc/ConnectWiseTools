@@ -190,7 +190,7 @@ namespace EstimatingUtilitiesLibrary
             if (subScope.SubScope.Connection.ConduitType != null)
             {
                 conduitString = subScope.SubScope.Connection.ConduitType.Name;
-                foreach (TECAssociatedCost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
+                foreach (TECCost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
                 {
                     if (cost.Name.ToUpper().Contains("FLEX"))
                     {

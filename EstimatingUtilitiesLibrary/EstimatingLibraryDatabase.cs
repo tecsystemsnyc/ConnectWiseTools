@@ -249,7 +249,7 @@ namespace EstimatingUtilitiesLibrary
                 editObject(new StackItem(Change.Edit, bid, conduitType));
                 editScopeChildrenRelations(conduitType);
             }
-            foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
             {
                 editObject(new StackItem(Change.Edit, bid, cost));
                 editScopeChildrenRelations(cost);
@@ -612,9 +612,9 @@ namespace EstimatingUtilitiesLibrary
             { conduitTypes.Add(getConduitTypeFromRow(row)); }
             return conduitTypes;
         }
-        static private ObservableCollection<TECAssociatedCost> getAssociatedCosts()
+        static private ObservableCollection<TECCost> getAssociatedCosts()
         {
-            ObservableCollection<TECAssociatedCost> associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            ObservableCollection<TECCost> associatedCosts = new ObservableCollection<TECCost>();
             DataTable associatedCostsDT = SQLiteDB.getDataFromTable(AssociatedCostTable.TableName);
             foreach (DataRow row in associatedCostsDT.Rows)
             { associatedCosts.Add(getAssociatedCostFromRow(row)); }
@@ -1298,7 +1298,7 @@ namespace EstimatingUtilitiesLibrary
             { tags.Add(getPlaceholderTagFromRow(row)); }
             return tags;
         }
-        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
+        static private ObservableCollection<TECCost> getAssociatedCostsInScope(Guid scopeID)
         {
             //string command = "select * from " + AssociatedCostTable.TableName + " where " + AssociatedCostTable.AssociatedCostID.Name + " in ";
             //command += "(select " + AssociatedCostTable.AssociatedCostID.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
@@ -1309,10 +1309,10 @@ namespace EstimatingUtilitiesLibrary
             command += "'";
 
             DataTable DT = SQLiteDB.getDataFromCommand(command);
-            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            var associatedCosts = new ObservableCollection<TECCost>();
             foreach (DataRow row in DT.Rows)
             {
-                TECAssociatedCost costToAdd = getPlaceholderAssociatedCostFromRow(row);
+                TECCost costToAdd = getPlaceholderAssociatedCostFromRow(row);
                 string quantityCommand = "select " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where " + ScopeAssociatedCostTable.ScopeID.Name + " = '";
                 quantityCommand += (scopeID + "' and " + ScopeAssociatedCostTable.AssociatedCostID.Name + " = '" + costToAdd.Guid + "'");
                 DataTable quantityDT = SQLiteDB.getDataFromCommand(quantityCommand);
@@ -1737,14 +1737,14 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
             return outConnectionType;
         }
-        private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
+        private static TECCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
             string name = row[AssociatedCostTable.Name.Name].ToString();
             double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
             double labor = row[AssociatedCostTable.Labor.Name].ToString().ToDouble(0);
 
-            var associatedCost = new TECAssociatedCost(guid);
+            var associatedCost = new TECCost(guid);
             associatedCost.Name = name;
             associatedCost.Cost = cost;
             associatedCost.Labor = labor;
@@ -2027,10 +2027,10 @@ namespace EstimatingUtilitiesLibrary
             TECTag tag = new TECTag(guid);
             return tag;
         }
-        private static TECAssociatedCost getPlaceholderAssociatedCostFromRow(DataRow row)
+        private static TECCost getPlaceholderAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ScopeAssociatedCostTable.AssociatedCostID.Name].ToString());
-            TECAssociatedCost associatedCost = new TECAssociatedCost(guid);
+            TECCost associatedCost = new TECCost(guid);
             return associatedCost;
         }
         private static TECLocation getPlaceholderLocationFromRow(DataRow row)
@@ -2296,7 +2296,7 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECTag tag in catalogs.Tags)
             { addObject(new StackItem(Change.Add, catalogs, tag)); }
-            foreach (TECAssociatedCost associatedCost in catalogs.AssociatedCosts)
+            foreach (TECCost associatedCost in catalogs.AssociatedCosts)
             { addObject(new StackItem(Change.Add, catalogs, associatedCost)); }
         }
 
@@ -2469,9 +2469,9 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveAssociatedCosts(TECScope scope)
         {
-            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
+            foreach (TECCost cost in scope.AssociatedCosts)
             {
-                addObject(new StackItem(Change.Add, scope, cost, typeof(TECScope), typeof(TECAssociatedCost)));
+                addObject(new StackItem(Change.Add, scope, cost, typeof(TECScope), typeof(TECCost)));
             }
         }
         private static void saveControllerChildProperties(TECController controller)
@@ -3183,9 +3183,9 @@ namespace EstimatingUtilitiesLibrary
             {
                 editObject(new StackItem(Change.Edit, scope, tag, typeof(TECScope), typeof(TECTag)));
             }
-            foreach (TECAssociatedCost assCost in scope.AssociatedCosts)
+            foreach (TECCost assCost in scope.AssociatedCosts)
             {
-                editObject(new StackItem(Change.Edit, scope, assCost, typeof(TECScope), typeof(TECAssociatedCost)));
+                editObject(new StackItem(Change.Edit, scope, assCost, typeof(TECScope), typeof(TECCost)));
             }
         }
         #endregion
