@@ -9,36 +9,22 @@ namespace EstimatingLibrary
 {
     public class TECMisc : TECCost, CostComponent
     {
-        public double MaterialCost
+        public List<TECCost> Costs
         {
             get
             {
-                return 0;
+                return getCosts();
             }
         }
-
-        public double LaborCost
+        private List<TECCost> getCosts()
         {
-            get
+            var outCosts = new List<TECCost>();
+            outCosts.Add(this);
+            foreach(TECCost cost in AssociatedCosts)
             {
-                return 0;
+                outCosts.Add(cost);
             }
-        }
-
-        public double ElectricalCost
-        {
-            get
-            {
-                return Cost * Quantity;
-            }
-        }
-
-        public double ElectricalLabor
-        {
-            get
-            {
-                return Labor * Quantity;
-            }
+            return outCosts;
         }
 
         public TECMisc(Guid guid) : base(guid) { }
