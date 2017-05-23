@@ -767,7 +767,7 @@ namespace Tests
 
             double cost = (new Random()).Next(0, 1000) / (new Random()).Next(0, 10);
 
-            var assCosts = new ObservableCollection<TECAssociatedCost>();
+            var assCosts = new ObservableCollection<TECCost>();
             int costNum = (new Random()).Next(1, 10);
             for(int x = 0; x < costNum; x++)
             {

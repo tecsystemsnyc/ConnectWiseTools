@@ -121,6 +121,31 @@ namespace EstimatingLibrary
             }
         }
 
+        public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECSubScope ss in SubScope)
+            {
+                foreach(TECCost cost in ss.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECCost cost in Costs)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
+        }
+
         #endregion //Properties
 
         #region Constructors

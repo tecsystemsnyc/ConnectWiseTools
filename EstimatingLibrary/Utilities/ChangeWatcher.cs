@@ -64,8 +64,6 @@ namespace EstimatingLibrary.Utilities
             { wiring.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach(TECControlledScope scope in Bid.ControlledScope)
-            { registerControlledScope(scope); }
         }
         private void registerTemplatesChanges(TECTemplates Templates)
         {
@@ -84,8 +82,6 @@ namespace EstimatingLibrary.Utilities
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECControlledScope scope in Templates.ControlledScopeTemplates)
-            { registerControlledScope(scope); }
 
         }
         private void registerScopeManager(TECScopeManager scopeManager)
@@ -213,10 +209,6 @@ namespace EstimatingLibrary.Utilities
             else if (newItem is TECSubScope)
             {
                 handleSubScopeChildren(newItem as TECSubScope, change);
-            }
-            else if (newItem is TECControlledScope)
-            {
-                handleControlledScope(newItem as TECControlledScope, change);
             }
             else if (newItem is TECDrawing)
             {
