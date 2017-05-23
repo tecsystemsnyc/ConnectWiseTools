@@ -274,7 +274,7 @@ namespace EstimatingLibrary
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
-        public TECSystem(bool isChild = false) : this(Guid.NewGuid(), isChild) { }
+        public TECSystem() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
         public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
@@ -364,15 +364,7 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        if (_isChild)
-                        {
-                            NotifyPropertyChanged("AddRelationship", this, item);
-                        }
-                        else
-                        {
-                            NotifyPropertyChanged("Add", this, item);
-                        }
-
+                        NotifyPropertyChanged("Add", this, item);
                     }
                 }
             }

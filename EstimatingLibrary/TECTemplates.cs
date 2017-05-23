@@ -115,8 +115,8 @@ namespace EstimatingLibrary
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
             _controllerTemplates = new ObservableCollection<TECController>();
-            _miscWiringTemplates = new ObservableCollection<TECMiscWiring>();
-            _miscCostTemplates = new ObservableCollection<TECMiscCost>();
+            _miscWiringTemplates = new ObservableCollection<TECMisc>();
+            _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
@@ -141,13 +141,13 @@ namespace EstimatingLibrary
             { SubScopeTemplates.Add(new TECSubScope(subScope)); }
             foreach (TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(new TECController(controller)); }
-            foreach (TECMiscCost cost in templatesSource.MiscCostTemplates)
+            foreach (TECMisc cost in templatesSource.MiscCostTemplates)
             {
-                MiscCostTemplates.Add(new TECMiscCost(cost));
+                MiscCostTemplates.Add(new TECMisc(cost));
             }
-            foreach (TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
+            foreach (TECMisc wiring in templatesSource.MiscWiringTemplates)
             {
-                MiscWiringTemplates.Add(new TECMiscWiring(wiring));
+                MiscWiringTemplates.Add(new TECMisc(wiring));
             }
             foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
@@ -196,10 +196,10 @@ namespace EstimatingLibrary
             { outTemplate.SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
             foreach (TECController controller in this.ControllerTemplates)
             { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
-            foreach (TECMiscCost cost in this.MiscCostTemplates)
-            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMiscCost); }
-            foreach (TECMiscWiring wiring in this.MiscWiringTemplates)
-            { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECMisc cost in this.MiscCostTemplates)
+            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
+            foreach (TECMisc wiring in this.MiscWiringTemplates)
+            { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMisc); }
             foreach (TECPanel panel in this.PanelTemplates)
             { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
             return outTemplate;

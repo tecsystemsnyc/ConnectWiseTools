@@ -946,9 +946,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 case ScopeCollectionIndex.AssociatedCosts:
                     canSearch = true;
                     break;
-                case ScopeCollectionIndex.ControlledScope:
-                    canSearch = true;
-                    break;
                 case ScopeCollectionIndex.Panels:
                     canSearch = true;
                     break;
@@ -1421,14 +1418,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 foreach (object item in e.NewItems)
                 {
-                    MiscCostsCollection.Add(item as TECMiscCost);
+                    MiscCostsCollection.Add(item as TECMisc);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    MiscCostsCollection.Remove(item as TECMiscCost);
+                    MiscCostsCollection.Remove(item as TECMisc);
                 }
             }
         }
@@ -1439,14 +1436,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 foreach (object item in e.NewItems)
                 {
-                    MiscWiringCollection.Add(item as TECMiscWiring);
+                    MiscWiringCollection.Add(item as TECMisc);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    MiscWiringCollection.Remove(item as TECMiscWiring);
+                    MiscWiringCollection.Remove(item as TECMisc);
                 }
             }
         }
