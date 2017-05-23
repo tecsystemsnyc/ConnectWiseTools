@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECCost, CostComponent
+    public class TECPanel : TECScope, CostComponent
     {
         #region Properties
         private TECPanelType _type;
@@ -38,27 +38,22 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-        public double ElectricalCost
+        public List<TECCost> Costs
         {
             get
             {
-                return 0;
+                return getCosts();
             }
         }
-        public double ElectricalLabor
+        private List<TECCost> getCosts()
         {
-            get
+            var outCosts = new List<TECCost>();
+            outCosts.Add(Type);
+            foreach(TECCost cost in AssociatedCosts)
             {
-                return getElectricalLabor();
+                outCosts.Add(Type);
             }
+            return outCosts;
         }
         #endregion
 
@@ -116,42 +111,5 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-
-            if (Type != null)
-            {
-                matCost += Type.Cost;
-            }
-
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double lCost = 0;
-
-
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                lCost += cost.Labor;
-            }
-
-            return lCost;
-        }
-        private double getElectricalLabor()
-        {
-            double mountingLabor = 0;
-            mountingLabor += .5;
-
-            return mountingLabor;
-        }
-
     }
 }

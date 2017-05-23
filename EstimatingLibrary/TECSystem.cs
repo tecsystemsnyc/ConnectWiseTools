@@ -124,14 +124,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
 
         public ObservableCollection<TECSubScope> SubScope
         {

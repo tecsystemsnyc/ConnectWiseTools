@@ -154,46 +154,6 @@ namespace EstimatingLibrary
 
             return connection;
         }
-        protected override double getElectricalCost()
-        {
-            double cost = 0;
-            if (ConnectionType != null)
-            {
-                TECConnectionType type = ConnectionType;
-                cost += Length * type.Cost;
-                foreach (TECCost associatedCost in type.AssociatedCosts)
-                { cost += associatedCost.Cost * ChildrenControllers.Count; }
-            }
-            if (ConduitType != null)
-            {
-                cost += ConduitLength * ConduitType.Cost;
-                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    cost += associatedCost.Cost * ChildrenControllers.Count;
-                }
-            }
-            return cost;
-        }
-        protected override double getElectricalLabor()
-        {
-            double laborHours = 0;
-            if (ConnectionType != null)
-            {
-                TECConnectionType type = ConnectionType;
-                laborHours += Length * type.Labor;
-                foreach (TECCost associatedCost in type.AssociatedCosts)
-                { laborHours += associatedCost.Labor * ChildrenControllers.Count; }
-            }
-            if (ConduitType != null)
-            {
-                laborHours += Length * ConduitType.Labor;
-                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    laborHours += associatedCost.Labor * ChildrenControllers.Count;
-                }
-            }
-            return laborHours;
-        }
         #endregion Methods
 
         #region Event Handlers

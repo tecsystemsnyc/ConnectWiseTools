@@ -58,29 +58,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-        public double ElectricalCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public double ElectricalLabor
-        {
-            get
-            {
-                return getElectricalLabor();
-            }
-        }
-
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return getConnectionTypes(); }
@@ -104,6 +81,38 @@ namespace EstimatingLibrary
             {
                 return getPointNumber();
             }
+        }
+
+        public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECDevice dev in Devices)
+            {
+                outCosts.Add(dev);
+                foreach(TECCost cost in dev.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECPoint point in Points)
+            {
+                foreach(TECCost cost in point.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECCost cost in AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
         }
         #endregion //Properties
 
