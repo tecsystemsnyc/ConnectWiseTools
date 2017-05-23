@@ -89,30 +89,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-
-        public double ElectricalCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public double ElectricalLabor
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public int PointNumber
         {
             get
