@@ -15,8 +15,8 @@ namespace EstimatingLibrary
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECController> _controllerTemplates;
-        private ObservableCollection<TECMiscCost> _miscCostTemplates;
-        private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
+        private ObservableCollection<TECMisc> _miscCostTemplates;
+        private ObservableCollection<TECMisc> _miscWiringTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
 
         public ObservableCollection<TECSystem> SystemTemplates
@@ -67,7 +67,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ControllerTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECMiscCost> MiscCostTemplates
+        public ObservableCollection<TECMisc> MiscCostTemplates
         {
             get { return _miscCostTemplates; }
             set
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("MiscCostTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECMiscWiring> MiscWiringTemplates
+        public ObservableCollection<TECMisc> MiscWiringTemplates
         {
             get { return _miscWiringTemplates; }
             set

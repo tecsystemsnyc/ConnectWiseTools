@@ -620,18 +620,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("AssociatedCostsItemsCollection");
             }
         }
-
-        private ObservableCollection<TECControlledScope> _controlledScopeItemsCollection;
-        public ObservableCollection<TECControlledScope> ControlledScopeItemsCollection
-        {
-            get { return _controlledScopeItemsCollection; }
-            set
-            {
-                _controlledScopeItemsCollection = value;
-                RaisePropertyChanged("ControlledScopeItemsCollection");
-            }
-        }
-
+        
         private ObservableCollection<TECPanel> _panelsItemsCollection;
         public ObservableCollection<TECPanel> PanelsItemsCollection
         {
@@ -643,8 +632,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECMiscWiring> _miscWiringCollection;
-        public ObservableCollection<TECMiscWiring> MiscWiringCollection
+        private ObservableCollection<TECMisc> _miscWiringCollection;
+        public ObservableCollection<TECMisc> MiscWiringCollection
         {
             get { return _miscWiringCollection; }
             set
@@ -654,8 +643,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECMiscCost> _miscCostsCollection;
-        public ObservableCollection<TECMiscCost> MiscCostsCollection
+        private ObservableCollection<TECMisc> _miscCostsCollection;
+        public ObservableCollection<TECMisc> MiscCostsCollection
         {
             get { return _miscCostsCollection; }
             set
@@ -865,27 +854,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case ScopeCollectionIndex.ControlledScope:
-                        ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
-                        foreach (TECControlledScope item in Templates.ControlledScopeTemplates)
-                        {
-                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                            {
-                                ControlledScopeItemsCollection.Add(item);
-                            }
-                            else
-                            {
-                                foreach (TECTag tag in item.Tags)
-                                {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
-                                    {
-                                        ControlledScopeItemsCollection.Add(item);
-                                    }
-                                }
-                            }
-                        }
-                        break;
                     case ScopeCollectionIndex.Panels:
                         PanelsItemsCollection = new ObservableCollection<TECPanel>();
                         foreach (TECPanel item in Templates.PanelTemplates)
@@ -908,8 +876,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                         break;
                     case ScopeCollectionIndex.MiscCosts:
-                        MiscCostsCollection = new ObservableCollection<TECMiscCost>();
-                        foreach (TECMiscCost item in Templates.MiscCostTemplates)
+                        MiscCostsCollection = new ObservableCollection<TECMisc>();
+                        foreach (TECMisc item in Templates.MiscCostTemplates)
                         {
                             if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
                                 UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
@@ -929,8 +897,8 @@ namespace TECUserControlLibrary.ViewModelExtensions
                         }
                         break;
                     case ScopeCollectionIndex.MiscWiring:
-                        MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
-                        foreach (TECMiscWiring item in Templates.MiscWiringTemplates)
+                        MiscWiringCollection = new ObservableCollection<TECMisc>();
+                        foreach (TECMisc item in Templates.MiscWiringTemplates)
                         {
                             if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
                                 UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
@@ -1234,11 +1202,14 @@ namespace TECUserControlLibrary.ViewModelExtensions
             DevicesItemsCollection = new ObservableCollection<TECDevice>();
             ControllersItemsCollection = new ObservableCollection<TECController>();
             AssociatedCostsItemsCollection = new ObservableCollection<TECCost>();
-            ControlledScopeItemsCollection = new ObservableCollection<TECControlledScope>();
             PanelsItemsCollection = new ObservableCollection<TECPanel>();
-            MiscWiringCollection = new ObservableCollection<TECMiscWiring>();
-            MiscCostsCollection = new ObservableCollection<TECMiscCost>();
+            MiscWiringCollection = new ObservableCollection<TECMisc>();
+            MiscCostsCollection = new ObservableCollection<TECMisc>();
 
+            TECSystem blankScope = new TECSystem();
+            blankScope.Name = "Blank";
+            blankScope.Description = "Drag in for a new Controlled Scope";
+            SystemItemsCollection.Add(blankScope);
             foreach (TECSystem sys in Templates.SystemTemplates)
             {
                 SystemItemsCollection.Add(sys);
@@ -1263,23 +1234,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 AssociatedCostsItemsCollection.Add(assCost);
             }
-            TECControlledScope blankScope = new TECControlledScope();
-            blankScope.Name = "Blank";
-            blankScope.Description = "Drag in for a new Controlled Scope";
-            ControlledScopeItemsCollection.Add(blankScope);
-            foreach (TECControlledScope controlScope in Templates.ControlledScopeTemplates)
-            {
-                ControlledScopeItemsCollection.Add(controlScope);
-            }
             foreach (TECPanel panel in Templates.PanelTemplates)
             {
                 PanelsItemsCollection.Add(panel);
             }
-            foreach (TECMiscWiring wiring in Templates.MiscWiringTemplates)
+            foreach (TECMisc wiring in Templates.MiscWiringTemplates)
             {
                 MiscWiringCollection.Add(wiring);
             }
-            foreach (TECMiscCost cost in Templates.MiscCostTemplates)
+            foreach (TECMisc cost in Templates.MiscCostTemplates)
             {
                 MiscCostsCollection.Add(cost);
             }
@@ -1295,7 +1258,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.Catalogs.Devices.CollectionChanged -= Devices_CollectionChanged;
                 Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
                 Templates.Catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
-                Templates.ControlledScopeTemplates.CollectionChanged -= ControlledScopeTemplates_CollectionChanged;
                 Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
                 Templates.MiscWiringTemplates.CollectionChanged -= MiscWiringTemplates_CollectionChanged;
                 Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
@@ -1310,7 +1272,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.Catalogs.Devices.CollectionChanged += Devices_CollectionChanged;
             Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
             Templates.Catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
-            Templates.ControlledScopeTemplates.CollectionChanged += ControlledScopeTemplates_CollectionChanged;
             Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
             Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
             Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
@@ -1435,25 +1396,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 }
             }
         }
-
-        private void ControlledScopeTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    ControlledScopeItemsCollection.Add(item as TECControlledScope);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    ControlledScopeItemsCollection.Remove(item as TECControlledScope);
-                }
-            }
-        }
-
+        
         private void PanelTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
