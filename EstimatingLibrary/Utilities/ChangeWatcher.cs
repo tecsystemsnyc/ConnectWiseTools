@@ -25,9 +25,9 @@ namespace EstimatingLibrary.Utilities
                 registerTemplatesChanges(scopeManager as TECTemplates);
             }
         }
-        public ChangeWatcher(TECControlledScope controlledScope)
+        public ChangeWatcher(TECSystem system)
         {
-            registerControlledScope(controlledScope);
+            registerSystem(system);
         }
 
         private void registerBidChanges(TECBid Bid)
@@ -133,15 +133,15 @@ namespace EstimatingLibrary.Utilities
                 registerSubScope(subScope);
             }
         }
-        private void registerSystems(TECSystem system)
-        {
-            //SystemChanged
-            system.PropertyChanged += Object_PropertyChanged;
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                registerEquipment(equipment);
-            }
-        }
+        //private void registerSystems(TECSystem system)
+        //{
+        //    //SystemChanged
+        //    system.PropertyChanged += Object_PropertyChanged;
+        //    foreach (TECEquipment equipment in system.Equipment)
+        //    {
+        //        registerEquipment(equipment);
+        //    }
+        //}
         private void registerScope(TECScopeBranch branch)
         {
 
@@ -171,7 +171,7 @@ namespace EstimatingLibrary.Utilities
                 registerScope(child);
             }
         }
-        private void registerControlledScope(TECControlledScope scope)
+        private void registerSystem(TECSystem scope)
         {
             scope.PropertyChanged += Object_PropertyChanged;
             foreach (TECPanel panel in scope.Panels)
@@ -182,9 +182,9 @@ namespace EstimatingLibrary.Utilities
             {
                 registerController(controller);
             }
-            foreach (TECSystem system in scope.Systems)
+            foreach (TECEquipment equipment in scope.Equipment)
             {
-                registerSystems(system);
+                registerEquipment(equipment);
             }
         }
         private void registerController(TECController controller)
