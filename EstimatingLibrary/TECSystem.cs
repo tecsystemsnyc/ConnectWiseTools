@@ -236,7 +236,49 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("SystemInstances", temp, this);
             }
         }
-        
+
+        public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECEquipment item in Equipment)
+            {
+                foreach(TECCost cost in item.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach (TECController item in Controllers)
+            {
+                foreach (TECCost cost in item.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach (TECPanel item in Panels)
+            {
+                foreach (TECCost cost in item.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach (TECCost item in AssociatedCosts)
+            {
+                foreach (TECCost cost in item.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            return outCosts;
+        }
+
         public ObservableItemToInstanceList<TECScope> CharactersticInstances;
         private ChangeWatcher watcher;
         
@@ -344,19 +386,6 @@ namespace EstimatingLibrary
                 matCost += cost.Cost;
             }
             return matCost;
-        }
-        private double getLaborCost()
-        {
-            double cost = 0;
-            foreach (TECEquipment equipment in this.Equipment)
-            {
-                cost += equipment.LaborCost;
-            }
-            foreach (TECCost assCost in this.AssociatedCosts)
-            {
-                cost += assCost.Labor;
-            }
-            return cost;
         }
         
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
