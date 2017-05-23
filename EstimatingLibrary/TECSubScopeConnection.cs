@@ -74,6 +74,44 @@ namespace EstimatingLibrary
                 return outIOTypes;
             }
         }
+
+        override public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECConnectionType connectionType in ConnectionTypes)
+            {
+                foreach (TECCost cost in connectionType.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+                foreach (TECCost cost in connectionType.RatedCosts)
+                {
+                    TECCost ratedCost = new TECCost();
+                    ratedCost.Cost = cost.Cost * Length;
+                    ratedCost.Labor = cost.Labor * Length;
+                    outCosts.Add(ratedCost);
+                }
+            }
+            foreach (TECCost cost in ConduitType.AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            foreach (TECCost cost in ConduitType.RatedCosts)
+            {
+                TECCost ratedCost = new TECCost();
+                ratedCost.Cost = cost.Cost * Length;
+                ratedCost.Labor = cost.Labor * Length;
+                outCosts.Add(ratedCost);
+            }
+            return outCosts;
+        }
         #endregion
 
         #region Constructors
@@ -96,49 +134,6 @@ namespace EstimatingLibrary
             if (_subScope != null)
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
-        }
-
-        protected override double getElectricalCost()
-        {
-            double cost = 0;
-
-            foreach (TECConnectionType type in ConnectionTypes)
-            {
-                cost += Length * type.Cost;
-                foreach (TECCost associatedCost in type.AssociatedCosts)
-                {
-                    cost += associatedCost.Cost;
-                }
-            }
-            if (ConduitType != null)
-            {
-                cost += ConduitLength * ConduitType.Cost;
-                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    cost += associatedCost.Cost;
-                }
-            }
-            
-            return cost;
-        }
-        protected override double getElectricalLabor()
-        {
-            double laborHours = 0;
-            if (ConduitType != null)
-            {
-                laborHours += ConduitLength * ConduitType.Labor;
-                foreach (TECCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    laborHours += associatedCost.Labor;
-                }
-            }
-            foreach (TECConnectionType type in ConnectionTypes)
-            {
-                laborHours += Length * type.Labor;
-                foreach (TECCost associatedCost in type.AssociatedCosts)
-                { laborHours += associatedCost.Labor; }
-            }
-            return laborHours;
         }
         #endregion
 
