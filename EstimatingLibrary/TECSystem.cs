@@ -244,7 +244,6 @@ namespace EstimatingLibrary
                 return getCosts();
             }
         }
-
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
