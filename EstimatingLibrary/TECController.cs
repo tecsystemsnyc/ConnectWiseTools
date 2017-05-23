@@ -13,27 +13,16 @@ namespace EstimatingLibrary
         IsServer = 1, IsBMS, IsNetworked, IsStandalone
     };
 
-    public class TECController : TECScope, CostComponent
+    public class TECController : TECCost, CostComponent
     {
         #region Properties
         //---Stored---
-        private double _cost;
         private TECNetworkConnection _parentConnection;
         private ObservableCollection<TECConnection> _childrenConnections;
         private ObservableCollection<TECIO> _io;
         private TECManufacturer _manufacturer;
-        private ControllerType _type;
-
-        public double Cost
-        {
-            get { return _cost; }
-            set
-            {
-                var temp = this.Copy();
-                _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
-            }
-        }
+        private ControllerType _controllerType;
+        
         public TECNetworkConnection ParentConnection
         {
             get { return _parentConnection; }
@@ -82,14 +71,14 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public ControllerType Type
+        public ControllerType ControllerType
         {
-            get { return _type; }
+            get { return _controllerType; }
             set
             {
                 var temp = Copy();
-                _type = value;
-                NotifyPropertyChanged("Type", temp, this);
+                _controllerType = value;
+                NotifyPropertyChanged("ControllerType", temp, this);
                 RaisePropertyChanged("IsServer");
                 RaisePropertyChanged("IsBMS");
                 RaisePropertyChanged("IsNetworked");
@@ -97,22 +86,25 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
+        public List<TECCost> Costs
         {
-            get { return getMaterialCost(); }
+            get
+            {
+                return getCosts();
+            }
         }
-        public double LaborCost
+
+        private List<TECCost> getCosts()
         {
-            get { return getLaborCost(); }
+            var outCosts = new List<TECCost>();
+            outCosts.Add(this);
+            foreach(TECCost cost in Costs)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
         }
-        public double ElectricalCost
-        {
-            get { return getElectricalCost(); }
-        }
-        public double ElectricalLabor
-        {
-            get { return getElectricalLabor(); }
-        }
+
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
         {

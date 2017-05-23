@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECScope, CostComponent
+    public class TECPanel : TECCost, CostComponent
     {
         #region Properties
         private TECPanelType _type;
