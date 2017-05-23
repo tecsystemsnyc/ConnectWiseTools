@@ -397,14 +397,7 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        if (_isChild)
-                        {
-                            NotifyPropertyChanged("RemoveRelationship", this, item);
-                        }
-                        else
-                        {
-                            NotifyPropertyChanged("Remove", this, item);
-                        }
+                         NotifyPropertyChanged("Remove", this, item);
                     }
                 }
             }
