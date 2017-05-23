@@ -67,18 +67,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ControllerTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECControlledScope> ControlledScopeTemplates
-        {
-            get { return _controlledScopeTemplates; }
-            set
-            {
-                var temp = this.Copy();
-                ControlledScopeTemplates.CollectionChanged -= CollectionChanged;
-                _controlledScopeTemplates = value;
-                ControlledScopeTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ControlledScopeTemplates", temp, this);
-            }
-        }
         public ObservableCollection<TECMiscCost> MiscCostTemplates
         {
             get { return _miscCostTemplates; }
@@ -129,7 +117,6 @@ namespace EstimatingLibrary
             _controllerTemplates = new ObservableCollection<TECController>();
             _miscWiringTemplates = new ObservableCollection<TECMiscWiring>();
             _miscCostTemplates = new ObservableCollection<TECMiscCost>();
-            _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
             _panelTemplates = new ObservableCollection<TECPanel>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
@@ -139,7 +126,6 @@ namespace EstimatingLibrary
             MiscWiringTemplates.CollectionChanged += CollectionChanged;
             MiscCostTemplates.CollectionChanged += CollectionChanged;
             PanelTemplates.CollectionChanged += CollectionChanged;
-            ControlledScopeTemplates.CollectionChanged += CollectionChanged;
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
@@ -166,10 +152,6 @@ namespace EstimatingLibrary
             foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
                 PanelTemplates.Add(new TECPanel(panel));
-            }
-            foreach (TECControlledScope scope in templatesSource.ControlledScopeTemplates)
-            {
-                ControlledScopeTemplates.Add(new TECControlledScope(scope));
             }
         }
         #endregion //Constructors
@@ -220,10 +202,6 @@ namespace EstimatingLibrary
             { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring); }
             foreach (TECPanel panel in this.PanelTemplates)
             { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
-            foreach (TECControlledScope scope in this.ControlledScopeTemplates)
-            {
-                outTemplate.ControlledScopeTemplates.Add(scope.Copy() as TECControlledScope);
-            }
             return outTemplate;
         }
 

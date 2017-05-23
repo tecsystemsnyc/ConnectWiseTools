@@ -13,18 +13,6 @@ namespace EstimatingLibrary
     public class TECSystem : TECScope, CostComponent, PointComponent
     {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
         #region Properties
-
-        bool _isChild;
-        public bool IsChild
-        {
-            get { return _isChild; }
-            set
-            {
-                _isChild = value;
-                RaisePropertyChanged("IsChild");
-            }
-        }
-
         private ObservableCollection<TECEquipment> _equipment;
         public ObservableCollection<TECEquipment> Equipment
         {
@@ -270,10 +258,7 @@ namespace EstimatingLibrary
             }
             foreach (TECCost item in AssociatedCosts)
             {
-                foreach (TECCost cost in item.Costs)
-                {
-                    outCosts.Add(cost);
-                }
+                outCosts.Add(item);
             }
             return outCosts;
         }
@@ -284,13 +269,12 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECSystem(Guid guid, bool isChild = false) : base(guid)
+        public TECSystem(Guid guid) : base(guid)
         {
             _budgetPriceModifier = -1;
             base.PropertyChanged += TECSystem_PropertyChanged;
             
-
-            _isChild = isChild;
+            
             _equipment = new ObservableCollection<TECEquipment>();
 
             _controllers = new ObservableCollection<TECController>();
