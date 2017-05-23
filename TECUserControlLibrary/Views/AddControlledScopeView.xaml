@@ -15,76 +15,109 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
-            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TabControl Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Controlled Scope"/>
+                <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
+                          SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
+                          Grid.Column="1" Margin="2"
+                          VerticalContentAlignment="Center"/>
+            </Grid>
+            <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
+                                           SelectedItem="{Binding SelectedControlledScope}"
+                                           ViewModel="{Binding}"
+                                           Grid.Row="1"/>
+
+
+        </Grid>
+        <GridSplitter Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                                          HorizontalAlignment="Stretch"/>
+        <TabControl Grid.Column="2" 
                     SelectedIndex="{Binding ElementName=parent, Path=SelectedEditIndex, Converter={cnvt:EditIndexToIntegerConverter}}">
             <TabItem Header="Edit" Visibility="Collapsed">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Panels"/>
-                        <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
-                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
-                              Grid.Row="1"/>
-                    </Grid>
-                    <GridSplitter Grid.Row="0" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-                    <Grid Grid.Row="0" Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Controllers"/>
-                        <grids:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
-                    </Grid>
-                    <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-                    <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Systems"/>
-                        <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="180"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{Binding SelectedControlledScope.Name}"/>
+                    <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeItemIndex}}}"
+                          SelectedItem="{Binding ElementName=parent, Path=SelectedItemIndex}"
+                          Grid.Column="1" Margin="2"
+                          VerticalContentAlignment="Center"/>
+                    <TabControl Grid.Row="1" Grid.ColumnSpan="2"
+                                SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={cnvt:EditIndexToIntegerConverter}}">
+                        <TabItem Header="Equipment" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Systems"/>
+                                <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"/>
-                    </Grid>
-                    <GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Background="{DynamicResource TextInputBrush}"
-                      HorizontalAlignment="Stretch"/>
-                    <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Connections"/>
-                        <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Controllers" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Row="1" Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Panels"/>
+                                    <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
+                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
+                              Grid.Row="1"/>
+                                </Grid>
+                                <GridSplitter Grid.Row="0" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
+                                          HorizontalAlignment="Stretch"/>
+                                <Grid Grid.Row="0" Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Controllers"/>
+                                    <grids:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Electrical" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Connections"/>
+                                <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                   Grid.Row="1"/>
-                    </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
             <TabItem Header="Remove" Visibility="Collapsed">
@@ -115,34 +148,11 @@
                             Background="{DynamicResource AlertActionBrush}"
                             Margin="2"/>
                     </Grid>
-                    
+
                 </Grid>
             </TabItem>
         </TabControl>
-        <Grid Grid.RowSpan="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Controlled Scope"/>
-                <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
-                          SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
-                          Grid.Column="1" Margin="2"
-                          VerticalContentAlignment="Center"/>
-            </Grid>
-            <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
-                                           SelectedItem="{Binding SelectedControlledScope}"
-                                           ViewModel="{Binding}"
-                                           Grid.Row="1"/>
-           
-            
-        </Grid>
-        <Canvas Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
+        <Canvas Grid.Column="2" Background="{DynamicResource SectionBackgroundBrush}"
                 Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 

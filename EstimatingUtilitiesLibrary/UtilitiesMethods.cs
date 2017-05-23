@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using EstimatingLibrary.Interfaces;
+using System.Collections;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -297,5 +298,6 @@ namespace EstimatingUtilitiesLibrary
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
     public enum ControlledScopeEditIndex { Edit, Qty };
+    public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
 }

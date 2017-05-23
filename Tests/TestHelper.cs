@@ -7,6 +7,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Collections;
 
 namespace Tests
 {
@@ -679,23 +680,23 @@ namespace Tests
             //Conduit Types
             var conduitType1 = new TECConduitType();
             conduitType1.Name = "Test Conduit 1";
-            conduitType1.Cost = 13;
-            conduitType1.Labor = 14;
+            conduitType1.Cost = RandomInt(10, 100);
+            conduitType1.Labor = RandomInt(10, 100);
 
             outCatalogs.ConduitTypes.Add(conduitType1);
 
             var conduitType2 = new TECConduitType();
             conduitType2.Name = "Test Conduit 2";
-            conduitType2.Cost = 13;
-            conduitType2.Labor = 14;
+            conduitType2.Cost = RandomInt(10, 100);
+            conduitType2.Labor = RandomInt(10, 100);
 
             outCatalogs.ConduitTypes.Add(conduitType2);
 
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
-            connectionType1.Cost = 10;
-            connectionType1.Labor = 12;
+            connectionType1.Cost = RandomInt(10, 100);
+            connectionType1.Labor = RandomInt(10, 100);
 
             var connectionType2 = new TECConnectionType();
             connectionType2.Name = "FourC18";
@@ -706,7 +707,7 @@ namespace Tests
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
-            manufacturer1.Multiplier = 0.8;
+            manufacturer1.Multiplier = RandomInt(0, 1);
             
             outCatalogs.Manufacturers.Add(manufacturer1);
 
@@ -716,7 +717,7 @@ namespace Tests
             TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
-            device1.Cost = 987.6;
+            device1.Cost = RandomInt(10, 100);
             device1.Tags.Add(tag1);
 
             outCatalogs.Devices.Add(device1);
@@ -724,13 +725,13 @@ namespace Tests
             //IO Modules
             TECIOModule testIOModule = new TECIOModule();
             testIOModule.Name = "Test IO Module";
-            testIOModule.Cost = 42;
+            testIOModule.Cost = RandomInt(10, 100);
             testIOModule.Manufacturer = manufacturer1;
             outCatalogs.IOModules.Add(testIOModule);
 
             //Panel Types
             TECPanelType panelType = new TECPanelType();
-            panelType.Cost = 123.4;
+            panelType.Cost = RandomInt(10, 100);
             panelType.Name = "Test Panel Type";
 
             outCatalogs.PanelTypes.Add(panelType);
@@ -756,6 +757,72 @@ namespace Tests
             panel.Controllers.Add(controller);
 
             return outScope;
+        }
+        public static TECDevice CreateTestDevice(TECCatalogs catalogs)
+        {
+
+            var connectionTypes = new ObservableCollection<TECConnectionType>();
+            connectionTypes.Add(catalogs.ConnectionTypes.RandomObject());
+            var manufacturer = catalogs.Manufacturers.RandomObject();
+
+            double cost = (new Random()).Next(0, 1000) / (new Random()).Next(0, 10);
+
+            var assCosts = new ObservableCollection<TECAssociatedCost>();
+            int costNum = (new Random()).Next(1, 10);
+            for(int x = 0; x < costNum; x++)
+            {
+                assCosts.Add(catalogs.AssociatedCosts.RandomObject());
+            }
+
+            TECDevice device = new TECDevice(connectionTypes, manufacturer);
+            device.Cost = cost;
+            device.AssociatedCosts = assCosts;
+            return device;
+        }
+        public static TECSubScope CreateTestSubScope(TECCatalogs catalogs)
+        {
+            var device = catalogs.Devices.RandomObject();
+            var point = new TECPoint();
+            point.Type = PointTypes.AI;
+
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            subScope.Points.Add(point);
+            return subScope;
+        }
+        public static TECEquipment CreateTestEquipment(TECCatalogs catalogs)
+        {
+            var equipment = new TECEquipment();
+
+            int subNumber = (new Random()).Next(1, 10);
+            for(int x = 0; x < subNumber; x++)
+            {
+                equipment.SubScope.Add(CreateTestSubScope(catalogs));
+            }
+            
+            return equipment;
+        }
+        public static TECController CreateTestController(TECCatalogs catalogs)
+        {
+            var manufacturer = catalogs.Manufacturers.RandomObject();
+
+            var controlller = new TECController(manufacturer);
+            return controlller;
+        }
+
+        public static T RandomObject<T>(this ObservableCollection<T> list)
+        {
+            int index = 0;
+            int maxIndex = list.Count - 1;
+            Random rand = new Random();
+            index = rand.Next(0, maxIndex);
+            return list[index];
+            
+        }
+        public static int RandomInt(int min, int max)
+        {
+            Random rand = new Random();
+            return rand.Next(min, max);
         }
     }
 }
