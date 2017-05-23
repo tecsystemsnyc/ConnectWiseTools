@@ -1628,7 +1628,7 @@ namespace Tests
         public void Save_Templates_Add_MiscCost()
         {
             //Act
-            TECMiscCost expectedCost = new TECMiscCost();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -1639,8 +1639,8 @@ namespace Tests
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1659,14 +1659,14 @@ namespace Tests
         public void Save_Templates_Remove_MiscCost()
         {
             //Act
-            TECMiscCost costToRemove = templates.MiscCostTemplates[0];
+            TECMisc costToRemove = templates.MiscCostTemplates[0];
             templates.MiscCostTemplates.Remove(costToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -1678,14 +1678,14 @@ namespace Tests
         public void Save_Templates_MiscCost_Name()
         {
             //Act
-            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1702,14 +1702,14 @@ namespace Tests
         public void Save_Templates_MiscCost_Cost()
         {
             //Act
-            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1729,7 +1729,7 @@ namespace Tests
         public void Save_Templates_Add_MiscWiring()
         {
             //Act
-            TECMiscWiring expectedCost = new TECMiscWiring();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -1739,8 +1739,8 @@ namespace Tests
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscWiringTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1759,14 +1759,14 @@ namespace Tests
         public void Save_Templates_Remove_MiscWiring()
         {
             //Act
-            TECMiscWiring costToRemove = templates.MiscWiringTemplates[0];
+            TECMisc costToRemove = templates.MiscWiringTemplates[0];
             templates.MiscWiringTemplates.Remove(costToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            foreach (TECMisc cost in actualTemplates.MiscWiringTemplates)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -1778,14 +1778,14 @@ namespace Tests
         public void Save_Templates_MiscWiring_Name()
         {
             //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            TECMisc expectedCost = templates.MiscWiringTemplates[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscWiringTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1802,14 +1802,14 @@ namespace Tests
         public void Save_Templates_MiscWiring_Cost()
         {
             //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            TECMisc expectedCost = templates.MiscWiringTemplates[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscWiringTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1826,14 +1826,14 @@ namespace Tests
         public void Save_Templates_MiscWiring_Quantity()
         {
             //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
+            TECMisc expectedCost = templates.MiscWiringTemplates[0];
             expectedCost.Quantity = 492;
 
             EstimatingLibraryDatabase.Update(path, testStack);
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscWiringTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2125,23 +2125,22 @@ namespace Tests
         public void Save_Templates_Add_ControlledScope()
         {
             //Act
-            TECControlledScope expectedScope = new TECControlledScope();
+            TECSystem expectedScope = new TECSystem();
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
-            templates.ControlledScopeTemplates.Add(expectedScope);
+            templates.SystemTemplates.Add(expectedScope);
 
-            var scopeSystem = new TECSystem();
-            scopeSystem.Name = "Test Scope System";
-            scopeSystem.Description = "Test scope system description";
-            scopeSystem.Equipment.Add(new TECEquipment());
-            scopeSystem.Equipment[0].SubScope.Add(new TECSubScope());
+            var scopeEquipment = new TECEquipment();
+            scopeEquipment.Name = "Test Scope System";
+            scopeEquipment.Description = "Test scope system description";
+            scopeEquipment.SubScope.Add(new TECSubScope());
 
-            expectedScope.Systems.Add(scopeSystem);
+            expectedScope.Equipment.Add(scopeEquipment);
 
             var scopeController = new TECController(templates.Catalogs.Manufacturers[0]);
             scopeController.Name = "Test Scope Controller";
             expectedScope.Controllers.Add(scopeController);
-            scopeController.AddSubScope(scopeSystem.Equipment[0].SubScope[0]);
+            scopeController.AddSubScope(scopeEquipment.SubScope[0]);
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             scopePanel.Name = "Test Scope Name";
@@ -2151,8 +2150,8 @@ namespace Tests
 
             TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
-            TECControlledScope actualScope = null;
-            foreach (TECControlledScope scope in actualTemplates.ControlledScopeTemplates)
+            TECSystem actualScope = null;
+            foreach (TECSystem scope in actualTemplates.SystemTemplates)
             {
                 if (expectedScope.Guid == scope.Guid)
                 {
@@ -2174,28 +2173,28 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedScope.Name, actualScope.Name);
             Assert.AreEqual(expectedScope.Description, actualScope.Description);
-            Assert.AreEqual(expectedScope.Systems.Count, actualScope.Systems.Count);
+            Assert.AreEqual(expectedScope.Equipment.Count, actualScope.Equipment.Count);
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Controllers[0].ChildrenConnections.Count, actualScope.Controllers[0].ChildrenConnections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Systems[0].Equipment[0].SubScope[0]);
+            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Equipment[0].SubScope[0]);
         }
 
         [TestMethod]
         public void Save_Templates_Remove_ControlledScope()
         {
             //Act
-            int oldNumScope = templates.ControlledScopeTemplates.Count;
-            TECControlledScope scopeToRemove = templates.ControlledScopeTemplates[0];
+            int oldNumScope = templates.SystemTemplates.Count;
+            TECSystem scopeToRemove = templates.SystemTemplates[0];
 
-            templates.ControlledScopeTemplates.Remove(scopeToRemove);
+            templates.SystemTemplates.Remove(scopeToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack);
 
             TECTemplates expectedTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECControlledScope scope in templates.ControlledScopeTemplates)
+            foreach (TECSystem scope in templates.SystemTemplates)
             {
                 if (scope.Guid == scopeToRemove.Guid)
                 {
@@ -2203,7 +2202,7 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual((oldNumScope - 1), templates.ControlledScopeTemplates.Count);
+            Assert.AreEqual((oldNumScope - 1), templates.SystemTemplates.Count);
         }
 
         #endregion

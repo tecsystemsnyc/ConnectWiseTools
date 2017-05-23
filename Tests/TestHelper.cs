@@ -33,53 +33,8 @@ namespace Tests
             bid.Parameters.IsTaxExempt = true;
 
             //Bid Labor
-            bid.Labor.PMCoef = 0.1;
-            bid.Labor.PMRate = 0.11;
-            bid.Labor.PMExtraHours = 1.1;
-
-            bid.Labor.ENGCoef = 0.2;
-            bid.Labor.ENGRate = 0.22;
-            bid.Labor.ENGExtraHours = 2.2;
-
-            bid.Labor.CommCoef = 0.3;
-            bid.Labor.CommRate = 0.33;
-            bid.Labor.CommExtraHours = 3.3;
-
-            bid.Labor.SoftCoef = 0.4;
-            bid.Labor.SoftRate = 0.44;
-            bid.Labor.SoftExtraHours = 4.4;
-
-            bid.Labor.GraphCoef = 0.5;
-            bid.Labor.GraphRate = 0.55;
-            bid.Labor.GraphExtraHours = 5.5;
-
-            bid.Labor.ElectricalRate = 0.6;
-            bid.Labor.ElectricalSuperRate = 0.66;
-
-            bid.Labor.ElectricalNonUnionRate = 0.7;
-            bid.Labor.ElectricalSuperNonUnionRate = 0.77;
-
-            bid.Labor.ElectricalIsOnOvertime = true;
-            bid.Labor.ElectricalIsUnion = true;
-
-            //Tags
-            var tag1 = new TECTag();
-            tag1.Text = "Tag 1";
-            var tag2 = new TECTag();
-            tag2.Text = "Test Tag";
-
-            bid.Catalogs.Tags.Add(tag1);
-            bid.Catalogs.Tags.Add(tag2);
-
-
-            //Associated Costs
-            var testCost = new TECCost();
-            testCost.Name = "Test Cost";
-            bid.Catalogs.AssociatedCosts.Add(testCost);
-
-            var testCost2 = new TECCost();
-            testCost2.Name = "Other Cost";
-            bid.Catalogs.AssociatedCosts.Add(testCost2);
+            bid.Labor = CreateTestLabor();
+            bid.Catalogs = CreateTestCatalogs();
             
             //Locations
             var cellar = new TECLocation();
@@ -96,153 +51,7 @@ namespace Tests
             bid.Locations.Add(location2);
             bid.Locations.Add(location3);
 
-            //Systems
-            var system1 = new TECSystem();
-            system1.Name = "System 1";
-            system1.Description = "Locations all the way";
-            system1.BudgetPriceModifier = 234.5;
-            system1.Quantity = 2345;
-            system1.Location = location1;
-
-            system1.Tags.Add(tag1);
-
-            var system2 = new TECSystem();
-            system2.Name = "System 2";
-            system2.Description = "Description 2";
-            system2.BudgetPriceModifier = 234.52;
-            system2.Quantity = 23452;
-            system2.Location = location2;
-
-            var system3 = new TECSystem();
-            system3.Name = "System 3";
-            system3.Description = "No Location";
-            system3.BudgetPriceModifier = 349;
-
-            //Add to bid
-            bid.Systems.Add(system1);
-            bid.Systems.Add(system2);
-            bid.Systems.Add(system3);
-
-            //Equipment
-            var equipment1 = new TECEquipment();
-            equipment1.Name = "Equipment 1";
-            equipment1.Description = "Description 1";
-            equipment1.BudgetUnitPrice = 123.4;
-            equipment1.Quantity = 1234;
-            equipment1.Location = location1;
-
-            equipment1.Tags.Add(tag1);
-
-            var equipment2 = new TECEquipment();
-            equipment1.Name = "Equipment 2";
-            equipment1.Description = "Description 2";
-            equipment1.BudgetUnitPrice = 0;
-
-            system1.Equipment.Add(equipment1);
-            system3.Equipment.Add(equipment2);
-
-            //SubScope
-            var subScope1 = new TECSubScope();
-            subScope1.Name = "SubScope 1";
-            subScope1.Description = "Description 1";
-            subScope1.Quantity = 654;
-            subScope1.Location = location3;
-            subScope1.AssociatedCosts.Add(testCost);
-            subScope1.AssociatedCosts.Add(testCost);
-            subScope1.AssociatedCosts.Add(testCost2);
-            subScope1.Tags.Add(tag1);
-
-            var subScope2 = new TECSubScope();
-            subScope2.Name = "Empty SubScope";
-            subScope2.Description = "Description 2";
-            subScope2.AssociatedCosts.Add(testCost);
-            equipment1.SubScope.Add(subScope1);
-            equipment2.SubScope.Add(subScope2);
-
-            //Conduit Types
-            var conduitType1 = new TECConduitType();
-            conduitType1.Name = "Test Conduit 1";
-            conduitType1.Cost = 13;
-            conduitType1.Labor = 14;
-
-            bid.Catalogs.ConduitTypes.Add(conduitType1);
-
-            var conduitType2 = new TECConduitType();
-            conduitType2.Name = "Test Conduit 2";
-            conduitType2.Cost = 13;
-            conduitType2.Labor = 14;
-
-            bid.Catalogs.ConduitTypes.Add(conduitType2);
-
-            //ConnectionTypes
-            var connectionType1 = new TECConnectionType();
-            connectionType1.Name = "ThreeC18";
-            connectionType1.Cost = 10;
-            connectionType1.Labor = 12;
-
-            var connectionType2 = new TECConnectionType();
-            connectionType2.Name = "FourC18";
-
-            bid.Catalogs.ConnectionTypes.Add(connectionType1);
-            bid.Catalogs.ConnectionTypes.Add(connectionType2);
-
-            //Manufacturers
-            var manufacturer1 = new TECManufacturer();
-            manufacturer1.Name = "Test";
-            manufacturer1.Multiplier = 0.8;
-            bid.Catalogs.Manufacturers.Add(manufacturer1);
-
-            //Devices
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
-            types.Add(connectionType1);
-            TECDevice device1 = new TECDevice(Guid.NewGuid(),
-                types,
-                manufacturer1);
-            device1.Name = "Device 1";
-            device1.Description = "Description 1";
-            device1.Cost = 987.6;
-            device1.Tags.Add(tag1);
-
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
-            subScope1.Devices.Add(device1);
             
-
-            //Points
-            var point1 = new TECPoint();
-            point1.Name = "Point 1";
-            point1.Description = "Description 1";
-            point1.Type = PointTypes.Serial;
-            point1.Quantity = 321;
-            point1.Tags.Add(tag1);
-
-            subScope1.Points.Add(point1);
-
-            ////VisualScope
-            //var vScope = new TECVisualScope(system1, 4.2, 4.2);
-
-
-            ////Drawings
-            //var drawing1 = PDFConverter.convertPDFToDrawing(TestPDF1);
-            //drawing1.Name = "Test";
-            //drawing1.Description = "Desc";
-
-            //bid.Drawings.Add(drawing1);
-
-            //drawing1.Pages[0].PageScope.Add(vScope);
-
-            //Devices Catalog
-            ObservableCollection<TECConnectionType> contypes = new ObservableCollection<TECConnectionType>();
-            types.Add(connectionType2);
-            TECDevice deviceC1 = new TECDevice(Guid.NewGuid(), contypes, manufacturer1);
-            deviceC1.Name = "Device C1";
-            deviceC1.Description = "Description C1";
-            deviceC1.Cost = 987.6;
-
-            deviceC1.Manufacturer = manufacturer1;
-            bid.Catalogs.Devices.Add(deviceC1);
-            bid.Catalogs.Devices.Add(device1);
-
             //Scope Branches
             var branch1 = new TECScopeBranch();
             branch1.Name = "Branch 1";
@@ -271,11 +80,10 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid(), manufacturer1);
+            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.Manufacturers.RandomObject());
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             expectedController.Cost = 42.6;
-            expectedController.Manufacturer = manufacturer1;
 
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;
@@ -308,7 +116,7 @@ namespace Tests
             propScope.Notes.Add(propNote);
 
             //Misc Cost
-            TECMiscCost cost = new TECMiscCost();
+            TECMisc cost = new TECMisc();
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
@@ -316,46 +124,107 @@ namespace Tests
             bid.MiscCosts.Add(cost);
 
             //Misc wiring
-            TECMiscWiring wiring = new TECMiscWiring();
+            TECMisc wiring = new TECMisc();
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
 
             bid.MiscWiring.Add(wiring);
-
-            //Panel Types
-            TECPanelType panelType = new TECPanelType();
-            panelType.Cost = 123.4;
-            panelType.Name = "Test Panel Type";
-
-            bid.Catalogs.PanelTypes.Add(panelType);
-
+            
             //Panels
-            TECPanel panel = new TECPanel(panelType);
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
             panel.Name = "Test Panel";
             panel.Controllers.Add(expectedController);
-            panel.AssociatedCosts.Add(testCost);
-            panel.AssociatedCosts.Add(testCost);
+            panel.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            panel.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
 
             bid.Panels.Add(panel);
-
-            //Connections
-            TECConnection testConnection = expectedController.AddSubScope(subScope1);
-            testConnection.ConduitType = conduitType1;
-            testConnection.Length = 42;
-
+            
             //IO Modules
             TECIOModule testIOModule = new TECIOModule();
             testIOModule.Name = "Test IO Module";
             testIOModule.Cost = 42;
-            testIOModule.Manufacturer = manufacturer1;
+            testIOModule.Manufacturer = bid.Catalogs.Manufacturers.RandomObject();
             bid.Catalogs.IOModules.Add(testIOModule);
             ioToAdd.IOModule = testIOModule;
 
-            var controlledScope = CreateTestControlledScope(bid.Catalogs);
-            bid.ControlledScope.Add(controlledScope);
+            //Systems
+            var system1 = CreateTestSystem(bid.Catalogs);
+            system1.Name = "System 1";
+            system1.Description = "Locations all the way";
+            system1.BudgetPriceModifier = 234.5;
+            system1.Quantity = 2345;
+            system1.Location = location1;
 
-            //Bid
+            system1.Tags.Add(bid.Catalogs.Tags.RandomObject());
+
+            var system2 = new TECSystem();
+            system2.Name = "System 2";
+            system2.Description = "Description 2";
+            system2.BudgetPriceModifier = 234.52;
+            system2.Quantity = 23452;
+            system2.Location = location2;
+
+            var system3 = new TECSystem();
+            system3.Name = "System 3";
+            system3.Description = "No Location";
+            system3.BudgetPriceModifier = 349;
+
+            bid.Systems.Add(system1);
+            bid.Systems.Add(system2);
+            bid.Systems.Add(system3);
+            
+            //Equipment
+            var equipment1 = new TECEquipment();
+            equipment1.Name = "Equipment 1";
+            equipment1.Description = "Description 1";
+            equipment1.BudgetUnitPrice = 123.4;
+            equipment1.Quantity = 1234;
+            equipment1.Location = location1;
+
+            equipment1.Tags.Add(bid.Catalogs.Tags.RandomObject());
+
+            var equipment2 = new TECEquipment();
+            equipment1.Name = "Equipment 2";
+            equipment1.Description = "Description 2";
+            equipment1.BudgetUnitPrice = 0;
+
+            system1.Equipment.Add(equipment1);
+            system3.Equipment.Add(equipment2);
+
+            //SubScope
+            var subScope1 = new TECSubScope();
+            subScope1.Name = "SubScope 1";
+            subScope1.Description = "Description 1";
+            subScope1.Quantity = 654;
+            subScope1.Location = location3;
+            subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            subScope1.Tags.Add(bid.Catalogs.Tags.RandomObject());
+
+            var subScope2 = new TECSubScope();
+            subScope2.Name = "Empty SubScope";
+            subScope2.Description = "Description 2";
+            subScope2.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            equipment1.SubScope.Add(subScope1);
+            equipment2.SubScope.Add(subScope2);
+            
+            //Points
+            var point1 = new TECPoint();
+            point1.Name = "Point 1";
+            point1.Description = "Description 1";
+            point1.Type = PointTypes.Serial;
+            point1.Quantity = 321;
+            point1.Tags.Add(bid.Catalogs.Tags.RandomObject());
+
+            subScope1.Points.Add(point1);
+            
+            //Connections
+            TECConnection testConnection = expectedController.AddSubScope(subScope1);
+            testConnection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            testConnection.Length = 42;
+
             return bid;
         }
 
@@ -364,20 +233,7 @@ namespace Tests
             TECTemplates templates = new TECTemplates();
 
             //Labor
-            templates.Labor.PMCoef = 1.1;
-            templates.Labor.PMRate = 2.2;
-            templates.Labor.ENGCoef = 3.3;
-            templates.Labor.ENGRate = 4.4;
-            templates.Labor.CommCoef = 5.5;
-            templates.Labor.CommRate = 6.6;
-            templates.Labor.SoftCoef = 7.7;
-            templates.Labor.SoftRate = 8.8;
-            templates.Labor.GraphCoef = 9.9;
-            templates.Labor.GraphRate = 10.10;
-            templates.Labor.ElectricalRate = 11.11;
-            templates.Labor.ElectricalSuperRate = 12.12;
-            templates.Labor.ElectricalNonUnionRate = 13.13;
-            templates.Labor.ElectricalSuperNonUnionRate = 14.14;
+            templates.Labor = CreateTestLabor();
 
             //Tags
             TECTag testTag = new TECTag();
@@ -569,7 +425,7 @@ namespace Tests
             templates.ControllerTemplates.Add(expectedController);
 
             //Misc Cost
-            TECMiscCost cost = new TECMiscCost();
+            TECMisc cost = new TECMisc();
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
@@ -577,7 +433,7 @@ namespace Tests
             templates.MiscCostTemplates.Add(cost);
 
             //Misc wiring
-            TECMiscWiring wiring = new TECMiscWiring();
+            TECMisc wiring = new TECMisc();
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
@@ -612,11 +468,11 @@ namespace Tests
             //controlledController.ChildrenConnections.Add(controlledConnection);
 
             //Controlled Scope
-            TECControlledScope testConScope = new TECControlledScope();
+            TECSystem testConScope = CreateTestSystem(templates.Catalogs);
             testConScope.Name = "Test Controlled Scope";
             testConScope.Description = "Test Description";
-            var controlledScopeSystem = controlledSystem.DragDropCopy() as TECSystem;
-            testConScope.Systems.Add(controlledScopeSystem);
+            var controlledScopeEquipment = equipment.DragDropCopy() as TECEquipment;
+            testConScope.Equipment.Add(controlledScopeEquipment);
             var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
             controlledScopePanel.Type = panelType;
             testConScope.Panels.Add(controlledScopePanel);
@@ -627,7 +483,7 @@ namespace Tests
             connection.Length = 42;
             controlledScopeController.ChildrenConnections[0].ConduitType = testConduitType;
 
-            templates.ControlledScopeTemplates.Add(testConScope);
+            templates.SystemTemplates.Add(testConScope);
 
             return templates;
         }
@@ -740,20 +596,21 @@ namespace Tests
 
         }
 
-        public static TECControlledScope CreateTestControlledScope(TECCatalogs catalogs)
+        public static TECSystem CreateTestSystem(TECCatalogs catalogs)
         {
-            TECControlledScope outScope = new TECControlledScope();
+            TECSystem outScope = new TECSystem();
 
             var panel = new TECPanel(catalogs.PanelTypes[0]);
 
             outScope.Panels.Add(panel);
 
-            var system = new TECSystem();
-            outScope.Systems.Add(system);
+            var equipment = CreateTestEquipment(catalogs);
+            outScope.Equipment.Add(equipment);
 
             var controller = new TECController(catalogs.Manufacturers[0]);
             outScope.Controllers.Add(controller);
 
+            ConnectEquipmentToController(equipment, controller);
             panel.Controllers.Add(controller);
 
             return outScope;
@@ -809,6 +666,39 @@ namespace Tests
             var controlller = new TECController(manufacturer);
             return controlller;
         }
+        public static TECLabor CreateTestLabor()
+        {
+            var labor = new TECLabor();
+            labor.PMCoef = 0.1;
+            labor.PMRate = 0.11;
+            labor.PMExtraHours = 1.1;
+
+            labor.ENGCoef = 0.2;
+            labor.ENGRate = 0.22;
+            labor.ENGExtraHours = 2.2;
+
+            labor.CommCoef = 0.3;
+            labor.CommRate = 0.33;
+            labor.CommExtraHours = 3.3;
+
+            labor.SoftCoef = 0.4;
+            labor.SoftRate = 0.44;
+            labor.SoftExtraHours = 4.4;
+
+            labor.GraphCoef = 0.5;
+            labor.GraphRate = 0.55;
+            labor.GraphExtraHours = 5.5;
+
+            labor.ElectricalRate = 0.6;
+            labor.ElectricalSuperRate = 0.66;
+
+            labor.ElectricalNonUnionRate = 0.7;
+            labor.ElectricalSuperNonUnionRate = 0.77;
+
+            labor.ElectricalIsOnOvertime = true;
+            labor.ElectricalIsUnion = true;
+            return labor;
+        }
 
         public static T RandomObject<T>(this ObservableCollection<T> list)
         {
@@ -823,6 +713,13 @@ namespace Tests
         {
             Random rand = new Random();
             return rand.Next(min, max);
+        }
+        public static void ConnectEquipmentToController(TECEquipment equipment, TECController controller)
+        {
+            foreach(TECSubScope subscope in equipment.SubScope)
+            {
+                controller.AddSubScope(subscope);
+            }
         }
     }
 }

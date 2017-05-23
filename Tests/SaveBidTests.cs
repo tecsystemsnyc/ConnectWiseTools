@@ -2839,7 +2839,7 @@ namespace Tests
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMiscCost expectedCost = new TECMiscCost();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2850,8 +2850,8 @@ namespace Tests
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2870,7 +2870,7 @@ namespace Tests
         public void Save_Bid_Remove_MiscCost()
         {
             //Act
-            TECMiscCost costToRemove = bid.MiscCosts[0];
+            TECMisc costToRemove = bid.MiscCosts[0];
             bid.MiscCosts.Remove(costToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -2878,7 +2878,7 @@ namespace Tests
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
             //Assert
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -2890,15 +2890,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Name()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2915,15 +2915,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Cost()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2940,15 +2940,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Quantity()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Quantity = 492;
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2967,7 +2967,7 @@ namespace Tests
         public void Save_Bid_Add_MiscWiring()
         {
             //Act
-            TECMiscWiring expectedCost = new TECMiscWiring();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2978,8 +2978,8 @@ namespace Tests
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscWiring)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2998,7 +2998,7 @@ namespace Tests
         public void Save_Bid_Remove_MiscWiring()
         {
             //Act
-            TECMiscWiring costToRemove = bid.MiscWiring[0];
+            TECMisc costToRemove = bid.MiscWiring[0];
             bid.MiscWiring.Remove(costToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -3006,7 +3006,7 @@ namespace Tests
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
             //Assert
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            foreach (TECMisc cost in actualBid.MiscWiring)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -3018,15 +3018,15 @@ namespace Tests
         public void Save_Bid_MiscWiring_Name()
         {
             //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            TECMisc expectedCost = bid.MiscWiring[0];
             expectedCost.Name = "Test Save Cost Name";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscWiring)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3043,15 +3043,15 @@ namespace Tests
         public void Save_Bid_MiscWiring_Cost()
         {
             //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            TECMisc expectedCost = bid.MiscWiring[0];
             expectedCost.Cost = 489.1238;
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscWiring)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3068,15 +3068,15 @@ namespace Tests
         public void Save_Bid_MiscWiring_Quantity()
         {
             //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
+            TECMisc expectedCost = bid.MiscWiring[0];
             expectedCost.Quantity = 492;
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
 
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscWiring)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
