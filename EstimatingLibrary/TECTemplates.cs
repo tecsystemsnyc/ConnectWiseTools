@@ -15,7 +15,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECController> _controllerTemplates;
-        private ObservableCollection<TECControlledScope> _controlledScopeTemplates;
         private ObservableCollection<TECMiscCost> _miscCostTemplates;
         private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;

@@ -303,21 +303,21 @@ namespace EstimatingLibrary.Utilities
             
         }
 
-        private void handleControlledScope(TECControlledScope scope, Change change)
+        private void handleSystem(TECSystem sys, Change change)
         {
-            foreach (TECSystem system in scope.Systems)
+            foreach (TECEquipment equip in sys.Equipment)
             {
                 if (change == Change.Add)
                 {
-                    system.PropertyChanged += Object_PropertyChanged;
+                    equip.PropertyChanged += Object_PropertyChanged;
                 }
                 else if (change == Change.Remove)
                 {
-                    system.PropertyChanged -= Object_PropertyChanged;
+                    equip.PropertyChanged -= Object_PropertyChanged;
                 }
-                handleSystemChildren(system, change);
+                handleEquipmentChildren(equip, change);
             }
-            foreach (TECController controller in scope.Controllers)
+            foreach (TECController controller in sys.Controllers)
             {
                 if (change == Change.Add)
                 {
@@ -328,7 +328,7 @@ namespace EstimatingLibrary.Utilities
                     controller.PropertyChanged -= Object_PropertyChanged;
                 }
             }
-            foreach (TECPanel panel in scope.Panels)
+            foreach (TECPanel panel in sys.Panels)
             {
                 if (change == Change.Add)
                 {
@@ -339,7 +339,7 @@ namespace EstimatingLibrary.Utilities
                     panel.PropertyChanged -= Object_PropertyChanged;
                 }
             }
-            foreach(TECControlledScope instance in scope.ScopeInstances)
+            foreach(TECSystem instance in sys.SystemInstances)
             {
                 if (change == Change.Add)
                 {
