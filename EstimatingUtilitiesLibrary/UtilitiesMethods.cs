@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using EstimatingLibrary.Interfaces;
+using System.Collections;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -287,6 +288,22 @@ namespace EstimatingUtilitiesLibrary
             }
             return containsAll;
         }
+        public static int randomIndex<T>(T list)
+        {
+            int index = 0;
+            var inList = list as IList;
+            if(inList != null)
+            {
+                int maxIndex = inList.Count - 1;
+                Random rand = new Random();
+                index = rand.Next(0, maxIndex);
+                return index;
+            }
+            else
+            {
+                throw new Exception("list is not IList");
+            }
+        }
 
     }
 
@@ -297,5 +314,6 @@ namespace EstimatingUtilitiesLibrary
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
     public enum ControlledScopeEditIndex { Edit, Qty };
+    public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
 }

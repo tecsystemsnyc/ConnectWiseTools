@@ -47,6 +47,16 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("SelectedEditIndex", typeof(ControlledScopeEditIndex),
               typeof(AddControlledScopeView), new PropertyMetadata(default(ControlledScopeEditIndex)));
 
+        public ControlledScopeItemIndex SelectedItemIndex
+        {
+            get { return (ControlledScopeItemIndex)GetValue(SelectedItemIndexProperty); }
+            set { SetValue(SelectedItemIndexProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedItemIndexProperty =
+            DependencyProperty.Register("SelectedItemIndex", typeof(ControlledScopeItemIndex),
+              typeof(AddControlledScopeView), new PropertyMetadata(default(ControlledScopeItemIndex)));
+        
         public AddControlledScopeView()
         {
             InitializeComponent();
