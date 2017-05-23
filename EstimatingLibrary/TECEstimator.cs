@@ -20,10 +20,8 @@ namespace EstimatingLibrary
         const double ZERO = 0;
 
         #region Cost Base
-        private double tecLaborHours;
-        private double tecMaterialCost;
-        private double electricalLaborHours;
-        private double electricalMaterialCost;
+        private TECCost tecCost;
+        private TECCost electricalCost;
         private int pointNumber;
         #endregion
 
@@ -117,7 +115,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return tecMaterialCost;
+                return tecCost.Cost;
             }
         }
         public double TECShipping
@@ -143,7 +141,7 @@ namespace EstimatingLibrary
 
         public double ElectricalLaborHours
         {
-            get { return electricalLaborHours; }
+            get { return electricalCost.Labor; }
         }
         public double ElectricalLaborCost
         {
@@ -170,7 +168,7 @@ namespace EstimatingLibrary
         public double ElectricalMaterialCost
         {
             get
-            { return electricalMaterialCost; }
+            { return electricalCost.Cost; }
         }
         public double ElectricalShipping
         {
@@ -304,10 +302,8 @@ namespace EstimatingLibrary
         private void getInitialValues()
         {
             pointNumber = 0;
-            tecLaborHours = 0;
-            tecMaterialCost = 0;
-            electricalLaborHours = 0;
-            electricalMaterialCost = 0;
+            tecCost = new TECCost();
+            electricalCost = new TECCost();
 
             foreach (TECSystem system in bid.Systems)
             {
@@ -338,41 +334,48 @@ namespace EstimatingLibrary
         {
             if (item is CostComponent)
             {
-                var cost = item as CostComponent;
-                tecMaterialCost += cost.MaterialCost;
-                tecLaborHours += cost.LaborCost;
-                electricalMaterialCost += cost.ElectricalCost;
-                electricalLaborHours += cost.ElectricalLabor;
-
-                if (Math.Abs(cost.MaterialCost) > ZERO)
-                { raiseMaterial(); }
-                if (Math.Abs(cost.LaborCost) > ZERO)
-                { raiseTECLabor(); }
-                if (Math.Abs(cost.ElectricalCost) > ZERO)
-                { raiseElectricalMaterial(); }
-                if (Math.Abs(cost.ElectricalLabor) > ZERO)
-                { raiseElectricalLabor(); }
-
+                var costComponent = item as CostComponent;
+                foreach(TECCost cost in costComponent.Costs)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        tecCost.Cost += cost.Cost;
+                        tecCost.Labor += cost.Labor;
+                        raiseMaterial();
+                        raiseLabor();
+                    }
+                    else if (cost.Type == CostType.Electrical) 
+                    {
+                        electricalCost.Cost += cost.Cost;
+                        electricalCost.Labor += cost.Labor;
+                        raiseElectricalMaterial();
+                        raiseElectricalLabor();
+                    }
+                }
             }
-
         }
         private void removeCost(object item)
         {
             if (item is CostComponent)
             {
-                var cost = item as CostComponent;
-                tecMaterialCost -= cost.MaterialCost;
-                tecLaborHours -= cost.LaborCost;
-                electricalMaterialCost -= cost.ElectricalCost;
-                electricalLaborHours -= cost.ElectricalLabor;
-                if (Math.Abs(cost.MaterialCost) > ZERO)
-                { raiseMaterial(); }
-                if (Math.Abs(cost.LaborCost) > ZERO)
-                { raiseTECLabor(); }
-                if (Math.Abs(cost.ElectricalCost) > ZERO)
-                { raiseElectricalMaterial(); }
-                if (Math.Abs(cost.ElectricalLabor) > ZERO)
-                { raiseElectricalLabor(); }
+                var costComponent = item as CostComponent;
+                foreach (TECCost cost in costComponent.Costs)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        tecCost.Cost -= cost.Cost;
+                        tecCost.Labor -= cost.Labor;
+                        raiseMaterial();
+                        raiseLabor();
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        electricalCost.Cost -= cost.Cost;
+                        electricalCost.Labor -= cost.Labor;
+                        raiseElectricalMaterial();
+                        raiseElectricalLabor();
+                    }
+                }
             }
         }
         private void editCost(object newValue, object oldValue)
@@ -442,8 +445,8 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetMaterialLabor(TECBid bid)
         {
-            double laborHours = tecLaborHours;
-            double cost = tecLaborHours * bid.Labor.CommRate;
+            double laborHours = tecCost.Labor;
+            double cost = tecCost.Labor * bid.Labor.CommRate;
             return cost;
         }
         /// <summary>
@@ -682,7 +685,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetElectricalLaborCost(TECBid bid)
         {
-            double cost = electricalLaborHours * bid.Labor.ElectricalEffectiveRate;
+            double cost = electricalCost.Labor * bid.Labor.ElectricalEffectiveRate;
 
             return cost;
         }
@@ -691,7 +694,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetElectricalSuperLaborHours()
         {
-            double laborHours = electricalLaborHours;
+            double laborHours = electricalCost.Labor;
 
             return laborHours / 7;
         }
@@ -709,7 +712,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetTotalElectricalLaborHours()
         {
-            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours();
+            double laborCost = electricalCost.Labor + GetElectricalSuperLaborHours();
             return laborCost;
         }
         /// <summary>
