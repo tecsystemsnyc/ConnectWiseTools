@@ -8,35 +8,21 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECScope, ElectricalMaterialComponent
+    public class TECConnectionType : TECCost, ElectricalMaterialComponent
     {
-        #region Properties
-
-        protected double _cost;
-        public double Cost
+        private ObservableCollection<TECCost> _ratedCosts;
+        public ObservableCollection<TECCost> RatedCosts
         {
-            get { return _cost; }
+            get
+            {
+                return _ratedCosts;
+            }
             set
             {
-                var temp = Copy();
-                _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
+                _ratedCosts = value;
+                RaisePropertyChanged("RatedCosts");
             }
         }
-
-        protected double _labor;
-        public double Labor
-        {
-            get { return _labor; }
-            set
-            {
-                var temp = Copy();
-                _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
-            }
-        }
-
-        #endregion
 
         public TECConnectionType(Guid guid) : base(guid)
         {

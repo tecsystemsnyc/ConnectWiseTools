@@ -149,21 +149,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public double ElectricalCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public double ElectricalLabor
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public int PointNumber
         {
             get

@@ -11,19 +11,19 @@ namespace EstimatingLibrary
     public class TECConduitType : TECCost, ElectricalMaterialComponent
     {
         #region Properties
-
-        protected double _labor;
-        public double Labor
+        private ObservableCollection<TECCost> _ratedCosts;
+        public ObservableCollection<TECCost> RatedCosts
         {
-            get { return _labor; }
+            get
+            {
+                return _ratedCosts;
+            }
             set
             {
-                var temp = Copy();
-                _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
+                _ratedCosts = value;
+                RaisePropertyChanged("RatedCosts");
             }
         }
-
         #endregion
 
         public TECConduitType(Guid guid) : base(guid)
