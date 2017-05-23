@@ -379,12 +379,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Bid.MiscCosts)
+            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Bid.MiscCosts)
             {
                 expected.Add(item);
             }
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -394,7 +394,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
+            ObservableCollection<TECMisc> actual = Bid.MiscCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -404,12 +404,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECMiscWiring> expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Bid.MiscWiring)
+            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Bid.MiscWiring)
             {
                 expected.Add(item);
             }
-            TECMiscWiring edit = new TECMiscWiring();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -419,7 +419,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMiscWiring> actual = Bid.MiscWiring;
+            ObservableCollection<TECMisc> actual = Bid.MiscWiring;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1430,13 +1430,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.MiscCosts.Add(edit);
-            var expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Bid.MiscCosts)
+            var expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Bid.MiscCosts)
             {
                 expected.Add(item);
             }
@@ -1444,7 +1444,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Bid.MiscCosts;
+            ObservableCollection<TECMisc> actual = Bid.MiscCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1454,13 +1454,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECMiscWiring edit = new TECMiscWiring();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.MiscWiring.Add(edit);
-            var expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Bid.MiscWiring)
+            var expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Bid.MiscWiring)
             {
                 expected.Add(item);
             }
@@ -1468,7 +1468,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMiscWiring> actual = Bid.MiscWiring;
+            ObservableCollection<TECMisc> actual = Bid.MiscWiring;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

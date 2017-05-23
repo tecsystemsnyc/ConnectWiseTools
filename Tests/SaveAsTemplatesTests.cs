@@ -453,8 +453,8 @@ namespace Tests
         public void SaveAs_Templates_MiscCost()
         {
             //Arrange
-            TECMiscCost expectedCost = expectedTemplates.MiscCostTemplates[0];
-            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
+            TECMisc expectedCost = expectedTemplates.MiscCostTemplates[0];
+            TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
@@ -465,8 +465,8 @@ namespace Tests
         public void SaveAs_Templates_MiscWiring()
         {
             //Arrange
-            TECMiscWiring expectedCost = expectedTemplates.MiscWiringTemplates[0];
-            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
+            TECMisc expectedCost = expectedTemplates.MiscWiringTemplates[0];
+            TECMisc actualCost = actualTemplates.MiscWiringTemplates[0];
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);

@@ -43,7 +43,7 @@ namespace EstimatingLibrary.Utilities
             foreach (TECLocation location in Bid.Locations)
             { location.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
-            { registerSystems(system); }
+            { registerSystem(system); }
             foreach (TECDrawing drawing in Bid.Drawings)
             {
                 drawing.PropertyChanged += Object_PropertyChanged;
@@ -58,9 +58,9 @@ namespace EstimatingLibrary.Utilities
             { registerController(controller); }
             foreach (TECProposalScope propScope in Bid.ProposalScope)
             { registerPropScope(propScope); }
-            foreach (TECMiscCost cost in Bid.MiscCosts)
+            foreach (TECMisc cost in Bid.MiscCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscWiring wiring in Bid.MiscWiring)
+            foreach (TECMisc wiring in Bid.MiscWiring)
             { wiring.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
@@ -69,16 +69,16 @@ namespace EstimatingLibrary.Utilities
         {
             registerScopeManager(Templates);
             foreach (TECSystem system in Templates.SystemTemplates)
-            { registerSystems(system); }
+            { registerSystem(system); }
             foreach (TECEquipment equipment in Templates.EquipmentTemplates)
             { registerEquipment(equipment); }
             foreach (TECSubScope subScope in Templates.SubScopeTemplates)
             { registerSubScope(subScope); }
             foreach (TECController controller in Templates.ControllerTemplates)
             { registerController(controller); }
-            foreach (TECMiscCost addition in Templates.MiscCostTemplates)
+            foreach (TECMisc addition in Templates.MiscCostTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMiscWiring addition in Templates.MiscWiringTemplates)
+            foreach (TECMisc addition in Templates.MiscWiringTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
@@ -129,15 +129,6 @@ namespace EstimatingLibrary.Utilities
                 registerSubScope(subScope);
             }
         }
-        //private void registerSystems(TECSystem system)
-        //{
-        //    //SystemChanged
-        //    system.PropertyChanged += Object_PropertyChanged;
-        //    foreach (TECEquipment equipment in system.Equipment)
-        //    {
-        //        registerEquipment(equipment);
-        //    }
-        //}
         private void registerScope(TECScopeBranch branch)
         {
 
@@ -181,6 +172,10 @@ namespace EstimatingLibrary.Utilities
             foreach (TECEquipment equipment in scope.Equipment)
             {
                 registerEquipment(equipment);
+            }
+            foreach(TECSystem system in scope.SystemInstances)
+            {
+                registerSystem(system);
             }
         }
         private void registerController(TECController controller)

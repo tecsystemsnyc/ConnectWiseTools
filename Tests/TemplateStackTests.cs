@@ -832,12 +832,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscCostTemplates)
             {
                 expected.Add(item);
             }
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -847,7 +847,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -857,12 +857,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECMiscWiring> expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
+            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscWiringTemplates)
             {
                 expected.Add(item);
             }
-            TECMiscWiring edit = new TECMiscWiring();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -872,7 +872,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscWiringTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1574,13 +1574,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.MiscCostTemplates.Add(edit);
-            var expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            var expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscCostTemplates)
             {
                 expected.Add(item);
             }
@@ -1588,7 +1588,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1598,13 +1598,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECMiscWiring edit = new TECMiscWiring();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.MiscWiringTemplates.Add(edit);
-            var expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
+            var expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscWiringTemplates)
             {
                 expected.Add(item);
             }
@@ -1612,7 +1612,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscWiringTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
