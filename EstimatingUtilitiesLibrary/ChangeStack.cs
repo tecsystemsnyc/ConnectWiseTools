@@ -425,7 +425,7 @@ namespace EstimatingUtilitiesLibrary
             }
             else if (newItem is TECController && (item.ReferenceObject is TECBid
                 || item.ReferenceObject is TECTemplates
-                || item.ReferenceObject is TECControlledScope))
+                || item.ReferenceObject is TECSystem))
             {
                 handleControllerChildren(newItem as TECController, item.Change);
             }
@@ -440,10 +440,6 @@ namespace EstimatingUtilitiesLibrary
             else if (newItem is TECConnection || newItem is TECSubScopeConnection || newItem is TECNetworkConnection)
             {
                 handleConnectionChildren(newItem as TECConnection, item.Change);
-            }
-            else if (newItem is TECControlledScope)
-            {
-                handleControlledScope(newItem as TECControlledScope, item.Change);
             }
             else if (newItem is TECPanel)
             {
@@ -614,7 +610,7 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
             }
         }
-        private void handleSystem(TECSystem scope, Change change)
+        private void handleSystemChildren(TECSystem scope, Change change)
         {
             StackItem item;
             foreach (TECEquipment equipment in scope.Equipment)
