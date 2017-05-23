@@ -141,39 +141,6 @@ namespace EstimatingUtilitiesLibrary
             watch.Stop();
             Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
-        static public void UpdateCatalogs(string path, TECTemplates templates)
-        {
-            SQLiteDB = new SQLiteDatabase(path);
-            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
-            checkAndUpdateDB(typeof(TECBid));
-            TECBid bid = getBidInfo();
-            updateCatalogs(bid, templates);
-
-            getScopeManagerProperties(bid);
-            bid.Parameters = getBidParameters(bid);
-            bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid();
-            bid.ProposalScope = getAllProposalScope(bid.Systems);
-            bid.Locations = getAllLocations();
-            bid.Catalogs.Tags = getAllTags();
-            bid.Notes = getNotes();
-            bid.Exclusions = getExclusions();
-            bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
-            bid.MiscWiring = getMiscWiring();
-            bid.MiscCosts = getMiscCosts();
-            bid.Panels = getPanels();
-
-            ModelLinkingHelper.LinkBid(bid);
-            getUserAdjustments(bid);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
-            SQLiteDB.nonQueryCommand("END TRANSACTION");
-            SQLiteDB.Connection.Close();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
         #endregion Public Functions
 
         #region Loading from DB Methods
@@ -195,8 +162,22 @@ namespace EstimatingUtilitiesLibrary
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
             bid.Controllers = getControllers();
-            bid.MiscWiring = getMiscWiring();
-            bid.MiscCosts = getMiscCosts();
+            var misc = getMisc();
+            var wire = new ObservableCollection<TECMisc>();
+            var cost = new ObservableCollection<TECMisc>();
+            foreach(TECMisc item in misc)
+            {
+                if(item.Type == CostType.Electrical)
+                {
+                    wire.Add(item);
+                }
+                else if (item.Type == CostType.TEC)
+                {
+                    cost.Add(item);
+                }
+            }
+            bid.MiscWiring = wire;
+            bid.MiscCosts = cost;
             bid.Panels = getPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
@@ -219,8 +200,22 @@ namespace EstimatingUtilitiesLibrary
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.ControllerTemplates = getOrphanControllers();
-            templates.MiscWiringTemplates = getMiscWiring();
-            templates.MiscCostTemplates = getMiscCosts();
+            var misc = getMisc();
+            var wire = new ObservableCollection<TECMisc>();
+            var cost = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in misc)
+            {
+                if (item.Type == CostType.Electrical)
+                {
+                    wire.Add(item);
+                }
+                else if (item.Type == CostType.TEC)
+                {
+                    cost.Add(item);
+                }
+            }
+            templates.MiscWiringTemplates = wire;
+            templates.MiscCostTemplates = cost;
             templates.PanelTemplates = getOrphanPanels();
 
             ModelLinkingHelper.LinkTemplates(templates);
@@ -532,24 +527,6 @@ namespace EstimatingUtilitiesLibrary
             { systems.Add(getSystemFromRow(row)); }
             return systems;
         }
-        static private ObservableCollection<TECSystem> getOrphanSystems()
-        {
-            //Returns the systems that are not in the ControlledScopeSystem table.
-            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
-
-            string command = "select * from " + SystemTable.TableName;
-            command += " where " + SystemTable.SystemID.Name + " not in ";
-            command += "(select " + ControlledScopeSystemTable.SystemID.Name;
-            command += " from " + ControlledScopeSystemTable.TableName + ")";
-
-            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
-            foreach (DataRow row in systemsDT.Rows)
-            {
-                systems.Add(getSystemFromRow(row));
-            }
-
-            return systems;
-        }
 
         static private ObservableCollection<TECEquipment> getOrphanEquipment()
         {
@@ -842,8 +819,8 @@ namespace EstimatingUtilitiesLibrary
 
             string command = "select * from " + ControllerTable.TableName;
             command += " where " + ControllerTable.ControllerID.Name + " not in ";
-            command += "(select " + ControlledScopeControllerTable.ControllerID.Name;
-            command += " from " + ControlledScopeControllerTable.TableName + ")";
+            command += "(select " + SystemControllerTable.ControllerID.Name;
+            command += " from " + SystemControllerTable.TableName + ")";
 
             DataTable controllersDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllersDT.Rows)
@@ -1040,29 +1017,17 @@ namespace EstimatingUtilitiesLibrary
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
-        static private ObservableCollection<TECMisc> getMiscCosts()
+        static private ObservableCollection<TECMisc> getMisc()
         {
-            ObservableCollection<TECMisc> costs = new ObservableCollection<TECMisc>();
+            ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
 
-            DataTable costsDT = SQLiteDB.getDataFromTable(MiscCostTable.TableName);
-            foreach (DataRow row in costsDT.Rows)
+            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            foreach (DataRow row in miscDT.Rows)
             {
-                costs.Add(getMiscCostFromRow(row));
+                misc.Add(getMiscFromRow(row));
             }
 
-            return costs;
-        }
-        static private ObservableCollection<TECMisc> getMiscWiring()
-        {
-            ObservableCollection<TECMisc> wiring = new ObservableCollection<TECMisc>();
-
-            DataTable wiringDT = SQLiteDB.getDataFromTable(MiscWiringTable.TableName);
-            foreach (DataRow row in wiringDT.Rows)
-            {
-                wiring.Add(getMiscWiringFromRow(row));
-            }
-
-            return wiring;
+            return misc;
         }
         static private ObservableCollection<TECPanelType> getPanelTypes()
         {
@@ -1095,8 +1060,8 @@ namespace EstimatingUtilitiesLibrary
 
             string command = "select * from " + PanelTable.TableName;
             command += " where " + PanelTable.PanelID.Name + " not in ";
-            command += "(select " + ControlledScopePanelTable.PanelID.Name;
-            command += " from " + ControlledScopePanelTable.TableName + ")";
+            command += "(select " + SystemPanelTable.PanelID.Name;
+            command += " from " + SystemPanelTable.TableName + ")";
 
             DataTable panelsDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in panelsDT.Rows)
@@ -1108,30 +1073,30 @@ namespace EstimatingUtilitiesLibrary
         }
         static private ObservableCollection<TECSystem> getSystems()
         {
-            ObservableCollection<TECSystem> controlledScope = new ObservableCollection<TECSystem>();
+            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
-            string command = "select * from " + ControlledScopeTable.TableName;
-            command += " where " + ControlledScopeTable.ControlledScopeID.Name;
-            command += " in (select " + ControlledScopeTable.ControlledScopeID.Name;
-            command += " from " + ControlledScopeTable.TableName + " where " + ControlledScopeTable.ControlledScopeID.Name + " not in ";
-            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName + "))";
+            string command = "select * from " + SystemTable.TableName;
+            command += " where " + SystemTable.SystemID.Name;
+            command += " in (select " + SystemTable.SystemID.Name;
+            command += " from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " not in ";
+            command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName + "))";
 
-            DataTable controlledScopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
-            foreach (DataRow row in controlledScopeDT.Rows)
+            foreach (DataRow row in systemsDT.Rows)
             {
-                controlledScope.Add(getSystemFromRow(row));
+                systems.Add(getSystemFromRow(row));
             }
-            return controlledScope;
+            return systems;
         }
         static private ObservableCollection<TECSystem> getChildrenSystems(Guid parentID)
         {
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
 
-            string command = "select * from " + ControlledScopeTable.TableName;
-            command += " where " + ControlledScopeTable.ControlledScopeID.Name + " in ";
-            command += "(select " + ControlledScopeHierarchyTable.ChildID.Name + " from " + ControlledScopeHierarchyTable.TableName;
-            command += " where " + ControlledScopeHierarchyTable.ParentID.Name + " = '";
+            string command = "select * from " + SystemTable.TableName;
+            command += " where " + SystemTable.SystemID.Name + " in ";
+            command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName;
+            command += " where " + SystemHierarchyTable.ParentID.Name + " = '";
             command += parentID;
             command += "')";
 
@@ -1171,12 +1136,12 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
-        static private ObservableCollection<TECController> getControllersInControlledScope(Guid guid)
+        static private ObservableCollection<TECController> getControllersInSystem(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
             string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
-            command += "(select " + ControlledScopeControllerTable.ControllerID.Name + " from " + ControlledScopeControllerTable.TableName + " where ";
-            command += ControlledScopeControllerTable.ControlledScopeID.Name + " = '" + guid;
+            command += "(select " + SystemControllerTable.ControllerID.Name + " from " + SystemControllerTable.TableName + " where ";
+            command += SystemControllerTable.SystemID.Name + " = '" + guid;
             command += "')";
 
             DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
@@ -1185,26 +1150,13 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
-        static private ObservableCollection<TECEquipment> getEquipmentInControlledScope(Guid guid)
-        {
-            ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
-            string command = "select * from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " in ";
-            command += "(select " + ControlledScopeSystemTable.SystemID.Name + " from " + ControlledScopeSystemTable.TableName + " where ";
-            command += ControlledScopeSystemTable.ControlledScopeID.Name + " = '" + guid;
-            command += "')";
-
-            DataTable pagesDT = SQLiteDB.getDataFromCommand(command);
-            foreach (DataRow row in pagesDT.Rows)
-            { equipment.Add(getEquipmentFromRow(row)); }
-
-            return equipment;
-        }
-        static private ObservableCollection<TECPanel> getPanelsInControlledScope(Guid guid)
+        
+        static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
             string command = "select * from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
-            command += "(select " + ControlledScopePanelTable.PanelID.Name + " from " + ControlledScopePanelTable.TableName + " where ";
-            command += ControlledScopePanelTable.ControlledScopeID.Name + " = '" + guid;
+            command += "(select " + SystemPanelTable.PanelID.Name + " from " + SystemPanelTable.TableName + " where ";
+            command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
 
             DataTable dt = SQLiteDB.getDataFromCommand(command);
@@ -1941,29 +1893,17 @@ namespace EstimatingUtilitiesLibrary
         #endregion
 
         #region Misc
-        private static TECMisc getMiscCostFromRow(DataRow row)
+        private static TECMisc getMiscFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[MiscCostTable.MiscCostID.Name].ToString());
+            Guid guid = new Guid(row[MiscTable.MiscID.Name].ToString());
             TECMisc cost = new TECMisc(guid);
 
-            cost.Name = row[MiscCostTable.Name.Name].ToString();
-            cost.Cost = row[MiscCostTable.Cost.Name].ToString().ToDouble(0);
-            cost.Labor = row[MiscCostTable.Labor.Name].ToString().ToDouble(0);
-            cost.Quantity = row[MiscCostTable.Quantity.Name].ToString().ToInt(1);
+            cost.Name = row[MiscTable.Name.Name].ToString();
+            cost.Cost = row[MiscTable.Cost.Name].ToString().ToDouble(0);
+            cost.Labor = row[MiscTable.Labor.Name].ToString().ToDouble(0);
+            cost.Quantity = row[MiscTable.Quantity.Name].ToString().ToInt(1);
 
             return cost;
-        }
-        private static TECMisc getMiscWiringFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[MiscWiringTable.MiscWiringID.Name].ToString());
-            TECMisc wiring = new TECMisc(guid);
-
-            wiring.Name = row[MiscWiringTable.Name.Name].ToString();
-            wiring.Cost = row[MiscWiringTable.Cost.Name].ToString().ToDouble(0);
-            wiring.Labor = row[MiscCostTable.Labor.Name].ToString().ToDouble(0);
-            wiring.Quantity = row[MiscWiringTable.Quantity.Name].ToString().ToInt(1);
-
-            return wiring;
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
         {
@@ -1987,14 +1927,14 @@ namespace EstimatingUtilitiesLibrary
 
         private static TECSystem getSystemFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ControlledScopeTable.ControlledScopeID.Name].ToString());
+            Guid guid = new Guid(row[SystemTable.SystemID.Name].ToString());
             TECSystem controlledScope = new TECSystem(guid);
 
-            controlledScope.Name = row[ControlledScopeTable.Name.Name].ToString();
-            controlledScope.Description = row[ControlledScopeTable.Description.Name].ToString();
-            controlledScope.Controllers = getControllersInControlledScope(guid);
-            controlledScope.Equipment = getEquipmentInControlledScope(guid);
-            controlledScope.Panels = getPanelsInControlledScope(guid);
+            controlledScope.Name = row[SystemTable.Name.Name].ToString();
+            controlledScope.Description = row[SystemTable.Description.Name].ToString();
+            controlledScope.Controllers = getControllersInSystem(guid);
+            controlledScope.Equipment = getEquipmentInSystem(guid);
+            controlledScope.Panels = getPanelsInSystem(guid);
             controlledScope.SystemInstances = getChildrenSystems(guid);
 
             return controlledScope;
