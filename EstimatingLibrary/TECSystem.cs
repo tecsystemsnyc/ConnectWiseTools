@@ -184,10 +184,6 @@ namespace EstimatingLibrary
             }
         }
 
-
-
-
-
         private ObservableCollection<TECController> _controllers { get; set; }
         public ObservableCollection<TECController> Controllers
         {
@@ -240,79 +236,34 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("SystemInstances", temp, this);
             }
         }
-
-        private void populateInstances()
-        {
-            _equipmentInstances = new ObservableCollection<TECSystem>();
-            _controllerInstances = new ObservableCollection<TECController>();
-            _panelInstances = new ObservableCollection<TECPanel>();
-            foreach (TECSystem scope in SystemInstances)
-            {
-                scope.PropertyChanged += TECControlledScope_PropertyChanged;
-                foreach (TECEquipment equipment in scope.Equipment)
-                {
-                    EquipmentInstances.Add(Equipment);
-                }
-                foreach (TECController controller in scope.Controllers)
-                {
-                    ControllerInstances.Add(controller);
-                }
-                foreach (TECPanel panel in scope.Panels)
-                {
-                    PanelInstances.Add(panel);
-                }
-            }
-        }
-
+        
         public ObservableItemToInstanceList<TECScope> CharactersticInstances;
         private ChangeWatcher watcher;
-
-        private ObservableCollection<TECController> _controllerInstances;
-        private ObservableCollection<TECPanel> _panelInstances;
-        public ObservableCollection<TECController> ControllerInstances
-        {
-            get { return _controllerInstances; }
-            set
-            {
-                _controllerInstances = value;
-                RaisePropertyChanged("ControllerInstances");
-            }
-        }
-        public ObservableCollection<TECPanel> PanelInstances
-        {
-            get { return _panelInstances; }
-            set
-            {
-                _panelInstances = value;
-                RaisePropertyChanged("PanelInstances");
-            }
-        }
+        
         #endregion //Properties
 
         #region Constructors
         public TECSystem(Guid guid, bool isChild = false) : base(guid)
         {
             _budgetPriceModifier = -1;
-            _equipment = new ObservableCollection<TECEquipment>();
-            Equipment.CollectionChanged += CollectionChanged;
             base.PropertyChanged += TECSystem_PropertyChanged;
             
 
             _isChild = isChild;
+            _equipment = new ObservableCollection<TECEquipment>();
+
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _systemInstances = new ObservableCollection<TECSystem>();
-            _controllerInstances = new ObservableCollection<TECController>();
-            _panelInstances = new ObservableCollection<TECPanel>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
+            Equipment.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
             SystemInstances.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
-
         public TECSystem(bool isChild = false) : this(Guid.NewGuid(), isChild) { }
 
         //Copy Constructor
@@ -478,7 +429,7 @@ namespace EstimatingLibrary
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object> && ScopeInstances.Count > 0)
+            if (e is PropertyChangedExtendedEventArgs<Object> && SystemInstances.Count > 0)
             {
                 PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
                 object oldValue = args.OldValue;
@@ -613,14 +564,14 @@ namespace EstimatingLibrary
                 var characteristicController = (referenceObject as TECController);
                 if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
                 {
-                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    foreach (TECSystem system in SystemInstances)
                     {
                         TECSubScope subScopeToConnect = null;
                         foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                         {
-                            foreach (TECSystem system in controlledScope.Systems)
+                            foreach (TECEquipment equipment in system.Equipment)
                             {
-                                if (system.SubScope.Contains(subScope))
+                                if (equipment.SubScope.Contains(subScope))
                                 {
                                     subScopeToConnect = subScope;
                                     break;
@@ -631,7 +582,7 @@ namespace EstimatingLibrary
                         {
                             foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                             {
-                                if (controlledScope.Controllers.Contains(controller))
+                                if (system.Controllers.Contains(controller))
                                 {
                                     var connection = controller.AddSubScope(subScopeToConnect);
                                     connection.Length = characteristicConnection.Length;
@@ -650,12 +601,12 @@ namespace EstimatingLibrary
                 var characteristicPanel = referenceObject as TECPanel;
                 if (CharactersticInstances.ContainsKey(characteristicPanel) && CharactersticInstances.ContainsKey(characteristicController))
                 {
-                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    foreach (TECSystem system in SystemInstances)
                     {
                         TECController controllerToConnect = null;
                         foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                         {
-                            if (controlledScope.Controllers.Contains(controller))
+                            if (system.Controllers.Contains(controller))
                             {
                                 controllerToConnect = controller;
                                 break;
@@ -665,7 +616,7 @@ namespace EstimatingLibrary
                         {
                             foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
                             {
-                                if (controlledScope.Panels.Contains(panel))
+                                if (system.Panels.Contains(panel))
                                 {
                                     panel.Controllers.Add(controllerToConnect);
                                 }
@@ -766,14 +717,14 @@ namespace EstimatingLibrary
                 var characteristicController = (referenceObject as TECController);
                 if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
                 {
-                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    foreach (TECSystem system in SystemInstances)
                     {
                         TECSubScope subScopeToRemove = null;
                         foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
                         {
-                            foreach (TECSystem system in controlledScope.Systems)
+                            foreach (TECEquipment equipment in system.Equipment)
                             {
-                                if (system.SubScope.Contains(subScope))
+                                if (equipment.SubScope.Contains(subScope))
                                 {
                                     subScopeToRemove = subScope;
                                     break;
@@ -784,7 +735,7 @@ namespace EstimatingLibrary
                         {
                             foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                             {
-                                if (controlledScope.Controllers.Contains(controller))
+                                if (system.Controllers.Contains(controller))
                                 {
                                     controller.RemoveSubScope(subScopeToRemove);
                                 }
@@ -799,12 +750,12 @@ namespace EstimatingLibrary
                 var characteristicPanel = referenceObject as TECPanel;
                 if (CharactersticInstances.ContainsKey(characteristicController) && CharactersticInstances.ContainsKey(characteristicPanel))
                 {
-                    foreach (TECControlledScope controlledScope in ScopeInstances)
+                    foreach (TECSystem system in SystemInstances)
                     {
                         TECController controllerToRemove = null;
                         foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                         {
-                            foreach (TECPanel panel in controlledScope.Panels)
+                            foreach (TECPanel panel in system.Panels)
                             {
                                 if (panel.Controllers.Contains(controller))
                                 {
@@ -817,7 +768,7 @@ namespace EstimatingLibrary
                         {
                             foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
                             {
-                                if (controlledScope.Panels.Contains(panel))
+                                if (system.Panels.Contains(panel))
                                 {
                                     panel.Controllers.Remove(controllerToRemove);
                                     break;
@@ -867,7 +818,6 @@ namespace EstimatingLibrary
         {
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
-            populateInstances();
         }
         #endregion
     }
