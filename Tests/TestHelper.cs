@@ -680,23 +680,23 @@ namespace Tests
             //Conduit Types
             var conduitType1 = new TECConduitType();
             conduitType1.Name = "Test Conduit 1";
-            conduitType1.Cost = RandomDouble(10, 100);
-            conduitType1.Labor = RandomDouble(10, 100);
+            conduitType1.Cost = RandomInt(10, 100);
+            conduitType1.Labor = RandomInt(10, 100);
 
             outCatalogs.ConduitTypes.Add(conduitType1);
 
             var conduitType2 = new TECConduitType();
             conduitType2.Name = "Test Conduit 2";
-            conduitType2.Cost = RandomDouble(10, 100);
-            conduitType2.Labor = RandomDouble(10, 100);
+            conduitType2.Cost = RandomInt(10, 100);
+            conduitType2.Labor = RandomInt(10, 100);
 
             outCatalogs.ConduitTypes.Add(conduitType2);
 
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
-            connectionType1.Cost = RandomDouble(10, 100);
-            connectionType1.Labor = RandomDouble(10, 100);
+            connectionType1.Cost = RandomInt(10, 100);
+            connectionType1.Labor = RandomInt(10, 100);
 
             var connectionType2 = new TECConnectionType();
             connectionType2.Name = "FourC18";
@@ -707,7 +707,7 @@ namespace Tests
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
-            manufacturer1.Multiplier = RandomDouble(0, 1);
+            manufacturer1.Multiplier = RandomInt(0, 1);
             
             outCatalogs.Manufacturers.Add(manufacturer1);
 
@@ -717,7 +717,7 @@ namespace Tests
             TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
-            device1.Cost = RandomDouble(10, 100);
+            device1.Cost = RandomInt(10, 100);
             device1.Tags.Add(tag1);
 
             outCatalogs.Devices.Add(device1);
@@ -725,13 +725,13 @@ namespace Tests
             //IO Modules
             TECIOModule testIOModule = new TECIOModule();
             testIOModule.Name = "Test IO Module";
-            testIOModule.Cost = RandomDouble(10, 100);
+            testIOModule.Cost = RandomInt(10, 100);
             testIOModule.Manufacturer = manufacturer1;
             outCatalogs.IOModules.Add(testIOModule);
 
             //Panel Types
             TECPanelType panelType = new TECPanelType();
-            panelType.Cost = RandomDouble(10, 100);
+            panelType.Cost = RandomInt(10, 100);
             panelType.Name = "Test Panel Type";
 
             outCatalogs.PanelTypes.Add(panelType);
@@ -823,10 +823,6 @@ namespace Tests
         {
             Random rand = new Random();
             return rand.Next(min, max);
-        }
-        public static int RandomDouble(int min, int max)
-        {
-            return RandomInt(min, max) / RandomInt((min / 10), (max / 10));
         }
     }
 }
