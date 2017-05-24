@@ -2032,12 +2032,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
+            var device = Bid.RandomDevice();
+            device.Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Name;
+            string actual = device.Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2051,12 +2052,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
+            var device = Bid.RandomDevice();
+            device.Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Description;
+            string actual = device.Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2070,12 +2072,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            var device = Bid.RandomDevice();
+            device.Cost = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            double actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            double actual = device.Cost;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2085,16 +2088,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECManufacturer edit = new TECManufacturer();
+            TECManufacturer edit = Bid.Catalogs.Manufacturers.RandomObject();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
+            var device = Bid.RandomDevice();
+            device.Manufacturer = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECManufacturer actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            TECManufacturer actual = device.Manufacturer;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2108,12 +2112,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
+            var device = Bid.RandomDevice();
+            device.Quantity = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            int actual = device.Quantity;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2130,12 +2135,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name = edit;
+            var point = Bid.RandomPoint();
+            point.Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Name;
+            string actual = point.Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2149,12 +2155,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description = edit;
+            var point = Bid.RandomPoint();
+            point.Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Description;
+            string actual = point.Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2169,13 +2176,14 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
+            var point = Bid.RandomPoint();
+            point.Quantity = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            int actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            int actual = point.Quantity;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2189,12 +2197,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type = edit;
+            var point = Bid.RandomPoint();
+            point.Type = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            PointTypes actual = Bid.Systems[0].Equipment[0].SubScope[0].Points[0].Type;
+            PointTypes actual = point.Type;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2211,12 +2220,13 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Panels[0].Name = edit;
+            var panel = Bid.Panels.RandomObject();
+            panel.Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Panels[0].Name;
+            string actual = panel.Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -2230,7 +2240,8 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Panels[0].Type = edit;
+            var panel = Bid.Panels.RandomObject();
+            panel.Type = edit;
             testStack.Undo();
             testStack.Redo();
 
