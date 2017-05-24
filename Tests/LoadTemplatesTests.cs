@@ -325,7 +325,7 @@ namespace Tests
         public void Load_Templates_IOModules()
         {
             //Arrange
-            TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
+            //TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
 
             //Assert
             Assert.AreEqual("Test IO Module", actualIOModule.Name);

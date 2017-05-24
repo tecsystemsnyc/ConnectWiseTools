@@ -226,7 +226,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
@@ -246,7 +245,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
             }
@@ -291,7 +289,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
             }
             else if (DGTabIndex == GridIndex.Misc)
             {
@@ -309,7 +306,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Visible;
-                ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
             }
@@ -329,7 +325,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }

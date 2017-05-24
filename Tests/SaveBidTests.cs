@@ -1011,27 +1011,18 @@ namespace Tests
         public void Save_Bid_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = null;
-            //Devices can only be added from the device catalog.
-            foreach (TECDevice dev in bid.Catalogs.Devices)
-            {
-                if (dev.Name == "Device C1")
-                {
-                    expectedDevice = dev;
-                    break;
-                }
-            }
+            TECDevice expectedDevice = bid.Catalogs.Devices.RandomObject();
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices = new ObservableCollection<TECDevice>();
             int expectedQuantity = 5;
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1266,7 +1257,7 @@ namespace Tests
             expectedPoint.Description = "Point Description";
             expectedPoint.Quantity = 84300;
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
             subScopeToModify.Points.Add(expectedPoint);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1309,7 +1300,7 @@ namespace Tests
         public void Save_Bid_Remove_Point()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
             int oldNumPoints = ssToModify.Points.Count();
             TECPoint pointToRemove = ssToModify.Points[0];
             ssToModify.Points.Remove(pointToRemove);
@@ -1350,7 +1341,7 @@ namespace Tests
         public void Save_Bid_Point_Name()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Name = "Point name save test";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1386,7 +1377,7 @@ namespace Tests
         public void Save_Bid_Point_Description()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Description = "Point Description save test";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1422,7 +1413,7 @@ namespace Tests
         public void Save_Bid_Point_Quantity()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Quantity = 7463;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1458,7 +1449,7 @@ namespace Tests
         public void Save_Bid_Point_Type()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Type = PointTypes.BI;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1497,7 +1488,7 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSystem()
         {
             TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSystem systemToEdit = bid.Systems[0];
+            TECSystem systemToEdit = bid.Systems.RandomObject();
 
             systemToEdit.Tags.Add(tagToAdd);
 
@@ -1527,8 +1518,8 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
+            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
+            TECEquipment equipmentToEdit = bid.RandomEquipment();
 
             equipmentToEdit.Tags.Add(tagToAdd);
 
@@ -1565,8 +1556,8 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
+            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
+            TECSubScope subScopeToEdit = bid.RandomSubScope();
 
             subScopeToEdit.Tags.Add(tagToAdd);
 
@@ -1604,8 +1595,8 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToPoint()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
+            TECPoint PointToEdit = bid.RandomPoint();
 
             PointToEdit.Tags.Add(tagToAdd);
 
@@ -1646,8 +1637,8 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECController ControllerToEdit = bid.Controllers[0];
+            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
+            TECController ControllerToEdit = bid.Controllers.RandomObject();
 
             ControllerToEdit.Tags.Add(tagToAdd);
 
@@ -1715,7 +1706,7 @@ namespace Tests
             TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Name = "New Child";
             expectedBranch.Description = "Child Branch Description";
-            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            TECScopeBranch branchToModify = bid.ScopeTree.RandomObject();
             branchToModify.Branches.Add(expectedBranch);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1752,7 +1743,7 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch branchToRemove = bid.ScopeTree[0];
+            TECScopeBranch branchToRemove = bid.ScopeTree.RandomObject();
             bid.ScopeTree.Remove(branchToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1784,7 +1775,7 @@ namespace Tests
             }
 
             int oldNumBranches = branchToModify.Branches.Count();
-            TECScopeBranch branchToRemove = branchToModify.Branches[0];
+            TECScopeBranch branchToRemove = branchToModify.Branches.RandomObject();
             branchToModify.Branches.Remove(branchToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1813,7 +1804,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Name = "Test Branch Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1836,7 +1827,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Description()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Description = "Test Branch Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1891,7 +1882,7 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLocation locationToRemove = bid.Locations[0];
+            TECLocation locationToRemove = bid.Locations.RandomObject();
             bid.Locations.Remove(locationToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1911,7 +1902,7 @@ namespace Tests
         public void Save_Bid_Edit_Location_Name()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
             expectedLocation.Name = "Location Name Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1936,7 +1927,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
