@@ -136,7 +136,7 @@ namespace Tests
             int expectedQuantity = 123;
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
 
-            double expectedBP = 123;
+            double expectedBP = 12.3;
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
         }
 
@@ -530,8 +530,7 @@ namespace Tests
             Assert.AreEqual(654.9648, actualCost.Cost);
             Assert.AreEqual(19, actualCost.Quantity);
         }
-
-
+        
         [TestMethod]
         public void Load_Bid_PanelType()
         {

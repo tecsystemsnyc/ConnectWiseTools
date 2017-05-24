@@ -1633,10 +1633,8 @@ namespace EstimatingUtilitiesLibrary
             equipmentToAdd.Description = row[EquipmentTable.Description.Name].ToString();
             equipmentToAdd.Quantity = row[EquipmentTable.Quantity.Name].ToString().ToInt();
             equipmentToAdd.BudgetUnitPrice = row[EquipmentTable.BudgetPrice.Name].ToString().ToDouble();
+            getScopeChildren(equipmentToAdd);
             equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
-            equipmentToAdd.Tags = getTagsInScope(equipmentID);
-            equipmentToAdd.Location = getLocationInScope(equipmentID);
-            equipmentToAdd.AssociatedCosts = getAssociatedCostsInScope(equipmentID);
             return equipmentToAdd;
         }
         private static TECSubScope getSubScopeFromRow(DataRow row)
@@ -1648,9 +1646,7 @@ namespace EstimatingUtilitiesLibrary
             subScopeToAdd.Quantity = row[SubScopeTable.Quantity.Name].ToString().ToInt(1);
             subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
-            subScopeToAdd.Location = getLocationInScope(subScopeID);
-            subScopeToAdd.Tags = getTagsInScope(subScopeID);
-            subScopeToAdd.AssociatedCosts = getAssociatedCostsInScope(subScopeID);
+            getScopeChildren(subScopeToAdd);
             return subScopeToAdd;
         }
         private static TECPoint getPointFromRow(DataRow row)
@@ -1661,8 +1657,7 @@ namespace EstimatingUtilitiesLibrary
             pointToAdd.Description = row[PointTable.Description.Name].ToString();
             pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
             pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
-            pointToAdd.Tags = getTagsInScope(pointID);
-            pointToAdd.AssociatedCosts = getAssociatedCostsInScope(pointID);
+            getScopeChildren(pointToAdd);
             return pointToAdd;
         }
         #endregion
@@ -1681,8 +1676,7 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.Name = name;
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
-            outConnectionType.Tags = getTagsInScope(guid);
-            outConnectionType.AssociatedCosts = getAssociatedCostsInScope(guid);
+            getScopeChildren(outConnectionType);
             return outConnectionType;
         }
         private static TECCost getAssociatedCostFromRow(DataRow row)
@@ -1711,8 +1705,7 @@ namespace EstimatingUtilitiesLibrary
             deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
             deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
             deviceToAdd.Cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
-            deviceToAdd.Tags = getTagsInScope(deviceToAdd.Guid);
-            deviceToAdd.AssociatedCosts = getAssociatedCostsInScope(deviceToAdd.Guid);
+            getScopeChildren(deviceToAdd);
             return deviceToAdd;
         }
         private static TECManufacturer getManufacturerFromRow(DataRow row)
@@ -1740,8 +1733,7 @@ namespace EstimatingUtilitiesLibrary
             conduitType.Name = name;
             conduitType.Cost = cost;
             conduitType.Labor = labor;
-            conduitType.Tags = getTagsInScope(conduitGuid);
-            conduitType.AssociatedCosts = getAssociatedCostsInScope(conduitGuid);
+            getScopeChildren(conduitType);
             return conduitType;
         }
         private static TECTag getTagFromRow(DataRow row)
@@ -1841,7 +1833,7 @@ namespace EstimatingUtilitiesLibrary
             panel.Description = row[PanelTable.Description.Name].ToString();
             panel.Quantity = row[PanelTable.Quantity.Name].ToString().ToInt(1);
             panel.Controllers = getControllersInPanel(guid);
-            panel.AssociatedCosts = getAssociatedCostsInScope(panel.Guid);
+            getScopeChildren(panel);
 
             return panel;
         }
@@ -1855,8 +1847,7 @@ namespace EstimatingUtilitiesLibrary
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
             controller.ControllerType = UtilitiesMethods.StringToEnum<ControllerType>(row[ControllerTable.Type.Name].ToString(), ControllerType.IsStandalone);
             controller.IO = getIOInController(guid);
-            controller.Tags = getTagsInScope(guid);
-            controller.AssociatedCosts = getAssociatedCostsInScope(guid);
+            getScopeChildren(controller);
             controller.ChildrenConnections = getConnectionsInController(controller);
             return controller;
         }
@@ -1903,7 +1894,7 @@ namespace EstimatingUtilitiesLibrary
             cost.Cost = row[MiscTable.Cost.Name].ToString().ToDouble(0);
             cost.Labor = row[MiscTable.Labor.Name].ToString().ToDouble(0);
             cost.Quantity = row[MiscTable.Quantity.Name].ToString().ToInt(1);
-
+            getScopeChildren(cost);
             return cost;
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
@@ -1926,6 +1917,13 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion
 
+        private static void getScopeChildren(TECScope scope)
+        {
+            scope.Tags = getTagsInScope(scope.Guid);
+            scope.Location = getLocationInScope(scope.Guid);
+            scope.AssociatedCosts = getAssociatedCostsInScope(scope.Guid);
+        }
+
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SystemTable.SystemID.Name].ToString());
@@ -1933,14 +1931,18 @@ namespace EstimatingUtilitiesLibrary
 
             controlledScope.Name = row[SystemTable.Name.Name].ToString();
             controlledScope.Description = row[SystemTable.Description.Name].ToString();
+            controlledScope.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
+            controlledScope.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
             controlledScope.Controllers = getControllersInSystem(guid);
             controlledScope.Equipment = getEquipmentInSystem(guid);
             controlledScope.Panels = getPanelsInSystem(guid);
             controlledScope.SystemInstances = getChildrenSystems(guid);
+            getScopeChildren(controlledScope);
 
             return controlledScope;
         }
 
+        #region Placeholder
         private static TECSubScope getSubScopeConnectionChildPlaceholderFromRow(DataRow row)
         {
             Guid subScopeID = new Guid(row[SubScopeConnectionChildrenTable.ChildID.Name].ToString());
@@ -2021,6 +2023,7 @@ namespace EstimatingUtilitiesLibrary
             }
             dict[key].Add(value);
         }
+        #endregion
         #endregion
 
         #region Generic Create Methods

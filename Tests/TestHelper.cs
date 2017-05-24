@@ -741,5 +741,74 @@ namespace Tests
                 controller.AddSubScope(subscope);
             }
         }
+
+        public static TECDevice RandomDevice(this TECBid bid)
+        {
+            TECDevice device = null;
+            foreach(TECSystem system in bid.Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        device = subScope.Devices.RandomObject();
+                        if(device != null)
+                        {
+                            return device;
+                        }
+                    }
+                }
+            }
+            return device;
+        }
+        public static TECPoint RandomPoint(this TECBid bid)
+        {
+            TECPoint point = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        point = subScope.Points.RandomObject();
+                        if (point != null)
+                        {
+                            return point;
+                        }
+                    }
+                }
+            }
+            return point;
+        }
+        public static TECSubScope RandomSubScope(this TECBid bid)
+        {
+            TECSubScope subScope = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECEquipment ewuipment in system.Equipment)
+                {
+                    subScope = ewuipment.SubScope.RandomObject();
+                    if (subScope != null)
+                    {
+                        return subScope;
+                    }
+                }
+            }
+            return subScope;
+        }
+        public static TECEquipment RandomEquipment(this TECBid bid)
+        {
+            TECEquipment equipment = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                equipment = system.Equipment.RandomObject();
+                if (equipment != null)
+                {
+                    return equipment;
+                }
+            }
+            return equipment;
+        }
+
     }
 }
