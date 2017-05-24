@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,6 @@ namespace EstimatingLibrary.Interfaces
         string Name { get; set; }
         double Cost { get; set; }
         double Labor { get; set; }
+        ObservableCollection<TECCost> RatedCosts { get; set; }
     }
 }
