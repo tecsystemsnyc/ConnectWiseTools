@@ -202,6 +202,26 @@ namespace EstimatingLibrary
             }
         }
 
+        private ObservableCollection<TECScopeBranch> _scopeBranches;
+        public ObservableCollection<TECScopeBranch> ScopeBranches
+        {
+            get { return _scopeBranches; }
+            set
+            {
+                var temp = this.Copy();
+                if (Panels != null)
+                {
+                    ScopeBranches.CollectionChanged -= CollectionChanged;
+                }
+
+                _scopeBranches = value;
+                ScopeBranches.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ScopeBranches", temp, this);
+
+            }
+        }
+
+
         public List<TECCost> Costs
         {
             get

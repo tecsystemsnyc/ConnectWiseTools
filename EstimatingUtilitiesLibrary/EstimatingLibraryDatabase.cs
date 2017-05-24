@@ -1150,7 +1150,21 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
-        
+        static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid)
+        {
+            ObservableCollection<TECScopeBranch> branches = new ObservableCollection<TECScopeBranch>();
+            string command = "select * from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            command += "(select " + SystemScopeBranchTable.BranchID.Name + " from " + SystemScopeBranchTable.TableName + " where ";
+            command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
+            command += "')";
+
+            DataTable branchDT = SQLiteDB.getDataFromCommand(command);
+            foreach (DataRow row in branchDT.Rows)
+            { branches.Add(getScopeBranchFromRow(row)); }
+
+            return branches;
+        }
+
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
