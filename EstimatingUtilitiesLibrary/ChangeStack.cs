@@ -635,7 +635,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 item = new StackItem(change, (object)scope, (object)system);
                 SaveStack.Add(item);
-                handleSystem(system, change);
+                handleSystemChildren(system, change);
             }
         }
         private void handlePanelChildren(TECPanel panel, Change change)
