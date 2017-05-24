@@ -188,13 +188,12 @@ namespace TECUserControlLibrary
             var sourceItem = dropInfo.Data;
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
-                if (dropInfo.Data is TECControlledScope)
+                if (dropInfo.Data is TECSystem)
                 {
                     Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-                    sourceItem = new TECControlledScope((dropInfo.Data as TECControlledScope), guidDictionary);
-                    var newControlledScope = sourceItem as TECControlledScope;
-                    ModelLinkingHelper.LinkControlledScopeObjects(newControlledScope.Systems,
-                        newControlledScope.Controllers, newControlledScope.Panels, scopeManager, guidDictionary);
+                    sourceItem = new TECSystem((dropInfo.Data as TECSystem), guidDictionary);
+                    var newControlledScope = sourceItem as TECSystem;
+                    ModelLinkingHelper.LinkSystem(newControlledScope, scopeManager, guidDictionary);
                     if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                     {
                         ((IList)dropInfo.TargetCollection).Add(sourceItem);
