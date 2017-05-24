@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:utilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -19,53 +21,78 @@
     </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <grids:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
-                                    Margin="5"
-                                        Grid.Row="0" Grid.ColumnSpan="2" />
-        
-        <GridSplitter Grid.Row="1" Grid.ColumnSpan="2" 
-                      HorizontalAlignment="Stretch"/>
+        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type utilities:ProposalIndex}}}"
+                  SelectedItem="{Binding ElementName=parent, Path=SelectedProposalIndex}"
+                  Margin="5"
+                  VerticalContentAlignment="Center"/>
 
-        <grids:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
-                                            Margin="5"
-                                            Grid.Row="2"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"/>
+        <TabControl Grid.Column="1" Grid.RowSpan="2" Margin="5"
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedProposalIndex, Converter={cnvt:ProposalIndexToIntegerConverter}}">
 
-        <GridSplitter Grid.Row="3" Grid.ColumnSpan="2"
-                      HorizontalAlignment="Stretch"/>
+            <!--Scope Tab-->
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <Grid
-                 Grid.Row="4"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                    <TextBlock Text="Scope" Foreground="Black" FontSize="20"/>
 
-                <grids:NotesGridControl NotesSource="{Binding Bid.Notes}"
-                                        Margin="5"/>
-            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"
-                          HorizontalAlignment="Stretch"/>
-            <grids:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"
-                                             Grid.Column="2"
-                                         Margin="5"/>
-            </Grid>
+                    <grids:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
+                                                Grid.Row="1"/>
+                </Grid>
+            </TabItem>
+
+            <!--Systems Tab-->
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Systems" Foreground="Black" FontSize="20"/>
+
+                    <grids:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
+                                                    Grid.Row="1"/>
+
+                </Grid>
+            </TabItem>
             
-        
+            <!--Notes Tab-->
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Notes and Exclusions" Foreground="Black" FontSize="20"/>
+
+                    <grids:NotesGridControl NotesSource="{Binding Bid.Notes}"
+                                            Grid.Row="1"/>
+
+                    <grids:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"
+                                                 Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            
+        </TabControl>
+
+        <Border Grid.Column="1" Grid.RowSpan="2" Margin="5" BorderBrush="Black" BorderThickness="1"/>
     </Grid>
 </UserControl>
