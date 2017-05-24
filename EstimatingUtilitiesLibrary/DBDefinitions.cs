@@ -506,6 +506,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {

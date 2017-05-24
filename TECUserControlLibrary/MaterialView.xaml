@@ -7,6 +7,7 @@
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="400" d:DesignWidth="600">
@@ -178,6 +179,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="0"
@@ -190,14 +192,17 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        
                         <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding AssociatedCostName}"/>
-                        <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                        <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding AssociatedCostCost}"/>
+
+                        <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="3" Margin="2"
+                                  SelectedItem="{Binding AssociatedCostType}" 
+                                  ItemsSource="{Binding Source={local:EnumBindingSource {x:Type TECLib:CostType}}}"/>
 
                     </Grid>
                     <Grid Grid.Row="2">
@@ -207,17 +212,32 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Labor:" Margin="5,0,0,0"
+
+                        <TextBlock Text="Cost:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding AssociatedCostCost}"/>
+                        <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding AssociatedCostLabor}"/>
+                    </Grid>
 
-                        <Button Grid.Column="2" Grid.ColumnSpan="2"
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddAssociatedCostCommand}"/>
                     </Grid>
+
                     <grids:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
-                                          Grid.Row="3"
+                                          Grid.Row="4"
                                           Margin="5"/>
                 </Grid>
             </TabItem>
