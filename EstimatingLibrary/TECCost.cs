@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public enum CostType { TEC, Electrical }
+    public enum CostType { None, TEC, Electrical }
 
     public class TECCost : TECScope
     { 
@@ -44,8 +44,9 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
+                var temp = this.Copy();
                 _type = value;
-                RaisePropertyChanged("Type");
+                NotifyPropertyChanged("Type", temp, this);
             }
         }
 

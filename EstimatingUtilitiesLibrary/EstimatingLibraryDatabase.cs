@@ -1701,11 +1701,14 @@ namespace EstimatingUtilitiesLibrary
             string name = row[AssociatedCostTable.Name.Name].ToString();
             double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
             double labor = row[AssociatedCostTable.Labor.Name].ToString().ToDouble(0);
+            string costTypeString = row[AssociatedCostTable.Type.Name].ToString();
 
             var associatedCost = new TECCost(guid);
+
             associatedCost.Name = name;
             associatedCost.Cost = cost;
             associatedCost.Labor = labor;
+            associatedCost.Type = UtilitiesMethods.StringToEnum(costTypeString, CostType.None);
 
             return associatedCost;
         }

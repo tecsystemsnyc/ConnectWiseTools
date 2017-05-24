@@ -99,6 +99,16 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 RaisePropertyChanged("AssociatedCostName");
             }
         }
+        private CostType _associatedCostType;
+        public CostType AssociatedCostType
+        {
+            get { return _associatedCostType; }
+            set
+            {
+                _associatedCostType = value;
+                RaisePropertyChanged("AssociatedCostType");
+            }
+        }
         private double _associatedCostCost;
         public double AssociatedCostCost
         {
@@ -272,6 +282,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         {
             var associatedCost = new TECCost();
             associatedCost.Name = AssociatedCostName;
+            associatedCost.Type = AssociatedCostType;
             associatedCost.Cost = AssociatedCostCost;
             associatedCost.Labor = AssociatedCostLabor;
             Templates.Catalogs.AssociatedCosts.Add(associatedCost);
