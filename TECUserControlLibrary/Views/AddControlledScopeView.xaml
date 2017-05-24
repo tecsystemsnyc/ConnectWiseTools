@@ -34,8 +34,8 @@
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
             </Grid>
-            <grids:ControlledScopeDataGrid ControlledScopeSource="{Binding Bid.ControlledScope}"
-                                           SelectedItem="{Binding SelectedControlledScope}"
+            <grids:ControlledScopeDataGrid SystemSource="{Binding Bid.Systems}"
+                                           SelectedItem="{Binding SelectedSystem}"
                                            ViewModel="{Binding}"
                                            Grid.Row="1"/>
 
@@ -127,7 +127,7 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <grids:ControlledScopeDataGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                                   ControlledScopeSource="{Binding SelectedControlledScope.ScopeInstances}"
+                                                   SystemSource="{Binding SelectedSystem.SystemInstances}"
                                                    SelectedItem="{Binding SelectedChild}"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>

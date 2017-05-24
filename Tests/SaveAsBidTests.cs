@@ -34,7 +34,6 @@ namespace Tests
         //static TECVisualScope expectedVisualScope;
         static TECController expectedController;
         static TECProposalScope expectedPropScope;
-        static TECControlledScope expectedControlledScope;
 
         static string path;
 
@@ -57,7 +56,6 @@ namespace Tests
         //static TECVisualScope actualVisualScope;
         static TECController actualController;
         static TECProposalScope actualPropScope;
-        static TECControlledScope actualControlledScope;
 
 
         private TestContext testContextInstance;
@@ -84,7 +82,6 @@ namespace Tests
             expectedEquipment = expectedSystem.Equipment[0];
             expectedSubScope = expectedEquipment.SubScope[0];
             expectedDevice = expectedSubScope.Devices[0];
-            expectedControlledScope = expectedBid.ControlledScope[0];
 
             expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
             expectedPoint = expectedSubScope.Points[0];
@@ -264,15 +261,6 @@ namespace Tests
                 if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
                 {
                     actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            foreach(TECControlledScope controlledScope in actualBid.ControlledScope)
-            {
-                if(controlledScope.Guid == expectedControlledScope.Guid)
-                {
-                    actualControlledScope = controlledScope;
                     break;
                 }
             }
@@ -600,8 +588,8 @@ namespace Tests
         public void SaveAs_Bid_MiscCost()
         {
             //Arrange
-            TECMiscCost expectedCost = expectedBid.MiscCosts[0];
-            TECMiscCost actualCost = actualBid.MiscCosts[0];
+            TECMisc expectedCost = expectedBid.MiscCosts[0];
+            TECMisc actualCost = actualBid.MiscCosts[0];
 
             Assert.AreEqual(expectedCost.Name, actualBid.MiscCosts[0].Name);
             Assert.AreEqual(expectedCost.Cost, actualBid.MiscCosts[0].Cost);
@@ -612,8 +600,8 @@ namespace Tests
         public void SaveAs_Bid_MiscWiring()
         {
             //Arrange
-            TECMiscWiring expectedCost = expectedBid.MiscWiring[0];
-            TECMiscWiring actualCost = actualBid.MiscWiring[0];
+            TECMisc expectedCost = expectedBid.MiscWiring[0];
+            TECMisc actualCost = actualBid.MiscWiring[0];
 
             Assert.AreEqual(expectedCost.Name, actualBid.MiscWiring[0].Name);
             Assert.AreEqual(expectedCost.Cost, actualBid.MiscWiring[0].Cost);
@@ -647,16 +635,16 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_ControlledScope()
         {
-            Assert.AreEqual(expectedControlledScope.Guid, actualControlledScope.Guid);
-            Assert.AreEqual(expectedControlledScope.Systems.Count, actualControlledScope.Systems.Count);
-            Assert.AreEqual(expectedControlledScope.Controllers.Count, actualControlledScope.Controllers.Count);
-            Assert.AreEqual(expectedControlledScope.Panels.Count, actualControlledScope.Panels.Count);
+            Assert.AreEqual(expectedSystem.Guid, actualSystem.Guid);
+            Assert.AreEqual(expectedSystem.Equipment.Count, actualSystem.Equipment.Count);
+            Assert.AreEqual(expectedSystem.Controllers.Count, actualSystem.Controllers.Count);
+            Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
 
-            foreach(TECPanel panel in expectedControlledScope.Panels)
+            foreach(TECPanel panel in expectedSystem.Panels)
             {
                 foreach(TECController controller in panel.Controllers)
                 {
-                    foreach(TECPanel obervedPanel in actualControlledScope.Panels)
+                    foreach(TECPanel obervedPanel in actualSystem.Panels)
                     {
                         if(obervedPanel.Guid == panel.Guid)
                         {
@@ -673,7 +661,7 @@ namespace Tests
                     }
                 }
             }
-            Assert.AreEqual(expectedControlledScope.Panels.Count, actualControlledScope.Panels.Count);
+            Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
 
         }
 
@@ -683,24 +671,23 @@ namespace Tests
             int quantity = 3;
             TECBid saveBid = new TECBid();
             saveBid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(saveBid.Catalogs);
-            saveBid.ControlledScope.Add(controlledScope);
-            saveBid.addControlledScope(controlledScope, quantity);
+            TECSystem system = TestHelper.CreateTestSystem(saveBid.Catalogs);
+            saveBid.Systems.Add(system);
             
             //Act
             path = Path.GetTempFileName();
             EstimatingLibraryDatabase.SaveNew(path, saveBid);
             TECBid loadedBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-            TECControlledScope loadedControlledScope = loadedBid.ControlledScope[0];
+            TECSystem loadedSystem = loadedBid.Systems[0];
             
-            Assert.AreEqual(controlledScope.ScopeInstances.Count, loadedControlledScope.ScopeInstances.Count);
-            foreach(TECControlledScope loadedInstance in loadedControlledScope.ScopeInstances)
+            Assert.AreEqual(system.SystemInstances.Count, loadedSystem.SystemInstances.Count);
+            foreach(TECSystem loadedInstance in loadedSystem.SystemInstances)
             {
-                foreach(TECControlledScope saveInstance in controlledScope.ScopeInstances)
+                foreach(TECSystem saveInstance in system.SystemInstances)
                 {
                     if(loadedInstance.Guid == saveInstance.Guid)
                     {
-                        Assert.AreEqual(loadedInstance.Systems.Count, saveInstance.Systems.Count);
+                        Assert.AreEqual(loadedInstance.Equipment.Count, saveInstance.Equipment.Count);
                         Assert.AreEqual(loadedInstance.Panels.Count, saveInstance.Panels.Count);
                         Assert.AreEqual(loadedInstance.Controllers.Count, saveInstance.Controllers.Count);
                     }

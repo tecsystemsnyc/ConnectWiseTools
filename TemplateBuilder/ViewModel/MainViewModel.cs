@@ -578,7 +578,7 @@ namespace TemplateBuilder.ViewModel
                     ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
 
-                    ScopeCollection.TabIndex = ScopeCollectionIndex.ControlledScope;
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.System;
 
                     break;
                 default:
