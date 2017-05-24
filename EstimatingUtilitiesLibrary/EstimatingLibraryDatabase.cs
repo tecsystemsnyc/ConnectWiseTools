@@ -162,22 +162,7 @@ namespace EstimatingUtilitiesLibrary
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
             bid.Controllers = getControllers();
-            var misc = getMisc();
-            var wire = new ObservableCollection<TECMisc>();
-            var cost = new ObservableCollection<TECMisc>();
-            foreach(TECMisc item in misc)
-            {
-                if(item.Type == CostType.Electrical)
-                {
-                    wire.Add(item);
-                }
-                else if (item.Type == CostType.TEC)
-                {
-                    cost.Add(item);
-                }
-            }
-            bid.MiscWiring = wire;
-            bid.MiscCosts = cost;
+            bid.MiscCosts = getMisc();
             bid.Panels = getPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
@@ -214,7 +199,6 @@ namespace EstimatingUtilitiesLibrary
                     cost.Add(item);
                 }
             }
-            templates.MiscWiringTemplates = wire;
             templates.MiscCostTemplates = cost;
             templates.PanelTemplates = getOrphanPanels();
 
@@ -2159,10 +2143,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(new StackItem(Change.Add, bid, cost));
             }
-            foreach (TECMisc wiring in bid.MiscWiring)
-            {
-                addObject(new StackItem(Change.Add, bid, wiring));
-            }
             foreach (TECPanel panel in bid.Panels)
             {
                 savePanel(panel, bid);
@@ -2199,10 +2179,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECMisc cost in templates.MiscCostTemplates)
             {
                 addObject(new StackItem(Change.Add, templates, cost));
-            }
-            foreach (TECMisc wiring in templates.MiscWiringTemplates)
-            {
-                addObject(new StackItem(Change.Add, templates, wiring));
             }
             foreach (TECPanel panel in templates.PanelTemplates)
             {

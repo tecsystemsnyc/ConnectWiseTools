@@ -28,7 +28,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
         private ObservableCollection<TECMisc> _miscCosts { get; set; }
-        private ObservableCollection<TECMisc> _miscWiring { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
 
         public string Name
@@ -206,18 +205,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("MiscCosts", temp, this);
             }
         }
-        public ObservableCollection<TECMisc> MiscWiring
-        {
-            get { return _miscWiring; }
-            set
-            {
-                var temp = this.Copy();
-                MiscWiring.CollectionChanged -= CollectionChanged;
-                _miscWiring = value;
-                MiscWiring.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscWiring", temp, this);
-            }
-        }
         public ObservableCollection<TECPanel> Panels
         {
             get { return _panels; }
@@ -266,7 +253,6 @@ namespace EstimatingLibrary
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _proposalScope = new ObservableCollection<TECProposalScope>();
-            _miscWiring = new ObservableCollection<TECMisc>();
             _miscCosts = new ObservableCollection<TECMisc>();
             _panels = new ObservableCollection<TECPanel>();
             _labor = new TECLabor();
@@ -284,7 +270,6 @@ namespace EstimatingLibrary
             Controllers.CollectionChanged += CollectionChanged;
             ProposalScope.CollectionChanged += CollectionChanged;
             MiscCosts.CollectionChanged += CollectionChanged;
-            MiscWiring.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
 
             registerSystems();
@@ -348,8 +333,6 @@ namespace EstimatingLibrary
             { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach (TECMisc cost in bidSource.MiscCosts)
             { MiscCosts.Add(new TECMisc(cost)); }
-            foreach (TECMisc wiring in bidSource.MiscWiring)
-            { MiscWiring.Add(new TECMisc(wiring)); }
             foreach (TECPanel panel in bidSource.Panels)
             { Panels.Add(new TECPanel(panel)); }
         }
@@ -509,8 +492,6 @@ namespace EstimatingLibrary
             { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
             foreach (TECMisc cost in this.MiscCosts)
             { bid.MiscCosts.Add(cost.Copy() as TECMisc); }
-            foreach (TECMisc wiring in this.MiscWiring)
-            { bid.MiscWiring.Add(wiring.Copy() as TECMisc); }
             foreach (TECPanel panel in this.Panels)
             { bid.Panels.Add(panel.Copy() as TECPanel); }
             return bid;

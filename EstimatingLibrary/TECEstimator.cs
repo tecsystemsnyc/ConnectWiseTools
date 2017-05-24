@@ -322,11 +322,6 @@ namespace EstimatingLibrary
             {
                 addCost(miscCost);
             }
-            foreach (TECMisc miscWiring in bid.MiscWiring)
-            {
-                addCost(miscWiring);
-            }
-
         }
 
         #region Update From Changes

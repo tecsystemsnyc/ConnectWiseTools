@@ -120,6 +120,7 @@ namespace Tests
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
+            cost.Type = CostType.TEC;
 
             bid.MiscCosts.Add(cost);
 
@@ -128,9 +129,11 @@ namespace Tests
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
+            wiring.Type = CostType.Electrical;
 
-            bid.MiscWiring.Add(wiring);
+            bid.MiscCosts.Add(wiring);
             
+
             //Panels
             TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
             panel.Name = "Test Panel";
@@ -425,6 +428,7 @@ namespace Tests
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
+            cost.Type = CostType.TEC;
 
             templates.MiscCostTemplates.Add(cost);
 
@@ -433,8 +437,9 @@ namespace Tests
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
+            wiring.Type = CostType.Electrical;
 
-            templates.MiscWiringTemplates.Add(wiring);
+            templates.MiscCostTemplates.Add(wiring);
 
             //Panel Types
             TECPanelType panelType = new TECPanelType();

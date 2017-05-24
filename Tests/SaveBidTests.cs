@@ -2962,134 +2962,6 @@ namespace Tests
         }
         #endregion
 
-        #region Save Misc Wiring
-        [TestMethod]
-        public void Save_Bid_Add_MiscWiring()
-        {
-            //Act
-            TECMisc expectedCost = new TECMisc();
-            expectedCost.Name = "Add cost addition";
-            expectedCost.Cost = 978.3;
-            expectedCost.Quantity = 21;
-
-            bid.MiscWiring.Add(expectedCost);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMisc actualCost = null;
-            foreach (TECMisc cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Bid_Remove_MiscWiring()
-        {
-            //Act
-            TECMisc costToRemove = bid.MiscWiring[0];
-            bid.MiscWiring.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            //Assert
-            foreach (TECMisc cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Name()
-        {
-            //Act
-            TECMisc expectedCost = bid.MiscWiring[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMisc actualCost = null;
-            foreach (TECMisc cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Cost()
-        {
-            //Act
-            TECMisc expectedCost = bid.MiscWiring[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMisc actualCost = null;
-            foreach (TECMisc cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Quantity()
-        {
-            //Act
-            TECMisc expectedCost = bid.MiscWiring[0];
-            expectedCost.Quantity = 492;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMisc actualCost = null;
-            foreach (TECMisc cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-        #endregion
-
         #region Save Panel Type
         [TestMethod]
         public void Save_Bid_Add_PanelType()
@@ -3137,7 +3009,7 @@ namespace Tests
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
+            Assert.AreEqual(bid.Catalogs.PanelTypes.Count, actualBid.Catalogs.PanelTypes.Count);
         }
 
         [TestMethod]

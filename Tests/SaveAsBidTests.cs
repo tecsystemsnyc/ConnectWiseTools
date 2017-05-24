@@ -604,18 +604,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_MiscWiring()
-        {
-            //Arrange
-            TECMisc expectedCost = expectedBid.MiscWiring[0];
-            TECMisc actualCost = actualBid.MiscWiring[0];
-
-            Assert.AreEqual(expectedCost.Name, actualBid.MiscWiring[0].Name);
-            Assert.AreEqual(expectedCost.Cost, actualBid.MiscWiring[0].Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscWiring[0].Quantity);
-        }
-
-        [TestMethod]
         public void SaveAs_Bid_Panel()
         {
             //Arrange

@@ -60,8 +60,6 @@ namespace EstimatingLibrary.Utilities
             { registerPropScope(propScope); }
             foreach (TECMisc cost in Bid.MiscCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMisc wiring in Bid.MiscWiring)
-            { wiring.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
         }
@@ -77,8 +75,6 @@ namespace EstimatingLibrary.Utilities
             foreach (TECController controller in Templates.ControllerTemplates)
             { registerController(controller); }
             foreach (TECMisc addition in Templates.MiscCostTemplates)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECMisc addition in Templates.MiscWiringTemplates)
             { addition.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Templates.PanelTemplates)
             { panel.PropertyChanged += Object_PropertyChanged; }
