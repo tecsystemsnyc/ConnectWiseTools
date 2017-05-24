@@ -26,9 +26,9 @@ namespace TECUserControlLibrary.DataGrids
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECMiscCost> CostSource
+        public ObservableCollection<TECMisc> CostSource
         {
-            get { return (ObservableCollection<TECMiscCost>)GetValue(CostSourceProperty); }
+            get { return (ObservableCollection<TECMisc>)GetValue(CostSourceProperty); }
             set { SetValue(CostSourceProperty, value); }
         }
 
@@ -36,8 +36,8 @@ namespace TECUserControlLibrary.DataGrids
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty CostSourceProperty =
-            DependencyProperty.Register("CostSource", typeof(ObservableCollection<TECMiscCost>),
-              typeof(MiscCostGridControl), new PropertyMetadata(default(ObservableCollection<TECMiscCost>)));
+            DependencyProperty.Register("CostSource", typeof(ObservableCollection<TECMisc>),
+              typeof(MiscCostGridControl), new PropertyMetadata(default(ObservableCollection<TECMisc>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used

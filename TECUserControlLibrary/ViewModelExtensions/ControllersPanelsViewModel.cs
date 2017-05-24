@@ -33,15 +33,15 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 registerChanges();
             }
         }
-        private TECControlledScope _controlledScope;
-        public TECControlledScope ControlledScope
+        private TECSystem _selectedSystem;
+        public TECSystem SelectedSystem
         {
-            get { return _controlledScope; }
+            get { return _selectedSystem; }
             private set
             {
                 unregisterChanges();
-                _controlledScope = value;
-                RaisePropertyChanged("ControlledScope");
+                _selectedSystem = value;
+                RaisePropertyChanged("SelectedSystem");
                 registerChanges();
             }
         }
@@ -155,11 +155,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Bid = bid;
             setup();
         }
-        public ControllersPanelsViewModel(TECControlledScope controlledScope)
+        public ControllersPanelsViewModel(TECSystem system)
         {
-            sourceControllers = controlledScope.Controllers;
-            sourcePanels = controlledScope.Panels;
-            ControlledScope = controlledScope;
+            sourceControllers = system.Controllers;
+            sourcePanels = system.Panels;
+            SelectedSystem = system;
             setup();
         }
         #endregion
@@ -172,11 +172,11 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Bid = bid;
             setup();
         }
-        public void Refresh(TECControlledScope controlledScope)
+        public void Refresh(TECSystem system)
         {
-            sourceControllers = controlledScope.Controllers;
-            sourcePanels = controlledScope.Panels;
-            ControlledScope = controlledScope;
+            sourceControllers = system.Controllers;
+            sourcePanels = system.Panels;
+            SelectedSystem = system;
             setup();
         }
 

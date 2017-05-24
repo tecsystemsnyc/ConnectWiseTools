@@ -245,7 +245,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECControlledScope)
+            if (dropInfo.Data is TECSystem)
             {
                 UIHelpers.ControlledScopeDrop(dropInfo, Templates);
             }

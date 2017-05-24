@@ -293,7 +293,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         public void Refresh(TECBid bid)
         {
             Bid = bid;
-            ScopeSource = new ObservableCollection<TECControlledScope>();
+            ScopeSource = new ObservableCollection<TECSystem>();
             ScopeDataGrid.Refresh(Bid);
             setupCatalogCollections();
             //TECControlledScope refreshedControlledScope = ControlledScope.Copy() as TECControlledScope;
