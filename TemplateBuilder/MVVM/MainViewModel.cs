@@ -49,7 +49,7 @@ namespace TemplateBuilder.ViewModel
         public ScopeDataGridExtension ScopeDataGrid { get; set; }
         public EditTabExtension EditTab { get; set; }
         public MaterialsCostsExtension MaterialsTab { get; set; }
-        public ControlledScopeViewModel ControlledScopeVM { get; set; }
+        public ControlledScopeVM ControlledScopeVM { get; set; }
         #endregion
         protected override TECScopeManager workingScopeManager
         {
@@ -291,7 +291,7 @@ namespace TemplateBuilder.ViewModel
         }
         private void setupControlledScopeTab()
         {
-            ControlledScopeVM = new ControlledScopeViewModel(Templates);
+            ControlledScopeVM = new ControlledScopeVM(Templates);
             ControlledScopeVM.DragHandler += DragOver;
             ControlledScopeVM.DropHandler += Drop;
             ControlledScopeVM.SelectionChanged += EditTab.updateSelection;

@@ -92,168 +92,186 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddAssociatedCostsControl.xaml.cs">
+    <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddPanelControl.xaml.cs">
+    <Compile Include="UserControls\AddPanelControl.xaml.cs">
       <DependentUpon>AddPanelControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddTagControl.xaml.cs">
+    <Compile Include="UserControls\AddTagControl.xaml.cs">
       <DependentUpon>AddTagControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\AssociatedCostsGridControl.xaml.cs">
+    <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AttachableForStyleBehavior.cs" />
-    <Compile Include="BindingProxy.cs" />
-    <Compile Include="BubbleScrollEvent .cs" />
-    <Compile Include="ByLocationControl.xaml.cs">
+    <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
+    <Compile Include="Utilities\BindingProxy.cs" />
+    <Compile Include="Utilities\BubbleScrollEvent .cs" />
+    <Compile Include="UserControls\ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\AssociatedCostsSummaryGrid.xaml.cs">
+    <Compile Include="UserControls\AssociatedCostsSummaryGrid.xaml.cs">
       <DependentUpon>AssociatedCostsSummaryGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\BMSControllerGridControl.xaml.cs">
+    <Compile Include="UserControls\BMSControllerGridControl.xaml.cs">
       <DependentUpon>BMSControllerGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ConduitTypeGridControl.xaml.cs">
+    <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ConnectionGrid.xaml.cs">
+    <Compile Include="UserControls\ConnectionGrid.xaml.cs">
       <DependentUpon>ConnectionGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ConnectionTypeGridControl.xaml.cs">
+    <Compile Include="UserControls\ConnectionTypeGridControl.xaml.cs">
       <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ControlledScopeDataGrid.xaml.cs">
+    <Compile Include="UserControls\ControlledScopeDataGrid.xaml.cs">
       <DependentUpon>ControlledScopeDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ControllerEditControl.xaml.cs">
+    <Compile Include="UserControls\ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ControlledScopeSystemsGrid.xaml.cs">
+    <Compile Include="UserControls\ControlledScopeSystemsGrid.xaml.cs">
       <DependentUpon>ControlledScopeSystemsGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ControllerGridControl.xaml.cs">
+    <Compile Include="UserControls\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ControllerInPanelGridControl.xaml.cs">
+    <Compile Include="UserControls\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\DeviceConnectionTypeGrid.xaml.cs">
+    <Compile Include="UserControls\DeviceConnectionTypeGrid.xaml.cs">
       <DependentUpon>DeviceConnectionTypeGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\MiscWiringGridControl.xaml.cs">
+    <Compile Include="Views\MiscWiringGridControl.xaml.cs">
       <DependentUpon>MiscWiringGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\MiscCostGridControl.xaml.cs">
+    <Compile Include="Views\MiscCostGridControl.xaml.cs">
       <DependentUpon>MiscCostGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\IOGridControl.xaml.cs">
+    <Compile Include="UserControls\IOGridControl.xaml.cs">
       <DependentUpon>IOGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\IOModuleGridControl.xaml.cs">
+    <Compile Include="UserControls\IOModuleGridControl.xaml.cs">
       <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\PanelsGrid.xaml.cs">
+    <Compile Include="Views\PanelsGrid.xaml.cs">
       <DependentUpon>PanelsGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\PanelTypeGridControl.xaml.cs">
+    <Compile Include="Views\PanelTypeGridControl.xaml.cs">
       <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DeviceEditControl.xaml.cs">
+    <Compile Include="UserControls\DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DocumentBuilderControl.xaml.cs">
-      <DependentUpon>DocumentBuilderControl.xaml</DependentUpon>
+    <Compile Include="Views\DocumentBuilderView.xaml.cs">
+      <DependentUpon>DocumentBuilderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditTabControl.xaml.cs">
-      <DependentUpon>EditTabControl.xaml</DependentUpon>
+    <Compile Include="Views\EditTabView.xaml.cs">
+      <DependentUpon>EditTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EquipmentEditControl.xaml.cs">
+    <Compile Include="UserControls\EquipmentEditControl.xaml.cs">
       <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ExclusionsGridControl.xaml.cs">
+    <Compile Include="UserControls\ExclusionsGridControl.xaml.cs">
       <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\LocationGridControl.xaml.cs">
+    <Compile Include="Views\LocationGridControl.xaml.cs">
       <DependentUpon>LocationGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MaterialView.xaml.cs">
+    <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AssociatedCostSummaryItem.cs" />
     <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
+    <Compile Include="Models\DeviceSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
+    <Compile Include="Models\LengthSummaryItem.cs" />
+    <Compile Include="Models\PanelTypeSummaryItem.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
-    <Compile Include="DataGrids\NotesGridControl.xaml.cs">
+    <Compile Include="Views\NotesGridControl.xaml.cs">
       <DependentUpon>NotesGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelEditControl.xaml.cs">
+    <Compile Include="Views\PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelTypeEditControl.xaml.cs">
+    <Compile Include="Views\PanelTypeEditControl.xaml.cs">
       <DependentUpon>PanelTypeEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PointEditControl.xaml.cs">
+    <Compile Include="Views\PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ProposalScopeGridControl.xaml.cs">
+    <Compile Include="Views\ProposalScopeGridControl.xaml.cs">
       <DependentUpon>ProposalScopeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ScopeBranchAsNoteGridControl.xaml.cs">
+    <Compile Include="Views\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScopeCollectionsTabControl.xaml.cs">
+    <Compile Include="Views\ScopeCollectionsTabControl.xaml.cs">
       <DependentUpon>ScopeCollectionsTabControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ScopeTreeGridControl.xaml.cs">
+    <Compile Include="Views\ScopeTreeGridControl.xaml.cs">
       <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIHelpers.cs" />
+    <Compile Include="Utilities\UIHelpers.cs" />
     <Compile Include="UserControls\StatusBarControl.xaml.cs">
       <DependentUpon>StatusBarControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SubScopeEditControl.xaml.cs">
+    <Compile Include="Views\SubScopeEditControl.xaml.cs">
       <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SubScopeWiringGridControl.xaml.cs">
+    <Compile Include="Views\SubScopeWiringGridControl.xaml.cs">
       <DependentUpon>SubScopeWiringGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemEditControl.xaml.cs">
+    <Compile Include="Views\SystemEditControl.xaml.cs">
       <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TECResourceDictionary.xaml.cs">
       <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextBoxEnterKeyUpdateBehavior.cs" />
+    <Compile Include="Utilities\TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="UserControls\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModelExtensions\AddControlledScopeExtension.cs" />
-    <Compile Include="ViewModelExtensions\ControllersPanelsViewModel.cs" />
-    <Compile Include="ViewModelExtensions\EditTabExtension.cs" />
-    <Compile Include="ViewModelExtensions\LocationDataGridExtension.cs" />
-    <Compile Include="ViewModelExtensions\MaterialsCostsExtension.cs" />
-    <Compile Include="ViewModels\BuilderViewModel.cs" />
+    <Compile Include="Utilities\EnumBindingSourceExtension.cs" />
+    <Compile Include="ViewModels\AddControlledScopeVM.cs" />
+    <Compile Include="ViewModels\ControllersPanelsVM.cs" />
+    <Compile Include="ViewModels\EditTabVM.cs" />
+    <Compile Include="ViewModels\LocationDataGridExtension.cs" />
+    <Compile Include="ViewModels\MaterialsCostsExtension.cs" />
+    <Compile Include="BaseVMs\BuilderViewModel.cs" />
+    <Compile Include="ViewModels\DrawingVM.cs" />
+    <Compile Include="ViewModels\ElectricalMaterialSummaryVM.cs" />
+    <Compile Include="ViewModels\ElectricalVM.cs" />
+    <Compile Include="ViewModels\LaborViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
-    <Compile Include="ViewModelExtensions\ScopeCollectionExtension.cs" />
-    <Compile Include="ViewModelExtensions\ScopeDataGridExtension.cs" />
-    <Compile Include="ViewModelExtensions\StatusBarExtension.cs" />
-    <Compile Include="ViewModels\BidEditorBase.cs" />
-    <Compile Include="ViewModels\BudgetViewModel.cs" />
-    <Compile Include="ViewModels\ControlledScopeViewModel.cs" />
-    <Compile Include="ViewModels\DocumentBuilderViewModel.cs" />
+    <Compile Include="ViewModels\ScopeCollectionExtension.cs" />
+    <Compile Include="ViewModels\ScopeDataGridExtension.cs" />
+    <Compile Include="ViewModels\StatusBarExtension.cs" />
+    <Compile Include="BaseVMs\BidEditorBase.cs" />
+    <Compile Include="ViewModels\BudgetVM.cs" />
+    <Compile Include="ViewModels\ControlledScopeVM.cs" />
+    <Compile Include="ViewModels\DocumentBuilderVM.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
-    <Compile Include="BudgetWindow.xaml.cs">
-      <DependentUpon>BudgetWindow.xaml</DependentUpon>
+    <Compile Include="Views\BudgetView.xaml.cs">
+      <DependentUpon>BudgetView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ViewModels\ProposalViewModel.cs" />
+    <Compile Include="ViewModels\ReviewViewModel.cs" />
+    <Compile Include="ViewModels\ScopeEditorViewModel.cs" />
+    <Compile Include="ViewModels\ScopeEditorViewModelData.cs" />
+    <Compile Include="ViewModels\ScopeViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\TECMaterialViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AddControlledScopeView.xaml.cs">
       <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ConstantsView.xaml.cs">
+      <DependentUpon>ConstantsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlledScopeView.xaml.cs">
       <DependentUpon>ControlledScopeView.xaml</DependentUpon>
@@ -261,186 +279,222 @@
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\DeviceListView.xaml.cs">
+      <DependentUpon>DeviceListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DrawingView.xaml.cs">
+      <DependentUpon>DrawingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ElectricalMaterialSummaryView.xaml.cs">
+      <DependentUpon>ElectricalMaterialSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ElectricalView.xaml.cs">
+      <DependentUpon>ElectricalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LaborView.xaml.cs">
+      <DependentUpon>LaborView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LengthSummaryDataGrid.xaml.cs">
+      <DependentUpon>LengthSummaryDataGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NetworkView.xaml.cs">
       <DependentUpon>NetworkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PanelTypeListView.xaml.cs">
+      <DependentUpon>PanelTypeListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProposalView.xaml.cs">
+      <DependentUpon>ProposalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReviewTabControl.xaml.cs">
+      <DependentUpon>ReviewTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReviewView.xaml.cs">
+      <DependentUpon>ReviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScopeEditorView.xaml.cs">
+      <DependentUpon>ScopeEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VisibilityModel.cs" />
-    <Page Include="AddAssociatedCostsControl.xaml">
+    <Compile Include="Views\TECMaterialView.xaml.cs">
+      <DependentUpon>TECMaterialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\VisibilityModel.cs" />
+    <Page Include="UserControls\AddAssociatedCostsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddPanelControl.xaml">
+    <Page Include="UserControls\AddPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddTagControl.xaml">
+    <Page Include="UserControls\AddTagControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\AssociatedCostsGridControl.xaml">
+    <Page Include="UserControls\AssociatedCostsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ByLocationControl.xaml">
+    <Page Include="UserControls\ByLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\AssociatedCostsSummaryGrid.xaml">
+    <Page Include="UserControls\AssociatedCostsSummaryGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\BMSControllerGridControl.xaml">
+    <Page Include="UserControls\BMSControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ConduitTypeGridControl.xaml">
+    <Page Include="UserControls\ConduitTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ConnectionGrid.xaml">
+    <Page Include="UserControls\ConnectionGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ConnectionTypeGridControl.xaml">
+    <Page Include="UserControls\ConnectionTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ControlledScopeDataGrid.xaml">
+    <Page Include="UserControls\ControlledScopeDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ControllerEditControl.xaml">
+    <Page Include="UserControls\ControllerEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ControlledScopeSystemsGrid.xaml">
+    <Page Include="UserControls\ControlledScopeSystemsGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ControllerGridControl.xaml">
+    <Page Include="UserControls\ControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ControllerInPanelGridControl.xaml">
+    <Page Include="UserControls\ControllerInPanelGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\DeviceConnectionTypeGrid.xaml">
+    <Page Include="UserControls\DeviceConnectionTypeGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\MiscWiringGridControl.xaml">
+    <Page Include="Views\MiscWiringGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DataGrids\MiscCostGridControl.xaml">
+    <Page Include="Views\MiscCostGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\IOGridControl.xaml">
+    <Page Include="UserControls\IOGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\IOModuleGridControl.xaml">
+    <Page Include="UserControls\IOModuleGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\PanelsGrid.xaml">
+    <Page Include="Views\PanelsGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\PanelTypeGridControl.xaml">
+    <Page Include="Views\PanelTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DeviceEditControl.xaml">
+    <Page Include="UserControls\DeviceEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\DevicesGridControl.xaml">
+    <Page Include="UserControls\DevicesGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DevicesPointsControl.xaml">
+    <Page Include="UserControls\DevicesPointsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DocumentBuilderControl.xaml">
+    <Page Include="Views\DocumentBuilderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EditTabControl.xaml">
+    <Page Include="Views\EditTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EquipmentEditControl.xaml">
+    <Page Include="UserControls\EquipmentEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\EquipmentGridControl.xaml">
+    <Page Include="UserControls\EquipmentGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DataGrids\ExclusionsGridControl.xaml">
+    <Page Include="UserControls\ExclusionsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\LocationGridControl.xaml">
+    <Page Include="Views\LocationGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ManufacturersGridControl.xaml">
+    <Page Include="Views\ManufacturersGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MaterialView.xaml">
+    <Page Include="Views\MaterialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\NotesGridControl.xaml">
+    <Page Include="Views\NotesGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelEditControl.xaml">
+    <Page Include="Views\PanelEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelTypeEditControl.xaml">
+    <Page Include="Views\PanelTypeEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PointEditControl.xaml">
+    <Page Include="Views\PointEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\PointsGridControl.xaml">
+    <Page Include="Views\PointsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DataGrids\ProposalScopeGridControl.xaml">
+    <Page Include="Views\ProposalScopeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ScopeBranchAsNoteGridControl.xaml">
+    <Page Include="Views\ScopeBranchAsNoteGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScopeCollectionsTabControl.xaml">
+    <Page Include="Views\ScopeCollectionsTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScopeControl.xaml">
+    <Page Include="Views\ScopeControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ScopeItemsControl.xaml">
+    <Page Include="Views\ScopeItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\ScopeTreeGridControl.xaml">
+    <Page Include="Views\ScopeTreeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -448,27 +502,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SubScopeEditControl.xaml">
+    <Page Include="Views\SubScopeEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\SubScopeGridControl.xaml">
+    <Page Include="Views\SubScopeGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SubScopeWiringGridControl.xaml">
+    <Page Include="Views\SubScopeWiringGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SystemEditControl.xaml">
+    <Page Include="Views\SystemEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataGrids\SystemsGridControl .xaml">
+    <Page Include="Views\SystemsGridControl .xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DataGrids\TagsGridControl.xaml">
+    <Page Include="Views\TagsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -480,40 +534,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="BaseConverter.cs" />
-    <Compile Include="DataGrids\DevicesGridControl.xaml.cs">
+    <Compile Include="Utilities\BaseConverter.cs" />
+    <Compile Include="UserControls\DevicesGridControl.xaml.cs">
       <DependentUpon>DevicesGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DevicesPointsControl.xaml.cs">
+    <Compile Include="UserControls\DevicesPointsControl.xaml.cs">
       <DependentUpon>DevicesPointsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnumBindingSourceExtension.cs" />
-    <Compile Include="DataGrids\EquipmentGridControl.xaml.cs">
+    <Compile Include="UserControls\EquipmentGridControl.xaml.cs">
       <DependentUpon>EquipmentGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HelperConverters.cs" />
-    <Compile Include="DataGrids\ManufacturersGridControl.xaml.cs">
+    <Compile Include="Utilities\HelperConverters.cs" />
+    <Compile Include="Views\ManufacturersGridControl.xaml.cs">
       <DependentUpon>ManufacturersGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\PointsGridControl.xaml.cs">
+    <Compile Include="Views\PointsGridControl.xaml.cs">
       <DependentUpon>PointsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScopeControl.xaml.cs">
+    <Compile Include="Views\ScopeControl.xaml.cs">
       <DependentUpon>ScopeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScopeItemsControl.xaml.cs">
+    <Compile Include="Views\ScopeItemsControl.xaml.cs">
       <DependentUpon>ScopeItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\SubScopeGridControl.xaml.cs">
+    <Compile Include="Views\SubScopeGridControl.xaml.cs">
       <DependentUpon>SubScopeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\SystemsGridControl .xaml.cs">
+    <Compile Include="Views\SystemsGridControl .xaml.cs">
       <DependentUpon>SystemsGridControl .xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\TagsGridControl.xaml.cs">
+    <Compile Include="Views\TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="BudgetWindow.xaml">
+    <Page Include="Views\BudgetView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -525,6 +578,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ConstantsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ControlledScopeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -533,13 +590,61 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\DeviceListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DrawingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ElectricalMaterialSummaryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ElectricalView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LaborView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LengthSummaryDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NetworkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PanelTypeListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ProposalView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ReviewTabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ReviewView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ScopeEditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TECMaterialView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -567,9 +672,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">

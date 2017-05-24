@@ -10,7 +10,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ProposalViewModel : DocumentBuilderViewModel
+    public class ProposalViewModel : DocumentBuilderVM
     {
         public ProposalViewModel(TECBid bid) : base(bid) { }
     }

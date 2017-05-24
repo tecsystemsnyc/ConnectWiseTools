@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ControlledScopeViewModel : ViewModelBase, IDropTarget
+    public class ControlledScopeVM : ViewModelBase, IDropTarget
     {
         #region Properties
 
@@ -181,7 +181,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Constructor
-        public ControlledScopeViewModel(TECTemplates templates)
+        public ControlledScopeVM(TECTemplates templates)
         {
             Templates = templates;
             setupCollections();

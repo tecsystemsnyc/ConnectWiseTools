@@ -55,8 +55,8 @@ namespace Scope_Builder.ViewModel
         public LocationDataGridExtension LocationDataGrid { get; set; }
         public ScopeCollectionExtension ScopeCollection { get; set; }
 
-        public DocumentBuilderViewModel DocumentBuilderVM { get; set; }
-        public BudgetViewModel BudgetVM { get; set; }
+        public DocumentBuilderVM DocumentBuilderVM { get; set; }
+        public BudgetVM BudgetVM { get; set; }
         #endregion
 
         #region Commands Properties
@@ -360,7 +360,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupBudget()
         {
-            BudgetVM = new BudgetViewModel(new TECBid());
+            BudgetVM = new BudgetVM(new TECBid());
         }
         #endregion
 

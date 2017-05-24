@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class BudgetViewModel : ViewModelBase
+    public class BudgetVM : ViewModelBase
     {
         #region Properties
         private double _manualAdjustmentAmount;
@@ -126,7 +126,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion 
 
         #region Constructors
-        public BudgetViewModel(TECBid bid)
+        public BudgetVM(TECBid bid)
         {
             Bid = bid;
             setupBid(Bid);

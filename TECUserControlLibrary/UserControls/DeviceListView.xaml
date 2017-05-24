@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -78,7 +79,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <cLibGrids:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
+                <views:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
                 
                 <TextBlock Grid.Row="1" Text="{Binding FirstString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.Device.Name, Converter={cnvt:StringToQuoteConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>

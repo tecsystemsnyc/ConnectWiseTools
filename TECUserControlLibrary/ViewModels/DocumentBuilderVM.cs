@@ -9,7 +9,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class DocumentBuilderViewModel : ViewModelBase
+    public class DocumentBuilderVM : ViewModelBase
     {
         private TECBid _bid;
         public TECBid Bid
@@ -22,7 +22,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public DocumentBuilderViewModel(TECBid bid)
+        public DocumentBuilderVM(TECBid bid)
         {
             Bid = bid;
         }
