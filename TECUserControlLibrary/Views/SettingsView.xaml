@@ -24,9 +24,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*" MinWidth="200"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
         <!--Default Directory Setting-->
