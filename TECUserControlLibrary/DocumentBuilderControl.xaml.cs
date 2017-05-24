@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingUtilitiesLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,12 +28,18 @@ namespace TECUserControlLibrary
             set { SetValue(ViewModelProperty, value); }
         }
 
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
               typeof(DocumentBuilderControl));
+
+        public ProposalIndex SelectedProposalIndex
+        {
+            get { return (ProposalIndex)GetValue(SelectedProposalIndexProperty); }
+            set { SetValue(SelectedProposalIndexProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedProposalIndexProperty =
+            DependencyProperty.Register("SelectedProposalIndex", typeof(ProposalIndex),
+              typeof(DocumentBuilderControl), new PropertyMetadata(default(ProposalIndex)));
 
         public DocumentBuilderControl()
         {

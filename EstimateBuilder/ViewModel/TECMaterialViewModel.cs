@@ -945,6 +945,7 @@ namespace EstimateBuilder.ViewModel
                     }
                 }
             }
+            IsExpanded = false;
         }
         private bool AddDeviceCanConfirm()
         {
@@ -971,9 +972,15 @@ namespace EstimateBuilder.ViewModel
                         {
                             ss.Devices.Remove(dev);
                         }
+                        if (SelectedDevice == null)
+                        {
+                            IsExpanded = false;
+                            return;
+                        }
                     }
                 }
             }
+            IsExpanded = false;
         }
         private bool RemoveDeviceCanConfirm()
         {
@@ -1001,9 +1008,15 @@ namespace EstimateBuilder.ViewModel
                             ss.Devices.Remove(dev);
                             ss.Devices.Add(NewSelectedDevice);
                         }
+                        if (SelectedDevice == null)
+                        {
+                            IsExpanded = false;
+                            return;
+                        }
                     }
                 }
             }
+            IsExpanded = false;
         }
         private bool ReplaceDeviceCanConfirm()
         {

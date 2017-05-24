@@ -300,4 +300,5 @@ namespace EstimatingUtilitiesLibrary
     public enum ControlledScopeEditIndex { Edit, Qty };
     public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
+    public enum ProposalIndex { Scope, Systems, Notes }
 }
