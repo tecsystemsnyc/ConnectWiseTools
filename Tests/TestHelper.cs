@@ -263,8 +263,7 @@ namespace Tests
             TECManufacturer childDevMan = new TECManufacturer();
             childDevMan.Name = "Child Manufacturer (Child Device)";
             childDevMan.Multiplier = 0.916;
-
-
+            
             templates.Catalogs.Manufacturers.Add(testMan);
             templates.Catalogs.Manufacturers.Add(testDevMan);
             templates.Catalogs.Manufacturers.Add(childDevMan);
@@ -338,10 +337,7 @@ namespace Tests
             system.Name = "Test System";
             system.Description = "System Description";
             system.BudgetPriceModifier = 587.3;
-
-            TECSystem controlledSystem = new TECSystem();
-            controlledSystem.Name = "Controlled System";
-
+            
             TECEquipment sysEquip = new TECEquipment();
             sysEquip.Name = "System Equipment";
             sysEquip.Description = "Child Equipment";
@@ -468,22 +464,22 @@ namespace Tests
             //controlledController.ChildrenConnections.Add(controlledConnection);
 
             //Controlled Scope
-            TECSystem testConScope = CreateTestSystem(templates.Catalogs);
-            testConScope.Name = "Test Controlled Scope";
-            testConScope.Description = "Test Description";
-            var controlledScopeEquipment = equipment.DragDropCopy() as TECEquipment;
-            testConScope.Equipment.Add(controlledScopeEquipment);
-            var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
-            controlledScopePanel.Type = panelType;
-            testConScope.Panels.Add(controlledScopePanel);
-            var controlledScopeController = controlledController.DragDropCopy() as TECController;
-            controlledScopePanel.Controllers.Add(controlledScopeController);
-            testConScope.Controllers.Add(controlledScopeController);
-            var connection = controlledScopeController.AddSubScope(subScope.DragDropCopy() as TECSubScope);
-            connection.Length = 42;
-            controlledScopeController.ChildrenConnections[0].ConduitType = testConduitType;
+            //TECSystem testConScope = CreateTestSystem(templates.Catalogs);
+            //testConScope.Name = "Test Controlled Scope";
+            //testConScope.Description = "Test Description";
+            //var controlledScopeEquipment = equipment.DragDropCopy() as TECEquipment;
+            //testConScope.Equipment.Add(controlledScopeEquipment);
+            //var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
+            //controlledScopePanel.Type = panelType;
+            //testConScope.Panels.Add(controlledScopePanel);
+            //var controlledScopeController = controlledController.DragDropCopy() as TECController;
+            //controlledScopePanel.Controllers.Add(controlledScopeController);
+            //testConScope.Controllers.Add(controlledScopeController);
+            //var connection = controlledScopeController.AddSubScope(subScope.DragDropCopy() as TECSubScope);
+            //connection.Length = 42;
+            //controlledScopeController.ChildrenConnections[0].ConduitType = testConduitType;
 
-            templates.SystemTemplates.Add(testConScope);
+            //templates.SystemTemplates.Add(testConScope);
 
             return templates;
         }
@@ -615,7 +611,6 @@ namespace Tests
             var panel = new TECPanel(catalogs.PanelTypes[0]);
 
             outScope.Panels.Add(panel);
-
             var equipment = CreateTestEquipment(catalogs);
             outScope.Equipment.Add(equipment);
 

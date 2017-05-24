@@ -2245,12 +2245,7 @@ namespace EstimatingUtilitiesLibrary
             var change = Change.Add;
             addObject(new StackItem(change, scopeManager, system));
             saveScopeChildProperties(system);
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                addObject(new StackItem(change, system, equipment));
-                saveScopeChildProperties(system);
-                saveCompleteEquipment(system);
-            }
+            saveCompleteEquipment(system);
             foreach (TECPanel panel in system.Panels)
             {
                 savePanel(panel, system);
