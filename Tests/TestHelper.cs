@@ -592,6 +592,18 @@ namespace Tests
 
             outCatalogs.PanelTypes.Add(panelType);
 
+            //Associated Costs
+            TECCost testAssociatedCost = new TECCost();
+            testAssociatedCost.Name = "Flex";
+            testAssociatedCost.Cost = 42;
+
+            outCatalogs.AssociatedCosts.Add(testAssociatedCost);
+
+            var testCost2 = new TECCost();
+            testCost2.Name = "Other Cost";
+            outCatalogs.AssociatedCosts.Add(testCost2);
+
+
             return outCatalogs;
 
         }
@@ -703,10 +715,18 @@ namespace Tests
         public static T RandomObject<T>(this ObservableCollection<T> list)
         {
             int index = 0;
-            int maxIndex = list.Count - 1;
-            Random rand = new Random();
-            index = rand.Next(0, maxIndex);
-            return list[index];
+            if(list.Count > 0)
+            {
+                int maxIndex = list.Count - 1;
+                Random rand = new Random();
+                index = rand.Next(0, maxIndex);
+                return list[index];
+            }
+            else
+            {
+                return default(T);
+            }
+            
             
         }
         public static int RandomInt(int min, int max)

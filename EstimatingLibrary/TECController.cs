@@ -98,7 +98,7 @@ namespace EstimatingLibrary
         {
             var outCosts = new List<TECCost>();
             outCosts.Add(this);
-            foreach(TECCost cost in Costs)
+            foreach(TECCost cost in AssociatedCosts)
             {
                 outCosts.Add(cost);
             }
