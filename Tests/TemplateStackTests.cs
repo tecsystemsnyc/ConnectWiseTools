@@ -853,31 +853,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Template_MiscWiring()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Template.MiscWiringTemplates)
-            {
-                expected.Add(item);
-            }
-            TECMisc edit = new TECMisc();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
-            Template.MiscWiringTemplates.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECMisc> actual = Template.MiscWiringTemplates;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
-        [TestMethod]
         public void Undo_Template_PanelType()
         {
             //Arrange
@@ -1589,30 +1564,6 @@ namespace Tests
 
             //assert
             ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Template_MiscWiring()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECMisc edit = new TECMisc();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.MiscWiringTemplates.Add(edit);
-            var expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Template.MiscWiringTemplates)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECMisc> actual = Template.MiscWiringTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

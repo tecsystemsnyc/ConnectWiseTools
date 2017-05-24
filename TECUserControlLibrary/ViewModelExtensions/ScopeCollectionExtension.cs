@@ -293,17 +293,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
         private Visibility _miscCostVisibility;
-
-        public Visibility MiscWiringVisibility
-        {
-            get { return _miscWiringVisibility; }
-            set
-            {
-                _miscWiringVisibility = value;
-                RaisePropertyChanged("MiscWiringVisibility");
-            }
-        }
-        private Visibility _miscWiringVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -632,17 +621,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             }
         }
 
-        private ObservableCollection<TECMisc> _miscWiringCollection;
-        public ObservableCollection<TECMisc> MiscWiringCollection
-        {
-            get { return _miscWiringCollection; }
-            set
-            {
-                _miscWiringCollection = value;
-                RaisePropertyChanged("MiscWiringCollection");
-            }
-        }
-
         private ObservableCollection<TECMisc> _miscCostsCollection;
         public ObservableCollection<TECMisc> MiscCostsCollection
         {
@@ -896,27 +874,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                             }
                         }
                         break;
-                    case ScopeCollectionIndex.MiscWiring:
-                        MiscWiringCollection = new ObservableCollection<TECMisc>();
-                        foreach (TECMisc item in Templates.MiscWiringTemplates)
-                        {
-                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                            {
-                                MiscWiringCollection.Add(item);
-                            }
-                            else
-                            {
-                                foreach (TECTag tag in item.Tags)
-                                {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
-                                    {
-                                        MiscWiringCollection.Add(item);
-                                    }
-                                }
-                            }
-                        }
-                        break;
                     default:
                         break;
 
@@ -950,9 +907,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                     canSearch = true;
                     break;
                 case ScopeCollectionIndex.MiscCosts:
-                    canSearch = true;
-                    break;
-                case ScopeCollectionIndex.MiscWiring:
                     canSearch = true;
                     break;
                 default:
@@ -1200,7 +1154,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             ControllersItemsCollection = new ObservableCollection<TECController>();
             AssociatedCostsItemsCollection = new ObservableCollection<TECCost>();
             PanelsItemsCollection = new ObservableCollection<TECPanel>();
-            MiscWiringCollection = new ObservableCollection<TECMisc>();
             MiscCostsCollection = new ObservableCollection<TECMisc>();
 
             TECSystem blankScope = new TECSystem();
@@ -1235,10 +1188,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             {
                 PanelsItemsCollection.Add(panel);
             }
-            foreach (TECMisc wiring in Templates.MiscWiringTemplates)
-            {
-                MiscWiringCollection.Add(wiring);
-            }
             foreach (TECMisc cost in Templates.MiscCostTemplates)
             {
                 MiscCostsCollection.Add(cost);
@@ -1256,7 +1205,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
                 Templates.Catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
                 Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
-                Templates.MiscWiringTemplates.CollectionChanged -= MiscWiringTemplates_CollectionChanged;
                 Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
             }
         }
@@ -1270,7 +1218,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
             Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
             Templates.Catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
-            Templates.MiscWiringTemplates.CollectionChanged += MiscWiringTemplates_CollectionChanged;
             Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
         }
 
@@ -1426,24 +1373,6 @@ namespace TECUserControlLibrary.ViewModelExtensions
                 foreach (object item in e.OldItems)
                 {
                     MiscCostsCollection.Remove(item as TECMisc);
-                }
-            }
-        }
-
-        private void MiscWiringTemplates_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    MiscWiringCollection.Add(item as TECMisc);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    MiscWiringCollection.Remove(item as TECMisc);
                 }
             }
         }

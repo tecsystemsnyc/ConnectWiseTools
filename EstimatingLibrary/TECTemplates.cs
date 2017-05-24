@@ -16,7 +16,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECController> _controllerTemplates;
         private ObservableCollection<TECMisc> _miscCostTemplates;
-        private ObservableCollection<TECMisc> _miscWiringTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
 
         public ObservableCollection<TECSystem> SystemTemplates
@@ -79,18 +78,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("MiscCostTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECMisc> MiscWiringTemplates
-        {
-            get { return _miscWiringTemplates; }
-            set
-            {
-                var temp = this.Copy();
-                MiscWiringTemplates.CollectionChanged -= CollectionChanged;
-                _miscWiringTemplates = value;
-                MiscWiringTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscWiringTemplates", temp, this);
-            }
-        }
         public ObservableCollection<TECPanel> PanelTemplates
         {
             get { return _panelTemplates; }
@@ -115,7 +102,6 @@ namespace EstimatingLibrary
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
             _controllerTemplates = new ObservableCollection<TECController>();
-            _miscWiringTemplates = new ObservableCollection<TECMisc>();
             _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
 
@@ -123,7 +109,6 @@ namespace EstimatingLibrary
             EquipmentTemplates.CollectionChanged += CollectionChanged;
             SubScopeTemplates.CollectionChanged += CollectionChanged;
             ControllerTemplates.CollectionChanged += CollectionChanged;
-            MiscWiringTemplates.CollectionChanged += CollectionChanged;
             MiscCostTemplates.CollectionChanged += CollectionChanged;
             PanelTemplates.CollectionChanged += CollectionChanged;
         }
@@ -144,10 +129,6 @@ namespace EstimatingLibrary
             foreach (TECMisc cost in templatesSource.MiscCostTemplates)
             {
                 MiscCostTemplates.Add(new TECMisc(cost));
-            }
-            foreach (TECMisc wiring in templatesSource.MiscWiringTemplates)
-            {
-                MiscWiringTemplates.Add(new TECMisc(wiring));
             }
             foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
@@ -198,8 +179,6 @@ namespace EstimatingLibrary
             { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
             foreach (TECMisc cost in this.MiscCostTemplates)
             { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
-            foreach (TECMisc wiring in this.MiscWiringTemplates)
-            { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMisc); }
             foreach (TECPanel panel in this.PanelTemplates)
             { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
             return outTemplate;

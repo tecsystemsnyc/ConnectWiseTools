@@ -315,19 +315,6 @@ namespace Tests
 
 
         [TestMethod]
-        public void Load_Templates_MiscWiring()
-        {
-            //Arrange
-            TECMisc actualCost = actualTemplates.MiscWiringTemplates[0];
-
-            //Assert
-            Assert.AreEqual("Test Misc Wiring", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
-        }
-
-
-        [TestMethod]
         public void Load_Templates_IOModules()
         {
             //Arrange

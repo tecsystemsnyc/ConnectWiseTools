@@ -462,18 +462,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_MiscWiring()
-        {
-            //Arrange
-            TECMisc expectedCost = expectedTemplates.MiscWiringTemplates[0];
-            TECMisc actualCost = actualTemplates.MiscWiringTemplates[0];
-
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-
-        [TestMethod]
         public void SaveAs_Templates_PanelType()
         {
             //Arrange

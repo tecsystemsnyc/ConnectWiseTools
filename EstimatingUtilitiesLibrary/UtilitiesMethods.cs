@@ -294,9 +294,9 @@ namespace EstimatingUtilitiesLibrary
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
     public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc, Settings };
     public enum TemplateGridIndex { None, ControlledScope, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
-    public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
+    public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts };
     public enum LocationScopeType { System, Equipment, SubScope };
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
+    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
     public enum ControlledScopeEditIndex { Edit, Qty };
     public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }

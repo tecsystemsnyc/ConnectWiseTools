@@ -204,9 +204,12 @@ namespace EstimateBuilder.ViewModel
             {
                 addController(controller);
             }
-            foreach(TECMisc miscWiring in bid.MiscWiring)
+            foreach(TECMisc misc in bid.MiscCosts)
             {
-                addMiscWiring(miscWiring);
+                if (misc.Type == CostType.Electrical)
+                {
+                    addMiscWiring(misc);
+                }
             }
 
             changeWatcher = new ChangeWatcher(bid);

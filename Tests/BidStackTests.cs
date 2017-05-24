@@ -400,31 +400,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Undo_Bid_MiscWiring()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Bid.MiscWiring)
-            {
-                expected.Add(item);
-            }
-            TECMisc edit = new TECMisc();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.MiscWiring.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECMisc> actual = Bid.MiscWiring;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
-        [TestMethod]
         public void Undo_Bid_PanelType()
         {
             //Arrange
@@ -1135,26 +1110,6 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-        [TestMethod]
-        public void Undo_MiscWiring_Name()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.MiscWiring[0].Name;
-            string edit = "changedName";
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.MiscWiring[0].Name = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            string actual = Bid.MiscWiring[0].Name;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
         #endregion
 
         #region Controller Properties
@@ -1445,30 +1400,6 @@ namespace Tests
 
             //assert
             ObservableCollection<TECMisc> actual = Bid.MiscCosts;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Bid_MiscWiring()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECMisc edit = new TECMisc();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            Bid.MiscWiring.Add(edit);
-            var expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Bid.MiscWiring)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECMisc> actual = Bid.MiscWiring;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
