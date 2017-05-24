@@ -43,7 +43,14 @@ namespace Tests
             //Arrange
             actualTemplates = TestHelper.LoadTestTemplates(TestHelper.StaticTestTemplatesPath);
 
-            actualSystem = actualTemplates.SystemTemplates[0];
+            actualSystem = null;
+            foreach(TECSystem system in actualTemplates.SystemTemplates)
+            {
+                if(system.Name == "Test System")
+                {
+                    actualSystem = system;
+                }
+            }
 
             actualEquipment = actualTemplates.EquipmentTemplates[0];
 
@@ -368,21 +375,6 @@ namespace Tests
 
             Assert.AreEqual("Test Panel", actualPanel.Name);
             Assert.AreEqual("Test Panel Type", actualPanelType.Name);
-        }
-
-        [TestMethod]
-        public void Load_Templates_ControlledScope()
-        {
-            //Arrange
-            TECSystem actualConScope = actualTemplates.SystemTemplates[0];
-
-            //Assert
-            Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
-            Assert.AreEqual("Test Controlled Description", actualConScope.Description);
-            Assert.AreEqual(420, actualConScope.Controllers[0].ChildrenConnections[0].Length);
-            Assert.AreEqual("Controlled Equipment", actualConScope.Equipment[0].Name);
-            Assert.AreEqual("Controlled Controller", actualConScope.Controllers[0].Name);
-            Assert.AreEqual("Controlled Panel", actualConScope.Panels[0].Name);
         }
 
         [TestMethod]

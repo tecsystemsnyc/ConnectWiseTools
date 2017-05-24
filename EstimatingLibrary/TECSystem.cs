@@ -277,12 +277,14 @@ namespace EstimatingLibrary
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _systemInstances = new ObservableCollection<TECSystem>();
+            _scopeBranches = new ObservableCollection<TECScopeBranch>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Equipment.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
             SystemInstances.CollectionChanged += CollectionChanged;
+            ScopeBranches.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }

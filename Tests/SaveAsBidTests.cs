@@ -77,14 +77,21 @@ namespace Tests
             //Arrange
             expectedBid = TestHelper.CreateTestBid();
             expectedLabor = expectedBid.Labor;
-            expectedSystem = expectedBid.Systems[0];
-            expectedSystem1 = expectedBid.Systems[1];
-            expectedEquipment = expectedSystem.Equipment[0];
-            expectedSubScope = expectedEquipment.SubScope[0];
-            expectedDevice = expectedSubScope.Devices[0];
+            expectedSystem = expectedBid.Systems.RandomObject();
+            foreach(TECSystem system in expectedBid.Systems)
+            {
+                if(system != expectedSystem)
+                {
+                    expectedSystem1 = system;
+                    break;
+                }
+            }
+            expectedEquipment = expectedBid.RandomEquipment();
+            expectedSubScope = expectedBid.RandomSubScope();
+            expectedDevice = expectedBid.Catalogs.Devices.RandomObject();
 
-            expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
-            expectedPoint = expectedSubScope.Points[0];
+            expectedManufacturer = expectedBid.Catalogs.Manufacturers.RandomObject();
+            expectedPoint = expectedBid.RandomPoint();
 
             expectedBranch = null;
             foreach (TECScopeBranch branch in expectedBid.ScopeTree)
@@ -96,15 +103,15 @@ namespace Tests
                 }
             }
 
-            expectedNote = expectedBid.Notes[0];
-            expectedExclusion = expectedBid.Exclusions[0];
-            expectedTag = expectedBid.Catalogs.Tags[0];
+            expectedNote = expectedBid.Notes.RandomObject();
+            expectedExclusion = expectedBid.Exclusions.RandomObject();
+            expectedTag = expectedBid.Catalogs.Tags.RandomObject();
 
             //expectedDrawing = expectedBid.Drawings[0];
             //expectedPage = expectedDrawing.Pages[0];
             //expectedVisualScope = expectedPage.PageScope[0];
 
-            expectedController = expectedBid.Controllers[0];
+            expectedController = expectedBid.Controllers.RandomObject();
 
             expectedPropScope = null;
             foreach (TECProposalScope propScope in expectedBid.ProposalScope)
@@ -612,9 +619,17 @@ namespace Tests
         public void SaveAs_Bid_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedBid.Panels[0];
-            TECPanel actualPanel = actualBid.Panels[0];
-
+            TECPanel expectedPanel = expectedBid.Panels.RandomObject();
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if(panel.Guid == expectedPanel.Guid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
+            
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
             Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
