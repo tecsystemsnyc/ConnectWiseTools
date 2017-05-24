@@ -331,7 +331,7 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
-                ScopeCollection.TabIndex = ScopeCollectionIndex.ControlledScope;
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
             else
             {

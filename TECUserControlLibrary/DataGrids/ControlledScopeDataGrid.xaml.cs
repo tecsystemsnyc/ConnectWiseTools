@@ -27,18 +27,18 @@ namespace TECUserControlLibrary.DataGrids
         /// <summary>
         /// Gets or sets the ControlledScopeSource which is displayed
         /// </summary>
-        public ObservableCollection<TECControlledScope> ControlledScopeSource
+        public ObservableCollection<TECSystem> SystemSource
         {
-            get { return (ObservableCollection<TECControlledScope>)GetValue(ControlledScopeSourceProperty); }
-            set { SetValue(ControlledScopeSourceProperty, value); }
+            get { return (ObservableCollection<TECSystem>)GetValue(SystemSourceProperty); }
+            set { SetValue(SystemSourceProperty, value); }
         }
 
         /// <summary>
         /// Identified the ControlledScopeSource dependency property
         /// </summary>
-        public static readonly DependencyProperty ControlledScopeSourceProperty =
-            DependencyProperty.Register("ControlledScopeSource", typeof(ObservableCollection<TECControlledScope>),
-              typeof(ControlledScopeDataGrid), new PropertyMetadata(default(ObservableCollection<TECControlledScope>)));
+        public static readonly DependencyProperty SystemSourceProperty =
+            DependencyProperty.Register("SystemSource", typeof(ObservableCollection<TECSystem>),
+              typeof(ControlledScopeDataGrid), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
 
         public object SelectedItem
         {

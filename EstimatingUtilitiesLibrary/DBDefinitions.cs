@@ -1283,7 +1283,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class SystemScopeBranchTable : TableBase
     {
-        public static new string TableName = "TECSystemTECPanel";
+        public static new string TableName = "TECSystemTECScopeBranch";
         public static Type SystemType = typeof(TECSystem);
         public static Type ScopeBranchType = typeof(TECScopeBranch);
 

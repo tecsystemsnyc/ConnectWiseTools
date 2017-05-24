@@ -305,7 +305,7 @@ namespace Tests
         public void Load_Templates_MiscCost()
         {
             //Arrange
-            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
+            TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
 
             //Assert
             Assert.AreEqual("Test Misc Cost", actualCost.Name);
@@ -318,7 +318,7 @@ namespace Tests
         public void Load_Templates_MiscWiring()
         {
             //Arrange
-            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
+            TECMisc actualCost = actualTemplates.MiscWiringTemplates[0];
 
             //Assert
             Assert.AreEqual("Test Misc Wiring", actualCost.Name);
@@ -374,13 +374,13 @@ namespace Tests
         public void Load_Templates_ControlledScope()
         {
             //Arrange
-            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
+            TECSystem actualConScope = actualTemplates.SystemTemplates[0];
 
             //Assert
             Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
             Assert.AreEqual("Test Controlled Description", actualConScope.Description);
             Assert.AreEqual(420, actualConScope.Controllers[0].ChildrenConnections[0].Length);
-            Assert.AreEqual("Controlled System", actualConScope.Systems[0].Name);
+            Assert.AreEqual("Controlled Equipment", actualConScope.Equipment[0].Name);
             Assert.AreEqual("Controlled Controller", actualConScope.Controllers[0].Name);
             Assert.AreEqual("Controlled Panel", actualConScope.Panels[0].Name);
         }
@@ -389,21 +389,18 @@ namespace Tests
         public void Load_Templates_ControlledScope_Linking()
         {
             //Arrange
-            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
+            TECSystem actualConScope = actualTemplates.SystemTemplates[0];
             var connectionsInSystemsLinked = true;
             var connectionsInControllersLinked = true;
             var controllersInPanelsLinked = true;
 
-            foreach (TECSystem system in actualConScope.Systems)
+            foreach (TECEquipment equipment in actualConScope.Equipment)
             {
-                foreach (TECEquipment equipment in system.Equipment)
+                foreach (TECSubScope subScope in equipment.SubScope)
                 {
-                    foreach (TECSubScope subScope in equipment.SubScope)
+                    if (!actualConScope.Controllers[0].ChildrenConnections.Contains(subScope.Connection))
                     {
-                        if (!actualConScope.Controllers[0].ChildrenConnections.Contains(subScope.Connection))
-                        {
-                            connectionsInSystemsLinked = false;
-                        }
+                        connectionsInSystemsLinked = false;
                     }
                 }
             }

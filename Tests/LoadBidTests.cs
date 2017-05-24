@@ -523,7 +523,7 @@ namespace Tests
         public void Load_Bid_MiscCost()
         {
             //Arrange
-            TECMiscCost actualCost = actualBid.MiscCosts[0];
+            TECMisc actualCost = actualBid.MiscCosts[0];
 
             //Assert
             Assert.AreEqual("Test Misc Cost", actualCost.Name);
@@ -536,7 +536,7 @@ namespace Tests
         public void Load_Bid_MiscWiring()
         {
             //Arrange
-            TECMiscWiring actualCost = actualBid.MiscWiring[0];
+            TECMisc actualCost = actualBid.MiscWiring[0];
 
             //Assert
             Assert.AreEqual("Test Misc Wiring", actualCost.Name);

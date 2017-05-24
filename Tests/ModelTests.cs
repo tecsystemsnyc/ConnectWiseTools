@@ -88,18 +88,15 @@ namespace Tests
         [TestMethod]
         public void Bid_AddControlledScope()
         {
-            int quantity = 3;
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(bid.Catalogs);
-            bid.ControlledScope.Add(controlledScope);
-
-            bid.addControlledScope(controlledScope, quantity);
-
-            Assert.AreEqual(quantity, bid.Systems.Count);
-            Assert.AreEqual(quantity, bid.Controllers.Count);
-            Assert.AreEqual(quantity, bid.Panels.Count);
+            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(controlledScope);
+            
+            //Assert.AreEqual(quantity, bid.Systems.Count);
+            //Assert.AreEqual(quantity, bid.Controllers.Count);
+            //Assert.AreEqual(quantity, bid.Panels.Count);
 
             foreach(TECPanel scopePanel in controlledScope.Panels)
             {
@@ -124,9 +121,8 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControlledScope controlledScope = TestHelper.CreateTestControlledScope(bid.Catalogs);
-            bid.ControlledScope.Add(controlledScope);
-            bid.addControlledScope(controlledScope, quantity);
+            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(controlledScope);
             controlledScope.Panels[0].Controllers.Remove(controlledScope.Controllers[0]);
 
             Assert.AreEqual(quantity, bid.Systems.Count);
