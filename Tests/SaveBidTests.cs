@@ -724,7 +724,7 @@ namespace Tests
         public void Save_Bid_Equipment_Name()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Name = "Save Equip Name";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -752,7 +752,7 @@ namespace Tests
         public void Save_Bid_Equipment_Description()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Description = "Save Equip Description";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -780,7 +780,7 @@ namespace Tests
         public void Save_Bid_Equipment_Quantity()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Quantity = 987654321;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -808,7 +808,7 @@ namespace Tests
         public void Save_Bid_Equipment_BudgetPrice()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.BudgetUnitPrice = 9876543.21;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -845,8 +845,9 @@ namespace Tests
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
             expectedSubScope.Quantity = 235746543;
+            
 
-            bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
+            bid.RandomEquipment().SubScope.Add(expectedSubScope);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -880,7 +881,7 @@ namespace Tests
         public void Save_Bid_Remove_SubScope()
         {
             //Act
-            TECEquipment equipToModify = bid.Systems[0].Equipment[0];
+            TECEquipment equipToModify = bid.RandomEquipment();
             int oldNumSubScope = equipToModify.SubScope.Count();
             TECSubScope subScopeToRemove = equipToModify.SubScope[0];
 
@@ -918,7 +919,7 @@ namespace Tests
         public void Save_Bid_SubScope_Name()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Name = "Save SubScope Name";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -950,7 +951,7 @@ namespace Tests
         public void Save_Bid_SubScope_Description()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Description = "Save SubScope Description";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -982,7 +983,7 @@ namespace Tests
         public void Save_Bid_SubScope_Quantity()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Quantity = 987654321;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1078,7 +1079,12 @@ namespace Tests
         public void Save_Bid_Remove_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
+
             int oldNumDevices = ssToModify.Devices.Count();
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1138,7 +1144,11 @@ namespace Tests
         public void Save_Bid_LowerQuantity_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
 
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1190,7 +1200,11 @@ namespace Tests
         public void Save_Bid_Device_Quantity()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while(ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
             TECDevice expectedDevice = ssToModify.Devices[0];
 
             int expectedNumDevices = 0;
@@ -2989,77 +3003,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
-
-        [TestMethod]
-        public void Save_Bid_Remove_PanelType()
-        {
-            //Act
-            TECPanelType costToRemove = bid.Catalogs.PanelTypes[0];
-            bid.Catalogs.PanelTypes.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            //Assert
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(bid.Catalogs.PanelTypes.Count, actualBid.Catalogs.PanelTypes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Name()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Cost()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
+        
         #endregion
 
         #region Save Panel
@@ -3143,80 +3087,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_ControlledScope()
         {
-            var expectedSystem = new TECSystem();
-            expectedSystem.Name = "CSSYSTEM";
-            var expectedEquipment = new TECEquipment();
-            expectedEquipment.Name = "CSEQUIPMENT";
-            var expectedSubScope = new TECSubScope();
-            expectedSubScope.Name = "CSSUBSCOPE";
-            expectedEquipment.SubScope.Add(expectedSubScope);
-            expectedSystem.Equipment.Add(expectedEquipment);
-
-            var expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
-            expectedPanel.Name = "CSPANEL";
-            var expectedController = new TECController(bid.Catalogs.Manufacturers[0]);
-            expectedController.Name = "CSCONTROLLER";
-            expectedPanel.Controllers.Add(expectedController);
-
-            var expectedConnection = new TECSubScopeConnection();
-            expectedConnection.Length = 1212;
-            expectedConnection.ParentController = expectedController;
-            expectedConnection.SubScope = expectedSubScope;
-            expectedController.ChildrenConnections.Add(expectedConnection);
-            expectedSubScope.Connection = expectedConnection;
-            
-            expectedSystem.Panels.Add(expectedPanel);
-            expectedSystem.Controllers.Add(expectedController);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanel actualpanel = null;
-            TECController actualController = null;
-            TECSubScopeConnection actualConnection = null;
-            TECSystem actualSystem = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Name == "CSCONTROLLER")
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Name == "CSSYSTEM")
-                {
-                    actualSystem = system;
-                    break;
-                }
-            }
-            foreach (TECSubScopeConnection connection in actualController.ChildrenConnections)
-            {
-                if (connection.Length == 1212)
-                {
-                    actualConnection = connection;
-                    break;
-                }
-            }
-            foreach (TECPanel panel in actualBid.Panels)
-            {
-                if (panel.Name == "CSPANEL")
-                {
-                    actualpanel = panel;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
-            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
-            Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
-            Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
-            Assert.IsTrue(actualConnection.SubScope == actualSystem.Equipment[0].SubScope[0], "Scope not linked in connection");
-            Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
+           
         }
         #endregion
 

@@ -161,9 +161,9 @@ namespace EstimatingUtilitiesLibrary
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
+            bid.Controllers = getOrphanControllers();
             bid.MiscCosts = getMisc();
-            bid.Panels = getPanels();
+            bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
             ModelLinkingHelper.LinkBid(bid, placeholderDict);
