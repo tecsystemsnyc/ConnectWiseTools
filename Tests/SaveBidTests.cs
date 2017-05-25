@@ -1508,11 +1508,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
             TECSystem systemToEdit = bid.Systems.RandomObject();
-
-            systemToEdit.Tags.Add(tagToAdd);
-
+            TECTag tagToAdd = null;
+            foreach(TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!systemToEdit.Tags.Contains(tag))
+                {
+                    systemToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
@@ -1539,10 +1545,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
             TECEquipment equipmentToEdit = bid.RandomEquipment();
-
-            equipmentToEdit.Tags.Add(tagToAdd);
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!equipmentToEdit.Tags.Contains(tag))
+                {
+                    equipmentToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1577,10 +1590,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
             TECSubScope subScopeToEdit = bid.RandomSubScope();
-
-            subScopeToEdit.Tags.Add(tagToAdd);
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!subScopeToEdit.Tags.Contains(tag))
+                {
+                    subScopeToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1616,10 +1636,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToPoint()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
             TECPoint PointToEdit = bid.RandomPoint();
-
-            PointToEdit.Tags.Add(tagToAdd);
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!PointToEdit.Tags.Contains(tag))
+                {
+                    PointToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1658,10 +1685,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags.RandomObject();
             TECController ControllerToEdit = bid.Controllers.RandomObject();
-
-            ControllerToEdit.Tags.Add(tagToAdd);
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!ControllerToEdit.Tags.Contains(tag))
+                {
+                    ControllerToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 

@@ -1746,7 +1746,7 @@ namespace Tests
             var system = Bid.Systems.RandomObject();
             system.Equipment.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in Bid.Systems[0].Equipment)
+            foreach (TECEquipment item in system.Equipment)
             {
                 expected.Add(item);
             }

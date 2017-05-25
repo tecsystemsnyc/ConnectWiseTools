@@ -2365,7 +2365,7 @@ namespace EstimatingUtilitiesLibrary
             var tableInfo = new TableInfo(table);
             var referenceCopy = (item.ReferenceObject as TECObject).Copy();
 
-            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy, item.ReferenceType);
 
             foreach (TECObject child in (IList)childrenCollection)
             {
@@ -2379,7 +2379,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                     else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
-                        var dataString = objectToDBString(getQuantityInParentCollection(child, item.ReferenceObject));
+                        var dataString = objectToDBString(getQuantityInParentCollection(child, item.ReferenceObject, item.ReferenceType));
                         data.Add(field.Name, dataString);
                     }
                     var assemblyItem = new StackItem(Change.Add, item.ReferenceObject, child, item.ReferenceType, item.TargetType);
@@ -2869,7 +2869,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return outList;
         }
-        private static int getQuantityInParentCollection(object childObject, object parentObject)
+        private static int getQuantityInParentCollection(object childObject, object parentObject, Type parentType = null)
         {
             TECScope child;
             TECScope parent;
@@ -2878,7 +2878,7 @@ namespace EstimatingUtilitiesLibrary
             parent = (parentObject as TECScope);
 
             int quantity = 0;
-            var childCollection = UtilitiesMethods.GetChildCollection(childObject.GetType(), parentObject);
+            var childCollection = UtilitiesMethods.GetChildCollection(childObject.GetType(), parentObject, parentType);
 
             foreach (TECScope item in (IList)childCollection)
             {

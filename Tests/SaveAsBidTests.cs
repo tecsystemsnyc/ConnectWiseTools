@@ -33,7 +33,6 @@ namespace Tests
         //static TECPage expectedPage;
         //static TECVisualScope expectedVisualScope;
         static TECController expectedController;
-        static TECProposalScope expectedPropScope;
 
         static string path;
 
@@ -55,7 +54,6 @@ namespace Tests
         //static TECPage actualPage;
         //static TECVisualScope actualVisualScope;
         static TECController actualController;
-        static TECProposalScope actualPropScope;
 
 
         private TestContext testContextInstance;
@@ -119,17 +117,7 @@ namespace Tests
             //expectedVisualScope = expectedPage.PageScope[0];
 
             expectedController = expectedBid.Controllers.RandomObject();
-
-            expectedPropScope = null;
-            foreach (TECProposalScope propScope in expectedBid.ProposalScope)
-            {
-                if (propScope.Scope.Name == "Prop System")
-                {
-                    expectedPropScope = propScope;
-                    break;
-                }
-            }
-
+            
             path = Path.GetTempFileName();
 
             //Act
@@ -238,15 +226,7 @@ namespace Tests
                     break;
                 }
             }
-
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
+            
         }
 
         [ClassCleanup]
@@ -519,15 +499,7 @@ namespace Tests
         //    Assert.AreEqual(expectedVisualScope.Scope.Guid, actualVisualScope.Scope.Guid);
         //}
 
-        [TestMethod]
-        public void SaveAs_Bid_PropScope()
-        {
-            //Assert
-            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
-            Assert.AreEqual(expectedPropScope.Notes[0].Guid, actualPropScope.Notes[0].Guid);
-            Assert.AreEqual(expectedPropScope.Notes[0].Branches[0].Guid, actualPropScope.Notes[0].Branches[0].Guid);
-        }
-
+        
         [TestMethod]
         public void SaveAs_Bid_Controller()
         {

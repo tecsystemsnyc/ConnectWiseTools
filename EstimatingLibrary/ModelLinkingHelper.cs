@@ -32,6 +32,7 @@ namespace EstimatingLibrary
             linkIOModules(bid.Controllers, bid.Catalogs.IOModules);
             linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
             linkSystems(bid.Systems, bid);
+            linkAllConnections(bid.Controllers, bid.Systems);
         }
         
         public static void LinkTemplates(TECTemplates templates)
@@ -69,12 +70,8 @@ namespace EstimatingLibrary
             {
                 linkScopeChildren(panel, scopeManager);
             }
-            linkAllConnections(system.Controllers, system.Equipment, guidDictionary);
-            if (scopeManager is TECBid)
-            {
-                var bid = scopeManager as TECBid;
-                linkAllGlobalConnections(bid.Controllers, system.Equipment, guidDictionary);
-            }
+            linkConnections(system.Controllers, system.Equipment, guidDictionary);
+            linkNetworkConnections(system.Controllers, guidDictionary);
         }
         #endregion
 
@@ -195,7 +192,8 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary = null)
+
+        static private void linkConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECEquipment equip in equipment)
             {
@@ -219,6 +217,9 @@ namespace EstimatingLibrary
                     }
                 }
             }
+        }
+        static private void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        {
             foreach (TECController controller in controllers)
             {
                 foreach (TECNetworkConnection netConnect in controller.ChildNetworkConnections)
@@ -240,39 +241,15 @@ namespace EstimatingLibrary
                 }
             }
         }
-        static private void linkAllGlobalConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary = null)
+        static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems)
         {
-           foreach (TECEquipment equip in equipment)
+            foreach (TECSystem system in systems)
             {
-                foreach (TECSubScope subScope in equip.SubScope)
-                {
-                    foreach (TECController controller in controllers)
-                    {
-                        if (controller.IsGlobal)
-                        {
-                            var subScopeToConnect = new List<TECSubScope>();
-                            foreach (TECConnection connection in controller.ChildrenConnections)
-                            {
-                                if (connection is TECSubScopeConnection)
-                                {
-                                    TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-                                    bool isCopy = (guidDictionary != null && ssConnect.SubScope.Guid == guidDictionary[subScope.Guid]);
-                                    if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
-                                    {
-                                        subScopeToConnect.Add(subScope);
-                                    }
-                                }
-                            }
-                            foreach(TECSubScope sub in subScopeToConnect)
-                            {
-                                controller.AddSubScope(sub);
-                            }
-                        }
-                            
-                    }
-                }
+                linkConnections(controllers, system.Equipment);
             }
+            linkNetworkConnections(controllers);
         }
+
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
         {
             foreach (TECSystem system in bidSystems)
@@ -469,6 +446,7 @@ namespace EstimatingLibrary
                 device.ConnectionTypes = linkedTypes;
             }
         }
+
         static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
         {
             if (scopeManager is TECBid)

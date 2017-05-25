@@ -11,22 +11,10 @@ namespace EstimatingLibrary
     public class TECDevice : TECCost
     {
         #region Properties
-        private double _cost;
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
-
-        public double Cost
-        {
-            get { return _cost; }
-            set
-            {
-                var temp = this.Copy();
-                _cost = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Cost", temp, this);
-            }
-        }
+        
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }

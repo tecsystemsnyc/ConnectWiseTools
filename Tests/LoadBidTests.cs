@@ -164,8 +164,30 @@ namespace Tests
         public void Load_Bid_SubScope()
         {
             //Arrange
-            TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
+            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            TECSubScope actualSubScope = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        if(subScope.Guid == actualConnection.SubScope.Guid)
+                        {
+                            actualSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if(actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
 
             //Assert
             string expectedName = "Test SubScope";
@@ -439,13 +461,35 @@ namespace Tests
             //Arrange
             TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
 
-            TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            TECController expectedController = null;
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (subScope.Guid == actualConnection.SubScope.Guid)
+                        {
+                            actualSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
+            TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
             {
                 if (controller.Name == "Test Controller")
                 {
-                    expectedController = controller;
+                    actualController = controller;
                     break;
                 }
             }
@@ -454,7 +498,7 @@ namespace Tests
             double expectedLength = 493.45;
 
             bool hasSubScope = false;
-            if (actualConnection.SubScope == expectedSubScope)
+            if (actualConnection.SubScope == actualSubScope)
             {
                 hasSubScope = true;
             }
@@ -462,30 +506,10 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(expectedController, actualConnection.ParentController);
+            Assert.AreEqual(actualController, actualConnection.ParentController);
             Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
         }
-
-        [TestMethod]
-        public void Load_Bid_ProposalScope()
-        {
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Arrange
-            TECProposalScope actualPropScope = actualBid.ProposalScope[0];
-
-            TECScope expectedScope = actualSystem;
-
-            bool expectedIsProposed = true;
-
-            string expectedPropScopeBranchName = "Proposal Scope";
-
-            //Assert
-            Assert.AreEqual(expectedScope, actualPropScope.Scope);
-            Assert.AreEqual(expectedIsProposed, actualPropScope.IsProposed);
-            Assert.AreEqual(expectedPropScopeBranchName, actualPropScope.Notes[0].Name);
-        }
-
+        
         [TestMethod]
         public void Load_Bid_AssociatedCosts()
         {
@@ -676,11 +700,10 @@ namespace Tests
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType))
+                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType) && connection.ConduitType != null)
                     { Assert.Fail("Conduit types in connection not linked"); }
                 }
             }
-
             Assert.IsTrue(true, "All conduit types Linked");
         }
 
