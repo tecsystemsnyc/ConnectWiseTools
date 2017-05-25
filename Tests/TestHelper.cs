@@ -90,32 +90,7 @@ namespace Tests
             ioToAdd.Quantity = 5;
             expectedController.IO.Add(ioToAdd);
             bid.Controllers.Add(expectedController);
-
-            //ProposalScope
-            TECSystem propSystem = new TECSystem();
-            AssignSecondaryProperties(propSystem, bid);
-            propSystem.Name = "Prop System";
-
-            TECScopeBranch propNote = new TECScopeBranch();
-            propNote.Name = "Proposal Note";
-            TECScopeBranch propNoteNote = new TECScopeBranch();
-            propNoteNote.Name = "Proposal Note Note";
-            propNote.Branches.Add(propNoteNote);
-
-            bid.Systems.Add(propSystem);
-
-            TECProposalScope propScope = null;
-            foreach (TECProposalScope pS in bid.ProposalScope)
-            {
-                if (pS.Scope.Guid == propSystem.Guid)
-                {
-                    propScope = pS;
-                    break;
-                }
-            }
-            propScope.IsProposed = true;
-            propScope.Notes.Add(propNote);
-
+            
             //Misc Cost
             TECMisc cost = new TECMisc();
             cost.Name = "Test Cost";

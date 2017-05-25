@@ -62,8 +62,8 @@
 
                     <TextBlock Text="Systems" Foreground="Black" FontSize="20"/>
 
-                    <grids:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
-                                                    Grid.Row="1"/>
+                    <!--<grids:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
+                                                    Grid.Row="1"/>-->
 
                 </Grid>
             </TabItem>

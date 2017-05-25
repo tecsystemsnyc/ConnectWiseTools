@@ -200,9 +200,6 @@
     <Compile Include="PointEditControl.xaml.cs">
       <DependentUpon>PointEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ProposalScopeGridControl.xaml.cs">
-      <DependentUpon>ProposalScopeGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DataGrids\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
     </Compile>
@@ -419,10 +416,6 @@
     <Page Include="DataGrids\PointsGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DataGrids\ProposalScopeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataGrids\ScopeBranchAsNoteGridControl.xaml">
       <SubType>Designer</SubType>

@@ -56,8 +56,6 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECController controller in Bid.Controllers)
             { registerController(controller); }
-            foreach (TECProposalScope propScope in Bid.ProposalScope)
-            { registerPropScope(propScope); }
             foreach (TECMisc cost in Bid.MiscCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
@@ -140,18 +138,6 @@ namespace EstimatingLibrary.Utilities
             {
                 scope.PropertyChanged -= Object_PropertyChanged;
                 unregisterScope(scope);
-            }
-        }
-        private void registerPropScope(TECProposalScope pScope)
-        {
-            pScope.PropertyChanged += Object_PropertyChanged;
-            foreach (TECProposalScope child in pScope.Children)
-            {
-                registerPropScope(child);
-            }
-            foreach (TECScopeBranch child in pScope.Notes)
-            {
-                registerScope(child);
             }
         }
         private void registerSystem(TECSystem scope)
