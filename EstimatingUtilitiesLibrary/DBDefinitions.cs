@@ -1179,10 +1179,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PanelTypeID = new TableField("PaneltypeID", "TEXT", ReferenceType.GetProperty("Guid"));
 
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
             PanelID,
             PanelTypeID
-            };
+        };
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType,

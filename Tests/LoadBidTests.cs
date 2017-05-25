@@ -125,8 +125,10 @@ namespace Tests
         {
             //Arrange
             TECSystem actualSystem = actualBid.Systems[0];
+            TECSystem actualChild = actualSystem.SystemInstances.RandomObject();
 
             //Assert
+            Assert.AreNotEqual(null, actualChild);
             string expectedName = "Test System";
             Assert.AreEqual(expectedName, actualSystem.Name);
 
