@@ -11,10 +11,10 @@ namespace TECUserControlLibrary.ViewModels
 {
     public enum MenuType { TB, SB, EB }
 
-    public class MenuViewModel : ViewModelBase
+    public class MenuVM : ViewModelBase
     {
 
-        public MenuViewModel(MenuType type)
+        public MenuVM(MenuType type)
         {
             setupMenu(type);
 

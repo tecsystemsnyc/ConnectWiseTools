@@ -45,7 +45,7 @@ namespace EstimateBuilder.ViewModel
             SimpleIoc.Default.Register<DrawingViewModel>();
             SimpleIoc.Default.Register<LaborViewModel>();
             SimpleIoc.Default.Register<ReviewViewModel>();
-            SimpleIoc.Default.Register<SettingsViewModel>();
+            SimpleIoc.Default.Register<SettingsVM>();
         }
 
         /// <summary>
@@ -124,11 +124,11 @@ namespace EstimateBuilder.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public SettingsViewModel Settings
+        public SettingsVM Settings
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<SettingsViewModel>();
+                return ServiceLocator.Current.GetInstance<SettingsVM>();
             }
         }
 

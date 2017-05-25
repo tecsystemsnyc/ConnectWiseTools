@@ -170,7 +170,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected override void setupMenu()
         {
-            MenuVM = new MenuViewModel(MenuType.SB);
+            MenuVM = new MenuVM(MenuType.SB);
 
             MenuVM.NewCommand = NewCommand;
             MenuVM.LoadCommand = LoadCommand;

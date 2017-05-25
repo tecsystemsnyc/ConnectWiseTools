@@ -606,7 +606,7 @@ namespace TemplateBuilder.ViewModel
         
         protected override void setupMenu()
         {
-            MenuVM = new MenuViewModel(MenuType.TB);
+            MenuVM = new MenuVM(MenuType.TB);
 
             MenuVM.NewCommand = NewCommand;
             MenuVM.LoadCommand = LoadCommand;

@@ -138,9 +138,9 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region View Models
-        public MenuViewModel MenuVM { get; set; }
+        public MenuVM MenuVM { get; set; }
         public StatusBarExtension StatusBarVM { get; set; }
-        public SettingsViewModel SettingsVM { get; set; }
+        public SettingsVM SettingsVM { get; set; }
         #endregion
 
         #region File Parameters
@@ -317,7 +317,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupSettings()
         {
-            SettingsVM = new SettingsViewModel(defaultDirectory, TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
+            SettingsVM = new SettingsVM(defaultDirectory, TemplatesHidden, TemplatesFilePath, MenuVM.LoadTemplatesCommand);
             SettingsVM.PropertyChanged += SettingsVM_PropertyChanged;
         }
 

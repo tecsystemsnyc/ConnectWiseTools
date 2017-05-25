@@ -120,7 +120,7 @@ namespace EstimateBuilder.ViewModel
         public ReviewViewModel ReviewVM { get; set; }
         public ProposalViewModel ProposalVM { get; set; }
         public ElectricalViewModel ElectricalVM { get; set; }
-        public NetworkViewModel NetworkVM { get; set; }
+        public NetworkVM NetworkVM { get; set; }
         public TECMaterialViewModel TECMaterialVM { get; set; }
         public ElectricalMaterialSummaryViewModel ElectricalMaterialVM { get; set; }
         #endregion
@@ -213,7 +213,7 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupNetworkVM(TECBid bid)
         {
-            NetworkVM = new NetworkViewModel(bid);
+            NetworkVM = new NetworkVM(bid);
         }
         private void setupDeviceVM(TECBid bid)
         {

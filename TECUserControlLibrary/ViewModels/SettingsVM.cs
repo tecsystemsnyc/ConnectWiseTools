@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsVM : ViewModelBase
     {
         private string _defaultDirectory;
         public string DefaultDirectory
@@ -50,7 +50,7 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand ResetDefaultDirectoryCommand { get; private set; }
         public ICommand ReloadTemplatesCommand { get; private set; }
 
-        public SettingsViewModel(string defaultDirectory, bool templatesHidden, string templatesLoadPath, ICommand reloadTemplatesCommand)
+        public SettingsVM(string defaultDirectory, bool templatesHidden, string templatesLoadPath, ICommand reloadTemplatesCommand)
         {
             ResetDefaultDirectoryCommand = new RelayCommand(ResetDefaultDirectoryExecute);
 

@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class NetworkViewModel : ViewModelBase, IDropTarget
+    public class NetworkVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECBid _bid;
@@ -124,7 +124,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #endregion
 
-        public NetworkViewModel(TECBid bid)
+        public NetworkVM(TECBid bid)
         {
             _bid = bid;
 
