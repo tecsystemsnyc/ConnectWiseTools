@@ -29,16 +29,6 @@ namespace TECUserControlLibrary.DataGrids
             DependencyProperty.Register("ControllerSource", typeof(BMSController),
               typeof(BMSControllerGridControl), new PropertyMetadata(default(BMSController)));
 
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-        
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(BMSControllerGridControl));
-
         public BMSControllerGridControl()
         {
             InitializeComponent();

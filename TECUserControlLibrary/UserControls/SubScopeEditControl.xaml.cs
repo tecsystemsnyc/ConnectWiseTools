@@ -22,43 +22,6 @@ namespace TECUserControlLibrary
     public partial class SubScopeEditControl : UserControl
     {
 
-        #region DPs
-        /*
-        /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
-        /// </summary>
-        public TECSubScope SubScope
-        {
-            get { return (TECSubScope)GetValue(SubScopeProperty); }
-            set { SetValue(SubScopeProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the DevicesSource dependency property
-        /// </summary>
-        public static readonly DependencyProperty SubScopeProperty =
-            DependencyProperty.Register("SubScope", typeof(TECSubScope),
-              typeof(SubScopeEditControl), new PropertyMetadata(default(TECSubScope)));
-        */
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(SubScopeEditControl));
-
-
-        #endregion
-
         public SubScopeEditControl()
         {
             InitializeComponent();

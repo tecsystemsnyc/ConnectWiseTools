@@ -22,16 +22,6 @@ namespace TECUserControlLibrary
     /// </summary>
     public partial class AddTagControl : UserControl
     {
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(AddTagControl));
-
         public ICommand AddTagCommand
         {
             get { return (ICommand)GetValue(AddTagCommandProperty); }

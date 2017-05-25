@@ -57,22 +57,6 @@ namespace TECUserControlLibrary
             DependencyProperty.Register("DevicesSource", typeof(ObservableCollection<TECDevice>),
               typeof(DevicesPointsControl), new PropertyMetadata(default(ObservableCollection<TECDevice>)));
 
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(DevicesPointsControl));
-
         #endregion
         public DevicesPointsControl()
         {

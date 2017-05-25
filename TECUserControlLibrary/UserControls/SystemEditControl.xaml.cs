@@ -21,42 +21,6 @@ namespace TECUserControlLibrary
     /// </summary>
     public partial class SystemEditControl : UserControl
     {
-        #region DPs
-        /*
-        /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
-        /// </summary>
-        public TECSystem System
-        {
-            get { return (TECSystem)GetValue(SystemProperty); }
-            set { SetValue(SystemProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the DevicesSource dependency property
-        /// </summary>
-        public static readonly DependencyProperty SystemProperty =
-            DependencyProperty.Register("System", typeof(TECSystem),
-              typeof(SystemEditControl), new PropertyMetadata(default(TECSystem)));
-              */
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(SystemEditControl));
-
-
-        #endregion
         public SystemEditControl()
         {
             InitializeComponent();

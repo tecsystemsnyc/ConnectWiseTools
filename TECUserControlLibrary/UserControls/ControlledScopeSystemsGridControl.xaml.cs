@@ -39,23 +39,6 @@ namespace TECUserControlLibrary.DataGrids
         public static readonly DependencyProperty ControlledScopeSourceProperty =
             DependencyProperty.Register("ControlledScopeSource", typeof(ObservableCollection<TECSystem>),
               typeof(ControlledScopeSystemsGrid), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
-
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ControlledScopeSystemsGrid));
-
         #endregion
         public ControlledScopeSystemsGrid()
         {

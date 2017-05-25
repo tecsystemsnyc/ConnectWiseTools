@@ -13,24 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EstimateBuilder.View.Review
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for DeviceListView.xaml
     /// </summary>
-    public partial class DeviceListView : UserControl
+    public partial class DeviceListControl : UserControl
     {
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
 
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(DeviceListView));
-
-        public DeviceListView()
+        public DeviceListControl()
         {
             InitializeComponent();
         }

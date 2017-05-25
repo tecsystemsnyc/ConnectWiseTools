@@ -33,23 +33,6 @@ namespace TECUserControlLibrary.DataGrids
         public static readonly DependencyProperty ConduitTypesSourceProperty =
             DependencyProperty.Register("ConduitTypesSource", typeof(ObservableCollection<TECConduitType>),
               typeof(ConduitTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECConduitType>)));
-
-
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ConduitTypeGridControl));
         #endregion
         public ConduitTypeGridControl()
         {

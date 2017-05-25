@@ -22,17 +22,6 @@ namespace TECUserControlLibrary
     /// </summary>
     public partial class AddAssociatedCostsControl : UserControl
     {
-
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(AddAssociatedCostsControl));
-
         public ICommand AddAssociatedCostCommand
         {
             get { return (ICommand)GetValue(AddAssociatedCostCommandProperty); }

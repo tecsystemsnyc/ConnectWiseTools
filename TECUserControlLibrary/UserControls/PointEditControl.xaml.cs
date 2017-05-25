@@ -22,43 +22,6 @@ namespace TECUserControlLibrary
     public partial class PointEditControl : UserControl
     {
 
-        #region DPs
-        /*
-        /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
-        /// </summary>
-        public TECPoint Point
-        {
-            get { return (TECPoint)GetValue(PointProperty); }
-            set { SetValue(PointProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the DevicesSource dependency property
-        /// </summary>
-        public static readonly DependencyProperty PointProperty =
-            DependencyProperty.Register("Point", typeof(TECPoint),
-              typeof(PointEditControl), new PropertyMetadata(default(TECPoint)));
-        */
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(PointEditControl));
-
-
-        #endregion
-
         public PointEditControl()
         {
             InitializeComponent();

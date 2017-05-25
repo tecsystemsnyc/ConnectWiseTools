@@ -34,16 +34,6 @@ namespace TECUserControlLibrary.DataGrids
             DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECCost>),
               typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECCost>)));
 
-        public Object ViewModel
-        {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(AssociatedCostsGridControl));
-
 
         #endregion
         public AssociatedCostsGridControl()

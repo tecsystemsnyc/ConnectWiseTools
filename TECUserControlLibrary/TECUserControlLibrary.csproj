@@ -110,8 +110,8 @@
     <Compile Include="UserControls\ByLocationControl.xaml.cs">
       <DependentUpon>ByLocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\AssociatedCostsSummaryGrid.xaml.cs">
-      <DependentUpon>AssociatedCostsSummaryGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\AssociatedCostsSummaryGridControl.xaml.cs">
+      <DependentUpon>AssociatedCostsSummaryGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\BMSControllerGridControl.xaml.cs">
       <DependentUpon>BMSControllerGridControl.xaml</DependentUpon>
@@ -119,20 +119,20 @@
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ConnectionGrid.xaml.cs">
-      <DependentUpon>ConnectionGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\ConnectionGridControl.xaml.cs">
+      <DependentUpon>ConnectionGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConnectionTypeGridControl.xaml.cs">
       <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ControlledScopeDataGrid.xaml.cs">
-      <DependentUpon>ControlledScopeDataGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\ControlledScopeGridControl.xaml.cs">
+      <DependentUpon>ControlledScopeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ControlledScopeSystemsGrid.xaml.cs">
-      <DependentUpon>ControlledScopeSystemsGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\ControlledScopeSystemsGridControl.xaml.cs">
+      <DependentUpon>ControlledScopeSystemsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
@@ -140,8 +140,8 @@
     <Compile Include="UserControls\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DeviceConnectionTypeGrid.xaml.cs">
-      <DependentUpon>DeviceConnectionTypeGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\DeviceConnectionTypeGridControl.xaml.cs">
+      <DependentUpon>DeviceConnectionTypeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MiscCostGridControl.xaml.cs">
       <DependentUpon>MiscCostGridControl.xaml</DependentUpon>
@@ -152,8 +152,8 @@
     <Compile Include="UserControls\IOModuleGridControl.xaml.cs">
       <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PanelsGrid.xaml.cs">
-      <DependentUpon>PanelsGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\PanelsGridControl.xaml.cs">
+      <DependentUpon>PanelsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PanelTypeGridControl.xaml.cs">
       <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
@@ -260,8 +260,8 @@
     <Compile Include="Views\AddControlledScopeView.xaml.cs">
       <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ConstantsView.xaml.cs">
-      <DependentUpon>ConstantsView.xaml</DependentUpon>
+    <Compile Include="UserControls\ConstantsControl.xaml.cs">
+      <DependentUpon>ConstantsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlledScopeView.xaml.cs">
       <DependentUpon>ControlledScopeView.xaml</DependentUpon>
@@ -269,8 +269,8 @@
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DeviceListView.xaml.cs">
-      <DependentUpon>DeviceListView.xaml</DependentUpon>
+    <Compile Include="UserControls\DeviceListControl.xaml.cs">
+      <DependentUpon>DeviceListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
@@ -290,8 +290,8 @@
     <Compile Include="Views\NetworkView.xaml.cs">
       <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PanelTypeListView.xaml.cs">
-      <DependentUpon>PanelTypeListView.xaml</DependentUpon>
+    <Compile Include="UserControls\PanelTypeListControl.xaml.cs">
+      <DependentUpon>PanelTypeListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
@@ -332,7 +332,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\AssociatedCostsSummaryGrid.xaml">
+    <Page Include="UserControls\AssociatedCostsSummaryGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -344,7 +344,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ConnectionGrid.xaml">
+    <Page Include="UserControls\ConnectionGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -352,7 +352,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ControlledScopeDataGrid.xaml">
+    <Page Include="UserControls\ControlledScopeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -360,7 +360,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ControlledScopeSystemsGrid.xaml">
+    <Page Include="UserControls\ControlledScopeSystemsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -372,7 +372,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\DeviceConnectionTypeGrid.xaml">
+    <Page Include="UserControls\DeviceConnectionTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -388,7 +388,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PanelsGrid.xaml">
+    <Page Include="UserControls\PanelsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -560,7 +560,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ConstantsView.xaml">
+    <Page Include="UserControls\ConstantsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -572,7 +572,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\DeviceListView.xaml">
+    <Page Include="UserControls\DeviceListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -600,7 +600,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PanelTypeListView.xaml">
+    <Page Include="UserControls\PanelTypeListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
