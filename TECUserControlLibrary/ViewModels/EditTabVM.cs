@@ -7,7 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -15,7 +15,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class EditTabExtension : ViewModelBase, IDropTarget
+    public class EditTabVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private bool isBid;
@@ -331,7 +331,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         /// <summary>
         /// Initializes a new instance of the EditTabExtension class.
         /// </summary>
-        public EditTabExtension(TECTemplates templates)
+        public EditTabVM(TECTemplates templates)
         {
             Templates = templates;
             setCatalogs(Templates);
@@ -339,7 +339,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             isBid = false;
             TabIndex = EditIndex.Nothing;
         }
-        public EditTabExtension(TECBid bid)
+        public EditTabVM(TECBid bid)
         {
             Bid = bid;
             setCatalogs(Bid);

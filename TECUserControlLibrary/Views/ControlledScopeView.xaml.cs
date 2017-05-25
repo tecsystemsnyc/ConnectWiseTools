@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,14 +21,14 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ControlledScopeView : UserControl
     {
-        public Object ViewModel
+        public ControlledScopeVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ControlledScopeVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(ControlledScopeVM),
               typeof(ControlledScopeView));
 
         public ControlledScopeView()

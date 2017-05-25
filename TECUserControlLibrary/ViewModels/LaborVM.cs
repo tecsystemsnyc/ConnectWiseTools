@@ -5,7 +5,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Windows.Input;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -13,7 +13,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class LaborViewModel : ViewModelBase
+    public class LaborVM : ViewModelBase
     {
         private TECBid _bid;
         public TECBid Bid

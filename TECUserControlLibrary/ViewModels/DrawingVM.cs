@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using DebugLibrary;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -23,7 +23,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class DrawingViewModel : ViewModelBase, IDropTarget
+    public class DrawingVM : ViewModelBase, IDropTarget
     {
         private TECBid _bid;
         private TECTemplates _templates;

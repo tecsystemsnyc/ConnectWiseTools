@@ -17,7 +17,7 @@ using TECUserControlLibrary.UserControls;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 
-namespace TECUserControlLibrary.HelperConverters
+namespace TECUserControlLibrary.Utilities
 {
     [System.Windows.Markup.MarkupExtensionReturnType(typeof(IValueConverter))]
 

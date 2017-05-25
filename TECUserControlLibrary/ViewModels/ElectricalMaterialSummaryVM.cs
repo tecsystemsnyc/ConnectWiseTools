@@ -8,9 +8,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using TECUserControlLibrary.Models;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
-    public class ElectricalMaterialSummaryViewModel : ViewModelBase
+    public class ElectricalMaterialSummaryVM : ViewModelBase
     {
         #region Properties
         private ChangeWatcher _changeWatcher;
@@ -171,7 +171,7 @@ namespace EstimateBuilder.ViewModel
         }
         #endregion
 
-        public ElectricalMaterialSummaryViewModel(TECBid bid)
+        public ElectricalMaterialSummaryVM(TECBid bid)
         {
             reinitialize(bid);
         }

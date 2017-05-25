@@ -15,7 +15,7 @@ using Microsoft.Practices.ServiceLocation;
 using EstimateBuilder.Model;
 using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.ViewModel
+namespace EstimateBuilder.MVVM
 {
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -68,7 +68,7 @@ namespace EstimateBuilder.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public ScopeEditorViewModel ScopeEditor
+        public ScopeEditorVM ScopeEditor
         {
             get
             {
@@ -82,7 +82,7 @@ namespace EstimateBuilder.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public DrawingViewModel Drawing
+        public DrawingVM Drawing
         {
             get
             {
@@ -96,7 +96,7 @@ namespace EstimateBuilder.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public LaborViewModel Labor
+        public LaborVM Labor
         {
             get
             {
@@ -110,7 +110,7 @@ namespace EstimateBuilder.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public ReviewViewModel Review
+        public ReviewVM Review
         {
             get
             {

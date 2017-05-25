@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for SystemsGridControl.xaml
     /// </summary>
-    public partial class SystemsGridControl : UserControl
+    public partial class SystemsView : UserControl
     {
         #region DPs
 
@@ -38,14 +39,14 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty SystemsSourceProperty =
             DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECSystem>),
-              typeof(SystemsGridControl), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+              typeof(SystemsView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public SystemsVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (SystemsVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -53,8 +54,8 @@ namespace TECUserControlLibrary.DataGrids
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(SystemsGridControl));
+            DependencyProperty.Register("ViewModel", typeof(SystemsVM),
+              typeof(SystemsView));
 
 
         /// <summary>
@@ -71,12 +72,12 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty AllowAddingNewProperty =
             DependencyProperty.Register("AllowAddingNew", typeof(bool),
-              typeof(SystemsGridControl), new PropertyMetadata(true));
+              typeof(SystemsView), new PropertyMetadata(true));
 
 
         #endregion
 
-        public SystemsGridControl()
+        public SystemsView()
         {
             InitializeComponent();
         }

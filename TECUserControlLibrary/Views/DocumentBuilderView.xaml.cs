@@ -1,36 +1,25 @@
 ﻿using EstimatingUtilitiesLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for DocumentBuilderControl.xaml
     /// </summary>
-    public partial class DocumentBuilderControl : UserControl
+    public partial class DocumentBuilderView : UserControl
     {
 
-        public Object ViewModel
+        public DocumentBuilderVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (DocumentBuilderVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(DocumentBuilderControl));
+            DependencyProperty.Register("ViewModel", typeof(DocumentBuilderVM),
+              typeof(DocumentBuilderView));
 
         public ProposalIndex SelectedProposalIndex
         {
@@ -39,9 +28,9 @@ namespace TECUserControlLibrary
         }
         public static readonly DependencyProperty SelectedProposalIndexProperty =
             DependencyProperty.Register("SelectedProposalIndex", typeof(ProposalIndex),
-              typeof(DocumentBuilderControl), new PropertyMetadata(default(ProposalIndex)));
+              typeof(DocumentBuilderView), new PropertyMetadata(default(ProposalIndex)));
 
-        public DocumentBuilderControl()
+        public DocumentBuilderView()
         {
             InitializeComponent();
         }

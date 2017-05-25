@@ -21,7 +21,7 @@ using GongSolutions.Wpf.DragDrop;
 using System.Linq;
 using TECUserControlLibrary;
 
-namespace EstimateBuilder.ViewModel
+namespace EstimateBuilder.MVVM
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -114,15 +114,15 @@ namespace EstimateBuilder.ViewModel
         #endregion
 
         #region ViewModels
-        public ScopeEditorViewModel ScopeEditorVM { get; set; }
-        public DrawingViewModel DrawingVM { get; set; }
-        public LaborViewModel LaborVM { get; set; }
-        public ReviewViewModel ReviewVM { get; set; }
-        public ProposalViewModel ProposalVM { get; set; }
-        public ElectricalViewModel ElectricalVM { get; set; }
+        public ScopeEditorVM ScopeEditorVM { get; set; }
+        public DrawingVM DrawingVM { get; set; }
+        public LaborVM LaborVM { get; set; }
+        public ReviewVM ReviewVM { get; set; }
+        public ProposalVM ProposalVM { get; set; }
+        public ElectricalVM ElectricalVM { get; set; }
         public NetworkVM NetworkVM { get; set; }
-        public TECMaterialViewModel TECMaterialVM { get; set; }
-        public ElectricalMaterialSummaryViewModel ElectricalMaterialVM { get; set; }
+        public TECMaterialSummaryVM TECMaterialSummaryVM { get; set; }
+        public ElectricalMaterialSummaryVM ElectricalMaterialSummaryVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -167,7 +167,7 @@ namespace EstimateBuilder.ViewModel
         #region VM Setup Methods
         private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
         {
-            ScopeEditorVM = new ScopeEditorViewModel(bid, templates);
+            ScopeEditorVM = new ScopeEditorVM(bid, templates);
             ScopeEditorVM.PropertyChanged += ScopeEditorVM_PropertyChanged;
             if (TemplatesHidden)
             {
@@ -181,13 +181,13 @@ namespace EstimateBuilder.ViewModel
         private void setupDrawingVM(TECBid bid)
         {
             //DebugHandler.LogDebugMessage("Setting up drawing VM");
-            DrawingVM = new DrawingViewModel();
+            DrawingVM = new DrawingVM();
             DrawingVM.Bid = bid;
             DrawingVM.Templates = Templates;
         }
         private void setupLaborVM(TECBid bid, TECTemplates templates)
         {
-            LaborVM = new LaborViewModel();
+            LaborVM = new LaborVM();
             LaborVM.Bid = bid;
             LaborVM.Templates = templates;
             LaborVM.LoadTemplates += LoadTemplatesExecute;
@@ -195,16 +195,16 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupReviewVM(TECBid bid)
         {
-            ReviewVM = new ReviewViewModel();
+            ReviewVM = new ReviewVM();
             ReviewVM.Bid = bid;
         }
         private void setupProposalVM(TECBid bid)
         {
-            ProposalVM = new ProposalViewModel(bid);
+            ProposalVM = new ProposalVM(bid);
         }
         private void setupElectricalVM(TECBid bid)
         {
-            ElectricalVM = new ElectricalViewModel(bid);
+            ElectricalVM = new ElectricalVM(bid);
         }
         private void setupMenuVM()
         {
@@ -217,11 +217,11 @@ namespace EstimateBuilder.ViewModel
         }
         private void setupDeviceVM(TECBid bid)
         {
-            TECMaterialVM = new TECMaterialViewModel(bid);
+            TECMaterialSummaryVM = new TECMaterialSummaryVM(bid);
         }
         private void setupElectricalMaterialVM(TECBid bid)
         {
-            ElectricalMaterialVM = new ElectricalMaterialSummaryViewModel(bid);
+            ElectricalMaterialSummaryVM = new ElectricalMaterialSummaryVM(bid);
         }
         #endregion
 
@@ -308,8 +308,8 @@ namespace EstimateBuilder.ViewModel
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid);
-                TECMaterialVM.Refresh(Bid);
-                ElectricalMaterialVM.Refresh(Bid);
+                TECMaterialSummaryVM.Refresh(Bid);
+                ElectricalMaterialSummaryVM.Refresh(Bid);
             }
         }
         private string getLoadDrawingsPath()

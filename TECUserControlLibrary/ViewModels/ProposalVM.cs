@@ -1,8 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
-using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -10,8 +9,8 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ProposalViewModel : DocumentBuilderVM
+    public class ProposalVM : DocumentBuilderVM
     {
-        public ProposalViewModel(TECBid bid) : base(bid) { }
+        public ProposalVM(TECBid bid) : base(bid) { }
     }
 }

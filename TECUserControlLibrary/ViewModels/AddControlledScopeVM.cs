@@ -12,7 +12,7 @@ using TECUserControlLibrary.Models;
 using System.ComponentModel;
 using System.Collections.Generic;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class AddControlledScopeExtension : ViewModelBase, IDropTarget
+    public class AddControlledScopeVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECSystem _selectedSystem;

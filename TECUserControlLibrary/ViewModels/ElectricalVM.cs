@@ -3,11 +3,9 @@ using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using TECUserControlLibrary;
 using TECUserControlLibrary.Models;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -15,7 +13,7 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ElectricalViewModel : ViewModelBase, IDropTarget
+    public class ElectricalVM: ViewModelBase, IDropTarget
     {
         private TECBid _bid;
         public TECBid Bid
@@ -87,7 +85,7 @@ namespace EstimateBuilder.ViewModel
             }
         }
 
-        public ElectricalViewModel(TECBid bid)
+        public ElectricalVM(TECBid bid)
         {
             setupNoneObjects();
             Refresh(bid);

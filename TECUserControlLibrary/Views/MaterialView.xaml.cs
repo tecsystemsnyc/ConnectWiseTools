@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary
 {
@@ -37,14 +38,14 @@ namespace TECUserControlLibrary
             DependencyProperty.Register("SelectedMaterialType", typeof(MaterialType),
               typeof(MaterialView), new PropertyMetadata(default(MaterialType)));
 
-        public Object ViewModel
+        public MaterialVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (MaterialVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(MaterialVM),
                 typeof(MaterialView));
 
         public MaterialView()

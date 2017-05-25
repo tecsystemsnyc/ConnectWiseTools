@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.DataGrids
         public static readonly DependencyProperty PanelTypeSourceProperty =
             DependencyProperty.Register("PanelTypeSource", typeof(ObservableCollection<TECPanelType>),
               typeof(PanelTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECPanelType>)));
+        #endregion
 
         public PanelTypeGridControl()
         {

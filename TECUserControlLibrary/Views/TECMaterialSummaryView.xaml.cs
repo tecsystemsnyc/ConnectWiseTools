@@ -13,22 +13,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View.Review
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for TECMaterialView.xaml
     /// </summary>
-    public partial class TECMaterialView : UserControl
+    public partial class TECMaterialSummaryView : UserControl
     {
-        public Object ViewModel
+        public TECMaterialSummaryVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (TECMaterialSummaryVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(TECMaterialView));
+            DependencyProperty.Register("ViewModel", typeof(TECMaterialSummaryVM),
+              typeof(TECMaterialSummaryView));
 
         public TECMaterialIndex SelectedMaterialIndex
         {
@@ -37,9 +38,9 @@ namespace EstimateBuilder.View.Review
         }
         public static readonly DependencyProperty SelectedMaterialIndexProperty =
             DependencyProperty.Register("SelectedMaterialIndex", typeof(TECMaterialIndex),
-              typeof(TECMaterialView), new PropertyMetadata(default(TECMaterialIndex)));
+              typeof(TECMaterialSummaryView), new PropertyMetadata(default(TECMaterialIndex)));
 
-        public TECMaterialView()
+        public TECMaterialSummaryView()
         {
             InitializeComponent();
         }

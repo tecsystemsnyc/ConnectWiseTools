@@ -12,25 +12,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View.Review
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for ElectricalMaterialView.xaml
     /// </summary>
-    public partial class ElectricalMaterialView : UserControl
+    public partial class ElectricalMaterialSummaryView : UserControl
     {
-        public Object ViewModel
+        public ElectricalMaterialSummaryVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ElectricalMaterialSummaryVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ElectricalMaterialView));
+            DependencyProperty.Register("ViewModel", typeof(ElectricalMaterialSummaryVM),
+              typeof(ElectricalMaterialSummaryView));
 
-        public ElectricalMaterialView()
+        public ElectricalMaterialSummaryView()
         {
             InitializeComponent();
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.View
 {
@@ -12,9 +13,9 @@ namespace EstimateBuilder.View
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public ScopeEditorVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ScopeEditorVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -22,7 +23,7 @@ namespace EstimateBuilder.View
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(ScopeEditorVM),
               typeof(ScopeEditorView));
 
         /// <summary>

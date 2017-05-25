@@ -12,22 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for ScopeCollectionsTabControl.xaml
     /// </summary>
-    public partial class ScopeCollectionsTabControl : UserControl
+    public partial class ScopeCollectionsTabView : UserControl
     {
         #region DPs
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public ScopeCollectionsTabVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ScopeCollectionsTabVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -35,11 +36,11 @@ namespace TECUserControlLibrary
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ScopeCollectionsTabControl));
+            DependencyProperty.Register("ViewModel", typeof(ScopeCollectionsTabVM),
+              typeof(ScopeCollectionsTabView));
 
         #endregion
-        public ScopeCollectionsTabControl()
+        public ScopeCollectionsTabView()
         {
             InitializeComponent();
         }

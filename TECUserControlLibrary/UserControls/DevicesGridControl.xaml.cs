@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using EstimatingLibrary;
 using System.Collections.ObjectModel;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
 
     /// <summary>

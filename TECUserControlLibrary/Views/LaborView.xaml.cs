@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Description for LaborView.
@@ -13,9 +14,9 @@ namespace EstimateBuilder.View
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public LaborVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (LaborVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -23,7 +24,7 @@ namespace EstimateBuilder.View
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(LaborVM),
               typeof(LaborView));
 
         /// <summary>

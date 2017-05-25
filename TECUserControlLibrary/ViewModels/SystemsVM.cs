@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
-    public class ScopeDataGridExtension : ViewModelBase, IDropTarget
+    public class SystemsVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private VisibilityModel _dataGridVisibilty;
@@ -216,7 +216,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #endregion
 
         #region Intializers
-        public ScopeDataGridExtension(TECBid bid)
+        public SystemsVM(TECBid bid)
         {
             _bid = bid;
             populateLocationSelections();
@@ -226,7 +226,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
             PointName = "";
             PointDescription = "";
         }
-        public ScopeDataGridExtension(TECTemplates templates)
+        public SystemsVM(TECTemplates templates)
         {
             Templates = templates;
             DataGridVisibilty = new VisibilityModel();

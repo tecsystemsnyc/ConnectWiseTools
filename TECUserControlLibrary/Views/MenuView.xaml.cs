@@ -12,27 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for MenuControl.xaml
     /// </summary>
-    public partial class MenuControl : UserControl
+    public partial class MenuView : UserControl
     {
-        public MenuControl()
+        public MenuView()
         {
             InitializeComponent();
         }
 
-        public Object ViewModel
+        public MenuVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (MenuVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(MenuControl));
+            DependencyProperty.Register("ViewModel", typeof(MenuVM),
+              typeof(MenuView));
 
         public Brush BackgroundColor
         {
@@ -42,7 +43,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty BackgroundColorProperty =
             DependencyProperty.Register("BackgroundColor", typeof(Brush),
-              typeof(MenuControl));
+              typeof(MenuView));
         
     }
 }

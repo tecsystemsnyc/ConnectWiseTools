@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Windows;
 using TECUserControlLibrary.Models;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -17,7 +17,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ControllersPanelsViewModel : ViewModelBase, IDropTarget
+    public class ControllersPanelsVM : ViewModelBase, IDropTarget
     {
         #region Properties
 

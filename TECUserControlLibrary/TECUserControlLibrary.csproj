@@ -256,7 +256,7 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
-    <Compile Include="ViewModels\TECMaterialReviewVM.cs" />
+    <Compile Include="ViewModels\TECMaterialSummaryVM.cs" />
     <Compile Include="Views\AddControlledScopeView.xaml.cs">
       <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
     </Compile>
@@ -308,8 +308,8 @@
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TECMaterialReviewView.xaml.cs">
-      <DependentUpon>TECMaterialReviewView.xaml</DependentUpon>
+    <Compile Include="Views\TECMaterialSummaryView.xaml.cs">
+      <DependentUpon>TECMaterialSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
     <Page Include="UserControls\AddAssociatedCostsControl.xaml">
@@ -624,7 +624,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TECMaterialReviewView.xaml">
+    <Page Include="Views\TECMaterialSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

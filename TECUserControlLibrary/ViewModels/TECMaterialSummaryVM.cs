@@ -10,9 +10,9 @@ using System.ComponentModel;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
-    public class TECMaterialViewModel : ViewModelBase
+    public class TECMaterialSummaryVM : ViewModelBase
     {
         #region Properties
         private ChangeWatcher _changeWatcher;
@@ -412,7 +412,7 @@ namespace EstimateBuilder.ViewModel
 
         #endregion
 
-        public TECMaterialViewModel(TECBid bid)
+        public TECMaterialSummaryVM(TECBid bid)
         {
             reinitialize(bid);
             AddDevice = new RelayCommand(AddDeviceExecute);

@@ -5,7 +5,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -13,7 +13,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MaterialsCostsExtension : ViewModelBase, IDropTarget
+    public class MaterialVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECTemplates _templates;
@@ -233,7 +233,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
 
         #endregion
 
-        public MaterialsCostsExtension(TECTemplates templates)
+        public MaterialVM(TECTemplates templates)
         {
             Templates = templates;
             setupCommands();

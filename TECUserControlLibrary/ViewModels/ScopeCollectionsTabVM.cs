@@ -13,9 +13,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
-    public class ScopeCollectionExtension : ViewModelBase, IDropTarget
+    public class ScopeCollectionsTabVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECTemplates _templates;
@@ -648,7 +648,7 @@ namespace TECUserControlLibrary.ViewModelExtensions
         #endregion
 
         #region Intializers
-        public ScopeCollectionExtension(TECTemplates templates)
+        public ScopeCollectionsTabVM(TECTemplates templates)
         {
             Templates = templates;
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);

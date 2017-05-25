@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary
 {
@@ -25,9 +26,9 @@ namespace TECUserControlLibrary
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public BudgetVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (BudgetVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -35,7 +36,7 @@ namespace TECUserControlLibrary
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(BudgetVM),
               typeof(BudgetWindow));
 
         public BudgetWindow()

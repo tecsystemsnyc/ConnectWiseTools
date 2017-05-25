@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -24,9 +25,9 @@ namespace TECUserControlLibrary.Views
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public AddControlledScopeVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (AddControlledScopeVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -34,7 +35,7 @@ namespace TECUserControlLibrary.Views
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(AddControlledScopeVM),
               typeof(AddControlledScopeView));
         
         public ControlledScopeEditIndex SelectedEditIndex

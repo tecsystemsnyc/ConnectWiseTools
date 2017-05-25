@@ -12,17 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for ProposalView.xaml
     /// </summary>
     public partial class ProposalView : UserControl
     {
-        public Object ViewModel
+        public ProposalVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ProposalVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -30,7 +31,7 @@ namespace EstimateBuilder.View
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(ProposalVM),
               typeof(ProposalView));
 
         public ProposalView()

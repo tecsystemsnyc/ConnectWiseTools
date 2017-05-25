@@ -2,11 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
-             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
-             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:cnvt="clr-namespace:TECUserControlLibrary.Utilities.HelperConverters"
+             
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">
@@ -79,7 +79,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <views:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
+                <controls:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
                 
                 <TextBlock Grid.Row="1" Text="{Binding FirstString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.Device.Name, Converter={cnvt:StringToQuoteConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -97,7 +97,7 @@
         <TextBlock Text="Device Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
 
         <!--Device Associated Costs Summary-->
-        <cLibGrids:AssociatedCostsSummaryGrid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+        <controls:AssociatedCostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
                                               AssociatedCostSummaryItemsSource="{Binding DeviceAssCostSummaryItems}"/>
         <!--Subtotals-->
         <TextBlock Text="Device Subtotal:" Grid.Row="2" Foreground="Black"/>

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TECUserControlLibrary.ViewModelExtensions
+namespace TECUserControlLibrary.ViewModels
 {
-    public class LocationDataGridExtension : ScopeDataGridExtension
+    public class LocationVM : SystemsVM
     {
         #region Properties
         private TECLocation _selectedLocation;

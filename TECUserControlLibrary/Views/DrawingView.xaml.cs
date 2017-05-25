@@ -1,11 +1,11 @@
-﻿using EstimateBuilder.ViewModel;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Description for DrawingView.
@@ -15,9 +15,9 @@ namespace EstimateBuilder.View
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public DrawingVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (DrawingVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -25,7 +25,7 @@ namespace EstimateBuilder.View
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(DrawingVM),
               typeof(DrawingView));
 
         /// <summary>

@@ -18,7 +18,7 @@ using TECUserControlLibrary;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModelExtensions;
 
-namespace EstimateBuilder.ViewModel
+namespace TECUserControlLibrary.ViewModels
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -26,10 +26,10 @@ namespace EstimateBuilder.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ScopeEditorViewModel : ViewModelBase, IDropTarget
+    public class ScopeEditorVM : ViewModelBase, IDropTarget
     {
         //Initializer
-        public ScopeEditorViewModel(TECBid bid, TECTemplates templates)
+        public ScopeEditorVM(TECBid bid, TECTemplates templates)
         {
             Bid = bid;
             Templates = templates;
@@ -226,7 +226,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
@@ -246,7 +245,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
             }
@@ -291,7 +289,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
             }
             else if (DGTabIndex == GridIndex.Misc)
             {
@@ -309,7 +306,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Visible;
-                ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
             }
@@ -329,7 +325,6 @@ namespace EstimateBuilder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
