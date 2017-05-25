@@ -185,21 +185,7 @@ namespace EstimatingUtilitiesLibrary
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.ControllerTemplates = getOrphanControllers();
-            var misc = getMisc();
-            var wire = new ObservableCollection<TECMisc>();
-            var cost = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in misc)
-            {
-                if (item.Type == CostType.Electrical)
-                {
-                    wire.Add(item);
-                }
-                else if (item.Type == CostType.TEC)
-                {
-                    cost.Add(item);
-                }
-            }
-            templates.MiscCostTemplates = cost;
+            templates.MiscCostTemplates = getMisc();
             templates.PanelTemplates = getOrphanPanels();
 
             ModelLinkingHelper.LinkTemplates(templates);

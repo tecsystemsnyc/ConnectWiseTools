@@ -188,9 +188,10 @@ namespace Tests
             equipment1.Tags.Add(bid.Catalogs.Tags.RandomObject());
 
             var equipment2 = new TECEquipment();
-            equipment1.Name = "Equipment 2";
-            equipment1.Description = "Description 2";
-            equipment1.BudgetUnitPrice = 0;
+            equipment2.Name = "Equipment 2";
+            equipment2.Description = "Description 2";
+            equipment2.BudgetUnitPrice = 0;
+            equipment2.Tags.Add(bid.Catalogs.Tags.RandomObject());
 
             system1.Equipment.Add(equipment1);
             system3.Equipment.Add(equipment2);
@@ -810,5 +811,58 @@ namespace Tests
             return equipment;
         }
 
+        public static TECScope FindScopeInSystems(ObservableCollection<TECSystem> systems, TECScope reference)
+        {
+            foreach(TECSystem system in systems)
+            {
+                if(system.Guid == reference.Guid)
+                { return system; }
+                else
+                {
+                    foreach(TECEquipment equipment in system.Equipment)
+                    {
+                        if(equipment.Guid == reference.Guid)
+                        { return equipment; }
+                        else
+                        {
+                            foreach(TECSubScope subScope in equipment.SubScope)
+                            {
+                                if(subScope.Guid == reference.Guid)
+                                { return subScope; }
+                                else
+                                {
+                                    foreach (TECDevice device in subScope.Devices)
+                                    {
+                                        if (device.Guid == reference.Guid)
+                                        { return device; }
+                                    }
+                                    foreach (TECPoint point in subScope.Points)
+                                    {
+                                        if (point.Guid == reference.Guid)
+                                        { return point; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach(TECPanel panel in system.Panels)
+                    {
+                        if(panel.Guid == reference.Guid)
+                        { return panel; }
+                    }
+                    foreach(TECController controller in system.Controllers)
+                    {
+                        if(controller.Guid == reference.Guid)
+                        { return controller; }
+                    }
+                    foreach (TECScopeBranch branch in system.ScopeBranches)
+                    {
+                        if (branch.Guid == reference.Guid)
+                        { return branch; }
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

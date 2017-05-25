@@ -680,7 +680,14 @@ namespace Tests
         public void Save_Bid_Remove_Equipment()
         {
             //Act
-            TECSystem systemToModify = bid.Systems[0];
+            TECSystem systemToModify = null; 
+            foreach(TECSystem system in bid.Systems)
+            {
+                if(system.Equipment.Count > 0)
+                {
+                    systemToModify = system;
+                }
+            }
             int oldNumEquip = systemToModify.Equipment.Count();
             TECEquipment equipToRemove = systemToModify.Equipment[0];
 
@@ -1013,7 +1020,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = bid.Catalogs.Devices.RandomObject();
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices = new ObservableCollection<TECDevice>();

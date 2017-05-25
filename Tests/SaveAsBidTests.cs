@@ -77,7 +77,14 @@ namespace Tests
             //Arrange
             expectedBid = TestHelper.CreateTestBid();
             expectedLabor = expectedBid.Labor;
-            expectedSystem = expectedBid.Systems.RandomObject();
+            foreach (TECSystem system in expectedBid.Systems)
+            {
+                if (system.Equipment.Count >  0)
+                {
+                    expectedSystem = system;
+                    break;
+                }
+            }
             foreach(TECSystem system in expectedBid.Systems)
             {
                 if(system != expectedSystem)
@@ -146,33 +153,11 @@ namespace Tests
                 }
             }
 
-            foreach (TECEquipment equip in actualSystem.Equipment)
-            {
-                if (equip.Guid == expectedEquipment.Guid)
-                {
-                    actualEquipment = equip;
-                    break;
-                }
-            }
-
-            foreach (TECSubScope ss in actualEquipment.SubScope)
-            {
-                if (ss.Guid == expectedSubScope.Guid)
-                {
-                    actualSubScope = ss;
-                    break;
-                }
-            }
+            actualEquipment = TestHelper.FindScopeInSystems(actualBid.Systems, expectedEquipment) as TECEquipment;
+            actualSubScope = TestHelper.FindScopeInSystems(actualBid.Systems, expectedSubScope) as TECSubScope;
             actualDevices = actualSubScope.Devices;
-            foreach (TECDevice dev in actualSubScope.Devices)
-            {
-                if (dev.Guid == expectedDevice.Guid)
-                {
-                    actualDevice = dev;
-                    break;
-                }
-            }
-
+            actualDevice = TestHelper.FindScopeInSystems(actualBid.Systems, expectedDevice) as TECDevice;
+            actualPoint = TestHelper.FindScopeInSystems(actualBid.Systems, expectedPoint) as TECPoint;
             foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
@@ -181,16 +166,7 @@ namespace Tests
                     break;
                 }
             }
-
-            foreach (TECPoint point in actualSubScope.Points)
-            {
-                if (point.Guid == expectedPoint.Guid)
-                {
-                    actualPoint = point;
-                    break;
-                }
-            }
-
+            
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
             {
                 if (branch.Guid == expectedBranch.Guid)
@@ -502,20 +478,20 @@ namespace Tests
             string expectedText = actualTag.Text;
             Guid expectedGuid = actualTag.Guid;
 
-            Assert.AreEqual(expectedGuid, actualSystem.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSystem.Tags[0].Text);
+            Assert.AreEqual(expectedSystem.Tags[0].Guid, actualSystem.Tags[0].Guid);
+            Assert.AreEqual(expectedSystem.Tags[0].Text, actualSystem.Tags[0].Text);
 
-            Assert.AreEqual(expectedGuid, actualEquipment.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualEquipment.Tags[0].Text);
+            Assert.AreEqual(expectedEquipment.Tags[0].Guid, actualEquipment.Tags[0].Guid);
+            Assert.AreEqual(expectedEquipment.Tags[0].Text, actualEquipment.Tags[0].Text);
 
-            Assert.AreEqual(expectedGuid, actualSubScope.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSubScope.Tags[0].Guid, actualSubScope.Tags[0].Guid);
+            Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
 
-            Assert.AreEqual(expectedGuid, actualDevice.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualDevice.Tags[0].Text);
+            Assert.AreEqual(expectedDevice.Tags[0].Guid, actualDevice.Tags[0].Guid);
+            Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
 
-            Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
+            Assert.AreEqual(expectedPoint.Tags[0].Guid, actualPoint.Tags[0].Guid);
+            Assert.AreEqual(expectedPoint.Tags[0].Text, actualPoint.Tags[0].Text);
         }
 
         //[TestMethod]

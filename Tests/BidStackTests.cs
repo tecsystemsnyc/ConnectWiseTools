@@ -712,8 +712,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            Guid expected = new Guid(Bid.Systems[0].Location.Guid.ToString());
             var system = Bid.Systems.RandomObject();
+            Guid expected = new Guid(system.Location.Guid.ToString());
             TECLocation edit = new TECLocation();
             edit.Name = "Floor 42";
 
@@ -739,18 +739,19 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Systems[0].Equipment[0].Name;
+            var equipment = Bid.RandomEquipment();
+            string expected = equipment.Name;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].Name = edit;
+            equipment.Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].Name;
+            string actual = equipment.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -760,18 +761,19 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Systems[0].Equipment[0].Description;
+            var equipment = Bid.RandomEquipment();
+            string expected = equipment.Description;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].Description = edit;
+            equipment.Description = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].Description;
+            string actual = equipment.Description;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -781,18 +783,19 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            int expected = Bid.Systems[0].Equipment[0].Quantity;
+            var equipment = Bid.RandomEquipment();
+            int expected = equipment.Quantity;
             int edit = 3;
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].Quantity = edit;
+            equipment.Quantity = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Bid.Systems[0].Equipment[0].Quantity;
+            int actual = equipment.Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -802,8 +805,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
+            var equipment = Bid.RandomEquipment();
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Bid.Systems[0].Equipment[0].SubScope)
+            foreach (TECSubScope item in equipment.SubScope)
             {
                 expected.Add(item);
             }
@@ -812,12 +816,12 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope.Add(edit);
+            equipment.SubScope.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Bid.Systems[0].Equipment[0].SubScope;
+            ObservableCollection<TECSubScope> actual = equipment.SubScope;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1087,18 +1091,19 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name;
+            var manufacturer = Bid.Catalogs.Manufacturers.RandomObject();
+            string expected = manufacturer.Name;
             string edit = "changedName";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name = edit;
+            manufacturer.Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Bid.Systems[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Name;
+            string actual = manufacturer.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
