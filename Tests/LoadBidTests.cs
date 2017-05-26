@@ -126,20 +126,41 @@ namespace Tests
             //Arrange
             TECSystem actualSystem = actualBid.Systems[0];
             TECSystem actualChild = actualSystem.SystemInstances.RandomObject();
+            string expectedName = "Test System";
+            string expectedDescription = "Test System Description";
+            int expectedQuantity = 123;
+            double expectedBP = 12.3;
 
             //Assert
             Assert.AreNotEqual(null, actualChild);
-            string expectedName = "Test System";
             Assert.AreEqual(expectedName, actualSystem.Name);
-
-            string expectedDescription = "Test System Description";
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-
-            int expectedQuantity = 123;
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
-
-            double expectedBP = 12.3;
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+            Assert.AreEqual(actualSystem.Equipment.Count, actualChild.Equipment.Count);
+            Assert.AreEqual(actualSystem.Panels.Count, actualChild.Panels.Count);
+            Assert.AreEqual(actualSystem.Controllers.Count, actualChild.Controllers.Count);
+            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Equipment[0]).Contains(actualChild.Equipment[0]));
+            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Controllers[0]).Contains(actualChild.Controllers[0]));
+            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Panels[0]).Contains(actualChild.Panels[0]));
+        }
+
+        [TestMethod]
+        public void Load_Bid_EditSystemInstances()
+        {
+            TECSystem system = actualBid.Systems[0];
+            
+            system.Equipment.Add(TestHelper.CreateTestEquipment(actualBid.Catalogs));
+            system.Controllers.Add(TestHelper.CreateTestController(actualBid.Catalogs));
+            system.Panels.Add(TestHelper.CreateTestPanel(actualBid.Catalogs));
+
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+
         }
 
         [TestMethod]
@@ -497,7 +518,7 @@ namespace Tests
             }
 
 
-            double expectedLength = 493.45;
+            double expectedLength = 521;
 
             bool hasSubScope = false;
             if (actualConnection.SubScope == actualSubScope)

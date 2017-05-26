@@ -658,6 +658,14 @@ namespace Tests
             controlller.Tags.Add(catalogs.Tags.RandomObject());
             return controlller;
         }
+        public static TECPanel CreateTestPanel(TECCatalogs catalogs)
+        {
+            var panelType = catalogs.PanelTypes.RandomObject();
+
+            var panel = new TECPanel(panelType);
+            panel.Tags.Add(catalogs.Tags.RandomObject());
+            return panel;
+        }
         public static TECLabor CreateTestLabor()
         {
             var labor = new TECLabor();

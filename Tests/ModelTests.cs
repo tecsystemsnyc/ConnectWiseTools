@@ -113,7 +113,56 @@ namespace Tests
                 }
             }
         }
-        
+
+        [TestMethod]
+        public void System_AddInstances()
+        {
+            TECBid bid = new TECBid();
+            int qty = 3;
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+
+            for(int x = 0; x < qty; x++)
+            {
+                system.AddInstance(bid);
+            }
+
+            Assert.AreEqual(system.SystemInstances.Count, qty);
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+            
+        }
+        [TestMethod]
+        public void System_EditInstances()
+        {
+            TECBid bid = new TECBid();
+            int qty = 3;
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+            for (int x = 0; x < qty; x++)
+            {
+                system.AddInstance(bid);
+            }
+
+            system.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            system.Controllers.Add(TestHelper.CreateTestController(bid.Catalogs));
+            system.Panels.Add(TestHelper.CreateTestPanel(bid.Catalogs));
+
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+
+        }
+
         #endregion
     }
 }

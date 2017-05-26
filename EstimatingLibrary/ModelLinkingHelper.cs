@@ -654,65 +654,46 @@ namespace EstimatingLibrary
         
         private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
         {
-            foreach (TECSystem scope in bid.Systems)
+            foreach (TECSystem system in bid.Systems)
             {
-                foreach (TECEquipment equipment in scope.Equipment)
+                foreach(TECSystem instance in system.SystemInstances)
                 {
-                    linkCharacteristicSystemWithSystems(scope.CharactersticInstances, placeholderDict, equipment, scope.Equipment);
-                }
-                foreach (TECController controller in scope.Controllers)
-                {
-                    linkCharacteristicScopeWithScope(scope.CharactersticInstances, placeholderDict, controller, scope.Controllers);
-                }
-                foreach (TECPanel panel in scope.Panels)
-                {
-                    linkCharacteristicScopeWithScope(scope.CharactersticInstances, placeholderDict, panel, scope.Panels);
-                }
-            }
-        }
-        private static void linkCharacteristicSystemWithSystems(ObservableItemToInstanceList<TECScope> characteristicList, Dictionary<Guid, List<Guid>> placeholderList,
-            TECScope characteristicScope, ObservableCollection<TECEquipment> equipmentInstances)
-        {
-            foreach (KeyValuePair<Guid, List<Guid>> item in placeholderList)
-            {
-                if (item.Key == characteristicScope.Guid)
-                {
-                    foreach (TECEquipment equipment in equipmentInstances)
+                    foreach(TECEquipment equipment in system.Equipment)
                     {
-                        linkCharacteristicScopeWithScope(characteristicList, placeholderList, equipment, equipmentInstances);
-                        foreach (TECSubScope subscope in equipment.SubScope)
+                        linkCharacteristicWithInstances(equipment, instance.Equipment, placeholderDict, system.CharactersticInstances);
+                        foreach(TECSubScope subscope in equipment.SubScope)
                         {
-                            linkCharacteristicScopeWithScope(characteristicList, placeholderList, subscope, equipment.SubScope);
-                            foreach (TECPoint point in subscope.Points)
+                            foreach(TECEquipment instanceEquipment in instance.Equipment)
                             {
-                                linkCharacteristicScopeWithScope(characteristicList, placeholderList, point, subscope.Points);
+                                linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, placeholderDict, system.CharactersticInstances);
+                                foreach(TECPoint point in subscope.Points)
+                                {
+                                    foreach(TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                                    {
+                                        linkCharacteristicWithInstances(point, instanceSubScope.Points, placeholderDict, system.CharactersticInstances);
+                                    }
+                                }
                             }
                         }
                     }
-                    break;
+                    foreach(TECController controller in system.Controllers)
+                    {
+                        linkCharacteristicWithInstances(controller, instance.Controllers, placeholderDict, system.CharactersticInstances);
+                    }
+                    foreach(TECPanel panel in system.Panels)
+                    {
+                        linkCharacteristicWithInstances(panel, instance.Panels, placeholderDict, system.CharactersticInstances);
+                    }
                 }
             }
         }
-
-        private static void linkCharacteristicScopeWithScope(ObservableItemToInstanceList<TECScope> characteristicList, Dictionary<Guid, List<Guid>> placeholderList,
-            TECScope characteristicScope, IList scopeInstances)
+        private static void linkCharacteristicWithInstances(TECScope characteristic, IList instances, Dictionary<Guid, List<Guid>> referenceDict, ObservableItemToInstanceList<TECScope> characteristicList)
         {
-            foreach (KeyValuePair<Guid, List<Guid>> item in placeholderList)
+            foreach(TECScope item in instances)
             {
-                if (item.Key == characteristicScope.Guid)
+                if (referenceDict[characteristic.Guid].Contains(item.Guid))
                 {
-                    foreach (TECScope scope in scopeInstances)
-                    {
-                        foreach (Guid guid in item.Value)
-                        {
-                            if (scope.Guid == guid)
-                            {
-                                characteristicList.AddItem(characteristicScope, scope);
-                            }
-                            break;
-                        }
-                    }
-                    break;
+                    characteristicList.AddItem(characteristic, item);
                 }
             }
         }

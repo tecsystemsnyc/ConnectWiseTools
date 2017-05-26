@@ -316,6 +316,13 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
             Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+            Assert.AreEqual(expectedSystem.SystemInstances.Count, actualSystem.SystemInstances.Count);
+            Assert.AreEqual(expectedSystem.Equipment.Count, actualSystem.Equipment.Count);
+            Assert.AreEqual(expectedSystem.Controllers.Count, actualSystem.Controllers.Count);
+            Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
+            Assert.AreEqual(expectedSystem.ScopeBranches.Count, actualSystem.ScopeBranches.Count);
+            Assert.AreEqual(expectedSystem.AssociatedCosts.Count, actualSystem.AssociatedCosts.Count);
+            Assert.AreEqual(expectedSystem.CharactersticInstances.GetFullDictionary().Count, actualSystem.CharactersticInstances.GetFullDictionary().Count);
         }
 
         [TestMethod]
