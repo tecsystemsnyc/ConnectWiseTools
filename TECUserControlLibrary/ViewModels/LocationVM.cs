@@ -71,7 +71,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #endregion
 
-        public LocationDataGridExtension(TECBid bid) : base(bid) { }
+        public LocationVM(TECBid bid) : base(bid) { }
 
         #region Methods
 

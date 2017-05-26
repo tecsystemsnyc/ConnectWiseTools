@@ -3,11 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
              xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
              xmlns:utilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
-             xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">

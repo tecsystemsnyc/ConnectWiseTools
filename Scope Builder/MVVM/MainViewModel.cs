@@ -187,7 +187,6 @@ namespace Scope_Builder.ViewModel
                 ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                 ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
@@ -348,7 +347,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupLocationDataGrid()
         {
-            LocationDataGrid = new LocationDataGridExtension(new TECBid());
+            LocationDataGrid = new LocationVM(new TECBid());
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
         }
