@@ -161,6 +161,9 @@
     <Compile Include="UserControls\DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DevicesPointsVM.cs" />
+    <Compile Include="ViewModels\EquipmentVM.cs" />
+    <Compile Include="ViewModels\SubScopeVM.cs" />
     <Compile Include="Views\DocumentBuilderView.xaml.cs">
       <DependentUpon>DocumentBuilderView.xaml</DependentUpon>
     </Compile>
@@ -404,7 +407,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\DevicesPointsControl.xaml">
+    <Page Include="Views\DevicesPointsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -488,7 +491,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SubScopeGridControl.xaml">
+    <Page Include="Views\SubScopeGridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -520,8 +523,8 @@
     <Compile Include="UserControls\DevicesGridControl.xaml.cs">
       <DependentUpon>DevicesGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DevicesPointsControl.xaml.cs">
-      <DependentUpon>DevicesPointsControl.xaml</DependentUpon>
+    <Compile Include="Views\DevicesPointsView.xaml.cs">
+      <DependentUpon>DevicesPointsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EquipmentGridView.xaml.cs">
       <DependentUpon>EquipmentGridView.xaml</DependentUpon>
@@ -539,8 +542,8 @@
     <Compile Include="UserControls\ScopeItemsControl.xaml.cs">
       <DependentUpon>ScopeItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SubScopeGridControl.xaml.cs">
-      <DependentUpon>SubScopeGridControl.xaml</DependentUpon>
+    <Compile Include="Views\SubScopeGridView.xaml.cs">
+      <DependentUpon>SubScopeGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SystemsGridView.xaml.cs">
       <DependentUpon>SystemsGridView.xaml</DependentUpon>

@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for SubScopeGridControl.xaml
     /// </summary>
-    public partial class SubScopeGridControl : UserControl
+    public partial class SubScopeGridView : UserControl
     {
         #region DPs
 
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty SubScopeSourceProperty =
             DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<TECSubScope>),
-              typeof(SubScopeGridControl), new PropertyMetadata(default(ObservableCollection<TECSubScope>)));
+              typeof(SubScopeGridView), new PropertyMetadata(default(ObservableCollection<TECSubScope>)));
 
         /// <summary>
         /// Gets or sets wether user can add rows 
@@ -54,11 +55,27 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty AllowAddingNewProperty =
             DependencyProperty.Register("AllowAddingNew", typeof(bool),
-              typeof(SubScopeGridControl), new PropertyMetadata(true));
+              typeof(SubScopeGridView), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public SubScopeVM ViewModel
+        {
+            get { return (SubScopeVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(SubScopeVM),
+              typeof(SubScopeGridView));
 
         #endregion
 
-        public SubScopeGridControl()
+        public SubScopeGridView()
         {
             InitializeComponent();
         }

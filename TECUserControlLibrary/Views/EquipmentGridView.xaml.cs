@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for SubScopeGridControl.xaml
     /// </summary>
-    public partial class EquipmentGridControl : UserControl
+    public partial class EquipmentGridView : UserControl
     {
         #region DPs
 
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty EquipmentSourceProperty =
             DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
-              typeof(EquipmentGridControl), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
+              typeof(EquipmentGridView), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
 
 
         /// <summary>
@@ -55,11 +56,26 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty AllowAddingNewProperty =
             DependencyProperty.Register("AllowAddingNew", typeof(bool),
-              typeof(EquipmentGridControl), new PropertyMetadata(true));
+              typeof(EquipmentGridView), new PropertyMetadata(true));
 
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public EquipmentVM ViewModel
+        {
+            get { return (EquipmentVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
 
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(EquipmentVM),
+              typeof(EquipmentGridView));
         #endregion
-        public EquipmentGridControl()
+
+        public EquipmentGridView()
         {
             InitializeComponent();
         }

@@ -44,7 +44,7 @@ namespace TECUserControlLibrary.ViewModels
         /// Initializes a new instance of the LaborViewModel class.
         /// </summary>
         /// 
-        public LaborViewModel()
+        public LaborVM()
         {
             Bid = new TECBid();
             Templates = new TECTemplates();

@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="TECUserControlLibrary.DataGrids.SubScopeGridControl"
+﻿<UserControl x:Class="TECUserControlLibrary.Views.SubScopeGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent"
@@ -19,7 +19,7 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=SubScopeSource}"
-                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">
@@ -33,7 +33,7 @@
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto" MinWidth="70"
                                     Visibility="{Binding Data.DataGridVisibilty.SubScopeDescription, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={utilities:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         DisplayMemberPath="Name"
                                         ItemsSource="{Binding Data.LocationSelections,
                                         Source={StaticResource proxy}}"

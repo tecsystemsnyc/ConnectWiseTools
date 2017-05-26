@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for DevicesPointsControl.xaml
     /// </summary>
-    public partial class DevicesPointsControl : UserControl
+    public partial class DevicesPointsView : UserControl
     {
         #region DPs
 
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary
         /// </summary>
         public static readonly DependencyProperty PointsSourceProperty =
             DependencyProperty.Register("PointsSource", typeof(ObservableCollection<TECPoint>),
-              typeof(DevicesPointsControl), new PropertyMetadata(default(ObservableCollection<TECPoint>)));
+              typeof(DevicesPointsView), new PropertyMetadata(default(ObservableCollection<TECPoint>)));
 
 
         /// <summary>
@@ -55,10 +56,26 @@ namespace TECUserControlLibrary
         /// </summary>
         public static readonly DependencyProperty DevicesSourceProperty =
             DependencyProperty.Register("DevicesSource", typeof(ObservableCollection<TECDevice>),
-              typeof(DevicesPointsControl), new PropertyMetadata(default(ObservableCollection<TECDevice>)));
+              typeof(DevicesPointsView), new PropertyMetadata(default(ObservableCollection<TECDevice>)));
+
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public DevicesPointsVM ViewModel
+        {
+            get { return (DevicesPointsVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(DevicesPointsVM),
+              typeof(DevicesPointsView));
 
         #endregion
-        public DevicesPointsControl()
+        public DevicesPointsView()
         {
             InitializeComponent();
         }
