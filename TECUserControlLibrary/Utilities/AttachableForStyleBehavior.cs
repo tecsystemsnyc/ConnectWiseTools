@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Utilities
 {
     public class AttachableForStyleBehavior<TComponent, TBehavior> : Behavior<TComponent>
         where TComponent : System.Windows.DependencyObject

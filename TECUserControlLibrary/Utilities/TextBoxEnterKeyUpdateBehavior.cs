@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Utilities
 {
     public class TextBoxEnterKeyUpdateBehavior : AttachableForStyleBehavior<TextBox, TextBoxEnterKeyUpdateBehavior>
     {

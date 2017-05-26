@@ -656,7 +656,6 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Bid_ControlledScopeInstances()
         {
-            int quantity = 3;
             TECBid saveBid = new TECBid();
             saveBid.Catalogs = TestHelper.CreateTestCatalogs();
             TECSystem system = TestHelper.CreateTestSystem(saveBid.Catalogs);

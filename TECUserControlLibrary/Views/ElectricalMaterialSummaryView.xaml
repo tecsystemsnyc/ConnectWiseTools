@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -58,7 +58,7 @@
 
         <!--Associated Cost Summary-->
         <TextBlock Text="Misc" Foreground="Black" FontSize="20" Grid.Row="6"/>
-        <grids:AssociatedCostsSummaryGrid Grid.ColumnSpan="4" Grid.Row="7" AssociatedCostSummaryItemsSource="{Binding AssociatedCostSummaryItems}"/>
+        <controls:AssociatedCostsSummaryGridControl Grid.ColumnSpan="4" Grid.Row="7" AssociatedCostSummaryItemsSource="{Binding AssociatedCostSummaryItems}"/>
 
         <TextBlock Text="Total Electrical Associated Cost:" Grid.Row="8" Foreground="Black"/>
         <TextBlock Text="{Binding TotalAssociatedCost, StringFormat={} {0:C}}" Grid.Row="8" Grid.Column="1" Foreground="Black"/>

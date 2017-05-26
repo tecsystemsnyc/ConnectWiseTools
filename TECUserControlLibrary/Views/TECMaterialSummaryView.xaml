@@ -43,12 +43,12 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Category:" Foreground="Black" VerticalAlignment="Center"/>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
                   SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialIndex}"
                   Margin="5"
                   VerticalContentAlignment="Center"/>
 
-        <TabControl Grid.Column="2" Grid.RowSpan="14" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialIndex, Converter={cnvt:TECMaterialIndexToIntegerConverter}}">
+        <TabControl Grid.Column="2" Grid.RowSpan="14" SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialIndex, Converter={utilities:TECMaterialIndexToIntegerConverter}}">
 
             <!--Device View-->
             <TabItem Visibility="Collapsed">

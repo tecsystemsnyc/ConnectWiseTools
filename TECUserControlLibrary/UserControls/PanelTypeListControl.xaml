@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:local="clr-namespace:EstimateBuilder.View.Review"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -48,7 +48,7 @@
         <TextBlock Text="Panel Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
 
         <!--Panel Associated Costs Summary-->
-        <cLibGrids:AssociatedCostsSummaryGrid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+        <controls:AssociatedCostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
                                               AssociatedCostSummaryItemsSource="{Binding PanelAssCostSummaryItems}"/>
         <!--Subtotals-->
         <TextBlock Text="Panel Type Subtotal:" Grid.Row="2" Foreground="Black"/>

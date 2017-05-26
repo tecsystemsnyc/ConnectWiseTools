@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Utilities
 {
     public abstract class BaseConverter : MarkupExtension
     {

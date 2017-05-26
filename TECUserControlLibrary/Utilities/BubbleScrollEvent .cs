@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Utilities
 {
     // Used on sub-controls of an expander to bubble the mouse wheel scroll event up 
     public sealed class BubbleScrollEvent : Behavior<UIElement>

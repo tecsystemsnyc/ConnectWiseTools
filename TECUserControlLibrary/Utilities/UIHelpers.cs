@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TECUserControlLibrary.Models;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Utilities
 {
     public static class UIHelpers
     {

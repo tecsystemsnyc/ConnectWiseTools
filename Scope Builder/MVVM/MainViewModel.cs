@@ -17,7 +17,6 @@ using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Reflection;
-using TECUserControlLibrary.ViewModelExtensions;
 using TECUserControlLibrary.ViewModels;
 
 namespace Scope_Builder.ViewModel
@@ -51,9 +50,9 @@ namespace Scope_Builder.ViewModel
         }
 
         #region VMExtensions
-        public ScopeDataGridExtension ScopeDataGrid { get; set; }
-        public LocationDataGridExtension LocationDataGrid { get; set; }
-        public ScopeCollectionExtension ScopeCollection { get; set; }
+        public SystemsVM ScopeDataGrid { get; set; }
+        public LocationVM LocationDataGrid { get; set; }
+        public ScopeCollectionsTabVM ScopeCollection { get; set; }
 
         public DocumentBuilderVM DocumentBuilderVM { get; set; }
         public BudgetVM BudgetVM { get; set; }
