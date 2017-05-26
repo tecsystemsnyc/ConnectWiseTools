@@ -8,6 +8,7 @@
              xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+             xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
              
              StartupUri="MainWindow.xaml"
              mc:Ignorable="d ignore">
