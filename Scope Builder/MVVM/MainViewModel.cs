@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Reflection;
 using TECUserControlLibrary.ViewModels;
+using TECUserControlLibrary.Utilities;
 
 namespace Scope_Builder.ViewModel
 {
@@ -338,7 +339,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupScopeDataGrid()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(new TECBid());
+            ScopeDataGrid = new SystemsVM(new TECBid());
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.SelectionChanged += setContextText;
@@ -353,7 +354,7 @@ namespace Scope_Builder.ViewModel
         }
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionExtension(new TECTemplates());
+            ScopeCollection = new ScopeCollectionsTabVM(new TECTemplates());
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }
