@@ -680,7 +680,14 @@ namespace Tests
         public void Save_Bid_Remove_Equipment()
         {
             //Act
-            TECSystem systemToModify = bid.Systems[0];
+            TECSystem systemToModify = null; 
+            foreach(TECSystem system in bid.Systems)
+            {
+                if(system.Equipment.Count > 0)
+                {
+                    systemToModify = system;
+                }
+            }
             int oldNumEquip = systemToModify.Equipment.Count();
             TECEquipment equipToRemove = systemToModify.Equipment[0];
 
@@ -717,7 +724,7 @@ namespace Tests
         public void Save_Bid_Equipment_Name()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Name = "Save Equip Name";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -745,7 +752,7 @@ namespace Tests
         public void Save_Bid_Equipment_Description()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Description = "Save Equip Description";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -773,7 +780,7 @@ namespace Tests
         public void Save_Bid_Equipment_Quantity()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Quantity = 987654321;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -801,7 +808,7 @@ namespace Tests
         public void Save_Bid_Equipment_BudgetPrice()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.BudgetUnitPrice = 9876543.21;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -838,8 +845,9 @@ namespace Tests
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
             expectedSubScope.Quantity = 235746543;
+            
 
-            bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
+            bid.RandomEquipment().SubScope.Add(expectedSubScope);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -873,7 +881,7 @@ namespace Tests
         public void Save_Bid_Remove_SubScope()
         {
             //Act
-            TECEquipment equipToModify = bid.Systems[0].Equipment[0];
+            TECEquipment equipToModify = bid.RandomEquipment();
             int oldNumSubScope = equipToModify.SubScope.Count();
             TECSubScope subScopeToRemove = equipToModify.SubScope[0];
 
@@ -911,7 +919,7 @@ namespace Tests
         public void Save_Bid_SubScope_Name()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Name = "Save SubScope Name";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -943,7 +951,7 @@ namespace Tests
         public void Save_Bid_SubScope_Description()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Description = "Save SubScope Description";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -975,7 +983,7 @@ namespace Tests
         public void Save_Bid_SubScope_Quantity()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Quantity = 987654321;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1011,27 +1019,18 @@ namespace Tests
         public void Save_Bid_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = null;
-            //Devices can only be added from the device catalog.
-            foreach (TECDevice dev in bid.Catalogs.Devices)
-            {
-                if (dev.Name == "Device C1")
-                {
-                    expectedDevice = dev;
-                    break;
-                }
-            }
+            TECDevice expectedDevice = bid.Catalogs.Devices.RandomObject();
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices = new ObservableCollection<TECDevice>();
             int expectedQuantity = 5;
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1080,7 +1079,12 @@ namespace Tests
         public void Save_Bid_Remove_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
+
             int oldNumDevices = ssToModify.Devices.Count();
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1140,7 +1144,11 @@ namespace Tests
         public void Save_Bid_LowerQuantity_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
 
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1192,7 +1200,11 @@ namespace Tests
         public void Save_Bid_Device_Quantity()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while(ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
             TECDevice expectedDevice = ssToModify.Devices[0];
 
             int expectedNumDevices = 0;
@@ -1266,7 +1278,7 @@ namespace Tests
             expectedPoint.Description = "Point Description";
             expectedPoint.Quantity = 84300;
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
             subScopeToModify.Points.Add(expectedPoint);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1309,7 +1321,7 @@ namespace Tests
         public void Save_Bid_Remove_Point()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
             int oldNumPoints = ssToModify.Points.Count();
             TECPoint pointToRemove = ssToModify.Points[0];
             ssToModify.Points.Remove(pointToRemove);
@@ -1350,7 +1362,7 @@ namespace Tests
         public void Save_Bid_Point_Name()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Name = "Point name save test";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1386,7 +1398,7 @@ namespace Tests
         public void Save_Bid_Point_Description()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Description = "Point Description save test";
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1422,7 +1434,7 @@ namespace Tests
         public void Save_Bid_Point_Quantity()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Quantity = 7463;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1458,7 +1470,7 @@ namespace Tests
         public void Save_Bid_Point_Type()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Type = PointTypes.BI;
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1496,11 +1508,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSystem systemToEdit = bid.Systems[0];
-
-            systemToEdit.Tags.Add(tagToAdd);
-
+            TECSystem systemToEdit = bid.Systems.RandomObject();
+            TECTag tagToAdd = null;
+            foreach(TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!systemToEdit.Tags.Contains(tag))
+                {
+                    systemToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
             TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
@@ -1527,10 +1545,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
-
-            equipmentToEdit.Tags.Add(tagToAdd);
+            TECEquipment equipmentToEdit = bid.RandomEquipment();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!equipmentToEdit.Tags.Contains(tag))
+                {
+                    equipmentToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1565,10 +1590,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
-
-            subScopeToEdit.Tags.Add(tagToAdd);
+            TECSubScope subScopeToEdit = bid.RandomSubScope();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!subScopeToEdit.Tags.Contains(tag))
+                {
+                    subScopeToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1604,10 +1636,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToPoint()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
-
-            PointToEdit.Tags.Add(tagToAdd);
+            TECPoint PointToEdit = bid.RandomPoint();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!PointToEdit.Tags.Contains(tag))
+                {
+                    PointToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1646,10 +1685,17 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECController ControllerToEdit = bid.Controllers[0];
-
-            ControllerToEdit.Tags.Add(tagToAdd);
+            TECController ControllerToEdit = bid.Controllers.RandomObject();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!ControllerToEdit.Tags.Contains(tag))
+                {
+                    ControllerToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
 
@@ -1715,7 +1761,7 @@ namespace Tests
             TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Name = "New Child";
             expectedBranch.Description = "Child Branch Description";
-            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            TECScopeBranch branchToModify = bid.ScopeTree.RandomObject();
             branchToModify.Branches.Add(expectedBranch);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1752,7 +1798,7 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch branchToRemove = bid.ScopeTree[0];
+            TECScopeBranch branchToRemove = bid.ScopeTree.RandomObject();
             bid.ScopeTree.Remove(branchToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1784,7 +1830,7 @@ namespace Tests
             }
 
             int oldNumBranches = branchToModify.Branches.Count();
-            TECScopeBranch branchToRemove = branchToModify.Branches[0];
+            TECScopeBranch branchToRemove = branchToModify.Branches.RandomObject();
             branchToModify.Branches.Remove(branchToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1813,7 +1859,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Name = "Test Branch Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1836,7 +1882,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Description()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Description = "Test Branch Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1891,7 +1937,7 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLocation locationToRemove = bid.Locations[0];
+            TECLocation locationToRemove = bid.Locations.RandomObject();
             bid.Locations.Remove(locationToRemove);
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1911,7 +1957,7 @@ namespace Tests
         public void Save_Bid_Edit_Location_Name()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
             expectedLocation.Name = "Location Name Save";
 
             EstimatingLibraryDatabase.Update(path, testStack, false);
@@ -1936,7 +1982,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -2605,235 +2651,7 @@ namespace Tests
         #endregion Controller IO
 
         #endregion
-
-        #region Save Proposal Scope
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_IsProposed()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0];
-            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_IsProposed_InProposalScope()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0].Children[0];
-            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                foreach (TECProposalScope child in propScope.Children)
-                {
-                    if (child.Scope.Guid == expectedPropScope.Scope.Guid)
-                    {
-                        actualPropScope = child;
-                        break;
-                    }
-                }
-                if (actualPropScope != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Add_Note()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0];
-            int oldNumNotes = expectedPropScope.Notes.Count;
-            TECScopeBranch expectedNote = new TECScopeBranch();
-            expectedNote.Name = "Added Prop Note";
-            expectedPropScope.Notes.Add(expectedNote);
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch actualNote = null;
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == expectedNote.Guid)
-                {
-                    actualNote = note;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedNote.Name, actualNote.Name);
-            Assert.AreEqual((oldNumNotes + 1), actualPropScope.Notes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Add_Note_InNote()
-        {
-            //Act
-            TECScopeBranch noteToModify = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    noteToModify = propScope.Notes[0];
-                    break;
-                }
-            }
-            int oldNumNotes = noteToModify.Branches.Count;
-            TECScopeBranch expectedNote = new TECScopeBranch();
-            expectedNote.Name = "Added Prop Note Note";
-            noteToModify.Branches.Add(expectedNote);
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECScopeBranch actualNote = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                foreach (TECScopeBranch note in propScope.Notes)
-                {
-                    if (note.Guid == noteToModify.Guid)
-                    {
-                        Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
-                        foreach (TECScopeBranch noteNote in note.Branches)
-                        {
-                            if (noteNote.Guid == expectedNote.Guid)
-                            {
-                                actualNote = noteNote;
-                                break;
-                            }
-                        }
-                    }
-                    if (actualNote != null) { break; }
-                }
-                if (actualNote != null) { break; }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedNote.Name, actualNote.Name);
-
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Remove_Note()
-        {
-            //Act
-            TECProposalScope propScopeToModify = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    propScopeToModify = propScope;
-                    break;
-                }
-            }
-            int numOldNotes = propScopeToModify.Notes.Count;
-            TECScopeBranch noteToRemove = propScopeToModify.Notes[0];
-            propScopeToModify.Notes.Remove(noteToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == propScopeToModify.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            //Assert
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == noteToRemove.Guid) { Assert.Fail(); }
-            }
-
-            Assert.AreEqual((numOldNotes - 1), actualPropScope.Notes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Edit_Note()
-        {
-            //Act
-            TECProposalScope expectedPropScope = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    expectedPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch noteToModify = expectedPropScope.Notes[0];
-            noteToModify.Name = "Edited note";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch actualNote = null;
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == noteToModify.Guid)
-                {
-                    actualNote = noteToModify;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(noteToModify.Name, actualNote.Name);
-            Assert.IsNotNull(actualNote);
-        }
-
-        #endregion Save Proposal Scope
-
+        
         #region Save Misc Cost
         [TestMethod]
         public void Save_Bid_Add_MiscCost()
@@ -2991,77 +2809,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
-
-        [TestMethod]
-        public void Save_Bid_Remove_PanelType()
-        {
-            //Act
-            TECPanelType costToRemove = bid.Catalogs.PanelTypes[0];
-            bid.Catalogs.PanelTypes.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            //Assert
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(bid.Catalogs.PanelTypes.Count, actualBid.Catalogs.PanelTypes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Name()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Cost()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
+        
         #endregion
 
         #region Save Panel
@@ -3145,80 +2893,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_ControlledScope()
         {
-            var expectedSystem = new TECSystem();
-            expectedSystem.Name = "CSSYSTEM";
-            var expectedEquipment = new TECEquipment();
-            expectedEquipment.Name = "CSEQUIPMENT";
-            var expectedSubScope = new TECSubScope();
-            expectedSubScope.Name = "CSSUBSCOPE";
-            expectedEquipment.SubScope.Add(expectedSubScope);
-            expectedSystem.Equipment.Add(expectedEquipment);
-
-            var expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
-            expectedPanel.Name = "CSPANEL";
-            var expectedController = new TECController(bid.Catalogs.Manufacturers[0]);
-            expectedController.Name = "CSCONTROLLER";
-            expectedPanel.Controllers.Add(expectedController);
-
-            var expectedConnection = new TECSubScopeConnection();
-            expectedConnection.Length = 1212;
-            expectedConnection.ParentController = expectedController;
-            expectedConnection.SubScope = expectedSubScope;
-            expectedController.ChildrenConnections.Add(expectedConnection);
-            expectedSubScope.Connection = expectedConnection;
-            
-            expectedSystem.Panels.Add(expectedPanel);
-            expectedSystem.Controllers.Add(expectedController);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanel actualpanel = null;
-            TECController actualController = null;
-            TECSubScopeConnection actualConnection = null;
-            TECSystem actualSystem = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Name == "CSCONTROLLER")
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Name == "CSSYSTEM")
-                {
-                    actualSystem = system;
-                    break;
-                }
-            }
-            foreach (TECSubScopeConnection connection in actualController.ChildrenConnections)
-            {
-                if (connection.Length == 1212)
-                {
-                    actualConnection = connection;
-                    break;
-                }
-            }
-            foreach (TECPanel panel in actualBid.Panels)
-            {
-                if (panel.Name == "CSPANEL")
-                {
-                    actualpanel = panel;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
-            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
-            Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
-            Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
-            Assert.IsTrue(actualConnection.SubScope == actualSystem.Equipment[0].SubScope[0], "Scope not linked in connection");
-            Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
+           
         }
         #endregion
 

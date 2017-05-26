@@ -269,15 +269,15 @@ namespace Tests
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
 
-            //Controlled scope tests]
-            TECSystem expectedConScope = expectedSystem;
-            TECSystem actualConScope = actualSystem;
-            Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
-            Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
-            Assert.AreEqual(expectedConScope.Equipment[0].Name, actualConScope.Equipment[0].Name);
-            Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
-            Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
-            Assert.AreEqual(42, actualConScope.Controllers[0].ChildrenConnections[0].Length);
+            ////Controlled scope tests]
+            //TECSystem expectedConScope = expectedSystem;
+            //TECSystem actualConScope = actualSystem;
+            //Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
+            //Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
+            //Assert.AreEqual(expectedConScope.Equipment[0].Name, actualConScope.Equipment[0].Name);
+            //Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
+            //Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
+            //Assert.AreEqual(42, actualConScope.Controllers[0].ChildrenConnections[0].Length);
         }
 
         [TestMethod]

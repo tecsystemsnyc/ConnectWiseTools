@@ -26,7 +26,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLocation> _locations { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
-        private ObservableCollection<TECProposalScope> _proposalScope { get; set; }
         private ObservableCollection<TECMisc> _miscCosts { get; set; }
         private ObservableCollection<TECPanel> _panels { get; set; }
 
@@ -188,11 +187,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Controllers", temp, this);
             }
         }
-        public ObservableCollection<TECProposalScope> ProposalScope
-        {
-            get { return _proposalScope; }
-            set { _proposalScope = value; }
-        }
         public ObservableCollection<TECMisc> MiscCosts
         {
             get { return _miscCosts; }
@@ -252,7 +246,6 @@ namespace EstimatingLibrary
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
-            _proposalScope = new ObservableCollection<TECProposalScope>();
             _miscCosts = new ObservableCollection<TECMisc>();
             _panels = new ObservableCollection<TECPanel>();
             _labor = new TECLabor();
@@ -268,7 +261,6 @@ namespace EstimatingLibrary
             Drawings.CollectionChanged += CollectionChanged;
             Locations.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
-            ProposalScope.CollectionChanged += CollectionChanged;
             MiscCosts.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
 
@@ -329,8 +321,6 @@ namespace EstimatingLibrary
             { Drawings.Add(new TECDrawing(drawing)); }
             foreach (TECController controller in bidSource.Controllers)
             { Controllers.Add(new TECController(controller)); }
-            foreach (TECProposalScope propScope in bidSource.ProposalScope)
-            { ProposalScope.Add(new TECProposalScope(propScope)); }
             foreach (TECMisc cost in bidSource.MiscCosts)
             { MiscCosts.Add(new TECMisc(cost)); }
             foreach (TECPanel panel in bidSource.Panels)
@@ -347,23 +337,15 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    if (item is TECProposalScope)
+                    NotifyPropertyChanged("Add", this, item);
+                    if (item is TECCost)
                     {
-                        NotifyPropertyChanged("MetaAdd", this, item);
+                        (item as TECObject).PropertyChanged += objectPropertyChanged;
                     }
-                    else
+                    else if (item is TECSystem)
                     {
-                        NotifyPropertyChanged("Add", this, item);
-                        if (item is TECCost)
-                        {
-                            (item as TECObject).PropertyChanged += objectPropertyChanged;
-                        }
-                        else if (item is TECSystem)
-                        {
-                            var sys = item as TECSystem;
-                            addProposalScope(sys);
-                            sys.PropertyChanged += System_PropertyChanged;
-                        }
+                        var sys = item as TECSystem;
+                        sys.PropertyChanged += System_PropertyChanged;
                     }
                 }
             }
@@ -371,35 +353,28 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECProposalScope)
+                    NotifyPropertyChanged("Remove", this, item);
+                    if (item is TECScope)
                     {
-                        NotifyPropertyChanged("MetaRemove", this, item);
+                        checkForVisualsToRemove((TECScope)item);
                     }
-                    else
-                    {
-                        NotifyPropertyChanged("Remove", this, item);
-                        if (item is TECScope)
-                        {
-                            checkForVisualsToRemove((TECScope)item);
-                        }
 
-                        if (item is TECCost)
-                        {
-                            (item as TECCost).PropertyChanged -= objectPropertyChanged;
-                        }
-                        else if (item is TECSystem)
-                        {
-                            var sys = item as TECSystem;
-                            sys.PropertyChanged -= System_PropertyChanged;
-                            removeProposalScope(sys);
-                            handleSystemSubScopeRemoval(item as TECSystem);
-                        }
-                        else if (item is TECController)
-                        {
-                            (item as TECController).RemoveAllConnections();
-                        }
+                    if (item is TECCost)
+                    {
+                        (item as TECCost).PropertyChanged -= objectPropertyChanged;
+                    }
+                    else if (item is TECSystem)
+                    {
+                        var sys = item as TECSystem;
+                        sys.PropertyChanged -= System_PropertyChanged;
+                        handleSystemSubScopeRemoval(item as TECSystem);
+                    }
+                    else if (item is TECController)
+                    {
+                        (item as TECController).RemoveAllConnections();
                     }
                 }
+                
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -488,8 +463,6 @@ namespace EstimatingLibrary
             { bid.Drawings.Add(drawing.Copy() as TECDrawing); }
             foreach (TECController controller in this.Controllers)
             { bid.Controllers.Add(controller.Copy() as TECController); }
-            foreach (TECProposalScope propScope in this.ProposalScope)
-            { bid.ProposalScope.Add(propScope.Copy() as TECProposalScope); }
             foreach (TECMisc cost in this.MiscCosts)
             { bid.MiscCosts.Add(cost.Copy() as TECMisc); }
             foreach (TECPanel panel in this.Panels)
@@ -530,28 +503,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private void addProposalScope(TECSystem system)
-        {
-            this.ProposalScope.Add(new TECProposalScope(system));
-        }
-        private void removeProposalScope(TECSystem system)
-        {
-            List<TECProposalScope> scopeToRemove = new List<TECProposalScope>();
-            foreach (TECProposalScope pScope in this.ProposalScope)
-            {
-                if (pScope.Scope == system)
-                {
-                    scopeToRemove.Add(pScope);
-                }
-            }
-            foreach (TECProposalScope pScope in scopeToRemove)
-            {
-                this.ProposalScope.Remove(pScope);
-            }
-
-        }
-
+        
         private void registerSystems()
         {
             foreach (TECSystem system in Systems)

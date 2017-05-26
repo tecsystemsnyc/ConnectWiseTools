@@ -155,15 +155,14 @@ namespace EstimatingUtilitiesLibrary
             bid.Parameters = getBidParameters(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid();
-            bid.ProposalScope = getAllProposalScope(bid.Systems);
             bid.Locations = getAllLocations();
             bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
-            bid.Controllers = getControllers();
+            bid.Controllers = getOrphanControllers();
             bid.MiscCosts = getMisc();
-            bid.Panels = getPanels();
+            bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
             ModelLinkingHelper.LinkBid(bid, placeholderDict);
@@ -185,21 +184,7 @@ namespace EstimatingUtilitiesLibrary
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.ControllerTemplates = getOrphanControllers();
-            var misc = getMisc();
-            var wire = new ObservableCollection<TECMisc>();
-            var cost = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in misc)
-            {
-                if (item.Type == CostType.Electrical)
-                {
-                    wire.Add(item);
-                }
-                else if (item.Type == CostType.TEC)
-                {
-                    cost.Add(item);
-                }
-            }
-            templates.MiscCostTemplates = cost;
+            templates.MiscCostTemplates = getMisc();
             templates.PanelTemplates = getOrphanPanels();
 
             ModelLinkingHelper.LinkTemplates(templates);
@@ -436,23 +421,6 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return mainBranches;
-        }
-        static private ObservableCollection<TECScopeBranch> getProposalScopeBranches(Guid propScopeID)
-        {
-            ObservableCollection<TECScopeBranch> scopeBranches = new ObservableCollection<TECScopeBranch>();
-            string command = "select * from " + ScopeBranchTable.TableName;
-            command += " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
-            command += "(select " + ProposalScopeScopeBranchTable.ScopeBranchID.Name;
-            command += " from " + ProposalScopeScopeBranchTable.TableName;
-            command += " where " + ProposalScopeScopeBranchTable.ProposalScopeID.Name + " = '" + propScopeID + "')";
-
-            DataTable scopeBranchDT = SQLiteDB.getDataFromCommand(command);
-            foreach (DataRow row in scopeBranchDT.Rows)
-            {
-                scopeBranches.Add(getScopeBranchFromRow(row));
-            }
-
-            return scopeBranches;
         }
         static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID)
         {
@@ -846,39 +814,6 @@ namespace EstimatingUtilitiesLibrary
             foreach (DataRow row in connectionDT.Rows)
             { connections.Add(getNetworkConnectionFromRow(row)); }
             return connections;
-        }
-        static private ObservableCollection<TECProposalScope> getAllProposalScope(ObservableCollection<TECSystem> systems)
-        {
-            ObservableCollection<TECProposalScope> propScope = new ObservableCollection<TECProposalScope>();
-            foreach (TECSystem sys in systems)
-            {
-                TECProposalScope propSysToAdd = getProposalScopeFromScope(sys);
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    TECProposalScope propEquipToAdd = getProposalScopeFromScope(equip);
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        propEquipToAdd.Children.Add(getProposalScopeFromScope(ss));
-                    }
-                    propSysToAdd.Children.Add(propEquipToAdd);
-                }
-                propScope.Add(propSysToAdd);
-            }
-            return propScope;
-        }
-        static private TECProposalScope getProposalScopeFromScope(TECScope scope)
-        {
-            bool isProposed;
-            ObservableCollection<TECScopeBranch> notes = getProposalScopeBranches(scope.Guid);
-            string command = "select " + ProposalScopeTable.IsProposed.Name + " from " + ProposalScopeTable.TableName;
-            command += " where " + ProposalScopeTable.ProposalScopeID.Name + " = '" + scope.Guid + "'";
-
-            DataTable isProposedDT = SQLiteDB.getDataFromCommand(command);
-            if (isProposedDT.Rows.Count > 0)
-            { isProposed = isProposedDT.Rows[0][ProposalScopeTable.IsProposed.Name].ToString().ToInt().ToBool(); }
-            else
-            { isProposed = false; }
-            return new TECProposalScope(scope, isProposed, notes);
         }
         static private TECScope getScopeGuidInVisualScope(Guid guid)
         {
@@ -2134,11 +2069,6 @@ namespace EstimatingUtilitiesLibrary
                 addObject(new StackItem(Change.Add, bid, drawing));
                 saveCompletePage(drawing);
             }
-            foreach (TECProposalScope proposalScope in bid.ProposalScope)
-            {
-                addObject(new StackItem(Change.Add, bid, proposalScope));
-                saveCompleteProposalScope(proposalScope);
-            }
             foreach (TECMisc cost in bid.MiscCosts)
             {
                 addObject(new StackItem(Change.Add, bid, cost));
@@ -2317,20 +2247,6 @@ namespace EstimatingUtilitiesLibrary
                 saveCompleteVisualConnections(page);
             }
         }
-        private static void saveCompleteProposalScope(TECProposalScope proposalScope)
-        {
-
-            foreach (TECProposalScope subProposalScope in proposalScope.Children)
-            {
-                addObject(new StackItem(Change.Add, proposalScope, subProposalScope));
-                saveCompleteProposalScope(subProposalScope);
-            }
-            foreach (TECScopeBranch branch in proposalScope.Notes)
-            {
-                addObject(new StackItem(Change.Add, proposalScope, branch));
-                saveCompleteScopeBranch(branch);
-            }
-        }
         private static void saveScopeChildProperties(TECScope scope)
         {
             saveLocation(scope);
@@ -2449,7 +2365,7 @@ namespace EstimatingUtilitiesLibrary
             var tableInfo = new TableInfo(table);
             var referenceCopy = (item.ReferenceObject as TECObject).Copy();
 
-            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy);
+            var childrenCollection = UtilitiesMethods.GetChildCollection(item.TargetType, referenceCopy, item.ReferenceType);
 
             foreach (TECObject child in (IList)childrenCollection)
             {
@@ -2463,7 +2379,7 @@ namespace EstimatingUtilitiesLibrary
                     }
                     else if (field.Property.Name == "Quantity" && field.Property.ReflectedType == typeof(HelperProperties))
                     {
-                        var dataString = objectToDBString(getQuantityInParentCollection(child, item.ReferenceObject));
+                        var dataString = objectToDBString(getQuantityInParentCollection(child, item.ReferenceObject, item.ReferenceType));
                         data.Add(field.Name, dataString);
                     }
                     var assemblyItem = new StackItem(Change.Add, item.ReferenceObject, child, item.ReferenceType, item.TargetType);
@@ -2953,7 +2869,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return outList;
         }
-        private static int getQuantityInParentCollection(object childObject, object parentObject)
+        private static int getQuantityInParentCollection(object childObject, object parentObject, Type parentType = null)
         {
             TECScope child;
             TECScope parent;
@@ -2962,7 +2878,7 @@ namespace EstimatingUtilitiesLibrary
             parent = (parentObject as TECScope);
 
             int quantity = 0;
-            var childCollection = UtilitiesMethods.GetChildCollection(childObject.GetType(), parentObject);
+            var childCollection = UtilitiesMethods.GetChildCollection(childObject.GetType(), parentObject, parentType);
 
             foreach (TECScope item in (IList)childCollection)
             {

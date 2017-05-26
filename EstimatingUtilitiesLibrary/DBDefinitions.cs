@@ -442,23 +442,6 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ProposalScopeTable : TableBase
-    {
-        public static new string TableName = "TECProposalScope";
-        public static Type ObjectType = typeof(TECProposalScope);
-
-        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IsProposed = new TableField("IsProposed", "INTEGER", ObjectType.GetProperty("IsProposed"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ProposalScopeID
-        };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType
-        };
-    }
     public class ConnectionTypeTable : CatalogTableBase
     {
         public static new string TableName = "TECConnectionType";
@@ -515,25 +498,6 @@ namespace EstimatingUtilitiesLibrary
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType
-        };
-    }
-    public class ProposalScopeScopeBranchTable : TableBase
-    {
-        public static new string TableName = "TECProposalScopeTECScopeBranch";
-        public static Type ObjectType = typeof(TECProposalScope);
-        public static Type ReferenceType = typeof(TECScopeBranch);
-
-        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ScopeBranchID
-        };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
         };
     }
     public class SubScopeConnectionTable : TableBase
@@ -1215,10 +1179,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PanelTypeID = new TableField("PaneltypeID", "TEXT", ReferenceType.GetProperty("Guid"));
 
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
             PanelID,
             PanelTypeID
-            };
+        };
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType,
@@ -1408,8 +1373,6 @@ namespace EstimatingUtilitiesLibrary
             new ControllerConnectionTable(),
             new ControllerIOTable(),
             new IOIOModuleTable(),
-            new ProposalScopeTable(),
-            new ProposalScopeScopeBranchTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
@@ -1515,11 +1478,9 @@ namespace EstimatingUtilitiesLibrary
 
 
             new BidLaborTable(),
-            new ProposalScopeTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),
-            new ProposalScopeScopeBranchTable(),
             new ControllerTable(),
             new ControllerIOTable(),
             new IOIOModuleTable(),

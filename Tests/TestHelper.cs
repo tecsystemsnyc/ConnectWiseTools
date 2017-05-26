@@ -90,31 +90,7 @@ namespace Tests
             ioToAdd.Quantity = 5;
             expectedController.IO.Add(ioToAdd);
             bid.Controllers.Add(expectedController);
-
-            //ProposalScope
-            TECSystem propSystem = new TECSystem();
-            propSystem.Name = "Prop System";
-
-            TECScopeBranch propNote = new TECScopeBranch();
-            propNote.Name = "Proposal Note";
-            TECScopeBranch propNoteNote = new TECScopeBranch();
-            propNoteNote.Name = "Proposal Note Note";
-            propNote.Branches.Add(propNoteNote);
-
-            bid.Systems.Add(propSystem);
-
-            TECProposalScope propScope = null;
-            foreach (TECProposalScope pS in bid.ProposalScope)
-            {
-                if (pS.Scope.Guid == propSystem.Guid)
-                {
-                    propScope = pS;
-                    break;
-                }
-            }
-            propScope.IsProposed = true;
-            propScope.Notes.Add(propNote);
-
+            
             //Misc Cost
             TECMisc cost = new TECMisc();
             cost.Name = "Test Cost";
@@ -153,22 +129,21 @@ namespace Tests
 
             //Systems
             var system1 = CreateTestSystem(bid.Catalogs);
+            AssignSecondaryProperties(system1, bid);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
             system1.BudgetPriceModifier = 234.5;
             system1.Quantity = 2345;
-            system1.Location = location1;
-
-            system1.Tags.Add(bid.Catalogs.Tags.RandomObject());
-
+            
             var system2 = new TECSystem();
+            AssignSecondaryProperties(system2, bid);
             system2.Name = "System 2";
             system2.Description = "Description 2";
             system2.BudgetPriceModifier = 234.52;
             system2.Quantity = 23452;
-            system2.Location = location2;
 
             var system3 = new TECSystem();
+            AssignSecondaryProperties(system3, bid);
             system3.Name = "System 3";
             system3.Description = "No Location";
             system3.BudgetPriceModifier = 349;
@@ -179,34 +154,33 @@ namespace Tests
             
             //Equipment
             var equipment1 = new TECEquipment();
+            AssignSecondaryProperties(equipment1, bid);
             equipment1.Name = "Equipment 1";
             equipment1.Description = "Description 1";
             equipment1.BudgetUnitPrice = 123.4;
             equipment1.Quantity = 1234;
-            equipment1.Location = location1;
-
-            equipment1.Tags.Add(bid.Catalogs.Tags.RandomObject());
 
             var equipment2 = new TECEquipment();
-            equipment1.Name = "Equipment 2";
-            equipment1.Description = "Description 2";
-            equipment1.BudgetUnitPrice = 0;
+            AssignSecondaryProperties(equipment2, bid);
+            equipment2.Name = "Equipment 2";
+            equipment2.Description = "Description 2";
+            equipment2.BudgetUnitPrice = 0;
 
             system1.Equipment.Add(equipment1);
             system3.Equipment.Add(equipment2);
 
             //SubScope
             var subScope1 = new TECSubScope();
+            AssignSecondaryProperties(subScope1, bid);
             subScope1.Name = "SubScope 1";
             subScope1.Description = "Description 1";
             subScope1.Quantity = 654;
-            subScope1.Location = location3;
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
-            subScope1.Tags.Add(bid.Catalogs.Tags.RandomObject());
 
             var subScope2 = new TECSubScope();
+            AssignSecondaryProperties(subScope2, bid);
             subScope2.Name = "Empty SubScope";
             subScope2.Description = "Description 2";
             subScope2.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
@@ -215,11 +189,11 @@ namespace Tests
             
             //Points
             var point1 = new TECPoint();
+            AssignSecondaryProperties(point1, bid);
             point1.Name = "Point 1";
             point1.Description = "Description 1";
             point1.Type = PointTypes.Serial;
             point1.Quantity = 321;
-            point1.Tags.Add(bid.Catalogs.Tags.RandomObject());
 
             subScope1.Points.Add(point1);
             
@@ -612,6 +586,7 @@ namespace Tests
         public static TECSystem CreateTestSystem(TECCatalogs catalogs)
         {
             TECSystem outScope = new TECSystem();
+            outScope.Tags.Add(catalogs.Tags.RandomObject());
 
             var panel = new TECPanel(catalogs.PanelTypes[0]);
 
@@ -646,6 +621,7 @@ namespace Tests
             TECDevice device = new TECDevice(connectionTypes, manufacturer);
             device.Cost = cost;
             device.AssociatedCosts = assCosts;
+            device.Tags.Add(catalogs.Tags.RandomObject());
             return device;
         }
         public static TECSubScope CreateTestSubScope(TECCatalogs catalogs)
@@ -653,8 +629,10 @@ namespace Tests
             var device = catalogs.Devices.RandomObject();
             var point = new TECPoint();
             point.Type = PointTypes.AI;
+            point.Tags.Add(catalogs.Tags.RandomObject());
 
             var subScope = new TECSubScope();
+            subScope.Tags.Add(catalogs.Tags.RandomObject());
             subScope.Devices.Add(device);
             subScope.Points.Add(point);
             return subScope;
@@ -662,6 +640,7 @@ namespace Tests
         public static TECEquipment CreateTestEquipment(TECCatalogs catalogs)
         {
             var equipment = new TECEquipment();
+            equipment.Tags.Add(catalogs.Tags.RandomObject());
 
             int subNumber = (new Random()).Next(1, 10);
             for(int x = 0; x < subNumber; x++)
@@ -676,7 +655,16 @@ namespace Tests
             var manufacturer = catalogs.Manufacturers.RandomObject();
 
             var controlller = new TECController(manufacturer);
+            controlller.Tags.Add(catalogs.Tags.RandomObject());
             return controlller;
+        }
+        public static TECPanel CreateTestPanel(TECCatalogs catalogs)
+        {
+            var panelType = catalogs.PanelTypes.RandomObject();
+
+            var panel = new TECPanel(panelType);
+            panel.Tags.Add(catalogs.Tags.RandomObject());
+            return panel;
         }
         public static TECLabor CreateTestLabor()
         {
@@ -810,5 +798,67 @@ namespace Tests
             return equipment;
         }
 
+        public static TECScope FindScopeInSystems(ObservableCollection<TECSystem> systems, TECScope reference)
+        {
+            foreach(TECSystem system in systems)
+            {
+                if(system.Guid == reference.Guid)
+                { return system; }
+                else
+                {
+                    foreach(TECEquipment equipment in system.Equipment)
+                    {
+                        if(equipment.Guid == reference.Guid)
+                        { return equipment; }
+                        else
+                        {
+                            foreach(TECSubScope subScope in equipment.SubScope)
+                            {
+                                if(subScope.Guid == reference.Guid)
+                                { return subScope; }
+                                else
+                                {
+                                    foreach (TECDevice device in subScope.Devices)
+                                    {
+                                        if (device.Guid == reference.Guid)
+                                        { return device; }
+                                    }
+                                    foreach (TECPoint point in subScope.Points)
+                                    {
+                                        if (point.Guid == reference.Guid)
+                                        { return point; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach(TECPanel panel in system.Panels)
+                    {
+                        if(panel.Guid == reference.Guid)
+                        { return panel; }
+                    }
+                    foreach(TECController controller in system.Controllers)
+                    {
+                        if(controller.Guid == reference.Guid)
+                        { return controller; }
+                    }
+                    foreach (TECScopeBranch branch in system.ScopeBranches)
+                    {
+                        if (branch.Guid == reference.Guid)
+                        { return branch; }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static void AssignSecondaryProperties(TECScope scope, TECBid bid)
+        {
+            scope.Location = bid.Locations.RandomObject();
+            if(scope.Tags.Count == 0)
+            {
+                scope.Tags.Add(bid.Catalogs.Tags.RandomObject());
+            }
+        }
     }
 }

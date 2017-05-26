@@ -87,7 +87,6 @@ namespace EstimatingLibrary
             outPanel._guid = _guid;
             return outPanel;
         }
-
         public override object DragDropCopy()
         {
             var outPanel = new TECPanel(this);

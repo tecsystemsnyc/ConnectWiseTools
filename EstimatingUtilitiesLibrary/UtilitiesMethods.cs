@@ -191,9 +191,13 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion Cast Conversions
 
-        public static object GetChildCollection(Type childType, object parentObject)
+        public static object GetChildCollection(Type childType, object parentObject, Type parentType = null)
         {
-            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
+            if(parentType == null)
+            {
+                parentType = parentObject.GetType();
+            }
+            foreach (PropertyInfo info in parentType.GetProperties())
             {
                 if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
                     return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);

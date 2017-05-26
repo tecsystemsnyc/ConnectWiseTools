@@ -1479,7 +1479,7 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECCost expectedCost = templates.Catalogs.AssociatedCosts[0];
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts.RandomObject();
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 

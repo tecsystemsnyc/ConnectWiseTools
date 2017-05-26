@@ -115,35 +115,54 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Bid_RemoveControllerInPanel_ControlledScope()
+        public void System_AddInstances()
         {
-            int quantity = 3;
             TECBid bid = new TECBid();
+            int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
 
-            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
-            bid.Systems.Add(controlledScope);
-            controlledScope.Panels[0].Controllers.Remove(controlledScope.Controllers[0]);
-
-            Assert.AreEqual(quantity, bid.Systems.Count);
-            Assert.AreEqual(quantity, bid.Controllers.Count);
-            Assert.AreEqual(quantity, bid.Panels.Count);
-
-            foreach (TECPanel scopePanel in controlledScope.Panels)
+            for(int x = 0; x < qty; x++)
             {
-                foreach (TECPanel bidPanel in bid.Panels)
-                {
-                    Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
-                }
+                system.AddInstance(bid);
             }
-            foreach (TECController scopeController in controlledScope.Controllers)
+
+            Assert.AreEqual(system.SystemInstances.Count, qty);
+            foreach(TECSystem instance in system.SystemInstances)
             {
-                foreach (TECController bidController in bid.Controllers)
-                {
-                    Assert.AreEqual(scopeController.ChildrenConnections.Count, bidController.ChildrenConnections.Count);
-                }
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
             }
+            
         }
+        [TestMethod]
+        public void System_EditInstances()
+        {
+            TECBid bid = new TECBid();
+            int qty = 3;
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+            for (int x = 0; x < qty; x++)
+            {
+                system.AddInstance(bid);
+            }
+
+            system.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            system.Controllers.Add(TestHelper.CreateTestController(bid.Catalogs));
+            system.Panels.Add(TestHelper.CreateTestPanel(bid.Catalogs));
+
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+
+        }
+
         #endregion
     }
 }

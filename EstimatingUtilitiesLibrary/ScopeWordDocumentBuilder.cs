@@ -1295,7 +1295,7 @@ namespace EstimatingUtilitiesLibrary
 
 
             var proposalScopeParagraphs = new List<Paragraph>();
-            addProposalScopeList(_bid.ProposalScope, proposalScopeParagraphs, fontSize1, 1);
+            addProposalScopeList(_bid.Systems, proposalScopeParagraphs, fontSize1, 1);
 
             Paragraph paragraph40 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00B23CE5", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "00B23CE5" };
 
@@ -13333,9 +13333,9 @@ namespace EstimatingUtilitiesLibrary
             
         }
 
-        private void addProposalScopeList(ObservableCollection<TECProposalScope> proposalScope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        private void addProposalScopeList(ObservableCollection<TECSystem> proposalScope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
         {
-            foreach(TECProposalScope scope in proposalScope)
+            foreach(TECSystem scope in proposalScope)
             {
                 Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 poposalScopeParagraphs.Add(paragraph35);
@@ -13361,7 +13361,7 @@ namespace EstimatingUtilitiesLibrary
 
                 runProperties51.Append((FontSize)fontSize.CloneNode(true));
                 Text text34 = new Text();
-                text34.Text = scope.Scope.Name;
+                text34.Text = scope.Name;
 
                 run51.Append(runProperties51);
                 run51.Append(text34);
@@ -13369,8 +13369,7 @@ namespace EstimatingUtilitiesLibrary
                 paragraph35.Append(paragraphProperties35);
                 paragraph35.Append(run51);
 
-                addScopeBranchList(scope.Notes, poposalScopeParagraphs, fontSize, levelIndex + 1);
-                addProposalScopeList(scope.Children, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                addScopeBranchList(scope.ScopeBranches, poposalScopeParagraphs, fontSize, levelIndex + 1);
             }
         }
     }

@@ -277,12 +277,14 @@ namespace EstimatingLibrary
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _systemInstances = new ObservableCollection<TECSystem>();
+            _scopeBranches = new ObservableCollection<TECScopeBranch>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Equipment.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
             SystemInstances.CollectionChanged += CollectionChanged;
+            ScopeBranches.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
@@ -483,18 +485,41 @@ namespace EstimatingLibrary
 
         private void handleAdd(object targetObject, object referenceObject)
         {
-            if (targetObject is TECEquipment && referenceObject is TECSystem)
+            if(referenceObject is TECSystem)
+            {
+                if((referenceObject as TECSystem).SystemInstances.Count == 0)
+                {
+                    return;
+                }
+            }
+            if (targetObject is TECController && referenceObject is TECSystem)
+            {
+                var characteristicController = targetObject as TECController;
+                foreach (TECSystem system in SystemInstances)
+                {
+                    var controllerToAdd = new TECController(characteristicController);
+                    CharactersticInstances.AddItem(characteristicController, controllerToAdd);
+                    system.Controllers.Add(controllerToAdd);
+                }
+            }
+            else if (targetObject is TECPanel && referenceObject is TECSystem)
+            {
+                var characteristicPanel = targetObject as TECPanel;
+                foreach (TECSystem system in SystemInstances)
+                {
+                    var panelToAdd = new TECPanel(characteristicPanel);
+                    CharactersticInstances.AddItem(characteristicPanel, panelToAdd);
+                    system.Panels.Add(panelToAdd);
+                }
+            }
+            else if (targetObject is TECEquipment && referenceObject is TECSystem)
             {
                 var characteristicEquipment = targetObject as TECEquipment;
-                var characteristicSystem = referenceObject as TECSystem;
-                if (CharactersticInstances.ContainsKey(characteristicSystem))
+                foreach (TECSystem system in SystemInstances)
                 {
-                    foreach (TECSystem system in CharactersticInstances.GetInstances(characteristicSystem))
-                    {
-                        var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: CharactersticInstances);
-                        CharactersticInstances.AddItem(characteristicEquipment, equipmentToAdd);
-                        system.Equipment.Add(equipmentToAdd);
-                    }
+                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: CharactersticInstances);
+                    CharactersticInstances.AddItem(characteristicEquipment, equipmentToAdd);
+                    system.Equipment.Add(equipmentToAdd);
                 }
             }
             else if (targetObject is TECSubScope && referenceObject is TECEquipment)
@@ -609,26 +634,67 @@ namespace EstimatingLibrary
         }
         private void handleRemove(object targetObject, object referenceObject)
         {
-            if (targetObject is TECEquipment && referenceObject is TECSystem)
+            if (referenceObject is TECSystem)
+            {
+                if ((referenceObject as TECSystem).SystemInstances.Count == 0)
+                {
+                    return;
+                }
+            }
+            if (targetObject is TECController && referenceObject is TECSystem)
+            {
+                var characteristicController = targetObject as TECController;
+                foreach (TECSystem system in SystemInstances)
+                {
+                    var controllersToRemove = new List<TECController>();
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        if (CharactersticInstances.GetInstances(characteristicController).Contains(controller))
+                        {
+                            controllersToRemove.Add(controller);
+                        }
+                    }
+                    foreach (TECController controller in controllersToRemove)
+                    {
+                        system.Controllers.Remove(controller);
+                    }
+                }
+            }
+            else if (targetObject is TECPanel && referenceObject is TECSystem)
+            {
+                var characteristicPanel = targetObject as TECPanel;
+                foreach (TECSystem system in SystemInstances)
+                {
+                    var panelsToRemove = new List<TECPanel>();
+                    foreach (TECPanel panel in system.Panels)
+                    {
+                        if (CharactersticInstances.GetInstances(characteristicPanel).Contains(panel))
+                        {
+                            panelsToRemove.Add(panel);
+                        }
+                    }
+                    foreach (TECPanel panel in panelsToRemove)
+                    {
+                        system.Panels.Remove(panel);
+                    }
+                }
+            }
+            else if (targetObject is TECEquipment && referenceObject is TECSystem)
             {
                 var characteristicEquipment = targetObject as TECEquipment;
-                var characteristicSystem = referenceObject as TECSystem;
-                if (CharactersticInstances.ContainsKey(characteristicSystem))
+                foreach (TECSystem system in SystemInstances)
                 {
-                    foreach (TECSystem system in CharactersticInstances.GetInstances(characteristicSystem))
+                    var equipmentToRemove = new List<TECEquipment>();
+                    foreach (TECEquipment equipment in system.Equipment)
                     {
-                        var equipmentToRemove = new List<TECEquipment>();
-                        foreach (TECEquipment equipment in system.Equipment)
+                        if (CharactersticInstances.GetInstances(characteristicEquipment).Contains(equipment))
                         {
-                            if (CharactersticInstances.GetInstances(characteristicEquipment).Contains(equipment))
-                            {
-                                equipmentToRemove.Add(equipment);
-                            }
+                            equipmentToRemove.Add(equipment);
                         }
-                        foreach (TECEquipment equipment in equipmentToRemove)
-                        {
-                            system.Equipment.Remove(equipment);
-                        }
+                    }
+                    foreach (TECEquipment equipment in equipmentToRemove)
+                    {
+                        system.Equipment.Remove(equipment);
                     }
                 }
             }
@@ -798,6 +864,36 @@ namespace EstimatingLibrary
         {
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
+        }
+        public void AddInstance(TECScopeManager scopeManager)
+        {
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            var newSystem = new TECSystem();
+            newSystem.Name = Name;
+            newSystem.Description = Description;
+            var equipmentCollection = new ObservableCollection<TECSystem>();
+            var controllerCollection = new ObservableCollection<TECController>();
+            var panelCollection = new ObservableCollection<TECPanel>();
+            foreach (TECEquipment equipment in Equipment)
+            {
+                var toAdd = new TECEquipment(equipment, guidDictionary, CharactersticInstances);
+                CharactersticInstances.AddItem(equipment, toAdd);
+                newSystem.Equipment.Add(toAdd);
+            }
+            foreach (TECController controller in Controllers)
+            {
+                var toAdd = new TECController(controller, guidDictionary);
+                CharactersticInstances.AddItem(controller, toAdd);
+                newSystem.Controllers.Add(toAdd);
+            }
+            foreach (TECPanel panel in Panels)
+            {
+                var toAdd = new TECPanel(panel, guidDictionary);
+                CharactersticInstances.AddItem(panel, toAdd);
+                newSystem.Panels.Add(toAdd);
+            }
+            ModelLinkingHelper.LinkSystem(newSystem, scopeManager, guidDictionary);
+            SystemInstances.Add(newSystem);
         }
         #endregion
     }

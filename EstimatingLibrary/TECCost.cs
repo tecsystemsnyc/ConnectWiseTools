@@ -67,6 +67,7 @@ namespace EstimatingLibrary
         {
             _cost = 0;
             _labor = 0;
+            _type = 0;
             base.PropertyChanged += TECCost_PropertyChanged;
         }
 
