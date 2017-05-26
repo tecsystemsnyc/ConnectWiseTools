@@ -5,19 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        
-        xmlns:local="clr-namespace:TemplateBuilder"
-        xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-        xmlns:dd="urn:gong-wpf-dragdrop"
-        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
-        xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
-        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
-        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
-        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
-        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:dd="urn:gong-wpf-dragdrop" 
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-        xmlns:view="clr-namespace:TemplateBuilder.View"
+        
+        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
         
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
@@ -51,11 +44,11 @@
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
     <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-        <cLibControls:MenuControl ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
+        <views:MenuView ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={utilities:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
@@ -76,7 +69,7 @@
             <TabControl Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        SelectedIndex="{Binding DGTabIndex, Converter={cnvt:TemplateGridIndexToIntegerConverter}}"
+                        SelectedIndex="{Binding DGTabIndex, Converter={utilities:TemplateGridIndexToIntegerConverter}}"
                         Background="{DynamicResource SectionBackgroundBrush}">
                 <TabItem Header="None" Visibility="Collapsed">
                 </TabItem>
@@ -84,11 +77,11 @@
                     <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
                 </TabItem>
                 <TabItem Header="Systems">
-                    <grids:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
+                    <views:SystemsView SystemsSource="{Binding Templates.SystemTemplates}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Equipment">
-                    <grids:EquipmentGridControl EquipmentSource="{Binding Templates.EquipmentTemplates}"
+                    <views:EquipmentView EquipmentSource="{Binding Templates.EquipmentTemplates}"
                                                ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Points">

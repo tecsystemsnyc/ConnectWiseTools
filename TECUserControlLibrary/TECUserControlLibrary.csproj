@@ -420,7 +420,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\EquipmentGridControl.xaml">
+    <Page Include="Views\EquipmentGridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -500,7 +500,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SystemsView.xaml">
+    <Page Include="Views\SystemsGridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -523,8 +523,8 @@
     <Compile Include="UserControls\DevicesPointsControl.xaml.cs">
       <DependentUpon>DevicesPointsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EquipmentGridControl.xaml.cs">
-      <DependentUpon>EquipmentGridControl.xaml</DependentUpon>
+    <Compile Include="Views\EquipmentGridView.xaml.cs">
+      <DependentUpon>EquipmentGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\HelperConverters.cs" />
     <Compile Include="UserControls\ManufacturersGridControl.xaml.cs">
@@ -542,8 +542,8 @@
     <Compile Include="UserControls\SubScopeGridControl.xaml.cs">
       <DependentUpon>SubScopeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SystemsView.xaml.cs">
-      <DependentUpon>SystemsView.xaml</DependentUpon>
+    <Compile Include="Views\SystemsGridView.xaml.cs">
+      <DependentUpon>SystemsGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\TagsGridControl.xaml.cs">
       <DependentUpon>TagsGridControl.xaml</DependentUpon>
