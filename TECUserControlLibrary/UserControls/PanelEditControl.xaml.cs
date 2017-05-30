@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for PanelEditControl.xaml
