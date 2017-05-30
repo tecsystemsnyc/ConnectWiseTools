@@ -42,6 +42,22 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("TagList", typeof(ObservableCollection<TECTag>),
               typeof(AddTagControl));
 
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(AddTagControl));
+
         public AddTagControl()
         {
             InitializeComponent();

@@ -11,7 +11,7 @@
         xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-        xmlns:cnvt ="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
+        xmlns:cLibUtilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Title="{Binding TitleString}"
@@ -52,7 +52,7 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -127,7 +127,7 @@
                    Grid.Column="8"/>
             </Grid>
         
-            <cLib:ScopeCollectionsTabControl ViewModel ="{Binding ScopeCollection}"
+            <cLibViews:ScopeCollectionsTabView ViewModel ="{Binding ScopeCollection}"
                                              Grid.Column="0"
                                              Grid.Row="1" Grid.RowSpan="2"/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
@@ -135,19 +135,19 @@
                     Grid.Column="2"
                     Grid.ColumnSpan="5"
                     Grid.RowSpan="2"
-                    SelectedIndex="{Binding DGTabIndex, Converter={cnvt:GridIndexToIntegerConverter}}">
+                    SelectedIndex="{Binding DGTabIndex, Converter={cLibUtilities:GridIndexToIntegerConverter}}">
                 <TabItem Header="None"
                          Visibility="Collapsed"/>
                 <TabItem Header="Controlled Scope"
                          Visibility="Collapsed"/>
                 <TabItem Header="Systems">
-                    <grids:SystemsGridControl SystemsSource="{Binding Bid.Systems}"
+                    <cLibViews:SystemsGridView SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="DDC"
                          Visibility="Collapsed"/>
                 <TabItem Header="By Location">
-                    <cLib:ByLocationControl LocationSource="{Binding Bid.Locations}"
+                    <cLibViews:LocationView LocationSource="{Binding Bid.Locations}"
                                             SystemsSource="{Binding LocationDataGrid.SystemsByLocation}"
                                             EquipmentSource="{Binding LocationDataGrid.EquipmentByLocation}"
                                             SubScopeSource="{Binding LocationDataGrid.SubScopeByLocation}"
@@ -155,7 +155,7 @@
                 </TabItem>
                 
                 <TabItem Header="Proposal">
-                    <cLib:DocumentBuilderControl ViewModel="{Binding}"/>
+                    <cLibViews:DocumentBuilderView ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Budget">
                     <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
@@ -167,7 +167,7 @@
                 </TabItem>
             </TabControl>
 
-            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=Window, Path=DataContext.StatusBarVM}"
+            <cLibViews:StatusBarView ViewModel="{Binding ElementName=Window, Path=DataContext.StatusBarVM}"
                 Grid.Row="3"
                        Grid.ColumnSpan="7"/>
         </Grid>

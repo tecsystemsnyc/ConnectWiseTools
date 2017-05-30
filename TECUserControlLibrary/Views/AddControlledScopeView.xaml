@@ -70,7 +70,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Systems"/>
-                                <views:SystemsView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                                <views:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"/>
                             </Grid>
@@ -114,7 +114,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Connections"/>
-                                <controls:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                <controls:ConnectionGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                   Grid.Row="1"/>
                             </Grid>
                         </TabItem>
@@ -127,7 +127,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
-                    <controls:ControlledScopeDataGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                    <controls:ControlledScopeGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                    SystemSource="{Binding SelectedSystem.SystemInstances}"
                                                    SelectedItem="{Binding SelectedChild}"/>
                     <Grid Grid.Row="1">

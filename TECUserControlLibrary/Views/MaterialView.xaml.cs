@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for MaterialView.xaml

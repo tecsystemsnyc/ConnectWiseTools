@@ -10,6 +10,7 @@
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
         
         Title="{Binding TitleString}"
@@ -63,7 +64,7 @@
             <Image Source="{Binding TECLogo}"
                    Grid.Column="4"/>
 
-            <cLib:ScopeCollectionsTabControl Grid.RowSpan="2"
+            <views:ScopeCollectionsTabView Grid.RowSpan="2"
                                              ViewModel="{Binding ScopeCollection}"/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1"/>
             <TabControl Grid.Row="0"
@@ -77,19 +78,19 @@
                     <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
                 </TabItem>
                 <TabItem Header="Systems">
-                    <views:SystemsView SystemsSource="{Binding Templates.SystemTemplates}"
+                    <views:SystemsGridView SystemsSource="{Binding Templates.SystemTemplates}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Equipment">
-                    <views:EquipmentView EquipmentSource="{Binding Templates.EquipmentTemplates}"
+                    <views:EquipmentGridView EquipmentSource="{Binding Templates.EquipmentTemplates}"
                                                ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Points">
-                    <grids:SubScopeGridControl SubScopeSource="{Binding Templates.SubScopeTemplates}"
+                    <views:SubScopeGridView SubScopeSource="{Binding Templates.SubScopeTemplates}"
                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Devices">
-                    <grids:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
+                    <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
@@ -103,25 +104,25 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Controllers"/>
-                        <grids:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
+                        <controls:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
                                                      ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
                                                      Grid.Row="1"
                                                      Margin="5"/>
                         <Label Grid.Row="0" Grid.Column="1" Content="Panels"/>
-                        <grids:PanelsGrid PanelsSource="{Binding Templates.PanelTemplates}"
+                        <controls:PanelsGridControl PanelsSource="{Binding Templates.PanelTemplates}"
                                           ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
                                           Grid.Row="1" Grid.Column="1"
                                           Margin="5"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Materials">
-                    <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
+                    <views:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                    <views:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
                 </TabItem>
                 <TabItem Header="Settings">
-                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
+                    <views:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
                 
             </TabControl>
