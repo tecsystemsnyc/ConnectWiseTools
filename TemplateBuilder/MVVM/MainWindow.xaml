@@ -119,7 +119,7 @@
                     <views:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <controls:ConstantsControl ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                    <views:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
                 </TabItem>
                 <TabItem Header="Settings">
                     <views:SettingsView ViewModel="{Binding SettingsVM}"/>
