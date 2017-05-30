@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for ConstantsView.xaml
