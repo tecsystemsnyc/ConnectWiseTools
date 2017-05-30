@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
@@ -48,7 +48,7 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <Grid>
-                            <controls:DevicesPointsControl DevicesSource="{Binding Devices}"
+                        <local:DevicesPointsView DevicesSource="{Binding Devices}"
                                                 PointsSource="{Binding Points}"
                                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                      </Grid>
