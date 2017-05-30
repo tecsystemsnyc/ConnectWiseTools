@@ -127,7 +127,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
-                    <grids:ControlledScopeDataGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                    <controls:ControlledScopeDataGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                    SystemSource="{Binding SelectedSystem.SystemInstances}"
                                                    SelectedItem="{Binding SelectedChild}"/>
                     <Grid Grid.Row="1">

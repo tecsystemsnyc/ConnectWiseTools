@@ -95,7 +95,7 @@
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
                         <Label Content="Equipment" FontSize="10"/>
-                        <local::EquipmentGridView EquipmentSource="{Binding Equipment}"
+                        <local:EquipmentGridView EquipmentSource="{Binding Equipment}"
                                                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                     Margin="30, 0, 0, 0"/>
                     </StackPanel>
