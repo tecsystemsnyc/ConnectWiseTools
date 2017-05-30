@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TemplateBuilder.View
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ConstantsView.xaml
     /// </summary>
-    public partial class ConstantsView : UserControl
+    public partial class ConstantsControl : UserControl
     {
-        public ConstantsView()
+        public ConstantsControl()
         {
             InitializeComponent();
         }
