@@ -18,10 +18,10 @@ namespace TECUserControlLibrary.UserControls
     /// <summary>
     /// Interaction logic for PanelTypeListView.xaml
     /// </summary>
-    public partial class PanelTypeListView : UserControl
+    public partial class PanelTypeListControl : UserControl
     {
 
-        public PanelTypeListView()
+        public PanelTypeListControl()
         {
             InitializeComponent();
         }
