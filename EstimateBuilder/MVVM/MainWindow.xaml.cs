@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using EstimateBuilder.ViewModel;
+using EstimateBuilder.MVVM;
 using System.ComponentModel;
 
 namespace EstimateBuilder
