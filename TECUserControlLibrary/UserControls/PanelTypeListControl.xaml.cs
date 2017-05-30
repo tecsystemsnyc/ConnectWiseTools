@@ -18,10 +18,25 @@ namespace TECUserControlLibrary.UserControls
     /// <summary>
     /// Interaction logic for PanelTypeListView.xaml
     /// </summary>
-    public partial class PanelTypeListView : UserControl
+    public partial class PanelTypeListControl : UserControl
     {
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public Object ViewModel
+        {
+            get { return (Object)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
 
-        public PanelTypeListView()
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(Object),
+              typeof(PanelTypeListControl));
+
+        public PanelTypeListControl()
         {
             InitializeComponent();
         }

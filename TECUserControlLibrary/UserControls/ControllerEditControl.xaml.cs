@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ControllerEditControl.xaml
