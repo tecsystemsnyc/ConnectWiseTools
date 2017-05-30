@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using EstimateBuilder.ViewModel;
 using System.ComponentModel;
+using EstimateBuilder.MVVM;
 
 namespace EstimateBuilder
 {
