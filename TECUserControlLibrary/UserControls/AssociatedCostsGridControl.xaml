@@ -26,7 +26,7 @@
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     ElementStyle="{StaticResource RightCell}" Header="Cost" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Labor}" Header="Labor" Width="Auto" MinWidth="50" ElementStyle="{StaticResource RightCell}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={utilites:EnumBindingSource {x:Type TECLib:CostType}}}" Header="Type" Width="Auto" MinWidth="50"/>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}" Header="Type" Width="Auto" MinWidth="50"/>
             </DataGrid.Columns>
         </DataGrid> 
     </Grid>
