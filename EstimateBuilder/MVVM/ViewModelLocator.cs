@@ -41,10 +41,10 @@ namespace EstimateBuilder.MVVM
             */
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<ScopeEditorViewModel>();
-            SimpleIoc.Default.Register<DrawingViewModel>();
-            SimpleIoc.Default.Register<LaborViewModel>();
-            SimpleIoc.Default.Register<ReviewViewModel>();
+            SimpleIoc.Default.Register<ScopeEditorVM>();
+            SimpleIoc.Default.Register<DrawingVM>();
+            SimpleIoc.Default.Register<LaborVM>();
+            SimpleIoc.Default.Register<ReviewVM>();
             SimpleIoc.Default.Register<SettingsVM>();
         }
 
@@ -72,7 +72,7 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<ScopeEditorViewModel>();
+                return ServiceLocator.Current.GetInstance<ScopeEditorVM>();
             }
         }
 
@@ -86,7 +86,7 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<DrawingViewModel>();
+                return ServiceLocator.Current.GetInstance<DrawingVM>();
             }
         }
 
@@ -100,7 +100,7 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<LaborViewModel>();
+                return ServiceLocator.Current.GetInstance<LaborVM>();
             }
         }
 
@@ -114,7 +114,7 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<ReviewViewModel>();
+                return ServiceLocator.Current.GetInstance<ReviewVM>();
             }
         }
 
