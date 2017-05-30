@@ -46,9 +46,9 @@
 
                     <TextBlock Text="Scope" Foreground="Black" FontSize="20"/>
 
-                    <!--REDO PROPOSAL STUFF-->
-                    <!--<controls:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
-                                                Grid.Row="1"/>-->
+                    
+                    <controls:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
+                                                Grid.Row="1"/>
                 </Grid>
             </TabItem>
 
@@ -62,8 +62,9 @@
 
                     <TextBlock Text="Systems" Foreground="Black" FontSize="20"/>
 
-                    <controls:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
-                                                    Grid.Row="1"/>
+                    <!--REDO PROPOSAL STUFF-->
+                    <!--<controls:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
+                                                    Grid.Row="1"/>-->
 
                 </Grid>
             </TabItem>
