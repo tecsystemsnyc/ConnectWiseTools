@@ -165,8 +165,8 @@
     <Compile Include="ViewModels\DevicesPointsVM.cs" />
     <Compile Include="ViewModels\EquipmentVM.cs" />
     <Compile Include="ViewModels\SubScopeVM.cs" />
-    <Compile Include="Views\DocumentBuilderView.xaml.cs">
-      <DependentUpon>DocumentBuilderView.xaml</DependentUpon>
+    <Compile Include="Views\ProposalView.xaml.cs">
+      <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditTabView.xaml.cs">
       <DependentUpon>EditTabView.xaml</DependentUpon>
@@ -251,12 +251,11 @@
     <Compile Include="BaseVMs\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetVM.cs" />
     <Compile Include="ViewModels\ControlledScopeVM.cs" />
-    <Compile Include="ViewModels\DocumentBuilderVM.cs" />
+    <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="Views\BudgetView.xaml.cs">
       <DependentUpon>BudgetView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MenuVM.cs" />
-    <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
@@ -296,9 +295,6 @@
     </Compile>
     <Compile Include="UserControls\PanelTypeListControl.xaml.cs">
       <DependentUpon>PanelTypeListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProposalView.xaml.cs">
-      <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ReviewTabControl.xaml.cs">
       <DependentUpon>ReviewTabControl.xaml</DependentUpon>
@@ -412,7 +408,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DocumentBuilderView.xaml">
+    <Page Include="Views\ProposalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -605,10 +601,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PanelTypeListControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ProposalView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

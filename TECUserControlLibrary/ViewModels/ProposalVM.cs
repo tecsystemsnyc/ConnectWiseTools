@@ -9,8 +9,27 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ProposalVM : DocumentBuilderVM
+    public class ProposalVM : ViewModelBase
     {
-        public ProposalVM(TECBid bid) : base(bid) { }
+        private TECBid _bid;
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                _bid = value;
+                RaisePropertyChanged("Bid");
+            }
+        }
+
+        public ProposalVM(TECBid bid)
+        {
+            Bid = bid;
+        }
+
+        public void Refresh(TECBid bid)
+        {
+            Bid = bid;
+        }
     }
 }

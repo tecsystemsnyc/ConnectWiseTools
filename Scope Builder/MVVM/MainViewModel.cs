@@ -55,7 +55,7 @@ namespace Scope_Builder.MVVM
         public LocationVM LocationDataGrid { get; set; }
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
 
-        public DocumentBuilderVM DocumentBuilderVM { get; set; }
+        public ProposalVM DocumentBuilderVM { get; set; }
         public BudgetVM BudgetVM { get; set; }
         #endregion
 
