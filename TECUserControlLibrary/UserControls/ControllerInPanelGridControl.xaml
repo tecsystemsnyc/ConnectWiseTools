@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <utilities:NoneValueConverter x:Key="NoneValueConverter" />
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>

@@ -11,7 +11,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop">
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>

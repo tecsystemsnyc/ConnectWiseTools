@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
@@ -26,7 +27,7 @@
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     ElementStyle="{StaticResource RightCell}" Header="Cost" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Labor}" Header="Labor" Width="Auto" MinWidth="50" ElementStyle="{StaticResource RightCell}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type TECLib:CostType}}}" Header="Type" Width="Auto" MinWidth="50"/>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}" Header="Type" Width="Auto" MinWidth="50"/>
             </DataGrid.Columns>
         </DataGrid> 
     </Grid>

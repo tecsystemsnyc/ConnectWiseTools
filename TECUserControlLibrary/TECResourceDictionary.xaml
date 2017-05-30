@@ -58,7 +58,7 @@
         <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="local:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
+        <Setter Property="utilities:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
         <EventSetter Event="PreviewMouseDown" Handler="TextBox_PreviewMouseDown"/>
     </Style>
     <Style TargetType="DataGrid">
