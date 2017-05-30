@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EstimateBuilder.View.Review
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for PanelTypeListView.xaml
