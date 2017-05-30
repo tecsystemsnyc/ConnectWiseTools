@@ -168,7 +168,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>
-                    <grids:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
+                    <controls:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
                                                 Grid.Row="3" Margin="5"
                                                 ViewModel="{Binding}"/>
                 </Grid>
