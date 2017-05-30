@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -52,23 +52,23 @@
             </TabItem>
             <TabItem Header="Controlled Scope"
                      Visibility="{Binding Path=ViewModel.ControlledScopeVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControlledScopeItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControlledScopeItemsCollection}"/>
             </TabItem>
             <TabItem Header="Sys"
                 Visibility="{Binding Path=ViewModel.SystemsVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
             </TabItem>
             <TabItem Header="Equip"
                  Visibility="{Binding Path=ViewModel.EquipmentVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.EquipmentItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.EquipmentItemsCollection}"/>
             </TabItem>
             <TabItem Header="Points"
                  Visibility="{Binding Path=ViewModel.SubScopeVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SubScopeItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SubScopeItemsCollection}"/>
             </TabItem>
             <TabItem Header="Devices"
                      Visibility="{Binding Path=ViewModel.DevicesVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.DevicesItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.DevicesItemsCollection}"/>
             </TabItem>
             <TabItem Header="Tags"
                      Visibility="{Binding Path=ViewModel.TagsVisibility}">
@@ -310,11 +310,11 @@
             </TabItem>
             <TabItem Header="Asociated Costs"
                      Visibility="{Binding Path=ViewModel.AssociatedCostsVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
             </TabItem>
             <TabItem Header="Panels"
                      Visibility="{Binding Path=ViewModel.PanelsVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.PanelsItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.PanelsItemsCollection}"/>
             </TabItem>
             <TabItem Header="Add Panel"
                      Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
@@ -322,11 +322,11 @@
             </TabItem>
             <TabItem Header="Misc. Costs"
                      Visibility="{Binding Path=ViewModel.MiscCostVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscCostsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscCostsCollection}"/>
             </TabItem>
             <TabItem Header="Misc. Wiring"
                      Visibility="{Binding Path=ViewModel.MiscWiringVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscWiringCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscWiringCollection}"/>
             </TabItem>
         </TabControl>
     </Grid>
