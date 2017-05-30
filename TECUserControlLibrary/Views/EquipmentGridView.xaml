@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
@@ -14,7 +13,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop">
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities::BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -75,7 +74,7 @@
                 <DataTemplate>
                     <StackPanel>
                         <Label Content="Points" FontSize="10"/>
-                        <grids:SubScopeGridControl SubScopeSource="{Binding SubScope}"
+                        <local:SubScopeGridView SubScopeSource="{Binding SubScope}"
                                                    ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                    Margin="30,0,0,0"/>
                     </StackPanel>

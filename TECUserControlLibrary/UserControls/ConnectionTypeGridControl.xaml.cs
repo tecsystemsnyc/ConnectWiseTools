@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ConnectionTypeGridControl.xaml

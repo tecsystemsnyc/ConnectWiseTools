@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
@@ -30,10 +30,10 @@
                Content="Devices"/>
         <Label Grid.Column="1" Grid.Row="0"
                Content="Points"/>
-        <grids:DevicesGridControl Grid.Row="1" Margin="5"
+        <controls:DevicesGridControl Grid.Row="1" Margin="5"
                                   DevicesSource="{Binding Path=DevicesSource}"
                                   ViewModel="{Binding Path=ViewModel}">
-        </grids:DevicesGridControl>
+        </controls:DevicesGridControl>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
@@ -69,7 +69,7 @@
             <TextBox Text="{Binding ElementName=parent, Path=ViewModel.PointQuantity}"
                      Grid.Column="3" Grid.Row="1"
                      Margin="0,1,5,1"/>
-            <grids:PointsGridControl Grid.Column="0" 
+            <controls:PointsGridControl Grid.Column="0" 
                                      Grid.ColumnSpan="4"
                                      Grid.Row="3" Margin="5" 
                                      PointsSource="{Binding Path=PointsSource}"

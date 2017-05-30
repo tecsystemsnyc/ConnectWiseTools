@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="parent"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
@@ -29,12 +30,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Controlled Scope"/>
-                <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
+                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
             </Grid>
-            <grids:ControlledScopeDataGrid SystemSource="{Binding Bid.Systems}"
+            <controls:ControlledScopeGridControl SystemSource="{Binding Bid.Systems}"
                                            SelectedItem="{Binding SelectedSystem}"
                                            ViewModel="{Binding}"
                                            Grid.Row="1"/>
@@ -56,7 +57,7 @@
                         <ColumnDefinition Width="180"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="{Binding SelectedControlledScope.Name}"/>
-                    <ComboBox ItemsSource="{Binding Source={cLib:EnumBindingSource {x:Type uLib:ControlledScopeItemIndex}}}"
+                    <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeItemIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedItemIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
@@ -69,7 +70,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Systems"/>
-                                <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                                <views:SystemsView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"/>
                             </Grid>
@@ -90,7 +91,7 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Label Content="Panels"/>
-                                    <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
+                                    <controls:PanelsGridControl PanelsSource="{Binding PanelsCollection}"
                               ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
                               Grid.Row="1"/>
                                 </Grid>
@@ -102,7 +103,7 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Label Content="Controllers"/>
-                                    <grids:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
+                                    <controls:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
                                 </Grid>
                             </Grid>
                         </TabItem>
@@ -113,7 +114,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Connections"/>
-                                <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                <controls:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                   Grid.Row="1"/>
                             </Grid>
                         </TabItem>

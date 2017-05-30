@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
@@ -29,7 +29,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type uLib:MaterialType}}}"
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:MaterialType}}}"
                       SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialType}"
                       Margin="5"
                   VerticalContentAlignment="Center"/>
@@ -77,7 +77,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConnectionTypeCommand}"/>
                     </Grid>
-                    <grids:ConnectionTypeGridControl Grid.Row="3" Margin="5"
+                    <controls:ConnectionTypeGridControl Grid.Row="3" Margin="5"
                                          ConnectionTypesSource="{Binding Templates.Catalogs.ConnectionTypes}"
                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
@@ -125,7 +125,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConduitTypeCommand}"/>
                     </Grid>
-                    <grids:ConduitTypeGridControl Grid.Row="3" Margin="5"
+                    <controls:ConduitTypeGridControl Grid.Row="3" Margin="5"
                                       ConduitTypesSource="{Binding Templates.Catalogs.ConduitTypes}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
@@ -202,7 +202,7 @@
                                    VerticalAlignment="Center"/>
                         <ComboBox Grid.Column="3" Margin="2"
                                   SelectedItem="{Binding AssociatedCostType}" 
-                                  ItemsSource="{Binding Source={local:EnumBindingSource {x:Type TECLib:CostType}}}"/>
+                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"/>
 
                     </Grid>
                     <Grid Grid.Row="2">
@@ -236,7 +236,7 @@
                     Command="{Binding AddAssociatedCostCommand}"/>
                     </Grid>
 
-                    <grids:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
+                    <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
                                           Grid.Row="4"
                                           Margin="5"/>
                 </Grid>
@@ -299,7 +299,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
-                    <grids:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
+                    <controls:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
                                                Grid.Row="3" Margin="5"/>
                 </Grid>
             </TabItem>
@@ -313,7 +313,7 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                     
-                    <grids:MiscWiringGridControl CostSource="{Binding Templates.MiscWiringTemplates}"
+                    <controls:MiscWiringGridControl CostSource="{Binding Templates.MiscWiringTemplates}"
                                                  ViewModel="{Binding}" Grid.Row="1" Grid.Column="1" 
                                                  Margin="5"/>
                 </Grid>
@@ -327,7 +327,7 @@
                     <TextBlock Text="Misc. Costs" Grid.Row="0"
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <grids:MiscCostGridControl CostSource="{Binding Templates.MiscCostTemplates}"
+                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscCostTemplates}"
                                                ViewModel="{Binding}"
                                                Grid.Row="1" Grid.Column="1" Margin="5"/>
                 </Grid>

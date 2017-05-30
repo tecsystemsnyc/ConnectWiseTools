@@ -15,12 +15,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for PanelsGrid.xaml
     /// </summary>
-    public partial class PanelsGrid : UserControl
+    public partial class PanelsGridControl : UserControl
     {
         #region DPs
 
@@ -38,10 +38,10 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty PanelsSourceProperty =
             DependencyProperty.Register("PanelsSource", typeof(ObservableCollection<TECPanel>),
-              typeof(PanelsGrid), new PropertyMetadata(default(ObservableCollection<TECPanel>)));
+              typeof(PanelsGridControl), new PropertyMetadata(default(ObservableCollection<TECPanel>)));
 
         #endregion
-        public PanelsGrid()
+        public PanelsGridControl()
         {
             InitializeComponent();
         }

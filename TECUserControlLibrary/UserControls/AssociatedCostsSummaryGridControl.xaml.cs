@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.Models;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for AssociatedCostsSummaryGrid.xaml

@@ -15,12 +15,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ControlledScopeSystemsGrid.xaml
     /// </summary>
-    public partial class ControlledScopeSystemsGrid : UserControl
+    public partial class ControlledScopeSystemsGridContol : UserControl
     {
         #region DPs
 
@@ -38,9 +38,9 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty ControlledScopeSourceProperty =
             DependencyProperty.Register("ControlledScopeSource", typeof(ObservableCollection<TECSystem>),
-              typeof(ControlledScopeSystemsGrid), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+              typeof(ControlledScopeSystemsGridContol), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
         #endregion
-        public ControlledScopeSystemsGrid()
+        public ControlledScopeSystemsGridContol()
         {
             InitializeComponent();
         }

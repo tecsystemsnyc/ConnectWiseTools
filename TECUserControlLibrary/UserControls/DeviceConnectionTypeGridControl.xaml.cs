@@ -15,12 +15,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for DeviceConnectionTypeGrid.xaml
     /// </summary>
-    public partial class DeviceConnectionTypeGrid : UserControl
+    public partial class DeviceConnectionTypeGridControl : UserControl
     {
         #region DPs
 
@@ -38,10 +38,10 @@ namespace TECUserControlLibrary.DataGrids
         /// </summary>
         public static readonly DependencyProperty ConnectionTypesSourceProperty =
             DependencyProperty.Register("ConnectionTypesSource", typeof(ObservableCollection<TECConnectionType>),
-              typeof(DeviceConnectionTypeGrid), new PropertyMetadata(default(ObservableCollection<TECConnectionType>)));
+              typeof(DeviceConnectionTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECConnectionType>)));
         
         #endregion
-        public DeviceConnectionTypeGrid()
+        public DeviceConnectionTypeGridControl()
         {
             InitializeComponent();
         }

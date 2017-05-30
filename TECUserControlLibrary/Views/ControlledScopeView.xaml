@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
@@ -37,7 +37,7 @@
         <Label Content="Controlled Scope"/>
         <Label Content="Systems in Selected" Grid.Column="2"/>
         <Label Content="Panels in Selected" Grid.Column="4"/>
-        <grids:ControlledScopeDataGrid SystemSource="{Binding Templates.SystemTemplates}"
+        <controls:ControlledScopeGridControl SystemSource="{Binding Templates.SystemTemplates}"
                                        ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                        SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedSystem}"
                                        Grid.Row="1" Grid.RowSpan="4"
@@ -46,7 +46,7 @@
 
         <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="5"
                       HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
-        <grids:SystemsGridControl SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+        <local:SystemsView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   AllowAddingNew="False"
                                   Grid.Row="1" Grid.Column="2"
@@ -59,7 +59,7 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <grids:PanelsGrid PanelsSource="{Binding PanelsCollection}"
+            <controls:PanelsGridControl PanelsSource="{Binding PanelsCollection}"
                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                               Grid.Row="0" Margin="5"/>
             <GridSplitter Grid.Row="1" Background="{DynamicResource TextInputBrush}"
@@ -70,7 +70,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Label Content="Controllers in Selected" Grid.Row="0"/>
-                <grids:ControllerInPanelGridControl Grid.Row="1" Margin="5" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                <controls:ControllerInPanelGridControl Grid.Row="1" Margin="5" ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
             </Grid>
         </Grid>
         <GridSplitter Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
@@ -81,7 +81,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Connections"/>
-            <grids:ConnectionGrid ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+            <controls:ConnectionGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"/>
         </Grid>
         <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>

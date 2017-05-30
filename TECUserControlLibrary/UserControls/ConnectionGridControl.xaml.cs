@@ -15,14 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.DataGrids
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ConnectionGrid.xaml
     /// </summary>
-    public partial class ConnectionGrid : UserControl
+    public partial class ConnectionGridControl : UserControl
     {
-        public ConnectionGrid()
+        public ConnectionGridControl()
         {
             InitializeComponent();
         }
