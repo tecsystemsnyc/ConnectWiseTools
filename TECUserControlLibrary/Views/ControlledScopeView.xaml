@@ -46,7 +46,7 @@
 
         <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="5"
                       HorizontalAlignment="Stretch" Background="{DynamicResource TextInputBrush}"/>
-        <local:SystemsView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+        <local:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   AllowAddingNew="False"
                                   Grid.Row="1" Grid.Column="2"
