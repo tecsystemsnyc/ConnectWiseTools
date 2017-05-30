@@ -22,7 +22,7 @@ using DebugLibrary;
 using TECUserControlLibrary.ViewModels;
 using TECUserControlLibrary.Utilities;
 
-namespace TemplateBuilder.ViewModel
+namespace TemplateBuilder.MVVM
 {
     public class MainViewModel : BuilderViewModel, IDropTarget
     {

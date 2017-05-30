@@ -14,7 +14,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using TemplateBuilder.Model;
 
-namespace TemplateBuilder.ViewModel
+namespace TemplateBuilder.MVVM
 {
     /// <summary>
     /// This class contains static references to all the view models in the
