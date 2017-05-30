@@ -51,7 +51,7 @@
 
             <!--Device View-->
             <TabItem Visibility="Collapsed">
-                <views:DeviceListView ViewModel="{Binding}"/>
+                <controls:DeviceListControl/>
             </TabItem>
             
             <!--Controller View-->
