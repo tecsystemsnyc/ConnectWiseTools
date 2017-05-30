@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eUtilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -29,7 +30,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ProposalIndex}}}"
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eUtilities:ProposalIndex}}}"
                   SelectedItem="{Binding ElementName=parent, Path=SelectedProposalIndex}"
                   VerticalContentAlignment="Center"/>
 
