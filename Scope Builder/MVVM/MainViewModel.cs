@@ -20,7 +20,7 @@ using System.Reflection;
 using TECUserControlLibrary.ViewModels;
 using TECUserControlLibrary.Utilities;
 
-namespace Scope_Builder.ViewModel
+namespace Scope_Builder.MVVM
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
