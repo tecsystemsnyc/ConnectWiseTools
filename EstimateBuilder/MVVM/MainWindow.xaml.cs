@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using EstimateBuilder.MVVM;
 
-namespace EstimateBuilder
+namespace EstimateBuilder.MVVM
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

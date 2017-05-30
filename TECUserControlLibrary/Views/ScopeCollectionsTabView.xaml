@@ -306,7 +306,7 @@
             </TabItem>
             <TabItem Header="Controllers"
                      Visibility="{Binding Path=ViewModel.ControllerVisibility}">
-                <local:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
+                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
             </TabItem>
             <TabItem Header="Asociated Costs"
                      Visibility="{Binding Path=ViewModel.AssociatedCostsVisibility}">

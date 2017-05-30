@@ -10,7 +10,7 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
              xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
              
-             StartupUri="MainWindow.xaml"
+             StartupUri="MainWindow.MVVM.xaml"
              mc:Ignorable="d ignore">
     
     <Application.Resources>
