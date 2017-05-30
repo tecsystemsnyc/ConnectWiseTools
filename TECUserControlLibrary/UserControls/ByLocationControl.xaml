@@ -2,8 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
@@ -30,7 +29,7 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type uLib:LocationScopeType}}}"
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:LocationScopeType}}}"
                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType}"
                       Margin="5"/>
             <TabControl Grid.Row="1"
