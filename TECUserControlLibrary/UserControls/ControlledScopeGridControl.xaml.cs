@@ -46,7 +46,7 @@ namespace TECUserControlLibrary.UserControls
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ControlledScopeDataGrid), new FrameworkPropertyMetadata(null)
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ControlledScopeGridControl), new FrameworkPropertyMetadata(null)
         {
             BindsTwoWayByDefault = true,
             DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
