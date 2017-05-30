@@ -313,7 +313,7 @@
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
                     
-                    <controls:MiscWiringGridControl CostSource="{Binding Templates.MiscWiringTemplates}"
+                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscWiringTemplates}"
                                                  ViewModel="{Binding}" Grid.Row="1" Grid.Column="1" 
                                                  Margin="5"/>
                 </Grid>
