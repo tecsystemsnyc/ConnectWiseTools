@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="TECResourceDictionary.xaml"/>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
