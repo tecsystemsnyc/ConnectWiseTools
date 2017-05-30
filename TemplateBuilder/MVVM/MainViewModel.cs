@@ -44,10 +44,10 @@ namespace TemplateBuilder.ViewModel
 
         #region Properties
         #region VM Extensions
-        public ScopeCollectionExtension ScopeCollection { get; set; }
-        public ScopeDataGridExtension ScopeDataGrid { get; set; }
-        public EditTabExtension EditTab { get; set; }
-        public MaterialsCostsExtension MaterialsTab { get; set; }
+        public ScopeCollectionsTabVM ScopeCollection { get; set; }
+        public SystemsVM ScopeDataGrid { get; set; }
+        public EditTabVM EditTab { get; set; }
+        public MaterialVM MaterialsTab { get; set; }
         public ControlledScopeVM ControlledScopeVM { get; set; }
         public ConstantsVM ConstantsVM { get; set; }
         #endregion
