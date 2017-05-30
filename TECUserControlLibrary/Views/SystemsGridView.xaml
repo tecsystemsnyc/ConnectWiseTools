@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
@@ -13,7 +13,7 @@
              x:Name="parent">
     <UserControl.Resources>
         <ResourceDictionary>
-            <local:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -92,10 +92,10 @@
                 <DataTemplate>
                     <StackPanel>
                         <i:Interaction.Behaviors>
-                            <local:BubbleScrollEvent/>
+                            <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
                         <Label Content="Equipment" FontSize="10"/>
-                        <grids:EquipmentGridControl EquipmentSource="{Binding Equipment}"
+                        <local::EquipmentGridView EquipmentSource="{Binding Equipment}"
                                                     ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                     Margin="30, 0, 0, 0"/>
                     </StackPanel>

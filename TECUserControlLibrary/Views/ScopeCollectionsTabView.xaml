@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
@@ -92,7 +92,7 @@
                             Grid.Row="1"
                             Command="{Binding Path=ViewModel.AddTagCommand}"
                                 Margin="5"/>
-                    <grids:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
+                    <controls:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                                            Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
@@ -127,7 +127,7 @@
                             Margin="5"
                         Command="{Binding Path=ViewModel.AddManufacturerCommand}"/>
 
-                    <grids:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
+                    <controls:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                                         Grid.Row="3" Grid.ColumnSpan="2"/>
 
                 </Grid>
@@ -190,7 +190,7 @@
                         <Button Content="Add Type" Command="{Binding Path=ViewModel.AddConnectionTypeToDeviceCommand}"
                                 Grid.Column="2" Margin="2"/>
                     </Grid>
-                    <grids:DeviceConnectionTypeGrid ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
+                    <controls:DeviceConnectionTypeGridControl ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
                                                      Grid.Row="4" Grid.ColumnSpan="2"/>
                     <Label Grid.Column="0"
                         Grid.Row="5"
@@ -207,7 +207,7 @@
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
                             Margin="5"/>
-                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
+                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
                                            TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
                         Grid.Row="8"
@@ -268,7 +268,7 @@
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="IO:"/>
-                        <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:IOType}}}"
+                        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:IOType}}}"
                                   SelectedValue="{Binding Path=ViewModel.ControllerIOType}"
                                   Margin="5" Grid.Column="1"/>
                         <TextBox Grid.Column="2" Text="{Binding Path=ViewModel.ControllerIOQTY}"
@@ -295,7 +295,7 @@
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
                             Margin="5"/>
-                    <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
+                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
                                            TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
                     <Button Content="Add Controller"
                             Command="{Binding Path=ViewModel.AddControllerCommand}"
@@ -318,7 +318,7 @@
             </TabItem>
             <TabItem Header="Add Panel"
                      Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
-                <local:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
+                <controls:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
             </TabItem>
             <TabItem Header="Misc. Costs"
                      Visibility="{Binding Path=ViewModel.MiscCostVisibility}">
