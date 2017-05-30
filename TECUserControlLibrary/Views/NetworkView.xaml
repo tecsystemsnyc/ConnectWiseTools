@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
@@ -18,7 +18,7 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <utilities:NoneValueConverter x:Key="NoneValueConverter" />
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
             <DataTemplate x:Key="ClearButton">
                 <StackPanel DataContext="{Binding RelativeSource={RelativeSource Self}}">
                     <Button Name="ClearParentController"
@@ -69,7 +69,7 @@
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
-                        <grids:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding Data, Source={StaticResource proxy}}"/>
+                        <controls:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding Data, Source={StaticResource proxy}}"/>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
@@ -162,7 +162,7 @@
                     </DataGrid.Columns>
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <grids:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding Data, Source={StaticResource proxy}}"/>
+                            <controls:BMSControllerGridControl ControllerSource="{Binding}" ViewModel="{Binding Data, Source={StaticResource proxy}}"/>
                         </DataTemplate>
                     </DataGrid.RowDetailsTemplate>
                 </DataGrid>
