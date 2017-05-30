@@ -104,6 +104,7 @@
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TECControl.cs" />
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
