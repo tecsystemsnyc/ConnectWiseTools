@@ -10,6 +10,7 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Height="720"
@@ -95,7 +96,7 @@
                         ViewModel="{Binding ProposalVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <views:ReviewTabControl
+                    <controls:ReviewTabControl
                         ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
