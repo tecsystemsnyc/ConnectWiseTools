@@ -17,7 +17,7 @@ using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight.Ioc;
 using TECUserControlLibrary.ViewModels;
 
-namespace Scope_Builder.ViewModel
+namespace Scope_Builder.MVVM
 {
     /// <summary>
     /// This class contains static references to all the view models in the

@@ -18,7 +18,7 @@ using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Scope_Builder.View
+namespace Scope_Builder
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
