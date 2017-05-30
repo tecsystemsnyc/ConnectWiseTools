@@ -7,13 +7,13 @@
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -86,7 +86,7 @@
         </Grid>
         <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>
         <Canvas Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{DynamicResource SectionBackgroundBrush}"
-                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
+                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={utilities:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">

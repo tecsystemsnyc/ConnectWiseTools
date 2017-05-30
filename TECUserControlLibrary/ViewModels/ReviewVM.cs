@@ -149,7 +149,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public ReviewViewModel()
+        public ReviewVM()
         {
             _bid = new TECBid();
         }

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -148,14 +149,14 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Constructor
-        public ControllersPanelsViewModel(TECBid bid)
+        public ControllersPanelsVM(TECBid bid)
         {
             sourceControllers = bid.Controllers;
             sourcePanels = bid.Panels;
             Bid = bid;
             setup();
         }
-        public ControllersPanelsViewModel(TECSystem system)
+        public ControllersPanelsVM(TECSystem system)
         {
             sourceControllers = system.Controllers;
             sourcePanels = system.Panels;

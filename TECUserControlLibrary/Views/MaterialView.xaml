@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -34,7 +34,7 @@
                       Margin="5"
                   VerticalContentAlignment="Center"/>
         <TabControl Grid.Column="1" Grid.RowSpan="4"
-                    SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={cnvt:EditIndexToIntegerConverter}}">
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>

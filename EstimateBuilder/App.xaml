@@ -24,19 +24,19 @@
             <localMVVM:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
 
-            <DataTemplate DataType="{x:Type vm:ScopeEditorViewModel}">
+            <DataTemplate DataType="{x:Type vm:ScopeEditorVM}">
                 <views:ScopeEditorView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:DrawingViewModel}">
+            <DataTemplate DataType="{x:Type vm:DrawingVM}">
                 <views:DrawingView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:LaborViewModel}">
+            <DataTemplate DataType="{x:Type vm:LaborVM}">
                 <views:LaborView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:ReviewViewModel}">
+            <DataTemplate DataType="{x:Type vm:ReviewVM}">
                 <views:ReviewView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type cLibViewModels:SettingsVM}">
+            <DataTemplate DataType="{x:Type vm:SettingsVM}">
                 <views:SettingsView/>
             </DataTemplate>
         </ResourceDictionary>

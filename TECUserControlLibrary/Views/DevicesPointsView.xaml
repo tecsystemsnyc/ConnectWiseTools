@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              d:DesignHeight="300" d:DesignWidth="500"
@@ -74,7 +74,7 @@
                                      Grid.Row="3" Margin="5" 
                                      PointsSource="{Binding Path=PointsSource}"
                                      ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                     Visibility="{Binding PointsSource.Count, Converter={cnvt:CountVisibilityConverter}}"/>
+                                     Visibility="{Binding PointsSource.Count, Converter={utilities:CountVisibilityConverter}}"/>
         </Grid>
                 
     </Grid>

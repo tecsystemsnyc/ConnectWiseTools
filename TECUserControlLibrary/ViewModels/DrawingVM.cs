@@ -231,7 +231,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #endregion Drawing Scale Properties
 
-        public DrawingViewModel()
+        public DrawingVM()
         {
             isConnecting = false;
             PercentageZoom = 1;

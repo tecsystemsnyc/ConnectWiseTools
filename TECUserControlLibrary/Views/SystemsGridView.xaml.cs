@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for SystemsGridControl.xaml
     /// </summary>
-    public partial class SystemsView : UserControl
+    public partial class SystemsGridView : UserControl
     {
         #region DPs
 
@@ -39,7 +39,7 @@ namespace TECUserControlLibrary.Views
         /// </summary>
         public static readonly DependencyProperty SystemsSourceProperty =
             DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECSystem>),
-              typeof(SystemsView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+              typeof(SystemsGridView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
@@ -55,7 +55,7 @@ namespace TECUserControlLibrary.Views
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(SystemsVM),
-              typeof(SystemsView));
+              typeof(SystemsGridView));
 
 
         /// <summary>
@@ -72,12 +72,12 @@ namespace TECUserControlLibrary.Views
         /// </summary>
         public static readonly DependencyProperty AllowAddingNewProperty =
             DependencyProperty.Register("AllowAddingNew", typeof(bool),
-              typeof(SystemsView), new PropertyMetadata(true));
+              typeof(SystemsGridView), new PropertyMetadata(true));
 
 
         #endregion
 
-        public SystemsView()
+        public SystemsGridView()
         {
             InitializeComponent();
         }

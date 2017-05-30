@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -21,7 +21,7 @@
         <TabControl Grid.Column="4"
                     Grid.Row="0"
                     Grid.RowSpan="2"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:EditIndexToIntegerConverter}}"
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={utilities:EditIndexToIntegerConverter}}"
                     Background="{DynamicResource SectionBackgroundBrush}">
             <!--System Edit-->
             <TabItem Visibility="Collapsed">

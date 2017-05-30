@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="parent"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
@@ -44,7 +44,7 @@
         <GridSplitter Grid.Column="1" Background="{DynamicResource TextInputBrush}"
                                           HorizontalAlignment="Stretch"/>
         <TabControl Grid.Column="2" 
-                    SelectedIndex="{Binding ElementName=parent, Path=SelectedEditIndex, Converter={cnvt:EditIndexToIntegerConverter}}">
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedEditIndex, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Header="Edit" Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -61,7 +61,7 @@
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
                     <TabControl Grid.Row="1" Grid.ColumnSpan="2"
-                                SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={cnvt:EditIndexToIntegerConverter}}">
+                                SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={utilities:EditIndexToIntegerConverter}}">
                         <TabItem Header="Equipment" Visibility="Collapsed">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -153,7 +153,7 @@
             </TabItem>
         </TabControl>
         <Canvas Grid.Column="2" Background="{DynamicResource SectionBackgroundBrush}"
-                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={cnvt:NullToVisibilityConverter}}"
+                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={utilities:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">

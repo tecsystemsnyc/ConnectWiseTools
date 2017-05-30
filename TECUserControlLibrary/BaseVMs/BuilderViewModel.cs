@@ -13,7 +13,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
-using TECUserControlLibrary.ViewModelExtensions;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -139,7 +139,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region View Models
         public MenuVM MenuVM { get; set; }
-        public StatusBarExtension StatusBarVM { get; set; }
+        public StatusBarVM StatusBarVM { get; set; }
         public SettingsVM SettingsVM { get; set; }
         #endregion
 
@@ -306,7 +306,7 @@ namespace TECUserControlLibrary.ViewModels
         protected abstract void setupMenu();
         private void setupStatusBar()
         {
-            StatusBarVM = new StatusBarExtension();
+            StatusBarVM = new StatusBarVM();
 
             if (ApplicationDeployment.IsNetworkDeployed)
             { StatusBarVM.Version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }

@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cLibGrids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
-             xmlns:utilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eUtilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">
@@ -40,7 +42,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Category:" Foreground="Black" VerticalAlignment="Center"/>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eUtilities:TECMaterialIndex}}}"
                   SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialIndex}"
                   Margin="5"
                   VerticalContentAlignment="Center"/>
@@ -49,7 +51,7 @@
 
             <!--Device View-->
             <TabItem Visibility="Collapsed">
-                <local:DeviceListView ViewModel="{Binding}"/>
+                <views:DeviceListView ViewModel="{Binding}"/>
             </TabItem>
             
             <!--Controller View-->
@@ -70,7 +72,7 @@
 
                     <TextBlock Text="Controller Associated Costs" Foreground="Black" FontSize="20"/>
 
-                    <cLibGrids:AssociatedCostsSummaryGrid Grid.Row="1" Grid.ColumnSpan="4" AssociatedCostSummaryItemsSource="{Binding ControllerAssCostSummaryItems}"/>
+                    <controls:AssociatedCostsSummaryGrid Grid.Row="1" Grid.ColumnSpan="4" AssociatedCostSummaryItemsSource="{Binding ControllerAssCostSummaryItems}"/>
 
                     <TextBlock Text="Controller Subtotal:" Grid.Row="2" Foreground="Black"/>
                     <TextBlock Text="{Binding ControllerSubTotal, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
@@ -87,7 +89,7 @@
             
             <!--Panel View-->
             <TabItem Visibility="Collapsed">
-                <local:PanelTypeListView ViewModel="{Binding}"/>
+                <views:PanelTypeListView ViewModel="{Binding}"/>
             </TabItem>
             
             <!--Misc Costs View-->

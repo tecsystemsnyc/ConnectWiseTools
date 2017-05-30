@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.Utilities.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              
              mc:Ignorable="d" 
              x:Name="parent"
@@ -65,7 +65,7 @@
             <Button Content="Remove" Command="{Binding RemoveDevice}" Grid.Row="1" Grid.Column="1" Margin="5"/>
             <Button Content="Replace" Command="{Binding ReplaceDevice}" Grid.Row="1" Grid.Column="2" Margin="5"/>
 
-            <Grid MaxHeight="300" Margin="5" Grid.Row="2" Grid.ColumnSpan="3" Visibility="{Binding IsExpanded, Converter={cnvt:BooleanToVisibilityConverter}}">
+            <Grid MaxHeight="300" Margin="5" Grid.Row="2" Grid.ColumnSpan="3" Visibility="{Binding IsExpanded, Converter={utilities:BooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="30"/>
@@ -82,10 +82,10 @@
                 <controls:DevicesGridControl Grid.ColumnSpan="6" DevicesSource="{Binding Bid.Catalogs.Devices}" SelectedDevice="{Binding NewSelectedDevice}"/>
                 
                 <TextBlock Grid.Row="1" Text="{Binding FirstString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.Device.Name, Converter={cnvt:StringToQuoteConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.Device.Name, Converter={utilities:StringToQuoteConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SecondString}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding NewSelectedDevice.Name, Converter={cnvt:StringToQuoteConverter}}"
-                           Visibility="{Binding HasNew, Converter={cnvt:BooleanToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding NewSelectedDevice.Name, Converter={utilities:StringToQuoteConverter}}"
+                           Visibility="{Binding HasNew, Converter={utilities:BooleanToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                 <Button Content="Confirm" Command="{Binding Confirm}" Grid.Row="1" Grid.Column="4" Margin="5"/>
                 <Button Content="Cancel" Command="{Binding Cancel}" Grid.Row="1" Grid.Column="5" Margin="5"/>

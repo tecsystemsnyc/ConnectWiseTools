@@ -104,7 +104,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        new public void Refresh(TECBid bid)
+        public void Refresh(TECBid bid)
         {
             Bid = bid;
             SelectedLocation = null;

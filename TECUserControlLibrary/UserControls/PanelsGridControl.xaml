@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -22,7 +22,7 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <DataGrid ItemsSource="{Binding ElementName=parent, Path=PanelsSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedPanel, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedPanel, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                   CanUserAddRows="False">
             <DataGrid.Columns>

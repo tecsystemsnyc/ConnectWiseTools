@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using TECUserControlLibrary.Models;
-using TECUserControlLibrary.ViewModelExtensions;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region VM Extenstions
-        public ScopeDataGridExtension ScopeDataGrid { get; set; }
+        public SystemsVM ScopeDataGrid { get; set; }
         #endregion
 
         #region Delegates
@@ -217,7 +217,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupVMs()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(Templates);
+            ScopeDataGrid = new SystemsVM(Templates);
             ScopeDataGrid.SelectionChanged += SelectionChanged;
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using TECUserControlLibrary.ViewModels;
 
-namespace EstimateBuilder.View
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Description for ScopeEditorView.

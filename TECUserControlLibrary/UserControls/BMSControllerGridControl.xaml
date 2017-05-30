@@ -7,14 +7,14 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
+            <utilities:NoneValueConverter x:Key="NoneValueConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -23,7 +23,7 @@
 
     <StackPanel DataContext="{Binding ElementName=parent, Path=ControllerSource}">
         <i:Interaction.Behaviors>
-            <cLib:BubbleScrollEvent/>
+            <utilities:BubbleScrollEvent/>
         </i:Interaction.Behaviors>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -86,7 +86,7 @@
                 <DataTemplate>
                     <StackPanel>
                         <i:Interaction.Behaviors>
-                            <cLib:BubbleScrollEvent/>
+                            <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
                         <Label Content="Controllers" FontSize="10"/>
                         <DataGrid ItemsSource="{Binding ChildrenControllers}"

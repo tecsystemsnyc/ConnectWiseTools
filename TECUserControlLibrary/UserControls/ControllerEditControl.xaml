@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
-             xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              x:Name="parent"
              mc:Ignorable="d" 
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -62,7 +63,7 @@
             <ComboBox ItemsSource="{Binding ManufacturerSelections}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding SelectedController.Manufacturer, Converter={cnvt:ManufacturerConverter}}"/>
+                         SelectedItem="{Binding SelectedController.Manufacturer, Converter={utilities:ManufacturerConverter}}"/>
             <Grid Grid.Row="4" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>
@@ -71,7 +72,7 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="IO:"/>
-                <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type eLib:IOType}}}"
+                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:IOType}}}"
                                   SelectedValue="{Binding ControllerIO}" Grid.Column="1"
                           Margin="5"/>
                 <TextBox Text="{Binding ControllerIOQTY}"
@@ -84,7 +85,7 @@
             </Grid>
             
         </Grid>
-        <grids:IOGridControl IOSource="{Binding SelectedController.IO}"
+        <controls:IOGridControl IOSource="{Binding SelectedController.IO}"
                              ViewModel="{Binding}"
                              Grid.Row="1"
                       Grid.ColumnSpan="2"/>
@@ -94,7 +95,7 @@
         <Button Grid.Row="2" Grid.Column="1" Content="Add Tag"
                             Command="{Binding AddTagToControllerCommand}"
                             Margin="5"/>
-        <grids:TagsGridControl Grid.ColumnSpan="2" Grid.Row="3"
+        <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="3"
                                            TagsSource="{Binding SelectedController.Tags}"/>
         <ComboBox Grid.Row="4" Margin="5" ItemsSource="{Binding AssociatedCostSelections}"
                                SelectedItem="{Binding SelectedAssociatedCost}"
@@ -102,7 +103,7 @@
         <Button Grid.Row="4" Grid.Column="1" Content="Associate Cost"
                             Command="{Binding AddAssociatedCostToControllerCommand}"
                             Margin="5"/>
-        <grids:AssociatedCostsGridControl Grid.Row="5" Grid.ColumnSpan="2"
+        <controls:AssociatedCostsGridControl Grid.Row="5" Grid.ColumnSpan="2"
                                           CostsSource="{Binding SelectedController.AssociatedCosts}"
                                           ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
         <Button Grid.ColumnSpan="2" Grid.Row="6" Content="Delete"

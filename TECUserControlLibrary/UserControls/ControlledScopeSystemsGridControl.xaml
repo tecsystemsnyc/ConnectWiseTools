@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.DataGrids"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"             
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"             
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
@@ -23,7 +23,7 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding ElementName=parent, Path=ControlledScopeSource}" 
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedControlledScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding SelectedControlledScope, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding}"
                   IsReadOnly="True">
             <DataGrid.Columns>

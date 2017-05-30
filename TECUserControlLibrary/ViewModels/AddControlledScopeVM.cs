@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using TECUserControlLibrary.Models;
 using System.ComponentModel;
 using System.Collections.Generic;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -260,8 +261,8 @@ namespace TECUserControlLibrary.ViewModels
 
 
         #region VM Extenstions
-        public ScopeDataGridExtension ScopeDataGrid { get; set; }
-        public ControllersPanelsViewModel ControllersPanelsVM { get; set; }
+        public SystemsVM ScopeDataGrid { get; set; }
+        public ControllersPanelsVM ControllersPanelsVM { get; set; }
         #endregion
 
         #region Delegates
@@ -276,7 +277,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <summary>
         /// Initializes a new instance of the AddControlledScopeExtension class.
         /// </summary>
-        public AddControlledScopeExtension(TECBid bid)
+        public AddControlledScopeVM(TECBid bid)
         {
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
@@ -557,7 +558,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupVMs()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(Bid);
+            ScopeDataGrid = new SystemsVM(Bid);
             ScopeDataGrid.SelectionChanged += SelectionChanged;
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
@@ -575,7 +576,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
-            ControllersPanelsVM = new ControllersPanelsViewModel(new TECSystem());
+            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem());
         }
 
         private void addControlledScopeExecute()

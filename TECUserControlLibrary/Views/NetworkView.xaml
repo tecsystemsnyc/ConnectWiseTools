@@ -8,7 +8,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -17,7 +17,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cnvt:NoneValueConverter x:Key="NoneValueConverter" />
+            <utilities:NoneValueConverter x:Key="NoneValueConverter" />
             <cLib:BindingProxy x:Key="proxy" Data="{Binding ViewModel, ElementName=parent}"/>
             <DataTemplate x:Key="ClearButton">
                 <StackPanel DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -101,7 +101,7 @@
                                     Binding="{Binding Path=Controller.Name}"
                                     Width="Auto" MinWidth="70"/>
 
-                        <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem  , Converter={cnvt:SelectedItemToControllerConverter}-->
+                        <!--Mess of styles is to set the DataContext of the DataGridComboBoxColumn to the DataGridRowItem  , Converter={utilities:SelectedItemToControllerConverter}-->
                         <DataGridComboBoxColumn Header="Networked To" 
                                         SelectedItemBinding="{Binding Path=ParentController, UpdateSourceTrigger=PropertyChanged}"
                                         DisplayMemberPath="Name"

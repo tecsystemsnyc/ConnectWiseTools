@@ -16,7 +16,7 @@ using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary;
 using TECUserControlLibrary.Models;
-using TECUserControlLibrary.ViewModelExtensions;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -63,12 +63,12 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Extensions
-        public ScopeDataGridExtension ScopeDataGrid { get; set; }
-        public LocationDataGridExtension LocationDataGrid { get; set; }
-        public ScopeCollectionExtension ScopeCollection { get; set; }
-        public EditTabExtension EditTab { get; set; }
-        public ControllersPanelsViewModel ControllersPanelsTab { get; set; }
-        public AddControlledScopeExtension AddControlledScopeTab { get; set; }
+        public SystemsVM ScopeDataGrid { get; set; }
+        public LocationVM LocationDataGrid { get; set; }
+        public ScopeCollectionsTabVM ScopeCollection { get; set; }
+        public EditTabVM EditTab { get; set; }
+        public ControllersPanelsVM ControllersPanelsTab { get; set; }
+        public AddControlledScopeVM AddControlledScopeTab { get; set; }
         #endregion
 
         #region Interface Properties
@@ -135,7 +135,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Setup Extensions
         private void setupScopeDataGrid()
         {
-            ScopeDataGrid = new ScopeDataGridExtension(Bid);
+            ScopeDataGrid = new SystemsVM(Bid);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
@@ -154,7 +154,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupLocationDataGrid()
         {
-            LocationDataGrid = new LocationDataGridExtension(Bid);
+            LocationDataGrid = new LocationVM(Bid);
             LocationDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
             LocationDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
             LocationDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
@@ -171,24 +171,24 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionExtension(Templates);
+            ScopeCollection = new ScopeCollectionsTabVM(Templates);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }
         private void setupEditTab()
         {
-            EditTab = new EditTabExtension(Bid);
+            EditTab = new EditTabVM(Bid);
             EditTab.DragHandler += DragOver;
             EditTab.DropHandler += Drop;
         }
         private void setupControllersPanelsTab()
         {
-            ControllersPanelsTab = new ControllersPanelsViewModel(Bid);
+            ControllersPanelsTab = new ControllersPanelsVM(Bid);
             ControllersPanelsTab.SelectionChanged += EditTab.updateSelection;
         }
         private void setupAddControlledScope()
         {
-            AddControlledScopeTab = new AddControlledScopeExtension(Bid);
+            AddControlledScopeTab = new AddControlledScopeVM(Bid);
             AddControlledScopeTab.SelectionChanged += EditTab.updateSelection;
             AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }

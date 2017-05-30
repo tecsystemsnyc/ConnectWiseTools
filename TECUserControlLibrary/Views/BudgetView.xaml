@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d"
              xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:uLib="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              MinHeight="350"
              MinWidth="500"

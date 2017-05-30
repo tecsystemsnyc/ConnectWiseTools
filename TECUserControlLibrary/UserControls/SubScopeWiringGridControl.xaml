@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
@@ -19,7 +19,7 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=SubScopeSource}"
-                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="False">

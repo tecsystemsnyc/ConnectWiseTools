@@ -50,7 +50,7 @@
     </Window.InputBindings>
 
     <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-        <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+        <cLibView:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
         <Grid x:Name="LayoutRoot">
@@ -73,11 +73,11 @@
 
             <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                 <TabItem Header="Scope Editor">
-                    <view:ScopeEditorView
+                    <cLibView:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
                 <TabItem Header="Electrical">
-                    <view:ElectricalView
+                    <cLibView:ElectricalView
                         ViewModel="{Binding ElectricalVM}"/>
                 </TabItem>
                 <TabItem Header="Network">
@@ -85,19 +85,19 @@
                         ViewModel="{Binding NetworkVM}"/>
                 </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
-                    <view:DrawingView
+                    <cLibView:DrawingView
                         ViewModel="{Binding DrawingVM}"/>
                 </TabItem>
                 <TabItem Header="Labor">
-                    <view:LaborView
+                    <cLibView:LaborView
                         ViewModel="{Binding LaborVM}"/>
                 </TabItem>
                 <TabItem Header="Proposal">
-                    <view:ProposalView
+                    <cLibView:ProposalView
                         ViewModel="{Binding ProposalVM}"/>
                 </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewTabControl
+                    <cLibView:ReviewTabControl
                         ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
@@ -105,7 +105,7 @@
                         ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
-            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+            <cLibView:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
                                            Grid.Row="3" Grid.ColumnSpan="3"
                                            dd:DragDrop.IsDropTarget="True"
                                            dd:DragDrop.DropHandler="{Binding}"/>

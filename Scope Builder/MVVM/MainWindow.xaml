@@ -49,7 +49,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}" IsEnabled="{Binding IsReady}">
-        <cLibControls:MenuControl ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
+        <cLibViews:MenuView ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" 
@@ -24,7 +24,7 @@
         <DataGrid ItemsSource="{Binding Path=EquipmentSource}"
                   x:Name="equipmentDataGrid"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=ViewModel.SelectedEquipment, Converter={cnvt:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedEquipment, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">
             <i:Interaction.Triggers>
@@ -42,7 +42,7 @@
                 <DataGridTextColumn Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" Header="Description" Width="Auto"  MinWidth="70"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentDescription, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={cnvt:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location, Converter={utilities:SelectedLocationToLocationConverter}, UpdateSourceTrigger=LostFocus}"
                                         DisplayMemberPath="Name"
                                         ItemsSource="{Binding Data.LocationSelections,
                                         Source={StaticResource proxy}}"
@@ -57,13 +57,13 @@
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentSubScopeCount,
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, UpdateSourceTrigger=LostFocus, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
+                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, UpdateSourceTrigger=LostFocus, Converter={utilities:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     Header="Unit Price" 
                                     Width="Auto" MinWidth="60"
                                     ElementStyle="{StaticResource RightCell}"
                                     Visibility="{Binding Data.DataGridVisibilty.EquipmentUnitPrice, 
                                     Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding TotalBudgetPrice, Converter={cnvt:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
+                <DataGridTextColumn Binding="{Binding TotalBudgetPrice, Converter={utilities:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
                                     IsReadOnly="True"
                                     Header="Total Price" 
                                     Width="Auto" MinWidth="60"

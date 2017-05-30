@@ -7,7 +7,7 @@
              xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
-             xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="parent"
              d:DesignHeight="720 " d:DesignWidth="300">
     <UserControl.Resources>
@@ -43,7 +43,7 @@
         </Grid>
         <TabControl Grid.Row="1"
                     Background="{DynamicResource SectionBackgroundBrush}"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={cnvt:ScopeCollectionIndexToIntegerConverter}}">
+                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={utilities:ScopeCollectionIndexToIntegerConverter}}">
             <TabItem Visibility="Collapsed">
                 <TextBlock Text="Choose another tab to display relevant templates."
                          TextWrapping="Wrap" Foreground="Black"
@@ -259,7 +259,7 @@
                     <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={cnvt:ManufacturerConverter}}"/>
+                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={utilities:ManufacturerConverter}}"/>
                     <Grid Grid.Row="4" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
