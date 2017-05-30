@@ -3,17 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"             
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:cLib="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
-            <cLib:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -35,10 +34,10 @@
                 <DataTemplate>
                     <StackPanel>
                         <i:Interaction.Behaviors>
-                            <cLib:BubbleScrollEvent/>
+                            <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
                         <Label Content="Systems" FontSize="10"/>
-                        <local:SystemsGridControl SystemsSource="{Binding SystemInstances}" 
+                        <views:SystemsGridView SystemsSource="{Binding SystemInstances}" 
                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                     </StackPanel>
                 </DataTemplate>
