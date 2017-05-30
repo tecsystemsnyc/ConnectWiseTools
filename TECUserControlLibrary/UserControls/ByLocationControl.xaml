@@ -35,17 +35,17 @@
             <TabControl Grid.Row="1"
                         SelectedIndex="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType, Converter={utilities:LocationScopeTypeToIntegerConverter}}">
                 <TabItem Visibility="Collapsed">
-                    <views:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=SystemsSource}"
+                    <views:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SystemsByLocation}"
                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                               AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
-                    <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=EquipmentSource}"
+                    <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=ViewModel.EquipmentByLocation}"
                                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                 AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
-                    <views:SubScopeGridView SubScopeSource="{Binding ElementName=parent, Path=SubScopeSource}"
+                    <views:SubScopeGridView SubScopeSource="{Binding ElementName=parent, Path=ViewModel.SubScopeByLocation}"
                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                AllowAddingNew="False"/>
                 </TabItem>
