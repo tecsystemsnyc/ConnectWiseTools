@@ -55,7 +55,7 @@
                                                   ViewModel="{Binding ScopeDataGrid}"/>
                     </TabItem>
                     <TabItem Header="All">
-                        <views:SystemsView SystemsSource="{Binding Bid.Systems}"
+                        <views:SystemsGridView SystemsSource="{Binding Bid.Systems}"
                                          ViewModel="{Binding ScopeDataGrid}"/>
                     </TabItem>
                 </TabControl>
@@ -103,7 +103,7 @@
                         <TextBlock Text="Misc. Wiring" Grid.Row="0"
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
-                        <controls:MiscWiringGridControl CostSource="{Binding Bid.MiscWiring}"
+                        <controls:MiscCostGridControl CostSource="{Binding Bid.MiscWiring}"
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="5"
                                   ViewModel="{Binding}"/>
