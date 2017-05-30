@@ -155,7 +155,7 @@
                     <cLibViews:DocumentBuilderView ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Budget">
-                    <cLib:BudgetWindow ViewModel="{Binding BudgetVM}"/>
+                    <cLibViews:BudgetView ViewModel="{Binding BudgetVM}"/>
                 </TabItem>
                 <!--Misc Tab-->
                 <TabItem Visibility="Collapsed"/>

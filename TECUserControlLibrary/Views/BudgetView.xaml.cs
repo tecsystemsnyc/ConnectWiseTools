@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for BudgetWindow.xaml
     /// </summary>
-    public partial class BudgetWindow : UserControl
+    public partial class BudgetView : UserControl
     {
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace TECUserControlLibrary.Views
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(BudgetVM),
-              typeof(BudgetWindow));
+              typeof(BudgetView));
 
-        public BudgetWindow()
+        public BudgetView()
         {
             InitializeComponent();
         }
