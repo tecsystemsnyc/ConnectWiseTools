@@ -161,6 +161,7 @@
     <Compile Include="UserControls\DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ConstantsVM.cs" />
     <Compile Include="ViewModels\DevicesPointsVM.cs" />
     <Compile Include="ViewModels\EquipmentVM.cs" />
     <Compile Include="ViewModels\SubScopeVM.cs" />
@@ -263,8 +264,8 @@
     <Compile Include="Views\AddControlledScopeView.xaml.cs">
       <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ConstantsControl.xaml.cs">
-      <DependentUpon>ConstantsControl.xaml</DependentUpon>
+    <Compile Include="Views\ConstantsView.xaml.cs">
+      <DependentUpon>ConstantsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControlledScopeView.xaml.cs">
       <DependentUpon>ControlledScopeView.xaml</DependentUpon>
@@ -563,7 +564,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ConstantsControl.xaml">
+    <Page Include="Views\ConstantsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

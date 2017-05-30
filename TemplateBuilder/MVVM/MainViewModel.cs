@@ -18,7 +18,6 @@ using System.Reflection;
 using System.Deployment.Application;
 using System.ComponentModel;
 using System.Windows.Controls;
-using TECUserControlLibrary.ViewModelExtensions;
 using DebugLibrary;
 using TECUserControlLibrary.ViewModels;
 
@@ -50,6 +49,7 @@ namespace TemplateBuilder.ViewModel
         public EditTabExtension EditTab { get; set; }
         public MaterialsCostsExtension MaterialsTab { get; set; }
         public ControlledScopeVM ControlledScopeVM { get; set; }
+        public ConstantsVM ConstantsVM { get; set; }
         #endregion
         protected override TECScopeManager workingScopeManager
         {
@@ -209,6 +209,7 @@ namespace TemplateBuilder.ViewModel
                 EditTab.Refresh(Templates);
                 MaterialsTab.Refresh(Templates);
                 ControlledScopeVM.Refresh(Templates);
+                ConstantsVM.Refresh(Templates.Labor);
             }
         }
         #region Setup Methods
@@ -296,6 +297,10 @@ namespace TemplateBuilder.ViewModel
             ControlledScopeVM.DropHandler += Drop;
             ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
             ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+        }
+        private void setupConstantsVM()
+        {
+            ConstantsVM = new ConstantsVM(Templates.Labor);
         }
         #endregion
         #region Commands Methods
