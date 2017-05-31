@@ -40,6 +40,7 @@ namespace TECUserControlLibrary.ViewModels
             setupLocationDataGrid();
             setupControllersPanelsTab();
             setupAddControlledScope();
+            setupMiscVM();
 
             DGTabIndex = GridIndex.AddControlledScope;
 
@@ -69,6 +70,7 @@ namespace TECUserControlLibrary.ViewModels
         public EditTabVM EditTab { get; set; }
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
         public AddControlledScopeVM AddControlledScopeTab { get; set; }
+        public MiscCostsVM MiscVM { get; set; }
         #endregion
 
         #region Interface Properties
@@ -128,6 +130,7 @@ namespace TECUserControlLibrary.ViewModels
             LocationDataGrid.Refresh(Bid);
             ControllersPanelsTab.Refresh(Bid);
             AddControlledScopeTab.Refresh(Bid);
+            MiscVM.Refresh(Bid);
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
@@ -191,6 +194,10 @@ namespace TECUserControlLibrary.ViewModels
             AddControlledScopeTab = new AddControlledScopeVM(Bid);
             AddControlledScopeTab.SelectionChanged += EditTab.updateSelection;
             AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+        }
+        private void setupMiscVM()
+        {
+            MiscVM = new MiscCostsVM(Bid);
         }
         #endregion
 

@@ -166,6 +166,9 @@
     <Compile Include="ViewModels\DevicesPointsVM.cs" />
     <Compile Include="ViewModels\EquipmentVM.cs" />
     <Compile Include="ViewModels\SubScopeVM.cs" />
+    <Compile Include="Views\MiscCostsView.xaml.cs">
+      <DependentUpon>MiscCostsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
@@ -408,6 +411,10 @@
     <Page Include="Views\DevicesPointsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MiscCostsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProposalView.xaml">
       <SubType>Designer</SubType>
