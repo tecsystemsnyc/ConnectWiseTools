@@ -108,7 +108,6 @@
     <Compile Include="Interfaces\PointComponent.cs" />
     <Compile Include="ObservableItemToInstanceList.cs" />
     <Compile Include="TECCatalogs.cs" />
-    <Compile Include="TECControlledScope.cs" />
     <Compile Include="TECEstimator.cs" />
     <Compile Include="TECIOModule.cs" />
     <Compile Include="ModelLinkingHelper.cs" />
