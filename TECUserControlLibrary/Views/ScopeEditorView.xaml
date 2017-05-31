@@ -43,24 +43,26 @@
                     Grid.Column="2"
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
-
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Typical Systems">
                 <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
             </TabItem>
-            <TabItem Header="All Systems">
-                <controls:TypicalInstancedSystemsGridControl TypicalSystemsSource="{Binding Bid.Systems}"
+            <TabItem Header="Instances">
+                <TabControl>
+                    <TabItem Header="All Systems">
+                        <controls:TypicalInstancedSystemsGridControl TypicalSystemsSource="{Binding Bid.Systems}"
                                                   ViewModel="{Binding ScopeDataGrid}"/>
+                    </TabItem>
+                    <TabItem Header="By Location">
+                        <views:LocationView LocationSource="{Binding Bid.Locations}"
+                                            ViewModel="{Binding LocationDataGrid}"/>
+                    </TabItem>
+                </TabControl>
             </TabItem>
-            
             <TabItem Header="Controllers and Panels">
                 <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
             </TabItem>
 
-            <TabItem Header="By Location">
-                <views:LocationView LocationSource="{Binding Bid.Locations}"
-                                            ViewModel="{Binding LocationDataGrid}"/>
-            </TabItem>
             <!--Proposal And Budget-->
             <TabItem Visibility="Collapsed"/>
             <TabItem Visibility="Collapsed"/>

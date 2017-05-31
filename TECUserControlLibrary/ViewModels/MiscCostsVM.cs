@@ -5,6 +5,8 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
+using GongSolutions.Wpf.DragDrop;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -14,7 +16,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MiscCostsVM : ViewModelBase
+    public class MiscCostsVM : ViewModelBase, IDropTarget
     {
         private ObservableCollection<TECMisc> _tecCostCollection;
         public ObservableCollection<TECMisc> TECCostCollection
@@ -181,6 +183,17 @@ namespace TECUserControlLibrary.ViewModels
             {
                 ElectricalCostCollection.Remove(misc);
             }
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.StandardDragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            var newMisc = (dropInfo.Data as TECMisc).DragDropCopy() as TECMisc;
+            handleAddMisc(newMisc);
         }
     }
 }

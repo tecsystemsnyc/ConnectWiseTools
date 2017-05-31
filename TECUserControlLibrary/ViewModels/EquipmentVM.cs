@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
@@ -74,6 +76,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        #region Command Properties
+        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
+
+        #endregion
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -101,11 +108,24 @@ namespace TECUserControlLibrary.ViewModels
             }
             setupVMs(scopeManager);
             populateLocationSelections();
+            setupCommands();
             DataGridVisibilty = new VisibilityModel();
         }
         #endregion
 
         #region Methods
+        #region Commands
+        private void setupCommands()
+        {
+            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
+        }
+
+        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
+        {
+            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
+            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
+        }
+        #endregion //Commands
         public void NullifySelected()
         {
             SelectedEquipment = null;

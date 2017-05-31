@@ -55,7 +55,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="180"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="{Binding SelectedControlledScope.Name}"/>
+                    <Label Content="{Binding SelectedSystem.Name}"/>
                     <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeItemIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedItemIndex}"
                           Grid.Column="1" Margin="2"
@@ -69,7 +69,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Equipment"/>
-                                <views:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
+                                <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.Equipment}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"/>
                             </Grid>
