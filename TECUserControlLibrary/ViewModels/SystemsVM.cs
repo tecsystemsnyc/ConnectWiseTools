@@ -110,8 +110,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         
-        
-
         #region VMs
         public EquipmentVM ChildVM { get; set; }
         #endregion
