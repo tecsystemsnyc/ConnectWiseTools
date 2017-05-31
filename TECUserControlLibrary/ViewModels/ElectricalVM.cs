@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.ViewModels
                 ConduitTypeSelections.Add(type);
             }
             populateControllerSelections();
-            updateCollections();
+            populateSubScopeConnections();
         }
         private void registerSubScope()
         {
@@ -174,14 +174,9 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (updateScope)
             {
-                updateCollections();
+                populateSubScopeConnections();
             }
             
-        }
-        
-        private void updateCollections()
-        {
-            updateSubScopeConnections();
         }
 
         private void populateControllerSelections()
@@ -193,7 +188,7 @@ namespace TECUserControlLibrary.ViewModels
                 ControllerSelections.Add(controller);
             }
         }
-        private void updateSubScopeConnections()
+        private void populateSubScopeConnections()
         {
             SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
             foreach (TECSystem system in Bid.Systems)

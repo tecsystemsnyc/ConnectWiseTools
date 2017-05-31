@@ -5,14 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -39,6 +52,23 @@
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="5,0,0,0"
                                   ViewModel="{Binding}"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Name:" Grid.Column="0"/>
+            <TextBox Text="{Binding MiscName}" Grid.Column="1"/>
+            <Label Content="Type:" Grid.Column="2"/>
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:CostType}}}"
+                      SelectedItem="{Binding MiscType}"
+                      Grid.Column="3"
+                  VerticalContentAlignment="Center"/>
+            <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="4"/>
         </Grid>
     </Grid>
 </UserControl>

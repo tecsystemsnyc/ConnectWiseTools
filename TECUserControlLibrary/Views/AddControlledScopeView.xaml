@@ -75,36 +75,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Controllers" Visibility="Collapsed">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Row="1" Grid.Column="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="Panels"/>
-                                    <controls:PanelsGridControl PanelsSource="{Binding PanelsCollection}"
-                              ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"
-                              Grid.Row="1"/>
-                                </Grid>
-                                <GridSplitter Grid.Row="0" Grid.Column="1" Background="{DynamicResource TextInputBrush}"
-                                          HorizontalAlignment="Stretch"/>
-                                <Grid Grid.Row="0" Grid.Column="2">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="Controllers"/>
-                                    <controls:ControllerInPanelGridControl Grid.Row="1" ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
-                                </Grid>
-                            </Grid>
+                            <views:ControllersPanelsView ViewModel="{Binding ElementName=parent, Path=ViewModel.ControllersPanelsVM}"/>
                         </TabItem>
                         <TabItem Header="Electrical" Visibility="Collapsed">
                             <Grid>
