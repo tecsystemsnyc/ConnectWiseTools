@@ -82,7 +82,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region VMs
-        public SubScopeVM ChildVM;
+        public SubScopeVM ChildVM { get; set; }
         #endregion
 
         /// <summary>

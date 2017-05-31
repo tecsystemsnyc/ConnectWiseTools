@@ -110,14 +110,13 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         
-
         #region Command Properties
         public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
 
         #endregion
 
         #region VMs
-        public EquipmentVM ChildVM;
+        public EquipmentVM ChildVM { get; set; }
         #endregion
 
         #endregion

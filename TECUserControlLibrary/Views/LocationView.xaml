@@ -41,12 +41,12 @@
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=ViewModel.EquipmentByLocation}"
-                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                ViewModel="{Binding ElementName=parent, Path=ViewModel.ChildVM}"
                                                 AllowAddingNew="False"/>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <views:SubScopeGridView SubScopeSource="{Binding ElementName=parent, Path=ViewModel.SubScopeByLocation}"
-                                               ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                               ViewModel="{Binding ElementName=parent, Path=ViewModel.ChildVM.ChildVM}"
                                                AllowAddingNew="False"/>
                 </TabItem>
             </TabControl>

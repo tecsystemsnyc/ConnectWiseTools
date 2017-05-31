@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedScopeType");
             }
         }
-
+        
         #endregion
 
         public LocationVM(TECBid bid) : base(bid) { }
