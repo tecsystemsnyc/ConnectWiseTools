@@ -228,7 +228,7 @@ namespace TECUserControlLibrary.ViewModels
 
 
         #region VM Extenstions
-        public SystemsVM ScopeDataGrid { get; set; }
+        public EquipmentVM ScopeDataGrid { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         #endregion
 
@@ -448,7 +448,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupVMs()
         {
-            ScopeDataGrid = new SystemsVM(Bid);
+            ScopeDataGrid = new EquipmentVM(Bid);
             ScopeDataGrid.SelectionChanged += SelectionChanged;
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;

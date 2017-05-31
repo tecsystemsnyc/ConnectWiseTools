@@ -110,10 +110,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         
-        #region Command Properties
-        public RelayCommand<AddingNewItemEventArgs> AddNewEquipment { get; private set; }
-
-        #endregion
+        
 
         #region VMs
         public EquipmentVM ChildVM { get; set; }
@@ -135,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             
             DataGridVisibilty = new VisibilityModel();
-            setupCommands();
+            
             setupVMs(scopeManager);
         }
         #endregion
@@ -164,20 +161,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             ChildVM.Refresh(scopeManager);
         }
-
-        #region Commands
-        private void setupCommands()
-        {
-            AddNewEquipment = new RelayCommand<AddingNewItemEventArgs>(e => AddNewEquipmentExecute(e));
-        }
         
-        private void AddNewEquipmentExecute(AddingNewItemEventArgs e)
-        {
-            //e.NewItem = new TECEquipment("here","this", 12, new ObservableCollection<TECSubScope>());
-            //((TECEquipment)e.NewItem).Location = SelectedSystem.Location;
-        }
-        #endregion //Commands
-
         private void NullifySelections(object obj)
         {
             //if(obj != null)
