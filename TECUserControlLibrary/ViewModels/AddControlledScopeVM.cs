@@ -248,7 +248,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
-            DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControllededScopeCanExecute);
+            DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControlledScopeCanExecute);
             _selectedSystem = null;
             _scopeSource = Bid.Systems;
             DebugVisibility = Visibility.Collapsed;
@@ -471,16 +471,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addControlledScopeExecute()
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //for (int x = 0; x < ControlledScopeQuantity; x++)
-            //{
-                //var subWatch = System.Diagnostics.Stopwatch.StartNew();
-                //Bid.addControlledScope(SelectedControlledScope, ControlledScopeQuantity);
-                //subWatch.Stop();
-                //Console.WriteLine("Add " + x + " controlled scope: " + subWatch.ElapsedMilliseconds);
-            //}
-            //watch.Stop();
-            //Console.WriteLine("Add all controlled scope: " + watch.ElapsedMilliseconds);
+            for (int x = 0; x < ControlledScopeQuantity; x++)
+            {
+                SelectedSystem.AddInstance(Bid);
+            }
             ControlledScopeQuantity = 0;
         }
         private bool addControlledScopeCanExecute()
@@ -494,7 +488,7 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private bool deleteControllededScopeCanExecute()
+        private bool deleteControlledScopeCanExecute()
         {
             if (SelectedChild != null && SelectedSystem.SystemInstances.Contains(SelectedChild))
             {
