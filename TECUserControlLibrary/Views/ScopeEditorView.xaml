@@ -78,7 +78,7 @@
                         <TextBlock Text="Misc. Costs" Grid.Row="0"
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
-                        <controls:MiscCostGridControl CostSource="{Binding Bid.MiscCosts}"
+                        <controls:MiscCostGridControl CostSource="{Binding TECCostCollection}"
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="5"
                                   ViewModel="{Binding}"/>
@@ -92,7 +92,7 @@
                         <TextBlock Text="Misc. Wiring" Grid.Row="0"
                                 FontWeight="Bold" Foreground="Black"
                                 VerticalAlignment="Center" Margin="5,7,0,7"/>
-                        <controls:MiscCostGridControl CostSource="{Binding Bid.MiscWiring}"
+                        <controls:MiscCostGridControl CostSource="{Binding ElectricalCostCollection}"
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="5"
                                   ViewModel="{Binding}"/>

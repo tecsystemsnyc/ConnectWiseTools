@@ -107,6 +107,7 @@
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
+    <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
     </Compile>

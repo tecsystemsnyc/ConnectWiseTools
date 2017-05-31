@@ -9,6 +9,13 @@
              mc:Ignorable="d"
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>

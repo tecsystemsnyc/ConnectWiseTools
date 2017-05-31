@@ -11,7 +11,6 @@ namespace TECUserControlLibrary.Utilities
 {
     public class TextBoxEnterKeyUpdateBehavior : AttachableForStyleBehavior<TextBox, TextBoxEnterKeyUpdateBehavior>
     {
-
         protected override void OnAttached()
         {
             if (this.AssociatedObject != null)

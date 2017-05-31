@@ -18,6 +18,9 @@
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible">
