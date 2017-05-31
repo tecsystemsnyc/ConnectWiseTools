@@ -65,39 +65,7 @@
             <TabItem Visibility="Collapsed"/>
             <TabItem Visibility="Collapsed"/>
             <TabItem Header="Misc.">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Misc. Costs" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                        <controls:MiscCostGridControl CostSource="{Binding TECCostCollection}"
-                                  Grid.Row="1" Grid.Column="1"
-                                  Margin="5"
-                                  ViewModel="{Binding}"/>
-
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Misc. Wiring" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                        <controls:MiscCostGridControl CostSource="{Binding ElectricalCostCollection}"
-                                  Grid.Row="1" Grid.Column="1"
-                                  Margin="5"
-                                  ViewModel="{Binding}"/>
-                    </Grid>
-                </Grid>
+                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
             </TabItem>
             
         </TabControl>

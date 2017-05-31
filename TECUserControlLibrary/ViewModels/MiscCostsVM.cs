@@ -40,6 +40,11 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         public MiscCostsVM(TECBid bid)
         {
+            Refresh(bid);
+        }
+
+        public void Refresh(TECBid bid)
+        {
             populateCollections(bid);
             bid.MiscCosts.CollectionChanged += MiscCosts_CollectionChanged;
         }
@@ -66,20 +71,30 @@ namespace TECUserControlLibrary.ViewModels
             var args = e as PropertyChangedExtendedEventArgs<object>;
             if(e.PropertyName == "Type")
             {
-                //TECMisc old = new 
-                if((args.OldValue as TECMisc).Type == CostType.TEC){
+                TECMisc old = args.OldValue as TECMisc;
+                TECMisc current = sender as TECMisc;
+                if (old.Type == CostType.TEC){
                     TECCostCollection.Remove(sender as TECMisc);
-                } else if ((args.OldValue as TECMisc).Type == CostType.TEC)
+                } else if (old.Type == CostType.TEC)
                 {
                     TECCostCollection.Remove(sender as TECMisc);
+                }
+
+                if(current.Type == CostType.TEC)
+                {
+                    TECCostCollection.Add(current);
+                }
+                else if (current.Type == CostType.Electrical)
+                {
+                    ElectricalCostCollection.Add(current);
                 }
             }
         }
 
         private void populateCollections(TECBid bid)
         {
-            ObservableCollection<TECMisc> tecCosts = new ObservableCollection<TECMisc>();
-            ObservableCollection<TECMisc> electricalCosts = new ObservableCollection<TECMisc>();
+            TECCostCollection = new ObservableCollection<TECMisc>();
+            ElectricalCostCollection = new ObservableCollection<TECMisc>();
             foreach(TECMisc misc in bid.MiscCosts)
             {
                 handleAddMisc(misc);
