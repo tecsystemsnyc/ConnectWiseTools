@@ -18,6 +18,10 @@
             <TabItem Header="Electrical Materials">
                 <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialVM}"/>
             </TabItem>
+            <TabItem Header="Labor">
+                <views:LaborView
+                        ViewModel="{Binding LaborVM}"/>
+            </TabItem>
             <TabItem Header="Summary">
                 <views:ReviewView ViewModel="{Binding ReviewVM}"/>
             </TabItem>

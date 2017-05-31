@@ -18,7 +18,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=ControlledScopeSource}"
+        <DataGrid ItemsSource="{Binding Path=SystemSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                   dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">

@@ -107,8 +107,8 @@
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
-    <Compile Include="UserControls\ByLocationControl.xaml.cs">
-      <DependentUpon>ByLocationControl.xaml</DependentUpon>
+    <Compile Include="Views\LocationView.xaml.cs">
+      <DependentUpon>LocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\AssociatedCostsSummaryGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsSummaryGridControl.xaml</DependentUpon>
@@ -177,8 +177,8 @@
     <Compile Include="UserControls\ExclusionsGridControl.xaml.cs">
       <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LocationView.xaml.cs">
-      <DependentUpon>LocationView.xaml</DependentUpon>
+    <Compile Include="UserControls\LocationGridControl.xaml.cs">
+      <DependentUpon>LocationGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
@@ -328,7 +328,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ByLocationControl.xaml">
+    <Page Include="Views\LocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -428,7 +428,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LocationView.xaml">
+    <Page Include="UserControls\LocationGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -152,7 +152,7 @@
                 </TabItem>
                 
                 <TabItem Header="Proposal">
-                    <cLibViews:DocumentBuilderView ViewModel="{Binding}"/>
+                    <cLibViews:ProposalView ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Budget">
                     <cLibViews:BudgetView ViewModel="{Binding BudgetVM}"/>

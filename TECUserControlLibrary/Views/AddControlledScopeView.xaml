@@ -29,17 +29,16 @@
                     <ColumnDefinition Width="1.5*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Controlled Scope"/>
+                <Label Content="Systems"/>
                 <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
             </Grid>
-            <controls:ControlledScopeGridControl SystemSource="{Binding Bid.Systems}"
+            <controls:ControlledScopeGridControl SystemSource="{Binding ScopeSource}"
                                            SelectedItem="{Binding SelectedSystem}"
                                            ViewModel="{Binding}"
                                            Grid.Row="1"/>
-
 
         </Grid>
         <GridSplitter Grid.Column="1" Background="{DynamicResource TextInputBrush}"
@@ -69,7 +68,7 @@
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <Label Content="Systems"/>
+                                <Label Content="Equipment"/>
                                 <views:SystemsGridView SystemsSource="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope.Systems}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
                                   Grid.Row="1"/>
@@ -149,16 +148,15 @@
                             Background="{DynamicResource AlertActionBrush}"
                             Margin="2"/>
                     </Grid>
-
                 </Grid>
             </TabItem>
         </TabControl>
         <Canvas Grid.Column="2" Background="{DynamicResource SectionBackgroundBrush}"
-                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedControlledScope, Converter={utilities:NullToVisibilityConverter}}"
+                Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedSystem, Converter={utilities:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
-                <Label Content="Select a Controlled Scope to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Content="Select a System to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Canvas>
     </Grid>

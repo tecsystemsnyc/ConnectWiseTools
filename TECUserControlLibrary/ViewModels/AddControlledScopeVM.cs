@@ -52,7 +52,6 @@ namespace TECUserControlLibrary.ViewModels
                 else
                 {
                     ControllersPanelsVM.Refresh(new TECSystem());
-
                 }
                 
             }
@@ -283,6 +282,7 @@ namespace TECUserControlLibrary.ViewModels
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
             DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControllededScopeCanExecute);
             _selectedSystem = null;
+            _scopeSource = Bid.Systems;
             DebugVisibility = Visibility.Collapsed;
             setupCatalogCollections();
             setupVMs();
@@ -294,7 +294,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECBid bid)
         {
             Bid = bid;
-            ScopeSource = new ObservableCollection<TECSystem>();
+            ScopeSource = bid.Systems;
             ScopeDataGrid.Refresh(Bid);
             setupCatalogCollections();
             //TECControlledScope refreshedControlledScope = ControlledScope.Copy() as TECControlledScope;
@@ -630,13 +630,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UIHelpers.ControllerInPanelDragOver(dropInfo);
             }
-            else if (sourceType == typeof(TECSystem))
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-            else if (SelectedSystem != null)
+            else 
             {
                 UIHelpers.StandardDragOver(dropInfo);
             }

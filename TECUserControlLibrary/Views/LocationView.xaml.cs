@@ -14,12 +14,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EstimatingUtilitiesLibrary;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for LocationGridControl.xaml
+    /// Interaction logic for ByLocationControl.xaml
     /// </summary>
     public partial class LocationView : UserControl
     {
@@ -27,7 +28,7 @@ namespace TECUserControlLibrary.Views
         #region DPs
 
         /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
+        /// Gets or sets the LocationSource which is displayed
         /// </summary>
         public ObservableCollection<TECLocation> LocationSource
         {
@@ -36,12 +37,60 @@ namespace TECUserControlLibrary.Views
         }
 
         /// <summary>
-        /// Identified the DevicesSource dependency property
+        /// Identified the LocationSource dependency property
         /// </summary>
         public static readonly DependencyProperty LocationSourceProperty =
             DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLocation>),
               typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECLocation>)));
 
+        /// <summary>
+        /// Gets or sets the SystemSource which is displayed
+        /// </summary>
+        public ObservableCollection<TECSystem> SystemsSource
+        {
+            get { return (ObservableCollection<TECSystem>)GetValue(SystemsSourceProperty); }
+            set { SetValue(SystemsSourceProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the SystemSource dependency property
+        /// </summary>
+        public static readonly DependencyProperty SystemsSourceProperty =
+            DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECSystem>),
+              typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+
+
+        /// <summary>
+        /// Gets or sets the EquipmentSource which is displayed
+        /// </summary>
+        public ObservableCollection<TECEquipment> EquipmentSource
+        {
+            get { return (ObservableCollection<TECEquipment>)GetValue(EquipmentSourceProperty); }
+            set { SetValue(EquipmentSourceProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the EquipmentSource dependency property
+        /// </summary>
+        public static readonly DependencyProperty EquipmentSourceProperty =
+            DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
+              typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
+
+        /// <summary>
+        /// Gets or sets the SubScopeSource which is displayed
+        /// </summary>
+        public ObservableCollection<TECSubScope> SubScopeSource
+        {
+            get { return (ObservableCollection<TECSubScope>)GetValue(SubScopeSourceProperty); }
+            set { SetValue(SubScopeSourceProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the SubScopeSource dependency property
+        /// </summary>
+        public static readonly DependencyProperty SubScopeSourceProperty =
+            DependencyProperty.Register("SubScopeSource", typeof(ObservableCollection<TECSubScope>),
+              typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECSubScope>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
@@ -58,6 +107,7 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(LocationVM),
               typeof(LocationView));
+
         #endregion
 
         public LocationView()

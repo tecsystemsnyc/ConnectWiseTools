@@ -75,28 +75,28 @@
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
                 <TabItem Header="Electrical">
-                    <views:ElectricalView
+                    <TabControl>
+                        <TabItem Header="Local">
+                            <views:ElectricalView
                         ViewModel="{Binding ElectricalVM}"/>
-                </TabItem>
-                <TabItem Header="Network">
-                    <views:NetworkView
+                        </TabItem>
+                        <TabItem Header="Network">
+                            <views:NetworkView
                         ViewModel="{Binding NetworkVM}"/>
+                        </TabItem>
+                    </TabControl>
                 </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
                     <views:DrawingView
                         ViewModel="{Binding DrawingVM}"/>
                 </TabItem>
-                <TabItem Header="Labor">
-                    <views:LaborView
-                        ViewModel="{Binding LaborVM}"/>
+                <TabItem Header="Review">
+                    <controls:ReviewTabControl
+                        ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Proposal">
                     <views:ProposalView
                         ViewModel="{Binding ProposalVM}"/>
-                </TabItem>
-                <TabItem Header="Review">
-                    <controls:ReviewTabControl
-                        ViewModel="{Binding}"/>
                 </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
                     <views:SettingsView
