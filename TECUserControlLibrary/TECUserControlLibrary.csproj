@@ -135,8 +135,8 @@
     <Compile Include="UserControls\ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ControlledScopeSystemsGridControl.xaml.cs">
-      <DependentUpon>ControlledScopeSystemsGridControl.xaml</DependentUpon>
+    <Compile Include="UserControls\TypicalInstancedSystemsGridControl.xaml.cs">
+      <DependentUpon>TypicalInstancedSystemsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
@@ -371,7 +371,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ControlledScopeSystemsGridControl.xaml">
+    <Page Include="UserControls\TypicalInstancedSystemsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

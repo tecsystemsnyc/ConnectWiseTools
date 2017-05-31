@@ -49,7 +49,7 @@
                 <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
             </TabItem>
             <TabItem Header="All Systems">
-                <controls:ControlledScopeSystemsGridContol ControlledScopeSource="{Binding Bid.Systems}"
+                <controls:TypicalInstancedSystemsGridControl TypicalSystemsSource="{Binding Bid.Systems}"
                                                   ViewModel="{Binding ScopeDataGrid}"/>
             </TabItem>
             
