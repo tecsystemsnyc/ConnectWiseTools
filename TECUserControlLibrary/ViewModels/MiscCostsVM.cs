@@ -1,7 +1,10 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -27,26 +30,80 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<TECMisc> _electricalCostCollection;
         public ObservableCollection<TECMisc> ElectricalCostCollection
         {
-            get { return _tecCostCollection; }
+            get { return _electricalCostCollection; }
             set
             {
-                _tecCostCollection = value;
-                RaisePropertyChanged("TECCostCollection");
+                _electricalCostCollection = value;
+                RaisePropertyChanged("ElectricalCostCollection");
             }
         }
-        
+
+        private string _miscName;
+        public string MiscName
+        {
+            get { return _miscName; }
+            set
+            {
+                _miscName = value;
+                RaisePropertyChanged("MiscName");
+            }
+        }
+
+        private CostType _miscType;
+        public CostType MiscType
+        {
+            get { return _miscType; }
+            set
+            {
+                _miscType = value;
+                RaisePropertyChanged("MiscType");
+            }
+        }
+
+        private TECBid _bid;
+
+        public ICommand AddNewCommand { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the MiscCostsVM class.
         /// </summary>
         public MiscCostsVM(TECBid bid)
         {
             Refresh(bid);
+            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
+            MiscType = CostType.TEC;
+        }
+
+        private bool addNewCanExecute()
+        {
+            if(MiscName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void addNewExecute()
+        {
+            TECMisc newMisc = new TECMisc();
+            newMisc.Name = MiscName;
+            newMisc.Type = MiscType;
+
+            _bid.MiscCosts.Add(newMisc);
         }
 
         public void Refresh(TECBid bid)
         {
+            if(_bid != null)
+            {
+                _bid.MiscCosts.CollectionChanged -= MiscCosts_CollectionChanged;
+            }
             populateCollections(bid);
             bid.MiscCosts.CollectionChanged += MiscCosts_CollectionChanged;
+            _bid = bid;
         }
 
         private void MiscCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
