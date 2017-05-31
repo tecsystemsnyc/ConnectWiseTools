@@ -63,9 +63,7 @@
 
                     <TextBlock Text="Systems" Foreground="Black" FontSize="20"/>
 
-                    <!--REDO PROPOSAL STUFF-->
-                    <!--<controls:ProposalScopeGridControl ProposalScopeSource="{Binding Bid.ProposalScope}"
-                                                    Grid.Row="1"/>-->
+                    <controls:SystemProposalGridControl SystemsSource="{Binding Bid.Systems}"/>
 
                 </Grid>
             </TabItem>
