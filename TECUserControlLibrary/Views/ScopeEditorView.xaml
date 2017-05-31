@@ -43,7 +43,6 @@
                     Grid.Column="2"
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
-
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Typical Systems">
                 <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
@@ -59,9 +58,7 @@
                                             ViewModel="{Binding LocationDataGrid}"/>
                     </TabItem>
                 </TabControl>
-
             </TabItem>
-
             <TabItem Header="Controllers and Panels">
                 <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
             </TabItem>
