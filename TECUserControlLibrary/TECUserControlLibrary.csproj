@@ -110,6 +110,7 @@
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
+    <Compile Include="ViewModels\DeviceSummaryVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
@@ -279,8 +280,8 @@
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DeviceListControl.xaml.cs">
-      <DependentUpon>DeviceListControl.xaml</DependentUpon>
+    <Compile Include="Views\DeviceSummaryView.xaml.cs">
+      <DependentUpon>DeviceSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DrawingView.xaml.cs">
       <DependentUpon>DrawingView.xaml</DependentUpon>
@@ -587,7 +588,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\DeviceListControl.xaml">
+    <Page Include="Views\DeviceSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

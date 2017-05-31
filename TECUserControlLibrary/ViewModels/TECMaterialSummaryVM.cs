@@ -30,157 +30,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public TECBid Bid { get; private set; }
-
-        #region Device View Properties
-        private Dictionary<Guid, DeviceSummaryItem> deviceDictionary;
-
-        private ObservableCollection<DeviceSummaryItem> _deviceSummaryItems;
-        public ObservableCollection<DeviceSummaryItem> DeviceSummaryItems
-        {
-            get { return _deviceSummaryItems; }
-            set
-            {
-                _deviceSummaryItems = value;
-                RaisePropertyChanged("DeviceSummaryItems");
-            }
-        }
-
-        private Dictionary<Guid, AssociatedCostSummaryItem> deviceAssCostDictionary;
-
-        private ObservableCollection<AssociatedCostSummaryItem> _deviceAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> DeviceAssCostSummaryItems
-        {
-            get { return _deviceAssCostSummaryItems; }
-            set
-            {
-                _deviceAssCostSummaryItems = value;
-                RaisePropertyChanged("DeviceAssCostSummaryItems");
-            }
-        }
-
-        private double _deviceSubTotal;
-        public double DeviceSubTotal
-        {
-            get { return _deviceSubTotal; }
-            set
-            {
-                _deviceSubTotal = value;
-                RaisePropertyChanged("DeviceSubTotal");
-                RaisePropertyChanged("TotalDeviceCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _deviceAssCostSubTotalCost;
-        public double DeviceAssCostSubTotalCost
-        {
-            get { return _deviceAssCostSubTotalCost; }
-            set
-            {
-                _deviceAssCostSubTotalCost = value;
-                RaisePropertyChanged("DeviceAssCostSubTotalCost");
-                RaisePropertyChanged("TotalDeviceCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _deviceAssCostSubTotalLabor;
-        public double DeviceAssCostSubTotalLabor
-        {
-            get { return _deviceAssCostSubTotalLabor; }
-            set
-            {
-                _deviceAssCostSubTotalLabor = value;
-                RaisePropertyChanged("DeviceAssCostSubTotalLabor");
-                RaisePropertyChanged("TotalDeviceLabor");
-                RaisePropertyChanged("TotalLabor");
-            }
-        }
-
-        #region Device Add/Remove/Replace
-        private DeviceSummaryItem _selectedDevice;
-        public DeviceSummaryItem SelectedDevice
-        {
-            get { return _selectedDevice; }
-            set
-            {
-                _selectedDevice = value;
-                RaisePropertyChanged("SelectedDevice");
-            }
-        }
-
-        private TECDevice _newSelectedDevice;
-        public TECDevice NewSelectedDevice
-        {
-            get { return _newSelectedDevice; }
-            set
-            {
-                _newSelectedDevice = value;
-                RaisePropertyChanged("NewSelectedDevice");
-            }
-        }
-
-        public ICommand AddDevice { get; private set; }
-        public ICommand RemoveDevice { get; private set; }
-        public ICommand ReplaceDevice { get; private set; }
-
-        private ICommand _confirm;
-        public ICommand Confirm
-        {
-            get { return _confirm; }
-            set
-            {
-                _confirm = value;
-                RaisePropertyChanged("Confirm");
-            }
-        }
-        public ICommand Cancel { get; private set; }
-
-        private bool _isExpanded;
-        public bool IsExpanded
-        {
-            get { return _isExpanded; }
-            set
-            {
-                _isExpanded = value;
-                RaisePropertyChanged("IsExpanded");
-            }
-        }
-
-        private bool _hasNew;
-        public bool HasNew
-        {
-            get { return _hasNew; }
-            private set
-            {
-                _hasNew = value;
-                RaisePropertyChanged("HasNew");
-            }
-        }
-
-        private string _firstString;
-        public string FirstString
-        {
-            get { return _firstString; }
-            private set
-            {
-                _firstString = value;
-                RaisePropertyChanged("FirstString");
-            }
-        }
-
-        private string _secondString;
-        public string SecondString
-        {
-            get { return _secondString; }
-            set
-            {
-                _secondString = value;
-                RaisePropertyChanged("SecondString");
-            }
-        }
-        #endregion
+        #region View Models
+        public DeviceSummaryVM DeviceSummaryVM { get; private set; }
         #endregion
 
         #region Controller View Properties
@@ -354,7 +205,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return (DeviceSubTotal + DeviceAssCostSubTotalCost);
+                return (DeviceSummaryVM.DeviceSubTotal + DeviceSummaryVM.DeviceAssCostSubTotalCost);
             }
         }
 
@@ -362,7 +213,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return (DeviceAssCostSubTotalLabor);
+                return (DeviceSummaryVM.DeviceAssCostSubTotalLabor);
             }
         }
 
@@ -415,10 +266,7 @@ namespace TECUserControlLibrary.ViewModels
         public TECMaterialSummaryVM(TECBid bid)
         {
             reinitialize(bid);
-            AddDevice = new RelayCommand(AddDeviceExecute);
-            RemoveDevice = new RelayCommand(RemoveDeviceExecute);
-            ReplaceDevice = new RelayCommand(ReplaceDeviceExecute);
-            Cancel = new RelayCommand(CancelExecute);
+            DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
         }
 
         public void Refresh(TECBid bid)
@@ -428,11 +276,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void reinitialize(TECBid bid)
         {
-            Bid = bid;
-            deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
-            DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
-            deviceAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            DeviceAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            DeviceSummaryVM = new DeviceSummaryVM(bid);
 
             controllerAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
             ControllerAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
@@ -443,10 +287,7 @@ namespace TECUserControlLibrary.ViewModels
             PanelAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
 
             MiscCosts = new ObservableCollection<TECMisc>();
-
-            DeviceSubTotal = 0;
-            DeviceAssCostSubTotalCost = 0;
-            DeviceAssCostSubTotalLabor = 0;
+            
             ControllerSubTotal = 0;
             ControllerAssCostSubTotalCost = 0;
             ControllerAssCostSubTotalLabor = 0;
@@ -456,10 +297,6 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostSubTotalCost = 0;
             MiscCostSubTotalLabor = 0;
 
-            foreach (TECSystem sys in bid.Systems)
-            {
-                addSystem(sys);
-            }
             foreach (TECController controller in bid.Controllers)
             {
                 addController(controller);
@@ -489,23 +326,23 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        addSystem(targetObject as TECSystem);
+                        DeviceSummaryVM.AddSystem(targetObject as TECSystem);
                     }
                     else if (targetObject is TECEquipment && referenceObject is TECSystem)
                     {
-                        addEquipment(targetObject as TECEquipment);
+                        DeviceSummaryVM.AddEquipment(targetObject as TECEquipment);
                     }
                     else if (targetObject is TECSubScope && referenceObject is TECEquipment)
                     {
-                        addSubScope(targetObject as TECSubScope);
+                        DeviceSummaryVM.AddSubScope(targetObject as TECSubScope);
                     }
                     else if (targetObject is TECDevice && referenceObject is TECSubScope)
                     {
-                        addDevice(targetObject as TECDevice);
+                        DeviceSummaryVM.AddDevice(targetObject as TECDevice);
                     }
                     else if (targetObject is TECCost && referenceObject is TECDevice)
                     {
-                        addCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
+                        DeviceSummaryVM.AddCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
                     else if (targetObject is TECController && referenceObject is TECBid)
                     {
@@ -533,23 +370,23 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        removeSystem(targetObject as TECSystem);
+                        DeviceSummaryVM.RemoveSystem(targetObject as TECSystem);
                     }
                     else if (targetObject is TECEquipment && referenceObject is TECSystem)
                     {
-                        removeEquipment(targetObject as TECEquipment);
+                        DeviceSummaryVM.RemoveEquipment(targetObject as TECEquipment);
                     }
                     else if (targetObject is TECSubScope && referenceObject is TECEquipment)
                     {
-                        removeSubScope(targetObject as TECSubScope);
+                        DeviceSummaryVM.RemoveSubScope(targetObject as TECSubScope);
                     }
                     else if (targetObject is TECDevice && referenceObject is TECSubScope)
                     {
-                        removeDevice(targetObject as TECDevice);
+                        DeviceSummaryVM.RemoveDevice(targetObject as TECDevice);
                     }
                     else if (targetObject is TECCost && referenceObject is TECDevice)
                     {
-                        removeCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
+                        DeviceSummaryVM.RemoveCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
                     else if (targetObject is TECController && referenceObject is TECBid)
                     {
@@ -583,20 +420,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void DeviceItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-
-                if (args.PropertyName == "Total")
-                {
-                    DeviceSubTotal -= (double)args.OldValue;
-                    DeviceSubTotal += (double)args.NewValue;
-                }
-            }
-        }
-
         private void raiseTotals()
         {
             RaisePropertyChanged("TotalCost");
@@ -605,85 +428,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Add/Remove
-        private void addDevice(TECDevice device)
-        {
-            bool containsDevice = deviceDictionary.ContainsKey(device.Guid);
-            if (containsDevice)
-            {
-                DeviceSubTotal -= deviceDictionary[device.Guid].Total;
-                deviceDictionary[device.Guid].Quantity++;
-                DeviceSubTotal += deviceDictionary[device.Guid].Total;
-            }
-            else
-            {
-                DeviceSummaryItem deviceItem = new DeviceSummaryItem(device);
-                deviceItem.PropertyChanged += DeviceItem_PropertyChanged;
-                deviceDictionary.Add(device.Guid, deviceItem);
-                DeviceSummaryItems.Add(deviceItem);
-                DeviceSubTotal += deviceItem.Total;
-            }
-            foreach (TECCost cost in device.AssociatedCosts)
-            {
-                Tuple<double, double> delta = addCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                DeviceAssCostSubTotalCost += delta.Item1;
-                DeviceAssCostSubTotalLabor += delta.Item2;
-            }
-        }
-
-        private void removeDevice(TECDevice device)
-        {
-            if (deviceDictionary.ContainsKey(device.Guid))
-            {
-                DeviceSubTotal -= deviceDictionary[device.Guid].Total;
-                deviceDictionary[device.Guid].Quantity--;
-                DeviceSubTotal += deviceDictionary[device.Guid].Total;
-                
-                if (deviceDictionary[device.Guid].Quantity < 1)
-                {
-                    deviceDictionary[device.Guid].PropertyChanged -= DeviceItem_PropertyChanged;
-                    DeviceSummaryItems.Remove(deviceDictionary[device.Guid]);
-                    deviceDictionary.Remove(device.Guid);
-                }
-
-                foreach (TECCost cost in device.AssociatedCosts)
-                {
-                    Tuple<double, double> delta = removeCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                    DeviceAssCostSubTotalCost += delta.Item1;
-                    DeviceAssCostSubTotalLabor += delta.Item2;
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Device not found in device dictionary.");
-            }
-        }
-
-        private void addCostToDevices(TECCost cost, TECDevice device)
-        {
-            if (deviceDictionary.ContainsKey(device.Guid))
-            {
-                for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
-                {
-                    Tuple<double, double> delta = addCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                    DeviceAssCostSubTotalCost += delta.Item1;
-                    DeviceAssCostSubTotalLabor += delta.Item2;
-                }
-            }
-        }
-
-        private void removeCostFromDevices(TECCost cost, TECDevice device)
-        {
-            if (deviceDictionary.ContainsKey(device.Guid))
-            {
-                for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
-                {
-                    Tuple<double, double> delta = removeCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                    DeviceAssCostSubTotalCost += delta.Item1;
-                    DeviceAssCostSubTotalLabor += delta.Item2;
-                }
-            }
-        }
-
         private void addController(TECController controller)
         {
             ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
@@ -704,14 +448,14 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addCostToController(TECCost cost)
         {
-            Tuple<double, double> delta = addCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
+            Tuple<double, double> delta = AddCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
             ControllerAssCostSubTotalCost += delta.Item1;
             ControllerAssCostSubTotalLabor += delta.Item2;
         }
 
         private void removeCostFromController(TECCost cost)
         {
-            Tuple<double, double> delta = removeCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
+            Tuple<double, double> delta = RemoveCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
             ControllerAssCostSubTotalCost += delta.Item1;
             ControllerAssCostSubTotalLabor += delta.Item2;
         }
@@ -734,7 +478,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach (TECCost cost in panel.AssociatedCosts)
             {
-                Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+                Tuple<double, double> delta = AddCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
                 PanelAssCostSubTotalCost += delta.Item1;
                 PanelAssCostSubTotalLabor += delta.Item2;
             }
@@ -757,7 +501,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 foreach (TECCost cost in panel.AssociatedCosts)
                 {
-                    Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+                    Tuple<double, double> delta = RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
                     PanelAssCostSubTotalCost += delta.Item1;
                     PanelAssCostSubTotalLabor += delta.Item2;
                 }
@@ -770,14 +514,14 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addCostToPanel(TECCost cost)
         {
-            Tuple<double, double> delta = addCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+            Tuple<double, double> delta = AddCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
             PanelAssCostSubTotalCost += delta.Item1;
             PanelAssCostSubTotalLabor += delta.Item2;
         }
 
         private void removeCostFromPanel(TECCost cost)
         {
-            Tuple<double, double> delta = removeCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+            Tuple<double, double> delta = RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
             PanelAssCostSubTotalCost += delta.Item1;
             PanelAssCostSubTotalLabor += delta.Item2;
         }
@@ -796,55 +540,7 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostSubTotalLabor -= cost.Labor * cost.Quantity;
         }
 
-        private void addSubScope(TECSubScope ss)
-        {
-            foreach(TECDevice dev in ss.Devices)
-            {
-                addDevice(dev);
-            }
-        }
-
-        private void removeSubScope(TECSubScope ss)
-        {
-            foreach(TECDevice dev in ss.Devices)
-            {
-                removeDevice(dev);
-            }
-        }
-
-        private void addEquipment(TECEquipment equip)
-        {
-            foreach(TECSubScope ss in equip.SubScope)
-            {
-                addSubScope(ss);
-            }
-        }
-
-        private void removeEquipment(TECEquipment equip)
-        {
-            foreach (TECSubScope ss in equip.SubScope)
-            {
-                removeSubScope(ss);
-            }
-        }
-
-        private void addSystem(TECSystem sys)
-        {
-            foreach(TECEquipment equip in sys.Equipment)
-            {
-                addEquipment(equip);
-            }
-        }
-
-        private void removeSystem(TECSystem sys)
-        {
-            foreach (TECEquipment equip in sys.Equipment)
-            {
-                removeEquipment(equip);
-            }
-        }
-
-        private Tuple<double, double> addCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        static public Tuple<double, double> AddCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;
@@ -868,7 +564,7 @@ namespace TECUserControlLibrary.ViewModels
             return Tuple.Create(costChange, laborChange);
         }
 
-        private Tuple<double, double> removeCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;
@@ -896,136 +592,19 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        #region Commands Methods
-        private void AddDeviceExecute()
+        #region Event Handlers
+        private void DeviceSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Confirm = new RelayCommand(ConfirmAddDeviceExecute, AddDeviceCanConfirm);
-            FirstString = "For all";
-            SecondString = "add";
-            HasNew = true;
-            IsExpanded = true;
-        }
-        private void RemoveDeviceExecute()
-        {
-            Confirm = new RelayCommand(ConfirmRemoveDeviceExecute, RemoveDeviceCanConfirm);
-            FirstString = "Remove all";
-            SecondString = "from Bid";
-            HasNew = false;
-            IsExpanded = true;
-        }
-        private void ReplaceDeviceExecute()
-        {
-            Confirm = new RelayCommand(ConfirmReplaceDeviceExecute, ReplaceDeviceCanConfirm);
-            FirstString = "Replace all";
-            SecondString = "with";
-            HasNew = true;
-            IsExpanded = true;
-        }
-
-        private void ConfirmAddDeviceExecute()
-        {
-            foreach(TECSystem system in Bid.Systems)
+            if (e.PropertyName == "DeviceSubTotal" || e.PropertyName == "DeviceAssCostSubTotalCost")
             {
-                foreach(TECEquipment equip in system.Equipment)
-                {
-                    foreach(TECSubScope ss in equip.SubScope)
-                    {
-                        int devicesToAdd = 0;
-                        foreach(TECDevice dev in ss.Devices)
-                        {
-                            if (dev.Guid == SelectedDevice.Device.Guid)
-                            {
-                                devicesToAdd += 1;
-                            }
-                        }
-                        for (int i = 0; i < devicesToAdd; i++)
-                        {
-                            ss.Devices.Add(NewSelectedDevice);
-                        }
-                    }
-                }
+                RaisePropertyChanged("TotalDeviceCost");
+                raiseTotals();
             }
-            IsExpanded = false;
-        }
-        private bool AddDeviceCanConfirm()
-        {
-            return ((SelectedDevice != null) && (NewSelectedDevice != null));
-        }
-
-        private void ConfirmRemoveDeviceExecute()
-        {
-            foreach(TECSystem system in Bid.Systems)
+            else if (e.PropertyName == "DeviceAssCostSubTotalLabor")
             {
-                foreach(TECEquipment equip in system.Equipment)
-                {
-                    foreach(TECSubScope ss in equip.SubScope)
-                    {
-                        List<TECDevice> devicesToRemove = new List<TECDevice>();
-                        foreach(TECDevice dev in ss.Devices)
-                        {
-                            if (dev.Guid == SelectedDevice.Device.Guid)
-                            {
-                                devicesToRemove.Add(dev);
-                            }
-                        }
-                        foreach(TECDevice dev in devicesToRemove)
-                        {
-                            ss.Devices.Remove(dev);
-                        }
-                        if (SelectedDevice == null)
-                        {
-                            IsExpanded = false;
-                            return;
-                        }
-                    }
-                }
+                RaisePropertyChanged("TotalDeviceLabor");
+                raiseTotals();
             }
-            IsExpanded = false;
-        }
-        private bool RemoveDeviceCanConfirm()
-        {
-            return (SelectedDevice != null);
-        }
-
-        private void ConfirmReplaceDeviceExecute()
-        {
-            foreach (TECSystem system in Bid.Systems)
-            {
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        List<TECDevice> devicesToRemove = new List<TECDevice>();
-                        foreach (TECDevice dev in ss.Devices)
-                        {
-                            if (dev.Guid == SelectedDevice.Device.Guid)
-                            {
-                                devicesToRemove.Add(dev);
-                            }
-                        }
-                        foreach (TECDevice dev in devicesToRemove)
-                        {
-                            ss.Devices.Remove(dev);
-                            ss.Devices.Add(NewSelectedDevice);
-                        }
-                        if (SelectedDevice == null)
-                        {
-                            IsExpanded = false;
-                            return;
-                        }
-                    }
-                }
-            }
-            IsExpanded = false;
-        }
-        private bool ReplaceDeviceCanConfirm()
-        {
-            return ((NewSelectedDevice != null) && (SelectedDevice != null));
-        }
-
-        private void CancelExecute()
-        {
-            IsExpanded = false;
         }
         #endregion
     }
