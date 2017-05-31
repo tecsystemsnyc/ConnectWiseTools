@@ -293,6 +293,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         private Visibility _miscCostVisibility;
+
+        public Visibility MiscWiringVisibility
+        {
+            get { return _miscWiringVisibility; }
+            set
+            {
+                _miscWiringVisibility = value;
+                RaisePropertyChanged("MiscWiringVisibility");
+            }
+        }
+        private Visibility _miscWiringVisibility;
         #endregion //Visibility Properties
 
         #region Device Interface Properties
@@ -629,6 +640,17 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscCostsCollection = value;
                 RaisePropertyChanged("MiscCostsCollection");
+            }
+        }
+
+        private ObservableCollection<TECMisc> _miscWiringCollection;
+        public ObservableCollection<TECMisc> MiscWiringCollection
+        {
+            get { return _miscWiringCollection; }
+            set
+            {
+                _miscWiringCollection = value;
+                RaisePropertyChanged("MiscWiringCollection");
             }
         }
         #endregion
@@ -1190,7 +1212,14 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach (TECMisc cost in Templates.MiscCostTemplates)
             {
-                MiscCostsCollection.Add(cost);
+                if (cost.Type == CostType.TEC)
+                {
+                    MiscCostsCollection.Add(cost);
+                }
+                else if (cost.Type == CostType.Electrical)
+                {
+                    MiscWiringCollection.Add(cost);
+                }
             }
         }
 
@@ -1365,14 +1394,30 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.NewItems)
                 {
-                    MiscCostsCollection.Add(item as TECMisc);
+                    TECMisc misc = item as TECMisc;
+                    if (misc.Type == CostType.TEC)
+                    {
+                        MiscCostsCollection.Add(misc);
+                    }
+                    else if (misc.Type == CostType.Electrical)
+                    {
+                        MiscWiringCollection.Add(misc);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    MiscCostsCollection.Remove(item as TECMisc);
+                    TECMisc misc = item as TECMisc;
+                    if (misc.Type == CostType.TEC)
+                    {
+                        MiscCostsCollection.Remove(misc);
+                    }
+                    else if (misc.Type == CostType.Electrical)
+                    {
+                        MiscWiringCollection.Remove(misc);
+                    }
                 }
             }
         }
