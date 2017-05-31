@@ -17,25 +17,19 @@ using System.Windows.Shapes;
 
 namespace TECUserControlLibrary.UserControls
 {
-    /// <summary>
-    /// Interaction logic for ControlledScopeDataGrid.xaml
-    /// </summary>
+    
     public partial class ControlledScopeGridControl : UserControl
     {
         #region DPs
 
-        /// <summary>
-        /// Gets or sets the ControlledScopeSource which is displayed
-        /// </summary>
+        
         public ObservableCollection<TECSystem> SystemSource
         {
             get { return (ObservableCollection<TECSystem>)GetValue(SystemSourceProperty); }
             set { SetValue(SystemSourceProperty, value); }
         }
 
-        /// <summary>
-        /// Identified the ControlledScopeSource dependency property
-        /// </summary>
+        
         public static readonly DependencyProperty SystemSourceProperty =
             DependencyProperty.Register("SystemSource", typeof(ObservableCollection<TECSystem>),
               typeof(ControlledScopeGridControl), new PropertyMetadata(default(ObservableCollection<TECSystem>)));

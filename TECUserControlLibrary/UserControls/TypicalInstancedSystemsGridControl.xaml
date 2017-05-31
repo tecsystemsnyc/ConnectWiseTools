@@ -20,7 +20,7 @@
     </UserControl.Resources>
     
     <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding ElementName=parent, Path=ControlledScopeSource}" 
+        <DataGrid ItemsSource="{Binding ElementName=parent, Path=TypicalSystemsSource}" 
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedTypicalSystem, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
                   dd:DragDrop.DropHandler="{Binding}"
