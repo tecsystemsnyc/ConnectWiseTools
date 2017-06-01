@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
         mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
         <!--<Label Content="Wiring"/>-->
         <Label Content="Wiring"/>
-        <controls:ConnectionGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+        <views:ConnectionView ViewModel="{Binding ElementName=parent, Path=ViewModel.ConnectionVM}"
                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1"
                               Margin="5"/>
     </Grid>

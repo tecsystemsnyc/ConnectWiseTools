@@ -21,7 +21,7 @@
         <controls:ControllerInPanelGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Row="1"
                                                  Margin="5"/>
         <Label Content="Panels" Grid.Column="1"/>
-        <controls:PanelsGridControl PanelsSource="{Binding Bid.Panels}"
+        <controls:PanelsGridControl PanelsSource="{Binding ElementName=parent, Path=ViewModel.PanelsSource}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Column="1" Grid.Row="1"
                                       Margin="5"/>
     </Grid>

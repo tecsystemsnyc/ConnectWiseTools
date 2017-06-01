@@ -49,6 +49,15 @@ namespace TECUserControlLibrary.ViewModels
 
         private ObservableCollection<TECController> sourceControllers;
         private ObservableCollection<TECPanel> sourcePanels;
+        public ObservableCollection<TECPanel> PanelsSource
+        {
+            get { return sourcePanels; }
+            set
+            {
+                sourcePanels = value;
+                RaisePropertyChanged("PanelsSource");
+            }
+        }
 
         private TECController _selectedController;
         public TECController SelectedController
@@ -152,14 +161,14 @@ namespace TECUserControlLibrary.ViewModels
         public ControllersPanelsVM(TECBid bid)
         {
             sourceControllers = bid.Controllers;
-            sourcePanels = bid.Panels;
+            PanelsSource = bid.Panels;
             Bid = bid;
             setup();
         }
         public ControllersPanelsVM(TECSystem system)
         {
             sourceControllers = system.Controllers;
-            sourcePanels = system.Panels;
+            PanelsSource = system.Panels;
             SelectedSystem = system;
             setup();
         }
@@ -169,14 +178,14 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECBid bid)
         {
             sourceControllers = bid.Controllers;
-            sourcePanels = bid.Panels;
+            PanelsSource = bid.Panels;
             Bid = bid;
             setup();
         }
         public void Refresh(TECSystem system)
         {
             sourceControllers = system.Controllers;
-            sourcePanels = system.Panels;
+            PanelsSource = system.Panels;
             SelectedSystem = system;
             setup();
         }

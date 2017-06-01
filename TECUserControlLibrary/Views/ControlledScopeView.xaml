@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
@@ -81,7 +82,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Connections"/>
-            <controls:ConnectionGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+            <views:ConnectionView ViewModel="{Binding ElementName=parent, Path=ViewModel.ConnectionVM}"
                              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"/>
         </Grid>
         <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="2"/>

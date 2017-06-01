@@ -14,21 +14,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for ConnectionGrid.xaml
     /// </summary>
-    public partial class ConnectionGridControl : UserControl
+    public partial class ConnectionView : UserControl
     {
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public ConnectionVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (ConnectionVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -36,10 +37,10 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ConnectionGridControl));
+            DependencyProperty.Register("ViewModel", typeof(ConnectionVM),
+              typeof(ConnectionView));
 
-        public ConnectionGridControl()
+        public ConnectionView()
         {
             InitializeComponent();
         }

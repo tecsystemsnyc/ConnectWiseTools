@@ -84,7 +84,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Connections"/>
-                                <controls:ConnectionGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                <views:ConnectionView ViewModel="{Binding ElementName=parent, Path=ViewModel.ConnectionVM}"
                                   Grid.Row="1"/>
                             </Grid>
                         </TabItem>
