@@ -91,7 +91,7 @@ namespace EstimatingLibrary
 
         public override object DragDropCopy()
         {
-            throw new NotImplementedException();
+            return this.Copy();
         }
 
         private void TECCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

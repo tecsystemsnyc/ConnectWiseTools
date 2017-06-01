@@ -75,7 +75,7 @@
                     <StackPanel>
                         <Label Content="Points" FontSize="10"/>
                         <local:SubScopeGridView SubScopeSource="{Binding SubScope}"
-                                                   ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ChildVM}"
                                                    Margin="30,0,0,0"/>
                     </StackPanel>
                 </DataTemplate>
