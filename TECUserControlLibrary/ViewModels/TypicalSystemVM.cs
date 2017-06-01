@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class AddControlledScopeVM : ViewModelBase, IDropTarget
+    public class TypicalSystemVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECSystem _selectedSystem;
@@ -141,7 +141,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <summary>
         /// Initializes a new instance of the AddControlledScopeExtension class.
         /// </summary>
-        public AddControlledScopeVM(TECBid bid)
+        public TypicalSystemVM(TECBid bid)
         {
             _bid = bid;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);

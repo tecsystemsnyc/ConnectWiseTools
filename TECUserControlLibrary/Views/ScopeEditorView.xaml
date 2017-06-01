@@ -45,7 +45,7 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Typical Systems">
-                <views:AddControlledScopeView ViewModel="{Binding AddControlledScopeTab}"/>
+                <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
             </TabItem>
             <TabItem Header="Instances">
                 <TabControl>
