@@ -32,14 +32,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private TECBid _bid;
-        public TECBid Bid
+        private TECScopeManager _scopeManager;
+        public TECScopeManager ScopeManager
         {
-            get { return _bid; }
+            get { return _scopeManager; }
             set
             {
-                _bid = value;
-                RaisePropertyChanged("Bid");
+                _scopeManager = value;
+                RaisePropertyChanged("ScopeManager");
             }
         }
 
@@ -97,16 +97,16 @@ namespace TECUserControlLibrary.ViewModels
         /// <summary>
         /// Initializes a new instance of the ConnectionVM class.
         /// </summary>
-        public ConnectionVM(TECBid bid)
+        public ConnectionVM(TECScopeManager scopeManager)
         {
-            _bid = bid;
+            _scopeManager = scopeManager;
             _selectedSystem = null;
             setupCatalogCollections();
         }
 
-        public void Refresh(TECBid bid)
+        public void Refresh(TECScopeManager scopeManager)
         {
-            _bid = bid;
+            ScopeManager = scopeManager;
             setupCatalogCollections();
         }
         
@@ -145,7 +145,7 @@ namespace TECUserControlLibrary.ViewModels
             noneConduit.Name = "None";
             NoneConduitType = noneConduit;
             ConduitTypeSelections.Add(NoneConduitType);
-            foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
+            foreach (TECConduitType type in ScopeManager.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
             }

@@ -33,7 +33,8 @@
                 <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
-                          VerticalContentAlignment="Center"/>
+                          VerticalContentAlignment="Center"
+                          Visibility="{Binding InstanceVisibility}"/>
             </Grid>
             <controls:ControlledScopeGridControl SystemSource="{Binding ScopeSource}"
                                            SelectedItem="{Binding SelectedSystem}"

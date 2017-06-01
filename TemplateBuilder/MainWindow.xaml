@@ -24,7 +24,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
-                <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -75,7 +74,7 @@
                 <TabItem Header="None" Visibility="Collapsed">
                 </TabItem>
                 <TabItem Header="Controlled Scope">
-                    <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
+                    <views:TypicalSystemsView ViewModel="{Binding ElementName=root, Path=DataContext.TypicalSystemsTab}"/>
                 </TabItem>
                 <TabItem Header="Systems">
                     <views:SystemsGridView SystemsSource="{Binding Templates.SystemTemplates}"

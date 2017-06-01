@@ -259,7 +259,6 @@
     <Compile Include="ViewModels\StatusBarVM.cs" />
     <Compile Include="BaseVMs\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetVM.cs" />
-    <Compile Include="ViewModels\ControlledScopeVM.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="Views\BudgetView.xaml.cs">
       <DependentUpon>BudgetView.xaml</DependentUpon>
@@ -274,9 +273,6 @@
     </Compile>
     <Compile Include="Views\ConstantsView.xaml.cs">
       <DependentUpon>ConstantsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ControlledScopeView.xaml.cs">
-      <DependentUpon>ControlledScopeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
@@ -580,10 +576,6 @@
     <Page Include="Views\ConstantsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ControlledScopeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControllersPanelsView.xaml">
       <SubType>Designer</SubType>

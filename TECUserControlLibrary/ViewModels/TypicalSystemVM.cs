@@ -65,7 +65,18 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Bid");
             }
         }
-        
+
+        private TECTemplates _templates;
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                RaisePropertyChanged("Templates");
+            }
+        }
+
         private TECSystem _selectedChild;
         public TECSystem SelectedChild
         {
@@ -120,9 +131,21 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _debugVisibility = value;
+                RaisePropertyChanged("DebugVisibility");
             }
         }
-        
+
+        private Visibility _instanceVisibility;
+        public Visibility InstanceVisibility
+        {
+            get { return _instanceVisibility; }
+            set
+            {
+                _instanceVisibility = value;
+                RaisePropertyChanged("InstanceVisibility");
+            }
+        }
+
         #region VM Extenstions
         public EquipmentVM ScopeDataGrid { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
@@ -149,23 +172,41 @@ namespace TECUserControlLibrary.ViewModels
             _selectedSystem = null;
             _scopeSource = Bid.Systems;
             DebugVisibility = Visibility.Collapsed;
-            setupVMs();
+            InstanceVisibility = Visibility.Visible;
+            setupVMs(Bid);
         }
-        
+        public TypicalSystemVM(TECTemplates templates)
+        {
+            _templates = templates;
+            AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
+            DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControlledScopeCanExecute);
+            _selectedSystem = null;
+            _scopeSource = Templates.SystemTemplates;
+            DebugVisibility = Visibility.Collapsed;
+            InstanceVisibility = Visibility.Collapsed;
+            setupVMs(Templates);
+        }
+
         #endregion
 
         #region Methods
-        public void Refresh(TECBid bid)
+        public void Refresh(TECScopeManager scopeManager)
         {
-            Bid = bid;
-            ScopeSource = bid.Systems;
-            ScopeDataGrid.Refresh(Bid);
-            ConnectionVM.Refresh(Bid);
-            
+            if(scopeManager is TECBid)
+            {
+                Bid = scopeManager as TECBid;
+                ScopeSource = Bid.Systems;
+            } else
+            {
+                Templates = scopeManager as TECTemplates;
+                ScopeSource = Templates.SystemTemplates;
+            }
+            ScopeDataGrid.Refresh(scopeManager);
+            ConnectionVM.Refresh(scopeManager);
         }
-        private void setupVMs()
+        private void setupVMs(TECScopeManager scopeManager)
         {
-            ScopeDataGrid = new EquipmentVM(Bid);
+            ScopeDataGrid = new EquipmentVM(scopeManager);
             ScopeDataGrid.SelectionChanged += SelectionChanged;
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
@@ -184,7 +225,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
             ControllersPanelsVM = new ControllersPanelsVM(new TECSystem());
-            ConnectionVM = new ConnectionVM(Bid);
+            ConnectionVM = new ConnectionVM(scopeManager);
         }
 
         private void addControlledScopeExecute()
@@ -247,8 +288,15 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
                 var controlledScopeToAdd = new TECSystem(dropInfo.Data as TECSystem, guidDictionary);
-                ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Bid, guidDictionary);
-                Bid.Systems.Add(controlledScopeToAdd);
+                if(Bid != null)
+                {
+                    ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Bid, guidDictionary);
+                    Bid.Systems.Add(controlledScopeToAdd);
+                } else if(Templates != null)
+                {
+                    ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Templates, guidDictionary);
+                    Templates.SystemTemplates.Add(controlledScopeToAdd);
+                }
             }
             else if (dropInfo.Data is TECController)
             {
