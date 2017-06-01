@@ -37,7 +37,8 @@
             <controls:MiscCostGridControl CostSource="{Binding TECCostCollection}"
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="0,0,5,0"
-                                  ViewModel="{Binding}"/>
+                                  ViewModel="{Binding}"
+                                          UserCanAddRows="False"/>
 
         </Grid>
         <Grid Grid.Column="1">
@@ -51,6 +52,7 @@
             <controls:MiscCostGridControl CostSource="{Binding ElectricalCostCollection}"
                                   Grid.Row="1" Grid.Column="1"
                                   Margin="5,0,0,0"
+                                          UserCanAddRows="False"
                                   ViewModel="{Binding}"/>
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">

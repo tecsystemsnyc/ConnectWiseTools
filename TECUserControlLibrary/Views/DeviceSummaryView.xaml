@@ -48,8 +48,8 @@
             </Grid.ColumnDefinitions>
             
             <DataGrid Grid.ColumnSpan="3" ItemsSource="{Binding DeviceSummaryItems}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
                       SelectedItem="{Binding SelectedDevice}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Device.Name}" Width="Auto" MinWidth="50"/>
@@ -61,9 +61,9 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Button Content="Add" Command="{Binding AddDevice}" Grid.Row="1" Margin="5"/>
-            <Button Content="Remove" Command="{Binding RemoveDevice}" Grid.Row="1" Grid.Column="1" Margin="5"/>
-            <Button Content="Replace" Command="{Binding ReplaceDevice}" Grid.Row="1" Grid.Column="2" Margin="5"/>
+            <Button Content="Add" Command="{Binding AddDeviceCommand}" Grid.Row="1" Margin="5"/>
+            <Button Content="Remove" Command="{Binding RemoveDeviceCommand}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+            <Button Content="Replace" Command="{Binding ReplaceDeviceCommand}" Grid.Row="1" Grid.Column="2" Margin="5"/>
 
             <Grid MaxHeight="300" Margin="5" Grid.Row="2" Grid.ColumnSpan="3" Visibility="{Binding IsExpanded, Converter={utilities:BooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
@@ -87,8 +87,8 @@
                 <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding NewSelectedDevice.Name, Converter={utilities:StringToQuoteConverter}}"
                            Visibility="{Binding HasNew, Converter={utilities:BooleanToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <Button Content="Confirm" Command="{Binding Confirm}" Grid.Row="1" Grid.Column="4" Margin="5"/>
-                <Button Content="Cancel" Command="{Binding Cancel}" Grid.Row="1" Grid.Column="5" Margin="5"/>
+                <Button Content="Confirm" Command="{Binding ConfirmCommand}" Grid.Row="1" Grid.Column="4" Margin="5"/>
+                <Button Content="Cancel" Command="{Binding CancelCommand}" Grid.Row="1" Grid.Column="5" Margin="5"/>
 
             </Grid>
             <Border Margin="5" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1"/>

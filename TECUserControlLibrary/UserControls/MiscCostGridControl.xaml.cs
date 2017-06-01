@@ -39,6 +39,17 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("CostSource", typeof(ObservableCollection<TECMisc>),
               typeof(MiscCostGridControl), new PropertyMetadata(default(ObservableCollection<TECMisc>)));
 
+        
+        public bool UserCanAddRows
+        {
+            get { return (bool)GetValue(UserCanAddRowsProperty); }
+            set { SetValue(UserCanAddRowsProperty, value); }
+        }
+        
+        public static readonly DependencyProperty UserCanAddRowsProperty =
+            DependencyProperty.Register("UserCanAddRows", typeof(bool),
+              typeof(MiscCostGridControl), new PropertyMetadata(true));
+
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>

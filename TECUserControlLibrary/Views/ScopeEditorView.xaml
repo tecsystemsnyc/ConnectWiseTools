@@ -62,7 +62,8 @@
             <TabItem Header="Controllers and Panels">
                 <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
             </TabItem>
-
+            <!--Old Location-->
+            <TabItem Visibility="Collapsed"/>
             <!--Proposal And Budget-->
             <TabItem Visibility="Collapsed"/>
             <TabItem Visibility="Collapsed"/>

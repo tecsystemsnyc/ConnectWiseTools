@@ -19,9 +19,10 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid ItemsSource="{Binding ElementName=parent, Path=CostSource}"
-                                  Grid.Row="1" Grid.Column="1"
-                                  AutoGenerateColumns="False"
-                                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
+                  Grid.Row="1" Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="{Binding ElementName=parent, Path=UserCanAddRows}"
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>

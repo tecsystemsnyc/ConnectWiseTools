@@ -20,10 +20,10 @@
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>
             <TabItem Header="TEC Materials">
-                <views:TECMaterialSummaryView ViewModel="{Binding TECMaterialVM}"/>
+                <views:TECMaterialSummaryView ViewModel="{Binding TECMaterialSummaryVM}"/>
             </TabItem>
             <TabItem Header="Electrical Materials">
-                <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialVM}"/>
+                <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialSummaryVM}"/>
             </TabItem>
             <TabItem Header="Labor">
                 <views:LaborView
