@@ -23,10 +23,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (_changeWatcher != null)
                 {
-                    _changeWatcher.Changed -= bidChanged;
+                    _changeWatcher.InstanceChanged -= bidChanged;
                 }
                 _changeWatcher = value;
-                _changeWatcher.Changed += bidChanged;
+                _changeWatcher.InstanceChanged += bidChanged;
             }
         }
 
