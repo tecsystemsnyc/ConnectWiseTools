@@ -21,202 +21,57 @@ namespace TECUserControlLibrary.ViewModels
             get { return _bid; }
             set
             {
-                if(Bid != null)
-                {
-                    Bid.Controllers.CollectionChanged -= collectionChanged;
-                }
                 _bid = value;
-                registerSubScope();
                 RaisePropertyChanged("Bid");
-                Bid.Controllers.CollectionChanged += collectionChanged;
+            }
+        }
+        
+        public ConnectionVM ConnectionVM { get; set; }
+        public SystemsVM SystemsVM { get; set; }
 
-            }
-        }
-
-        private ObservableCollection<TECController> _controllerSelections;
-        public ObservableCollection<TECController> ControllerSelections
+        private TECSystem _selectedSystem;
+        public TECSystem SelectedSystem
         {
-            get { return _controllerSelections; }
+            get { return _selectedSystem; }
             set
             {
-                _controllerSelections = value;
-                RaisePropertyChanged("ControllerSelections");
-            }
-        }
-        private ObservableCollection<SubScopeConnection> _subScopeConnectionCollection;
-        public ObservableCollection<SubScopeConnection> SubScopeConnectionCollection
-        {
-            get { return _subScopeConnectionCollection; }
-            set
-            {
-                _subScopeConnectionCollection = value;
-                RaisePropertyChanged("SubScopeConnectionCollection");
-            }
-        }
-        private ObservableCollection<TECConduitType> _conduitTypeSelections;
-        public ObservableCollection<TECConduitType> ConduitTypeSelections
-        {
-            get { return _conduitTypeSelections; }
-            set
-            {
-                _conduitTypeSelections = value;
-                RaisePropertyChanged("ConduitTypeSelections");
-            }
-        }
-
-        private TECController _noneController;
-        public TECController NoneController
-        {
-            get { return _noneController; }
-            set
-            {
-                _noneController = value;
-                RaisePropertyChanged("NoneController");
-            }
-        }
-        private TECConduitType _noneConduitType;
-        public TECConduitType NoneConduitType
-        {
-            get { return _noneConduitType; }
-            set
-            {
-                _noneConduitType = value;
-                RaisePropertyChanged("NoneConduitType");
+                _selectedSystem = value;
+                RaisePropertyChanged("SelectedSystem");
+                if(ConnectionVM != null)
+                {
+                    ConnectionVM.SelectedSystem = SelectedSystem;
+                }
             }
         }
 
         public ElectricalVM(TECBid bid)
         {
-            setupNoneObjects();
-            Refresh(bid);
+            Bid = bid;
+            ConnectionVM = new ConnectionVM(bid);
+            SystemsVM = new SystemsVM(bid);
+            SystemsVM.SelectionChanged += selectionChanged;
+            SystemsVM.DataGridVisibilty.SystemExpander = System.Windows.Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemModifierPrice = System.Windows.Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemPointNumber = System.Windows.Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemQuantity = System.Windows.Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemSubScopeCount = System.Windows.Visibility.Collapsed; 
+            SystemsVM.DataGridVisibilty.SystemTotalPrice = System.Windows.Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemUnitPrice = System.Windows.Visibility.Collapsed;
         }
 
         public void Refresh(TECBid bid)
         {
             Bid = bid;
-            ConduitTypeSelections = new ObservableCollection<TECConduitType>();
-            
-            ConduitTypeSelections.Add(NoneConduitType);
-            foreach (TECConduitType type in Bid.Catalogs.ConduitTypes)
-            {
-                ConduitTypeSelections.Add(type);
-            }
-            populateControllerSelections();
-            populateSubScopeConnections();
-        }
-        private void registerSubScope()
-        {
-            Bid.Systems.CollectionChanged += collectionChanged;
-            foreach (TECSystem sys in Bid.Systems)
-            {
-                sys.Equipment.CollectionChanged += collectionChanged;
-
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    equip.SubScope.CollectionChanged += collectionChanged;
-                }
-            }
-        }
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            bool updateScope = false;
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    if (item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged += collectionChanged;
-                        foreach (TECEquipment equip in (item as TECSystem).Equipment)
-                        {
-                            equip.SubScope.CollectionChanged += collectionChanged;
-                        }
-                        updateScope = true;
-                    }
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged += collectionChanged;
-                        updateScope = true;
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        updateScope = true;
-                    }
-                    else if (item is TECController)
-                    {
-                        ControllerSelections.Add(item as TECController);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    if (item is TECSystem)
-                    {
-                        (item as TECSystem).Equipment.CollectionChanged -= collectionChanged;
-                        updateScope = true;
-                    }
-                    else if (item is TECEquipment)
-                    {
-                        (item as TECEquipment).SubScope.CollectionChanged -= collectionChanged;
-                        updateScope = true;
-                    }
-                    else if (item is TECSubScope)
-                    {
-                        updateScope = true;
-                    }
-                    else if (item is TECController)
-                    {
-                        ControllerSelections.Remove(item as TECController);
-                    }
-                }
-            }
-            if (updateScope)
-            {
-                populateSubScopeConnections();
-            }
-            
+            ConnectionVM.Refresh(bid);
+            SystemsVM.Refresh(bid);
         }
 
-        private void populateControllerSelections()
+        private void selectionChanged(object item)
         {
-            ControllerSelections = new ObservableCollection<TECController>();
-            ControllerSelections.Add(NoneController);
-            foreach (TECController controller in Bid.Controllers)
+            if(item is TECSystem)
             {
-                ControllerSelections.Add(controller);
+                SelectedSystem = item as TECSystem;
             }
-        }
-        private void populateSubScopeConnections()
-        {
-            SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
-            foreach (TECSystem system in Bid.Systems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        var subConnectionToAdd = new SubScopeConnection(subScope);
-
-                        subConnectionToAdd.ParentSystem = system;
-                        subConnectionToAdd.ParentEquipment = equipment;
-
-                        SubScopeConnectionCollection.Add(subConnectionToAdd);
-                    }
-                }
-            }
-        }
-
-        private void setupNoneObjects()
-        {
-            TECController noneController = new TECController(new TECManufacturer());
-            noneController.Name = "None";
-            NoneController = noneController;
-
-            TECConduitType noneConduitType = new TECConduitType();
-            noneConduitType.Name = "None";
-            NoneConduitType = noneConduitType;
         }
 
         public void DragOver(IDropInfo dropInfo)

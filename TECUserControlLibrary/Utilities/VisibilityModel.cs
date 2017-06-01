@@ -120,6 +120,17 @@ namespace TECUserControlLibrary.Utilities
                 RaisePropertyChanged("SystemTotalPrice");
             }
         }
+
+        private Visibility _systemExpander;
+        public Visibility SystemExpander
+        {
+            get { return _systemExpander; }
+            set
+            {
+                _systemExpander = value;
+                RaisePropertyChanged("SystemExpander");
+            }
+        }
         #endregion
 
         #region Equipment Datagrid Visibilities
@@ -280,6 +291,7 @@ namespace TECUserControlLibrary.Utilities
             SystemUnitPrice = Visibility.Visible;
             SystemModifierPrice = Visibility.Visible;
             SystemTotalPrice = Visibility.Visible;
+            SystemExpander = Visibility.Visible;
 
             EquipmentName = Visibility.Visible;
             EquipmentDescription = Visibility.Visible;

@@ -34,7 +34,9 @@
                   Grid.Row="1">
             
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 
+                                        Visibility="{Binding Data.DataGridVisibilty.SystemExpander, 
+                                    Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" Header="Name" Width="Auto" MinWidth="40"
                                     Visibility="{Binding Data.DataGridVisibilty.SystemName, 
                                     Source={StaticResource proxy}}"/>
