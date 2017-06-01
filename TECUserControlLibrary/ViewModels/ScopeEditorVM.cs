@@ -69,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
         public EditTabVM EditTab { get; set; }
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
-        public AddControlledScopeVM AddControlledScopeTab { get; set; }
+        public TypicalSystemVM TypicalSystemsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         #endregion
 
@@ -129,7 +129,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.Refresh(Bid);
             LocationDataGrid.Refresh(Bid);
             ControllersPanelsTab.Refresh(Bid);
-            AddControlledScopeTab.Refresh(Bid);
+            TypicalSystemsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
@@ -191,9 +191,9 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupAddControlledScope()
         {
-            AddControlledScopeTab = new AddControlledScopeVM(Bid);
-            AddControlledScopeTab.SelectionChanged += EditTab.updateSelection;
-            AddControlledScopeTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab = new TypicalSystemVM(Bid);
+            TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupMiscVM()
         {

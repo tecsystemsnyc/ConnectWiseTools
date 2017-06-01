@@ -23,7 +23,7 @@
         <DataGrid ItemsSource="{Binding ElementName=parent, Path=TypicalSystemsSource}" 
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedTypicalSystem, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
-                  dd:DragDrop.DropHandler="{Binding}"
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
                   IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>

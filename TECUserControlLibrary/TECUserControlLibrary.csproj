@@ -247,7 +247,7 @@
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\EnumBindingSourceExtension.cs" />
-    <Compile Include="ViewModels\AddControlledScopeVM.cs" />
+    <Compile Include="ViewModels\TypicalSystemVM.cs" />
     <Compile Include="ViewModels\ControllersPanelsVM.cs" />
     <Compile Include="ViewModels\EditTabVM.cs" />
     <Compile Include="ViewModels\LocationVM.cs" />
@@ -263,7 +263,6 @@
     <Compile Include="ViewModels\StatusBarVM.cs" />
     <Compile Include="BaseVMs\BidEditorBase.cs" />
     <Compile Include="ViewModels\BudgetVM.cs" />
-    <Compile Include="ViewModels\ControlledScopeVM.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="Views\BudgetView.xaml.cs">
       <DependentUpon>BudgetView.xaml</DependentUpon>
@@ -273,14 +272,11 @@
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
     <Compile Include="ViewModels\TECMaterialSummaryVM.cs" />
-    <Compile Include="Views\AddControlledScopeView.xaml.cs">
-      <DependentUpon>AddControlledScopeView.xaml</DependentUpon>
+    <Compile Include="Views\TypicalSystemView.xaml.cs">
+      <DependentUpon>TypicalSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConstantsView.xaml.cs">
       <DependentUpon>ConstantsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ControlledScopeView.xaml.cs">
-      <DependentUpon>ControlledScopeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
@@ -581,17 +577,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddControlledScopeView.xaml">
+    <Page Include="Views\TypicalSystemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConstantsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ControlledScopeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControllersPanelsView.xaml">
       <SubType>Designer</SubType>

@@ -20,14 +20,14 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for AddControlledScopeView.xaml
     /// </summary>
-    public partial class AddControlledScopeView : UserControl
+    public partial class TypicalSystemsView : UserControl
     {
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public AddControlledScopeVM ViewModel
+        public TypicalSystemVM ViewModel
         {
-            get { return (AddControlledScopeVM)GetValue(ViewModelProperty); }
+            get { return (TypicalSystemVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -35,8 +35,8 @@ namespace TECUserControlLibrary.Views
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(AddControlledScopeVM),
-              typeof(AddControlledScopeView));
+            DependencyProperty.Register("ViewModel", typeof(TypicalSystemVM),
+              typeof(TypicalSystemsView));
         
         public ControlledScopeEditIndex SelectedEditIndex
         {
@@ -46,7 +46,7 @@ namespace TECUserControlLibrary.Views
         
         public static readonly DependencyProperty SelectedEditIndexProperty =
             DependencyProperty.Register("SelectedEditIndex", typeof(ControlledScopeEditIndex),
-              typeof(AddControlledScopeView), new PropertyMetadata(default(ControlledScopeEditIndex)));
+              typeof(TypicalSystemsView), new PropertyMetadata(default(ControlledScopeEditIndex)));
 
         public ControlledScopeItemIndex SelectedItemIndex
         {
@@ -56,9 +56,9 @@ namespace TECUserControlLibrary.Views
 
         public static readonly DependencyProperty SelectedItemIndexProperty =
             DependencyProperty.Register("SelectedItemIndex", typeof(ControlledScopeItemIndex),
-              typeof(AddControlledScopeView), new PropertyMetadata(default(ControlledScopeItemIndex)));
+              typeof(TypicalSystemsView), new PropertyMetadata(default(ControlledScopeItemIndex)));
         
-        public AddControlledScopeView()
+        public TypicalSystemsView()
         {
             InitializeComponent();
         }

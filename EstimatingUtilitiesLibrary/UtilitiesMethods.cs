@@ -302,7 +302,7 @@ namespace EstimatingUtilitiesLibrary
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
     public enum ControlledScopeEditIndex { Edit, Qty };
-    public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical };
+    public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
 }

@@ -49,7 +49,7 @@ namespace TemplateBuilder.MVVM
         public SystemsVM ScopeDataGrid { get; set; }
         public EditTabVM EditTab { get; set; }
         public MaterialVM MaterialsTab { get; set; }
-        public ControlledScopeVM ControlledScopeVM { get; set; }
+        public TypicalSystemVM TypicalSystemsTab { get; set; }
         public ConstantsVM ConstantsVM { get; set; }
         #endregion
         protected override TECScopeManager workingScopeManager
@@ -209,7 +209,7 @@ namespace TemplateBuilder.MVVM
                 ScopeDataGrid.Refresh(Templates);
                 EditTab.Refresh(Templates);
                 MaterialsTab.Refresh(Templates);
-                ControlledScopeVM.Refresh(Templates);
+                TypicalSystemsTab.Refresh(Templates);
                 ConstantsVM.Refresh(Templates.Labor);
             }
         }
@@ -262,7 +262,7 @@ namespace TemplateBuilder.MVVM
             setupEditTab();
             setupScopeDataGrid();
             setupMaterialsTab();
-            setupControlledScopeTab();
+            setupTypicalSystemseTab();
         }
 
         private void setupScopeCollecion()
@@ -291,13 +291,13 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.DropHandler += Drop;
             MaterialsTab.SelectionChanged += EditTab.updateSelection;
         }
-        private void setupControlledScopeTab()
+        private void setupTypicalSystemseTab()
         {
-            ControlledScopeVM = new ControlledScopeVM(Templates);
-            ControlledScopeVM.DragHandler += DragOver;
-            ControlledScopeVM.DropHandler += Drop;
-            ControlledScopeVM.SelectionChanged += EditTab.updateSelection;
-            ControlledScopeVM.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab = new TypicalSystemVM(Templates);
+            TypicalSystemsTab.DragHandler += DragOver;
+            TypicalSystemsTab.DropHandler += Drop;
+            TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
         }
         private void setupConstantsVM()
         {

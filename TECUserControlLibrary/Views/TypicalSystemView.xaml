@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TECUserControlLibrary.Views.AddControlledScopeView"
+﻿<UserControl x:Class="TECUserControlLibrary.Views.TypicalSystemsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -33,7 +33,8 @@
                 <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
-                          VerticalContentAlignment="Center"/>
+                          VerticalContentAlignment="Center"
+                          Visibility="{Binding InstanceVisibility}"/>
             </Grid>
             <controls:ControlledScopeGridControl SystemSource="{Binding ScopeSource}"
                                            SelectedItem="{Binding SelectedSystem}"
@@ -88,6 +89,29 @@
                                   Grid.Row="1"/>
                             </Grid>
                         </TabItem>
+                        <TabItem Header="Misc" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Misc. Costs"/>
+                                <controls:AssociatedCostsGridControl CostsSource="{Binding SelectedSystem.AssociatedCosts}"
+                                                                     ViewModel="{Binding}"
+                                                                     Grid.Row="1"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Proposal" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Proposal"/>
+                                <controls:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.ScopeBranches}"
+                                  Grid.Row="1"/>
+                            </Grid>
+                        </TabItem>
                     </TabControl>
                 </Grid>
             </TabItem>
@@ -122,13 +146,13 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Canvas Grid.Column="2" Background="{DynamicResource SectionBackgroundBrush}"
+        <!--<Canvas Grid.Column="2" Background="{DynamicResource SectionBackgroundBrush}"
                 Visibility="{Binding ElementName=parent, Path=ViewModel.SelectedSystem, Converter={utilities:NullToVisibilityConverter}}"
                 x:Name="placeholderCanvas">
             <Grid Width="{Binding ActualWidth, ElementName=placeholderCanvas}" 
           Height="{Binding ActualHeight, ElementName=placeholderCanvas}">
                 <Label Content="Select a System to Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-        </Canvas>
+        </Canvas>-->
     </Grid>
 </UserControl>

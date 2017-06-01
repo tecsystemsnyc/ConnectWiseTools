@@ -94,13 +94,13 @@ namespace TECUserControlLibrary.ViewModels
             if (scopeManager is TECBid)
             {
                 _bid = scopeManager as TECBid;
+                populateLocationSelections();
             }
             else
             {
                 Templates = scopeManager as TECTemplates;
             }
             setupVMs();
-            populateLocationSelections();
             DataGridVisibilty = new VisibilityModel();
         }
         #endregion
