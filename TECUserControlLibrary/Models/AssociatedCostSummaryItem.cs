@@ -38,7 +38,7 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("Total", old, _totalCost);
+                NotifyPropertyChanged("TotalCost", old, _totalCost);
             }
         }
 
@@ -53,7 +53,7 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("Total", old, _totalLabor);
+                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
             }
         }
 
