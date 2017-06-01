@@ -191,6 +191,14 @@ namespace TECUserControlLibrary.ViewModels
             DeviceSubTotal = 0;
             DeviceAssCostSubTotalCost = 0;
             DeviceAssCostSubTotalLabor = 0;
+
+            foreach(TECSystem system in bid.Systems)
+            {
+                foreach(TECSystem sys in system.SystemInstances)
+                {
+                    AddSystem(sys);
+                }
+            }
         }
 
         #region Add/Remove

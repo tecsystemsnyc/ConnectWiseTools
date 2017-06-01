@@ -32,63 +32,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region View Models
         public DeviceSummaryVM DeviceSummaryVM { get; private set; }
-        #endregion
-
-        #region Controller View Properties
-        private Dictionary<Guid, AssociatedCostSummaryItem> controllerAssCostDictionary;
-
-        private ObservableCollection<AssociatedCostSummaryItem> _controllerAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> ControllerAssCostSummaryItems
-        {
-            get
-            {
-                return _controllerAssCostSummaryItems;
-            }
-            set
-            {
-                _controllerAssCostSummaryItems = value;
-                RaisePropertyChanged("ControllerAssCostSummaryItems");
-            }
-        }
-
-        private double _controllerSubTotal;
-        public double ControllerSubTotal
-        {
-            get { return _controllerSubTotal; }
-            set
-            {
-                _controllerSubTotal = value;
-                RaisePropertyChanged("ControllerSubTotal");
-                RaisePropertyChanged("TotalControllerCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _controllerAssCostSubTotalCost;
-        public double ControllerAssCostSubTotalCost
-        {
-            get { return _controllerAssCostSubTotalCost; }
-            set
-            {
-                _controllerAssCostSubTotalCost = value;
-                RaisePropertyChanged("ControllerAssCostSubTotalCost");
-                RaisePropertyChanged("TotalControllerCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _controllerAssCostSubTotalLabor;
-        public double ControllerAssCostSubTotalLabor
-        {
-            get { return _controllerAssCostSubTotalLabor; }
-            set
-            {
-                _controllerAssCostSubTotalLabor = value;
-                RaisePropertyChanged("ControllerAssCostSubTotalLabor");
-                RaisePropertyChanged("TotalControllerLabor");
-                RaisePropertyChanged("TotalLabor");
-            }
-        }
+        public ControllerSummaryVM ControllerSummaryVM { get; private set; }
         #endregion
 
         #region Panel View Properties
@@ -221,13 +165,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return (ControllerSubTotal + ControllerAssCostSubTotalCost);
+                return (ControllerSummaryVM.ControllerSubTotal + ControllerSummaryVM.ControllerAssCostSubTotalCost);
             }
         }
 
         public double TotalControllerLabor
         {
-            get { return ControllerAssCostSubTotalLabor; }
+            get { return ControllerSummaryVM.ControllerAssCostSubTotalLabor; }
         }
 
         public double TotalPanelCost
@@ -265,22 +209,19 @@ namespace TECUserControlLibrary.ViewModels
 
         public TECMaterialSummaryVM(TECBid bid)
         {
+            initializeVMs(bid);
             reinitialize(bid);
-            DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
         }
 
         public void Refresh(TECBid bid)
         {
             reinitialize(bid);
+            DeviceSummaryVM.Refresh(bid);
+            ControllerSummaryVM.Refresh(bid);
         }
 
         private void reinitialize(TECBid bid)
         {
-            DeviceSummaryVM = new DeviceSummaryVM(bid);
-
-            controllerAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            ControllerAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
-
             panelTypeDictionary = new Dictionary<Guid, PanelTypeSummaryItem>();
             PanelTypeSummaryItems = new ObservableCollection<PanelTypeSummaryItem>();
             panelAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
@@ -288,19 +229,14 @@ namespace TECUserControlLibrary.ViewModels
 
             MiscCosts = new ObservableCollection<TECMisc>();
             
-            ControllerSubTotal = 0;
-            ControllerAssCostSubTotalCost = 0;
-            ControllerAssCostSubTotalLabor = 0;
+            
             PanelTypeSubTotal = 0;
             PanelAssCostSubTotalCost = 0;
             PanelAssCostSubTotalLabor = 0;
             MiscCostSubTotalCost = 0;
             MiscCostSubTotalLabor = 0;
 
-            foreach (TECController controller in bid.Controllers)
-            {
-                addController(controller);
-            }
+            
             foreach(TECPanel panel in bid.Panels)
             {
                 addPanel(panel);
@@ -311,6 +247,15 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             changeWatcher = new ChangeWatcher(bid);
+        }
+
+        private void initializeVMs(TECBid bid)
+        {
+            DeviceSummaryVM = new DeviceSummaryVM(bid);
+            ControllerSummaryVM = new ControllerSummaryVM(bid);
+
+            DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
+            ControllerSummaryVM.PropertyChanged += ControllerSummaryVM_PropertyChanged;
         }
 
         #region Event Handlers
@@ -324,9 +269,13 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
+                    if (targetObject is TECSystem && referenceObject is TECSystem)
                     {
                         DeviceSummaryVM.AddSystem(targetObject as TECSystem);
+                        foreach(TECController control in (targetObject as TECSystem).Controllers)
+                        {
+                            ControllerSummaryVM.AddController(control);
+                        }
                     }
                     else if (targetObject is TECEquipment && referenceObject is TECSystem)
                     {
@@ -344,17 +293,17 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         DeviceSummaryVM.AddCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
-                    else if (targetObject is TECController && referenceObject is TECBid)
+                    else if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        addController(targetObject as TECController);
+                        ControllerSummaryVM.AddController(targetObject as TECController);
                     }
-                    else if (targetObject is TECPanel && referenceObject is TECBid)
+                    else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
                         addPanel(targetObject as TECPanel);
                     }
                     else if (targetObject is TECCost && referenceObject is TECController)
                     {
-                        addCostToController(targetObject as TECCost);
+                        ControllerSummaryVM.AddCostToController(targetObject as TECCost);
                     }
                     else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
@@ -371,6 +320,10 @@ namespace TECUserControlLibrary.ViewModels
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
                         DeviceSummaryVM.RemoveSystem(targetObject as TECSystem);
+                        foreach(TECController control in (targetObject as TECSystem).Controllers)
+                        {
+                            ControllerSummaryVM.RemoveController(control);
+                        }
                     }
                     else if (targetObject is TECEquipment && referenceObject is TECSystem)
                     {
@@ -388,17 +341,17 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         DeviceSummaryVM.RemoveCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
                     }
-                    else if (targetObject is TECController && referenceObject is TECBid)
+                    else if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        removeController(targetObject as TECController);
+                        ControllerSummaryVM.RemoveController(targetObject as TECController);
                     }
-                    else if (targetObject is TECPanel && referenceObject is TECBid)
+                    else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
                         removePanel(targetObject as TECPanel);
                     }
                     else if (targetObject is TECCost && referenceObject is TECController)
                     {
-                        removeCostFromController(targetObject as TECCost);
+                        ControllerSummaryVM.RemoveCostFromController(targetObject as TECCost);
                     }
                     else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
@@ -420,46 +373,36 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void raiseTotals()
+        private void DeviceSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged("TotalCost");
-            RaisePropertyChanged("TotalLabor");
+            if (e.PropertyName == "DeviceSubTotal" || e.PropertyName == "DeviceAssCostSubTotalCost")
+            {
+                RaisePropertyChanged("TotalDeviceCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "DeviceAssCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalDeviceLabor");
+                RaisePropertyChanged("TotalLabor");
+            }
+        }
+
+        private void ControllerSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ControllerSubTotal" || e.PropertyName == "ControllerAssCostSubTotalCost")
+            {
+                RaisePropertyChanged("TotalControllerCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "ControllerAssCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalControllerLabor");
+                RaisePropertyChanged("TotalLabor");
+            }
         }
         #endregion
 
         #region Add/Remove
-        private void addController(TECController controller)
-        {
-            ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
-            foreach(TECCost cost in controller.AssociatedCosts)
-            {
-                addCostToController(cost);
-            }
-        }
-
-        private void removeController(TECController controller)
-        {
-            ControllerSubTotal -= controller.Cost * controller.Manufacturer.Multiplier;
-            foreach(TECCost cost in controller.AssociatedCosts)
-            {
-                removeCostFromController(cost);
-            }
-        }
-
-        private void addCostToController(TECCost cost)
-        {
-            Tuple<double, double> delta = AddCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
-            ControllerAssCostSubTotalCost += delta.Item1;
-            ControllerAssCostSubTotalLabor += delta.Item2;
-        }
-
-        private void removeCostFromController(TECCost cost)
-        {
-            Tuple<double, double> delta = RemoveCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
-            ControllerAssCostSubTotalCost += delta.Item1;
-            ControllerAssCostSubTotalLabor += delta.Item2;
-        }
-
         private void addPanel(TECPanel panel)
         {
             bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
@@ -588,22 +531,6 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 throw new InvalidOperationException("Associated Cost not found in dictionary.");
-            }
-        }
-        #endregion
-
-        #region Event Handlers
-        private void DeviceSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "DeviceSubTotal" || e.PropertyName == "DeviceAssCostSubTotalCost")
-            {
-                RaisePropertyChanged("TotalDeviceCost");
-                raiseTotals();
-            }
-            else if (e.PropertyName == "DeviceAssCostSubTotalLabor")
-            {
-                RaisePropertyChanged("TotalDeviceLabor");
-                raiseTotals();
             }
         }
         #endregion
