@@ -33,7 +33,7 @@
                                                          DisplayMemberPath="Item3">
                                                 <ContextMenu.ItemContainerStyle>
                                                     <Style TargetType="MenuItem">
-                                                        <Setter Property="Command" Value="{Binding Source={x:Reference drawingControl}, Path=ViewModel.ConnectCommand}" />
+                                                        <Setter Property="Command" Value="{Binding Source={x:Reference parent}, Path=ViewModel.ConnectCommand}" />
                                                         <Setter Property="CommandParameter" Value="{Binding}"/>
                                                     </Style>
                                                 </ContextMenu.ItemContainerStyle>
@@ -77,7 +77,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid 
-        DataContext="{Binding ElementName=drawingControl, Path=ViewModel}">
+        DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
