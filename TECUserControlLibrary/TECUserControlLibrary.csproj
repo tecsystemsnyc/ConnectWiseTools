@@ -114,6 +114,7 @@
     <Compile Include="ViewModels\ControllerSummaryVM.cs" />
     <Compile Include="ViewModels\DeviceSummaryVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
+    <Compile Include="ViewModels\PanelTypeSummaryVM.cs" />
     <Compile Include="Views\ControllerSummaryView.xaml.cs">
       <DependentUpon>ControllerSummaryView.xaml</DependentUpon>
     </Compile>
@@ -302,8 +303,8 @@
     <Compile Include="Views\NetworkView.xaml.cs">
       <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PanelTypeListControl.xaml.cs">
-      <DependentUpon>PanelTypeListControl.xaml</DependentUpon>
+    <Compile Include="Views\PanelTypeSummaryView.xaml.cs">
+      <DependentUpon>PanelTypeSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ReviewTabControl.xaml.cs">
       <DependentUpon>ReviewTabControl.xaml</DependentUpon>
@@ -617,7 +618,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PanelTypeListControl.xaml">
+    <Page Include="Views\PanelTypeSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -61,7 +61,7 @@
             
             <!--Panel View-->
             <TabItem Visibility="Collapsed">
-                <controls:PanelTypeListControl ViewModel="{Binding}"/>
+                <views:PanelTypeSummaryView ViewModel="{Binding PanelTypeSummaryVM}"/>
             </TabItem>
             
             <!--Misc Costs View-->
