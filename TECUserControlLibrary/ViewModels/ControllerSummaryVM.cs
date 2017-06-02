@@ -27,6 +27,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private ObservableCollection<TECController> _controllers;
+        public ObservableCollection<TECController> Controllers
+        {
+            get { return _controllers; }
+            set
+            {
+                _controllers = value;
+                RaisePropertyChanged("Controllers");
+            }
+        }
+
         private Dictionary<Guid, AssociatedCostSummaryItem> controllerAssCostDictionary;
 
         private ObservableCollection<AssociatedCostSummaryItem> _controllerAssCostSummaryItems;
@@ -97,6 +108,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
 
+            Controllers = new ObservableCollection<TECController>();
+
             controllerAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
             ControllerAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
 
@@ -123,6 +136,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Add/Remove
         public void AddController(TECController controller)
         {
+            Controllers.Add(controller);
             ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
             foreach (TECCost cost in controller.AssociatedCosts)
             {
@@ -132,6 +146,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void RemoveController(TECController controller)
         {
+            Controllers.Remove(controller);
             ControllerSubTotal -= controller.Cost * controller.Manufacturer.Multiplier;
             foreach (TECCost cost in controller.AssociatedCosts)
             {

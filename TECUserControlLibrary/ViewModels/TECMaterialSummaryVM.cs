@@ -33,76 +33,7 @@ namespace TECUserControlLibrary.ViewModels
         #region View Models
         public DeviceSummaryVM DeviceSummaryVM { get; private set; }
         public ControllerSummaryVM ControllerSummaryVM { get; private set; }
-        #endregion
-
-        #region Panel View Properties
-        private Dictionary<Guid, PanelTypeSummaryItem> panelTypeDictionary;
-
-        private ObservableCollection<PanelTypeSummaryItem> _panelTypeSummaryItems;
-        public ObservableCollection<PanelTypeSummaryItem> PanelTypeSummaryItems
-        {
-            get
-            {
-                return _panelTypeSummaryItems;
-            }
-            set
-            {
-                _panelTypeSummaryItems = value;
-                RaisePropertyChanged("PanelTypeSummaryItems");
-            }
-        }
-
-        private Dictionary<Guid, AssociatedCostSummaryItem> panelAssCostDictionary;
-
-        private ObservableCollection<AssociatedCostSummaryItem> _panelAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> PanelAssCostSummaryItems
-        {
-            get { return _panelAssCostSummaryItems; }
-            set
-            {
-                _panelAssCostSummaryItems = value;
-                RaisePropertyChanged("PanelAssCostSummaryItems");
-            }
-        }
-
-        private double _panelTypeSubTotal;
-        public double PanelTypeSubTotal
-        {
-            get { return _panelTypeSubTotal; }
-            set
-            {
-                _panelTypeSubTotal = value;
-                RaisePropertyChanged("PanelTypeSubTotal");
-                RaisePropertyChanged("TotalPanelCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _panelAssCostSubTotalCost;
-        public double PanelAssCostSubTotalCost
-        {
-            get { return _panelAssCostSubTotalCost; }
-            set
-            {
-                _panelAssCostSubTotalCost = value;
-                RaisePropertyChanged("PanelAssCostSubTotalCost");
-                RaisePropertyChanged("TotalPanelCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _panelAssCostSubTotalLabor;
-        public double PanelAssCostSubTotalLabor
-        {
-            get { return _panelAssCostSubTotalLabor; }
-            set
-            {
-                _panelAssCostSubTotalLabor = value;
-                RaisePropertyChanged("PanelAssCostSubTotalLabor");
-                RaisePropertyChanged("TotalPanelLabor");
-                RaisePropertyChanged("TotalLabor");
-            }
-        }
+        public PanelTypeSummaryVM PanelTypeSummaryVM { get; private set; }
         #endregion
 
         #region Misc Cost View Properties
@@ -176,12 +107,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public double TotalPanelCost
         {
-            get { return (PanelTypeSubTotal + PanelAssCostSubTotalCost); }
+            get { return (PanelTypeSummaryVM.PanelTypeSubTotal + PanelTypeSummaryVM.PanelAssCostSubTotalCost); }
         }
 
         public double TotalPanelLabor
         {
-            get { return PanelAssCostSubTotalLabor; }
+            get { return PanelTypeSummaryVM.PanelAssCostSubTotalLabor; }
         }
 
         public double TotalMiscCost
@@ -218,29 +149,16 @@ namespace TECUserControlLibrary.ViewModels
             reinitialize(bid);
             DeviceSummaryVM.Refresh(bid);
             ControllerSummaryVM.Refresh(bid);
+            PanelTypeSummaryVM.Refresh(bid);
         }
 
         private void reinitialize(TECBid bid)
         {
-            panelTypeDictionary = new Dictionary<Guid, PanelTypeSummaryItem>();
-            PanelTypeSummaryItems = new ObservableCollection<PanelTypeSummaryItem>();
-            panelAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            PanelAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
-
             MiscCosts = new ObservableCollection<TECMisc>();
             
-            
-            PanelTypeSubTotal = 0;
-            PanelAssCostSubTotalCost = 0;
-            PanelAssCostSubTotalLabor = 0;
             MiscCostSubTotalCost = 0;
             MiscCostSubTotalLabor = 0;
-
             
-            foreach(TECPanel panel in bid.Panels)
-            {
-                addPanel(panel);
-            }
             foreach(TECMisc cost in bid.MiscCosts)
             {
                 addMiscCost(cost);
@@ -253,9 +171,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             DeviceSummaryVM = new DeviceSummaryVM(bid);
             ControllerSummaryVM = new ControllerSummaryVM(bid);
+            PanelTypeSummaryVM = new PanelTypeSummaryVM(bid);
 
             DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
             ControllerSummaryVM.PropertyChanged += ControllerSummaryVM_PropertyChanged;
+            PanelTypeSummaryVM.PropertyChanged += PanelTypeSummaryVM_PropertyChanged;
         }
 
         #region Event Handlers
@@ -299,7 +219,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        addPanel(targetObject as TECPanel);
+                        PanelTypeSummaryVM.AddPanel(targetObject as TECPanel);
                     }
                     else if (targetObject is TECCost && referenceObject is TECController)
                     {
@@ -307,7 +227,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
-                        addCostToPanel(targetObject as TECCost);
+                        PanelTypeSummaryVM.AddCostToPanel(targetObject as TECCost);
                     }
                     else if (targetObject is TECMisc && referenceObject is TECBid)
                     {
@@ -347,7 +267,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        removePanel(targetObject as TECPanel);
+                        PanelTypeSummaryVM.RemovePanel(targetObject as TECPanel);
                     }
                     else if (targetObject is TECCost && referenceObject is TECController)
                     {
@@ -355,7 +275,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (targetObject is TECCost && referenceObject is TECPanel)
                     {
-                        removeCostFromPanel(targetObject as TECCost);
+                        PanelTypeSummaryVM.RemoveCostFromPanel(targetObject as TECCost);
                     }
                     else if (targetObject is TECMisc && referenceObject is TECBid)
                     {
@@ -400,75 +320,23 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TotalLabor");
             }
         }
+
+        private void PanelTypeSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "PanelTypeSubTotal" || e.PropertyName == "PanelAssCostSubTotalCost")
+            {
+                RaisePropertyChanged("TotalPanelCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "PanelAssCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalPanelLabor");
+                RaisePropertyChanged("TotalLabor");
+            }
+        }
         #endregion
 
         #region Add/Remove
-        private void addPanel(TECPanel panel)
-        {
-            bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
-            if (containsPanelType)
-            {
-                PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
-                panelTypeDictionary[panel.Type.Guid].Quantity++;
-                PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
-            }
-            else
-            {
-                PanelTypeSummaryItem panelTypeItem = new PanelTypeSummaryItem(panel.Type);
-                panelTypeDictionary.Add(panel.Type.Guid, panelTypeItem);
-                PanelTypeSummaryItems.Add(panelTypeItem);
-                PanelTypeSubTotal += panelTypeItem.Total;
-            }
-            foreach (TECCost cost in panel.AssociatedCosts)
-            {
-                Tuple<double, double> delta = AddCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
-                PanelAssCostSubTotalCost += delta.Item1;
-                PanelAssCostSubTotalLabor += delta.Item2;
-            }
-        }
-
-        private void removePanel(TECPanel panel)
-        {
-            bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
-            if (containsPanelType)
-            {
-                PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
-                panelTypeDictionary[panel.Type.Guid].Quantity--;
-                PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
-
-                if (panelTypeDictionary[panel.Type.Guid].Quantity < 1)
-                {
-                    PanelTypeSummaryItems.Remove(panelTypeDictionary[panel.Type.Guid]);
-                    panelTypeDictionary.Remove(panel.Type.Guid);
-                }
-
-                foreach (TECCost cost in panel.AssociatedCosts)
-                {
-                    Tuple<double, double> delta = RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
-                    PanelAssCostSubTotalCost += delta.Item1;
-                    PanelAssCostSubTotalLabor += delta.Item2;
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Panel type not found in panel type dictionary.");
-            }
-        }
-
-        private void addCostToPanel(TECCost cost)
-        {
-            Tuple<double, double> delta = AddCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
-            PanelAssCostSubTotalCost += delta.Item1;
-            PanelAssCostSubTotalLabor += delta.Item2;
-        }
-
-        private void removeCostFromPanel(TECCost cost)
-        {
-            Tuple<double, double> delta = RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
-            PanelAssCostSubTotalCost += delta.Item1;
-            PanelAssCostSubTotalLabor += delta.Item2;
-        }
-
         private void addMiscCost(TECMisc cost)
         {
             MiscCosts.Add(cost);
