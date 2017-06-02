@@ -140,9 +140,14 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs(TECScopeManager scopeManager)
         {
             ChildVM = new EquipmentVM(scopeManager);
+        }
+
+        public void AssignChildDelegates()
+        {
             ChildVM.DragHandler += DragHandler;
             ChildVM.DropHandler += DropHandler;
             ChildVM.SelectionChanged += SelectionChanged;
+            ChildVM.AssignChildDelegates();
         }
         
         public void Refresh(TECScopeManager scopeManager)

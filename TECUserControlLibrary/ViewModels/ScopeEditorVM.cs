@@ -141,6 +141,8 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid = new SystemsVM(Bid);
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            ScopeDataGrid.AssignChildDelegates();
             ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
@@ -152,8 +154,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
-
-            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            
         }
         private void setupLocationDataGrid()
         {

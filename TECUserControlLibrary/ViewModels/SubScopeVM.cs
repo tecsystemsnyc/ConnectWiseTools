@@ -109,9 +109,6 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs()
         {
             ChildVM = new DevicesPointsVM();
-            ChildVM.DragHandler += DragHandler;
-            ChildVM.DropHandler += DropHandler;
-            ChildVM.SelectionChanged += SelectionChanged;
         }
 
         public void Refresh(TECScopeManager scopeManager)
@@ -127,7 +124,12 @@ namespace TECUserControlLibrary.ViewModels
                 Templates = templates;
             }
         }
-
+        public void AssignChildDelegates()
+        {
+            ChildVM.DragHandler += DragHandler;
+            ChildVM.DropHandler += DropHandler;
+            ChildVM.SelectionChanged += SelectionChanged;
+        }
         public void NullifySelected()
         {
             SelectedSubScope = null;

@@ -149,11 +149,14 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs(TECScopeManager scopeManager)
         {
             ChildVM = new SubScopeVM(scopeManager);
+        }
+        public void AssignChildDelegates()
+        {
             ChildVM.DragHandler += DragHandler;
             ChildVM.DropHandler += DropHandler;
             ChildVM.SelectionChanged += SelectionChanged;
+            ChildVM.AssignChildDelegates();
         }
-
         private void populateLocationSelections()
         {
             LocationSelections = new ObservableCollection<TECLocation>();
