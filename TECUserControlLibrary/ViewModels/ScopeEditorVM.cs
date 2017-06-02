@@ -172,6 +172,7 @@ namespace TECUserControlLibrary.ViewModels
             LocationDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
+            ScopeDataGrid.AssignChildDelegates();
         }
         private void setupScopeCollection()
         {

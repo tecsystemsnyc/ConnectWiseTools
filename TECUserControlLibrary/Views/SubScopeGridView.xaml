@@ -50,7 +50,7 @@
                     <Grid>
                         <local:DevicesPointsView DevicesSource="{Binding Devices}"
                                                 PointsSource="{Binding Points}"
-                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
+                                                ViewModel="{Binding ElementName=parent, Path=ViewModel.ChildVM}"/>
                      </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
