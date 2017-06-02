@@ -113,10 +113,14 @@
     <Compile Include="ViewModels\ConnectionVM.cs" />
     <Compile Include="ViewModels\ControllerSummaryVM.cs" />
     <Compile Include="ViewModels\DeviceSummaryVM.cs" />
+    <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="ViewModels\PanelTypeSummaryVM.cs" />
     <Compile Include="Views\ControllerSummaryView.xaml.cs">
       <DependentUpon>ControllerSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstanceSystemView.xaml.cs">
+      <DependentUpon>InstanceSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
@@ -343,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControllerSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstanceSystemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
