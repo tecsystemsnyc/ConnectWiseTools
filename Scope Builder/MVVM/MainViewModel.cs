@@ -342,6 +342,7 @@ namespace Scope_Builder.MVVM
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.SelectionChanged += setContextText;
+            ScopeDataGrid.AssignChildDelegates();
             ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
 
         }
@@ -350,6 +351,7 @@ namespace Scope_Builder.MVVM
             LocationDataGrid = new LocationVM(new TECBid());
             LocationDataGrid.DragHandler += DragOver;
             LocationDataGrid.DropHandler += Drop;
+            ScopeDataGrid.AssignChildDelegates();
         }
         private void setupScopeCollection()
         {

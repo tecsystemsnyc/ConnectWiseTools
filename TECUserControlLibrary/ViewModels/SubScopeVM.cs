@@ -59,7 +59,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region VMs
-        public DevicesPointsVM ChildVM;
+        public DevicesPointsVM ChildVM { get; set; }
         #endregion
 
         private TECSubScope _selectedSubScope;

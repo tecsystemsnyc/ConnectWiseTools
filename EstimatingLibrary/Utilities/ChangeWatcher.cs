@@ -596,10 +596,7 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged += Object_PropertyChanged;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     handleChildren(newValue, Change.Add, ChangeType.Object);
-                    if(oldValue is TECSystem && newValue is TECSystem)
-                    {
-                        InstanceChanged?.Invoke(sender, e);
-                    }
+                    checkForRaiseInstance(sender, args);
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -608,10 +605,7 @@ namespace EstimatingLibrary.Utilities
 
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(newValue, Change.Remove, ChangeType.Object);
-                    if (oldValue is TECSystem && newValue is TECSystem)
-                    {
-                        InstanceChanged?.Invoke(sender, e);
-                    }
+                    checkForRaiseInstance(sender, args);
 
                 }
                 else if (e.PropertyName == "MetaAdd")
@@ -713,6 +707,18 @@ namespace EstimatingLibrary.Utilities
                 message = "Property not compatible: " + e.PropertyName;
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
+            }
+        }
+
+        private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs<object> args)
+        {
+            var oldValue = args.OldValue;
+            var newValue = args.NewValue;
+            if (oldValue is TECSystem && newValue is TECSystem ||
+                oldValue is TECBid && newValue is TECController ||
+                oldValue is TECBid && newValue is TECPanel)
+            {
+                InstanceChanged?.Invoke(sender, args);
             }
         }
     }
