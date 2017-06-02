@@ -66,7 +66,7 @@
             
             <!--Misc Costs View-->
             <TabItem Visibility="Collapsed">
-                
+                <views:MiscCostsSummaryView ViewModel="{Binding MiscCostsSummaryVM}"/>
             </TabItem>
             
         </TabControl>

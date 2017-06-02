@@ -29,15 +29,15 @@
 
         <TextBlock Text="Miscellaneous Costs" Foreground="Black" FontSize="20"/>
 
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding MiscCosts}"
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding MiscCostSummaryItems}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Cost.Name}" Width="Auto" MinWidth="50"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Unit Cost" Binding="{Binding Cost}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Cost" Binding="{Binding Cost.Cost}" Width="Auto" MinWidth="50"/>
                 <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost}" Width="Auto" MinWidth="50"/>
-                <DataGridTextColumn Header="Unit Labor" Binding="{Binding Labor}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Labor" Binding="{Binding Cost.Labor}" Width="Auto" MinWidth="50"/>
                 <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="50"/>
             </DataGrid.Columns>
         </DataGrid>

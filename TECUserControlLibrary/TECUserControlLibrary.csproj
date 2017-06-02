@@ -92,6 +92,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\MiscCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
     </Compile>
@@ -179,6 +180,7 @@
     <Compile Include="Views\MiscCostsSummaryView.xaml.cs">
       <DependentUpon>MiscCostsSummaryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\MiscCostsSummaryVM.cs" />
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
     </Compile>

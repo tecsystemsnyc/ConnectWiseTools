@@ -23,10 +23,12 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (_changeWatcher != null)
                 {
-                    _changeWatcher.InstanceChanged -= bidChanged;
+                    _changeWatcher.InstanceChanged -= instanceChanged;
+                    _changeWatcher.Changed -= bidChanged;
                 }
                 _changeWatcher = value;
-                _changeWatcher.InstanceChanged += bidChanged;
+                _changeWatcher.InstanceChanged += instanceChanged;
+                _changeWatcher.Changed += bidChanged;
             }
         }
 
@@ -34,45 +36,7 @@ namespace TECUserControlLibrary.ViewModels
         public DeviceSummaryVM DeviceSummaryVM { get; private set; }
         public ControllerSummaryVM ControllerSummaryVM { get; private set; }
         public PanelTypeSummaryVM PanelTypeSummaryVM { get; private set; }
-        #endregion
-
-        #region Misc Cost View Properties
-        private ObservableCollection<TECMisc> _miscCosts;
-        public ObservableCollection<TECMisc> MiscCosts
-        {
-            get { return _miscCosts; }
-            set
-            {
-                _miscCosts = value;
-                RaisePropertyChanged("MiscCosts");
-            }
-        }
-
-        private double _miscCostSubTotalCost;
-        public double MiscCostSubTotalCost
-        {
-            get { return _miscCostSubTotalCost; }
-            set
-            {
-                _miscCostSubTotalCost = value;
-                RaisePropertyChanged("MiscCostSubTotalCost");
-                RaisePropertyChanged("TotalMiscCost");
-                RaisePropertyChanged("TotalCost");
-            }
-        }
-
-        private double _miscCostSubTotalLabor;
-        public double MiscCostSubTotalLabor
-        {
-            get { return _miscCostSubTotalLabor; }
-            set
-            {
-                _miscCostSubTotalLabor = value;
-                RaisePropertyChanged("MiscCostSubTotalLabor");
-                RaisePropertyChanged("TotalMiscLabor");
-                RaisePropertyChanged("TotalLabor");
-            }
-        }
+        public MiscCostsSummaryVM MiscCostsSummaryVM { get; private set; }
         #endregion
 
         #region Summary Totals
@@ -117,12 +81,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public double TotalMiscCost
         {
-            get { return MiscCostSubTotalCost; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalCost; }
         }
 
         public double TotalMiscLabor
         {
-            get { return MiscCostSubTotalLabor; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor; }
         }
 
         public double TotalCost
@@ -150,20 +114,11 @@ namespace TECUserControlLibrary.ViewModels
             DeviceSummaryVM.Refresh(bid);
             ControllerSummaryVM.Refresh(bid);
             PanelTypeSummaryVM.Refresh(bid);
+            MiscCostsSummaryVM.Refresh(bid);
         }
 
         private void reinitialize(TECBid bid)
         {
-            MiscCosts = new ObservableCollection<TECMisc>();
-            
-            MiscCostSubTotalCost = 0;
-            MiscCostSubTotalLabor = 0;
-            
-            foreach(TECMisc cost in bid.MiscCosts)
-            {
-                addMiscCost(cost);
-            }
-
             changeWatcher = new ChangeWatcher(bid);
         }
 
@@ -172,14 +127,16 @@ namespace TECUserControlLibrary.ViewModels
             DeviceSummaryVM = new DeviceSummaryVM(bid);
             ControllerSummaryVM = new ControllerSummaryVM(bid);
             PanelTypeSummaryVM = new PanelTypeSummaryVM(bid);
+            MiscCostsSummaryVM = new MiscCostsSummaryVM(bid);
 
             DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
             ControllerSummaryVM.PropertyChanged += ControllerSummaryVM_PropertyChanged;
             PanelTypeSummaryVM.PropertyChanged += PanelTypeSummaryVM_PropertyChanged;
+            MiscCostsSummaryVM.PropertyChanged += MiscCostsSummaryVM_PropertyChanged;
         }
 
         #region Event Handlers
-        private void bidChanged(object sender, PropertyChangedEventArgs e)
+        private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
             {
@@ -229,11 +186,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         PanelTypeSummaryVM.AddCostToPanel(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMisc && referenceObject is TECBid)
-                    {
-                        addMiscCost(targetObject as TECMisc);
-                    }
- 
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
@@ -277,17 +229,37 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         PanelTypeSummaryVM.RemoveCostFromPanel(targetObject as TECCost);
                     }
-                    else if (targetObject is TECMisc && referenceObject is TECBid)
+                }
+            }
+        }
+        private void bidChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                var targetObject = args.NewValue;
+                var referenceObject = args.OldValue;
+
+                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
+                {
+                    if (targetObject is TECMisc && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        removeMiscCost(targetObject as TECMisc);
+                        TECMisc cost = targetObject as TECMisc;
+                        if (cost.Type == CostType.TEC)
+                        {
+                            MiscCostsSummaryVM.AddMiscCost(cost);
+                        }
                     }
                 }
-                else if (args.PropertyName == "Cost" || args.PropertyName == "Quantity")
+                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (args.OldValue is TECMisc && args.NewValue is TECMisc)
+                    if (targetObject is TECMisc && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
-                        removeMiscCost(args.OldValue as TECMisc);
-                        addMiscCost(args.NewValue as TECMisc);
+                        TECMisc cost = targetObject as TECMisc;
+                        if (cost.Type == CostType.TEC)
+                        {
+                            MiscCostsSummaryVM.RemoveMiscCost(targetObject as TECMisc);
+                        }
                     }
                 }
             }
@@ -334,23 +306,23 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TotalLabor");
             }
         }
+
+        private void MiscCostsSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "MiscCostSubTotalCost")
+            {
+                RaisePropertyChanged("TotalMiscCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "MiscCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalMiscLabor");
+                RaisePropertyChanged("TotalLabor");
+            }
+        }
         #endregion
 
         #region Add/Remove
-        private void addMiscCost(TECMisc cost)
-        {
-            MiscCosts.Add(cost);
-            MiscCostSubTotalCost += cost.Cost * cost.Quantity;
-            MiscCostSubTotalLabor += cost.Labor * cost.Quantity;
-        }
-
-        private void removeMiscCost(TECMisc cost)
-        {
-            MiscCosts.Remove(cost);
-            MiscCostSubTotalCost -= cost.Cost * cost.Quantity;
-            MiscCostSubTotalLabor -= cost.Labor * cost.Quantity;
-        }
-
         static public Tuple<double, double> AddCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
             double costChange = 0;
