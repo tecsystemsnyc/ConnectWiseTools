@@ -43,7 +43,7 @@ namespace TECUserControlLibrary.ViewModels
             setupMiscVM();
             setupInstanceSystemVM();
 
-            DGTabIndex = GridIndex.AddControlledScope;
+            DGTabIndex = GridIndex.Systems;
 
             TemplatesVisibility = Visibility.Visible;
 
@@ -227,7 +227,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             ScopeDataGrid.NullifySelected();
 
-            if (DGTabIndex == GridIndex.Scope)
+            if (DGTabIndex == GridIndex.Systems)
             {
                 ScopeCollection.SystemsVisibility = Visibility.Visible;
                 ScopeCollection.EquipmentVisibility = Visibility.Visible;
@@ -329,26 +329,6 @@ namespace TECUserControlLibrary.ViewModels
                 ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
-            }
-            else if (DGTabIndex == GridIndex.AddControlledScope)
-            {
-                ScopeCollection.SystemsVisibility = Visibility.Visible;
-                ScopeCollection.EquipmentVisibility = Visibility.Visible;
-                ScopeCollection.SubScopeVisibility = Visibility.Visible;
-                ScopeCollection.DevicesVisibility = Visibility.Visible;
-                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                ScopeCollection.TagsVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerVisibility = Visibility.Visible;
-                ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
-                ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
-                ScopeCollection.PanelsVisibility = Visibility.Visible;
-                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
-
-                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
             else
             {

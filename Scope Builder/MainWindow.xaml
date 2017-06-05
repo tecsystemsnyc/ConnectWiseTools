@@ -138,8 +138,6 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={cLibUtilities:GridIndexToIntegerConverter}}">
                 <TabItem Header="None"
                          Visibility="Collapsed"/>
-                <TabItem Header="Controlled Scope"
-                         Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <cLibViews:SystemsGridView SystemsSource="{Binding Bid.Systems}"
                                              ViewModel="{Binding ScopeDataGrid}"/>
@@ -152,7 +150,7 @@
                 </TabItem>
                 
                 <TabItem Header="Proposal">
-                    <cLibViews:ProposalView ViewModel="{Binding}"/>
+                    <cLibViews:ProposalView ViewModel="{Binding DocumentBuilderVM}"/>
                 </TabItem>
                 <TabItem Header="Budget">
                     <cLibViews:BudgetView ViewModel="{Binding BudgetVM}"/>

@@ -297,7 +297,7 @@ namespace TemplateBuilder.MVVM
             TypicalSystemsTab.DragHandler += DragOver;
             TypicalSystemsTab.DropHandler += Drop;
             TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
-            TypicalSystemsTab.ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab.ComponentVM.SelectionChanged += EditTab.updateSelection;
         }
         private void setupConstantsVM()
         {

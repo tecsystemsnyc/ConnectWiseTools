@@ -161,7 +161,7 @@ namespace EstimatingUtilitiesLibrary
             bid.Exclusions = getExclusions();
             bid.Drawings = getDrawings();
             bid.Controllers = getOrphanControllers();
-            bid.MiscCosts = getMisc();
+            bid.MiscCosts = getMiscInBid();
             bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
@@ -1225,7 +1225,37 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
-        
+
+        static private ObservableCollection<TECMisc> getMiscInBid()
+        {
+            ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
+            string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
+            command += "')";
+            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            foreach (DataRow row in miscDT.Rows)
+            {
+                misc.Add(getMiscFromRow(row));
+            }
+
+            return misc;
+        }
+        static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid)
+        {
+            ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
+            string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
+            command += SystemMiscTable.SystemID.Name + " = '" + guid;
+            command += "')";
+            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            foreach (DataRow row in miscDT.Rows)
+            {
+                misc.Add(getMiscFromRow(row));
+            }
+
+            return misc;
+        }
+
         #endregion //Loading from DB Methods
 
         #region Populate Derived
@@ -1544,7 +1574,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
 
-        #region Table Row to Object Methods
+        #region Row to Object Methods
         #region Base Scope
         //private static TECSystem getSystemFromRow(DataRow row)
         //{
@@ -1872,6 +1902,7 @@ namespace EstimatingUtilitiesLibrary
             controlledScope.Equipment = getEquipmentInSystem(guid);
             controlledScope.Panels = getPanelsInSystem(guid);
             controlledScope.SystemInstances = getChildrenSystems(guid);
+            controlledScope.MiscCosts = getMiscInSystem(guid);
             getScopeChildren(controlledScope);
 
             return controlledScope;

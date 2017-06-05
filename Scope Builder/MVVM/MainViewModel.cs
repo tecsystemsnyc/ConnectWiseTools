@@ -139,7 +139,7 @@ namespace Scope_Builder.MVVM
             isEstimate = false;
             programName = "Scope Builder";
             buildTitleString();
-            DGTabIndex = GridIndex.Scope;
+            DGTabIndex = GridIndex.Systems;
             workingFileParameters = BidFileParameters;
 
             ToggleTemplatesVisibilityCommand = new RelayCommand(ToggleTemplatesVisibilityExecute);
@@ -171,7 +171,7 @@ namespace Scope_Builder.MVVM
         #region Helper Functions
         private void updateVisibility()
         {
-            if (DGTabIndex == GridIndex.Scope)
+            if (DGTabIndex == GridIndex.Systems)
             {
                 ScopeCollection.SystemsVisibility = Visibility.Visible;
                 ScopeCollection.EquipmentVisibility = Visibility.Visible;

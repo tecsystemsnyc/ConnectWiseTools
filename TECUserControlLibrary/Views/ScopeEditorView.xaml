@@ -44,12 +44,12 @@
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
-            <TabItem Header="Typical Systems">
-                <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
-            </TabItem>
-            <TabItem Header="Instances">
+            <TabItem Header="Systems">
                 <TabControl>
-                    <TabItem Header="All Systems">
+                    <TabItem Header="Typical">
+                        <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
+                    </TabItem>
+                    <TabItem Header="Instances">
                         <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
                     </TabItem>
                     <TabItem Header="By Location">

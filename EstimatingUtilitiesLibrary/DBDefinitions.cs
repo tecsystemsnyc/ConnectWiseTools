@@ -1284,6 +1284,25 @@ namespace EstimatingUtilitiesLibrary
             SystemType
         };
     }
+    public class SystemMiscTable : TableBase
+    {
+        public static new string TableName = "TECSystemTECMisc";
+        public static Type SystemType = typeof(TECSystem);
+        public static Type MiscType = typeof(TECMisc);
+
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField MiscID = new TableField("MIscID", "TEXT", MiscType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SystemID,
+            MiscID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            SystemType,
+            MiscType
+        };
+    }
 
     public class CharacteristicScopeInstanceScopeTable : TableBase
     {
@@ -1382,6 +1401,7 @@ namespace EstimatingUtilitiesLibrary
             new SystemPanelTable(),
             new SystemScopeBranchTable(),
             new SystemHierarchyTable(),
+            new SystemMiscTable(),
             new CharacteristicScopeInstanceScopeTable(),
             new BidBidParametersTable(),
             new BidMiscTable(),
@@ -1414,6 +1434,7 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
+            new ScopeBranchTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1437,6 +1458,7 @@ namespace EstimatingUtilitiesLibrary
             new SystemPanelTable(),
             new SystemHierarchyTable(),
             new SystemScopeBranchTable(),
+            new SystemMiscTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new IOModuleManufacturerTable()
@@ -1508,6 +1530,7 @@ namespace EstimatingUtilitiesLibrary
             new SystemPanelTable(),
             new SystemHierarchyTable(),
             new SystemScopeBranchTable(),
+            new SystemMiscTable(),
             new CharacteristicScopeInstanceScopeTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
