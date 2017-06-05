@@ -33,7 +33,7 @@ namespace TemplateBuilder.MVVM
             buildTitleString();
             setupCommands();
             setupVMs();
-            DGTabIndex = TemplateGridIndex.ControlledScope;
+            DGTabIndex = TemplateGridIndex.Systems;
 
             ResetStatus();
         }
@@ -404,33 +404,7 @@ namespace TemplateBuilder.MVVM
 
             switch (gridIndex)
             {
-                case TemplateGridIndex.Systems:
-                    ScopeCollection.SystemsVisibility = Visibility.Visible;
-                    ScopeCollection.EquipmentVisibility = Visibility.Visible;
-                    ScopeCollection.SubScopeVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-                    ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-
-                    ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
-                    ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
-                    ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
-                    ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
-                    ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
-                    ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
-                    ScopeDataGrid.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
-
-                    ScopeCollection.TabIndex = ScopeCollectionIndex.System;
-                    break;
-                case TemplateGridIndex.Equipment:
+               case TemplateGridIndex.Equipment:
                     ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -552,7 +526,7 @@ namespace TemplateBuilder.MVVM
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 
                     break;
-                case TemplateGridIndex.ControlledScope:
+                case TemplateGridIndex.Systems:
 
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;

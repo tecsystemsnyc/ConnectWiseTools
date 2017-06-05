@@ -438,6 +438,7 @@ namespace EstimatingLibrary
             TECController outController = new TECController(this.Guid, Manufacturer);
             outController.copyPropertiesFromScope(this);
             outController._cost = Cost;
+            outController._type = Type;
             foreach (TECIO io in this.IO)
             {
                 outController.IO.Add(io.Copy() as TECIO);

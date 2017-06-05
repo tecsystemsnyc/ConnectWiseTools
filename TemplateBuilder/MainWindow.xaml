@@ -73,12 +73,8 @@
                         Background="{DynamicResource SectionBackgroundBrush}">
                 <TabItem Header="None" Visibility="Collapsed">
                 </TabItem>
-                <TabItem Header="Controlled Scope">
-                    <views:TypicalSystemsView ViewModel="{Binding ElementName=root, Path=DataContext.TypicalSystemsTab}"/>
-                </TabItem>
                 <TabItem Header="Systems">
-                    <views:SystemsGridView SystemsSource="{Binding Templates.SystemTemplates}"
-                                             ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                    <views:TypicalSystemsView ViewModel="{Binding ElementName=root, Path=DataContext.TypicalSystemsTab}"/>
                 </TabItem>
                 <TabItem Header="Equipment">
                     <views:EquipmentGridView EquipmentSource="{Binding Templates.EquipmentTemplates}"

@@ -2497,6 +2497,7 @@ namespace EstimatingUtilitiesLibrary
         private static void removeObjectFromTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
+            
             if (fieldsIncludeQuantity(tableInfo.Fields))
             {
                 var qty = getQuantityInParentCollection(item.TargetObject, item.ReferenceObject);
@@ -2609,7 +2610,11 @@ namespace EstimatingUtilitiesLibrary
                 relevantObjects = new object[]
                 { item.TargetObject };
             }
-
+            if(tableInfo.PrimaryFields.Count == 1 && item.Change == Change.Remove)
+            {
+                return assembleDataWithItem(data, item, tableInfo.PrimaryFields[0]);
+            }
+            
             int currentField = 0;
             foreach (TableField field in tableInfo.Fields)
             {
