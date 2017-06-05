@@ -128,19 +128,12 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
             ScopeDataGrid.AssignChildDelegates();
-            ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
-            ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.ChildVM.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
-            ScopeDataGrid.ChildVM.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
             ControllersPanelsVM = new ControllersPanelsVM(new TECSystem());
             ConnectionVM = new ConnectionVM(scopeManager);

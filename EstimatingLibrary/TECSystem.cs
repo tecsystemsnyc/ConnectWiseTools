@@ -191,7 +191,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                if (Panels != null)
+                if (SystemInstances != null)
                 {
                     SystemInstances.CollectionChanged -= CollectionChanged;
                 }
@@ -209,7 +209,7 @@ namespace EstimatingLibrary
             set
             {
                 var temp = this.Copy();
-                if (Panels != null)
+                if (ScopeBranches != null)
                 {
                     ScopeBranches.CollectionChanged -= CollectionChanged;
                 }
@@ -221,6 +221,22 @@ namespace EstimatingLibrary
             }
         }
 
+        private ObservableCollection<TECMisc> _miscCosts;
+        public ObservableCollection<TECMisc> MiscCosts
+        {
+            get { return _miscCosts; }
+            set
+            {
+                var temp = this.Copy();
+                if (MiscCosts != null)
+                {
+                    MiscCosts.CollectionChanged -= CollectionChanged;
+                }
+                _miscCosts = value;
+                MiscCosts.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("MiscCosts", temp, this);
+            }
+        }
 
         public List<TECCost> Costs
         {
@@ -278,6 +294,7 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _systemInstances = new ObservableCollection<TECSystem>();
             _scopeBranches = new ObservableCollection<TECScopeBranch>();
+            _miscCosts = new ObservableCollection<TECMisc>();
             CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Equipment.CollectionChanged += CollectionChanged;
@@ -285,6 +302,7 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += CollectionChanged;
             SystemInstances.CollectionChanged += CollectionChanged;
             ScopeBranches.CollectionChanged += CollectionChanged;
+            MiscCosts.CollectionChanged += CollectionChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
