@@ -263,6 +263,7 @@ namespace TemplateBuilder.MVVM
             setupScopeDataGrid();
             setupMaterialsTab();
             setupTypicalSystemseTab();
+            setupConstantsVM();
         }
 
         private void setupScopeCollecion()
