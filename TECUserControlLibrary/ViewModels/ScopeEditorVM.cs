@@ -237,13 +237,13 @@ namespace TECUserControlLibrary.ViewModels
                 ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                 ScopeCollection.TagsVisibility = Visibility.Collapsed;
                 ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Visible;
                 ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                 ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Visible;
                 ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Visible;
+                ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                 ScopeCollection.TabIndex = ScopeCollectionIndex.System;
             }
