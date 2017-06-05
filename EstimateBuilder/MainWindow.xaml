@@ -74,17 +74,9 @@
                     <views:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
-                <TabItem Header="Electrical">
-                    <TabControl>
-                        <TabItem Header="Local">
-                            <views:ElectricalView
-                        ViewModel="{Binding ElectricalVM}"/>
-                        </TabItem>
-                        <TabItem Header="Network">
-                            <views:NetworkView
+                <TabItem Header="Network">
+                    <views:NetworkView
                         ViewModel="{Binding NetworkVM}"/>
-                        </TabItem>
-                    </TabControl>
                 </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
                     <views:DrawingView

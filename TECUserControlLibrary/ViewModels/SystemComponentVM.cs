@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class InstanceSystemVM : ViewModelBase, IDropTarget
+    public class SystemComponentVM : ViewModelBase, IDropTarget
     {
         #region Properties
         private TECSystem _selectedSystem;
@@ -33,7 +34,21 @@ namespace TECUserControlLibrary.ViewModels
 
         private void refreshSelected(TECSystem selected)
         {
-            ComponentVM.SelectedSystem = selected;
+            if (ControllersPanelsVM != null)
+            {
+                if (selected != null)
+                {
+                    ControllersPanelsVM.Refresh(SelectedSystem);
+                }
+                else
+                {
+                    ControllersPanelsVM.Refresh(new TECSystem());
+                }
+            }
+            if (ConnectionVM != null)
+            {
+                ConnectionVM.SelectedSystem = selected;
+            }
         }
 
         private TECBid _bid;
@@ -57,68 +72,11 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-
-        private int _controlledScopeQuantity;
-        public int ControlledScopeQuantity
-        {
-            get { return _controlledScopeQuantity; }
-            set
-            {
-                _controlledScopeQuantity = value;
-                RaisePropertyChanged("ControlledScopeQuantity");
-            }
-        }
-
-        private ObservableCollection<TECSystem> _scopeSource;
-        public ObservableCollection<TECSystem> ScopeSource
-        {
-            get { return _scopeSource; }
-            set
-            {
-                _scopeSource = value;
-                RaisePropertyChanged("ScopeSource");
-            }
-        }
-
-        private VisibilityModel _dataGridVisibilty;
-        public VisibilityModel DataGridVisibilty
-        {
-            get { return _dataGridVisibilty; }
-            set
-            {
-                _dataGridVisibilty = value;
-                RaisePropertyChanged("DataGridVisibilty");
-            }
-        }
-
-        public ICommand AddControlledScopeCommand { get; private set; }
-        public ICommand DeleteControlledScopeCommand { get; private set; }
-
-        private Visibility _debugVisibility;
-        public Visibility DebugVisibility
-        {
-            get { return _debugVisibility; }
-            set
-            {
-                _debugVisibility = value;
-                RaisePropertyChanged("DebugVisibility");
-            }
-        }
-
-        private Visibility _instanceVisibility;
-        public Visibility InstanceVisibility
-        {
-            get { return _instanceVisibility; }
-            set
-            {
-                _instanceVisibility = value;
-                RaisePropertyChanged("InstanceVisibility");
-            }
-        }
-
+        
         #region VM Extenstions
-        public SystemComponentVM ComponentVM { get; set; }
-        public SystemsVM SystemsVM {get; set;}
+        public EquipmentVM ScopeDataGrid { get; set; }
+        public ControllersPanelsVM ControllersPanelsVM { get; set; }
+        public ConnectionVM ConnectionVM { get; set; }
         #endregion
 
         #region Delegates
@@ -130,23 +88,23 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Constructors
-        public InstanceSystemVM(TECScopeManager scopeManager)
+        /// <summary>
+        /// Initializes a new instance of the AddControlledScopeExtension class.
+        /// </summary>
+        public SystemComponentVM(TECScopeManager scopeManager)
         {
             if (scopeManager is TECBid)
             {
                 _bid = scopeManager as TECBid;
-                _scopeSource = Bid.Systems;
             }
             else
             {
                 _templates = scopeManager as TECTemplates;
-                _scopeSource = Templates.SystemTemplates;
             }
             _selectedSystem = null;
-            DebugVisibility = Visibility.Collapsed;
-            InstanceVisibility = Visibility.Collapsed;
             setupVMs(scopeManager);
         }
+
         #endregion
 
         #region Methods
@@ -155,36 +113,37 @@ namespace TECUserControlLibrary.ViewModels
             if (scopeManager is TECBid)
             {
                 Bid = scopeManager as TECBid;
-                ScopeSource = Bid.Systems;
             }
             else
             {
                 Templates = scopeManager as TECTemplates;
-                ScopeSource = Templates.SystemTemplates;
             }
-            ComponentVM.Refresh(scopeManager);
-            SystemsVM.Refresh(scopeManager);
+            ScopeDataGrid.Refresh(scopeManager);
+            ConnectionVM.Refresh(scopeManager);
         }
         private void setupVMs(TECScopeManager scopeManager)
         {
-            ComponentVM = new SystemComponentVM(scopeManager);
-            ComponentVM.SelectionChanged += SelectionChanged;
+            ScopeDataGrid = new EquipmentVM(scopeManager);
+            ScopeDataGrid.SelectionChanged += SelectionChanged;
+            ScopeDataGrid.DragHandler += DragOver;
+            ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.AssignChildDelegates();
+            ScopeDataGrid.DataGridVisibilty.SystemLocation = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.ChildVM.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
+            ScopeDataGrid.ChildVM.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
-            SystemsVM = new SystemsVM(scopeManager);
-            SystemsVM.SelectionChanged += updateSelectedSystem;
-            SystemsVM.DataGridVisibilty.SystemExpander = Visibility.Collapsed;
-            SystemsVM.DragHandler += DragHandler;
-            SystemsVM.DropHandler += DropHandler;
-            SystemsVM.AssignChildDelegates();
-           
-        }
-
-        private void updateSelectedSystem(object item)
-        {
-            if(item is TECSystem)
-            {
-                SelectedSystem = item as TECSystem;
-            }
+            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem());
+            ConnectionVM = new ConnectionVM(scopeManager);
         }
         
         public void DragOver(IDropInfo dropInfo)
@@ -232,6 +191,7 @@ namespace TECUserControlLibrary.ViewModels
                 UIHelpers.StandardDrop(dropInfo);
             }
         }
+
         #endregion
     }
 }

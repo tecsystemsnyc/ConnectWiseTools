@@ -50,8 +50,7 @@
             <TabItem Header="Instances">
                 <TabControl>
                     <TabItem Header="All Systems">
-                        <controls:TypicalInstancedSystemsGridControl TypicalSystemsSource="{Binding Bid.Systems}"
-                                                  ViewModel="{Binding ScopeDataGrid}"/>
+                        <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
                     </TabItem>
                     <TabItem Header="By Location">
                         <views:LocationView LocationSource="{Binding Bid.Locations}"

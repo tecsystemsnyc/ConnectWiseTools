@@ -117,6 +117,7 @@
     <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="ViewModels\PanelTypeSummaryVM.cs" />
+    <Compile Include="ViewModels\SystemComponentVM.cs" />
     <Compile Include="Views\ControllerSummaryView.xaml.cs">
       <DependentUpon>ControllerSummaryView.xaml</DependentUpon>
     </Compile>
@@ -282,6 +283,9 @@
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
     <Compile Include="ViewModels\TECMaterialSummaryVM.cs" />
+    <Compile Include="Views\SystemComponentView.xaml.cs">
+      <DependentUpon>SystemComponentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TypicalSystemView.xaml.cs">
       <DependentUpon>TypicalSystemView.xaml</DependentUpon>
     </Compile>
@@ -536,6 +540,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\SystemEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemComponentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
