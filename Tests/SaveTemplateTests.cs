@@ -1109,7 +1109,7 @@ namespace Tests
         {
             //Act
             int oldNumControllers = templates.ControllerTemplates.Count;
-            TECController controllerToRemove = templates.ControllerTemplates[0];
+            TECController controllerToRemove = templates.ControllerTemplates.RandomObject();
 
             templates.ControllerTemplates.Remove(controllerToRemove);
 
@@ -1121,6 +1121,7 @@ namespace Tests
             foreach (TECController controller in actualTemplates.ControllerTemplates)
             {
                 if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
+                if (controller.Name == controllerToRemove.Name) Assert.Fail();
             }
 
             Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
