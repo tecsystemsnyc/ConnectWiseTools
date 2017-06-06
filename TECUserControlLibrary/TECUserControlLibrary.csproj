@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\MiscCostSummaryItem.cs" />
+    <Compile Include="Models\NetworkController.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
     </Compile>
@@ -104,6 +105,11 @@
     </Compile>
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\NetworkControllerVM.cs" />
+    <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="Views\NetworkControllerView.xaml.cs">
+      <DependentUpon>NetworkControllerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SystemProposalGridControl.xaml.cs">
       <DependentUpon>SystemProposalGridControl.xaml</DependentUpon>
@@ -129,9 +135,6 @@
     </Compile>
     <Compile Include="UserControls\AssociatedCostsSummaryGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsSummaryGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\BMSControllerGridControl.xaml.cs">
-      <DependentUpon>BMSControllerGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
@@ -189,6 +192,9 @@
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NetworkView.xaml.cs">
+      <DependentUpon>NetworkView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
@@ -208,7 +214,6 @@
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AssociatedCostSummaryItem.cs" />
-    <Compile Include="Models\BMSController.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\DeviceSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
@@ -268,7 +273,6 @@
     <Compile Include="ViewModels\ElectricalMaterialSummaryVM.cs" />
     <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
-    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
     <Compile Include="ViewModels\SystemsVM.cs" />
     <Compile Include="ViewModels\StatusBarVM.cs" />
@@ -313,9 +317,6 @@
     <Compile Include="UserControls\LengthSummaryDataGrid.xaml.cs">
       <DependentUpon>LengthSummaryDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NetworkView.xaml.cs">
-      <DependentUpon>NetworkView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\PanelTypeSummaryView.xaml.cs">
       <DependentUpon>PanelTypeSummaryView.xaml</DependentUpon>
     </Compile>
@@ -351,6 +352,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NetworkControllerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -368,10 +373,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AssociatedCostsSummaryGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\BMSControllerGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -448,6 +449,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MiscCostsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NetworkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -638,10 +643,6 @@
     <Page Include="UserControls\LengthSummaryDataGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NetworkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PanelTypeSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>

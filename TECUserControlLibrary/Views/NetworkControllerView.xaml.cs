@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,25 +13,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for NetworkView.xaml
+    /// Interaction logic for NetworkControllerGridControl.xaml
     /// </summary>
-    public partial class NetworkView : UserControl
+    public partial class NetworkControllerView : UserControl
     {
-        public NetworkVM ViewModel
+        public NetworkControllerVM ViewModel
         {
-            get { return (NetworkVM)GetValue(ViewModelProperty); }
+            get { return (NetworkControllerVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(NetworkVM),
-                typeof(NetworkView));
+            DependencyProperty.Register("ViewModel", typeof(NetworkControllerVM),
+                typeof(NetworkControllerView));
 
-        public NetworkView()
+        public NetworkControllerView()
         {
             InitializeComponent();
         }
