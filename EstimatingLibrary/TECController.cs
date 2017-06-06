@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public enum ControllerType
+    public enum NetworkType
     {
-        IsServer = 1, IsBMS, IsNetworked, IsStandalone
+        Unitary = 1, DDC, Server
     };
 
     public class TECController : TECCost, CostComponent
@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnection> _childrenConnections;
         private ObservableCollection<TECIO> _io;
         private TECManufacturer _manufacturer;
-        private ControllerType _controllerType;
+        private NetworkType _networkType;
         
         public TECNetworkConnection ParentConnection
         {
@@ -71,18 +71,14 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public ControllerType ControllerType
+        public NetworkType NetworkType
         {
-            get { return _controllerType; }
+            get { return _networkType; }
             set
             {
                 var temp = Copy();
-                _controllerType = value;
-                NotifyPropertyChanged("ControllerType", temp, this);
-                RaisePropertyChanged("IsServer");
-                RaisePropertyChanged("IsBMS");
-                RaisePropertyChanged("IsNetworked");
-                RaisePropertyChanged("IsStandalone");
+                _networkType = value;
+                NotifyPropertyChanged("NetworkType", temp, this);
             }
         }
 
@@ -152,35 +148,6 @@ namespace EstimatingLibrary
             get
             {
                 return getNetworkConnections();
-            }
-        }
-
-        public bool IsServer
-        {
-            get
-            {
-                return (ControllerType == ControllerType.IsServer);
-            }
-        }
-        public bool IsBMS
-        {
-            get
-            {
-                return ((ControllerType == ControllerType.IsServer) || (ControllerType == ControllerType.IsBMS));
-            }
-        }
-        public bool IsNetworked
-        {
-            get
-            {
-                return ((ControllerType == ControllerType.IsServer) || (ControllerType == ControllerType.IsBMS) || (ControllerType == ControllerType.IsNetworked));
-            }
-        }
-        public bool IsStandalone
-        {
-            get
-            {
-                return (ControllerType == ControllerType.IsStandalone);
             }
         }
 

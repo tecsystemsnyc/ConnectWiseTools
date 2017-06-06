@@ -1810,7 +1810,7 @@ namespace EstimatingUtilitiesLibrary
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
             controller.Cost = row[ControllerTable.Cost.Name].ToString().ToDouble(0);
-            controller.ControllerType = UtilitiesMethods.StringToEnum<ControllerType>(row[ControllerTable.Type.Name].ToString(), ControllerType.IsStandalone);
+            controller.NetworkType = UtilitiesMethods.StringToEnum<NetworkType>(row[ControllerTable.Type.Name].ToString(), 0);
             controller.IO = getIOInController(guid);
             getScopeChildren(controller);
             controller.ChildrenConnections = getConnectionsInController(controller);
