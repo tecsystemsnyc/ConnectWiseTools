@@ -176,7 +176,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         var subConnectionToAdd = new SubScopeConnection(subScope);
 
-                        subConnectionToAdd.ParentSystem = SelectedSystem;
                         subConnectionToAdd.ParentEquipment = equipment;
 
                         SubScopeConnectionCollection.Add(subConnectionToAdd);
