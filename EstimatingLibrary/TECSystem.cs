@@ -276,7 +276,21 @@ namespace EstimatingLibrary
             return outCosts;
         }
 
-        public ObservableItemToInstanceList<TECScope> CharactersticInstances;
+        private ObservableItemToInstanceList<TECScope> _charactersticInstances;
+        public ObservableItemToInstanceList<TECScope> CharactersticInstances
+        {
+            get { return _charactersticInstances; }
+            set
+            {
+                if(CharactersticInstances != null)
+                {
+                    CharactersticInstances.PropertyChanged -= CharactersticInstances_PropertyChanged;
+                }
+                _charactersticInstances = value;
+                CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
+
+            }
+        }
         private ChangeWatcher watcher;
         
         #endregion //Properties
@@ -366,6 +380,7 @@ namespace EstimatingLibrary
             }
             outSystem._budgetPriceModifier = this.BudgetPriceModifier;
             outSystem.copyPropertiesFromScope(this);
+            ModelLinkingHelper.LinkCharacteristicInstances(CharactersticInstances, outSystem);
             return outSystem;
         }
         public override object DragDropCopy()
@@ -442,29 +457,6 @@ namespace EstimatingLibrary
                 {
                     handleRemove(newValue, oldValue);
                 }
-                else if (e.PropertyName == "Edit")
-                {
-                }
-                else if (e.PropertyName == "ChildChanged")
-                {
-
-                }
-                else if (e.PropertyName == "ObjectPropertyChanged")
-                {
-
-                }
-                else if (e.PropertyName == "RelationshipPropertyChanged")
-                {
-
-                }
-                else if (e.PropertyName == "MetaAdd")
-                {
-
-                }
-                else if (e.PropertyName == "MetaRemove")
-                {
-
-                }
                 else if (e.PropertyName == "AddRelationship")
                 {
                     handleAdd(newValue, oldValue);
@@ -473,27 +465,6 @@ namespace EstimatingLibrary
                 {
                     handleRemove(newValue, oldValue);
                 }
-                else if (e.PropertyName == "RemovedSubScope") { }
-                else if (e.PropertyName == "AddCatalog")
-                {
-
-                }
-                else if (e.PropertyName == "RemoveCatalog")
-                {
-
-                }
-                else if (e.PropertyName == "Catalogs")
-                {
-
-                }
-                else
-                {
-
-                }
-
-            }
-            else
-            {
             }
         }
         private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -30,6 +30,7 @@ namespace EstimatingUtilitiesLibrary
         #region Public Functions
         static public TECScopeManager Load(string path)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
@@ -50,7 +51,8 @@ namespace EstimatingUtilitiesLibrary
 
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
-
+            watch.Stop();
+            Console.WriteLine("Load: " + watch.ElapsedMilliseconds);
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
@@ -177,7 +179,6 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECTemplates));
 
             TECTemplates templates = new TECTemplates();
-
             templates = getTemplatesInfo();
             getScopeManagerProperties(templates);
             templates.SystemTemplates = getSystems();
@@ -186,7 +187,6 @@ namespace EstimatingUtilitiesLibrary
             templates.ControllerTemplates = getOrphanControllers();
             templates.MiscCostTemplates = getMisc();
             templates.PanelTemplates = getOrphanPanels();
-
             ModelLinkingHelper.LinkTemplates(templates);
             return templates;
         }
@@ -2076,6 +2076,7 @@ namespace EstimatingUtilitiesLibrary
             addObject(new StackItem(Change.Add, bid, bid.Parameters));
             foreach (TECSystem system in bid.Systems)
             {
+                addObject(new StackItem(Change.Add, bid, system));
                 saveFullSystem(system, bid);
             }
             foreach (TECController controller in bid.Controllers)
@@ -2116,6 +2117,7 @@ namespace EstimatingUtilitiesLibrary
             saveScopeManagerProperties(templates);
             foreach (TECSystem system in templates.SystemTemplates)
             {
+                addObject(new StackItem(Change.Add, templates, system));
                 saveFullSystem(system, templates);
             }
             foreach (TECEquipment equipment in templates.EquipmentTemplates)
@@ -2183,7 +2185,6 @@ namespace EstimatingUtilitiesLibrary
         private static void saveFullSystem(TECSystem system, TECScopeManager scopeManager)
         {
             var change = Change.Add;
-            addObject(new StackItem(change, scopeManager, system));
             saveScopeChildProperties(system);
             saveCompleteEquipment(system);
             foreach (TECPanel panel in system.Panels)
@@ -2472,7 +2473,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveIndexRelationships(Dictionary<TableBase, List<StackItem>> updates)
         {
-            foreach (KeyValuePair<TableBase, List<StackItem>> item in indexesToUpdate)
+            foreach (KeyValuePair<TableBase, List<StackItem>> item in updates)
             {
                 foreach (StackItem stackItem in item.Value)
                 {
@@ -2593,6 +2594,11 @@ namespace EstimatingUtilitiesLibrary
                 item.TargetObject,
                 item.ReferenceObject
             };
+            var relevantTypes = new Type[]
+            {
+                item.TargetType,
+                item.ReferenceType
+            };
             Dictionary<string, string> data = new Dictionary<string, string>();
 
             var isHierarchial = false;
@@ -2603,6 +2609,11 @@ namespace EstimatingUtilitiesLibrary
                 {
                     item.ReferenceObject,
                     item.TargetObject
+                };
+                relevantTypes = new Type[]
+                {
+                    item.ReferenceType,
+                    item.TargetType
                 };
             }
             else if (tableInfo.Types.Count == 1)
@@ -2620,7 +2631,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (isHierarchial)
                 {
-                    if (isFieldType(tableInfo, field, relevantObjects[currentField]))
+                    if (isFieldType(field, relevantObjects[currentField], relevantTypes[currentField]))
                     {
                         DebugHandler.LogDebugMessage("Adding " + field.Name + " to table " + tableInfo.Name + " with type " + relevantObjects[currentField].GetType(), DebugBooleans.Generic);
 
@@ -2856,18 +2867,6 @@ namespace EstimatingUtilitiesLibrary
                 isEdit = true;
             }
             return isEdit;
-        }
-        private static bool isFieldType(TableInfo table, TableField field, Object consideredObject)
-        {
-            var type = consideredObject.GetType();
-            if (field.Property == null)
-                return false;
-            else if (field.Property.ReflectedType == type)
-                return true;
-            else if (field.Property.ReflectedType == type.BaseType && !table.Types.Contains(type))
-                return true;
-            else
-                return false;
         }
         private static bool isFieldType(TableField field, Object consideredObject, Type consideredType)
         {

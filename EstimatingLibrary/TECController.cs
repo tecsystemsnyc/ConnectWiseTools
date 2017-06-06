@@ -263,14 +263,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, (item as TECObject).Copy(), typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
                 }
             }
             if (sender == ChildrenConnections)

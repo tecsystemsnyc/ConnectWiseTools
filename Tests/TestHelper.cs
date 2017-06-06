@@ -135,14 +135,14 @@ namespace Tests
             system1.BudgetPriceModifier = 234.5;
             system1.Quantity = 2345;
             
-            var system2 = new TECSystem();
+            var system2 = CreateTestSystem(bid.Catalogs);
             AssignSecondaryProperties(system2, bid);
             system2.Name = "System 2";
             system2.Description = "Description 2";
             system2.BudgetPriceModifier = 234.52;
             system2.Quantity = 23452;
 
-            var system3 = new TECSystem();
+            var system3 = CreateTestSystem(bid.Catalogs);
             AssignSecondaryProperties(system3, bid);
             system3.Name = "System 3";
             system3.Description = "No Location";
@@ -151,7 +151,14 @@ namespace Tests
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);
             bid.Systems.Add(system3);
-            
+
+            system1.AddInstance(bid);
+            system2.AddInstance(bid);
+            system3.AddInstance(bid);
+            system1.AddInstance(bid);
+            system2.AddInstance(bid);
+            system3.AddInstance(bid);
+
             //Equipment
             var equipment1 = new TECEquipment();
             AssignSecondaryProperties(equipment1, bid);

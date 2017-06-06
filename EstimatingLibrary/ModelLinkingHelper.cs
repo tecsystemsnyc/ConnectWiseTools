@@ -72,6 +72,33 @@ namespace EstimatingLibrary
             }
             linkConnections(system.Controllers, system.Equipment, guidDictionary);
             linkNetworkConnections(system.Controllers, guidDictionary);
+            linkSystems(system.SystemInstances, scopeManager);
+        }
+
+        public static void LinkCharacteristicInstances(ObservableItemToInstanceList<TECScope> oldCharacteristicInstances, TECSystem system)
+        {
+            ObservableItemToInstanceList<TECScope> newCharacteristicInstances = new ObservableItemToInstanceList<TECScope>();
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                linkCharacteristicCollections(system.Equipment, instance.Equipment, oldCharacteristicInstances, newCharacteristicInstances);
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECEquipment instanceEquipment in instance.Equipment)
+                    {
+                        linkCharacteristicCollections(equipment.SubScope, instanceEquipment.SubScope, oldCharacteristicInstances, newCharacteristicInstances);
+                        foreach(TECSubScope subscope in equipment.SubScope)
+                        {
+                            foreach(TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                            {
+                                linkCharacteristicCollections(subscope.Points, instanceSubScope.Points, oldCharacteristicInstances, newCharacteristicInstances);
+                            }
+                        }
+                    }
+                }
+                linkCharacteristicCollections(system.Controllers, instance.Controllers, oldCharacteristicInstances, newCharacteristicInstances);
+                linkCharacteristicCollections(system.Panels, instance.Panels, oldCharacteristicInstances, newCharacteristicInstances);
+            }
+            system.CharactersticInstances = newCharacteristicInstances;
         }
         #endregion
 
@@ -82,6 +109,31 @@ namespace EstimatingLibrary
             linkManufacturersWithDevices(catalogs.Manufacturers, catalogs.Devices);
             linkManufacturersWithIOModules(catalogs.Manufacturers, catalogs.IOModules);
 
+        }
+        static private void linkCharacteristicCollections(IList characteristic, IList instances,
+            ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
+            ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
+        {
+            foreach (var item in oldCharacteristicInstances.GetFullDictionary())
+            {
+                foreach (TECScope charItem in characteristic)
+                {
+                    if (item.Key.Guid == charItem.Guid)
+                    {
+                        foreach (var sub in item.Value)
+                        {
+                            foreach (TECScope subInstance in instances)
+                            {
+                                if (subInstance.Guid == sub.Guid)
+                                {
+                                    newCharacteristicInstances.AddItem(charItem, subInstance);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
         }
 
         static private void linkSystems(ObservableCollection<TECSystem> systems, TECScopeManager scopeManager)
