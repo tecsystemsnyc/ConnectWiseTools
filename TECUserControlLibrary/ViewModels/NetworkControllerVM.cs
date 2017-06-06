@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,8 +14,9 @@ using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class NetworkControllerVM : ViewModelBase
+    public class NetworkControllerVM : ViewModelBase, IDropTarget
     {
+        #region Properties
         private ObservableCollection<NetworkController> _networkControllers;
         public ObservableCollection<NetworkController> NetworkControllers
         {
@@ -35,6 +37,10 @@ namespace TECUserControlLibrary.ViewModels
         public TECConnectionType SelectedWire { get; set; }
 
         public ICommand AddConnectionCommand { get; private set; }
+
+        public Action<IDropInfo> DragHandler;
+        public Action<IDropInfo> DropHandler;
+        #endregion
 
         public NetworkControllerVM(Visibility detailsVisibility, TECBid bid = null)
         {
@@ -116,6 +122,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 return false;
             }
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DragHandler?.Invoke(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            DropHandler?.Invoke(dropInfo);
         }
     }
 }

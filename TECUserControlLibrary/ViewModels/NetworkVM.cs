@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,10 +9,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class NetworkVM : ViewModelBase
+    public class NetworkVM : ViewModelBase, IDropTarget
     {
         public NetworkControllerVM NetworkControllersVM { get; private set; }
         public NetworkControllerVM UnitaryControllersVM { get; private set; }
@@ -90,8 +92,28 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         sortController(targetObject as TECController);
                     }
+                    else if (targetObject is TECSystem && referenceObject is TECSystem)
+                    {
+                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
+                        {
+                            sortController(controller);
+                        }
+                    }
                 }
             }
         }
+
+
+        #region Drag/Drop
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.StandardDragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            
+        }
+        #endregion
     }
 }
