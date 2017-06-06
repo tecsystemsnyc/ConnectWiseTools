@@ -637,6 +637,17 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(item);
                 handleSystemChildren(system, change);
             }
+            foreach(var pair in scope.CharactersticInstances.GetFullDictionary())
+            {
+                var subChange = Change.AddRelationship;
+                if (change == Change.Remove)
+                { subChange = Change.RemoveRelationship; }
+                foreach (var value in pair.Value)
+                {
+                    item = new StackItem(subChange, pair.Key, value, typeof(TECScope), typeof(TECScope));
+                    SaveStack.Add(item);
+                }
+            }
         }
         private void handlePanelChildren(TECPanel panel, Change change)
         {
