@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -19,7 +20,8 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <DataGrid ItemsSource="{Binding NetworkControllers}"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  dd:DragDrop.DropHandler="{Binding}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
