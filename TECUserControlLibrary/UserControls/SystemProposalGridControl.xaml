@@ -27,14 +27,7 @@
             <DataGridTextColumn Header="Description" Width="Auto" MinWidth="70"
                             Binding="{Binding Description}"/>
             <DataGridCheckBoxColumn Header="Include Equipment" Width="Auto"
-                                    Binding="{Binding ProposeEquipment}">
-                <DataGridCheckBoxColumn.ElementStyle>
-                    <Style>
-                        <Setter Property="FrameworkElement.Margin" Value="5, 0, 0, 0"/>
-                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
-                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
-                    </Style>
-                </DataGridCheckBoxColumn.ElementStyle>
+                                    Binding="{Binding ProposeEquipment, UpdateSourceTrigger=PropertyChanged}">
             </DataGridCheckBoxColumn>
         </DataGrid.Columns>
         <DataGrid.RowDetailsTemplate>

@@ -1295,7 +1295,7 @@ namespace EstimatingUtilitiesLibrary
 
 
             var proposalScopeParagraphs = new List<Paragraph>();
-            addProposalScopeList(_bid.Systems, proposalScopeParagraphs, fontSize1, 1);
+            addSystemList(_bid.Systems, proposalScopeParagraphs, fontSize1, 1);
 
             Paragraph paragraph40 = new Paragraph() { RsidParagraphMarkRevision = "00795B63", RsidParagraphAddition = "00B23CE5", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "00B23CE5" };
 
@@ -13313,64 +13313,62 @@ namespace EstimatingUtilitiesLibrary
 
                 paragraph32.Append(paragraphProperties32);
                 paragraph32.Append(run46);
-
-                Paragraph paragraph33 = new Paragraph() { RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "00A61B35", RsidRunAdditionDefault = "00A61B35" };
-                scopeParagraphs.Add(paragraph33);
-                ParagraphProperties paragraphProperties33 = new ParagraphProperties();
-                Indentation indentation2 = new Indentation() { Start = "360" };
-
-                ParagraphMarkRunProperties paragraphMarkRunProperties30 = new ParagraphMarkRunProperties();
-
-                paragraphMarkRunProperties30.Append((FontSize)fontSize.CloneNode(true));
-
-                paragraphProperties33.Append(indentation2);
-                paragraphProperties33.Append(paragraphMarkRunProperties30);
-
-                paragraph33.Append(paragraphProperties33);
-
-                addScopeBranchList(branch.Branches, scopeParagraphs, fontSize, levelIndex + 1);
+                
             }
             
         }
 
-        private void addProposalScopeList(ObservableCollection<TECSystem> proposalScope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        private void addSystemList(ObservableCollection<TECSystem> systems, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
         {
-            foreach(TECSystem scope in proposalScope)
+            foreach(TECSystem scope in systems)
             {
-                Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
-                poposalScopeParagraphs.Add(paragraph35);
-                ParagraphProperties paragraphProperties35 = new ParagraphProperties();
-
-                NumberingProperties numberingProperties3 = new NumberingProperties();
-                NumberingLevelReference numberingLevelReference3 = new NumberingLevelReference() { Val = levelIndex };
-                NumberingId numberingId3 = new NumberingId() { Val = 25 };
-
-                numberingProperties3.Append(numberingLevelReference3);
-                numberingProperties3.Append(numberingId3);
-
-                ParagraphMarkRunProperties paragraphMarkRunProperties32 = new ParagraphMarkRunProperties();
-
-                paragraphMarkRunProperties32.Append((FontSize)fontSize.CloneNode(true));
-
-                paragraphProperties35.Append(numberingProperties3);
-                paragraphProperties35.Append(paragraphMarkRunProperties32);
-
-                Run run51 = new Run() { RsidRunProperties = "00A61B35" };
-
-                RunProperties runProperties51 = new RunProperties();
-
-                runProperties51.Append((FontSize)fontSize.CloneNode(true));
-                Text text34 = new Text();
-                text34.Text = scope.Name;
-
-                run51.Append(runProperties51);
-                run51.Append(text34);
-
-                paragraph35.Append(paragraphProperties35);
-                paragraph35.Append(run51);
-
+                addItemToList(scope, poposalScopeParagraphs, fontSize, levelIndex);
                 addScopeBranchList(scope.ScopeBranches, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                if (scope.ProposeEquipment)
+                {
+                    foreach(TECEquipment equipment in scope.Equipment)
+                    {
+                        addItemToList(equipment, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                    }
+                }
             }
+        }
+
+        private void addItemToList(TECScope scope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        {
+           
+            Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
+            poposalScopeParagraphs.Add(paragraph35);
+            ParagraphProperties paragraphProperties35 = new ParagraphProperties();
+
+            NumberingProperties numberingProperties3 = new NumberingProperties();
+            NumberingLevelReference numberingLevelReference3 = new NumberingLevelReference() { Val = levelIndex };
+            NumberingId numberingId3 = new NumberingId() { Val = 25 };
+
+            numberingProperties3.Append(numberingLevelReference3);
+            numberingProperties3.Append(numberingId3);
+
+            ParagraphMarkRunProperties paragraphMarkRunProperties32 = new ParagraphMarkRunProperties();
+
+            paragraphMarkRunProperties32.Append((FontSize)fontSize.CloneNode(true));
+
+            paragraphProperties35.Append(numberingProperties3);
+            paragraphProperties35.Append(paragraphMarkRunProperties32);
+
+            Run run51 = new Run() { RsidRunProperties = "00A61B35" };
+
+            RunProperties runProperties51 = new RunProperties();
+
+            runProperties51.Append((FontSize)fontSize.CloneNode(true));
+            Text text34 = new Text();
+            text34.Text = scope.Name;
+
+            run51.Append(runProperties51);
+            run51.Append(text34);
+
+            paragraph35.Append(paragraphProperties35);
+            paragraph35.Append(run51);
+
         }
     }
 }

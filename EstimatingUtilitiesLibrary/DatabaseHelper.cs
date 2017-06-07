@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibrary
 
         static public void SaveNew(string path, TECScopeManager scopeManager)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
 
             SQLiteDB = new SQLiteDatabase(path);
             indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
@@ -86,12 +86,12 @@ namespace EstimatingUtilitiesLibrary
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            watch.Stop();
-            Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
         }
         static public void Update(string path, ChangeStack changeStack, bool doBackup = true)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
 
             if (doBackup) { createBackup(path); }
 
@@ -140,8 +140,8 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(tempPath, path, true);
 
             File.Delete(tempPath);
-            watch.Stop();
-            Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
+           // watch.Stop();
+           // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
         #endregion Public Functions
 
