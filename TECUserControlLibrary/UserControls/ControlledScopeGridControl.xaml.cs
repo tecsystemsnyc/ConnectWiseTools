@@ -47,6 +47,22 @@ namespace TECUserControlLibrary.UserControls
         });
 
         /// <summary>
+        /// Gets or sets wether user can add rows 
+        /// </summary>
+        public bool UserCanAddRows
+        {
+            get { return (bool)GetValue(AllowAddingNewProperty); }
+            set { SetValue(AllowAddingNewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the AllowAddingNew dependency property
+        /// </summary>
+        public static readonly DependencyProperty AllowAddingNewProperty =
+            DependencyProperty.Register("UserCanAddRows", typeof(bool),
+              typeof(ControlledScopeGridControl), new PropertyMetadata(true));
+
+        /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
         public Object ViewModel

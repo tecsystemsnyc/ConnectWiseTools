@@ -163,6 +163,14 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     ControllerSelections.Add(controller);
                 }
+                var bid = ScopeManager as TECBid;
+                if(bid != null)
+                {
+                    foreach (TECController controller in bid.Controllers)
+                    {
+                        ControllerSelections.Add(controller);
+                    }
+                }
             }
         }
         private void populateSubScopeConnections()

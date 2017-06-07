@@ -479,8 +479,33 @@ namespace EstimatingLibrary
                 {
                     handleRemove(newValue, oldValue);
                 }
+            } else if (e.PropertyName == "Connection" && sender is TECSubScope)
+            {
+                handleSubScopeConnectionChanged(sender as TECSubScope);
             }
         }
+
+        private void handleSubScopeConnectionChanged(TECSubScope subScope)
+        {
+            if (CharactersticInstances.ContainsKey(subScope))
+            {
+                if (subScope.Connection == null)
+                {
+                    foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
+                    {
+                        instance.Connection.ParentController.RemoveSubScope(instance);
+                    }
+                }
+                else
+                {
+                    foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
+                    {
+                        subScope.Connection.ParentController.AddSubScope(instance);
+                    }
+                }
+            }
+        }
+
         private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RaiseExtendedPropertyChanged(sender, e);
@@ -570,7 +595,7 @@ namespace EstimatingLibrary
                 var characteristicConnection = targetObject as TECSubScopeConnection;
                 var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
                 var characteristicController = (referenceObject as TECController);
-                if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
+                if (CharactersticInstances.ContainsKey(characteristicSubScope) && (CharactersticInstances.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
                     foreach (TECSystem system in SystemInstances)
                     {
@@ -588,18 +613,27 @@ namespace EstimatingLibrary
                         }
                         if (subScopeToConnect != null)
                         {
-                            foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                            if (characteristicController.IsGlobal)
                             {
-                                if (system.Controllers.Contains(controller))
+                                var connection = characteristicController.AddSubScope(subScopeToConnect);
+                                connection.Length = characteristicConnection.Length;
+                                connection.ConduitLength = characteristicConnection.ConduitLength;
+                                connection.ConduitType = characteristicConnection.ConduitType;
+                            }
+                            else
+                            {
+                                foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                                 {
-                                    var connection = controller.AddSubScope(subScopeToConnect);
-                                    connection.Length = characteristicConnection.Length;
-                                    connection.ConduitLength = characteristicConnection.ConduitLength;
-                                    connection.ConduitType = characteristicConnection.ConduitType;
+                                    if (system.Controllers.Contains(controller))
+                                    {
+                                        var connection = controller.AddSubScope(subScopeToConnect);
+                                        connection.Length = characteristicConnection.Length;
+                                        connection.ConduitLength = characteristicConnection.ConduitLength;
+                                        connection.ConduitType = characteristicConnection.ConduitType;
+                                    }
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -764,7 +798,7 @@ namespace EstimatingLibrary
                 var characteristicConnection = targetObject as TECSubScopeConnection;
                 var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
                 var characteristicController = (referenceObject as TECController);
-                if (CharactersticInstances.ContainsKey(characteristicSubScope) && CharactersticInstances.ContainsKey(characteristicController))
+                if (CharactersticInstances.ContainsKey(characteristicSubScope) && (CharactersticInstances.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
                     foreach (TECSystem system in SystemInstances)
                     {
@@ -782,11 +816,18 @@ namespace EstimatingLibrary
                         }
                         if (subScopeToRemove != null)
                         {
-                            foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                            if (characteristicController.IsGlobal)
                             {
-                                if (system.Controllers.Contains(controller))
+                                characteristicController.RemoveSubScope(subScopeToRemove);
+                            }
+                            else
+                            {
+                                foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
                                 {
-                                    controller.RemoveSubScope(subScopeToRemove);
+                                    if (system.Controllers.Contains(controller))
+                                    {
+                                        controller.RemoveSubScope(subScopeToRemove);
+                                    }
                                 }
                             }
                         }
