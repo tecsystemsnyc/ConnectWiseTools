@@ -228,7 +228,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-                        loadedTemplates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
+                        loadedTemplates = DatabaseHelper.Load(TemplatesFilePath) as TECTemplates;
                     }
                     else
                     {

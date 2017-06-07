@@ -12,9 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using EstimatingUtilitiesLibrary;
-using EstimatingLibrary;
 using TECUserControlLibrary.ViewModels;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.Views
 {

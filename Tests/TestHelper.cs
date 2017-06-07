@@ -472,13 +472,13 @@ namespace Tests
 
         public static TECBid LoadTestBid(string path)
         {
-            TECBid testBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid testBid = DatabaseHelper.Load(path) as TECBid;
             return testBid;
         }
 
         public static TECTemplates LoadTestTemplates(string path)
         {
-            return EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            return DatabaseHelper.Load(path) as TECTemplates;
         }
 
         public static TECBid CreateEstimatorBid()
@@ -594,7 +594,7 @@ namespace Tests
         {
             TECSystem outScope = new TECSystem();
             outScope.Tags.Add(catalogs.Tags.RandomObject());
-
+            outScope.ProposeEquipment = true;
             var panel = new TECPanel(catalogs.PanelTypes[0]);
 
             outScope.Panels.Add(panel);

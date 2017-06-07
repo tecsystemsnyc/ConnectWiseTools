@@ -121,8 +121,8 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveNew(path, expectedBid);
-            actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            DatabaseHelper.SaveNew(path, expectedBid);
+            actualBid = DatabaseHelper.Load(path) as TECBid;
             actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
@@ -641,8 +641,8 @@ namespace Tests
             
             //Act
             path = Path.GetTempFileName();
-            EstimatingLibraryDatabase.SaveNew(path, saveBid);
-            TECBid loadedBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            DatabaseHelper.SaveNew(path, saveBid);
+            TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
             TECSystem loadedSystem = loadedBid.Systems[0];
             
             Assert.AreEqual(system.SystemInstances.Count, loadedSystem.SystemInstances.Count);

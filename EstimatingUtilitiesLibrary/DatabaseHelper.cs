@@ -17,7 +17,7 @@ using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public static class EstimatingLibraryDatabase
+    public static class DatabaseHelper
     {
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
@@ -1898,6 +1898,7 @@ namespace EstimatingUtilitiesLibrary
             controlledScope.Description = row[SystemTable.Description.Name].ToString();
             controlledScope.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
             controlledScope.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            controlledScope.ProposeEquipment = row[SystemTable.ProposeEquipment.Name].ToString().ToInt(0).ToBool();
             controlledScope.Controllers = getControllersInSystem(guid);
             controlledScope.Equipment = getEquipmentInSystem(guid);
             controlledScope.Panels = getPanelsInSystem(guid);
@@ -2390,6 +2391,18 @@ namespace EstimatingUtilitiesLibrary
             var relevantTables = getRelevantTablesForAddRemove(item);
             addToTables(item, relevantTables);
         }
+        private static void addToTables(StackItem item, List<TableBase> tables)
+        {
+            foreach (TableBase table in tables)
+            {
+                var tableInfo = new TableInfo(table);
+                if (tableInfo.IsRelationTable)
+                { addToIndexUpdates(indexesToUpdate, item, table); }
+                //{ updateIndexedRelation(table, item); }
+                else
+                { addObjectToTable(table, item); }
+            }
+        }
         private static void addObjectToTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
@@ -2404,6 +2417,31 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+        private static void addToIndexUpdates(Dictionary<TableBase, List<StackItem>> updates, StackItem item, TableBase table)
+        {
+            if (!updates.ContainsKey(table))
+            {
+                var stackForTable = new List<StackItem>();
+                stackForTable.Add(item);
+                updates[table] = stackForTable;
+            }
+            else
+            {
+                bool alreadyRepresented = false;
+                foreach (StackItem updateItem in updates[table])
+                {
+                    if (updateItem.ReferenceObject == item.ReferenceObject)
+                    {
+                        alreadyRepresented = true;
+                    }
+                }
+                if (!alreadyRepresented)
+                {
+                    updates[table].Add(item);
+                }
+            }
+        }
+
         private static void updateIndexedRelation(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
@@ -2445,43 +2483,6 @@ namespace EstimatingUtilitiesLibrary
             //ObjectsToAdd = [targetObject, referenceObject];
             var relevantTables = getRelevantTablesForAddRemoveRelationship(item);
             addToTables(item, relevantTables);
-        }
-
-        private static void addToTables(StackItem item, List<TableBase> tables)
-        {
-            foreach (TableBase table in tables)
-            {
-                var tableInfo = new TableInfo(table);
-                if (tableInfo.IsRelationTable)
-                { addToIndexUpdates(indexesToUpdate, item, table); }
-                //{ updateIndexedRelation(table, item); }
-                else
-                { addObjectToTable(table, item); }
-            }
-        }
-        private static void addToIndexUpdates(Dictionary<TableBase, List<StackItem>> updates, StackItem item, TableBase table)
-        {
-            if (!updates.ContainsKey(table))
-            {
-                var stackForTable = new List<StackItem>();
-                stackForTable.Add(item);
-                updates[table] = stackForTable;
-            }
-            else
-            {
-                bool alreadyRepresented = false;
-                foreach (StackItem updateItem in updates[table])
-                {
-                    if (updateItem.ReferenceObject == item.ReferenceObject)
-                    {
-                        alreadyRepresented = true;
-                    }
-                }
-                if (!alreadyRepresented)
-                {
-                    updates[table].Add(item);
-                }
-            }
         }
         private static void saveIndexRelationships(Dictionary<TableBase, List<StackItem>> updates)
         {

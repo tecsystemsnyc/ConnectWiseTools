@@ -249,6 +249,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
         public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetPriceModifier"));
+        public static TableField ProposeEquipment = new TableField("ProposeEquipment", "INTEGER", ObjectType.GetProperty("ProposeEquipment"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID

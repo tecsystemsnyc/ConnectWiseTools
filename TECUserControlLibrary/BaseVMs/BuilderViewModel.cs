@@ -463,7 +463,7 @@ namespace TECUserControlLibrary.ViewModels
                     File.Delete(path);
                 }
                 //Create new database
-                EstimatingLibraryDatabase.SaveNew(path, workingScopeManager);
+                DatabaseHelper.SaveNew(path, workingScopeManager);
                 return true;
             }
             else
@@ -478,7 +478,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 try
                 {
-                    EstimatingLibraryDatabase.Update(path, saveStack);
+                    DatabaseHelper.Update(path, saveStack);
                     return true;
                 }
                 catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
@@ -499,7 +499,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDirectoryPath = Path.GetDirectoryName(path);
             TECScopeManager outScope = null;
             if (!UtilitiesMethods.IsFileLocked(path))
-            { outScope = EstimatingLibraryDatabase.Load(path); }
+            { outScope = DatabaseHelper.Load(path); }
             else
             {
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");

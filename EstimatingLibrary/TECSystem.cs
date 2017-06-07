@@ -110,6 +110,18 @@ namespace EstimatingLibrary
             }
         }
 
+        private bool _proposeEquipment;
+        public bool ProposeEquipment
+        {
+            get { return _proposeEquipment; }
+            set
+            {
+                var temp = this.Copy();
+                _proposeEquipment = value;
+                NotifyPropertyChanged("ProposeEquipment", temp, this);
+            }
+        }
+
         public double TotalBudgetPrice
         {
             get
@@ -299,6 +311,7 @@ namespace EstimatingLibrary
         public TECSystem(Guid guid) : base(guid)
         {
             _budgetPriceModifier = -1;
+            _proposeEquipment = false;
             base.PropertyChanged += TECSystem_PropertyChanged;
             
             
@@ -380,6 +393,7 @@ namespace EstimatingLibrary
             }
             outSystem._budgetPriceModifier = this.BudgetPriceModifier;
             outSystem.copyPropertiesFromScope(this);
+            outSystem._proposeEquipment = this.ProposeEquipment;
             ModelLinkingHelper.LinkCharacteristicInstances(CharactersticInstances, outSystem);
             return outSystem;
         }

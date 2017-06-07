@@ -42,7 +42,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Category:" Foreground="Black" VerticalAlignment="Center"/>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eUtilities:TECMaterialIndex}}}"
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:TECMaterialIndex}}}"
                   SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialIndex}"
                   Margin="5"
                   VerticalContentAlignment="Center"/>

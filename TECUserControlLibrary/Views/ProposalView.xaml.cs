@@ -1,6 +1,6 @@
-﻿using EstimatingUtilitiesLibrary;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views

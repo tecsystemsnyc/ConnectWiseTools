@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Systems"/>
-                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
+                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"

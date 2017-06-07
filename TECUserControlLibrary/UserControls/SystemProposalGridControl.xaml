@@ -4,19 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <DataGrid ItemsSource="{Binding ElementName=parent, Path=SystemsSource}"
               AutoGenerateColumns="False"
               CanUserAddRows="False">
         <DataGrid.Columns>
+            <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True"/>
             <DataGridTextColumn Header="Name" Width="Auto" MinWidth="50"
                             Binding="{Binding Name}"/>
             <DataGridTextColumn Header="Description" Width="Auto" MinWidth="70"
                             Binding="{Binding Description}"/>
             <DataGridCheckBoxColumn Header="Include Equipment" Width="Auto"
-                                    Binding="{Binding IncludeEquipment}">
+                                    Binding="{Binding ProposeEquipment}">
                 <DataGridCheckBoxColumn.ElementStyle>
                     <Style>
                         <Setter Property="FrameworkElement.Margin" Value="5, 0, 0, 0"/>
@@ -26,5 +37,17 @@
                 </DataGridCheckBoxColumn.ElementStyle>
             </DataGridCheckBoxColumn>
         </DataGrid.Columns>
+        <DataGrid.RowDetailsTemplate>
+            <DataTemplate>
+                <StackPanel>
+                    <i:Interaction.Behaviors>
+                        <utilities:BubbleScrollEvent/>
+                    </i:Interaction.Behaviors>
+                    <Label Content="Notes" FontSize="10"/>
+                    <local:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding ScopeBranches}"
+                                                    Margin="30, 0, 0, 0"/>
+                </StackPanel>
+            </DataTemplate>
+        </DataGrid.RowDetailsTemplate>
     </DataGrid>
 </UserControl>
