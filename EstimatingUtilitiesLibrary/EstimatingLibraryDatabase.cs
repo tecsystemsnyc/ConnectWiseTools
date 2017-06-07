@@ -1231,8 +1231,8 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
             string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
             command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
-            command += "')";
-            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            command += ")";
+            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -1247,7 +1247,7 @@ namespace EstimatingUtilitiesLibrary
             command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
-            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -1903,6 +1903,7 @@ namespace EstimatingUtilitiesLibrary
             controlledScope.Panels = getPanelsInSystem(guid);
             controlledScope.SystemInstances = getChildrenSystems(guid);
             controlledScope.MiscCosts = getMiscInSystem(guid);
+            controlledScope.ScopeBranches = getScopeBranchesInSystem(guid);
             getScopeChildren(controlledScope);
 
             return controlledScope;
@@ -2063,7 +2064,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
 
-        #region Generic Complete Save Methods
+        #region Complete Save Methods
         private static void saveScopeManagerProperties(TECScopeManager scopeManager)
         {
             addObject(new StackItem(Change.Add, scopeManager, scopeManager.Labor));
@@ -2071,6 +2072,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveCompleteBid(TECBid bid)
         {
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
             addObject(new StackItem(Change.Add, bid, bid));
             saveScopeManagerProperties(bid);
             addObject(new StackItem(Change.Add, bid, bid.Parameters));
@@ -2103,16 +2105,17 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECMisc cost in bid.MiscCosts)
             {
-                addObject(new StackItem(Change.Add, bid, cost));
+                addObject(new StackItem(Change.Add, bid, cost, typeof(TECBid), typeof(TECMisc)));
             }
             foreach (TECPanel panel in bid.Panels)
             {
                 savePanel(panel, bid);
             }
-
+            saveIndexRelationships(indexesToUpdate);
         }
         private static void saveCompleteTemplate(TECTemplates templates)
         {
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
             addObject(new StackItem(Change.Add, templates, templates));
             saveScopeManagerProperties(templates);
             foreach (TECSystem system in templates.SystemTemplates)
@@ -2147,6 +2150,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, templates);
             }
+            saveIndexRelationships(indexesToUpdate);
         }
         private static void saveCompleteCatalogs(TECCatalogs catalogs)
         {
@@ -2197,7 +2201,15 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach(TECSystem childScope in system.SystemInstances)
+            foreach(TECMisc misc in system.MiscCosts)
+            {
+                addObject(new StackItem(change, system, misc, typeof(TECSystem), typeof(TECMisc)));
+            }
+            foreach (TECScopeBranch branch in system.ScopeBranches)
+            {
+                addObject(new StackItem(change, system, branch));
+            }
+            foreach (TECSystem childScope in system.SystemInstances)
             {
                 addObject(new StackItem(change, system, childScope));
                 saveFullSystem(childScope, scopeManager);

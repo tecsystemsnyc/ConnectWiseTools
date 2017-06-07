@@ -607,6 +607,14 @@ namespace Tests
             ConnectEquipmentToController(equipment, controller);
             panel.Controllers.Add(controller);
 
+            var scopeBranch = new TECScopeBranch();
+            outScope.ScopeBranches.Add(scopeBranch);
+
+            var misc = new TECMisc();
+            outScope.MiscCosts.Add(misc);
+
+            outScope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());
+
             return outScope;
         }
         public static TECDevice CreateTestDevice(TECCatalogs catalogs)

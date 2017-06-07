@@ -639,6 +639,40 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
+
+        [TestMethod]
+        public void Save_Bid_System_Misc()
+        {
+            //Act
+            TECSystem expectedSystem = bid.Systems.RandomObject();
+            var expectedMisc = new TECMisc();
+            expectedSystem.MiscCosts.Add(expectedMisc);
+            EstimatingLibraryDatabase.Update(path, testStack, false);
+
+            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            TECMisc actualMisc = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                    foreach(TECMisc misc in actualSystem.MiscCosts)
+                    {
+                        if(misc.Guid == expectedMisc.Guid)
+                        {
+                            actualMisc = misc;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedMisc.Guid, actualMisc.Guid);
+        }
         #endregion Edit System
         #endregion Save System
 

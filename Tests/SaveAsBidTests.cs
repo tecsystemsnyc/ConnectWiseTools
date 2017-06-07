@@ -323,6 +323,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.ScopeBranches.Count, actualSystem.ScopeBranches.Count);
             Assert.AreEqual(expectedSystem.AssociatedCosts.Count, actualSystem.AssociatedCosts.Count);
             Assert.AreEqual(expectedSystem.CharactersticInstances.GetFullDictionary().Count, actualSystem.CharactersticInstances.GetFullDictionary().Count);
+            Assert.AreEqual(expectedSystem.MiscCosts.Count, actualSystem.MiscCosts.Count);
         }
 
         [TestMethod]
@@ -551,11 +552,18 @@ namespace Tests
         {
             //Arrange
             TECMisc expectedCost = expectedBid.MiscCosts[0];
-            TECMisc actualCost = actualBid.MiscCosts[0];
+            TECMisc actualCost = null;
+            foreach (TECMisc misc in actualBid.MiscCosts)
+            {
+                if(misc.Guid == expectedCost.Guid)
+                {
+                    actualCost = misc;
+                }
+            }
 
-            Assert.AreEqual(expectedCost.Name, actualBid.MiscCosts[0].Name);
-            Assert.AreEqual(expectedCost.Cost, actualBid.MiscCosts[0].Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualBid.MiscCosts[0].Quantity);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
 
         [TestMethod]

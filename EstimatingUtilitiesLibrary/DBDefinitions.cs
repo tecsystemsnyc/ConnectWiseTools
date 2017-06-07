@@ -1497,8 +1497,7 @@ namespace EstimatingUtilitiesLibrary
             new NetworkConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
-
-
+            
             new BidLaborTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1535,7 +1534,8 @@ namespace EstimatingUtilitiesLibrary
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new IOModuleManufacturerTable()
+            new IOModuleManufacturerTable(),
+            new BidMiscTable()
         };
     }
 
