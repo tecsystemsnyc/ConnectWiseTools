@@ -380,48 +380,54 @@ namespace TECUserControlLibrary.ViewModels
         #region Add/Remove
         private void addLengthToWireType(double length, TECConnectionType type)
         {
-            bool containsWire = wireDictionary.ContainsKey(type.Guid);
-            if (containsWire)
+            if (type != null)
             {
-                TotalWireCost -= wireDictionary[type.Guid].TotalCost;
-                TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
-                wireDictionary[type.Guid].Length += length;
-                TotalWireCost += wireDictionary[type.Guid].TotalCost;
-                TotalWireHours += wireDictionary[type.Guid].TotalLabor;
-            }
-            else
-            {
-                LengthSummaryItem wireItem = new LengthSummaryItem(type);
-                wireItem.Length = length;
-                wireItem.PropertyChanged += WireItem_PropertyChanged;
-                wireDictionary.Add(type.Guid, wireItem);
-                WireSummaryItems.Add(wireItem);
-                TotalWireCost += wireItem.TotalCost;
-                TotalWireHours += wireItem.TotalLabor;
+                bool containsWire = wireDictionary.ContainsKey(type.Guid);
+                if (containsWire)
+                {
+                    TotalWireCost -= wireDictionary[type.Guid].TotalCost;
+                    TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
+                    wireDictionary[type.Guid].Length += length;
+                    TotalWireCost += wireDictionary[type.Guid].TotalCost;
+                    TotalWireHours += wireDictionary[type.Guid].TotalLabor;
+                }
+                else
+                {
+                    LengthSummaryItem wireItem = new LengthSummaryItem(type);
+                    wireItem.Length = length;
+                    wireItem.PropertyChanged += WireItem_PropertyChanged;
+                    wireDictionary.Add(type.Guid, wireItem);
+                    WireSummaryItems.Add(wireItem);
+                    TotalWireCost += wireItem.TotalCost;
+                    TotalWireHours += wireItem.TotalLabor;
+                }
             }
         }
 
         private void removeLengthFromWireType(double length, TECConnectionType type)
         {
-            bool containsWire = wireDictionary.ContainsKey(type.Guid);
-            if (containsWire)
+            if (type != null)
             {
-                TotalWireCost -= wireDictionary[type.Guid].TotalCost;
-                TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
-                wireDictionary[type.Guid].Length -= length;
-                TotalWireCost += wireDictionary[type.Guid].TotalCost;
-                TotalWireHours += wireDictionary[type.Guid].TotalLabor;
-
-                if (wireDictionary[type.Guid].Length < 0)
+                bool containsWire = wireDictionary.ContainsKey(type.Guid);
+                if (containsWire)
                 {
-                    wireDictionary[type.Guid].PropertyChanged -= WireItem_PropertyChanged;
-                    WireSummaryItems.Remove(wireDictionary[type.Guid]);
-                    wireDictionary.Remove(type.Guid);
+                    TotalWireCost -= wireDictionary[type.Guid].TotalCost;
+                    TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
+                    wireDictionary[type.Guid].Length -= length;
+                    TotalWireCost += wireDictionary[type.Guid].TotalCost;
+                    TotalWireHours += wireDictionary[type.Guid].TotalLabor;
+
+                    if (wireDictionary[type.Guid].Length < 0)
+                    {
+                        wireDictionary[type.Guid].PropertyChanged -= WireItem_PropertyChanged;
+                        WireSummaryItems.Remove(wireDictionary[type.Guid]);
+                        wireDictionary.Remove(type.Guid);
+                    }
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("Wire not found in wire dictionary");
+                else
+                {
+                    throw new InvalidOperationException("Wire not found in wire dictionary");
+                }
             }
         }
 
@@ -546,10 +552,12 @@ namespace TECUserControlLibrary.ViewModels
                 TECNetworkConnection netConnect = connection as TECNetworkConnection;
 
                 addLengthToWireType(connection.Length, netConnect.ConnectionType);
-                
-                foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                if (netConnect.ConnectionType != null)
                 {
-                    addAssociatedCost(cost);
+                    foreach (TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                    {
+                        addAssociatedCost(cost);
+                    }
                 }
             }
             else
@@ -590,9 +598,12 @@ namespace TECUserControlLibrary.ViewModels
 
                 removeLengthFromWireType(connection.Length, netConnect.ConnectionType);
 
-                foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                if (netConnect.ConnectionType != null)
                 {
-                    removeAssociatedCost(cost);
+                    foreach (TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                    {
+                        removeAssociatedCost(cost);
+                    }
                 }
             }
             else

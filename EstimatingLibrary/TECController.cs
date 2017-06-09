@@ -143,14 +143,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public ObservableCollection<TECNetworkConnection> ChildNetworkConnections
-        {
-            get
-            {
-                return getNetworkConnections();
-            }
-        }
-
         public bool IsGlobal;
 
         #endregion
@@ -249,32 +241,17 @@ namespace EstimatingLibrary
 
         #region Connection Methods
 
-        public TECNetworkConnection AddController(TECController controller, TECConnection connection = null)
+        public TECNetworkConnection AddController(TECController controller)
         {
             if (controller != this)
             {
-                if (connection != null)
-                {
-                    foreach (TECNetworkConnection conn in ChildrenConnections)
-                    {
-                        if (connection == conn)
-                        {
-                            conn.ChildrenControllers.Add(controller);
-                            controller.ParentConnection = conn;
-                            return conn;
-                        }
-                    }
-                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
-                }
-                else
-                {
-                    TECNetworkConnection netConnect = new TECNetworkConnection();
-                    netConnect.ParentController = this;
-                    netConnect.ChildrenControllers.Add(controller);
-                    ChildrenConnections.Add(netConnect);
-                    controller.ParentConnection = netConnect;
-                    return netConnect;
-                }
+                
+                TECNetworkConnection netConnect = new TECNetworkConnection();
+                netConnect.ParentController = this;
+                netConnect.ChildrenControllers.Add(controller);
+                ChildrenConnections.Add(netConnect);
+                controller.ParentConnection = netConnect;
+                return netConnect;
             }
             else
             {

@@ -274,22 +274,26 @@ namespace EstimatingLibrary
         {
             foreach (TECController controller in controllers)
             {
-                foreach (TECNetworkConnection netConnect in controller.ChildNetworkConnections)
+                foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
-                    foreach (TECController child in netConnect.ChildrenControllers)
+                    if (connection is TECNetworkConnection)
                     {
-                        foreach (TECController bidController in controllers)
+                        TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                        ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
+                        foreach (TECController child in netConnect.ChildrenControllers)
                         {
-                            bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
-                            if (child.Guid == bidController.Guid || isCopy)
+                            foreach (TECController bidController in controllers)
                             {
-                                controllersToAdd.Add(bidController);
-                                bidController.ParentConnection = netConnect;
+                                bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
+                                if (child.Guid == bidController.Guid || isCopy)
+                                {
+                                    controllersToAdd.Add(bidController);
+                                    bidController.ParentConnection = netConnect;
+                                }
                             }
                         }
+                        netConnect.ChildrenControllers = controllersToAdd;
                     }
-                    netConnect.ChildrenControllers = controllersToAdd;
                 }
             }
         }

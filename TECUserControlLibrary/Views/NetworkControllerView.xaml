@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
+            <utilities:NoneValueConverter x:Key="NoneValueConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
@@ -48,19 +49,35 @@
                     </DataGridComboBoxColumn.EditingElementStyle>
                 </DataGridComboBoxColumn>
                 <DataGridComboBoxColumn Header="Wire Type"
-                                        SelectedItemBinding="{Binding WireType}"
                                         ItemsSource="{Binding Data.WireTypes, Source={StaticResource proxy}}"
+                                        DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="100"
-                                        Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
+                                        Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
+                            <Binding Path="WireType"/>
+                            <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
                 <DataGridTextColumn Header="Wire Length"
                                     Binding="{Binding WireLength}"
                                     Width="Auto" MinWidth="100"
                                     Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
                 <DataGridComboBoxColumn Header="Conduit Type"
-                                        SelectedItemBinding="{Binding ConduitType}"
                                         ItemsSource="{Binding Data.ConduitTypes, Source={StaticResource proxy}}"
+                                        DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="100"
-                                        Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
+                                        Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}">
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0}">
+                            <Binding Path="ConduitType"/>
+                            <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
+                </DataGridComboBoxColumn>
                 <DataGridTextColumn Header="Conduit Length"
                                     Binding="{Binding ConduitLength}"
                                     Width="Auto" MinWidth="100"
@@ -85,7 +102,7 @@
                             <Label Content="Child Connections/Daisy Chains" FontSize="10"/>
                             <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="2"
-                                      ItemsSource="{Binding NetworkIO}"
+                                      ItemsSource="{Binding Controller.NetworkIO}"
                                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedIO}"
                                       Margin="5"/>
                             <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
@@ -97,30 +114,61 @@
                             <Button Grid.Column="5"
                                     Content="Add"
                                     Command="{Binding ElementName=parent, Path=ViewModel.AddConnectionCommand}"
-                                    CommandParameter="{Binding Controller}"
+                                    CommandParameter="{Binding Controller, Mode=OneWay}"
                                     Margin="5"/>
                         </Grid>
                         <DataGrid ItemsSource="{Binding NetworkConnections}"
                                   AutoGenerateColumns="False">
                             <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 
+                                        Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
                                 <DataGridTextColumn Header="# Controllers"
-                                                    Binding="{Binding Controllers.Count}"
+                                                    Binding="{Binding ChildrenControllers.Count}"
+                                                    IsReadOnly="True"
                                                     Width="Auto" MinWidth="100"/>
                                 <DataGridComboBoxColumn Header="Wire Type"
-                                                        SelectedItemBinding="{Binding WireType}"
                                                         ItemsSource="{Binding Data.WireTypes, Source={StaticResource proxy}}"
-                                                        Width="Auto" MinWidth="100"/>
+                                                        DisplayMemberPath="Name"
+                                                        Width="Auto" MinWidth="100">
+                                    <DataGridComboBoxColumn.SelectedItemBinding>
+                                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                                      StringFormat="{}{0}">
+                                            <Binding Path="ConnectionType"/>
+                                            <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
+                                        </MultiBinding>
+                                    </DataGridComboBoxColumn.SelectedItemBinding>
+                                </DataGridComboBoxColumn>
                                 <DataGridTextColumn Header="Wire Length"
-                                                    Binding="{Binding WireLength}"
+                                                    Binding="{Binding Length}"
                                                     Width="Auto" MinWidth="100"/>
                                 <DataGridComboBoxColumn Header="Conduit Type"
-                                                        SelectedItemBinding="{Binding ConduitType}"
                                                         ItemsSource="{Binding Data.ConduitTypes, Source={StaticResource proxy}}"
-                                                        Width="Auto" MinWidth="100"/>
+                                                        DisplayMemberPath="Name"
+                                                        Width="Auto" MinWidth="100">
+                                    <DataGridComboBoxColumn.SelectedItemBinding>
+                                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                                      StringFormat="{}{0}">
+                                            <Binding Path="ConduitType"/>
+                                            <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
+                                        </MultiBinding>
+                                    </DataGridComboBoxColumn.SelectedItemBinding>
+                                </DataGridComboBoxColumn>
                                 <DataGridTextColumn Header="Conduit Length"
                                                     Binding="{Binding ConduitLength}"
                                                     Width="Auto" MinWidth="100"/>
                             </DataGrid.Columns>
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <DataGrid ItemsSource="{Binding ChildrenControllers}"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Controller"
+                                                                Binding="{Binding Name}"
+                                                                Width="Auto"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
                         </DataGrid>
                     </StackPanel>
                 </DataTemplate>

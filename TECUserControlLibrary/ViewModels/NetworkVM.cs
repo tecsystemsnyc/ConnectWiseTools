@@ -3,12 +3,15 @@ using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
@@ -56,17 +59,28 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
 
+            refreshPossibleParents();
+
             changeWatcher = new ChangeWatcher(bid);
+
+            NetworkControllersVM.DragHandler = DragOver;
+            NetworkControllersVM.DropHandler = Drop;
+
+            UnitaryControllersVM.DragHandler = DragOver;
+            UnitaryControllersVM.DropHandler = Drop;
         }
 
         public void Refresh(TECBid bid)
         {
             NetworkControllersVM.Refresh(bid);
             UnitaryControllersVM.Refresh();
+
+            refreshPossibleParents();
+
             changeWatcher = new ChangeWatcher(bid);
         }
 
-        public void sortController(TECController controller)
+        private void sortController(TECController controller)
         {
             if (controller.NetworkType == NetworkType.DDC || controller.NetworkType == NetworkType.Server)
             {
@@ -103,16 +117,86 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private void refreshPossibleParents()
+        {
+            NetworkControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
+            UnitaryControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
+        }
 
         #region Drag/Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            var sourceItem = dropInfo.Data;
+            Type sourceType;
+            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
+            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            else
+            { sourceType = sourceItem.GetType(); }
+            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+
+            if (sourceType == typeof(NetworkController))
+            {
+                if (targetType == typeof(TECController))
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = System.Windows.DragDropEffects.Copy;
+                }
+                else
+                {
+                    UIHelpers.StandardDragOver(dropInfo);
+                }
+            }
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            {
+                object sourceItem = dropInfo.Data;
+                object targetCollection = dropInfo.TargetCollection;
+                object sourceCollection = dropInfo.DragInfo.SourceCollection;
+
+                if (sourceItem is IList)
+                {
+                    foreach (object item in ((IList)sourceItem))
+                    {
+                        handleDropItem(item, sourceCollection, targetCollection);
+                    }
+                }
+                else
+                {
+                    handleDropItem(sourceItem, sourceCollection, targetCollection);
+                }
+            }
+        }
+
+        private void handleDropItem(object sourceItem, object sourceCollection, object targetCollection)
+        {
+            NetworkController netController = sourceItem as NetworkController;
+
+            if (sourceCollection == NetworkControllersVM.NetworkControllers && targetCollection == UnitaryControllersVM.NetworkControllers)
+            {
+                NetworkControllersVM.NetworkControllers.Remove(netController);
+                netController.Controller.NetworkType = NetworkType.Unitary;
+                UnitaryControllersVM.NetworkControllers.Add(netController);
+
+                refreshPossibleParents();
+            }
+            else if (sourceCollection == UnitaryControllersVM.NetworkControllers)
+            {
+                if (targetCollection == NetworkControllersVM.NetworkControllers)
+                {
+                    UnitaryControllersVM.NetworkControllers.Remove(netController);
+                    netController.Controller.NetworkType = NetworkType.DDC;
+                    NetworkControllersVM.NetworkControllers.Add(netController);
+
+                    refreshPossibleParents();
+                }
+                else if (targetCollection is ObservableCollection<TECController>)
+                {
+                    (targetCollection as ObservableCollection<TECController>).Add(netController.Controller);
+                }
+            }
         }
         #endregion
     }

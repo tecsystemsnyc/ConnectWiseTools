@@ -61,27 +61,33 @@ namespace EstimatingLibrary
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
-            foreach(TECCost cost in ConnectionType.AssociatedCosts)
+            if (ConnectionType != null)
             {
-                outCosts.Add(cost);
+                foreach (TECCost cost in ConnectionType.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+                foreach (TECCost cost in ConnectionType.RatedCosts)
+                {
+                    TECCost ratedCost = new TECCost();
+                    ratedCost.Cost = cost.Cost * Length;
+                    ratedCost.Labor = cost.Labor * Length;
+                    outCosts.Add(ratedCost);
+                }
             }
-            foreach(TECCost cost in ConnectionType.RatedCosts)
+            if (ConduitType != null)
             {
-                TECCost ratedCost = new TECCost();
-                ratedCost.Cost = cost.Cost * Length;
-                ratedCost.Labor = cost.Labor * Length;
-                outCosts.Add(ratedCost);
-            }
-            foreach(TECCost cost in ConduitType.AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            foreach(TECCost cost in ConduitType.RatedCosts)
-            {
-                TECCost ratedCost = new TECCost();
-                ratedCost.Cost = cost.Cost * Length;
-                ratedCost.Labor = cost.Labor * Length;
-                outCosts.Add(ratedCost);
+                foreach (TECCost cost in ConduitType.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+                foreach (TECCost cost in ConduitType.RatedCosts)
+                {
+                    TECCost ratedCost = new TECCost();
+                    ratedCost.Cost = cost.Cost * Length;
+                    ratedCost.Labor = cost.Labor * Length;
+                    outCosts.Add(ratedCost);
+                }
             }
             return outCosts;
         }
