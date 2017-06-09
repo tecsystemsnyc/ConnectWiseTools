@@ -12,7 +12,7 @@ namespace TECUserControlLibrary.Models
     {
         #region Properties
         public TECController Controller { get; private set; }
-
+        
         private ObservableCollection<TECController> _possibleParents;
         public ObservableCollection<TECController> PossibleParents
         {
@@ -58,13 +58,17 @@ namespace TECUserControlLibrary.Models
             }
             set
             {
-                if (value)
+                if (value != IsServer)
                 {
-                    Controller.NetworkType = NetworkType.Server;
-                }
-                else
-                {
-                    Controller.NetworkType = NetworkType.DDC;
+                    if (value)
+                    {
+                        Controller.NetworkType = NetworkType.Server;
+                    }
+                    else
+                    {
+                        Controller.NetworkType = NetworkType.DDC;
+                    }
+                    RaisePropertyChanged("IsServer");
                 }
             }
         }
@@ -160,6 +164,14 @@ namespace TECUserControlLibrary.Models
                 }
             }
         }
+
+        public bool IsConnected
+        {
+            get
+            {
+                return (isConnected(this.Controller));
+            }
+        }
         #endregion
 
         public NetworkController(TECController controller)
@@ -215,6 +227,34 @@ namespace TECUserControlLibrary.Models
             else
             {
                 return (isDescendantOf(descendantController.ParentController, ancestorController));
+            }
+        }
+
+        private bool isConnected(TECController controller, List<TECController> searchedControllers = null)
+        {
+            if (searchedControllers == null)
+            {
+                searchedControllers = new List<TECController>();
+            }
+
+            if (controller.NetworkType == NetworkType.Server)
+            {
+                return true;
+            }
+            else if (controller.ParentConnection == null || searchedControllers.Contains(controller))
+            {
+                return false;
+            }
+            else
+            {
+                searchedControllers.Add(controller);
+                TECController parentController = controller.ParentConnection.ParentController;
+                if (parentController == null)
+                {
+                    throw new NullReferenceException("Parent controller to passed controller is null, but parent connection isn't.");
+                }
+                bool parentIsConnected = isConnected(parentController, searchedControllers);
+                return parentIsConnected;
             }
         }
 

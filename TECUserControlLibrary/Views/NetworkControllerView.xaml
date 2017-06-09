@@ -55,7 +55,7 @@
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}">
                     <DataGridComboBoxColumn.SelectedItemBinding>
                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                      StringFormat="{}{0}">
+                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
                             <Binding Path="WireType"/>
                             <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
                         </MultiBinding>
@@ -72,7 +72,7 @@
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}">
                     <DataGridComboBoxColumn.SelectedItemBinding>
                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                      StringFormat="{}{0}">
+                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
                             <Binding Path="ConduitType"/>
                             <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
                         </MultiBinding>
@@ -82,6 +82,10 @@
                                     Binding="{Binding ConduitLength}"
                                     Width="Auto" MinWidth="100"
                                     Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
+                <DataGridCheckBoxColumn Header="Connected"
+                                        Binding="{Binding IsConnected, Mode=OneWay}"
+                                        IsReadOnly="True"
+                                        Width="Auto"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
@@ -132,7 +136,7 @@
                                                         Width="Auto" MinWidth="100">
                                     <DataGridComboBoxColumn.SelectedItemBinding>
                                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                                      StringFormat="{}{0}">
+                                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
                                             <Binding Path="ConnectionType"/>
                                             <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
                                         </MultiBinding>
@@ -147,7 +151,7 @@
                                                         Width="Auto" MinWidth="100">
                                     <DataGridComboBoxColumn.SelectedItemBinding>
                                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                                      StringFormat="{}{0}">
+                                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
                                             <Binding Path="ConduitType"/>
                                             <Binding Path="Data.NoneConduitType" Source="{StaticResource proxy}"/>
                                         </MultiBinding>
