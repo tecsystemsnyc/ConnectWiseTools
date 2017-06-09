@@ -30,7 +30,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eUtilities:ProposalIndex}}}"
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ProposalIndex}}}"
                   SelectedItem="{Binding ElementName=parent, Path=SelectedProposalIndex}"
                   VerticalContentAlignment="Center"/>
 
@@ -46,8 +46,6 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Scope" Foreground="Black" FontSize="20"/>
-
-                    
                     <controls:ScopeTreeGridControl ScopeTreeSource="{Binding Bid.ScopeTree}"
                                                 Grid.Row="1"/>
                 </Grid>
@@ -63,7 +61,8 @@
 
                     <TextBlock Text="Systems" Foreground="Black" FontSize="20"/>
 
-                    <controls:SystemProposalGridControl SystemsSource="{Binding Bid.Systems}"/>
+                    <controls:SystemProposalGridControl SystemsSource="{Binding Bid.Systems}"
+                                                        Grid.Row="1"/>
 
                 </Grid>
             </TabItem>
@@ -92,6 +91,6 @@
             
         </TabControl>
 
-        <Border Grid.Column="1" Grid.RowSpan="2" Margin="5" BorderBrush="Black" BorderThickness="1"/>
+        <!--<Border Grid.Column="1" Grid.RowSpan="2" Margin="5" BorderBrush="Black" BorderThickness="1"/>-->
     </Grid>
 </UserControl>

@@ -29,7 +29,7 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:LocationScopeType}}}"
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:LocationScopeType}}}"
                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedScopeType}"
                       Margin="5"/>
             <TabControl Grid.Row="1"

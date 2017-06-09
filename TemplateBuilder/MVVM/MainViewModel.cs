@@ -226,7 +226,7 @@ namespace TemplateBuilder.MVVM
             if ((TemplatesFilePath != "") && (File.Exists(TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                { Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates; }
+                { Templates = DatabaseHelper.Load(TemplatesFilePath) as TECTemplates; }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -245,7 +245,7 @@ namespace TemplateBuilder.MVVM
                     {
                         if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = EstimatingLibraryDatabase.Load(TemplatesFilePath) as TECTemplates;
+                            Templates = DatabaseHelper.Load(TemplatesFilePath) as TECTemplates;
                         }
                         else
                         {

@@ -21,7 +21,8 @@
         <DataGrid ItemsSource="{Binding Path=SystemSource}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
+                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}"
+                  CanUserAddRows="{Binding ElementName=parent, Path=UserCanAddRows}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70"/>

@@ -55,6 +55,7 @@ namespace EstimatingLibrary
             {
                 _connection = value;
                 RaisePropertyChanged("Connection");
+                
             }
         }
 

@@ -73,9 +73,9 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveNew(path, expectedTemplates);
+            DatabaseHelper.SaveNew(path, expectedTemplates);
 
-            actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {

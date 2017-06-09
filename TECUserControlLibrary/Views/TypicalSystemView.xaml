@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Systems"/>
-                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type uLib:ControlledScopeEditIndex}}}"
+                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ControlledScopeEditIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"
@@ -57,7 +57,8 @@
                     </Grid.RowDefinitions>
                     <controls:ControlledScopeGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                    SystemSource="{Binding SelectedSystem.SystemInstances}"
-                                                   SelectedItem="{Binding SelectedChild}"/>
+                                                   SelectedItem="{Binding SelectedChild}"
+                                                         UserCanAddRows="False"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>

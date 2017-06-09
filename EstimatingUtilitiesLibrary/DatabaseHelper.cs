@@ -17,7 +17,7 @@ using DebugLibrary;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public static class EstimatingLibraryDatabase
+    public static class DatabaseHelper
     {
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibrary
 
         static public void SaveNew(string path, TECScopeManager scopeManager)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
 
             SQLiteDB = new SQLiteDatabase(path);
             indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
@@ -86,12 +86,12 @@ namespace EstimatingUtilitiesLibrary
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            watch.Stop();
-            Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
+            //watch.Stop();
+            //Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
         }
         static public void Update(string path, ChangeStack changeStack, bool doBackup = true)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
 
             if (doBackup) { createBackup(path); }
 
@@ -140,8 +140,8 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(tempPath, path, true);
 
             File.Delete(tempPath);
-            watch.Stop();
-            Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
+           // watch.Stop();
+           // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
         #endregion Public Functions
 
@@ -1231,8 +1231,8 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
             string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
             command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
-            command += "')";
-            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            command += ")";
+            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -1247,7 +1247,7 @@ namespace EstimatingUtilitiesLibrary
             command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
-            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -1898,11 +1898,13 @@ namespace EstimatingUtilitiesLibrary
             controlledScope.Description = row[SystemTable.Description.Name].ToString();
             controlledScope.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
             controlledScope.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            controlledScope.ProposeEquipment = row[SystemTable.ProposeEquipment.Name].ToString().ToInt(0).ToBool();
             controlledScope.Controllers = getControllersInSystem(guid);
             controlledScope.Equipment = getEquipmentInSystem(guid);
             controlledScope.Panels = getPanelsInSystem(guid);
             controlledScope.SystemInstances = getChildrenSystems(guid);
             controlledScope.MiscCosts = getMiscInSystem(guid);
+            controlledScope.ScopeBranches = getScopeBranchesInSystem(guid);
             getScopeChildren(controlledScope);
 
             return controlledScope;
@@ -2063,7 +2065,7 @@ namespace EstimatingUtilitiesLibrary
         }
         #endregion
 
-        #region Generic Complete Save Methods
+        #region Complete Save Methods
         private static void saveScopeManagerProperties(TECScopeManager scopeManager)
         {
             addObject(new StackItem(Change.Add, scopeManager, scopeManager.Labor));
@@ -2071,6 +2073,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void saveCompleteBid(TECBid bid)
         {
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
             addObject(new StackItem(Change.Add, bid, bid));
             saveScopeManagerProperties(bid);
             addObject(new StackItem(Change.Add, bid, bid.Parameters));
@@ -2103,16 +2106,17 @@ namespace EstimatingUtilitiesLibrary
             }
             foreach (TECMisc cost in bid.MiscCosts)
             {
-                addObject(new StackItem(Change.Add, bid, cost));
+                addObject(new StackItem(Change.Add, bid, cost, typeof(TECBid), typeof(TECMisc)));
             }
             foreach (TECPanel panel in bid.Panels)
             {
                 savePanel(panel, bid);
             }
-
+            saveIndexRelationships(indexesToUpdate);
         }
         private static void saveCompleteTemplate(TECTemplates templates)
         {
+            indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
             addObject(new StackItem(Change.Add, templates, templates));
             saveScopeManagerProperties(templates);
             foreach (TECSystem system in templates.SystemTemplates)
@@ -2147,6 +2151,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 savePanel(panel, templates);
             }
+            saveIndexRelationships(indexesToUpdate);
         }
         private static void saveCompleteCatalogs(TECCatalogs catalogs)
         {
@@ -2197,7 +2202,15 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach(TECSystem childScope in system.SystemInstances)
+            foreach(TECMisc misc in system.MiscCosts)
+            {
+                addObject(new StackItem(change, system, misc, typeof(TECSystem), typeof(TECMisc)));
+            }
+            foreach (TECScopeBranch branch in system.ScopeBranches)
+            {
+                addObject(new StackItem(change, system, branch));
+            }
+            foreach (TECSystem childScope in system.SystemInstances)
             {
                 addObject(new StackItem(change, system, childScope));
                 saveFullSystem(childScope, scopeManager);
@@ -2378,6 +2391,18 @@ namespace EstimatingUtilitiesLibrary
             var relevantTables = getRelevantTablesForAddRemove(item);
             addToTables(item, relevantTables);
         }
+        private static void addToTables(StackItem item, List<TableBase> tables)
+        {
+            foreach (TableBase table in tables)
+            {
+                var tableInfo = new TableInfo(table);
+                if (tableInfo.IsRelationTable)
+                { addToIndexUpdates(indexesToUpdate, item, table); }
+                //{ updateIndexedRelation(table, item); }
+                else
+                { addObjectToTable(table, item); }
+            }
+        }
         private static void addObjectToTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
@@ -2392,6 +2417,31 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
         }
+        private static void addToIndexUpdates(Dictionary<TableBase, List<StackItem>> updates, StackItem item, TableBase table)
+        {
+            if (!updates.ContainsKey(table))
+            {
+                var stackForTable = new List<StackItem>();
+                stackForTable.Add(item);
+                updates[table] = stackForTable;
+            }
+            else
+            {
+                bool alreadyRepresented = false;
+                foreach (StackItem updateItem in updates[table])
+                {
+                    if (updateItem.ReferenceObject == item.ReferenceObject)
+                    {
+                        alreadyRepresented = true;
+                    }
+                }
+                if (!alreadyRepresented)
+                {
+                    updates[table].Add(item);
+                }
+            }
+        }
+
         private static void updateIndexedRelation(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
@@ -2433,43 +2483,6 @@ namespace EstimatingUtilitiesLibrary
             //ObjectsToAdd = [targetObject, referenceObject];
             var relevantTables = getRelevantTablesForAddRemoveRelationship(item);
             addToTables(item, relevantTables);
-        }
-
-        private static void addToTables(StackItem item, List<TableBase> tables)
-        {
-            foreach (TableBase table in tables)
-            {
-                var tableInfo = new TableInfo(table);
-                if (tableInfo.IsRelationTable)
-                { addToIndexUpdates(indexesToUpdate, item, table); }
-                //{ updateIndexedRelation(table, item); }
-                else
-                { addObjectToTable(table, item); }
-            }
-        }
-        private static void addToIndexUpdates(Dictionary<TableBase, List<StackItem>> updates, StackItem item, TableBase table)
-        {
-            if (!updates.ContainsKey(table))
-            {
-                var stackForTable = new List<StackItem>();
-                stackForTable.Add(item);
-                updates[table] = stackForTable;
-            }
-            else
-            {
-                bool alreadyRepresented = false;
-                foreach (StackItem updateItem in updates[table])
-                {
-                    if (updateItem.ReferenceObject == item.ReferenceObject)
-                    {
-                        alreadyRepresented = true;
-                    }
-                }
-                if (!alreadyRepresented)
-                {
-                    updates[table].Add(item);
-                }
-            }
         }
         private static void saveIndexRelationships(Dictionary<TableBase, List<StackItem>> updates)
         {
