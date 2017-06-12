@@ -51,6 +51,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public bool IsTypical { get; private set; }
+
         private TECBid _bid;
         public TECBid Bid
         {
@@ -91,8 +93,9 @@ namespace TECUserControlLibrary.ViewModels
         /// <summary>
         /// Initializes a new instance of the AddControlledScopeExtension class.
         /// </summary>
-        public SystemComponentVM(TECScopeManager scopeManager)
+        public SystemComponentVM(TECScopeManager scopeManager, bool isTypicalSystem = true)
         {
+            IsTypical = isTypicalSystem;
             if (scopeManager is TECBid)
             {
                 _bid = scopeManager as TECBid;
@@ -102,7 +105,7 @@ namespace TECUserControlLibrary.ViewModels
                 _templates = scopeManager as TECTemplates;
             }
             _selectedSystem = null;
-            setupVMs(scopeManager);
+            setupVMs(scopeManager, isTypicalSystem);
         }
 
         #endregion
@@ -121,7 +124,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.Refresh(scopeManager);
             ConnectionVM.Refresh(scopeManager);
         }
-        private void setupVMs(TECScopeManager scopeManager)
+        private void setupVMs(TECScopeManager scopeManager, bool isTypicalSystem = true)
         {
             ScopeDataGrid = new EquipmentVM(scopeManager);
             ScopeDataGrid.SelectionChanged += SelectionChanged;
@@ -135,23 +138,26 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
             ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
-            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem());
-            ConnectionVM = new ConnectionVM(scopeManager);
+            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(), isTypicalSystem);
+            ConnectionVM = new ConnectionVM(scopeManager, isTypicalSystem);
         }
         
         public void DragOver(IDropInfo dropInfo)
         {
-            var sourceItem = dropInfo.Data;
-            Type sourceType = sourceItem.GetType();
+            if (IsTypical)
+            {
+                var sourceItem = dropInfo.Data;
+                Type sourceType = sourceItem.GetType();
 
-            var targetCollection = dropInfo.TargetCollection;
-            if (sourceType == typeof(TECController) && SelectedSystem != null)
-            {
-                UIHelpers.ControllerInPanelDragOver(dropInfo);
-            }
-            else
-            {
-                UIHelpers.StandardDragOver(dropInfo);
+                var targetCollection = dropInfo.TargetCollection;
+                if (sourceType == typeof(TECController) && SelectedSystem != null)
+                {
+                    UIHelpers.ControllerInPanelDragOver(dropInfo);
+                }
+                else
+                {
+                    UIHelpers.StandardDragOver(dropInfo);
+                }
             }
         }
         public void Drop(IDropInfo dropInfo)

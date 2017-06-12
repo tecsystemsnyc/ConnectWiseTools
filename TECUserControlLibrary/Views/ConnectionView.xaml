@@ -28,7 +28,8 @@
             <DataGrid.Columns>
                 <DataGridComboBoxColumn ItemsSource="{Binding Data.ControllerSelections, Source={StaticResource proxy}}"
                                         Header="Controller" Width="Auto" MinWidth="60"
-                                        DisplayMemberPath="Name">
+                                        DisplayMemberPath="Name"
+                                        IsReadOnly="{Binding Data.ControllerSelectionReadOnly, Source={StaticResource proxy}}">
                     <DataGridComboBoxColumn.SelectedItemBinding>
                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
                                       StringFormat="{}{0}">

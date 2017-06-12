@@ -47,6 +47,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public bool PanelSelectionReadOnly { get; private set; }
+
         private ObservableCollection<TECController> sourceControllers;
         private ObservableCollection<TECPanel> sourcePanels;
         public ObservableCollection<TECPanel> PanelsSource
@@ -161,14 +163,17 @@ namespace TECUserControlLibrary.ViewModels
         public ControllersPanelsVM(TECBid bid)
         {
             isGlobal = true;
+            PanelSelectionReadOnly = false;
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
+            
         }
-        public ControllersPanelsVM(TECSystem system)
+        public ControllersPanelsVM(TECSystem system, bool canSelectPanel = true)
         {
             isGlobal = false;
+            PanelSelectionReadOnly = !canSelectPanel;
             sourceControllers = system.Controllers;
             PanelsSource = system.Panels;
             SelectedSystem = system;
@@ -312,7 +317,10 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.ControllerInPanelDragOver(dropInfo);
+            if (!PanelSelectionReadOnly)
+            {
+                UIHelpers.ControllerInPanelDragOver(dropInfo);
+            }
         }
         public void Drop(IDropInfo dropInfo)
         {

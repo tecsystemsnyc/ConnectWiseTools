@@ -95,12 +95,15 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("NoneConduitType");
             }
         }
+
+        public bool ControllerSelectionReadOnly { get; private set; }
         
         /// <summary>
         /// Initializes a new instance of the ConnectionVM class.
         /// </summary>
-        public ConnectionVM(TECScopeManager scopeManager)
+        public ConnectionVM(TECScopeManager scopeManager, bool isTypical = true)
         {
+            ControllerSelectionReadOnly = !isTypical;
             _scopeManager = scopeManager;
             _selectedSystem = null;
             setupCatalogCollections();

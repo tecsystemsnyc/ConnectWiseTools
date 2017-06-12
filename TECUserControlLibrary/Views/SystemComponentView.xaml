@@ -35,6 +35,7 @@
                     <Label Content="Equipment"/>
                     <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.Equipment}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                             AllowAddingNew="{Binding ElementName=parent, Path=ViewModel.IsTypical}"
                                   Grid.Row="1"/>
                 </Grid>
             </TabItem>
@@ -72,7 +73,7 @@
                     </Grid.RowDefinitions>
                     <Label Content="Proposal"/>
                     <controls:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.ScopeBranches}"
-                                  Grid.Row="1"/>
+                                                           Grid.Row="1" />
                 </Grid>
             </TabItem>
         </TabControl>
