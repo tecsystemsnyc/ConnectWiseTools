@@ -127,10 +127,7 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs(TECScopeManager scopeManager, bool isTypicalSystem = true)
         {
             ScopeDataGrid = new EquipmentVM(scopeManager);
-            ScopeDataGrid.SelectionChanged += SelectionChanged;
-            ScopeDataGrid.DragHandler += DragOver;
-            ScopeDataGrid.DropHandler += Drop;
-            ScopeDataGrid.AssignChildDelegates();
+            
             ScopeDataGrid.DataGridVisibilty.EquipmentLocation = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentUnitPrice = Visibility.Collapsed;
             ScopeDataGrid.DataGridVisibilty.EquipmentTotalPrice = Visibility.Collapsed;
@@ -140,6 +137,15 @@ namespace TECUserControlLibrary.ViewModels
 
             ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(), isTypicalSystem);
             ConnectionVM = new ConnectionVM(scopeManager, isTypicalSystem);
+        }
+
+        public void AssignChildDelegates()
+        {
+            ScopeDataGrid.SelectionChanged += SelectionChanged;
+            ScopeDataGrid.DragHandler += DragOver;
+            ScopeDataGrid.DropHandler += Drop;
+            ScopeDataGrid.AssignChildDelegates();
+            ControllersPanelsVM.SelectionChanged += SelectionChanged;
         }
         
         public void DragOver(IDropInfo dropInfo)
@@ -189,6 +195,13 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UIHelpers.StandardDrop(dropInfo);
             }
+        }
+        public void NullifySelected()
+        {
+            ScopeDataGrid.NullifySelected();
+            ControllersPanelsVM.SelectedControllerInPanel = null;
+            ControllersPanelsVM.SelectedPanel = null;
+            
         }
 
         #endregion

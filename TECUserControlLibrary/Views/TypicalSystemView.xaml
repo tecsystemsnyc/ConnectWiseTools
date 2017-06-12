@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Systems"/>
-                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ControlledScopeEditIndex}}}"
+                <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:TypicalSystemIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedEditIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"
@@ -47,7 +47,7 @@
         <TabControl Grid.Column="2" 
                     SelectedIndex="{Binding ElementName=parent, Path=SelectedEditIndex, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Header="Edit" Visibility="Collapsed">
-                <views:SystemComponentView ViewModel="{Binding ComponentVM}"/>
+                <views:SystemComponentView ViewModel="{Binding ComponentVM}" SelectedItemIndex="{Binding ComponentIndex, Mode=OneWayToSource}"/>
             </TabItem>
             <TabItem Header="Remove" Visibility="Collapsed">
                 <Grid>

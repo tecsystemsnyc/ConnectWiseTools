@@ -45,7 +45,7 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Systems">
-                <TabControl>
+                <TabControl SelectedIndex="{Binding SystemsSubIndex, Mode=OneWayToSource}">
                     <TabItem Header="Typical">
                         <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
                     </TabItem>

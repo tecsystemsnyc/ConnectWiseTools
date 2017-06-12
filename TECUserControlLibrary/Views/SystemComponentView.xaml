@@ -20,7 +20,7 @@
             <ColumnDefinition Width="180"/>
         </Grid.ColumnDefinitions>
         <Label Content="{Binding SelectedSystem.Name}"/>
-        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ControlledScopeItemIndex}}}"
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedItemIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>

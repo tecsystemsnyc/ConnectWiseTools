@@ -162,6 +162,7 @@ namespace TECUserControlLibrary.ViewModels
                 Templates = scopeManager as TECTemplates;
                 ScopeSource = Templates.SystemTemplates;
             }
+            SelectedSystem = null;
             ComponentVM.Refresh(scopeManager);
             SystemsVM.Refresh(scopeManager);
         }

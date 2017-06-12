@@ -65,6 +65,63 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private SystemsSubIndex _systemsSubIndex;
+        public SystemsSubIndex SystemsSubIndex
+        {
+            get { return _systemsSubIndex; }
+            set {
+                _systemsSubIndex = value;
+                RaisePropertyChanged("SystemsSubIndex");
+                updateVisibilityFromSystemSub(value);
+            }
+        }
+
+        private void updateVisibilityFromSystemSub(SystemsSubIndex value)
+        {
+            if(value == SystemsSubIndex.Typical)
+            {
+                updateVisibilityFromSystems(TypicalSystemsTab.ComponentIndex);
+            }
+            else if (value == SystemsSubIndex.Instance)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Visible;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+            }
+            else if (value == SystemsSubIndex.Location)
+            {
+                ScopeCollection.SystemsVisibility = Visibility.Visible;
+                ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                ScopeCollection.TagsVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+                ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+                ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+            }
+        }
+
         #region Extensions
         public SystemsVM ScopeDataGrid { get; set; }
         public LocationVM LocationDataGrid { get; set; }
@@ -199,8 +256,79 @@ namespace TECUserControlLibrary.ViewModels
         {
             TypicalSystemsTab = new TypicalSystemVM(Bid);
             TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
-            TypicalSystemsTab.ComponentVM.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab.AssignChildDelegates();
+            TypicalSystemsTab.ComponentChanged += updateVisibilityFromSystems;
         }
+
+        private void updateVisibilityFromSystems(SystemComponentIndex index)
+        {
+            TypicalSystemsTab.ComponentVM.NullifySelected();
+
+            var systemsVisibility = Visibility.Visible;
+            var equipmentVisibility = Visibility.Collapsed;
+            var subScopeVisibility = Visibility.Collapsed;
+            var devicesVisibility = Visibility.Collapsed;
+            var devicesEditVisibility = Visibility.Collapsed;
+            var manufacturerVisibility = Visibility.Collapsed;
+            var tagsVisibility = Visibility.Collapsed;
+            var controllerEditVisibility = Visibility.Collapsed;
+            var controllerVisibility = Visibility.Collapsed;
+            var associatedCostsVisibility = Visibility.Collapsed;
+            var panelsVisibility = Visibility.Collapsed;
+            var addPanelsVisibility = Visibility.Collapsed;
+            var miscCostsVisibility = Visibility.Collapsed;
+            var miscWiringVisibility = Visibility.Collapsed;
+
+            ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+
+            if (TypicalSystemsTab.SelectedSystem == null)
+            {
+                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+            }
+            else
+            {
+                if (index == SystemComponentIndex.Controllers)
+                {
+                    controllerVisibility = Visibility.Visible;
+                    panelsVisibility = Visibility.Visible;
+                    associatedCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
+                }
+                else if (index == SystemComponentIndex.Electrical)
+                {
+
+                }
+                else if (index == SystemComponentIndex.Equipment)
+                {
+                    equipmentVisibility = Visibility.Visible;
+                    subScopeVisibility = Visibility.Visible;
+                    devicesVisibility = Visibility.Visible;
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.Equipment;
+                }
+                else if (index == SystemComponentIndex.Misc)
+                {
+                    miscWiringVisibility = Visibility.Visible;
+                    miscCostsVisibility = Visibility.Visible;
+                    ScopeCollection.TabIndex = ScopeCollectionIndex.MiscCosts;
+                }
+            }
+
+            ScopeCollection.SystemsVisibility = systemsVisibility;
+            ScopeCollection.EquipmentVisibility = equipmentVisibility;
+            ScopeCollection.SubScopeVisibility = subScopeVisibility;
+            ScopeCollection.DevicesVisibility = devicesVisibility;
+            ScopeCollection.DevicesEditVisibility = devicesEditVisibility;
+            ScopeCollection.ManufacturerVisibility = manufacturerVisibility;
+            ScopeCollection.TagsVisibility = tagsVisibility;
+            ScopeCollection.ControllerEditVisibility = controllerEditVisibility;
+            ScopeCollection.ControllerVisibility = controllerVisibility;
+            ScopeCollection.AssociatedCostsVisibility = associatedCostsVisibility;
+            ScopeCollection.PanelsVisibility = panelsVisibility;
+            ScopeCollection.AddPanelVisibility = addPanelsVisibility;
+            ScopeCollection.MiscCostVisibility = miscCostsVisibility;
+            ScopeCollection.MiscWiringVisibility = miscWiringVisibility;
+        }
+
         private void setupMiscVM()
         {
             MiscVM = new MiscCostsVM(Bid);
@@ -229,23 +357,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (DGTabIndex == GridIndex.Systems)
             {
-                ScopeCollection.SystemsVisibility = Visibility.Visible;
-                ScopeCollection.EquipmentVisibility = Visibility.Visible;
-                ScopeCollection.SubScopeVisibility = Visibility.Visible;
-                ScopeCollection.DevicesVisibility = Visibility.Visible;
-                ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                ScopeCollection.TagsVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                ScopeCollection.ControllerVisibility = Visibility.Visible;
-                ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-                ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                ScopeCollection.PanelsVisibility = Visibility.Visible;
-                ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                ScopeCollection.MiscCostVisibility = Visibility.Visible;
-                ScopeCollection.MiscWiringVisibility = Visibility.Visible;
-
-                ScopeCollection.TabIndex = ScopeCollectionIndex.System;
+                updateVisibilityFromSystemSub(SystemsSubIndex);
             }
             else if (DGTabIndex == GridIndex.DDC)
             {
