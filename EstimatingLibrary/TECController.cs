@@ -148,9 +148,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, TECManufacturer manufacturer) : base(guid)
+        public TECController(Guid guid, TECManufacturer manufacturer, bool isGlobal = true) : base(guid)
         {
-            IsGlobal = true;
+            IsGlobal = isGlobal;
             _cost = 0;
             _io = new ObservableCollection<TECIO>();
             _childrenConnections = new ObservableCollection<TECConnection>();
@@ -159,7 +159,7 @@ namespace EstimatingLibrary
             IO.CollectionChanged += IO_CollectionChanged;
         }
 
-        public TECController(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECController(TECManufacturer manufacturer, bool isGlobal = true) : this(Guid.NewGuid(), manufacturer, isGlobal) { }
         public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Manufacturer)
         {
             if (guidDictionary != null)

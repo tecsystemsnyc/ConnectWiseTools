@@ -38,11 +38,13 @@ namespace TECUserControlLibrary.ViewModels
             get { return _scopeManager; }
             set
             {
+                unregisterScopeManagerChanges();
                 _scopeManager = value;
+                registerScopeManagerChanges();
                 RaisePropertyChanged("ScopeManager");
             }
         }
-
+        
         private ObservableCollection<SubScopeConnection> _subScopeConnectionCollection;
         public ObservableCollection<SubScopeConnection> SubScopeConnectionCollection
         {
@@ -102,12 +104,14 @@ namespace TECUserControlLibrary.ViewModels
             _scopeManager = scopeManager;
             _selectedSystem = null;
             setupCatalogCollections();
+            setupCollections();
         }
 
         public void Refresh(TECScopeManager scopeManager)
         {
             ScopeManager = scopeManager;
             setupCatalogCollections();
+            setupCollections();
         }
         
         private void setupCollections()
@@ -215,7 +219,24 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        
+        private void registerScopeManagerChanges()
+        {
+            var bid = ScopeManager as TECBid;
+            if (bid != null)
+            {
+                bid.Controllers.CollectionChanged += collectionChanged;
+            }
+        }
+
+        private void unregisterScopeManagerChanges()
+        {
+            var bid = ScopeManager as TECBid;
+            if (bid != null)
+            {
+                bid.Controllers.CollectionChanged -= collectionChanged;
+            }
+        }
+
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

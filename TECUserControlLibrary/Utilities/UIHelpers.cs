@@ -120,7 +120,7 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers)
+        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, bool isGlobal = true)
         {
             var sourceItem = (dropInfo.Data as TECScope).DragDropCopy();
             Type sourceType = dropInfo.Data.GetType();
@@ -130,7 +130,9 @@ namespace TECUserControlLibrary.Utilities
             {
                 if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                 {
-                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
+                    var controller = sourceItem as TECController;
+                    controller.IsGlobal = isGlobal;
+                    var controllerInPanel = new ControllerInPanel(controller, null);
                     controllers.Add(sourceItem as TECController);
                     sourceItem = controllerInPanel;
                 }

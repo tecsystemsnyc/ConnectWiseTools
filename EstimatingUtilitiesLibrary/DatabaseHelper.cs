@@ -777,7 +777,9 @@ namespace EstimatingUtilitiesLibrary
             DataTable controllersDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllersDT.Rows)
             {
-                controllers.Add(getControllerFromRow(row));
+                var controller = getControllerFromRow(row);
+                controller.IsGlobal = true;
+                controllers.Add(controller);
             }
 
             return controllers;
@@ -1065,7 +1067,11 @@ namespace EstimatingUtilitiesLibrary
 
             DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
-            { controllers.Add(getControllerFromRow(row)); }
+            {
+                var controller = getControllerFromRow(row);
+                controller.IsGlobal = false;
+                controllers.Add(controller);
+            }
 
             return controllers;
         }

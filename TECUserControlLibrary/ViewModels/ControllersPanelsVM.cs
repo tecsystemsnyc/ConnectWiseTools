@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ControllersPanelsVM : ViewModelBase, IDropTarget
     {
         #region Properties
-
+        private bool isGlobal;
         private TECBid _bid;
         public TECBid Bid
         {
@@ -160,6 +160,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Constructor
         public ControllersPanelsVM(TECBid bid)
         {
+            isGlobal = true;
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
@@ -167,6 +168,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public ControllersPanelsVM(TECSystem system)
         {
+            isGlobal = false;
             sourceControllers = system.Controllers;
             PanelsSource = system.Panels;
             SelectedSystem = system;
@@ -316,7 +318,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers);
+                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers, isGlobal);
             }
             else
             {
