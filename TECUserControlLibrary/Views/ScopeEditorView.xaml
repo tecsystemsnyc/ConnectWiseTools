@@ -37,7 +37,7 @@
         <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
                                          Grid.RowSpan="2"
                                          ViewModel="{Binding ScopeCollection}"/>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
         <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="2"
@@ -71,7 +71,7 @@
             </TabItem>
             
         </TabControl>
-        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
 
         <!--Right Tab Control-->
         <views:EditTabView ViewModel="{Binding EditTab}"

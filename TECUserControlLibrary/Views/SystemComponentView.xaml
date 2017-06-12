@@ -25,7 +25,8 @@
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
         <TabControl Grid.Row="1" Grid.ColumnSpan="2"
-                                SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={utilities:EditIndexToIntegerConverter}}">
+                    Padding="0"
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Header="Equipment" Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
