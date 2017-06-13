@@ -36,7 +36,22 @@ namespace TECUserControlLibrary.ViewModels
         public IOType SelectedIO { get; set; }
         public TECConnectionType SelectedWire { get; set; }
 
+        private TECController _selectedChild;
+        public TECController SelectedChild
+        {
+            get
+            {
+                return _selectedChild;
+            }
+            set
+            {
+                _selectedChild = value;
+                RaisePropertyChanged("SelectedChild");
+            }
+        }
+
         public ICommand AddConnectionCommand { get; private set; }
+        public ICommand RemoveControllerCommand { get; private set; }
 
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -56,6 +71,7 @@ namespace TECUserControlLibrary.ViewModels
                     populateWireAndConduitTypes(bid);
 
                     AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x), x => CanAddConnectionExecute());
+                    RemoveControllerCommand = new RelayCommand<TECController>(x => RemoveControllerExecute(x), x => CanRemoveControllerExecute());
                 }
                 else
                 {
@@ -139,6 +155,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 return false;
             }
+        }
+
+        private void RemoveControllerExecute(TECController controller)
+        {
+            controller.RemoveController(SelectedChild);
+            SelectedChild = null;
+        }
+        private bool CanRemoveControllerExecute()
+        {
+            return (SelectedChild != null);
         }
 
         private void setupNoneTypes()

@@ -95,34 +95,51 @@
                         </i:Interaction.Behaviors>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"/>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Child Connections/Daisy Chains" FontSize="10"/>
-                            <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center"/>
+                            <TextBlock Text="IO Type:" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
                             <ComboBox Grid.Column="2"
                                       ItemsSource="{Binding Controller.NetworkIO}"
                                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedIO}"
                                       Margin="5"/>
-                            <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center"/>
+                            <TextBlock Text="Wire:" Grid.Column="3" VerticalAlignment="Center" Margin="5"/>
                             <ComboBox Grid.Column="4"
                                       ItemsSource="{Binding ElementName=parent, Path=ViewModel.WireTypes}"
                                       SelectedItem="{Binding ElementName=parent, Path=ViewModel.SelectedWire}"
                                       DisplayMemberPath="Name"
                                       Margin="5"/>
                             <Button Grid.Column="5"
-                                    Content="Add"
+                                    Content="Add Daisy Chain"
                                     Command="{Binding ElementName=parent, Path=ViewModel.AddConnectionCommand}"
                                     CommandParameter="{Binding Controller, Mode=OneWay}"
                                     Margin="5"/>
+                            <TextBlock Text="Remove" Grid.Column="6" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="{Binding ElementName=parent, Path=ViewModel.SelectedChild.Name}" Grid.Column="7" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="from" Grid.Column="8" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="{Binding Controller.Name}" Grid.Column="9" VerticalAlignment="Center" Margin="5"/>
+                            <Button Grid.Column="10"
+                                    Content="Remove Controller"
+                                    Command="{Binding ElementName=parent, Path=ViewModel.RemoveControllerCommand}"
+                                    CommandParameter="{Binding Controller, Mode=OneWay}"
+                                    Margin="5"/>
+                            <Border Grid.Column="1" Grid.ColumnSpan="5" BorderBrush="Black" BorderThickness="1"/>
+                            <Border Grid.Column="6" Grid.ColumnSpan="5" BorderBrush="Black" BorderThickness="1"/>
                         </Grid>
                         <DataGrid ItemsSource="{Binding NetworkConnections}"
-                                  AutoGenerateColumns="False">
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
@@ -165,7 +182,9 @@
                                 <DataTemplate>
                                     <DataGrid ItemsSource="{Binding ChildrenControllers}"
                                               AutoGenerateColumns="False"
+                                              SelectedItem="{Binding Data.SelectedChild, Source={StaticResource proxy}}"
                                               dd:DragDrop.DropHandler="{Binding Data, Source={StaticResource proxy}}"
+                                              IsReadOnly="True"
                                               MinHeight="50">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Controller"
