@@ -20,12 +20,13 @@
             <ColumnDefinition Width="180"/>
         </Grid.ColumnDefinitions>
         <Label Content="{Binding SelectedSystem.Name}"/>
-        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ControlledScopeItemIndex}}}"
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
                           SelectedItem="{Binding ElementName=parent, Path=SelectedItemIndex}"
                           Grid.Column="1" Margin="2"
                           VerticalContentAlignment="Center"/>
         <TabControl Grid.Row="1" Grid.ColumnSpan="2"
-                                SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={utilities:EditIndexToIntegerConverter}}">
+                    Padding="0"
+                    SelectedIndex="{Binding ElementName=parent, Path=SelectedItemIndex, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Header="Equipment" Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -35,6 +36,7 @@
                     <Label Content="Equipment"/>
                     <views:EquipmentGridView EquipmentSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.Equipment}"
                                   ViewModel="{Binding ElementName=parent, Path=ViewModel.ScopeDataGrid}"
+                                             AllowAddingNew="{Binding ElementName=parent, Path=ViewModel.IsTypical}"
                                   Grid.Row="1"/>
                 </Grid>
             </TabItem>
@@ -72,7 +74,7 @@
                     </Grid.RowDefinitions>
                     <Label Content="Proposal"/>
                     <controls:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding ElementName=parent, Path=ViewModel.SelectedSystem.ScopeBranches}"
-                                  Grid.Row="1"/>
+                                                           Grid.Row="1" />
                 </Grid>
             </TabItem>
         </TabControl>

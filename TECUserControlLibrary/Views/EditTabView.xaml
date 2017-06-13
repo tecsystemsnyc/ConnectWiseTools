@@ -22,7 +22,8 @@
                     Grid.Row="0"
                     Grid.RowSpan="2"
                     SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={utilities:EditIndexToIntegerConverter}}"
-                    Background="{DynamicResource SectionBackgroundBrush}">
+                    Background="{DynamicResource SectionBackgroundBrush}"
+                    Padding="0">
             <!--System Edit-->
             <TabItem Visibility="Collapsed">
                 <controls:SystemEditControl

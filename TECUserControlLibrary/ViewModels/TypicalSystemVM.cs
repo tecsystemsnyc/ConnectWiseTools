@@ -32,6 +32,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedSystem = value;
                 refreshSelected(value);
+                SelectionChanged?.Invoke(value);
                 RaisePropertyChanged("SelectedSystem");
             }
         }
@@ -132,6 +133,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private SystemComponentIndex _componentIndex;
+        public SystemComponentIndex ComponentIndex
+        {
+            get { return _componentIndex; }
+            set
+            {
+                _componentIndex = value;
+                RaisePropertyChanged("ComponentIndex");
+                ComponentChanged?.Invoke(value);
+            }
+        }
+
         #region VM Extenstions
         public SystemComponentVM ComponentVM { get; set; }
         #endregion
@@ -141,6 +154,7 @@ namespace TECUserControlLibrary.ViewModels
         public Action<IDropInfo> DropHandler;
 
         public Action<Object> SelectionChanged;
+        public Action<SystemComponentIndex> ComponentChanged;
         #endregion
         #endregion
 
@@ -186,7 +200,11 @@ namespace TECUserControlLibrary.ViewModels
         private void setupVMs(TECScopeManager scopeManager)
         {
             ComponentVM = new SystemComponentVM(scopeManager);
+        }
+        public void AssignChildDelegates()
+        {
             ComponentVM.SelectionChanged += SelectionChanged;
+            ComponentVM.AssignChildDelegates();
         }
 
         private void addControlledScopeExecute()

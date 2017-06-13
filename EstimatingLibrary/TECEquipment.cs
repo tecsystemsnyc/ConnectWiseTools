@@ -139,22 +139,17 @@ namespace EstimatingLibrary
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
             ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
-            if (characteristicReference == null)
-            {
-                characteristicReference = new ObservableItemToInstanceList<TECScope>();
-            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
-
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
                 var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
-                characteristicReference.AddItem(subScope,toAdd);
+                characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }
             _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
-
             this.copyPropertiesFromScope(equipmentSource);
+            
         }
         #endregion //Constructors
 

@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ControllersPanelsVM : ViewModelBase, IDropTarget
     {
         #region Properties
-
+        private bool isGlobal;
         private TECBid _bid;
         public TECBid Bid
         {
@@ -31,6 +31,18 @@ namespace TECUserControlLibrary.ViewModels
                 unregisterChanges();
                 _bid = value;
                 RaisePropertyChanged("Bid");
+                registerChanges();
+            }
+        }
+        private TECTemplates _templates;
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            private set
+            {
+                unregisterChanges();
+                _templates = value;
+                RaisePropertyChanged("Temnplates");
                 registerChanges();
             }
         }
@@ -46,6 +58,9 @@ namespace TECUserControlLibrary.ViewModels
                 registerChanges();
             }
         }
+
+        public bool PanelSelectionReadOnly { get; private set; }
+        public Visibility PanelSelectionVisibility { get; private set; }
 
         private ObservableCollection<TECController> sourceControllers;
         private ObservableCollection<TECPanel> sourcePanels;
@@ -160,13 +175,31 @@ namespace TECUserControlLibrary.ViewModels
         #region Constructor
         public ControllersPanelsVM(TECBid bid)
         {
+            isGlobal = true;
+            PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
+            
         }
-        public ControllersPanelsVM(TECSystem system)
+        public ControllersPanelsVM(TECTemplates templates)
         {
+            isGlobal = true;
+            PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Collapsed;
+            sourceControllers = templates.ControllerTemplates;
+            PanelsSource = templates.PanelTemplates;
+            Templates = templates;
+            setup();
+
+        }
+        public ControllersPanelsVM(TECSystem system, bool canSelectPanel = true)
+        {
+            isGlobal = false;
+            PanelSelectionReadOnly = !canSelectPanel;
+            PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = system.Controllers;
             PanelsSource = system.Panels;
             SelectedSystem = system;
@@ -180,6 +213,13 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
+            setup();
+        }
+        public void Refresh(TECTemplates templates)
+        {
+            sourceControllers = templates.ControllerTemplates;
+            PanelsSource = templates.PanelTemplates;
+            Templates = templates;
             setup();
         }
         public void Refresh(TECSystem system)
@@ -310,13 +350,16 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.ControllerInPanelDragOver(dropInfo);
+            if (!PanelSelectionReadOnly)
+            {
+                UIHelpers.ControllerInPanelDragOver(dropInfo);
+            }
         }
         public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers);
+                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers, isGlobal);
             }
             else
             {

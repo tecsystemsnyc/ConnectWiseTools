@@ -120,7 +120,7 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers)
+        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, bool isGlobal = true)
         {
             var sourceItem = (dropInfo.Data as TECScope).DragDropCopy();
             Type sourceType = dropInfo.Data.GetType();
@@ -130,7 +130,9 @@ namespace TECUserControlLibrary.Utilities
             {
                 if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                 {
-                    var controllerInPanel = new ControllerInPanel(sourceItem as TECController, null);
+                    var controller = sourceItem as TECController;
+                    controller.IsGlobal = isGlobal;
+                    var controllerInPanel = new ControllerInPanel(controller, null);
                     controllers.Add(sourceItem as TECController);
                     sourceItem = controllerInPanel;
                 }
@@ -255,8 +257,9 @@ namespace TECUserControlLibrary.Utilities
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
-    public enum ControlledScopeEditIndex { Edit, Qty };
-    public enum ControlledScopeItemIndex { Equipment, Controllers, Electrical, Misc, Proposal };
+    public enum TypicalSystemIndex { Edit, Qty };
+    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
+    public enum SystemsSubIndex { Typical, Instance, Location}
 }

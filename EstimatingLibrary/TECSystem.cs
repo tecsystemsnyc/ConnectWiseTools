@@ -458,30 +458,35 @@ namespace EstimatingLibrary
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object> && SystemInstances.Count > 0)
+            if (SystemInstances.Count > 0)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                object oldValue = args.OldValue;
-                object newValue = args.NewValue;
-                if (e.PropertyName == "Add")
+
+                if (e is PropertyChangedExtendedEventArgs<Object>)
                 {
-                    handleAdd(newValue, oldValue);
-                }
-                else if (e.PropertyName == "Remove")
+                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    object oldValue = args.OldValue;
+                    object newValue = args.NewValue;
+                    if (e.PropertyName == "Add")
+                    {
+                        handleAdd(newValue, oldValue);
+                    }
+                    else if (e.PropertyName == "Remove")
+                    {
+                        handleRemove(newValue, oldValue);
+                    }
+                    else if (e.PropertyName == "AddRelationship")
+                    {
+                        handleAdd(newValue, oldValue);
+                    }
+                    else if (e.PropertyName == "RemoveRelationship")
+                    {
+                        handleRemove(newValue, oldValue);
+                    }
+                } else if (e.PropertyName == "Connection" && sender is TECSubScope)
                 {
-                    handleRemove(newValue, oldValue);
+                    handleSubScopeConnectionChanged(sender as TECSubScope);
                 }
-                else if (e.PropertyName == "AddRelationship")
-                {
-                    handleAdd(newValue, oldValue);
-                }
-                else if (e.PropertyName == "RemoveRelationship")
-                {
-                    handleRemove(newValue, oldValue);
-                }
-            } else if (e.PropertyName == "Connection" && sender is TECSubScope)
-            {
-                handleSubScopeConnectionChanged(sender as TECSubScope);
+
             }
         }
 
@@ -493,10 +498,14 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
                     {
+                        if(instance.Connection == null || !instance.Connection.ParentController.IsGlobal)
+                        {
+                            break;
+                        }
                         instance.Connection.ParentController.RemoveSubScope(instance);
                     }
                 }
-                else
+                else if (subScope.Connection.ParentController.IsGlobal)
                 {
                     foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
                     {
@@ -526,6 +535,7 @@ namespace EstimatingLibrary
                 foreach (TECSystem system in SystemInstances)
                 {
                     var controllerToAdd = new TECController(characteristicController);
+                    controllerToAdd.IsGlobal = false;
                     CharactersticInstances.AddItem(characteristicController, controllerToAdd);
                     system.Controllers.Add(controllerToAdd);
                 }
@@ -915,9 +925,6 @@ namespace EstimatingLibrary
             var newSystem = new TECSystem();
             newSystem.Name = Name;
             newSystem.Description = Description;
-            var equipmentCollection = new ObservableCollection<TECSystem>();
-            var controllerCollection = new ObservableCollection<TECController>();
-            var panelCollection = new ObservableCollection<TECPanel>();
             foreach (TECEquipment equipment in Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, CharactersticInstances);

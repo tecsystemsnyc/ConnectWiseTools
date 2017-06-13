@@ -26,15 +26,15 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("ViewModel", typeof(SystemComponentVM),
               typeof(SystemComponentView));
 
-        public ControlledScopeItemIndex SelectedItemIndex
+        public SystemComponentIndex SelectedItemIndex
         {
-            get { return (ControlledScopeItemIndex)GetValue(SelectedItemIndexProperty); }
+            get { return (SystemComponentIndex)GetValue(SelectedItemIndexProperty); }
             set { SetValue(SelectedItemIndexProperty, value); }
         }
 
         public static readonly DependencyProperty SelectedItemIndexProperty =
-            DependencyProperty.Register("SelectedItemIndex", typeof(ControlledScopeItemIndex),
-              typeof(SystemComponentView), new PropertyMetadata(default(ControlledScopeItemIndex)));
+            DependencyProperty.Register("SelectedItemIndex", typeof(SystemComponentIndex),
+              typeof(SystemComponentView), new PropertyMetadata(default(SystemComponentIndex)));
 
         public SystemComponentView()
         {

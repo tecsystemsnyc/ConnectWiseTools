@@ -37,7 +37,7 @@
         <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
                                          Grid.RowSpan="2"
                                          ViewModel="{Binding ScopeCollection}"/>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
         <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="2"
@@ -45,7 +45,7 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Systems">
-                <TabControl>
+                <TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
                     <TabItem Header="Typical">
                         <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
                     </TabItem>
@@ -71,10 +71,10 @@
             </TabItem>
             
         </TabControl>
-        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
 
         <!--Right Tab Control-->
-        <views:EditTabView ViewModel="{Binding EditTab}"
+        <views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
                              Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
     </Grid>
 </UserControl>

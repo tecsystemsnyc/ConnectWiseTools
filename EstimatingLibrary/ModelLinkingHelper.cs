@@ -302,6 +302,10 @@ namespace EstimatingLibrary
             foreach (TECSystem system in systems)
             {
                 linkConnections(controllers, system.Equipment);
+                foreach(TECSystem instance in system.SystemInstances)
+                {
+                    linkConnections(controllers, instance.Equipment);
+                }
             }
             linkNetworkConnections(controllers);
         }

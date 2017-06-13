@@ -23,6 +23,7 @@ namespace EstimatingLibrary
                 charactersticInstances[key] = new List<T>();
             }
             charactersticInstances[key].Add(value);
+            
             NotifyPropertyChanged("AddRelationship", key as object, value as object, typeof(T), typeof(T));
         }
 

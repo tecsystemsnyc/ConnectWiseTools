@@ -82,39 +82,20 @@
                 </TabItem>
                 <TabItem Header="Points">
                     <views:SubScopeGridView SubScopeSource="{Binding Templates.SubScopeTemplates}"
-                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid.ChildVM}"/>
                 </TabItem>
                 <TabItem Header="Devices">
                     <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
-                                             ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                                             ViewModel="{Binding ScopeDataGrid.ChildVM.ChildVM}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" Content="Controllers"/>
-                        <controls:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
-                                                     ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
-                                                     Grid.Row="1"
-                                                     Margin="5"/>
-                        <Label Grid.Row="0" Grid.Column="1" Content="Panels"/>
-                        <controls:PanelsGridControl PanelsSource="{Binding Templates.PanelTemplates}"
-                                          ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
-                                          Grid.Row="1" Grid.Column="1"
-                                          Margin="5"/>
-                    </Grid>
+                    <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
                 </TabItem>
                 <TabItem Header="Materials">
-                    <views:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
+                    <views:MaterialView ViewModel="{Binding MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <views:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                    <views:ConstantsView ViewModel="{Binding ConstantsVM}"/>
                 </TabItem>
                 <TabItem Header="Settings">
                     <views:SettingsView ViewModel="{Binding SettingsVM}"/>

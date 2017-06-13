@@ -162,12 +162,13 @@ namespace TECUserControlLibrary.ViewModels
                 Templates = scopeManager as TECTemplates;
                 ScopeSource = Templates.SystemTemplates;
             }
+            SelectedSystem = null;
             ComponentVM.Refresh(scopeManager);
             SystemsVM.Refresh(scopeManager);
         }
         private void setupVMs(TECScopeManager scopeManager)
         {
-            ComponentVM = new SystemComponentVM(scopeManager);
+            ComponentVM = new SystemComponentVM(scopeManager, false);
             ComponentVM.SelectionChanged += SelectionChanged;
 
             SystemsVM = new SystemsVM(scopeManager);
