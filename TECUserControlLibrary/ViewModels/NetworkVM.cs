@@ -131,12 +131,14 @@ namespace TECUserControlLibrary.ViewModels
                     if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
                     {
                         removeController(targetObject as TECController);
+                        (targetObject as TECController).RemoveAllConnections();
                     }
                     else if (targetObject is TECSystem && referenceObject is TECSystem)
                     {
                         foreach(TECController controller in (targetObject as TECSystem).Controllers)
                         {
                             removeController(controller);
+                            controller.RemoveAllConnections();
                         }
                     }
                 }
@@ -220,6 +222,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 NetworkControllersVM.NetworkControllers.Remove(netController);
                 netController.Controller.NetworkType = NetworkType.Unitary;
+                netController.Controller.RemoveAllConnections();
                 UnitaryControllersVM.NetworkControllers.Add(netController);
 
                 refreshPossibleParents();
@@ -236,7 +239,27 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (targetCollection is ObservableCollection<TECController>)
                 {
-                    (targetCollection as ObservableCollection<TECController>).Add(netController.Controller);
+                    ObservableCollection<TECController> daisyChain = targetCollection as ObservableCollection<TECController>;
+
+                    if (!daisyChain.Contains(netController.Controller))
+                    {
+                        TECController parentController = null;
+                        TECNetworkConnection parentConnection = null;
+                        foreach (NetworkController controller in NetworkControllersVM.NetworkControllers)
+                        {
+                            foreach (TECConnection connection in controller.Controller.ChildrenConnections)
+                            {
+                                if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
+                                {
+                                    parentConnection = (connection as TECNetworkConnection);
+                                    parentController = controller.Controller;
+                                    break;
+                                }
+                            }
+                            if (parentController != null) break;
+                        }
+                        parentController.AddController(netController.Controller, parentConnection);
+                    }
                 }
             }
         }
