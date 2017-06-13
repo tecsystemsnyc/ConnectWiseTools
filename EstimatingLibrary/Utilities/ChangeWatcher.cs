@@ -718,6 +718,19 @@ namespace EstimatingLibrary.Utilities
                 oldValue is TECBid && newValue is TECPanel)
             {
                 InstanceChanged?.Invoke(sender, args);
+                if (change == Change.Add)
+                {
+                    (newValue as TECScope).PropertyChanged += Instance_PropertyChanged;
+                }
+                else if (change == Change.Remove)
+                {
+                    (newValue as TECScope).PropertyChanged -= Instance_PropertyChanged;
+                }
+                if (newValue is TECController)
+                {
+                    handleControllerChildren(newValue as TECController, change, ChangeType.Instance);
+                }
+                
             }
         }
     }

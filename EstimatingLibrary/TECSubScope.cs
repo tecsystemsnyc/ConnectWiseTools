@@ -297,50 +297,6 @@ namespace EstimatingLibrary
             return outTypes;
         }
 
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-
-            foreach (TECDevice device in this.Devices)
-            {
-                matCost += device.Cost * device.Manufacturer.Multiplier;
-                foreach (TECCost cost in device.AssociatedCosts)
-                {
-                    matCost += cost.Cost;
-                }
-            }
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double labCost = 0;
-
-            foreach (TECDevice device in this.Devices)
-            {
-                labCost += device.LaborCost;
-            }
-            foreach (TECCost assCost in this.AssociatedCosts)
-            {
-                labCost += assCost.Labor;
-            }
-
-            return labCost;
-        }
-        private double getElectricalLabor()
-        {
-            double mountingLabor = 0;
-            foreach(TECDevice device in Devices)
-            {
-                mountingLabor += .5;
-            }
-            return mountingLabor;
-        }
-
         private void subscribeToDevices()
         {
             foreach (TECDevice item in this._devices)
