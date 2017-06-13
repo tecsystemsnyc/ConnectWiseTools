@@ -42,6 +42,21 @@ namespace EstimateBuilder.Model
             }
         }
 
+        private double _laborTotal;
+        public double LaborTotal
+        {
+            get
+            {
+                return _laborTotal;
+            }
+            set
+            {
+                double old = _laborTotal;
+                _laborTotal = value;
+                NotifyPropertyChanged("LaborTotal", old, _laborTotal);
+            }
+        }
+
         public PanelTypeSummaryItem(TECPanelType panelType)
         {
             _panelType = panelType;
@@ -53,11 +68,12 @@ namespace EstimateBuilder.Model
         private void updateTotal()
         {
             Total = (PanelType.Cost * Quantity);
+            LaborTotal = (PanelType.Labor * Quantity);
         }
 
         private void PanelType_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Cost")
+            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
             {
                 updateTotal();
             }

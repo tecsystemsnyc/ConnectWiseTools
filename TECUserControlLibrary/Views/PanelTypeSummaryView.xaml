@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
              x:Name="parent"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -53,6 +53,9 @@
         <TextBlock Text="Panel Type Subtotal:" Grid.Row="2" Foreground="Black"/>
         <TextBlock Text="{Binding PanelTypeSubTotal, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
 
+        <TextBlock Text="Panel Type Labor Subtotal:" Grid.Row="3" Foreground="Black"/>
+        <TextBlock Text="{Binding PanelTypeLaborSubTotal, StringFormat={} {0:C}}" Grid.Row="3" Grid.Column="1" Foreground="Black"/>
+        
         <TextBlock Text="Panel Associated Costs Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
         <TextBlock Text="{Binding PanelAssCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
 

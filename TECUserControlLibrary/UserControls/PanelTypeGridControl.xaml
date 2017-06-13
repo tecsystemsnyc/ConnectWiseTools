@@ -24,6 +24,8 @@
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     Header="Cost" Width="Auto" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
+                <DataGridTextColumn Binding="{Binding Labor}" Header="Labor" Width="Auto" MinWidth="40"
+                                    ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

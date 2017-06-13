@@ -257,7 +257,7 @@ namespace TECUserControlLibrary.Utilities
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
-    public enum TypicalSystemIndex { Edit, Qty };
+    public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }

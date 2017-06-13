@@ -52,6 +52,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TotalCost");
             }
         }
+        private double _panelTypeLaborSubTotal;
+        public double PanelTypeLaborSubTotal
+        {
+            get { return _panelTypeLaborSubTotal; }
+            set
+            {
+                _panelTypeLaborSubTotal = value;
+                RaisePropertyChanged("PanelTypeLaborSubTotal");
+            }
+        }
 
         private double _panelAssCostSubTotalCost;
         public double PanelAssCostSubTotalCost
@@ -114,8 +124,10 @@ namespace TECUserControlLibrary.ViewModels
             if (containsPanelType)
             {
                 PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
                 panelTypeDictionary[panel.Type.Guid].Quantity++;
                 PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
             }
             else
             {
@@ -123,6 +135,7 @@ namespace TECUserControlLibrary.ViewModels
                 panelTypeDictionary.Add(panel.Type.Guid, panelTypeItem);
                 PanelTypeSummaryItems.Add(panelTypeItem);
                 PanelTypeSubTotal += panelTypeItem.Total;
+                PanelTypeLaborSubTotal += panelTypeItem.LaborTotal;
             }
             foreach (TECCost cost in panel.AssociatedCosts)
             {
@@ -138,8 +151,10 @@ namespace TECUserControlLibrary.ViewModels
             if (containsPanelType)
             {
                 PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal -= panelTypeDictionary[panel.Type.Guid].LaborTotal;
                 panelTypeDictionary[panel.Type.Guid].Quantity--;
                 PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal += panelTypeDictionary[panel.Type.Guid].LaborTotal;
 
                 if (panelTypeDictionary[panel.Type.Guid].Quantity < 1)
                 {

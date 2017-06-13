@@ -1778,6 +1778,7 @@ namespace EstimatingUtilitiesLibrary
 
             panelType.Name = row[PanelTypeTable.Name.Name].ToString();
             panelType.Cost = row[PanelTypeTable.Cost.Name].ToString().ToDouble(0);
+            panelType.Labor = row[PanelTypeTable.Labor.Name].ToString().ToDouble(0);
 
             return panelType;
         }
