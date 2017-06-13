@@ -332,6 +332,8 @@ namespace EstimatingLibrary
         {
             if (item is CostComponent)
             {
+                bool tecChanged = false;
+                bool electricalChanged = false;
                 var costComponent = item as CostComponent;
                 foreach(TECCost cost in costComponent.Costs)
                 {
@@ -339,16 +341,24 @@ namespace EstimatingLibrary
                     {
                         tecCost.Cost += cost.Cost;
                         tecCost.Labor += cost.Labor;
-                        raiseMaterial();
-                        raiseLabor();
+                        tecChanged = true;
                     }
                     else if (cost.Type == CostType.Electrical) 
                     {
                         electricalCost.Cost += cost.Cost;
                         electricalCost.Labor += cost.Labor;
-                        raiseElectricalMaterial();
-                        raiseElectricalLabor();
+                        electricalChanged = true;
                     }
+                }
+                if (tecChanged)
+                {
+                    raiseMaterial();
+                    raiseLabor();
+                }
+                if (electricalChanged)
+                {
+                    raiseElectricalMaterial();
+                    raiseElectricalLabor();
                 }
             }
         }
@@ -356,6 +366,8 @@ namespace EstimatingLibrary
         {
             if (item is CostComponent)
             {
+                bool tecChanged = false;
+                bool electricalChanged = false;
                 var costComponent = item as CostComponent;
                 foreach (TECCost cost in costComponent.Costs)
                 {
@@ -363,16 +375,24 @@ namespace EstimatingLibrary
                     {
                         tecCost.Cost -= cost.Cost;
                         tecCost.Labor -= cost.Labor;
-                        raiseMaterial();
-                        raiseLabor();
+                        tecChanged = true;
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
                         electricalCost.Cost -= cost.Cost;
                         electricalCost.Labor -= cost.Labor;
-                        raiseElectricalMaterial();
-                        raiseElectricalLabor();
+                        electricalChanged = true;
                     }
+                }
+                if (tecChanged)
+                {
+                    raiseMaterial();
+                    raiseLabor();
+                }
+                if (electricalChanged)
+                {
+                    raiseElectricalMaterial();
+                    raiseElectricalLabor();
                 }
             }
         }

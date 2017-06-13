@@ -34,6 +34,18 @@ namespace TECUserControlLibrary.ViewModels
                 registerChanges();
             }
         }
+        private TECTemplates _templates;
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            private set
+            {
+                unregisterChanges();
+                _templates = value;
+                RaisePropertyChanged("Temnplates");
+                registerChanges();
+            }
+        }
         private TECSystem _selectedSystem;
         public TECSystem SelectedSystem
         {
@@ -48,6 +60,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public bool PanelSelectionReadOnly { get; private set; }
+        public Visibility PanelSelectionVisibility { get; private set; }
 
         private ObservableCollection<TECController> sourceControllers;
         private ObservableCollection<TECPanel> sourcePanels;
@@ -164,16 +177,29 @@ namespace TECUserControlLibrary.ViewModels
         {
             isGlobal = true;
             PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
             
         }
+        public ControllersPanelsVM(TECTemplates templates)
+        {
+            isGlobal = true;
+            PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Collapsed;
+            sourceControllers = templates.ControllerTemplates;
+            PanelsSource = templates.PanelTemplates;
+            Templates = templates;
+            setup();
+
+        }
         public ControllersPanelsVM(TECSystem system, bool canSelectPanel = true)
         {
             isGlobal = false;
             PanelSelectionReadOnly = !canSelectPanel;
+            PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = system.Controllers;
             PanelsSource = system.Panels;
             SelectedSystem = system;
@@ -187,6 +213,13 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = bid.Controllers;
             PanelsSource = bid.Panels;
             Bid = bid;
+            setup();
+        }
+        public void Refresh(TECTemplates templates)
+        {
+            sourceControllers = templates.ControllerTemplates;
+            PanelsSource = templates.PanelTemplates;
+            Templates = templates;
             setup();
         }
         public void Refresh(TECSystem system)

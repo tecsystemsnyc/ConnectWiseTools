@@ -13,7 +13,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid  DataContext="{Binding ElementName=parent, Path=ViewModel.Templates}"
+    <Grid  DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
