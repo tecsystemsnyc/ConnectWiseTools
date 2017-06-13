@@ -374,6 +374,11 @@ namespace EstimatingLibrary
             old._devices = oldDevices;
             return old;
         }
+
+        public void LinkConnection(TECSubScopeConnection connection)
+        {
+            _connection = connection;
+        }
         #endregion
     }
 }

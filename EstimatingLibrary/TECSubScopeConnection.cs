@@ -138,6 +138,7 @@ namespace EstimatingLibrary
             { connection._subScope = _subScope.Copy() as TECSubScope; }
             return connection;
         }
+        
         #endregion
 
     }
