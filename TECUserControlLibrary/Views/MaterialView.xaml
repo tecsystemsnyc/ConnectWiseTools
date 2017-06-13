@@ -162,9 +162,14 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="0" Grid.ColumnSpan="2"
+                        <TextBlock Text="Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding PanelTypeLabor}"/>
+                        <Button Grid.Column="2" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>

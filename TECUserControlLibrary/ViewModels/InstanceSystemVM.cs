@@ -174,6 +174,13 @@ namespace TECUserControlLibrary.ViewModels
             SystemsVM = new SystemsVM(scopeManager);
             SystemsVM.SelectionChanged += updateSelectedSystem;
             SystemsVM.DataGridVisibilty.SystemExpander = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemPointNumber = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemModifierPrice = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemEquipmentCount = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemUnitPrice = Visibility.Collapsed;
+            SystemsVM.DataGridVisibilty.SystemSubScopeCount = Visibility.Collapsed;
             SystemsVM.DragHandler += DragHandler;
             SystemsVM.DropHandler += DropHandler;
             SystemsVM.AssignChildDelegates();

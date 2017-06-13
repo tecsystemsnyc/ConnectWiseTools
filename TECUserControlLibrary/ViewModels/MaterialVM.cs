@@ -150,6 +150,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelTypeCost");
             }
         }
+        private double _panelTypeLabor;
+        public double PanelTypeLabor
+        {
+            get { return _panelTypeLabor; }
+            set
+            {
+                _panelTypeLabor = value;
+                RaisePropertyChanged("PanelTypeLabor");
+            }
+        }
 
         private string _ioModuleName;
         public string IOModuleName
@@ -306,10 +316,12 @@ namespace TECUserControlLibrary.ViewModels
             var panelType = new TECPanelType();
             panelType.Name = PanelTypeName;
             panelType.Cost = PanelTypeCost;
+            panelType.Labor = PanelTypeLabor;
 
             Templates.Catalogs.PanelTypes.Add(panelType);
             PanelTypeName = "";
             PanelTypeCost = 0;
+            PanelTypeLabor = 0;
         }
         private bool canAddPanelTypeExecute()
         {
