@@ -27,7 +27,7 @@
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
                 <DataGridCheckBoxColumn Header="Is Server"
-                                        Binding="{Binding IsServer}"
+                                        Binding="{Binding IsServer, UpdateSourceTrigger=PropertyChanged}"
                                         Width="Auto"
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}"/>
                 <DataGridTextColumn Header="Name"

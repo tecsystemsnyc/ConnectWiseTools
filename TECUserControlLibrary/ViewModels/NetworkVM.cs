@@ -93,6 +93,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private void removeController(TECController controller)
+        {
+            if (controller.NetworkType == NetworkType.DDC || controller.NetworkType == NetworkType.Server)
+            {
+                NetworkControllersVM.RemoveController(controller);
+            }
+            else
+            {
+                UnitaryControllersVM.RemoveController(controller);
+            }
+        }
+
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -114,6 +126,24 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
+                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
+                {
+                    if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
+                    {
+                        removeController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECSystem && referenceObject is TECSystem)
+                    {
+                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
+                        {
+                            removeController(controller);
+                        }
+                    }
+                }
+                else if (args.PropertyName == "NetworkType" && targetObject is TECController)
+                {
+                    refreshIsConnected();
+                }
             }
         }
 
@@ -121,6 +151,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             NetworkControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
             UnitaryControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
+        }
+
+        private void refreshIsConnected()
+        {
+            foreach (NetworkController netController in NetworkControllersVM.NetworkControllers)
+            {
+                netController.RefreshIsConnected();
+            }
+            foreach (NetworkController netController in UnitaryControllersVM.NetworkControllers)
+            {
+                netController.RefreshIsConnected();
+            }
         }
 
         #region Drag/Drop

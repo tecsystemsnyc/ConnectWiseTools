@@ -69,6 +69,7 @@ namespace TECUserControlLibrary.Models
                         Controller.NetworkType = NetworkType.DDC;
                     }
                     RaisePropertyChanged("IsServer");
+                    RaisePropertyChanged("IsConnected");
                 }
             }
         }
@@ -186,6 +187,12 @@ namespace TECUserControlLibrary.Models
                 }
             }
             controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
+            controller.PropertyChanged += Controller_PropertyChanged;
+        }
+
+        public void RefreshIsConnected()
+        {
+            RaisePropertyChanged("IsConnected");
         }
 
         #region Event Handlers
@@ -210,6 +217,13 @@ namespace TECUserControlLibrary.Models
                         NetworkConnections.Remove(item as TECNetworkConnection);
                     }
                 }
+            }
+        }
+        private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                RaisePropertyChanged("IsConnected");
             }
         }
         #endregion

@@ -56,23 +56,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-
-        public double ElectricalCost
-        {
-            get { return 0; }
-        }
-        public double ElectricalLabor
-        {
-            get { return 0; }
-        }
         #endregion//Properties
 
         #region Constructors
@@ -106,25 +89,6 @@ namespace EstimatingLibrary
         public override Object DragDropCopy()
         {
             return this;
-        }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-            foreach (TECCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double cost = 0;
-            foreach (TECCost assCost in this.AssociatedCosts)
-            {
-                cost += assCost.Labor;
-            }
-            return cost;
         }
 
         private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
