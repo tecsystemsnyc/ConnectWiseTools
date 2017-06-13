@@ -164,7 +164,9 @@
                             <DataGrid.RowDetailsTemplate>
                                 <DataTemplate>
                                     <DataGrid ItemsSource="{Binding ChildrenControllers}"
-                                              AutoGenerateColumns="False">
+                                              AutoGenerateColumns="False"
+                                              dd:DragDrop.DropHandler="{Binding Data, Source={StaticResource proxy}}"
+                                              MinHeight="50">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Controller"
                                                                 Binding="{Binding Name}"

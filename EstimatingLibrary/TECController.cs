@@ -240,18 +240,36 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
-
-        public TECNetworkConnection AddController(TECController controller)
+        public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection = null)
         {
             if (controller != this)
             {
-                
-                TECNetworkConnection netConnect = new TECNetworkConnection();
-                netConnect.ParentController = this;
-                netConnect.ChildrenControllers.Add(controller);
-                ChildrenConnections.Add(netConnect);
-                controller.ParentConnection = netConnect;
-                return netConnect;
+                if (connection != null)
+                {
+                    foreach (TECConnection conn in ChildrenConnections)
+                    {
+                        if (conn is TECNetworkConnection)
+                        {
+                            TECNetworkConnection netConn = conn as TECNetworkConnection;
+                            if (connection == netConn)
+                            {
+                                netConn.ChildrenControllers.Add(controller);
+                                controller.ParentConnection = netConn;
+                                return netConn;
+                            }
+                        }
+                    }
+                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+                }
+                else
+                {
+                    TECNetworkConnection netConnect = new TECNetworkConnection();
+                    netConnect.ParentController = this;
+                    netConnect.ChildrenControllers.Add(controller);
+                    ChildrenConnections.Add(netConnect);
+                    controller.ParentConnection = netConnect;
+                    return netConnect;
+                }
             }
             else
             {
