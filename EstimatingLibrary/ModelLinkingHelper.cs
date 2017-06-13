@@ -262,7 +262,7 @@ namespace EstimatingLibrary
                                 if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                                 {
                                     ssConnect.SubScope = subScope;
-                                    subScope.Connection = ssConnect;
+                                    subScope.LinkConnection(ssConnect);
                                 }
                             }
                         }
