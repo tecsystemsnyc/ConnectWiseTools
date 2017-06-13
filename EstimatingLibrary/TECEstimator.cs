@@ -19,6 +19,8 @@ namespace EstimatingLibrary
 
         const double ZERO = 0;
 
+        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship"});
+
         #region Cost Base
         private TECCost tecCost;
         private TECCost electricalCost;
@@ -259,6 +261,7 @@ namespace EstimatingLibrary
                         removePoints(newValue);
                     }
                 }
+                else if (omitStrings.Contains(e.PropertyName)) { }
                 else
                 {
                     message = "Edit change: " + oldValue;

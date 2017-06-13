@@ -925,9 +925,6 @@ namespace EstimatingLibrary
             var newSystem = new TECSystem();
             newSystem.Name = Name;
             newSystem.Description = Description;
-            var equipmentCollection = new ObservableCollection<TECSystem>();
-            var controllerCollection = new ObservableCollection<TECController>();
-            var panelCollection = new ObservableCollection<TECPanel>();
             foreach (TECEquipment equipment in Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, CharactersticInstances);

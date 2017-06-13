@@ -132,62 +132,57 @@ namespace EstimatingLibrary
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
             ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
-            if (characteristicReference == null)
-            {
-                characteristicReference = new ObservableItemToInstanceList<TECScope>();
-            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-
             foreach (TECDevice device in sourceSubScope.Devices)
             { Devices.Add(new TECDevice(device)); }
+            var subWatch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECPoint point in sourceSubScope.Points)
             {
                 var toAdd = new TECPoint(point);
-                characteristicReference.AddItem(point,toAdd);
+                characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
-
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
 
         #region Num Point Types
-        private int _ai;
-        private int _ao;
-        private int _bi;
-        private int _bo;
-        private int _serial;
+        //private int _ai;
+        //private int _ao;
+        //private int _bi;
+        //private int _bo;
+        //private int _serial;
 
-        public int AI { get { return _ai; } }
-        public int AO { get { return _ao; } }
-        public int BI { get { return _bi; } }
-        public int BO { get { return _bo; } }
-        public int Serial { get { return _serial; } }
+        //public int AI { get { return _ai; } }
+        //public int AO { get { return _ao; } }
+        //public int BI { get { return _bi; } }
+        //public int BO { get { return _bo; } }
+        //public int Serial { get { return _serial; } }
 
         #endregion //Num Point Types
 
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            _ai = 0;
-            _ao = 0;
-            _bi = 0;
-            _bo = 0;
-            _serial = 0;
-            foreach (TECPoint point in Points)
-            {
-                if (point.Type == PointTypes.AI) { _ai++; }
-                else if (point.Type == PointTypes.AO) { _ao++; }
-                else if (point.Type == PointTypes.BI) { _bi++; }
-                else if (point.Type == PointTypes.BO) { _bo++; }
-                else if (point.Type == PointTypes.Serial) { _serial++; }
-                else
-                {
-                    string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
-                    throw new InvalidCastException(message);
-                }
-            }
+            //_ai = 0;
+            //_ao = 0;
+            //_bi = 0;
+            //_bo = 0;
+            //_serial = 0;
+            //foreach (TECPoint point in Points)
+            //{
+            //    if (point.Type == PointTypes.AI) { _ai++; }
+            //    else if (point.Type == PointTypes.AO) { _ao++; }
+            //    else if (point.Type == PointTypes.BI) { _bi++; }
+            //    else if (point.Type == PointTypes.BO) { _bo++; }
+            //    else if (point.Type == PointTypes.Serial) { _serial++; }
+            //    else
+            //    {
+            //        string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
+            //        throw new InvalidCastException(message);
+            //    }
+            //}
 
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
