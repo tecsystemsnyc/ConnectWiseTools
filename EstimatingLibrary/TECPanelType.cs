@@ -8,7 +8,9 @@ namespace EstimatingLibrary
 {
     public class TECPanelType : TECCost
     {
-        public TECPanelType(Guid guid) : base(guid) { }
+        public TECPanelType(Guid guid) : base(guid) {
+            _type = CostType.TEC;
+        }
         public TECPanelType() : this(Guid.NewGuid()) { }
         public TECPanelType(TECPanelType typeSource) : this()
         {
