@@ -81,6 +81,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _connectionTypes = connectionTypes;
             _manufacturer = manufacturer;
+            _type = CostType.TEC;
             ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
         }
         public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }

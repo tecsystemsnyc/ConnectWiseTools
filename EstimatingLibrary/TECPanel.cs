@@ -51,7 +51,7 @@ namespace EstimatingLibrary
             outCosts.Add(Type);
             foreach(TECCost cost in AssociatedCosts)
             {
-                outCosts.Add(Type);
+                outCosts.Add(cost);
             }
             return outCosts;
         }
