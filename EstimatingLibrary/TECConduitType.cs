@@ -34,6 +34,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _labor = 0;
             _ratedCosts = new ObservableCollection<TECCost>();
+            _type = CostType.Electrical;
             RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
 
