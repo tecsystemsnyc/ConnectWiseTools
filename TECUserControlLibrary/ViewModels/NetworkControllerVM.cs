@@ -30,8 +30,26 @@ namespace TECUserControlLibrary.ViewModels
 
         public Visibility DetailsVisibility { get; private set; }
 
-        public ObservableCollection<TECConnectionType> WireTypes { get; private set; }
-        public ObservableCollection<TECConduitType> ConduitTypes { get; private set; }
+        private ObservableCollection<TECConnectionType> _wireTypes;
+        public ObservableCollection<TECConnectionType> WireTypes
+        {
+            get { return _wireTypes; }
+            private set
+            {
+                _wireTypes = value;
+                RaisePropertyChanged("WireTypes");
+            }
+        }
+        private ObservableCollection<TECConduitType> _conduitTypes;
+        public ObservableCollection<TECConduitType> ConduitTypes
+        {
+            get { return _conduitTypes; }
+            set
+            {
+                _conduitTypes = value;
+                RaisePropertyChanged("ConduitTypes");
+            }
+        }
 
         public IOType SelectedIO { get; set; }
         public TECConnectionType SelectedWire { get; set; }
