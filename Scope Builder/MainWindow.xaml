@@ -52,7 +52,7 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -135,6 +135,7 @@
                     Grid.Column="2"
                     Grid.ColumnSpan="5"
                     Grid.RowSpan="2"
+                        Margin="0,2,0,0"
                     SelectedIndex="{Binding DGTabIndex, Converter={cLibUtilities:GridIndexToIntegerConverter}}">
                 <TabItem Header="None"
                          Visibility="Collapsed"/>
