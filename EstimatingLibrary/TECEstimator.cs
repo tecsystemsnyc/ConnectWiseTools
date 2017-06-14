@@ -339,7 +339,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost += cost.Cost;
+                        tecCost.Cost += cost.ExtendedCost;
                         tecCost.Labor += cost.Labor;
                         tecChanged = true;
                     }
@@ -373,7 +373,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost -= cost.Cost;
+                        tecCost.Cost -= cost.ExtendedCost;
                         tecCost.Labor -= cost.Labor;
                         tecChanged = true;
                     }

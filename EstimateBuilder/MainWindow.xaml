@@ -15,6 +15,7 @@
         mc:Ignorable="d ignore"
         Height="720"
         Width="1200"
+        WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         x:Name="parent">

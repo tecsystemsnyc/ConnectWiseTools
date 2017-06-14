@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
                 <ResourceDictionary Source="/TECUserControlLibrary;component/TECControlTemplateDictionary.xaml"/>
+                <ResourceDictionary Source="ResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <localMVVM:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
         </ResourceDictionary>

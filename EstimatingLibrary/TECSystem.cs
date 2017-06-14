@@ -285,6 +285,10 @@ namespace EstimatingLibrary
             {
                 outCosts.Add(item);
             }
+            foreach (TECMisc item in MiscCosts)
+            {
+                outCosts.Add(item);
+            }
             return outCosts;
         }
 
