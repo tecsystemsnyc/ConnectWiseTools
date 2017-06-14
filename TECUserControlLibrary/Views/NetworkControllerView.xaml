@@ -34,7 +34,6 @@
                                     Binding="{Binding Controller.Name}" 
                                     Width="Auto" MinWidth="100"/>
                 <DataGridComboBoxColumn Header="Parent Controller"
-                                        SelectedItemBinding="{Binding Path=Controller.ParentController, UpdateSourceTrigger=PropertyChanged}"
                                         DisplayMemberPath="Name"
                                         Width="Auto" MinWidth="90">
                     <DataGridComboBoxColumn.ElementStyle>
@@ -47,19 +46,20 @@
                             <Setter Property="ItemsSource" Value="{Binding Path=PossibleParents}"/>
                         </Style>
                     </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.SelectedItemBinding>
+                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
+                                      StringFormat="{}{0]" BindingGroupName="{x:Null}">
+                            <Binding Path="Controller.ParentController"/>
+                            <Binding Path="Data.NoneController" Source="{StaticResource proxy}"/>
+                        </MultiBinding>
+                    </DataGridComboBoxColumn.SelectedItemBinding>
                 </DataGridComboBoxColumn>
                 <DataGridComboBoxColumn Header="Wire Type"
                                         ItemsSource="{Binding Data.WireTypes, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
+                                        SelectedItemBinding="{Binding WireType}"
                                         Width="Auto" MinWidth="100"
                                         Visibility="{Binding Data.DetailsVisibility, Source={StaticResource proxy}}">
-                    <DataGridComboBoxColumn.SelectedItemBinding>
-                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
-                            <Binding Path="WireType"/>
-                            <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
-                        </MultiBinding>
-                    </DataGridComboBoxColumn.SelectedItemBinding>
                 </DataGridComboBoxColumn>
                 <DataGridTextColumn Header="Wire Length"
                                     Binding="{Binding WireLength}"
@@ -150,14 +150,8 @@
                                 <DataGridComboBoxColumn Header="Wire Type"
                                                         ItemsSource="{Binding Data.WireTypes, Source={StaticResource proxy}}"
                                                         DisplayMemberPath="Name"
+                                                        SelectedItemBinding="{Binding ConnectionType}"
                                                         Width="Auto" MinWidth="100">
-                                    <DataGridComboBoxColumn.SelectedItemBinding>
-                                        <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
-                                                      StringFormat="{}{0}" BindingGroupName="{x:Null}">
-                                            <Binding Path="ConnectionType"/>
-                                            <Binding Path="Data.NoneWireType" Source="{StaticResource proxy}"/>
-                                        </MultiBinding>
-                                    </DataGridComboBoxColumn.SelectedItemBinding>
                                 </DataGridComboBoxColumn>
                                 <DataGridTextColumn Header="Wire Length"
                                                     Binding="{Binding Length}"

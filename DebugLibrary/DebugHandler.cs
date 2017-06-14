@@ -97,16 +97,29 @@ namespace DebugLibrary
                 File.Create(logPath).Close();
             }
 
-            using (StreamWriter writer = new StreamWriter(logPath, true))
+            bool logged = false;
+            while(!logged)
             {
-                DateTime date = DateTime.Now;
-                CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
-                DateTimeFormatInfo dtfi = culture.DateTimeFormat;
-                dtfi = culture.DateTimeFormat;
-                dtfi.TimeSeparator = "-";
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(logPath, true))
+                    {
+                        DateTime date = DateTime.Now;
+                        CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
+                        DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+                        dtfi = culture.DateTimeFormat;
+                        dtfi.TimeSeparator = "-";
 
-                writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
-                writer.Close();
+                        writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
+                        writer.Close();
+                        logged = true;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Log file: " + logPath + " is locked. Waiting 0.5 seconds.");
+                    System.Threading.Thread.Sleep(500);
+                }
             }
         }
 

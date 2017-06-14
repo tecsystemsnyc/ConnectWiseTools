@@ -17,33 +17,9 @@ namespace TECUserControlLibrary.Models
         public ObservableCollection<TECController> PossibleParents
         {
             get { return _possibleParents; }
-            set
+            private set
             {
-                ObservableCollection<TECController> newParents = new ObservableCollection<TECController>();
-
-                foreach (TECController possibleParent in value)
-                {
-                    if (possibleParent != null && Controller != possibleParent && !isDescendantOf(possibleParent, Controller))
-                    {
-                        foreach (IOType thisType in Controller.NetworkIO)
-                        {
-                            foreach (IOType parentType in possibleParent.NetworkIO)
-                            {
-                                if (thisType == parentType)
-                                {
-                                    newParents.Add(possibleParent);
-                                    break;
-                                }
-                            }
-                            if (newParents.Contains(possibleParent))
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                _possibleParents = newParents;
+                _possibleParents = value;
                 RaisePropertyChanged("PossibleParents");
             }
         }
@@ -166,11 +142,14 @@ namespace TECUserControlLibrary.Models
             }
         }
 
+        private bool _isConnected;
         public bool IsConnected
         {
-            get
+            get { return _isConnected; }
+            set
             {
-                return (isConnected(this.Controller));
+                _isConnected = value;
+                RaisePropertyChanged("IsConnected");
             }
         }
         #endregion
@@ -178,6 +157,7 @@ namespace TECUserControlLibrary.Models
         public NetworkController(TECController controller)
         {
             Controller = controller;
+            _possibleParents = new ObservableCollection<TECController>();
             NetworkConnections = new ObservableCollection<TECNetworkConnection>();
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
@@ -192,7 +172,56 @@ namespace TECUserControlLibrary.Models
 
         public void RefreshIsConnected()
         {
-            RaisePropertyChanged("IsConnected");
+            IsConnected = isConnected(this.Controller);
+        }
+
+        public void SetPossibleParents(ObservableCollection<TECController> possibleParents, TECController noneController)
+        {
+            ObservableCollection<TECController> newParents = new ObservableCollection<TECController>();
+            newParents.Add(noneController);
+
+            foreach (TECController possibleParent in possibleParents)
+            {
+                if (possibleParent != null && Controller != possibleParent && !isDescendantOf(possibleParent, Controller))
+                {
+                    foreach (IOType thisType in Controller.NetworkIO)
+                    {
+                        foreach (IOType parentType in possibleParent.NetworkIO)
+                        {
+                            if (thisType == parentType)
+                            {
+                                newParents.Add(possibleParent);
+                                break;
+                            }
+                        }
+                        if (newParents.Contains(possibleParent))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            ObservableCollection<TECController> controllerToRemove = new ObservableCollection<TECController>();
+            foreach(TECController controller in PossibleParents)
+            {
+                if (!newParents.Contains(controller))
+                {
+                    controllerToRemove.Add(controller);
+                }
+                else
+                {
+                    newParents.Remove(controller);
+                }
+            }
+            foreach(TECController controller in controllerToRemove)
+            {
+                PossibleParents.Remove(controller);
+            }
+            foreach(TECController controller in newParents)
+            {
+                PossibleParents.Add(controller);
+            }
         }
 
         #region Event Handlers
@@ -223,7 +252,7 @@ namespace TECUserControlLibrary.Models
         {
             if (e.PropertyName == "ParentController")
             {
-                RaisePropertyChanged("IsConnected");
+                RefreshIsConnected();
             }
         }
         #endregion
