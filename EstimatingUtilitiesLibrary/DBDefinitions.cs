@@ -1463,7 +1463,8 @@ namespace EstimatingUtilitiesLibrary
             new SystemMiscTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
-            new IOModuleManufacturerTable()
+            new IOModuleManufacturerTable(),
+            new ScopeBranchHierarchyTable()
         };
     }
 

@@ -61,7 +61,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Content="Misc. Costs"/>
-                    <controls:AssociatedCostsGridControl CostsSource="{Binding SelectedSystem.AssociatedCosts}"
+                    <controls:MiscCostGridControl CostSource="{Binding SelectedSystem.MiscCosts}"
                                                                      ViewModel="{Binding}"
                                                                      Grid.Row="1"/>
                 </Grid>

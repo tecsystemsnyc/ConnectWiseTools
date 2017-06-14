@@ -227,7 +227,7 @@ namespace EstimatingLibrary
             bid = Bid;
             getInitialValues();
             watcher = new ChangeWatcher(bid);
-            watcher.Changed += Object_PropertyChanged;
+            watcher.InstanceChanged += Object_PropertyChanged;
         }
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
