@@ -25,6 +25,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="DataGrid">
+                <Setter Property="CanUserSortColumns" Value="True"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     
@@ -70,7 +73,8 @@
                         Grid.Column="2"
                         Grid.RowSpan="2"
                         SelectedIndex="{Binding DGTabIndex, Converter={utilities:TemplateGridIndexToIntegerConverter}}"
-                        Background="{DynamicResource SectionBackgroundBrush}">
+                        Background="{DynamicResource SectionBackgroundBrush}"
+                        Margin="0,6,0,0">
                 <TabItem Header="None" Visibility="Collapsed">
                 </TabItem>
                 <TabItem Header="Systems">
@@ -107,7 +111,7 @@
             <!--Right Tab Control-->
             <views:EditTabView Index="{Binding EditTab.TabIndex}"
                              ViewModel="{Binding ElementName=root, Path=DataContext.EditTab}"
-                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="1"/>
+                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,-2,0,0"/>
 
             <views:StatusBarView ViewModel="{Binding ElementName=root, Path=DataContext.StatusBarVM}"
                 Grid.Row="3"
