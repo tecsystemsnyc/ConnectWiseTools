@@ -276,7 +276,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo);
+            UIHelpers.StandardDrop(dropInfo, Bid);
         }
         #endregion
 

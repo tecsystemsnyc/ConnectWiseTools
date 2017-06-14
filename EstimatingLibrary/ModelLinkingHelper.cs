@@ -100,6 +100,33 @@ namespace EstimatingLibrary
             }
             system.CharactersticInstances = newCharacteristicInstances;
         }
+        public static void LinkScopeCopy(TECScope scope, TECScopeManager scopeManager)
+        {
+            if(scope is TECSystem)
+            {
+                linkAssociatedCostsInSystem(scopeManager.Catalogs.AssociatedCosts, scope as TECSystem);
+                linkAllDevicesFromEquipment((scope as TECSystem).Equipment, scopeManager.Catalogs.Devices);
+            } else if (scope is TECEquipment)
+            {
+                linkAssociatedCostsInEquipment(scopeManager.Catalogs.AssociatedCosts, scope as TECEquipment);
+                linkAllDevicesFromSubScope((scope as TECEquipment).SubScope, scopeManager.Catalogs.Devices);
+            }
+            else if (scope is TECSubScope)
+            {
+                linkAssociatedCostsInSubScope(scopeManager.Catalogs.AssociatedCosts, scope as TECSubScope);
+            }
+            else if (scope is TECController)
+            {
+                linkManufacturersWithControllers(scopeManager.Catalogs.Manufacturers, new ObservableCollection<TECController> { scope as TECController });
+                linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
+                linkIOModules(new ObservableCollection<TECController> { scope as TECController }, scopeManager.Catalogs.IOModules);
+            }
+            else if (scope is TECPanel)
+            {
+                linkPanelTypesInPanel(scopeManager.Catalogs.PanelTypes, new ObservableCollection<TECPanel> { scope as TECPanel });
+                linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
+            }
+        }
         #endregion
 
         #region Link Methods

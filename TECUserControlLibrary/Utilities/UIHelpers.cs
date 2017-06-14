@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void StandardDrop(IDropInfo dropInfo, bool newDevice = false)
+        public static void StandardDrop(IDropInfo dropInfo, TECScopeManager scopeManager, bool newDevice = false)
         {
             var sourceItem = dropInfo.Data;
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -49,7 +49,9 @@ namespace TECUserControlLibrary.Utilities
                     var outSource = new List<object>();
                     foreach (object item in ((IList)sourceItem))
                     {
-                        outSource.Add(((TECScope)item).DragDropCopy());
+                        var toAdd = ((TECScope)item).DragDropCopy() as TECScope;
+                        ModelLinkingHelper.LinkScopeCopy(toAdd, scopeManager);
+                        outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
                 }
@@ -62,6 +64,7 @@ namespace TECUserControlLibrary.Utilities
                     else
                     {
                         sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                        ModelLinkingHelper.LinkScopeCopy(sourceItem as TECScope, scopeManager);
 
                     }
                 }
@@ -71,7 +74,7 @@ namespace TECUserControlLibrary.Utilities
                     {
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Add(((TECScope)item).DragDropCopy());
+                            ((IList)dropInfo.TargetCollection).Add(item);
                         }
                     }
                     else
@@ -86,13 +89,13 @@ namespace TECUserControlLibrary.Utilities
                         var x = dropInfo.InsertIndex;
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Insert(x, ((TECScope)item).DragDropCopy());
+                            ((IList)dropInfo.TargetCollection).Insert(x, item);
                             x += 1;
                         }
                     }
                     else
                     {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, ((TECScope)sourceItem).DragDropCopy());
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
 
                     }
                 }
