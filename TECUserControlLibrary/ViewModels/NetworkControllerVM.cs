@@ -55,9 +55,9 @@ namespace TECUserControlLibrary.ViewModels
 
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
-
-        public TECConnectionType NoneWireType { get; set; }
+        
         public TECConduitType NoneConduitType { get; set; }
+        public TECController NoneController { get; set; }
         #endregion
 
         public NetworkControllerVM(Visibility detailsVisibility, TECBid bid = null)
@@ -133,7 +133,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(NetworkController netController in NetworkControllers)
             {
-                netController.PossibleParents = possibleParents;
+                netController.SetPossibleParents(possibleParents, NoneController);
             }
         }
 
@@ -169,15 +169,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupNoneTypes()
         {
-            NoneWireType = new TECConnectionType();
-            NoneWireType.Name = "None";
             NoneConduitType = new TECConduitType();
             NoneConduitType.Name = "None";
         }
         private void populateWireAndConduitTypes(TECBid bid)
         {
             WireTypes = new ObservableCollection<TECConnectionType>();
-            WireTypes.Add(NoneWireType);
             foreach(TECConnectionType type in bid.Catalogs.ConnectionTypes)
             {
                 WireTypes.Add(type);

@@ -39,25 +39,19 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private TECController noneController;
+
         public NetworkVM(TECBid bid)
         {
             NetworkControllersVM = new NetworkControllerVM(System.Windows.Visibility.Visible, bid);
             UnitaryControllersVM = new NetworkControllerVM(System.Windows.Visibility.Collapsed);
-            
-            foreach(TECController control in bid.Controllers)
-            {
-                sortController(control);
-            }
-            foreach (TECSystem typical in bid.Systems)
-            {
-                foreach (TECSystem instance in typical.SystemInstances)
-                {
-                    foreach(TECController control in instance.Controllers)
-                    {
-                        sortController(control);
-                    }
-                }
-            }
+
+            noneController = new TECController(new TECManufacturer());
+            noneController.Name = "None";
+            NetworkControllersVM.NoneController = noneController;
+            UnitaryControllersVM.NoneController = noneController;
+
+            sortAllControllers(bid);
 
             refreshPossibleParents();
 
@@ -72,12 +66,46 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Refresh(TECBid bid)
         {
+            List<TECController> controllersToRemove = new List<TECController>();
+            foreach(NetworkController netController in NetworkControllersVM.NetworkControllers)
+            {
+                controllersToRemove.Add(netController.Controller);
+            }
+            foreach(NetworkController unitaryController in UnitaryControllersVM.NetworkControllers)
+            {
+                controllersToRemove.Add(unitaryController.Controller);
+            }
+            foreach(TECController controller in controllersToRemove)
+            {
+                removeController(controller);
+            }
+
             NetworkControllersVM.Refresh(bid);
             UnitaryControllersVM.Refresh();
+
+            sortAllControllers(bid);
 
             refreshPossibleParents();
 
             changeWatcher = new ChangeWatcher(bid);
+        }
+
+        private void sortAllControllers(TECBid bid)
+        {
+            foreach (TECController control in bid.Controllers)
+            {
+                sortController(control);
+            }
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController control in instance.Controllers)
+                    {
+                        sortController(control);
+                    }
+                }
+            }
         }
 
         private void sortController(TECController controller)
@@ -91,6 +119,8 @@ namespace TECUserControlLibrary.ViewModels
                 controller.NetworkType = NetworkType.Unitary;
                 UnitaryControllersVM.AddController(controller);
             }
+            refreshPossibleParents();
+            controller.PropertyChanged += Controller_PropertyChanged;
         }
 
         private void removeController(TECController controller)
@@ -103,6 +133,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UnitaryControllersVM.RemoveController(controller);
             }
+            controller.PropertyChanged -= Controller_PropertyChanged;
         }
 
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
@@ -166,6 +197,16 @@ namespace TECUserControlLibrary.ViewModels
                 netController.RefreshIsConnected();
             }
         }
+
+        #region Event Handlers
+        private void Controller_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ParentController")
+            {
+                refreshPossibleParents();
+            }
+        }
+        #endregion
 
         #region Drag/Drop
         public void DragOver(IDropInfo dropInfo)
@@ -239,26 +280,46 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (targetCollection is ObservableCollection<TECController>)
                 {
+                    //Dragged into a daisy chain
                     ObservableCollection<TECController> daisyChain = targetCollection as ObservableCollection<TECController>;
 
                     if (!daisyChain.Contains(netController.Controller))
                     {
-                        TECController parentController = null;
-                        TECNetworkConnection parentConnection = null;
                         foreach (NetworkController controller in NetworkControllersVM.NetworkControllers)
                         {
-                            foreach (TECConnection connection in controller.Controller.ChildrenConnections)
+                            //Check for compatibility
+                            bool compatible = false;
+                            foreach(IOType thisType in netController.Controller.NetworkIO)
                             {
-                                if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
+                                foreach(IOType parentType in controller.Controller.NetworkIO)
                                 {
-                                    parentConnection = (connection as TECNetworkConnection);
-                                    parentController = controller.Controller;
-                                    break;
+                                    if (thisType == parentType)
+                                    {
+                                        compatible = true;
+                                        break;
+                                    }
                                 }
+                                if (compatible) break;
                             }
-                            if (parentController != null) break;
+
+                            if (compatible)
+                            {
+                                //Find the parent controller and connection and add the controller.
+                                bool connectionFound = false;
+                                foreach (TECConnection connection in controller.Controller.ChildrenConnections)
+                                {
+                                    if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
+                                    {
+                                        TECNetworkConnection parentConnection = (connection as TECNetworkConnection);
+                                        TECController parentController = controller.Controller;
+                                        parentController.AddController(netController.Controller, parentConnection);
+                                        connectionFound = true;
+                                        break;
+                                    }
+                                }
+                                if (connectionFound) break;
+                            }
                         }
-                        parentController.AddController(netController.Controller, parentConnection);
                     }
                 }
             }
