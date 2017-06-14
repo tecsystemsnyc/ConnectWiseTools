@@ -86,7 +86,8 @@
                 </TabItem>
                 <TabItem Header="Devices">
                     <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
-                                             ViewModel="{Binding ScopeDataGrid.ChildVM.ChildVM}"/>
+                                             ViewModel="{Binding ScopeDataGrid.ChildVM.ChildVM}"
+                                                 SelectedDevice="{Binding ScopeDataGrid.ChildVM.ChildVM.SelectedDevice}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
                     <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
