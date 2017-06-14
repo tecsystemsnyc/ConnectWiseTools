@@ -52,7 +52,7 @@
                                   DockPanel.Dock="Top"/>
         <Grid>
         <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>

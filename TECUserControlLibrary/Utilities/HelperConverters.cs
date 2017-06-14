@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.Utilities
         {
             if ((Visibility)value == Visibility.Visible)
             {
-                return 250;
+                return 400;
             }
             else if ((Visibility)value == Visibility.Hidden)
             {
@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.Utilities
             }
             else
             {
-                return 250;
+                return 400;
             }
         }
 
