@@ -154,6 +154,14 @@ namespace TECUserControlLibrary.ViewModels
                         removeConnection(targetObject as TECConnection);
                     }
                 }
+                else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConnectionType" || args.PropertyName == "ConduitType")
+                {
+                    if (args.NewValue is TECConnection && args.OldValue is TECConnection)
+                    {
+                        removeConnection(args.OldValue as TECConnection);
+                        addConnection(args.NewValue as TECConnection);
+                    }
+                }
             }
         }
         private void bidChanged(object sender, PropertyChangedEventArgs e)
