@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.LengthSummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             mc:Ignorable="d"
+             x:Name="parent"
+             d:DesignHeight="1070" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{DynamicResource SectionBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <!--Length Item Summary-->
+        <TextBlock Text="{Binding Title, Mode=OneWay}" Foreground="Black" FontSize="20"/>
+        
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="5"
+                  ItemsSource="{Binding LengthSummaryItems}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Material.Name}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Length" Binding="{Binding Length}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Cost" Binding="{Binding Material.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Labor" Binding="{Binding Material.Labor}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="50"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!--Associated Costs Summary-->
+        <TextBlock Text="Associated Costs" Foreground="Black" FontSize="20"
+                   Grid.Column="2"/>
+
+        <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+            
+        </Grid>
+        
+        <!--Rated Costs Summary-->
+        <TextBlock Text="Rated Costs" Foreground="Black" FontSize="20"
+                   Grid.Column="2" Grid.Row="4"/>
+
+        <Grid Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2">
+            
+        </Grid>
+        
+        <!--Subtotals-->
+        <TextBlock Text="Length Subtotal Cost:" Grid.Row="6" Foreground="Black"/>
+        <TextBlock Text="{Binding LengthSubTotalCost, StringFormat={} {0:C}}" Grid.Row="6" Grid.Column="1" Foreground="Black"/>
+
+        <TextBlock Text="Length Subtotal Labor:" Grid.Row="7" Foreground="Black"/>
+        <TextBlock Text="{Binding LengthSubTotalLabor}" Grid.Row="7" Grid.Column="1" Foreground="Black"/>
+
+        <TextBlock Text="Associated Costs Subtotal:" Grid.Row="2" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding AssCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="3" Foreground="Black"/>
+
+        <TextBlock Text="Associated Labor Subtotal:" Grid.Row="3" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding AssCostSubTotalLabor}" Grid.Row="3" Grid.Column="3" Foreground="Black"/>
+
+        <TextBlock Text="Rated Costs Subtotal:" Grid.Row="6" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding RatedCostSubTotalCost, StringFormat={} {0:C}}" Grid.Row="6" Grid.Column="3" Foreground="Black"/>
+
+        <TextBlock Text="Rated Labor Subtotal:" Grid.Row="7" Grid.Column="2" Foreground="Black"/>
+        <TextBlock Text="{Binding RatedCostSubTotalLabor}" Grid.Row="7" Grid.Column="3" Foreground="Black"/>
+        
+        <!--Borders-->
+        <Border Grid.RowSpan="6" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="4" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1"/>
+    </Grid>
+</UserControl>

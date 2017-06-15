@@ -260,6 +260,7 @@ namespace TECUserControlLibrary.Utilities
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
+    public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
 }

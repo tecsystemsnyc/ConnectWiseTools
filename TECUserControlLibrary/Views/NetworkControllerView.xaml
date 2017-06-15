@@ -49,7 +49,7 @@
                     <DataGridComboBoxColumn.SelectedItemBinding>
                         <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
                                       StringFormat="{}{0]" BindingGroupName="{x:Null}">
-                            <Binding Path="Controller.ParentController"/>
+                            <Binding Path="ParentController"/>
                             <Binding Path="Data.NoneController" Source="{StaticResource proxy}"/>
                         </MultiBinding>
                     </DataGridComboBoxColumn.SelectedItemBinding>

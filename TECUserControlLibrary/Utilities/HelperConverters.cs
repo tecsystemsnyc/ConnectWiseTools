@@ -699,6 +699,24 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class ElectricalMaterialIndexToIntegerConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int outInt = System.Convert.ToInt32(value);
+            return outInt;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (ElectricalMaterialIndex)value;
+        }
+
+        #endregion
+    }
+
     public class ProposalIndexToIntegerConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members

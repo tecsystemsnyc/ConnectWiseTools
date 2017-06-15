@@ -97,7 +97,7 @@
         <TextBlock Text="Panel Labor:" Grid.Row="10" Foreground="Black"/>
         <TextBlock Text="{Binding TotalPanelLabor}" Grid.Row="10" Grid.Column="1" Foreground="Black"/>
 
-        <TextBlock Text="Misc Labor:" Grid.Row="11" Foreground="Black"/>
+        <TextBlock Text="Misc. Labor:" Grid.Row="11" Foreground="Black"/>
         <TextBlock Text="{Binding TotalMiscLabor}" Grid.Row="11" Grid.Column="1" Foreground="Black"/>
 
         <TextBlock Text="Total Labor:" Grid.Row="12" Foreground="Black"/>

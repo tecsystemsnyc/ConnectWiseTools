@@ -127,7 +127,7 @@ namespace TECUserControlLibrary.ViewModels
             DeviceSummaryVM = new DeviceSummaryVM(bid);
             ControllerSummaryVM = new ControllerSummaryVM(bid);
             PanelTypeSummaryVM = new PanelTypeSummaryVM(bid);
-            MiscCostsSummaryVM = new MiscCostsSummaryVM(bid);
+            MiscCostsSummaryVM = new MiscCostsSummaryVM(bid, CostType.TEC);
 
             DeviceSummaryVM.PropertyChanged += DeviceSummaryVM_PropertyChanged;
             ControllerSummaryVM.PropertyChanged += ControllerSummaryVM_PropertyChanged;
@@ -242,23 +242,37 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECMisc && (referenceObject is TECBid || referenceObject is TECSystem))
+                    if (targetObject is TECMisc)
                     {
                         TECMisc cost = targetObject as TECMisc;
-                        if (cost.Type == CostType.TEC)
+                        if (referenceObject is TECBid)
                         {
                             MiscCostsSummaryVM.AddMiscCost(cost);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            {
+                                MiscCostsSummaryVM.AddMiscCost(cost);
+                            }
                         }
                     }
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (targetObject is TECMisc && (referenceObject is TECBid || referenceObject is TECSystem))
+                    if (targetObject is TECMisc)
                     {
                         TECMisc cost = targetObject as TECMisc;
-                        if (cost.Type == CostType.TEC)
+                        if (referenceObject is TECBid)
                         {
-                            MiscCostsSummaryVM.RemoveMiscCost(targetObject as TECMisc);
+                            MiscCostsSummaryVM.RemoveMiscCost(cost);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            {
+                                MiscCostsSummaryVM.RemoveMiscCost(cost);
+                            }
                         }
                     }
                 }

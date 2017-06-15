@@ -44,7 +44,7 @@ namespace TECUserControlLibrary.ViewModels
         public NetworkVM(TECBid bid)
         {
             NetworkControllersVM = new NetworkControllerVM(System.Windows.Visibility.Visible, bid);
-            UnitaryControllersVM = new NetworkControllerVM(System.Windows.Visibility.Collapsed);
+            UnitaryControllersVM = new NetworkControllerVM(System.Windows.Visibility.Collapsed, bid);
 
             noneController = new TECController(new TECManufacturer());
             noneController.Name = "None";
@@ -81,7 +81,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             NetworkControllersVM.Refresh(bid);
-            UnitaryControllersVM.Refresh();
+            UnitaryControllersVM.Refresh(bid);
 
             sortAllControllers(bid);
 

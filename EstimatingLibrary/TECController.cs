@@ -31,7 +31,6 @@ namespace EstimatingLibrary
                 var temp = Copy();
                 _parentConnection = value;
                 NotifyPropertyChanged("ParentConnection", temp, this);
-                RaisePropertyChanged("ParentController");
                 RaisePropertyChanged("NetworkIO");
             }
         }
@@ -112,35 +111,6 @@ namespace EstimatingLibrary
             get
             { return getNetworkIO(); }
             private set { }
-        }
-
-        public TECController ParentController
-        {
-            get
-            {
-                if (ParentConnection == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return ParentConnection.ParentController;
-                }
-            }
-            set
-            {
-                if (ParentConnection != null)
-                {
-                    ParentController.RemoveController(this);
-                }
-
-                if (value != null)
-                {
-                    value.AddController(this);
-                }
-
-                RaisePropertyChanged("ParentController");
-            }
         }
 
         public bool IsGlobal;
@@ -240,36 +210,76 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
-        public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection = null)
+        public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection)
         {
             if (controller != this)
             {
-                if (connection != null)
+                foreach (TECConnection conn in ChildrenConnections)
                 {
-                    foreach (TECConnection conn in ChildrenConnections)
+                    if (conn is TECNetworkConnection)
                     {
-                        if (conn is TECNetworkConnection)
+                        TECNetworkConnection netConn = conn as TECNetworkConnection;
+                        if (connection == netConn)
                         {
-                            TECNetworkConnection netConn = conn as TECNetworkConnection;
-                            if (connection == netConn)
+                            bool ioMatches = false;
+                            foreach(IOType ioType in controller.NetworkIO)
+                            {
+                                if (connection.IOType == ioType)
+                                {
+                                    ioMatches = true;
+                                    break;
+                                }
+                            }
+                            if (ioMatches)
                             {
                                 netConn.ChildrenControllers.Add(controller);
                                 controller.ParentConnection = netConn;
                                 return netConn;
                             }
+                            else
+                            {
+                                throw new ArgumentException("Controller and connection do not have a matching IOType.");
+                            }
                         }
                     }
-                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
                 }
-                else
+                throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public TECNetworkConnection AddController(TECController controller, TECConnectionType connectionType)
+        {
+            if (controller != this)
+            {
+                IOType ioType = 0;
+                foreach (IOType thisType in this.NetworkIO)
                 {
-                    TECNetworkConnection netConnect = new TECNetworkConnection();
-                    netConnect.ParentController = this;
-                    netConnect.ChildrenControllers.Add(controller);
-                    ChildrenConnections.Add(netConnect);
-                    controller.ParentConnection = netConnect;
-                    return netConnect;
+                    foreach (IOType otherType in controller.NetworkIO)
+                    {
+                        if (thisType == otherType)
+                        {
+                            ioType = thisType;
+                            break;
+                        }
+                    }
+                    if (ioType != 0) { break; }
                 }
+                if (ioType == 0)
+                {
+                    throw new ArgumentException("Controller and parent do not have a matching IOType.");
+                }
+
+                TECNetworkConnection netConnect = new TECNetworkConnection();
+                netConnect.ParentController = this;
+                netConnect.ChildrenControllers.Add(controller);
+                netConnect.IOType = ioType;
+                netConnect.ConnectionType = connectionType;
+                ChildrenConnections.Add(netConnect);
+                controller.ParentConnection = netConnect;
+                return netConnect;
             }
             else
             {
@@ -377,7 +387,31 @@ namespace EstimatingLibrary
                 }
                 ChildrenConnections.Remove(connectToRemove);
             }
-            ParentController = null;
+            SetParentController(null, null);
+        }
+
+        public TECController GetParentController()
+        {
+            if (ParentConnection == null)
+            {
+                return null;
+            }
+            else
+            {
+                return ParentConnection.ParentController;
+            }
+        }
+        public void SetParentController(TECController controller, TECConnectionType connectionType)
+        {
+            if (ParentConnection != null)
+            {
+                GetParentController().RemoveController(this);
+            }
+
+            if (controller != null)
+            {
+                controller.AddController(this, connectionType);
+            }
         }
 
         private ObservableCollection<TECNetworkConnection> getNetworkConnections()

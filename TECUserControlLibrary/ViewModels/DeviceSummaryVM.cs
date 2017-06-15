@@ -62,8 +62,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _deviceAssCostSubTotalCost = value;
                 RaisePropertyChanged("DeviceAssCostSubTotalCost");
-                RaisePropertyChanged("TotalDeviceCost");
-                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -75,8 +73,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _deviceAssCostSubTotalLabor = value;
                 RaisePropertyChanged("DeviceAssCostSubTotalLabor");
-                RaisePropertyChanged("TotalDeviceLabor");
-                RaisePropertyChanged("TotalLabor");
             }
         }
 

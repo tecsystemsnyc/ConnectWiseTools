@@ -12,6 +12,8 @@ namespace TECUserControlLibrary.ViewModels
         #region Properties
         public TECBid Bid { get; private set; }
 
+        public CostType CostType { get; private set; }
+
         private Dictionary<Guid, MiscCostSummaryItem> miscCostDictionary;
 
         private ObservableCollection<MiscCostSummaryItem> _miscCostSummaryItems;
@@ -52,8 +54,9 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public MiscCostsSummaryVM(TECBid bid)
+        public MiscCostsSummaryVM(TECBid bid, CostType type)
         {
+            CostType = type;
             reinitialize(bid);
         }
 
@@ -81,49 +84,55 @@ namespace TECUserControlLibrary.ViewModels
         #region Add/Remove
         public void AddMiscCost(TECMisc cost)
         {
-            bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
-            if (containsCost)
+            if (cost.Type == CostType)
             {
-                MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
-                MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
-                miscCostDictionary[cost.Guid].Quantity += cost.Quantity;
-                MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
-                MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
-            }
-            else
-            {
-                MiscCostSummaryItem costItem = new MiscCostSummaryItem(cost);
-                costItem.PropertyChanged += CostItem_PropertyChanged;
-                miscCostDictionary.Add(cost.Guid, costItem);
-                MiscCostSummaryItems.Add(costItem);
-                MiscCostSubTotalCost += costItem.TotalCost;
-                MiscCostSubTotalLabor += costItem.TotalLabor;
-                cost.PropertyChanged += Cost_PropertyChanged;
+                bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
+                if (containsCost)
+                {
+                    MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
+                    MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
+                    miscCostDictionary[cost.Guid].Quantity += cost.Quantity;
+                    MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
+                    MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
+                }
+                else
+                {
+                    MiscCostSummaryItem costItem = new MiscCostSummaryItem(cost);
+                    costItem.PropertyChanged += CostItem_PropertyChanged;
+                    miscCostDictionary.Add(cost.Guid, costItem);
+                    MiscCostSummaryItems.Add(costItem);
+                    MiscCostSubTotalCost += costItem.TotalCost;
+                    MiscCostSubTotalLabor += costItem.TotalLabor;
+                    cost.PropertyChanged += Cost_PropertyChanged;
+                }
             }
         }
 
         public void RemoveMiscCost(TECMisc cost)
         {
-            bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
-            if (containsCost)
+            if (cost.Type == CostType)
             {
-                MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
-                MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
-                miscCostDictionary[cost.Guid].Quantity -= cost.Quantity;
-                MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
-                MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
-
-                if (miscCostDictionary[cost.Guid].Quantity < 1)
+                bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
+                if (containsCost)
                 {
-                    miscCostDictionary[cost.Guid].PropertyChanged -= CostItem_PropertyChanged;
-                    MiscCostSummaryItems.Remove(miscCostDictionary[cost.Guid]);
-                    miscCostDictionary.Remove(cost.Guid);
-                    cost.PropertyChanged -= Cost_PropertyChanged;
+                    MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
+                    MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
+                    miscCostDictionary[cost.Guid].Quantity -= cost.Quantity;
+                    MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
+                    MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
+
+                    if (miscCostDictionary[cost.Guid].Quantity < 1)
+                    {
+                        miscCostDictionary[cost.Guid].PropertyChanged -= CostItem_PropertyChanged;
+                        MiscCostSummaryItems.Remove(miscCostDictionary[cost.Guid]);
+                        miscCostDictionary.Remove(cost.Guid);
+                        cost.PropertyChanged -= Cost_PropertyChanged;
+                    }
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("Cost not found in cost dictionary.");
+                else
+                {
+                    throw new InvalidOperationException("Cost not found in cost dictionary.");
+                }
             }
         }
         #endregion

@@ -12,9 +12,11 @@ namespace EstimatingLibrary.Interfaces
     {
         event PropertyChangedEventHandler PropertyChanged;
 
+        Guid Guid { get; }
         string Name { get; set; }
         double Cost { get; set; }
         double Labor { get; set; }
+        ObservableCollection<TECCost> AssociatedCosts { get; set; }
         ObservableCollection<TECCost> RatedCosts { get; set; }
     }
 }

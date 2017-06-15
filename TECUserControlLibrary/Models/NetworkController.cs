@@ -12,6 +12,16 @@ namespace TECUserControlLibrary.Models
     {
         #region Properties
         public TECController Controller { get; private set; }
+
+        public TECController ParentController
+        {
+            get { return Controller.GetParentController(); }
+            set
+            {
+                Controller.SetParentController(value, defaultWireType);
+                RaisePropertyChanged("ParentController");
+            }
+        }
         
         private ObservableCollection<TECController> _possibleParents;
         public ObservableCollection<TECController> PossibleParents
@@ -152,9 +162,11 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("IsConnected");
             }
         }
+
+        private TECConnectionType defaultWireType;
         #endregion
 
-        public NetworkController(TECController controller)
+        public NetworkController(TECController controller, TECConnectionType defaultWireType)
         {
             Controller = controller;
             _possibleParents = new ObservableCollection<TECController>();
@@ -168,6 +180,7 @@ namespace TECUserControlLibrary.Models
             }
             controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
             controller.PropertyChanged += Controller_PropertyChanged;
+            this.defaultWireType = defaultWireType;
         }
 
         public void RefreshIsConnected()
@@ -250,8 +263,9 @@ namespace TECUserControlLibrary.Models
         }
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ParentController")
+            if (e.PropertyName == "ParentConnection")
             {
+                RaisePropertyChanged("ParentController");
                 RefreshIsConnected();
             }
         }
@@ -259,17 +273,17 @@ namespace TECUserControlLibrary.Models
 
         private bool isDescendantOf(TECController descendantController, TECController ancestorController)
         {
-            if (descendantController.ParentController == ancestorController)
+            if (descendantController.GetParentController() == ancestorController)
             {
                 return true;
             }
-            else if (descendantController.ParentController == null)
+            else if (descendantController.GetParentController() == null)
             {
                 return false;
             }
             else
             {
-                return (isDescendantOf(descendantController.ParentController, ancestorController));
+                return (isDescendantOf(descendantController.GetParentController(), ancestorController));
             }
         }
 

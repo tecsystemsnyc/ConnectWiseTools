@@ -76,49 +76,45 @@ namespace TECUserControlLibrary.ViewModels
         
         public TECConduitType NoneConduitType { get; set; }
         public TECController NoneController { get; set; }
+
+        private TECConnectionType defaultWireType;
         #endregion
 
-        public NetworkControllerVM(Visibility detailsVisibility, TECBid bid = null)
+        public NetworkControllerVM(Visibility detailsVisibility, TECBid bid)
         {
             if (detailsVisibility == Visibility.Visible)
             {
-                if (bid != null)
-                {
-                    setupNoneTypes();
+                setupNoneTypes();
 
-                    populateWireAndConduitTypes(bid);
+                populateWireAndConduitTypes(bid);
 
-                    AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x), x => CanAddConnectionExecute());
-                    RemoveControllerCommand = new RelayCommand<TECController>(x => RemoveControllerExecute(x), x => CanRemoveControllerExecute());
-                }
-                else
-                {
-                    throw new NullReferenceException("Bid cannot be null when details visibility is visible.");
-                }
+                AddConnectionCommand = new RelayCommand<TECController>(x => AddConnectionExecute(x), x => CanAddConnectionExecute());
+                RemoveControllerCommand = new RelayCommand<TECController>(x => RemoveControllerExecute(x), x => CanRemoveControllerExecute());
             }
             DetailsVisibility = detailsVisibility;
             NetworkControllers = new ObservableCollection<NetworkController>();
+            if (bid.Catalogs.ConnectionTypes.Count > 0)
+            {
+                defaultWireType = bid.Catalogs.ConnectionTypes[0];
+            }
         }
 
-        public void Refresh(TECBid bid = null)
+        public void Refresh(TECBid bid)
         {
             if (DetailsVisibility == Visibility.Visible)
             {
-                if (bid != null)
-                {
-                    populateWireAndConduitTypes(bid);
-                }
-                else
-                {
-                    throw new NullReferenceException("Bid cannot be null when details visibility is visible.");
-                }
+                populateWireAndConduitTypes(bid);
             }
             NetworkControllers = new ObservableCollection<NetworkController>();
+            if (bid.Catalogs.ConnectionTypes.Count > 0)
+            {
+                defaultWireType = bid.Catalogs.ConnectionTypes[0];
+            }
         }
 
         public void AddController(TECController controller)
         {
-            NetworkControllers.Add(new NetworkController(controller));
+            NetworkControllers.Add(new NetworkController(controller, defaultWireType));
         }
 
         public void RemoveController(TECController controller)

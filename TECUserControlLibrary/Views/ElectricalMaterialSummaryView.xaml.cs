@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -30,6 +31,15 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(ElectricalMaterialSummaryVM),
               typeof(ElectricalMaterialSummaryView));
+
+        public ElectricalMaterialIndex SelectedMaterialIndex
+        {
+            get { return (ElectricalMaterialIndex)GetValue(SelectedMaterialIndexProperty); }
+            set { SetValue(SelectedMaterialIndexProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedMaterialIndexProperty =
+            DependencyProperty.Register("SelectedMaterialIndex", typeof(ElectricalMaterialIndex),
+              typeof(ElectricalMaterialSummaryView), new PropertyMetadata(default(ElectricalMaterialIndex)));
 
         public ElectricalMaterialSummaryView()
         {

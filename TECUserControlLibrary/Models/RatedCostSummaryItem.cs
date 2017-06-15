@@ -1,19 +1,18 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EstimatingLibrary.Interfaces;
-using EstimatingLibrary;
 
 namespace TECUserControlLibrary.Models
 {
-    public class LengthSummaryItem : TECObject
+    public class RatedCostSummaryItem : TECObject
     {
-        private ElectricalMaterialComponent _material;
-        public ElectricalMaterialComponent Material
+        private TECCost _ratedCost;
+        public TECCost RatedCost
         {
-            get { return _material; }
+            get { return _ratedCost; }
         }
 
         private double _length;
@@ -43,7 +42,10 @@ namespace TECUserControlLibrary.Models
         private double _totalLabor;
         public double TotalLabor
         {
-            get { return _totalLabor; }
+            get
+            {
+                return _totalLabor;
+            }
             set
             {
                 double old = _totalLabor;
@@ -52,21 +54,21 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public LengthSummaryItem(ElectricalMaterialComponent material)
+        public RatedCostSummaryItem(TECCost ratedCost, double length)
         {
-            _material = material;
-            _length = 0;
-            material.PropertyChanged += Material_PropertyChanged;
+            _ratedCost = ratedCost;
+            _length = length;
+            RatedCost.PropertyChanged += RatedCost_PropertyChanged;
             updateTotals();
         }
 
         private void updateTotals()
         {
-            TotalCost = (Material.Cost * Length);
-            TotalLabor = (Material.Labor * Length);
+            TotalCost = (RatedCost.Cost * Length);
+            TotalLabor = (RatedCost.Labor * Length);
         }
 
-        private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void RatedCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
             {

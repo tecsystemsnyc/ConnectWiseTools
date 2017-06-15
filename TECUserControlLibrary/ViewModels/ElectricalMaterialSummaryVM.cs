@@ -21,201 +21,133 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (_changeWatcher != null)
                 {
+                    _changeWatcher.InstanceChanged -= instanceChanged;
                     _changeWatcher.Changed -= bidChanged;
                 }
                 _changeWatcher = value;
+                _changeWatcher.InstanceChanged += instanceChanged;
                 _changeWatcher.Changed += bidChanged;
             }
         }
 
-        private ObservableCollection<LengthSummaryItem> _wireSummaryItems;
-        public ObservableCollection<LengthSummaryItem> WireSummaryItems
-        {
-            get { return _wireSummaryItems; }
-            set
-            {
-                _wireSummaryItems = value;
-                RaisePropertyChanged("WireSummaryItems");
-            }
-        }
+        #region View Models
+        public LengthSummaryVM WireSummaryVM { get; private set; }
+        public LengthSummaryVM ConduitSummaryVM { get; private set; }
+        public MiscCostsSummaryVM MiscCostsSummaryVM { get; private set; }
+        #endregion
 
-        private ObservableCollection<LengthSummaryItem> _conduitSummaryItems;
-        public ObservableCollection<LengthSummaryItem> ConduitSummaryItems
-        {
-            get { return _conduitSummaryItems; }
-            set
-            {
-                _conduitSummaryItems = value;
-                RaisePropertyChanged("ConduitSummaryItems");
-            }
-        }
-
-        private ObservableCollection<AssociatedCostSummaryItem> _associatedCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> AssociatedCostSummaryItems
-        {
-            get { return _associatedCostSummaryItems; }
-            set
-            {
-                _associatedCostSummaryItems = value;
-                RaisePropertyChanged("AssociatedCostSummaryItems");
-            }
-        }
-
-        private ObservableCollection<TECMisc> _miscWiring;
-        public ObservableCollection<TECMisc> MiscWiring
-        {
-            get { return _miscWiring; }
-            set
-            {
-                _miscWiring = value;
-                RaisePropertyChanged("MiscWiring");
-            }
-        }
-        
-        private Dictionary<Guid, LengthSummaryItem> wireDictionary;
-        private Dictionary<Guid, LengthSummaryItem> conduitDictionary;
-        private Dictionary<Guid, AssociatedCostSummaryItem> associatedCostDictionary;
-
-        private double _totalMiscWiring;
-        public double TotalMiscWiring
-        {
-            get { return _totalMiscWiring; }
-            set
-            {
-                _totalMiscWiring = value;
-                RaisePropertyChanged("TotalMiscWiring");
-                RaisePropertyChanged("TotalElectricalCost");
-            }
-        }
-
-        private double _totalWireCost;
+        #region Summary Totals
         public double TotalWireCost
         {
-            get { return _totalWireCost; }
-            set
-            {
-                _totalWireCost = value;
-                RaisePropertyChanged("TotalWireCost");
-                RaisePropertyChanged("TotalElectricalCost");
-            }
+            get { return (WireSummaryVM.LengthSubTotalCost + WireSummaryVM.AssCostSubTotalCost + WireSummaryVM.RatedCostSubTotalCost); }
         }
 
-        private double _totalWireHours;
-        public double TotalWireHours
+        public double TotalWireLabor
         {
-            get { return _totalWireHours; }
-            set
-            {
-                _totalWireHours = value;
-                RaisePropertyChanged("TotalWireHours");
-                RaisePropertyChanged("TotalElectricalHours");
-            }
+            get { return (WireSummaryVM.LengthSubTotalLabor + WireSummaryVM.AssCostSubTotalLabor + WireSummaryVM.RatedCostSubTotalLabor); }
         }
 
-        private double _totalConduitCost;
         public double TotalConduitCost
         {
-            get { return _totalConduitCost; }
-            set
-            {
-                _totalConduitCost = value;
-                RaisePropertyChanged("TotalConduitCost");
-                RaisePropertyChanged("TotalElectricalCost");
-            }
+            get { return (ConduitSummaryVM.LengthSubTotalCost + ConduitSummaryVM.AssCostSubTotalCost + ConduitSummaryVM.RatedCostSubTotalCost); }
         }
 
-        private double _totalConduitHours;
-        public double TotalConduitHours
+        public double TotalConduitLabor
         {
-            get { return _totalConduitHours; }
-            set
-            {
-                _totalConduitHours = value;
-                RaisePropertyChanged("TotalConduitHours");
-                RaisePropertyChanged("TotalElectricalHours");
-            }
+            get { return (ConduitSummaryVM.LengthSubTotalLabor + ConduitSummaryVM.AssCostSubTotalLabor + ConduitSummaryVM.RatedCostSubTotalLabor); }
         }
 
-        private double _totalAssociatedCost;
-        public double TotalAssociatedCost
+        public double TotalMiscCost
         {
-            get { return _totalAssociatedCost; }
-            set
-            {
-                _totalAssociatedCost = value;
-                RaisePropertyChanged("TotalAssociatedCost");
-                RaisePropertyChanged("TotalElectricalCost");
-            }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalCost; }
         }
 
-        private double _totalAssociatedHours;
-        public double TotalAssociatedHours
+        public double TotalMiscLabor
         {
-            get { return _totalAssociatedHours; }
-            set
-            {
-                _totalAssociatedHours = value;
-                RaisePropertyChanged("TotalAssociatedHours");
-                RaisePropertyChanged("TotalElectricalHours");
-            }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor; }
         }
 
-        public double TotalElectricalCost
+        public double TotalCost
         {
-            get { return (TotalWireCost + TotalConduitCost + TotalAssociatedCost + TotalMiscWiring); }
+            get { return TotalWireCost + TotalConduitCost + TotalMiscCost; }
         }
 
-        public double TotalElectricalHours
+        public double TotalLabor
         {
-            get { return (TotalWireHours + TotalConduitHours + TotalAssociatedHours); }
+            get { return TotalWireLabor + TotalConduitLabor + TotalMiscLabor; }
         }
+        #endregion
+
         #endregion
 
         public ElectricalMaterialSummaryVM(TECBid bid)
         {
+            initializeVMs(bid);
             reinitialize(bid);
         }
-
+        
         public void Refresh(TECBid bid)
         {
             reinitialize(bid);
+            refreshVMs(bid);
         }
 
-        private void reinitialize(TECBid bid)
+        public void reinitialize(TECBid bid)
         {
-            WireSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            ConduitSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            AssociatedCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
-            MiscWiring = new ObservableCollection<TECMisc>();
-
-            wireDictionary = new Dictionary<Guid, LengthSummaryItem>();
-            conduitDictionary = new Dictionary<Guid, LengthSummaryItem>();
-            associatedCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-
-            TotalMiscWiring = 0;
-            TotalWireCost = 0;
-            TotalWireHours = 0;
-            TotalConduitCost = 0;
-            TotalConduitHours = 0;
-            TotalAssociatedCost = 0;
-            TotalAssociatedHours = 0;
-
-            foreach(TECController controller in bid.Controllers)
-            {
-                addController(controller);
-            }
-            foreach(TECMisc misc in bid.MiscCosts)
-            {
-                if (misc.Type == CostType.Electrical)
-                {
-                    addMiscWiring(misc);
-                }
-            }
-
             changeWatcher = new ChangeWatcher(bid);
         }
-        
+
+        public void initializeVMs(TECBid bid)
+        {
+            WireSummaryVM = new LengthSummaryVM(bid, LengthType.Wire);
+            ConduitSummaryVM = new LengthSummaryVM(bid, LengthType.Conduit);
+            MiscCostsSummaryVM = new MiscCostsSummaryVM(bid, CostType.Electrical);
+
+            WireSummaryVM.PropertyChanged += WireSummaryVM_PropertyChanged;
+            ConduitSummaryVM.PropertyChanged += ConduitSummaryVM_PropertyChanged;
+            MiscCostsSummaryVM.PropertyChanged += MiscCostsSummaryVM_PropertyChanged;
+        }
+
+        public void refreshVMs(TECBid bid)
+        {
+            WireSummaryVM.Refresh(bid);
+            ConduitSummaryVM.Refresh(bid);
+            MiscCostsSummaryVM.Refresh(bid);
+        }
+
         #region Event Handlers
+        private void instanceChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                var targetObject = args.NewValue;
+                var referenceObject = args.OldValue;
+
+                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
+                {
+                    if (targetObject is TECController)
+                    {
+                        addController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECConnection)
+                    {
+                        addConnection(targetObject as TECConnection);
+                    }
+                }
+                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
+                {
+                    if (targetObject is TECController)
+                    {
+                        removeController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECConnection)
+                    {
+                        removeConnection(targetObject as TECConnection);
+                    }
+                }
+            }
+        }
         private void bidChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -224,432 +156,163 @@ namespace TECUserControlLibrary.ViewModels
                 var targetObject = args.NewValue;
                 var referenceObject = args.OldValue;
 
-                if (args.PropertyName == "Add")
+                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECController && referenceObject is TECBid)
+                    if (targetObject is TECMisc)
                     {
-                        addController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECConnection && referenceObject is TECController)
-                    {
-                        addConnection(targetObject as TECConnection);
-                    }
-                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
-                    {
-                        if ((referenceObject as TECSubScope).Connection != null)
+                        TECMisc cost = targetObject as TECMisc;
+                        if (referenceObject is TECBid)
                         {
-                            foreach(TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            MiscCostsSummaryVM.AddMiscCost(cost);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
                             {
-                                addLengthToWireType((referenceObject as TECSubScope).Connection.Length, type);
+                                MiscCostsSummaryVM.AddMiscCost(cost);
                             }
                         }
                     }
-                    else if (targetObject is TECCost && referenceObject is TECConnectionType)
-                    {
-                        addAssociatedCost(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECConduitType)
-                    {
-                        addAssociatedCost(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECMisc && referenceObject is TECBid) 
-                    {
-                        addMiscWiring(targetObject as TECMisc);
-                    }
                 }
-                else if (args.PropertyName == "Remove")
+                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (targetObject is TECController && referenceObject is TECBid)
+                    if (targetObject is TECMisc)
                     {
-                        removeController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECConnection && referenceObject is TECController)
-                    {
-                        removeConnection(targetObject as TECConnection);
-                    }
-                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
-                    {
-                        if ((referenceObject as TECSubScope).Connection != null)
+                        TECMisc cost = targetObject as TECMisc;
+                        if (referenceObject is TECBid)
                         {
-                            foreach (TECConnectionType type in (targetObject as TECDevice).ConnectionTypes)
+                            MiscCostsSummaryVM.RemoveMiscCost(cost);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
                             {
-                                removeLengthFromWireType((referenceObject as TECSubScope).Connection.Length, type);
+                                MiscCostsSummaryVM.RemoveMiscCost(cost);
                             }
                         }
                     }
-                    else if (targetObject is TECCost && referenceObject is TECConnectionType)
-                    {
-                        removeAssociatedCost(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECConduitType)
-                    {
-                        removeAssociatedCost(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECMisc && referenceObject is TECBid)
-                    {
-                        removeMiscWiring(targetObject as TECMisc);
-                    }
-                }
-                else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConduitType")
-                {
-                    if (args.OldValue is TECConnection && args.NewValue is TECConnection)
-                    {
-                        removeConnection(args.OldValue as TECConnection);
-                        addConnection(args.NewValue as TECConnection);
-                    }
-                }
-                else if (args.PropertyName == "ConnectionType")
-                {
-                    if (args.OldValue is TECNetworkConnection && args.NewValue is TECNetworkConnection)
-                    {
-                        removeConnection(args.OldValue as TECConnection);
-                        addConnection(args.NewValue as TECConnection);
-                    }
-                }
-                else if (targetObject is TECMisc && referenceObject is TECMisc)
-                {
-                    editMiscWiring(targetObject as TECMisc, referenceObject as TECMisc);
                 }
             }
         }
 
-        private void editMiscWiring(TECMisc newWiring, TECMisc oldWiring)
+        private void WireSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            TotalMiscWiring -= oldWiring.Cost * oldWiring.Quantity;
-            TotalMiscWiring += newWiring.Cost * newWiring.Quantity;
-        }
-
-        private void WireItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e.PropertyName == "LengthSubTotalCost" || e.PropertyName == "AssCostSubTotalCost" || e.PropertyName == "RatedCostSubTotalCost")
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-
-                if (args.PropertyName == "TotalCost")
-                {
-                    TotalWireCost -= (double)args.OldValue;
-                    TotalWireCost += (double)args.NewValue;
-                }
-                else if (args.PropertyName == "TotalLabor")
-                {
-                    TotalWireHours -= (double)args.OldValue;
-                    TotalWireHours += (double)args.NewValue;
-                }
+                RaisePropertyChanged("TotalWireCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "LengthSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor" || e.PropertyName == "RatedCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalWireLabor");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
-        private void ConduitItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ConduitSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e.PropertyName == "LengthSubTotalCost" || e.PropertyName == "AssCostSubTotalCost" || e.PropertyName == "RatedCostSubTotalCost")
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-
-                if (args.PropertyName == "TotalCost")
-                {
-                    TotalConduitCost -= (double)args.OldValue;
-                    TotalConduitCost += (double)args.NewValue;
-                }
-                else if (args.PropertyName == "TotalLabor")
-                {
-                    TotalConduitHours -= (double)args.OldValue;
-                    TotalConduitHours += (double)args.NewValue;
-                }
+                RaisePropertyChanged("TotalConduitCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "LengthSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor" || e.PropertyName == "RatedCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalConduitLabor");
+                RaisePropertyChanged("TotalCost");
             }
         }
 
-        private void CostItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void MiscCostsSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e.PropertyName == "MiscCostSubTotalCost")
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-
-                if (args.PropertyName == "TotalCost")
-                {
-                    TotalAssociatedCost -= (double)args.OldValue;
-                    TotalAssociatedCost += (double)args.NewValue;
-                }
-                else if (args.PropertyName == "TotalLabor")
-                {
-                    TotalAssociatedHours -= (double)args.OldValue;
-                    TotalAssociatedHours += (double)args.NewValue;
-                }
+                RaisePropertyChanged("TotalMiscCost");
+                RaisePropertyChanged("TotalCost");
+            }
+            else if (e.PropertyName == "MiscCostSubTotalLabor")
+            {
+                RaisePropertyChanged("TotalMiscLabor");
+                RaisePropertyChanged("TotalLabor");
             }
         }
         #endregion
 
         #region Add/Remove
-        private void addLengthToWireType(double length, TECConnectionType type)
+        static public Tuple<double, double> AddCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
-            if (type != null)
+            double costChange = 0;
+            double laborChange = 0;
+            bool containsCost = dictionary.ContainsKey(cost.Guid);
+            if (containsCost)
             {
-                bool containsWire = wireDictionary.ContainsKey(type.Guid);
-                if (containsWire)
-                {
-                    TotalWireCost -= wireDictionary[type.Guid].TotalCost;
-                    TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
-                    wireDictionary[type.Guid].Length += length;
-                    TotalWireCost += wireDictionary[type.Guid].TotalCost;
-                    TotalWireHours += wireDictionary[type.Guid].TotalLabor;
-                }
-                else
-                {
-                    LengthSummaryItem wireItem = new LengthSummaryItem(type);
-                    wireItem.Length = length;
-                    wireItem.PropertyChanged += WireItem_PropertyChanged;
-                    wireDictionary.Add(type.Guid, wireItem);
-                    WireSummaryItems.Add(wireItem);
-                    TotalWireCost += wireItem.TotalCost;
-                    TotalWireHours += wireItem.TotalLabor;
-                }
-            }
-        }
-
-        private void removeLengthFromWireType(double length, TECConnectionType type)
-        {
-            if (type != null)
-            {
-                bool containsWire = wireDictionary.ContainsKey(type.Guid);
-                if (containsWire)
-                {
-                    TotalWireCost -= wireDictionary[type.Guid].TotalCost;
-                    TotalWireHours -= wireDictionary[type.Guid].TotalLabor;
-                    wireDictionary[type.Guid].Length -= length;
-                    TotalWireCost += wireDictionary[type.Guid].TotalCost;
-                    TotalWireHours += wireDictionary[type.Guid].TotalLabor;
-
-                    if (wireDictionary[type.Guid].Length < 0)
-                    {
-                        wireDictionary[type.Guid].PropertyChanged -= WireItem_PropertyChanged;
-                        WireSummaryItems.Remove(wireDictionary[type.Guid]);
-                        wireDictionary.Remove(type.Guid);
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Wire not found in wire dictionary");
-                }
-            }
-        }
-
-        private void addLengthToConduitType(double length, TECConduitType type)
-        {
-            if (type != null)
-            {
-                bool containsConduit = conduitDictionary.ContainsKey(type.Guid);
-                if (containsConduit)
-                {
-                    TotalConduitCost -= conduitDictionary[type.Guid].TotalCost;
-                    TotalConduitHours -= conduitDictionary[type.Guid].TotalLabor;
-                    conduitDictionary[type.Guid].Length += length;
-                    TotalConduitCost += conduitDictionary[type.Guid].TotalCost;
-                    TotalConduitHours += conduitDictionary[type.Guid].TotalLabor;
-                }
-                else
-                {
-                    LengthSummaryItem conduitItem = new LengthSummaryItem(type);
-                    conduitItem.Length = length;
-                    conduitItem.PropertyChanged += ConduitItem_PropertyChanged;
-                    conduitDictionary.Add(type.Guid, conduitItem);
-                    ConduitSummaryItems.Add(conduitItem);
-                    TotalConduitCost += conduitItem.TotalCost;
-                    TotalConduitHours += conduitItem.TotalLabor;
-                }
-            }
-        }
-
-        private void removeLengthFromConduitType(double length, TECConduitType type)
-        {
-            if (type != null)
-            {
-                bool containsconduit = conduitDictionary.ContainsKey(type.Guid);
-                if (containsconduit)
-                {
-                    TotalConduitCost -= conduitDictionary[type.Guid].TotalCost;
-                    TotalConduitHours -= conduitDictionary[type.Guid].TotalLabor;
-                    conduitDictionary[type.Guid].Length -= length;
-                    TotalConduitCost += conduitDictionary[type.Guid].TotalCost;
-                    TotalConduitHours += conduitDictionary[type.Guid].TotalLabor;
-
-                    if (conduitDictionary[type.Guid].Length < 0)
-                    {
-                        conduitDictionary[type.Guid].PropertyChanged -= ConduitItem_PropertyChanged;
-                        ConduitSummaryItems.Remove(conduitDictionary[type.Guid]);
-                        conduitDictionary.Remove(type.Guid);
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Conduit not found in conduit dictionary");
-                }
-            }
-        }
-
-        private void addAssociatedCost(TECCost assCost)
-        {
-            bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
-            if (containsAssCost)
-            {
-                TotalAssociatedCost -= associatedCostDictionary[assCost.Guid].TotalCost;
-                TotalAssociatedHours -= associatedCostDictionary[assCost.Guid].TotalLabor;
-                associatedCostDictionary[assCost.Guid].Quantity++;
-                TotalAssociatedCost += associatedCostDictionary[assCost.Guid].TotalCost;
-                TotalAssociatedHours += associatedCostDictionary[assCost.Guid].TotalLabor;
+                costChange -= dictionary[cost.Guid].TotalCost;
+                laborChange -= dictionary[cost.Guid].TotalLabor;
+                dictionary[cost.Guid].Quantity++;
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
             }
             else
             {
-                AssociatedCostSummaryItem costItem = new AssociatedCostSummaryItem(assCost);
-                costItem.PropertyChanged += CostItem_PropertyChanged;
-                associatedCostDictionary.Add(assCost.Guid, costItem);
-                AssociatedCostSummaryItems.Add(costItem);
-                TotalAssociatedCost += costItem.TotalCost;
-                TotalAssociatedHours += costItem.TotalLabor;
+                AssociatedCostSummaryItem costItem = new AssociatedCostSummaryItem(cost);
+                dictionary.Add(cost.Guid, costItem);
+                collection.Add(costItem);
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
             }
+            return Tuple.Create(costChange, laborChange);
         }
 
-        private void removeAssociatedCost(TECCost assCost)
+        static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
         {
-            bool containsAssCost = associatedCostDictionary.ContainsKey(assCost.Guid);
-            if (containsAssCost)
+            double costChange = 0;
+            double laborChange = 0;
+            bool containsCost = dictionary.ContainsKey(cost.Guid);
+            if (containsCost)
             {
-                AssociatedCostSummaryItem costItem = associatedCostDictionary[assCost.Guid];
-                TotalAssociatedCost -= costItem.TotalCost;
-                TotalAssociatedHours -= costItem.TotalLabor;
-                costItem.Quantity--;
-                TotalAssociatedCost += costItem.TotalCost;
-                TotalAssociatedHours += costItem.TotalLabor;
+                costChange -= dictionary[cost.Guid].TotalCost;
+                laborChange -= dictionary[cost.Guid].TotalLabor;
+                dictionary[cost.Guid].Quantity--;
+                costChange += dictionary[cost.Guid].TotalCost;
+                laborChange += dictionary[cost.Guid].TotalLabor;
 
-                if (costItem.Quantity < 1)
+                if (dictionary[cost.Guid].Quantity < 1)
                 {
-                    costItem.PropertyChanged -= CostItem_PropertyChanged;
-                    AssociatedCostSummaryItems.Remove(costItem);
-                    associatedCostDictionary.Remove(assCost.Guid);
+                    collection.Remove(dictionary[cost.Guid]);
+                    dictionary.Remove(cost.Guid);
                 }
+
+                return Tuple.Create(costChange, laborChange);
             }
             else
             {
-                throw new InvalidOperationException("Associated cost not found in associated cost dictionary.");
+                throw new InvalidOperationException("Associated Cost not found in dictionary.");
             }
         }
 
         private void addConnection(TECConnection connection)
         {
-            //Add Wire
-            if (connection is TECSubScopeConnection)
-            {
-                TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-
-                foreach(TECConnectionType type in ssConnect.ConnectionTypes)
-                {
-                    addLengthToWireType(connection.Length, type);
-                    foreach(TECCost cost in type.AssociatedCosts)
-                    {
-                        addAssociatedCost(cost);
-                    }
-                }
-            }
-            else if (connection is TECNetworkConnection)
-            {
-                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-
-                addLengthToWireType(connection.Length, netConnect.ConnectionType);
-                if (netConnect.ConnectionType != null)
-                {
-                    foreach (TECCost cost in netConnect.ConnectionType.AssociatedCosts)
-                    {
-                        addAssociatedCost(cost);
-                    }
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            //Add Conduit
-            addLengthToConduitType(connection.ConduitLength, connection.ConduitType);
-            if (connection.ConduitType != null)
-            {
-                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
-                {
-                    addAssociatedCost(cost);
-                }
-            }
+            WireSummaryVM.AddConnection(connection);
+            ConduitSummaryVM.AddConnection(connection);
         }
 
         private void removeConnection(TECConnection connection)
         {
-            //Remove Wire
-            if (connection is TECSubScopeConnection)
-            {
-                TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-
-                foreach (TECConnectionType type in ssConnect.ConnectionTypes)
-                {
-                    removeLengthFromWireType(connection.Length, type);
-                    foreach(TECCost cost in type.AssociatedCosts)
-                    {
-                        removeAssociatedCost(cost);
-                    }
-                }
-            }
-            else if (connection is TECNetworkConnection)
-            {
-                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-
-                removeLengthFromWireType(connection.Length, netConnect.ConnectionType);
-
-                if (netConnect.ConnectionType != null)
-                {
-                    foreach (TECCost cost in netConnect.ConnectionType.AssociatedCosts)
-                    {
-                        removeAssociatedCost(cost);
-                    }
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            //Remove Conduit
-            removeLengthFromConduitType(connection.ConduitLength, connection.ConduitType);
-            if (connection.ConduitType != null)
-            {
-                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
-                {
-                    removeAssociatedCost(cost);
-                }
-            }
+            WireSummaryVM.RemoveConnection(connection);
+            ConduitSummaryVM.RemoveConnection(connection);
         }
 
         private void addController(TECController controller)
         {
-            foreach(TECConnection connection in controller.ChildrenConnections)
-            {
-                addConnection(connection);
-            }
+            WireSummaryVM.AddController(controller);
+            ConduitSummaryVM.AddController(controller);
         }
 
         private void removeController(TECController controller)
         {
-            foreach(TECConnection connection in controller.ChildrenConnections)
-            {
-                removeConnection(connection);
-            }
-        }
-
-        private void addMiscWiring(TECMisc miscWiring)
-        {
-            TotalMiscWiring += miscWiring.Cost * miscWiring.Quantity;
-            MiscWiring.Add(miscWiring);
-        }
-
-        private void removeMiscWiring(TECMisc miscWiring)
-        {
-            TotalMiscWiring -= miscWiring.Cost * miscWiring.Quantity;
-            MiscWiring.Remove(miscWiring);
+            WireSummaryVM.RemoveController(controller);
+            ConduitSummaryVM.RemoveController(controller);
         }
         #endregion
-
     }
 }
