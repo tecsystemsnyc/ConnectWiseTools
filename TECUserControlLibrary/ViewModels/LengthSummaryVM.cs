@@ -161,20 +161,20 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
 
-            _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            _assCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
-            _ratedCostSummaryItems = new ObservableCollection<RatedCostSummaryItem>();
+            LengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
+            AssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            RatedCostSummaryItems = new ObservableCollection<RatedCostSummaryItem>();
 
             lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
             assCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
             ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
 
-            _lengthSubTotalCost = 0;
-            _lengthSubTotalLabor = 0;
-            _assCostSubTotalCost = 0;
-            _assCostSubTotalLabor = 0;
-            _ratedCostSubTotalCost = 0;
-            _ratedCostSubTotalLabor = 0;
+            LengthSubTotalCost = 0;
+            LengthSubTotalLabor = 0;
+            AssCostSubTotalCost = 0;
+            AssCostSubTotalLabor = 0;
+            RatedCostSubTotalCost = 0;
+            RatedCostSubTotalLabor = 0;
 
         }
 
@@ -360,6 +360,22 @@ namespace TECUserControlLibrary.ViewModels
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 RemoveConnection(connection);
+            }
+        }
+
+        public void AddSystem(TECSystem system)
+        {
+            foreach(TECController controller in system.Controllers)
+            {
+                AddController(controller);
+            }
+        }
+
+        public void RemoveSystem(TECSystem system)
+        {
+            foreach(TECController controller in system.Controllers)
+            {
+                RemoveController(controller);
             }
         }
         #endregion

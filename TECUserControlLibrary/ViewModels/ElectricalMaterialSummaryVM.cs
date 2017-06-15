@@ -126,7 +126,11 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECController)
+                    if (targetObject is TECSystem)
+                    {
+                        addSystem(targetObject as TECSystem);
+                    }
+                    else if (targetObject is TECController)
                     {
                         addController(targetObject as TECController);
                     }
@@ -137,7 +141,11 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (targetObject is TECController)
+                    if (targetObject is TECSystem)
+                    {
+                        removeSystem(targetObject as TECSystem);
+                    }
+                    else if (targetObject is TECController)
                     {
                         removeController(targetObject as TECController);
                     }
@@ -312,6 +320,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             WireSummaryVM.RemoveController(controller);
             ConduitSummaryVM.RemoveController(controller);
+        }
+
+        private void addSystem(TECSystem system)
+        {
+            WireSummaryVM.AddSystem(system);
+            ConduitSummaryVM.AddSystem(system);
+        }
+
+        private void removeSystem(TECSystem system)
+        {
+            WireSummaryVM.RemoveSystem(system);
+            ConduitSummaryVM.RemoveSystem(system);
         }
         #endregion
     }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d"
              x:Name="parent"
              d:DesignHeight="1070" d:DesignWidth="1200">
@@ -54,18 +55,27 @@
         <TextBlock Text="Associated Costs" Foreground="Black" FontSize="20"
                    Grid.Column="2"/>
 
-        <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
-            
-        </Grid>
-        
+        <controls:AssociatedCostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                                    AssociatedCostSummaryItemsSource="{Binding AssCostSummaryItems}"/>
+
         <!--Rated Costs Summary-->
         <TextBlock Text="Rated Costs" Foreground="Black" FontSize="20"
                    Grid.Column="2" Grid.Row="4"/>
 
-        <Grid Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2">
-            
-        </Grid>
-        
+        <DataGrid Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2"
+                  ItemsSource="{Binding RatedCostSummaryItems}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding RatedCost.Name}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Length" Binding="{Binding Length}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Cost" Binding="{Binding RatedCost.Cost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat={} {0:C}}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Unit Labor" Binding="{Binding RatedCost.Labor}" Width="Auto" MinWidth="50"/>
+                <DataGridTextColumn Header="Total Labor" Binding="{Binding TotalLabor}" Width="Auto" MinWidth="50"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
         <!--Subtotals-->
         <TextBlock Text="Length Subtotal Cost:" Grid.Row="6" Foreground="Black"/>
         <TextBlock Text="{Binding LengthSubTotalCost, StringFormat={} {0:C}}" Grid.Row="6" Grid.Column="1" Foreground="Black"/>
