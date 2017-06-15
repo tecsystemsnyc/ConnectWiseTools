@@ -405,7 +405,7 @@ namespace TemplateBuilder.MVVM
             {
                 newDevice = true;
             }
-            UIHelpers.StandardDrop(dropInfo, newDevice);
+            UIHelpers.StandardDrop(dropInfo, Templates, newDevice);
         }
         #endregion
         #region Helper Methods
