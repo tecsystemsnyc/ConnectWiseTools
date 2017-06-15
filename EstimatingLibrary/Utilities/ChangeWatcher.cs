@@ -57,7 +57,10 @@ namespace EstimatingLibrary.Utilities
                 }
             }
             foreach (TECController controller in Bid.Controllers)
-            { registerController(controller); }
+            {
+                registerController(controller, ChangeType.Object);
+                registerController(controller, ChangeType.Instance);
+            }
             foreach (TECMisc cost in Bid.MiscCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanel panel in Bid.Panels)
