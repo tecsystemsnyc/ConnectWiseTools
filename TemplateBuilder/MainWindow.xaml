@@ -25,9 +25,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="DataGrid">
-                <Setter Property="CanUserSortColumns" Value="True"/>
-            </Style>
         </ResourceDictionary>
     </Window.Resources>
     

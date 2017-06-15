@@ -85,8 +85,15 @@ namespace EstimatingLibrary
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
-            foreach(TECConnectionType connectionType in ConnectionTypes)
+            TECCost thisCost = new TECCost();
+
+            foreach (TECConnectionType connectionType in ConnectionTypes)
             {
+                thisCost = new TECCost();
+                thisCost.Type = connectionType.Type;
+                thisCost.Cost = connectionType.Cost * Length;
+                thisCost.Labor = connectionType.Labor * Length;
+                outCosts.Add(thisCost);
                 foreach (TECCost cost in connectionType.AssociatedCosts)
                 {
                     outCosts.Add(cost);
@@ -94,6 +101,7 @@ namespace EstimatingLibrary
                 foreach (TECCost cost in connectionType.RatedCosts)
                 {
                     TECCost ratedCost = new TECCost();
+                    ratedCost.Type = cost.Type;
                     ratedCost.Cost = cost.Cost * Length;
                     ratedCost.Labor = cost.Labor * Length;
                     outCosts.Add(ratedCost);
@@ -101,6 +109,11 @@ namespace EstimatingLibrary
             }
             if(ConduitType != null)
             {
+                thisCost = new TECCost();
+                thisCost.Type = ConduitType.Type;
+                thisCost.Cost = ConduitType.Cost * ConduitLength;
+                thisCost.Labor = ConduitType.Labor * ConduitLength;
+                outCosts.Add(thisCost);
                 foreach (TECCost cost in ConduitType.AssociatedCosts)
                 {
                     outCosts.Add(cost);
@@ -108,8 +121,8 @@ namespace EstimatingLibrary
                 foreach (TECCost cost in ConduitType.RatedCosts)
                 {
                     TECCost ratedCost = new TECCost();
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
+                    ratedCost.Cost = cost.Cost * ConduitLength;
+                    ratedCost.Labor = cost.Labor * ConduitLength;
                     outCosts.Add(ratedCost);
                 }
             }

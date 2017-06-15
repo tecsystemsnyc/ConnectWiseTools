@@ -227,7 +227,7 @@ namespace EstimatingLibrary
             bid = Bid;
             getInitialValues();
             watcher = new ChangeWatcher(bid);
-            watcher.Changed += Object_PropertyChanged;
+            watcher.InstanceChanged += Object_PropertyChanged;
         }
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
@@ -339,7 +339,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost += cost.Cost;
+                        tecCost.Cost += cost.ExtendedCost;
                         tecCost.Labor += cost.Labor;
                         tecChanged = true;
                     }
@@ -373,7 +373,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost -= cost.Cost;
+                        tecCost.Cost -= cost.ExtendedCost;
                         tecCost.Labor -= cost.Labor;
                         tecChanged = true;
                     }

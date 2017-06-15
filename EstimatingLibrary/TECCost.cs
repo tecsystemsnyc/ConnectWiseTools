@@ -25,6 +25,11 @@ namespace EstimatingLibrary
             }
         }
 
+        virtual public double ExtendedCost
+        {
+            get { return Cost; }
+        }
+
         protected double _labor;
         public double Labor
         {

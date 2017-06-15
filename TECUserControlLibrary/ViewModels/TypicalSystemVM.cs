@@ -283,7 +283,16 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                UIHelpers.StandardDrop(dropInfo);
+                TECScopeManager scopeManager;
+                if (Templates != null)
+                {
+                    scopeManager = Templates;
+                }
+                else
+                {
+                    scopeManager = Bid;
+                }
+                UIHelpers.StandardDrop(dropInfo, scopeManager);
             }
         }
         

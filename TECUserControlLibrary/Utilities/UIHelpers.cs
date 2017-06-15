@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void StandardDrop(IDropInfo dropInfo, bool newDevice = false)
+        public static void StandardDrop(IDropInfo dropInfo, TECScopeManager scopeManager, bool newDevice = false)
         {
             var sourceItem = dropInfo.Data;
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -49,7 +49,9 @@ namespace TECUserControlLibrary.Utilities
                     var outSource = new List<object>();
                     foreach (object item in ((IList)sourceItem))
                     {
-                        outSource.Add(((TECScope)item).DragDropCopy());
+                        var toAdd = ((TECScope)item).DragDropCopy() as TECScope;
+                        ModelLinkingHelper.LinkScopeCopy(toAdd, scopeManager);
+                        outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
                 }
@@ -62,6 +64,7 @@ namespace TECUserControlLibrary.Utilities
                     else
                     {
                         sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
+                        ModelLinkingHelper.LinkScopeCopy(sourceItem as TECScope, scopeManager);
 
                     }
                 }
@@ -71,7 +74,7 @@ namespace TECUserControlLibrary.Utilities
                     {
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Add(((TECScope)item).DragDropCopy());
+                            ((IList)dropInfo.TargetCollection).Add(item);
                         }
                     }
                     else
@@ -86,13 +89,13 @@ namespace TECUserControlLibrary.Utilities
                         var x = dropInfo.InsertIndex;
                         foreach (object item in ((IList)sourceItem))
                         {
-                            ((IList)dropInfo.TargetCollection).Insert(x, ((TECScope)item).DragDropCopy());
+                            ((IList)dropInfo.TargetCollection).Insert(x, item);
                             x += 1;
                         }
                     }
                     else
                     {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, ((TECScope)sourceItem).DragDropCopy());
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
 
                     }
                 }
@@ -254,7 +257,7 @@ namespace TECUserControlLibrary.Utilities
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
     public enum GridIndex { Systems = 1, DDC, Location, Proposal, Budget, Misc, Settings };
     public enum TemplateGridIndex { None, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
-    public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts };
+    public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
     public enum TypicalSystemIndex { Edit, Instances };

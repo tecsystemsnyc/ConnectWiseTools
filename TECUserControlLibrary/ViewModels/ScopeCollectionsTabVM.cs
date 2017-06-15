@@ -880,18 +880,45 @@ namespace TECUserControlLibrary.ViewModels
                         MiscCostsCollection = new ObservableCollection<TECMisc>();
                         foreach (TECMisc item in Templates.MiscCostTemplates)
                         {
-                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                            if (item.Type == CostType.TEC)
+                            {
+                                if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
                                 UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                            {
-                                MiscCostsCollection.Add(item);
-                            }
-                            else
-                            {
-                                foreach (TECTag tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    MiscCostsCollection.Add(item);
+                                }
+                                else
+                                {
+                                    foreach (TECTag tag in item.Tags)
                                     {
-                                        MiscCostsCollection.Add(item);
+                                        if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                        {
+                                            MiscCostsCollection.Add(item);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case ScopeCollectionIndex.MiscWiring:
+                        MiscCostsCollection = new ObservableCollection<TECMisc>();
+                        foreach (TECMisc item in Templates.MiscCostTemplates)
+                        {
+                            if(item.Type == CostType.Electrical)
+                            {
+                                if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
+                                                                UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
+                                {
+                                    MiscWiringCollection.Add(item);
+                                }
+                                else
+                                {
+                                    foreach (TECTag tag in item.Tags)
+                                    {
+                                        if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                        {
+                                            MiscWiringCollection.Add(item);
+                                        }
                                     }
                                 }
                             }
@@ -930,6 +957,9 @@ namespace TECUserControlLibrary.ViewModels
                     canSearch = true;
                     break;
                 case ScopeCollectionIndex.MiscCosts:
+                    canSearch = true;
+                    break;
+                case ScopeCollectionIndex.MiscWiring:
                     canSearch = true;
                     break;
                 default:
@@ -1178,6 +1208,7 @@ namespace TECUserControlLibrary.ViewModels
             AssociatedCostsItemsCollection = new ObservableCollection<TECCost>();
             PanelsItemsCollection = new ObservableCollection<TECPanel>();
             MiscCostsCollection = new ObservableCollection<TECMisc>();
+            MiscWiringCollection = new ObservableCollection<TECMisc>();
 
             TECSystem blankScope = new TECSystem();
             blankScope.Name = "Blank";

@@ -1,12 +1,13 @@
 ﻿<UserControl x:Class="TECUserControlLibrary.Views.MaterialView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -309,33 +310,7 @@
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Misc. Wiring" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    
-                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscWiringTemplates}"
-                                                 ViewModel="{Binding}" Grid.Row="1" Grid.Column="1" 
-                                                 Margin="5"/>
-                </Grid>
-            </TabItem>
-            <TabItem Visibility="Collapsed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Misc. Costs" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscCostTemplates}"
-                                               ViewModel="{Binding}"
-                                               Grid.Row="1" Grid.Column="1" Margin="5"/>
-                </Grid>
+                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
             </TabItem>
         </TabControl>
         

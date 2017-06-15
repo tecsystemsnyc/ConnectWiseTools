@@ -565,6 +565,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -1463,7 +1464,8 @@ namespace EstimatingUtilitiesLibrary
             new SystemMiscTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
-            new IOModuleManufacturerTable()
+            new IOModuleManufacturerTable(),
+            new ScopeBranchHierarchyTable()
         };
     }
 

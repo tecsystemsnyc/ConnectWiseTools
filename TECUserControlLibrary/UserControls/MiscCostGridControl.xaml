@@ -27,7 +27,8 @@
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Cost}" Header="Cost" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Labor}" Header="Labor Hours" Width="Auto" MinWidth="80"/>
-                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Qty" Visibility="{Binding Data.QuantityVisibility, 
+                                    Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

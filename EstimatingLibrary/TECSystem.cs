@@ -285,6 +285,10 @@ namespace EstimatingLibrary
             {
                 outCosts.Add(item);
             }
+            foreach (TECMisc item in MiscCosts)
+            {
+                outCosts.Add(item);
+            }
             return outCosts;
         }
 
@@ -368,6 +372,16 @@ namespace EstimatingLibrary
                 }
                  _panels.Add(toAdd);
             }
+            foreach(TECScopeBranch branch in source._scopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                _scopeBranches.Add(toAdd);
+            }
+            foreach(TECMisc misc in source.MiscCosts)
+            {
+                var toAdd = new TECMisc(misc);
+                _miscCosts.Add(toAdd);
+            }
             _budgetPriceModifier = source.BudgetPriceModifier;
             this.copyPropertiesFromScope(source);
         }
@@ -390,6 +404,14 @@ namespace EstimatingLibrary
             foreach(TECSystem system in SystemInstances)
             {
                 outSystem.SystemInstances.Add(system.Copy() as TECSystem);
+            }
+            foreach(TECScopeBranch branch in ScopeBranches)
+            {
+                outSystem.ScopeBranches.Add(branch.Copy() as TECScopeBranch);
+            }
+            foreach(TECMisc misc in MiscCosts)
+            {
+                outSystem.MiscCosts.Add(misc.Copy() as TECMisc);
             }
             outSystem._budgetPriceModifier = this.BudgetPriceModifier;
             outSystem.copyPropertiesFromScope(this);

@@ -26,7 +26,7 @@ namespace EstimatingUtilitiesLibrary
         static private SQLiteDatabase SQLiteDB; 
 
         static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
-
+        static private bool isCompatbile;
         #region Public Functions
         static public TECScopeManager Load(string path)
         {
@@ -149,70 +149,83 @@ namespace EstimatingUtilitiesLibrary
         static private TECBid loadBid()
         {
             checkAndUpdateDB(typeof(TECBid));
-            TECBid bid = getBidInfo();
-            //updateCatalogs(bid, templates);
+            if (isCompatbile)
+            {
+                TECBid bid = getBidInfo();
+                //updateCatalogs(bid, templates);
 
-            getScopeManagerProperties(bid);
-            
-            bid.Parameters = getBidParameters(bid);
-            bid.ScopeTree = getBidScopeBranches();
-            bid.Systems = getAllSystemsInBid();
-            bid.Locations = getAllLocations();
-            bid.Catalogs.Tags = getAllTags();
-            bid.Notes = getNotes();
-            bid.Exclusions = getExclusions();
-            bid.Drawings = getDrawings();
-            bid.Controllers = getOrphanControllers();
-            bid.MiscCosts = getMiscInBid();
-            bid.Panels = getOrphanPanels();
-            var placeholderDict = getCharacteristicInstancesList();
+                getScopeManagerProperties(bid);
 
-            ModelLinkingHelper.LinkBid(bid, placeholderDict);
-            getUserAdjustments(bid);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+                bid.Parameters = getBidParameters(bid);
+                bid.ScopeTree = getBidScopeBranches();
+                bid.Systems = getAllSystemsInBid();
+                bid.Locations = getAllLocations();
+                bid.Catalogs.Tags = getAllTags();
+                bid.Notes = getNotes();
+                bid.Exclusions = getExclusions();
+                bid.Drawings = getDrawings();
+                bid.Controllers = getOrphanControllers();
+                bid.MiscCosts = getMiscInBid();
+                bid.Panels = getOrphanPanels();
+                var placeholderDict = getCharacteristicInstancesList();
 
-            return bid;
+                ModelLinkingHelper.LinkBid(bid, placeholderDict);
+                getUserAdjustments(bid);
+                //Breaks Visual Scope in a page
+                //populatePageVisualConnections(bid.Drawings, bid.Connections);
+
+                return bid;
+            }
+            else
+            {
+                return new TECBid();
+            }
         }
         static private TECTemplates loadTemplates()
         {
             checkAndUpdateDB(typeof(TECTemplates));
-            createTemplateIndexes();
-            TECTemplates templates = new TECTemplates();
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            templates = getTemplatesInfo();
-            watch.Stop();
-            Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            getScopeManagerProperties(templates);
-            watch.Stop();
-            Console.WriteLine("getScopeManagerProperties: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.SystemTemplates = getSystems();
-            watch.Stop();
-            Console.WriteLine("getSystems: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.EquipmentTemplates = getOrphanEquipment();
-            watch.Stop();
-            Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.SubScopeTemplates = getOrphanSubScope();
-            watch.Stop();
-            Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.ControllerTemplates = getOrphanControllers();
-            watch.Stop();
-            Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.MiscCostTemplates = getMisc();
-            watch.Stop();
-            Console.WriteLine("getMisc: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            templates.PanelTemplates = getOrphanPanels();
-            watch.Stop();
-            Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
-            ModelLinkingHelper.LinkTemplates(templates);
-            return templates;
+            if (isCompatbile)
+            {
+                createTemplateIndexes();
+                TECTemplates templates = new TECTemplates();
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                templates = getTemplatesInfo();
+                watch.Stop();
+                Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                getScopeManagerProperties(templates);
+                watch.Stop();
+                Console.WriteLine("getScopeManagerProperties: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.SystemTemplates = getSystems();
+                watch.Stop();
+                Console.WriteLine("getSystems: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.EquipmentTemplates = getOrphanEquipment();
+                watch.Stop();
+                Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.SubScopeTemplates = getOrphanSubScope();
+                watch.Stop();
+                Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.ControllerTemplates = getOrphanControllers();
+                watch.Stop();
+                Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.MiscCostTemplates = getMisc();
+                watch.Stop();
+                Console.WriteLine("getMisc: " + watch.ElapsedMilliseconds);
+                watch = System.Diagnostics.Stopwatch.StartNew();
+                templates.PanelTemplates = getOrphanPanels();
+                watch.Stop();
+                Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
+                ModelLinkingHelper.LinkTemplates(templates);
+                return templates;
+            } else
+            {
+                return new TECTemplates();
+            }
         }
 
         static private void updateCatalogs(TECBid bid, TECTemplates templates)
@@ -1412,7 +1425,12 @@ namespace EstimatingUtilitiesLibrary
         {
             bool isUpToDate;
             isUpToDate = checkDatabaseVersion(type);
-            if (!isUpToDate)
+            if (!isCompatbile)
+            {
+                MessageBox.Show("This database is not compatible with this version of the program.");
+                return;
+            }
+            else if (!isUpToDate)
             {
                 updateDatabase(type);
                 updateVersionNumber(type);
@@ -1421,6 +1439,7 @@ namespace EstimatingUtilitiesLibrary
         static private bool checkDatabaseVersion(Type type)
         {
             string currentVersion = Properties.Settings.Default.Version;
+            string lowestCompatible = "1.6.0.11";
             DataTable infoDT = new DataTable();
             if (type == typeof(TECBid))
             { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
@@ -1443,10 +1462,12 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (type == typeof(TECBid))
                 {
+                    isCompatbile = false;
                     throw new DataException("Could not load from TECBidInfo");
                 }
                 else if (type == typeof(TECTemplates))
                 {
+                    isCompatbile = false;
                     return false;
                 }
                 else
@@ -1458,8 +1479,13 @@ namespace EstimatingUtilitiesLibrary
                 if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
                 {
                     string version = infoRow[BidInfoTable.DBVersion.Name].ToString();
+                    if(UtilitiesMethods.IsLowerVersion(lowestCompatible, version))
+                    {
+                        isCompatbile = false;
+                        return false;
+                    }
+                    isCompatbile = true;
                     return (!UtilitiesMethods.IsLowerVersion(currentVersion, version));
-                    //return (version == currentVersion);
                 }
                 else
                 { return false; }
@@ -1924,6 +1950,8 @@ namespace EstimatingUtilitiesLibrary
             cost.Cost = row[MiscTable.Cost.Name].ToString().ToDouble(0);
             cost.Labor = row[MiscTable.Labor.Name].ToString().ToDouble(0);
             cost.Quantity = row[MiscTable.Quantity.Name].ToString().ToInt(1);
+            string costTypeString = row[AssociatedCostTable.Type.Name].ToString();
+            cost.Type = UtilitiesMethods.StringToEnum(costTypeString, CostType.None);
             getScopeChildren(cost);
             return cost;
         }

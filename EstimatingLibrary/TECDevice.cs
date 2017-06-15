@@ -14,7 +14,10 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
-        
+        public override double ExtendedCost
+        {
+            get { return Cost * Manufacturer.Multiplier; }
+        }
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }

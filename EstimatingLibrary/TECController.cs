@@ -97,9 +97,20 @@ namespace EstimatingLibrary
             {
                 outCosts.Add(cost);
             }
+            foreach(TECConnection connection in ChildrenConnections)
+            {
+                foreach(TECCost cost in connection.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
             return outCosts;
         }
 
+        public override double ExtendedCost
+        {
+            get { return Cost * Manufacturer.Multiplier; }
+        }
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
         {
@@ -127,6 +138,7 @@ namespace EstimatingLibrary
             _manufacturer = manufacturer;
             ChildrenConnections.CollectionChanged += collectionChanged;
             IO.CollectionChanged += IO_CollectionChanged;
+            _type = CostType.TEC;
         }
 
         public TECController(TECManufacturer manufacturer, bool isGlobal = true) : this(Guid.NewGuid(), manufacturer, isGlobal) { }
