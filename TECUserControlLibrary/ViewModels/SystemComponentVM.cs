@@ -39,10 +39,12 @@ namespace TECUserControlLibrary.ViewModels
                 if (selected != null)
                 {
                     ControllersPanelsVM.Refresh(SelectedSystem);
+                    MiscCostsVM.Refresh(SelectedSystem);
                 }
                 else
                 {
                     ControllersPanelsVM.Refresh(new TECSystem());
+                    MiscCostsVM.Refresh(new TECSystem());
                 }
             }
             if (ConnectionVM != null)
@@ -79,6 +81,7 @@ namespace TECUserControlLibrary.ViewModels
         public EquipmentVM ScopeDataGrid { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         public ConnectionVM ConnectionVM { get; set; }
+        public MiscCostsVM MiscCostsVM { get; set; }
         #endregion
 
         #region Delegates
@@ -137,6 +140,7 @@ namespace TECUserControlLibrary.ViewModels
 
             ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(), isTypicalSystem);
             ConnectionVM = new ConnectionVM(scopeManager, isTypicalSystem);
+            MiscCostsVM = new MiscCostsVM(new TECSystem());
         }
 
         public void AssignChildDelegates()
@@ -210,7 +214,6 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.NullifySelected();
             ControllersPanelsVM.SelectedControllerInPanel = null;
             ControllersPanelsVM.SelectedPanel = null;
-            
         }
 
         #endregion

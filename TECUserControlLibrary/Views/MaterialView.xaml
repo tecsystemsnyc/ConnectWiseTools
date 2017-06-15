@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:uLib ="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
@@ -309,33 +310,7 @@
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Misc. Wiring" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-
-                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscCostTemplates}"
-                                                 ViewModel="{Binding}" Grid.Row="1" Grid.Column="1" 
-                                                 Margin="5"/>
-                </Grid>
-            </TabItem>
-            <TabItem Visibility="Collapsed">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Misc. Costs" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <controls:MiscCostGridControl CostSource="{Binding Templates.MiscCostTemplates}"
-                                               ViewModel="{Binding}"
-                                               Grid.Row="1" Grid.Column="1" Margin="5"/>
-                </Grid>
+                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
             </TabItem>
         </TabControl>
         

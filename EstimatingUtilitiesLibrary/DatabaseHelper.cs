@@ -1950,6 +1950,8 @@ namespace EstimatingUtilitiesLibrary
             cost.Cost = row[MiscTable.Cost.Name].ToString().ToDouble(0);
             cost.Labor = row[MiscTable.Labor.Name].ToString().ToDouble(0);
             cost.Quantity = row[MiscTable.Quantity.Name].ToString().ToInt(1);
+            string costTypeString = row[AssociatedCostTable.Type.Name].ToString();
+            cost.Type = UtilitiesMethods.StringToEnum(costTypeString, CostType.None);
             getScopeChildren(cost);
             return cost;
         }

@@ -223,8 +223,7 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-
-
+        
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
@@ -241,6 +240,10 @@ namespace TECUserControlLibrary.ViewModels
         public Action<Object> SelectionChanged;
         #endregion
 
+        #region ViewModels
+        public MiscCostsVM MiscVM { get; private set; }
+        #endregion
+
         #endregion
 
         public MaterialVM(TECTemplates templates)
@@ -248,12 +251,16 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             setupCommands();
             setupInterfaceDefaults();
+            setupVMs();
         }
+
+        
 
         #region Methods
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
+            MiscVM.Refresh(templates);
             setupInterfaceDefaults();
         }
 
@@ -393,6 +400,11 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleDescription = "";
             IOModuleCost = 0;
             IOModuleIOPerModule = 1;
+        }
+
+        private void setupVMs()
+        {
+            MiscVM = new MiscCostsVM(Templates);
         }
         #endregion
     }

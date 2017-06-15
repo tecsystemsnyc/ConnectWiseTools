@@ -413,23 +413,30 @@ namespace TemplateBuilder.MVVM
         {
             ScopeDataGrid.NullifySelected();
 
+            ScopeCollection.SystemsVisibility = Visibility.Collapsed;
+            ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+            ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+            ScopeCollection.DevicesVisibility = Visibility.Collapsed;
+            ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
+            ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+            ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
+            ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+            ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
+            ScopeCollection.TagsVisibility = Visibility.Collapsed;
+            ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
+            ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
+            ScopeCollection.PanelsVisibility = Visibility.Collapsed;
+            ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+            ScopeCollection.MiscWiringVisibility = Visibility.Collapsed;
+
             switch (gridIndex)
             {
                case TemplateGridIndex.Equipment:
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
+                    
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
@@ -438,102 +445,47 @@ namespace TemplateBuilder.MVVM
 
                     break;
                 case TemplateGridIndex.SubScope:
-
-
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
+                    
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-
+                   
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.SubScope;
 
                     break;
                 case TemplateGridIndex.Devices:
-
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
+                    
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Visible;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-
+                    
                     ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
-
-
+                    
                     break;
                 case TemplateGridIndex.DDC:
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
+                    
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
                     ScopeCollection.ControllerVisibility = Visibility.Visible;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
-                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
                     ScopeCollection.AddPanelVisibility = Visibility.Visible;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Visible;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.Controllers;
 
                     break;
                 case TemplateGridIndex.Materials:
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
+                   
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
-                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
                     ScopeCollection.MiscCostVisibility = Visibility.Visible;
+                    ScopeCollection.MiscWiringVisibility = Visibility.Visible;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.AssociatedCosts;
                     break;
                 case TemplateGridIndex.Constants:
-                    ScopeCollection.SystemsVisibility = Visibility.Collapsed;
-                    ScopeCollection.EquipmentVisibility = Visibility.Collapsed;
-                    ScopeCollection.SubScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesVisibility = Visibility.Collapsed;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.AssociatedCostsVisibility = Visibility.Collapsed;
-                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
-
+                    
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 
                     break;
@@ -543,16 +495,10 @@ namespace TemplateBuilder.MVVM
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerEditVisibility = Visibility.Collapsed;
                     ScopeCollection.ControllerVisibility = Visibility.Visible;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
-                    ScopeCollection.TagsVisibility = Visibility.Collapsed;
                     ScopeCollection.ControlledScopeVisibility = Visibility.Visible;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
                     ScopeCollection.PanelsVisibility = Visibility.Visible;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
 
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
@@ -571,15 +517,7 @@ namespace TemplateBuilder.MVVM
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
-                    ScopeCollection.DevicesEditVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControllerVisibility = Visibility.Collapsed;
-                    ScopeCollection.ManufacturerVisibility = Visibility.Collapsed;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.AddPanelVisibility = Visibility.Collapsed;
-                    ScopeCollection.ControlledScopeVisibility = Visibility.Collapsed;
-                    ScopeCollection.PanelsVisibility = Visibility.Collapsed;
-                    ScopeCollection.MiscCostVisibility = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 
