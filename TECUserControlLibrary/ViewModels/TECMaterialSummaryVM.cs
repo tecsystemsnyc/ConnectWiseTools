@@ -148,7 +148,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECSystem)
                     {
-                        DeviceSummaryVM.AddSystem(targetObject as TECSystem);
+                        DeviceSummaryVM.AddInstanceSystem(targetObject as TECSystem);
                         foreach (TECController control in (targetObject as TECSystem).Controllers)
                         {
                             ControllerSummaryVM.AddController(control);
@@ -191,7 +191,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        DeviceSummaryVM.RemoveSystem(targetObject as TECSystem);
+                        DeviceSummaryVM.RemoveInstanceSystem(targetObject as TECSystem);
                         foreach (TECController control in (targetObject as TECSystem).Controllers)
                         {
                             ControllerSummaryVM.RemoveController(control);
