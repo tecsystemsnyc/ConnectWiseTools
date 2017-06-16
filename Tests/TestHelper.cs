@@ -866,6 +866,28 @@ namespace Tests
             }
             return null;
         }
+        public static TECController FindControllerInController(ObservableCollection<TECController> controllers, TECController reference)
+        {
+            foreach(TECController controller in controllers)
+            {
+                if(controller.Guid == reference.Guid)
+                {
+                    return controller;
+                }
+            }
+            return null;
+        }
+        public static TECConnection FindConnectionInController(TECController controller, TECConnection reference)
+        {
+            foreach(TECConnection connection in controller.ChildrenConnections)
+            {
+                if(connection.Guid == reference.Guid)
+                {
+                    return connection;
+                }
+            }
+            return null;
+        }
 
         public static void AssignSecondaryProperties(TECScope scope, TECBid bid)
         {

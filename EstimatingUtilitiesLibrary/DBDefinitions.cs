@@ -900,7 +900,6 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID,

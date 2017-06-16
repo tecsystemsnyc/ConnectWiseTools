@@ -405,7 +405,8 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECDevice> getAllDevices()
         {
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
-            DataTable devicesDT = SQLiteDB.getDataFromTable(DeviceTable.TableName);
+            string command = string.Format("select {0} from {1}", allFieldsInTableString(new DeviceTable()), DeviceTable.TableName);
+            DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
 
             foreach (DataRow row in devicesDT.Rows)
             { devices.Add(getDeviceFromRow(row)); }
@@ -414,7 +415,8 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECManufacturer> getAllManufacturers()
         {
             ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
-            DataTable manufacturersDT = SQLiteDB.getDataFromTable(ManufacturerTable.TableName);
+            string command = string.Format("select {0} from {1}", allFieldsInTableString(new ManufacturerTable()), ManufacturerTable.TableName);
+            DataTable manufacturersDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in manufacturersDT.Rows)
             { manufacturers.Add(getManufacturerFromRow(row)); }
             return manufacturers;
@@ -422,7 +424,8 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECConduitType> getConduitTypes()
         {
             ObservableCollection<TECConduitType> conduitTypes = new ObservableCollection<TECConduitType>();
-            DataTable conduitTypesDT = SQLiteDB.getDataFromTable(ConduitTypeTable.TableName);
+            string command = string.Format("select {0} from {1}", allFieldsInTableString(new ConduitTypeTable()), ConduitTypeTable.TableName);
+            DataTable conduitTypesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in conduitTypesDT.Rows)
             { conduitTypes.Add(getConduitTypeFromRow(row)); }
             return conduitTypes;
@@ -430,8 +433,8 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECPanelType> getPanelTypes()
         {
             ObservableCollection<TECPanelType> panelTypes = new ObservableCollection<TECPanelType>();
-
-            DataTable panelTypesDT = SQLiteDB.getDataFromTable(PanelTypeTable.TableName);
+            string command = string.Format("select {0} from {1}", allFieldsInTableString(new PanelTypeTable()), PanelTypeTable.TableName);
+            DataTable panelTypesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in panelTypesDT.Rows)
             {
                 panelTypes.Add(getPanelTypeFromRow(row));
@@ -442,8 +445,8 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
-
-            DataTable connectionTypesDT = SQLiteDB.getDataFromTable(ConnectionTypeTable.TableName);
+            string command = string.Format("select {0} from {1}", allFieldsInTableString(new ConnectionTypeTable()), ConnectionTypeTable.TableName);
+            DataTable connectionTypesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in connectionTypesDT.Rows)
             { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             return connectionTypes;
@@ -454,11 +457,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            string command = "select * from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
+            string command = "select "+ allFieldsInTableString(new PanelTable()) +" from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
             command += "(select " + SystemPanelTable.PanelID.Name + " from " + SystemPanelTable.TableName + " where ";
             command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
-
+            explain(command);
             DataTable dt = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
             { panels.Add(getPanelFromRow(row)); }
@@ -469,22 +472,18 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select TECEquipment.EquipmentID, " +
-                EquipmentTable.Name.Name + ", " +
-                EquipmentTable.Description.Name + ", " +
-                EquipmentTable.Quantity.Name + ", " +
-                EquipmentTable.BudgetPrice.Name;
+            string command = "select " +
+                allFieldsInTableString(new EquipmentTable());
             command += " from (" + EquipmentTable.TableName + " inner join ";
             command += SystemEquipmentTable.TableName + " on ";
             command += "(TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID";
             command += " and " + SystemEquipmentTable.SystemID.Name + " = '";
             command += systemID;
             command += "')) order by " + SystemEquipmentTable.ScopeIndex.Name;
-
+            explain(command);
             //string command = string.Format("select * from {0} where {1} in (select {2} from {3} indexed by {4} where {5} = '{6}')",
             //    EquipmentTable.TableName, EquipmentTable.EquipmentID.Name, SystemEquipmentTable.EquipmentID.Name, SystemEquipmentTable.TableName,
             //    systemEquipmentIndex, SystemEquipmentTable.SystemID.Name, systemID);
-
 
             DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
@@ -495,13 +494,13 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
 
-            string command = "select * from " + SystemTable.TableName;
+            string command = "select "+ allFieldsInTableString(new SystemTable())+" from " + SystemTable.TableName;
             command += " where " + SystemTable.SystemID.Name + " in ";
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName;
             command += " where " + SystemHierarchyTable.ParentID.Name + " = '";
             command += parentID;
             command += "')";
-
+            explain(command);
             DataTable childDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in childDT.Rows)
             {
@@ -513,11 +512,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECController> getControllersInSystem(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select "+allFieldsInTableString(new ControllerTable())+" from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + SystemControllerTable.ControllerID.Name + " from " + SystemControllerTable.TableName + " where ";
             command += SystemControllerTable.SystemID.Name + " = '" + guid;
             command += "')";
-
+            explain(command);
             DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
             {
@@ -531,11 +530,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid)
         {
             ObservableCollection<TECScopeBranch> branches = new ObservableCollection<TECScopeBranch>();
-            string command = "select * from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            string command = "select "+allFieldsInTableString(new ScopeBranchTable())+" from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
             command += "(select " + SystemScopeBranchTable.BranchID.Name + " from " + SystemScopeBranchTable.TableName + " where ";
             command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
             command += "')";
-
+            explain(command);
             DataTable branchDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in branchDT.Rows)
             { branches.Add(getScopeBranchFromRow(row)); }
@@ -555,10 +554,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            string command = "select "+allFieldsInTableString(new MiscTable())+" from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
             command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
+            explain(command);
             DataTable miscDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
@@ -594,7 +594,6 @@ namespace EstimatingUtilitiesLibrary
             string command = "select " + ScopeAssociatedCostTable.AssociatedCostID.Name + ", "+ ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
             command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
             command += "'";
-
             DataTable DT = SQLiteDB.getDataFromCommand(command);
             var associatedCosts = new ObservableCollection<TECCost>();
             foreach (DataRow row in DT.Rows)
@@ -670,7 +669,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
 
-            string command = "select * from " + ScopeBranchTable.TableName;
+            string command = "select " + allFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName;
             command += " where " + ScopeBranchTable.ScopeBranchID.Name;
             command += " in (select " + ScopeBranchTable.ScopeBranchID.Name;
             command += " from " + BidScopeBranchTable.TableName + " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
@@ -689,7 +688,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
 
-            string command = "select * from " + ScopeBranchTable.TableName;
+            string command = "select " + allFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName;
             command += " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
             command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName;
             command += " where " + ScopeBranchHierarchyTable.ParentID.Name + " = '";
@@ -722,7 +721,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
-            string command = "select * from ("
+            string command = "select " + allFieldsInTableString(new SystemTable()) + " from ("
                 + SystemTable.TableName
                 + " inner join "
                 + BidSystemTable.TableName
@@ -736,7 +735,7 @@ namespace EstimatingUtilitiesLibrary
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
             if (systemsDT.Rows.Count < 1)
             {
-                command = "select * from " + SystemTable.TableName;
+                command = "select " + allFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
                 systemsDT = SQLiteDB.getDataFromCommand(command);
             }
             foreach (DataRow row in systemsDT.Rows)
@@ -748,7 +747,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select * from " + EquipmentTable.TableName;
+            string command = "select "+allFieldsInTableString(new EquipmentTable())+" from " + EquipmentTable.TableName;
             command += " where " + EquipmentTable.EquipmentID.Name + " not in ";
             command += "(select " + SystemEquipmentTable.EquipmentID.Name;
             command += " from " + SystemEquipmentTable.TableName + ")";
@@ -762,7 +761,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECSubScope> getOrphanSubScope()
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
-            string command = "select * from " + SubScopeTable.TableName;
+            string command = "select " + allFieldsInTableString(new SubScopeTable()) + " from " + SubScopeTable.TableName;
             command += " where " + SubScopeTable.SubScopeID.Name + " not in ";
             command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
@@ -789,11 +788,11 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECSubScope> getSubScopeInEquipment(Guid equipmentID)
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
-            string command = "select * from (TECSubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
+            string command = "select " + allFieldsInTableString(new SubScopeTable()) + " from (TECSubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
             command += "(TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and ";
             command += EquipmentSubScopeTable.EquipmentID.Name + "= '" + equipmentID;
             command += "')) order by " + EquipmentSubScopeTable.ScopeIndex.Name + "";
-
+            explain(command);
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row)); }
@@ -804,8 +803,9 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
 
             string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
-                SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName, SubScopeDeviceTable.SubScopeID.Name, subScopeID, SubScopeDeviceTable.Quantity.Name);
-
+                SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName, 
+                SubScopeDeviceTable.SubScopeID.Name, subScopeID, SubScopeDeviceTable.Quantity.Name);
+            explain(command);
             DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in devicesDT.Rows)
             {
@@ -821,11 +821,11 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
-            string command = "select * from (" + PointTable.TableName + " inner join " + SubScopePointTable.TableName + " on ";
+            string command = "select " + allFieldsInTableString(new PointTable()) + " from (" + PointTable.TableName + " inner join " + SubScopePointTable.TableName + " on ";
             command += "(TECPoint.PointID = TECSubScopeTECPoint.PointID and ";
             command += SubScopePointTable.SubScopeID.Name + " = '" + subScopeID;
-            command += "')) order by " + SubScopePointTable.ScopeIndex.Name;
-
+            command += "'))";
+            explain(command);
             DataTable pointsDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in pointsDT.Rows)
             { points.Add(getPointFromRow(row)); }
@@ -838,7 +838,6 @@ namespace EstimatingUtilitiesLibrary
             command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
             command += deviceID;
             command += "'";
-
             DataTable manTable = SQLiteDB.getDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderDeviceManufacturerFromRow(manTable.Rows[0]); }
@@ -847,7 +846,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECManufacturer getManufacturerInIOModule(Guid guid)
         {
-            string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ManufacturerTable()) + " from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
             command += "(select " + IOModuleManufacturerTable.ManufacturerID.Name + " from " + IOModuleManufacturerTable.TableName;
             command += " where " + IOModuleManufacturerTable.IOModuleID.Name + " = '";
             command += guid;
@@ -878,7 +877,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECConduitType getConduitTypeInConnection(Guid connectionID)
         {
-            string command = "select * from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ConduitTypeID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ConduitTypeTable()) + " from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ConduitTypeID.Name + " in ";
             command += "(select " + ConnectionConduitTypeTable.TypeID.Name + " from " + ConnectionConduitTypeTable.TableName + " where ";
             command += ConnectionConduitTypeTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
@@ -891,7 +890,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECConnectionType getConnectionTypeInNetworkConnection(Guid netConnectionID)
         {
-            string command = "select * from " + ConnectionTypeTable.TableName + " where " + ConnectionTypeTable.ConnectionTypeID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ConnectionTypeTable()) + " from " + ConnectionTypeTable.TableName + " where " + ConnectionTypeTable.ConnectionTypeID.Name + " in ";
             command += "(select " + NetworkConnectionConnectionTypeTable.TypeID.Name + " from " + NetworkConnectionConnectionTypeTable.TableName + " where ";
             command += NetworkConnectionConnectionTypeTable.ConnectionID.Name + " = '" + netConnectionID;
             command += "')";
@@ -943,7 +942,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECPage> getPagesInDrawing(Guid DrawingID)
         {
             ObservableCollection<TECPage> pages = new ObservableCollection<TECPage>();
-            string command = "select * from " + PageTable.TableName + " where " + PageTable.PageID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new PageTable()) + " from " + PageTable.TableName + " where " + PageTable.PageID.Name + " in ";
             command += "(select " + DrawingPageTable.PageID.Name + " from " + DrawingPageTable.TableName + " where ";
             command += DrawingPageTable.DrawingID.Name + " = '" + DrawingID;
             command += "') order by " + PageTable.PageNum.Name;
@@ -957,7 +956,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECVisualScope> getVisualScopeInPage(Guid PageID)
         {
             ObservableCollection<TECVisualScope> vs = new ObservableCollection<TECVisualScope>();
-            string command = "select * from " + VisualScopeTable.TableName + " where " + VisualScopeTable.VisualScopeID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new VisualScopeTable()) + " from " + VisualScopeTable.TableName + " where " + VisualScopeTable.VisualScopeID.Name + " in ";
             command += "(select " + PageVisualScopeTable.VisualScopeID.Name + " from " + PageVisualScopeTable.TableName + " where ";
             command += PageVisualScopeTable.PageID.Name + " = '" + PageID;
             command += "')";
@@ -983,7 +982,7 @@ namespace EstimatingUtilitiesLibrary
             //Returns the controllers that are not in the ControlledScopeController table.
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
 
-            string command = "select * from " + ControllerTable.TableName;
+            string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName;
             command += " where " + ControllerTable.ControllerID.Name + " not in ";
             command += "(select " + SystemControllerTable.ControllerID.Name;
             command += " from " + SystemControllerTable.TableName + ")";
@@ -1001,7 +1000,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECIO> getIOInController(Guid controllerID)
         {
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
-            string command = "select * from " + IOTable.TableName + " where " + IOTable.IOID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new IOTable()) + " from " + IOTable.TableName + " where " + IOTable.IOID.Name + " in ";
             command += "(select " + ControllerIOTable.IOID.Name + " from " + ControllerIOTable.TableName + " where ";
             command += ControllerIOTable.ControllerID.Name + " = '" + controllerID;
             command += "')";
@@ -1053,7 +1052,7 @@ namespace EstimatingUtilitiesLibrary
             if (tables.Contains(SubScopeConnectionTable.TableName) || tables.Contains(NetworkConnectionTable.TableName))
             {
                 var outController = new TECController(new TECManufacturer());
-                string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+                string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
                 command += "(select " + ControllerConnectionTable.ControllerID.Name + " from " + ControllerConnectionTable.TableName + " where ";
                 command += ControllerConnectionTable.ConnectionID.Name + " = '" + connectionID;
                 command += "')";
@@ -1091,7 +1090,7 @@ namespace EstimatingUtilitiesLibrary
         {
             var outScope = new ObservableCollection<TECController>();
 
-            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + NetworkConnectionControllerTable.ControllerID.Name + " from " + NetworkConnectionControllerTable.TableName + " where ";
             command += NetworkConnectionControllerTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
@@ -1123,7 +1122,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECBidParameters getBidParameters(TECBid bid)
         {
-            string constsCommand = "select * from (" + BidParametersTable.TableName + " inner join ";
+            string constsCommand = "select " + allFieldsInTableString(new BidParametersTable()) + " from (" + BidParametersTable.TableName + " inner join ";
             constsCommand += BidBidParametersTable.TableName + " on ";
             constsCommand += "(TECBidTECParameters.ParametersID = TECBidTECParameters.ParametersID";
             constsCommand += " and " + BidBidParametersTable.BidID.Name + " = '";
@@ -1172,7 +1171,7 @@ namespace EstimatingUtilitiesLibrary
             //Returns the panels that are not in the ControlledScopePanel table.
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
 
-            string command = "select * from " + PanelTable.TableName;
+            string command = "select " + allFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName;
             command += " where " + PanelTable.PanelID.Name + " not in ";
             command += "(select " + SystemPanelTable.PanelID.Name;
             command += " from " + SystemPanelTable.TableName + ")";
@@ -1189,12 +1188,13 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
-            string command = "select * from " + SystemTable.TableName;
+            string command = "select " + allFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
             command += " where " + SystemTable.SystemID.Name;
             command += " in (select " + SystemTable.SystemID.Name;
             command += " from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " not in ";
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName + "))";
 
+            explain(command);
             DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
 
             foreach (DataRow row in systemsDT.Rows)
@@ -1205,7 +1205,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private TECPanelType getPanelTypeInPanel(Guid guid)
         {
-            string command = "select * from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new PanelTypeTable()) + " from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
             command += "(select " + PanelPanelTypeTable.PanelTypeID.Name + " from " + PanelPanelTypeTable.TableName;
             command += " where " + PanelPanelTypeTable.PanelID.Name + " = '";
             command += guid;
@@ -1220,7 +1220,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select * from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + PanelControllerTable.ControllerID.Name + " from " + PanelControllerTable.TableName + " where ";
             command += PanelControllerTable.PanelID.Name + " = '" + guid;
             command += "')";
@@ -1241,7 +1241,7 @@ namespace EstimatingUtilitiesLibrary
 
             if (tables.Contains(NetworkConnectionTable.TableName))
             {
-                command = "select * from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ConnectionID.Name + " in ";
+                command = "select " + allFieldsInTableString(new NetworkConnectionTable()) + " from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ConnectionID.Name + " in ";
                 command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
                 command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
                 command += "')";
@@ -1256,7 +1256,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            command = "select * from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
+            command = "select " + allFieldsInTableString(new SubScopeConnectionTable()) + " from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
             command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
             command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
             command += "')";
@@ -1293,7 +1293,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECMisc> getMiscInBid()
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            string command = "select * from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
             command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
             command += ")";
             DataTable miscDT = SQLiteDB.getDataFromCommand(command);
@@ -3094,6 +3094,37 @@ namespace EstimatingUtilitiesLibrary
 
             return outStack;
         }
+
+        static private void explain(string command)
+        {
+            if (DebugBooleans.VerboseSQLite)
+            {
+                Console.WriteLine("");
+                var explainer = "explain query plan " + command;
+                var explainDT = SQLiteDB.getDataFromCommand(explainer);
+                foreach (DataRow row in explainDT.Rows)
+                {
+                    Console.WriteLine(row["detail"]);
+                }
+            }
+        }
+        static private string allFieldsInTableString(TableBase table)
+        {
+            var tableInfo = new TableInfo(table);
+            string command = "";
+            for(int x = 0; x < tableInfo.Fields.Count; x++)
+            {
+                if(x != tableInfo.Fields.Count - 1)
+                {
+                    command += tableInfo.Name + "."+ tableInfo.Fields[x].Name + ", ";
+                }else
+                {
+                    command += tableInfo.Name + "." + tableInfo.Fields[x].Name;
+                }
+            }
+            return command;
+        }
+
 
         ///<summary>
         ///Used to merge catalogs more completely. Pass a scope and all relations will be updated.

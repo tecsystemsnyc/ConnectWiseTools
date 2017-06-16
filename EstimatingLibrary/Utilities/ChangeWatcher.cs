@@ -58,11 +58,13 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECController controller in Bid.Controllers)
             {
-                registerController(controller, ChangeType.Object);
                 registerController(controller, ChangeType.Instance);
             }
             foreach (TECMisc cost in Bid.MiscCosts)
-            { cost.PropertyChanged += Object_PropertyChanged; }
+            {
+                cost.PropertyChanged += Object_PropertyChanged;
+                cost.PropertyChanged += Instance_PropertyChanged;
+            }
             foreach (TECPanel panel in Bid.Panels)
             { panel.PropertyChanged += Object_PropertyChanged; }
         }
@@ -179,6 +181,11 @@ namespace EstimatingLibrary.Utilities
             foreach(TECSystem system in scope.SystemInstances)
             {
                 registerSystem(system, ChangeType.Instance);
+            }
+            foreach(TECMisc misc in scope.MiscCosts)
+            {
+                misc.PropertyChanged += Object_PropertyChanged;
+                misc.PropertyChanged += Instance_PropertyChanged;
             }
         }
         private void registerController(TECController controller, ChangeType changeType = ChangeType.Object)
@@ -718,7 +725,8 @@ namespace EstimatingLibrary.Utilities
                 handleSystem(newValue as TECSystem, change, ChangeType.Instance);
             }
             else if (oldValue is TECBid && newValue is TECController ||
-                oldValue is TECBid && newValue is TECPanel)
+                oldValue is TECBid && newValue is TECPanel ||
+                oldValue is TECBid && newValue is TECMisc)
             {
                 InstanceChanged?.Invoke(sender, args);
                 if (change == Change.Add)
