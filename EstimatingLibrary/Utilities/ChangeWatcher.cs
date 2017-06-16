@@ -58,7 +58,6 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECController controller in Bid.Controllers)
             {
-                registerController(controller, ChangeType.Object);
                 registerController(controller, ChangeType.Instance);
             }
             foreach (TECMisc cost in Bid.MiscCosts)

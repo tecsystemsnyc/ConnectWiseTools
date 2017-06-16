@@ -535,8 +535,25 @@ namespace Tests
         public void SaveAs_Bid_SubScopeConnection()
         {
             //Arrange
-            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
-            TECSubScopeConnection expectedConnection = expectedBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            TECController expectedConnectedController = null;
+            TECSubScopeConnection expectedConnection = null;
+            foreach (TECController controller in expectedBid.Controllers) {
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if(connection is TECSubScopeConnection)
+                    {
+                        expectedConnectedController = controller;
+                        expectedConnection = connection as TECSubScopeConnection;
+                        break;
+                    }
+                }
+                if(expectedConnectedController != null)
+                {
+                    break;
+                }
+            }
+            TECController actualConnectedController =  TestHelper.FindControllerInController(actualBid.Controllers, expectedConnectedController);
+            TECSubScopeConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECSubScopeConnection;
 
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);

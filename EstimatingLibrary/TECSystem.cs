@@ -700,6 +700,18 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            else if (targetObject is TECScope && referenceObject is TECCost)
+            {
+                var characteristicScope = targetObject as TECScope;
+                var cost = referenceObject as TECCost;
+                if (CharactersticInstances.ContainsKey(characteristicScope))
+                {
+                    foreach(TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                    {
+                        scope.AssociatedCosts.Add(cost);
+                    }
+                }
+            }
         }
         private void handleRemove(object targetObject, object referenceObject)
         {
@@ -898,6 +910,18 @@ namespace EstimatingLibrary
                             }
                         }
 
+                    }
+                }
+            }
+            else if (targetObject is TECScope && referenceObject is TECCost)
+            {
+                var characteristicScope = targetObject as TECScope;
+                var cost = referenceObject as TECCost;
+                if (CharactersticInstances.ContainsKey(characteristicScope))
+                {
+                    foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                    {
+                        scope.AssociatedCosts.Remove(cost);
                     }
                 }
             }
