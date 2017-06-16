@@ -43,10 +43,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private Dictionary<Guid, AssociatedCostSummaryItem> assCostDictionary;
+        private Dictionary<Guid, CostSummaryItem> assCostDictionary;
 
-        private ObservableCollection<AssociatedCostSummaryItem> _assCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> AssCostSummaryItems
+        private ObservableCollection<CostSummaryItem> _assCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> AssCostSummaryItems
         {
             get { return _assCostSummaryItems; }
             set
@@ -162,11 +162,11 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
 
             LengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            AssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            AssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
             RatedCostSummaryItems = new ObservableCollection<RatedCostSummaryItem>();
 
             lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
-            assCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
+            assCostDictionary = new Dictionary<Guid, CostSummaryItem>();
             ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
 
             LengthSubTotalCost = 0;

@@ -92,7 +92,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\MiscCostSummaryItem.cs" />
     <Compile Include="Models\NetworkController.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -218,7 +217,7 @@
     <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\AssociatedCostSummaryItem.cs" />
+    <Compile Include="Models\CostSummaryItem.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\DeviceSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />

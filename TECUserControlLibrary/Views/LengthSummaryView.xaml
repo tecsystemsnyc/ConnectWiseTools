@@ -55,8 +55,8 @@
         <TextBlock Text="Associated Costs" Foreground="Black" FontSize="20"
                    Grid.Column="2"/>
 
-        <controls:AssociatedCostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
-                                                    AssociatedCostSummaryItemsSource="{Binding AssCostSummaryItems}"/>
+        <controls:CostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                                    CostSummaryItemsSource="{Binding AssCostSummaryItems}"/>
 
         <!--Rated Costs Summary-->
         <TextBlock Text="Rated Costs" Foreground="Black" FontSize="20"

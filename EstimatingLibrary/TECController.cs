@@ -121,7 +121,6 @@ namespace EstimatingLibrary
         {
             get
             { return getNetworkIO(); }
-            private set { }
         }
 
         public bool IsGlobal;
