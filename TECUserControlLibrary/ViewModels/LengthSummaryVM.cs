@@ -176,9 +176,153 @@ namespace TECUserControlLibrary.ViewModels
             RatedCostSubTotalCost = 0;
             RatedCostSubTotalLabor = 0;
 
+            foreach(TECSystem typical in bid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    AddInstanceSystem(instance);
+                }
+            }
         }
 
         #region Add/Remove
+        public void AddInstanceSystem(TECSystem system)
+        {
+            foreach (TECController controller in system.Controllers)
+            {
+                AddController(controller);
+            }
+        }
+        public void RemoveInstanceSystem(TECSystem system)
+        {
+            foreach (TECController controller in system.Controllers)
+            {
+                RemoveController(controller);
+            }
+        }
+
+        public void AddController(TECController controller)
+        {
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                AddConnection(connection);
+            }
+        }
+        public void RemoveController(TECController controller)
+        {
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                RemoveConnection(connection);
+            }
+        }
+
+        public void AddConnection(TECConnection connection)
+        {
+            if (Type == LengthType.Conduit)
+            {
+                if (connection.ConduitType != null)
+                {
+                    AddLength(connection.ConduitType, connection.ConduitLength);
+                    foreach(TECCost cost in connection.ConduitType.AssociatedCosts)
+                    {
+                        AddAssCost(cost);
+                    }
+                    foreach(TECCost cost in connection.ConduitType.RatedCosts)
+                    {
+                        AddRatedCost(cost, connection.ConduitLength);
+                    }
+                }
+            }
+            else if (Type == LengthType.Wire)
+            {
+                if (connection is TECNetworkConnection)
+                {
+                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                    AddLength(netConnect.ConnectionType, connection.Length);
+                    foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                    {
+                        AddAssCost(cost);
+                    }
+                    foreach(TECCost cost in netConnect.ConnectionType.RatedCosts)
+                    {
+                        AddRatedCost(cost, connection.Length);
+                    }
+                }
+                else if (connection is TECSubScopeConnection)
+                {
+                    foreach (TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
+                    {
+                        AddLength(connectionType, connection.Length);
+                        foreach(TECCost cost in connectionType.AssociatedCosts)
+                        {
+                            AddAssCost(cost);
+                        }
+                        foreach(TECCost cost in connectionType.RatedCosts)
+                        {
+                            AddRatedCost(cost, connection.Length);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+        public void RemoveConnection(TECConnection connection)
+        {
+            if (Type == LengthType.Conduit)
+            {
+                if (connection.ConduitType != null)
+                {
+                    RemoveLength(connection.ConduitType, connection.ConduitLength);
+                    foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                    foreach (TECCost cost in connection.ConduitType.RatedCosts)
+                    {
+                        RemoveRatedCost(cost, connection.ConduitLength);
+                    }
+                }
+            }
+            else if (Type == LengthType.Wire)
+            {
+                if (connection is TECNetworkConnection)
+                {
+                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                    RemoveLength(netConnect.ConnectionType, connection.Length);
+                    foreach(TECCost cost in netConnect.ConnectionType.AssociatedCosts)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                    foreach(TECCost cost in netConnect.ConnectionType.RatedCosts)
+                    {
+                        RemoveRatedCost(cost, connection.Length);
+                    }
+                }
+                else if (connection is TECSubScopeConnection)
+                {
+                    foreach (TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
+                    {
+                        RemoveLength(connectionType, connection.Length);
+                        foreach(TECCost cost in connectionType.AssociatedCosts)
+                        {
+                            RemoveAssCost(cost);
+                        }
+                        foreach(TECCost cost in connectionType.RatedCosts)
+                        {
+                            RemoveRatedCost(cost, connection.Length);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+
         public void AddLength(ElectricalMaterialComponent component, double length)
         {
             bool containsLength = lengthDictionary.ContainsKey(component.Guid);
@@ -199,18 +343,7 @@ namespace TECUserControlLibrary.ViewModels
                 LengthSubTotalCost += lengthItem.TotalCost;
                 LengthSubTotalLabor += lengthItem.TotalLabor;
             }
-            foreach (TECCost cost in component.AssociatedCosts)
-            {
-                Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, assCostDictionary, AssCostSummaryItems);
-                AssCostSubTotalCost += delta.Item1;
-                AssCostSubTotalLabor += delta.Item2;
-            }
-            foreach (TECCost cost in component.RatedCosts)
-            {
-                AddRatedCost(cost, length);
-            }
         }
-
         public void RemoveLength(ElectricalMaterialComponent component, double length)
         {
             bool containsLength = lengthDictionary.ContainsKey(component.Guid);
@@ -227,22 +360,24 @@ namespace TECUserControlLibrary.ViewModels
                     LengthSummaryItems.Remove(lengthDictionary[component.Guid]);
                     lengthDictionary.Remove(component.Guid);
                 }
-
-                foreach (TECCost cost in component.AssociatedCosts)
-                {
-                    Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, assCostDictionary, AssCostSummaryItems);
-                    AssCostSubTotalCost += delta.Item1;
-                    AssCostSubTotalLabor += delta.Item2;
-                }
-                foreach (TECCost cost in component.RatedCosts)
-                {
-                    RemoveRatedCost(cost, length);
-                }
             }
             else
             {
                 throw new InvalidOperationException("Component not found in length dictionary.");
             }
+        }
+
+        public void AddAssCost(TECCost cost)
+        {
+            Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, assCostDictionary, AssCostSummaryItems);
+            AssCostSubTotalCost += delta.Item1;
+            AssCostSubTotalLabor += delta.Item2;
+        }
+        public void RemoveAssCost(TECCost cost)
+        {
+            Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, assCostDictionary, AssCostSummaryItems);
+            AssCostSubTotalCost += delta.Item1;
+            AssCostSubTotalLabor += delta.Item2;
         }
 
         public void AddRatedCost(TECCost cost, double length)
@@ -265,7 +400,6 @@ namespace TECUserControlLibrary.ViewModels
                 RatedCostSubTotalLabor += ratedItem.TotalLabor;
             }
         }
-
         public void RemoveRatedCost(TECCost cost, double length)
         {
             bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
@@ -286,96 +420,6 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 throw new InvalidOperationException("Cost not found in ratedCost dicionary.");
-            }
-        }
-
-        public void AddConnection(TECConnection connection)
-        {
-            if (Type == LengthType.Conduit)
-            {
-                if (connection.ConduitType != null)
-                {
-                    AddLength(connection.ConduitType, connection.ConduitLength);
-                }
-            }
-            else if (Type == LengthType.Wire)
-            {
-                if (connection is TECNetworkConnection)
-                {
-                    AddLength((connection as TECNetworkConnection).ConnectionType, connection.Length);
-                }
-                else if (connection is TECSubScopeConnection)
-                {
-                    foreach(TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
-                    {
-                        AddLength(connectionType, connection.Length);
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-        }
-
-        public void RemoveConnection(TECConnection connection)
-        {
-            if (Type == LengthType.Conduit)
-            {
-                if (connection.ConduitType != null)
-                {
-                    RemoveLength(connection.ConduitType, connection.ConduitLength);
-                }
-            }
-            else if (Type == LengthType.Wire)
-            {
-                if (connection is TECNetworkConnection)
-                {
-                    RemoveLength((connection as TECNetworkConnection).ConnectionType, connection.Length);
-                }
-                else if (connection is TECSubScopeConnection)
-                {
-                    foreach (TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
-                    {
-                        RemoveLength(connectionType, connection.Length);
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-        }
-
-        public void AddController(TECController controller)
-        {
-            foreach(TECConnection connection in controller.ChildrenConnections)
-            {
-                AddConnection(connection);
-            }
-        }
-
-        public void RemoveController(TECController controller)
-        {
-            foreach(TECConnection connection in controller.ChildrenConnections)
-            {
-                RemoveConnection(connection);
-            }
-        }
-
-        public void AddSystem(TECSystem system)
-        {
-            foreach(TECController controller in system.Controllers)
-            {
-                AddController(controller);
-            }
-        }
-
-        public void RemoveSystem(TECSystem system)
-        {
-            foreach(TECController controller in system.Controllers)
-            {
-                RemoveController(controller);
             }
         }
         #endregion

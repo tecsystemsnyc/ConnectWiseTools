@@ -97,13 +97,13 @@ namespace TECUserControlLibrary.Models
                     PropertyChangedExtendedEventArgs<object> args = e as PropertyChangedExtendedEventArgs<object>;
                     if (system == null)
                     {
-                        Quantity -= (int)args.OldValue;
-                        Quantity += (int)args.NewValue;
+                        Quantity -= (args.OldValue as TECCost).Quantity;
+                        Quantity += (args.NewValue as TECCost).Quantity;
                     }
                     else
                     {
-                        Quantity -= (int)args.OldValue * system.SystemInstances.Count;
-                        Quantity += (int)args.NewValue * system.SystemInstances.Count;
+                        Quantity -= (args.OldValue as TECCost).Quantity * system.SystemInstances.Count;
+                        Quantity += (args.NewValue as TECCost).Quantity * system.SystemInstances.Count;
                     }
                 }
             }

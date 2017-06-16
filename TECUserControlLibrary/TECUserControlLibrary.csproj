@@ -137,8 +137,8 @@
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\AssociatedCostsSummaryGridControl.xaml.cs">
-      <DependentUpon>AssociatedCostsSummaryGridControl.xaml</DependentUpon>
+    <Compile Include="UserControls\CostsSummaryGridControl.xaml.cs">
+      <DependentUpon>CostsSummaryGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
@@ -377,7 +377,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\AssociatedCostsSummaryGridControl.xaml">
+    <Page Include="UserControls\CostsSummaryGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
