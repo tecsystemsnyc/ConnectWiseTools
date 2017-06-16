@@ -21,12 +21,12 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (_changeWatcher != null)
                 {
-                    _changeWatcher.InstanceChanged -= instanceChanged;
                     _changeWatcher.Changed -= bidChanged;
+                    _changeWatcher.InstanceChanged -= instanceChanged;
                 }
                 _changeWatcher = value;
-                _changeWatcher.InstanceChanged += instanceChanged;
                 _changeWatcher.Changed += bidChanged;
+                _changeWatcher.InstanceChanged += instanceChanged;
             }
         }
 
@@ -59,12 +59,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public double TotalMiscCost
         {
-            get { return MiscCostsSummaryVM.MiscCostSubTotalCost; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalCost + MiscCostsSummaryVM.AssCostSubTotalCost; }
         }
 
         public double TotalMiscLabor
         {
-            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor + MiscCostsSummaryVM.AssCostSubTotalLabor; }
         }
 
         public double TotalCost
@@ -116,6 +116,30 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Event Handlers
+        private void bidChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                var targetObject = args.NewValue;
+                var referenceObject = args.OldValue;
+
+                if (args.PropertyName == "Add")
+                {
+                    if (targetObject is TECSystem && referenceObject is TECBid)
+                    {
+                        addTypicalSystem(targetObject as TECSystem);
+                    }
+                }
+                else if (args.PropertyName == "Remove")
+                {
+                    if (targetObject is TECSystem && referenceObject is TECBid)
+                    {
+                        removeTypicalSystem(targetObject as TECSystem);
+                    }
+                }
+            }
+        }
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -128,7 +152,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        addSystem(targetObject as TECSystem);
+                        addInstanceSystem(targetObject as TECSystem);
                     }
                     else if (targetObject is TECController)
                     {
@@ -138,12 +162,39 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         addConnection(targetObject as TECConnection);
                     }
+                    else if (targetObject is TECEquipment)
+                    {
+                        addEquipment(targetObject as TECEquipment);
+                    }
+                    else if (targetObject is TECSubScope)
+                    {
+                        addSubScope(targetObject as TECSubScope);
+                    }
+                    else if (targetObject is TECPoint)
+                    {
+                        addPoint(targetObject as TECPoint);
+                    }
+                    else if (targetObject is TECMisc)
+                    {
+                        if (referenceObject is TECBid)
+                        {
+                            addMiscCost(targetObject as TECMisc);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            addMiscCost(targetObject as TECMisc, referenceObject as TECSystem);
+                        }
+                    }
+                    else if (targetObject is TECCost)
+                    {
+                        addAssCost(targetObject as TECCost);
+                    }
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
                     if (targetObject is TECSystem)
                     {
-                        removeSystem(targetObject as TECSystem);
+                        removeInstanceSystem(targetObject as TECSystem);
                     }
                     else if (targetObject is TECController)
                     {
@@ -153,6 +204,26 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         removeConnection(targetObject as TECConnection);
                     }
+                    else if (targetObject is TECEquipment)
+                    {
+                        removeEquipment(targetObject as TECEquipment);
+                    }
+                    else if (targetObject is TECSubScope)
+                    {
+                        removeSubScope(targetObject as TECSubScope);
+                    }
+                    else if (targetObject is TECPoint)
+                    {
+                        removePoint(targetObject as TECPoint);
+                    }
+                    else if (targetObject is TECMisc)
+                    {
+                        removeMiscCost(targetObject as TECMisc);
+                    }
+                    else if (targetObject is TECCost)
+                    {
+                        removeAssCost(targetObject as TECCost);
+                    }
                 }
                 else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConnectionType" || args.PropertyName == "ConduitType")
                 {
@@ -160,52 +231,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         removeConnection(args.OldValue as TECConnection);
                         addConnection(args.NewValue as TECConnection);
-                    }
-                }
-            }
-        }
-        private void bidChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                var targetObject = args.NewValue;
-                var referenceObject = args.OldValue;
-
-                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
-                {
-                    if (targetObject is TECMisc)
-                    {
-                        TECMisc cost = targetObject as TECMisc;
-                        if (referenceObject is TECBid)
-                        {
-                            MiscCostsSummaryVM.AddMiscCost(cost);
-                        }
-                        else if (referenceObject is TECSystem)
-                        {
-                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
-                            {
-                                MiscCostsSummaryVM.AddMiscCost(cost);
-                            }
-                        }
-                    }
-                }
-                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
-                {
-                    if (targetObject is TECMisc)
-                    {
-                        TECMisc cost = targetObject as TECMisc;
-                        if (referenceObject is TECBid)
-                        {
-                            MiscCostsSummaryVM.RemoveMiscCost(cost);
-                        }
-                        else if (referenceObject is TECSystem)
-                        {
-                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
-                            {
-                                MiscCostsSummaryVM.RemoveMiscCost(cost);
-                            }
-                        }
                     }
                 }
             }
@@ -241,12 +266,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void MiscCostsSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "MiscCostSubTotalCost")
+            if (e.PropertyName == "MiscCostSubTotalCost" || e.PropertyName == "AssCostSubTotalCost")
             {
                 RaisePropertyChanged("TotalMiscCost");
                 RaisePropertyChanged("TotalCost");
             }
-            else if (e.PropertyName == "MiscCostSubTotalLabor")
+            else if (e.PropertyName == "MiscCostSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor")
             {
                 RaisePropertyChanged("TotalMiscLabor");
                 RaisePropertyChanged("TotalLabor");
@@ -278,7 +303,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             return Tuple.Create(costChange, laborChange);
         }
-
         static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, CostSummaryItem> dictionary, ObservableCollection<CostSummaryItem> collection)
         {
             double costChange = 0;
@@ -305,17 +329,27 @@ namespace TECUserControlLibrary.ViewModels
                 throw new InvalidOperationException("Associated Cost not found in dictionary.");
             }
         }
-
-        private void addConnection(TECConnection connection)
+        
+        private void addTypicalSystem(TECSystem system)
         {
-            WireSummaryVM.AddConnection(connection);
-            ConduitSummaryVM.AddConnection(connection);
+            MiscCostsSummaryVM.AddTypicalSystem(system);
+        }
+        private void removeTypicalSystem(TECSystem system)
+        {
+            MiscCostsSummaryVM.RemoveTypicalSystem(system);
         }
 
-        private void removeConnection(TECConnection connection)
+        private void addInstanceSystem(TECSystem system)
         {
-            WireSummaryVM.RemoveConnection(connection);
-            ConduitSummaryVM.RemoveConnection(connection);
+            WireSummaryVM.AddInstanceSystem(system);
+            ConduitSummaryVM.AddInstanceSystem(system);
+            MiscCostsSummaryVM.AddInstanceSystem(system);
+        }
+        private void removeInstanceSystem(TECSystem system)
+        {
+            WireSummaryVM.RemoveInstanceSystem(system);
+            ConduitSummaryVM.RemoveInstanceSystem(system);
+            MiscCostsSummaryVM.RemoveInstanceSystem(system);
         }
 
         private void addController(TECController controller)
@@ -323,23 +357,66 @@ namespace TECUserControlLibrary.ViewModels
             WireSummaryVM.AddController(controller);
             ConduitSummaryVM.AddController(controller);
         }
-
         private void removeController(TECController controller)
         {
             WireSummaryVM.RemoveController(controller);
             ConduitSummaryVM.RemoveController(controller);
         }
 
-        private void addSystem(TECSystem system)
+        private void addConnection(TECConnection connection)
         {
-            WireSummaryVM.AddSystem(system);
-            ConduitSummaryVM.AddSystem(system);
+            WireSummaryVM.AddConnection(connection);
+            ConduitSummaryVM.AddConnection(connection);
+        }
+        private void removeConnection(TECConnection connection)
+        {
+            WireSummaryVM.RemoveConnection(connection);
+            ConduitSummaryVM.RemoveConnection(connection);
         }
 
-        private void removeSystem(TECSystem system)
+        private void addEquipment(TECEquipment equipment)
         {
-            WireSummaryVM.RemoveSystem(system);
-            ConduitSummaryVM.RemoveSystem(system);
+            MiscCostsSummaryVM.AddEquipment(equipment);
+        }
+        private void removeEquipment(TECEquipment equipment)
+        {
+            MiscCostsSummaryVM.RemoveEquipment(equipment);
+        }
+
+        private void addSubScope(TECSubScope subscope)
+        {
+            MiscCostsSummaryVM.AddSubScope(subscope);
+        }
+        private void removeSubScope(TECSubScope subscope)
+        {
+            MiscCostsSummaryVM.RemoveSubScope(subscope);
+        }
+
+        private void addPoint(TECPoint point)
+        {
+            MiscCostsSummaryVM.AddPoint(point);
+        }
+        private void removePoint(TECPoint point)
+        {
+            MiscCostsSummaryVM.RemovePoint(point);
+        }
+
+        private void addMiscCost(TECMisc misc, TECSystem system = null)
+        {
+            MiscCostsSummaryVM.AddMiscCost(misc, system);
+        }
+        private void removeMiscCost(TECMisc misc)
+        {
+            MiscCostsSummaryVM.RemoveMiscCost(misc);
+        }
+
+        private void addAssCost(TECCost cost)
+        {
+            MiscCostsSummaryVM.AddAssCost(cost);
+        }
+        private void removeAssCost(TECCost cost)
+        {
+            MiscCostsSummaryVM.RemoveAssCost(cost);
         }
         #endregion
     }

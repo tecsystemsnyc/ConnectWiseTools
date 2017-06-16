@@ -14,8 +14,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public CostType CostType { get; private set; }
 
-        private Dictionary<Guid, CostSummaryItem> miscCostDictionary;
-
         private ObservableCollection<CostSummaryItem> _miscCostSummaryItems;
         public ObservableCollection<CostSummaryItem> MiscCostSummaryItems
         {
@@ -99,8 +97,7 @@ namespace TECUserControlLibrary.ViewModels
         private void reinitialize(TECBid bid)
         {
             Bid = bid;
-
-            miscCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            
             MiscCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             assCostDictionary = new Dictionary<Guid, CostSummaryItem>();
@@ -111,24 +108,116 @@ namespace TECUserControlLibrary.ViewModels
             AssCostSubTotalCost = 0;
             AssCostSubTotalLabor = 0;
 
-            foreach (TECMisc cost in bid.MiscCosts)
+            foreach(TECMisc misc in bid.MiscCosts)
             {
-                AddMiscCost(cost);
+                AddMiscCost(misc);
             }
-            foreach (TECSystem typical in bid.Systems)
+            foreach(TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                AddTypicalSystem(typical);
+                foreach(TECSystem instance in typical.SystemInstances)
                 {
-                    AddSystem(instance);
-                    foreach(TECMisc misc in typical.MiscCosts)
-                    {
-                        AddMiscCost(misc);
-                    }
+                    AddInstanceSystem(instance);
                 }
             }
         }
 
         #region Add/Remove
+        public void AddTypicalSystem(TECSystem system)
+        {
+            foreach(TECMisc misc in system.MiscCosts)
+            {
+                AddMiscCost(misc, system);
+            }
+        }
+        public void RemoveTypicalSystem(TECSystem system)
+        {
+            foreach(TECMisc misc in system.MiscCosts)
+            {
+                RemoveMiscCost(misc);
+            }
+        }
+
+        public void AddInstanceSystem(TECSystem system)
+        {
+            foreach (TECCost cost in system.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+            foreach (TECEquipment equip in system.Equipment)
+            {
+                AddEquipment(equip);
+            }
+        }
+        public void RemoveInstanceSystem(TECSystem system)
+        {
+            foreach (TECCost cost in system.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+            foreach (TECEquipment equip in system.Equipment)
+            {
+                RemoveEquipment(equip);
+            }
+        }
+
+        public void AddEquipment(TECEquipment equip)
+        {
+            foreach (TECCost cost in equip.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+            foreach (TECSubScope ss in equip.SubScope)
+            {
+                AddSubScope(ss);
+            }
+        }
+        public void RemoveEquipment(TECEquipment equip)
+        {
+            foreach (TECCost cost in equip.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+            foreach (TECSubScope ss in equip.SubScope)
+            {
+                RemoveSubScope(ss);
+            }
+        }
+
+        public void AddSubScope(TECSubScope subScope)
+        {
+            foreach (TECCost cost in subScope.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+            foreach (TECPoint point in subScope.Points)
+            {
+                AddPoint(point);
+            }
+        }
+        public void RemoveSubScope(TECSubScope subScope)
+        {
+            foreach (TECCost cost in subScope.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+        }
+
+        public void AddPoint(TECPoint point)
+        {
+            foreach(TECCost cost in point.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+        }
+        public void RemovePoint(TECPoint point)
+        {
+            foreach(TECCost cost in point.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+        }
+
         public void AddAssCost(TECCost cost)
         {
             if (cost.Type == this.CostType)
@@ -138,7 +227,6 @@ namespace TECUserControlLibrary.ViewModels
                 AssCostSubTotalLabor += delta.Item2;
             }
         }
-
         public void RemoveAssCost(TECCost cost)
         {
             if (cost.Type == this.CostType)
@@ -149,87 +237,47 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void AddMiscCost(TECMisc misc)
+        public void AddMiscCost(TECMisc misc, TECSystem system = null)
         {
             if (misc.Type == this.CostType)
             {
-                Tuple<double, double> delta = ElectricalMaterialSummaryVM.AddCost(misc, miscCostDictionary, MiscCostSummaryItems);
-                MiscCostSubTotalCost += delta.Item1;
-                MiscCostSubTotalLabor += delta.Item2;
+                CostSummaryItem miscItem = null;
+                if (system != null)
+                {
+                    miscItem = new CostSummaryItem(misc, system);
+                }
+                else
+                {
+                    miscItem = new CostSummaryItem(misc);
+                }
+                MiscCostSubTotalCost += miscItem.TotalCost;
+                MiscCostSubTotalLabor += miscItem.TotalLabor;
+                MiscCostSummaryItems.Add(miscItem);
             }
         }
-
         public void RemoveMiscCost(TECMisc misc)
         {
             if (misc.Type == this.CostType)
             {
-                Tuple<double, double> delta = ElectricalMaterialSummaryVM.RemoveCost(misc, miscCostDictionary, MiscCostSummaryItems);
-                MiscCostSubTotalCost += delta.Item1;
-                MiscCostSubTotalLabor += delta.Item2;
-            }
-        }
-
-        public void AddSubScope(TECSubScope subScope)
-        {
-            foreach(TECCost cost in subScope.AssociatedCosts)
-            {
-                AddAssCost(cost);
-            }
-        }
-
-        public void RemoveSubScope(TECSubScope subScope)
-        {
-            foreach(TECCost cost in subScope.AssociatedCosts)
-            {
-                RemoveAssCost(cost);
-            }
-        }
-
-        public void AddEquipment(TECEquipment equip)
-        {
-            foreach(TECCost cost in equip.AssociatedCosts)
-            {
-                AddAssCost(cost);
-            }
-            foreach(TECSubScope ss in equip.SubScope)
-            {
-                AddSubScope(ss);
-            }
-        }
-
-        public void RemoveEquipment(TECEquipment equip)
-        {
-            foreach(TECCost cost in equip.AssociatedCosts)
-            {
-                RemoveAssCost(cost);
-            }
-            foreach(TECSubScope ss in equip.SubScope)
-            {
-                RemoveSubScope(ss);
-            }
-        }
-
-        public void AddSystem(TECSystem system)
-        {
-            foreach(TECCost cost in system.AssociatedCosts)
-            {
-                AddAssCost(cost);
-            }
-            foreach(TECEquipment equip in system.Equipment)
-            {
-                AddEquipment(equip);
-            }
-        }
-
-        public void RemoveSystem(TECSystem system)
-        {
-            foreach(TECCost cost in system.AssociatedCosts)
-            {
-                RemoveAssCost(cost);
-            }
-            foreach(TECEquipment equip in system.Equipment)
-            {
-                RemoveEquipment(equip);
+                CostSummaryItem itemToRemove = null;
+                foreach (CostSummaryItem miscItem in MiscCostSummaryItems)
+                {
+                    if (misc.Guid == miscItem.Cost.Guid)
+                    {
+                        MiscCostSubTotalCost -= miscItem.TotalCost;
+                        MiscCostSubTotalLabor -= miscItem.TotalLabor;
+                        itemToRemove = miscItem;
+                        break;
+                    }
+                }
+                if (itemToRemove != null)
+                {
+                    MiscCostSummaryItems.Remove(itemToRemove);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Misc not found in summary items.");
+                }
             }
         }
         #endregion
