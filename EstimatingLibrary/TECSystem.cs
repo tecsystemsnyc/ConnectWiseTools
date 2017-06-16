@@ -700,7 +700,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECScope && referenceObject is TECCost)
+            else if (targetObject is TECScope && referenceObject is TECCost && !(referenceObject is TECMisc))
             {
                 var characteristicScope = targetObject as TECScope;
                 var cost = referenceObject as TECCost;
@@ -913,7 +913,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECScope && referenceObject is TECCost)
+            else if (targetObject is TECScope && referenceObject is TECCost && !(referenceObject is TECMisc))
             {
                 var characteristicScope = targetObject as TECScope;
                 var cost = referenceObject as TECCost;
