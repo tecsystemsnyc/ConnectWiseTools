@@ -246,7 +246,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (e.PropertyName == "LengthSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor" || e.PropertyName == "RatedCostSubTotalLabor")
             {
                 RaisePropertyChanged("TotalWireLabor");
-                RaisePropertyChanged("TotalCost");
+                RaisePropertyChanged("TotalLabor");
             }
         }
 
@@ -260,7 +260,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (e.PropertyName == "LengthSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor" || e.PropertyName == "RatedCostSubTotalLabor")
             {
                 RaisePropertyChanged("TotalConduitLabor");
-                RaisePropertyChanged("TotalCost");
+                RaisePropertyChanged("TotalLabor");
             }
         }
 
