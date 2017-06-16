@@ -116,6 +116,36 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AssCostFromEquipemnt()
+        {
+            var bid = new TECBid();
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            var tecCost = new TECCost();
+            tecCost.Cost = 1234;
+            tecCost.Labor = 4321;
+            tecCost.Type = CostType.TEC;
+
+            var eCost = new TECCost();
+            eCost.Cost = 5678;
+            eCost.Labor = 8765;
+            eCost.Type = CostType.Electrical;
+
+            equipment.AssociatedCosts.Add(tecCost);
+            equipment.AssociatedCosts.Add(eCost);
+
+            Assert.AreEqual(2468, bid.Estimate.TECMaterialCost, "Material cost not added");
+            Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
+            Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
+            Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+        }
+
+        [TestMethod]
         public void Estimate_AddDeviceToSubScope()
         {
             var bid = new TECBid();
@@ -145,6 +175,7 @@ namespace Tests
         public void Estimate_AddConnectionToSubScope()
         {
             var bid = new TECBid();
+
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
@@ -156,14 +187,22 @@ namespace Tests
             
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
+            system.Controllers.Add(controller);
             bid.Systems.Add(system);
+
+            var ratedCost = new TECCost();
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
             
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
             var conduitType = new TECConduitType();
             conduitType.Cost = 1;
             conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
 
             var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
@@ -177,9 +216,119 @@ namespace Tests
             
             system.AddInstance(bid);
             system.AddInstance(bid);
+            
+            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+        }
 
-            Assert.AreEqual(30, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
-            Assert.AreEqual(30, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+        [TestMethod]
+        public void Estimate_AddNetworkConnection()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+
+            var controller1 = new TECController(manufacturer);
+            controller1.IO.Add(io);
+            var controller2 = new TECController(manufacturer);
+            controller2.IO.Add(io);
+
+            bid.Controllers.Add(controller1);
+            bid.Controllers.Add(controller2);
+            
+            var connection = controller1.AddController(controller2, connectionType);
+            connection.Length = 50;
+
+            Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+        }
+
+        [TestMethod]
+        public void Estimate_AddNetworkConnectionToSystem()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+
+            var controller1 = new TECController(manufacturer);
+            controller1.IO.Add(io);
+            var controller2 = new TECController(manufacturer);
+            controller2.IO.Add(io);
+
+            bid.Controllers.Add(controller1);
+            system.Controllers.Add(controller2);
+            system.AddInstance(bid);
+            var instanceController = system.SystemInstances.RandomObject().Controllers.RandomObject();
+
+            var connection = controller1.AddController(instanceController, connectionType);
+            connection.Length = 50;
+
+            Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+        }
+
+        [TestMethod]
+        public void Estimate_AddSubScopeToSystem()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+
+            var equipment = new TECEquipment();
+            system.Equipment.Add(equipment);
+            system.AddInstance(bid);
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+
+            equipment.SubScope.Add(subScope);
+
+            Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+        }
+
+        [TestMethod]
+        public void Estimate_AddEquipmentToSystem()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+
+            Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
         }
     }
 }
