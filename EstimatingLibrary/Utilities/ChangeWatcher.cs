@@ -726,7 +726,8 @@ namespace EstimatingLibrary.Utilities
             }
             else if (oldValue is TECBid && newValue is TECController ||
                 oldValue is TECBid && newValue is TECPanel ||
-                oldValue is TECBid && newValue is TECMisc)
+                oldValue is TECBid && newValue is TECMisc ||
+                oldValue is TECSystem && newValue is TECMisc)
             {
                 InstanceChanged?.Invoke(sender, args);
                 if (change == Change.Add)

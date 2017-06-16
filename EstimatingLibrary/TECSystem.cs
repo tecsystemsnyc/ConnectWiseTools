@@ -287,7 +287,10 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc item in MiscCosts)
             {
-                outCosts.Add(item);
+                foreach(TECSystem system in SystemInstances)
+                {
+                    outCosts.Add(item);
+                }
             }
             return outCosts;
         }
@@ -488,19 +491,15 @@ namespace EstimatingLibrary
                     PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
                     object oldValue = args.OldValue;
                     object newValue = args.NewValue;
-                    if (e.PropertyName == "Add")
+                    if (e.PropertyName == "Add" ||
+                        e.PropertyName == "AddRelationship" ||
+                        e.PropertyName == "AddCatalog")
                     {
                         handleAdd(newValue, oldValue);
                     }
-                    else if (e.PropertyName == "Remove")
-                    {
-                        handleRemove(newValue, oldValue);
-                    }
-                    else if (e.PropertyName == "AddRelationship")
-                    {
-                        handleAdd(newValue, oldValue);
-                    }
-                    else if (e.PropertyName == "RemoveRelationship")
+                    else if (e.PropertyName == "Remove" ||
+                        e.PropertyName == "RemoveRelationship" ||
+                        e.PropertyName == "RemoveCatalog")
                     {
                         handleRemove(newValue, oldValue);
                     }

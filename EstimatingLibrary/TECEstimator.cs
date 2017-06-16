@@ -247,8 +247,20 @@ namespace EstimatingLibrary
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     if(!(oldValue is TECCatalogs))
                     {
-                        addCost(newValue);
-                        addPoints(newValue);
+                        if(newValue is TECSystem && oldValue is TECSystem)
+                        {
+                            handleInstanceAdded(newValue as TECSystem, oldValue as TECSystem);
+                        }
+                        else if (newValue is TECMisc && oldValue is TECSystem)
+                        {
+                            handleAddMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                        }
+                        else
+                        {
+                            addCost(newValue);
+                            addPoints(newValue);
+                        }
+                        
                     }
                 }
                 else if (e.PropertyName == "Remove")
@@ -257,8 +269,19 @@ namespace EstimatingLibrary
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     if (!(oldValue is TECCatalogs))
                     {
-                        removeCost(newValue);
-                        removePoints(newValue);
+                        if (newValue is TECSystem && oldValue is TECSystem)
+                        {
+                            handleInstanceRemoved(newValue as TECSystem, oldValue as TECSystem);
+                        }
+                        else if (newValue is TECMisc && oldValue is TECSystem)
+                        {
+                            handleRemoveMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                        }
+                        else
+                        {
+                            removeCost(newValue);
+                            removePoints(newValue);
+                        }
                     }
                 }
                 else if (omitStrings.Contains(e.PropertyName)) { }
@@ -299,6 +322,43 @@ namespace EstimatingLibrary
                 message = "Property not compatible: " + e.PropertyName;
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
+            }
+        }
+
+        private void handleRemoveMiscInSystem(TECMisc misc, TECSystem system)
+        {
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                removeCost(misc);
+            }
+        }
+
+        private void handleAddMiscInSystem(TECMisc misc, TECSystem system)
+        {
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                addCost(misc);
+            }
+        }
+
+        private void handleInstanceRemoved(TECSystem instance, TECSystem parent)
+        {
+
+            removeCost(instance);
+            removePoints(instance);
+            foreach (TECMisc misc in parent.MiscCosts)
+            {
+                removeCost(misc);
+            }
+        }
+
+        private void handleInstanceAdded(TECSystem instance, TECSystem parent)
+        {
+            addCost(instance);
+            addPoints(instance);
+            foreach (TECMisc misc in parent.MiscCosts)
+            {
+                addCost(misc);
             }
         }
 
@@ -670,6 +730,12 @@ namespace EstimatingLibrary
             return cost;
         }
 
+        public double GetMiscLaborCost(TECBid bid)
+        {
+            double cost = tecCost.Labor * bid.Labor.CommRate;
+            return cost;
+        }
+
         /// <summary>
         /// Returns all TEC labor hours
         /// </summary>
@@ -681,6 +747,7 @@ namespace EstimatingLibrary
             outLabor += GetCommTotalHours(bid);
             outLabor += GetSoftTotalHours(bid);
             outLabor += GetGraphTotalHours(bid);
+            outLabor += tecCost.Labor;
             return outLabor;
         }
         /// <summary>
@@ -695,6 +762,7 @@ namespace EstimatingLibrary
             outCost += GetSoftLaborCost(bid);
             outCost += GetGraphLaborCost(bid);
             outCost += GetMaterialLabor(bid);
+            outCost += GetMiscLaborCost(bid);
             return outCost;
         }
 
