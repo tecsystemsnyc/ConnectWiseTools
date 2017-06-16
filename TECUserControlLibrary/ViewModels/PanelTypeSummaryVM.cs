@@ -115,9 +115,31 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddPanel(panel);
             }
+            foreach(TECSystem typical in bid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    AddInstanceSystem(instance);
+                }
+            }
         }
 
         #region Add/Remove
+        public void AddInstanceSystem(TECSystem system)
+        {
+            foreach(TECPanel panel in system.Panels)
+            {
+                AddPanel(panel);
+            }
+        }
+        public void RemoveInstanceSystem(TECSystem system)
+        {
+            foreach(TECPanel panel in system.Panels)
+            {
+                RemovePanel(panel);
+            }
+        }
+
         public void AddPanel(TECPanel panel)
         {
             bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
@@ -144,7 +166,6 @@ namespace TECUserControlLibrary.ViewModels
                 PanelAssCostSubTotalLabor += delta.Item2;
             }
         }
-
         public void RemovePanel(TECPanel panel)
         {
             bool containsPanelType = panelTypeDictionary.ContainsKey(panel.Type.Guid);
@@ -181,7 +202,6 @@ namespace TECUserControlLibrary.ViewModels
             PanelAssCostSubTotalCost += delta.Item1;
             PanelAssCostSubTotalLabor += delta.Item2;
         }
-
         public void RemoveCostFromPanel(TECCost cost)
         {
             Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);

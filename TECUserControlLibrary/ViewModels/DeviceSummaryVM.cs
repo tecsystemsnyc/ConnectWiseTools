@@ -188,16 +188,61 @@ namespace TECUserControlLibrary.ViewModels
             DeviceAssCostSubTotalCost = 0;
             DeviceAssCostSubTotalLabor = 0;
 
-            foreach(TECSystem system in bid.Systems)
+            foreach(TECSystem typical in bid.Systems)
             {
-                foreach(TECSystem sys in system.SystemInstances)
+                foreach(TECSystem instance in typical.SystemInstances)
                 {
-                    AddSystem(sys);
+                    AddInstanceSystem(instance);
                 }
             }
         }
 
         #region Add/Remove
+        public void AddInstanceSystem(TECSystem system)
+        {
+            foreach (TECEquipment equip in system.Equipment)
+            {
+                AddEquipment(equip);
+            }
+        }
+        public void RemoveInstanceSystem(TECSystem system)
+        {
+            foreach (TECEquipment equip in system.Equipment)
+            {
+                RemoveEquipment(equip);
+            }
+        }
+
+        public void AddEquipment(TECEquipment equip)
+        {
+            foreach (TECSubScope ss in equip.SubScope)
+            {
+                AddSubScope(ss);
+            }
+        }
+        public void RemoveEquipment(TECEquipment equip)
+        {
+            foreach (TECSubScope ss in equip.SubScope)
+            {
+                RemoveSubScope(ss);
+            }
+        }
+
+        public void AddSubScope(TECSubScope ss)
+        {
+            foreach (TECDevice dev in ss.Devices)
+            {
+                AddDevice(dev);
+            }
+        }
+        public void RemoveSubScope(TECSubScope ss)
+        {
+            foreach (TECDevice dev in ss.Devices)
+            {
+                RemoveDevice(dev);
+            }
+        }
+
         public void AddDevice(TECDevice device)
         {
             bool containsDevice = deviceDictionary.ContainsKey(device.Guid);
@@ -222,7 +267,6 @@ namespace TECUserControlLibrary.ViewModels
                 DeviceAssCostSubTotalLabor += delta.Item2;
             }
         }
-
         public void RemoveDevice(TECDevice device)
         {
             if (deviceDictionary.ContainsKey(device.Guid))
@@ -263,7 +307,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         public void RemoveCostFromDevices(TECCost cost, TECDevice device)
         {
             if (deviceDictionary.ContainsKey(device.Guid))
@@ -274,54 +317,6 @@ namespace TECUserControlLibrary.ViewModels
                     DeviceAssCostSubTotalCost += delta.Item1;
                     DeviceAssCostSubTotalLabor += delta.Item2;
                 }
-            }
-        }
-
-        public void AddSubScope(TECSubScope ss)
-        {
-            foreach (TECDevice dev in ss.Devices)
-            {
-                AddDevice(dev);
-            }
-        }
-
-        public void RemoveSubScope(TECSubScope ss)
-        {
-            foreach (TECDevice dev in ss.Devices)
-            {
-                RemoveDevice(dev);
-            }
-        }
-
-        public void AddEquipment(TECEquipment equip)
-        {
-            foreach (TECSubScope ss in equip.SubScope)
-            {
-                AddSubScope(ss);
-            }
-        }
-
-        public void RemoveEquipment(TECEquipment equip)
-        {
-            foreach (TECSubScope ss in equip.SubScope)
-            {
-                RemoveSubScope(ss);
-            }
-        }
-
-        public void AddSystem(TECSystem sys)
-        {
-            foreach (TECEquipment equip in sys.Equipment)
-            {
-                AddEquipment(equip);
-            }
-        }
-
-        public void RemoveSystem(TECSystem sys)
-        {
-            foreach (TECEquipment equip in sys.Equipment)
-            {
-                RemoveEquipment(equip);
             }
         }
         #endregion
