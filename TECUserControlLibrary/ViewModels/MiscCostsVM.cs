@@ -207,9 +207,9 @@ namespace TECUserControlLibrary.ViewModels
                 TECMisc current = sender as TECMisc;
                 if (old.Type == CostType.TEC){
                     TECCostCollection.Remove(sender as TECMisc);
-                } else if (old.Type == CostType.TEC)
+                } else if (old.Type == CostType.Electrical)
                 {
-                    TECCostCollection.Remove(sender as TECMisc);
+                    ElectricalCostCollection.Remove(sender as TECMisc);
                 }
 
                 if(current.Type == CostType.TEC)

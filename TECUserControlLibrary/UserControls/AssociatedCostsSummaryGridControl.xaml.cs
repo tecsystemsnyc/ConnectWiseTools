@@ -20,19 +20,19 @@ namespace TECUserControlLibrary.UserControls
     /// <summary>
     /// Interaction logic for AssociatedCostsSummaryGrid.xaml
     /// </summary>
-    public partial class AssociatedCostsSummaryGridControl : UserControl
+    public partial class CostsSummaryGridControl : UserControl
     {
-        public ObservableCollection<AssociatedCostSummaryItem> AssociatedCostSummaryItemsSource
+        public ObservableCollection<CostSummaryItem> CostSummaryItemsSource
         {
-            get { return (ObservableCollection<AssociatedCostSummaryItem>)GetValue(AssociatedCostSummaryItemsSourceProperty); }
-            set { SetValue(AssociatedCostSummaryItemsSourceProperty, value); }
+            get { return (ObservableCollection<CostSummaryItem>)GetValue(CostSummaryItemsSourceProperty); }
+            set { SetValue(CostSummaryItemsSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty AssociatedCostSummaryItemsSourceProperty =
-            DependencyProperty.Register("AssociatedCostSummaryItemsSource", typeof(ObservableCollection<AssociatedCostSummaryItem>),
-              typeof(AssociatedCostsSummaryGridControl), new PropertyMetadata(default(ObservableCollection<AssociatedCostSummaryItem>)));
+        public static readonly DependencyProperty CostSummaryItemsSourceProperty =
+            DependencyProperty.Register("CostSummaryItemsSource", typeof(ObservableCollection<CostSummaryItem>),
+              typeof(CostsSummaryGridControl), new PropertyMetadata(default(ObservableCollection<CostSummaryItem>)));
 
-        public AssociatedCostsSummaryGridControl()
+        public CostsSummaryGridControl()
         {
             InitializeComponent();
         }

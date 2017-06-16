@@ -14,16 +14,29 @@ namespace TECUserControlLibrary.ViewModels
 
         public CostType CostType { get; private set; }
 
-        private Dictionary<Guid, MiscCostSummaryItem> miscCostDictionary;
+        private Dictionary<Guid, CostSummaryItem> miscCostDictionary;
 
-        private ObservableCollection<MiscCostSummaryItem> _miscCostSummaryItems;
-        public ObservableCollection<MiscCostSummaryItem> MiscCostSummaryItems
+        private ObservableCollection<CostSummaryItem> _miscCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> MiscCostSummaryItems
         {
             get { return _miscCostSummaryItems; }
             set
             {
                 _miscCostSummaryItems = value;
                 RaisePropertyChanged("MiscCostSummaryItems");
+            }
+        }
+
+        private Dictionary<Guid, CostSummaryItem> assCostDictionary;
+
+        private ObservableCollection<CostSummaryItem> _assCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> AssCostSummaryItems
+        {
+            get { return _assCostSummaryItems; }
+            set
+            {
+                _assCostSummaryItems = value;
+                RaisePropertyChanged("AssCostSummaryItems");
             }
         }
 
@@ -35,8 +48,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscCostSubTotalCost = value;
                 RaisePropertyChanged("MiscCostSubTotalCost");
-                RaisePropertyChanged("TotalMiscCost");
-                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -48,8 +59,28 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscCostSubTotalLabor = value;
                 RaisePropertyChanged("MiscCostSubTotalLabor");
-                RaisePropertyChanged("TotalMiscLabor");
-                RaisePropertyChanged("TotalLabor");
+            }
+        }
+
+        private double _assCostSubTotalCost;
+        public double AssCostSubTotalCost
+        {
+            get { return _assCostSubTotalCost; }
+            set
+            {
+                _assCostSubTotalCost = value;
+                RaisePropertyChanged("AssCostSubTotalCost");
+            }
+        }
+
+        private double _assCostSubTotalLabor;
+        public double AssCostSubTotalLabor
+        {
+            get { return _assCostSubTotalLabor; }
+            set
+            {
+                _assCostSubTotalLabor = value;
+                RaisePropertyChanged("AssCostSubTotalLabor");
             }
         }
         #endregion
@@ -69,129 +100,136 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
 
-            miscCostDictionary = new Dictionary<Guid, MiscCostSummaryItem>();
-            MiscCostSummaryItems = new ObservableCollection<MiscCostSummaryItem>();
+            miscCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            MiscCostSummaryItems = new ObservableCollection<CostSummaryItem>();
+
+            assCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            AssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             MiscCostSubTotalCost = 0;
             MiscCostSubTotalLabor = 0;
+            AssCostSubTotalCost = 0;
+            AssCostSubTotalLabor = 0;
 
             foreach (TECMisc cost in bid.MiscCosts)
             {
                 AddMiscCost(cost);
             }
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    AddSystem(instance);
+                    foreach(TECMisc misc in typical.MiscCosts)
+                    {
+                        AddMiscCost(misc);
+                    }
+                }
+            }
         }
 
         #region Add/Remove
-        public void AddMiscCost(TECMisc cost)
+        public void AddAssCost(TECCost cost)
         {
-            if (cost.Type == CostType)
+            if (cost.Type == this.CostType)
             {
-                bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
-                if (containsCost)
-                {
-                    MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
-                    MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
-                    miscCostDictionary[cost.Guid].Quantity += cost.Quantity;
-                    MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
-                    MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
-                }
-                else
-                {
-                    MiscCostSummaryItem costItem = new MiscCostSummaryItem(cost);
-                    costItem.PropertyChanged += CostItem_PropertyChanged;
-                    miscCostDictionary.Add(cost.Guid, costItem);
-                    MiscCostSummaryItems.Add(costItem);
-                    MiscCostSubTotalCost += costItem.TotalCost;
-                    MiscCostSubTotalLabor += costItem.TotalLabor;
-                    cost.PropertyChanged += Cost_PropertyChanged;
-                }
+                Tuple<double, double> delta = ElectricalMaterialSummaryVM.AddCost(cost, assCostDictionary, AssCostSummaryItems);
+                AssCostSubTotalCost += delta.Item1;
+                AssCostSubTotalLabor += delta.Item2;
             }
         }
 
-        public void RemoveMiscCost(TECMisc cost)
+        public void RemoveAssCost(TECCost cost)
         {
-            if (cost.Type == CostType)
+            if (cost.Type == this.CostType)
             {
-                bool containsCost = miscCostDictionary.ContainsKey(cost.Guid);
-                if (containsCost)
-                {
-                    MiscCostSubTotalCost -= miscCostDictionary[cost.Guid].TotalCost;
-                    MiscCostSubTotalLabor -= miscCostDictionary[cost.Guid].TotalLabor;
-                    miscCostDictionary[cost.Guid].Quantity -= cost.Quantity;
-                    MiscCostSubTotalCost += miscCostDictionary[cost.Guid].TotalCost;
-                    MiscCostSubTotalLabor += miscCostDictionary[cost.Guid].TotalLabor;
-
-                    if (miscCostDictionary[cost.Guid].Quantity < 1)
-                    {
-                        miscCostDictionary[cost.Guid].PropertyChanged -= CostItem_PropertyChanged;
-                        MiscCostSummaryItems.Remove(miscCostDictionary[cost.Guid]);
-                        miscCostDictionary.Remove(cost.Guid);
-                        cost.PropertyChanged -= Cost_PropertyChanged;
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Cost not found in cost dictionary.");
-                }
-            }
-        }
-        #endregion
-
-        #region Event Handlers
-        private void CostItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-
-                if (args.PropertyName == "TotalCost")
-                {
-                    MiscCostSubTotalCost -= (double)args.OldValue;
-                    MiscCostSubTotalCost += (double)args.NewValue;
-                }
-                else if (args.PropertyName == "TotalLabor")
-                {
-                    MiscCostSubTotalLabor -= (double)args.OldValue;
-                    MiscCostSubTotalLabor += (double)args.NewValue;
-                }
+                Tuple<double, double> delta = ElectricalMaterialSummaryVM.RemoveCost(cost, assCostDictionary, AssCostSummaryItems);
+                AssCostSubTotalCost += delta.Item1;
+                AssCostSubTotalLabor += delta.Item2;
             }
         }
 
-        private void Cost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        public void AddMiscCost(TECMisc misc)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (misc.Type == this.CostType)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                Tuple<double, double> delta = ElectricalMaterialSummaryVM.AddCost(misc, miscCostDictionary, MiscCostSummaryItems);
+                MiscCostSubTotalCost += delta.Item1;
+                MiscCostSubTotalLabor += delta.Item2;
+            }
+        }
 
-                if (args.PropertyName == "Quantity")
-                {
-                    TECMisc misc = args.NewValue as TECMisc;
-                    int deltaQuantity = ((TECMisc)args.NewValue).Quantity - ((TECMisc)args.OldValue).Quantity;
+        public void RemoveMiscCost(TECMisc misc)
+        {
+            if (misc.Type == this.CostType)
+            {
+                Tuple<double, double> delta = ElectricalMaterialSummaryVM.RemoveCost(misc, miscCostDictionary, MiscCostSummaryItems);
+                MiscCostSubTotalCost += delta.Item1;
+                MiscCostSubTotalLabor += delta.Item2;
+            }
+        }
 
-                    bool containsCost = false;
-                    foreach (TECSystem sys in Bid.Systems)
-                    {
-                        //Costs is not what we want
-                        foreach (TECMisc cost in sys.Costs)
-                        {
-                            if (misc.Guid == cost.Guid)
-                            {
-                                containsCost = true;
-                                break;
-                            }
-                        }
-                        if (containsCost)
-                        {
-                            int sysQuantity = sys.SystemInstances.Count;
-                            miscCostDictionary[misc.Guid].Quantity += deltaQuantity * sysQuantity;
-                            break;
-                        }
-                    }
-                    if (!containsCost)
-                    {
-                        miscCostDictionary[misc.Guid].Quantity += deltaQuantity;
-                    }
-                }
+        public void AddSubScope(TECSubScope subScope)
+        {
+            foreach(TECCost cost in subScope.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+        }
+
+        public void RemoveSubScope(TECSubScope subScope)
+        {
+            foreach(TECCost cost in subScope.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+        }
+
+        public void AddEquipment(TECEquipment equip)
+        {
+            foreach(TECCost cost in equip.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+            foreach(TECSubScope ss in equip.SubScope)
+            {
+                AddSubScope(ss);
+            }
+        }
+
+        public void RemoveEquipment(TECEquipment equip)
+        {
+            foreach(TECCost cost in equip.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+            foreach(TECSubScope ss in equip.SubScope)
+            {
+                RemoveSubScope(ss);
+            }
+        }
+
+        public void AddSystem(TECSystem system)
+        {
+            foreach(TECCost cost in system.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                AddEquipment(equip);
+            }
+        }
+
+        public void RemoveSystem(TECSystem system)
+        {
+            foreach(TECCost cost in system.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                RemoveEquipment(equip);
             }
         }
         #endregion

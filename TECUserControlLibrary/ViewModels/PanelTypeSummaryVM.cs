@@ -27,10 +27,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private Dictionary<Guid, AssociatedCostSummaryItem> panelAssCostDictionary;
+        private Dictionary<Guid, CostSummaryItem> panelAssCostDictionary;
 
-        private ObservableCollection<AssociatedCostSummaryItem> _panelAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> PanelAssCostSummaryItems
+        private ObservableCollection<CostSummaryItem> _panelAssCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> PanelAssCostSummaryItems
         {
             get { return _panelAssCostSummaryItems; }
             set
@@ -104,8 +104,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             panelTypeDictionary = new Dictionary<Guid, PanelTypeSummaryItem>();
             PanelTypeSummaryItems = new ObservableCollection<PanelTypeSummaryItem>();
-            panelAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            PanelAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            panelAssCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            PanelAssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             PanelTypeSubTotal = 0;
             PanelAssCostSubTotalCost = 0;

@@ -28,10 +28,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private Dictionary<Guid, AssociatedCostSummaryItem> deviceAssCostDictionary;
+        private Dictionary<Guid, CostSummaryItem> deviceAssCostDictionary;
 
-        private ObservableCollection<AssociatedCostSummaryItem> _deviceAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> DeviceAssCostSummaryItems
+        private ObservableCollection<CostSummaryItem> _deviceAssCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> DeviceAssCostSummaryItems
         {
             get { return _deviceAssCostSummaryItems; }
             set
@@ -181,8 +181,8 @@ namespace TECUserControlLibrary.ViewModels
 
             deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
             DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
-            deviceAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            DeviceAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            deviceAssCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            DeviceAssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             DeviceSubTotal = 0;
             DeviceAssCostSubTotalCost = 0;

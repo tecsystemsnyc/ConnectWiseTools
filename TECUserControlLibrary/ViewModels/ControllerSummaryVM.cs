@@ -38,10 +38,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private Dictionary<Guid, AssociatedCostSummaryItem> controllerAssCostDictionary;
+        private Dictionary<Guid, CostSummaryItem> controllerAssCostDictionary;
 
-        private ObservableCollection<AssociatedCostSummaryItem> _controllerAssCostSummaryItems;
-        public ObservableCollection<AssociatedCostSummaryItem> ControllerAssCostSummaryItems
+        private ObservableCollection<CostSummaryItem> _controllerAssCostSummaryItems;
+        public ObservableCollection<CostSummaryItem> ControllerAssCostSummaryItems
         {
             get
             {
@@ -110,8 +110,8 @@ namespace TECUserControlLibrary.ViewModels
 
             Controllers = new ObservableCollection<TECController>();
 
-            controllerAssCostDictionary = new Dictionary<Guid, AssociatedCostSummaryItem>();
-            ControllerAssCostSummaryItems = new ObservableCollection<AssociatedCostSummaryItem>();
+            controllerAssCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            ControllerAssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             ControllerSubTotal = 0;
             ControllerAssCostSubTotalCost = 0;

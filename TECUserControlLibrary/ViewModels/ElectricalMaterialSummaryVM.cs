@@ -255,7 +255,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Add/Remove
-        static public Tuple<double, double> AddCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        static public Tuple<double, double> AddCost(TECCost cost, Dictionary<Guid, CostSummaryItem> dictionary, ObservableCollection<CostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;
@@ -270,7 +270,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                AssociatedCostSummaryItem costItem = new AssociatedCostSummaryItem(cost);
+                CostSummaryItem costItem = new CostSummaryItem(cost);
                 dictionary.Add(cost.Guid, costItem);
                 collection.Add(costItem);
                 costChange += dictionary[cost.Guid].TotalCost;
@@ -279,7 +279,7 @@ namespace TECUserControlLibrary.ViewModels
             return Tuple.Create(costChange, laborChange);
         }
 
-        static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, AssociatedCostSummaryItem> dictionary, ObservableCollection<AssociatedCostSummaryItem> collection)
+        static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, CostSummaryItem> dictionary, ObservableCollection<CostSummaryItem> collection)
         {
             double costChange = 0;
             double laborChange = 0;

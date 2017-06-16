@@ -97,8 +97,8 @@
         <TextBlock Text="Device Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
 
         <!--Device Associated Costs Summary-->
-        <controls:AssociatedCostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
-                                              AssociatedCostSummaryItemsSource="{Binding DeviceAssCostSummaryItems}"/>
+        <controls:CostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                              CostSummaryItemsSource="{Binding DeviceAssCostSummaryItems}"/>
         <!--Subtotals-->
         <TextBlock Text="Device Subtotal:" Grid.Row="2" Foreground="Black"/>
         <TextBlock Text="{Binding DeviceSubTotal, StringFormat={} {0:C}}" Grid.Row="2" Grid.Column="1" Foreground="Black"/>
