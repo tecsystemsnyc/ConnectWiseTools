@@ -93,21 +93,21 @@
             <TextBlock Text="{Binding Bid.Estimate.TECMaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="5" Grid.Column="1"
                TextAlignment="Right"/>
-
-            <Label Content="Shipping (3%):" Grid.Row="6"/>
+            
+            <Label Content="Tax:" Grid.Row="6" />
+            <TextBlock Text="{Binding Bid.Estimate.Tax, StringFormat= {} {0:C}}" 
+               Grid.Row="6" Grid.Column="1"
+               TextAlignment="Right" />
+            
+            <Label Content="Shipping (3%):" Grid.Row="7"/>
             <TextBlock Text="{Binding Bid.Estimate.TECShipping, StringFormat= {} {0:C}}"
-                   Grid.Row="6" Grid.Column="1"
-                   TextAlignment="Right"/>
-
-            <Label Content="Warranty (5%):" Grid.Row="7"/>
-            <TextBlock Text="{Binding Bid.Estimate.TECWarranty, StringFormat= {} {0:C}}"
                    Grid.Row="7" Grid.Column="1"
                    TextAlignment="Right"/>
 
-            <Label Content="Tax:" Grid.Row="8" />
-            <TextBlock Text="{Binding Bid.Estimate.Tax, StringFormat= {} {0:C}}" 
-               Grid.Row="8" Grid.Column="1"
-               TextAlignment="Right" />
+            <Label Content="Warranty (5%):" Grid.Row="8"/>
+            <TextBlock Text="{Binding Bid.Estimate.TECWarranty, StringFormat= {} {0:C}}"
+                   Grid.Row="8" Grid.Column="1"
+                   TextAlignment="Right"/>
 
             <Label Content="Labor:" Grid.Row="9" />
             <TextBlock Text="{Binding Bid.Estimate.TECLaborCost, StringFormat= {} {0:C}}" 

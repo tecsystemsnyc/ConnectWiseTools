@@ -329,5 +329,55 @@ namespace Tests
 
             Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
         }
+
+        [TestMethod]
+        public void Estimate_Tax()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+
+            Assert.AreEqual(0.875, bid.Estimate.Tax, "TECMaterialCost Not Updating");
+        }
+
+        [TestMethod]
+        public void Estimate_TaxExempt()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+
+            bid.Parameters.IsTaxExempt = true;
+
+            Assert.AreEqual(0, bid.Estimate.Tax, "TECMaterialCost Not Updating");
+        }
     }
 }
