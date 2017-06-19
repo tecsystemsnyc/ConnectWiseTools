@@ -351,7 +351,7 @@ namespace Tests
 
             system.Equipment.Add(equipment);
 
-            Assert.AreEqual(0.875, bid.Estimate.Tax, "TECMaterialCost Not Updating");
+            Assert.AreEqual(0.875, bid.Estimate.Tax);
         }
 
         [TestMethod]
@@ -377,7 +377,155 @@ namespace Tests
 
             bid.Parameters.IsTaxExempt = true;
 
-            Assert.AreEqual(0, bid.Estimate.Tax, "TECMaterialCost Not Updating");
+            Assert.AreEqual(0, bid.Estimate.Tax);
+        }
+
+        [TestMethod]
+        public void Estimate_TECShipping()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+            
+            Assert.AreEqual(0.3, bid.Estimate.TECShipping);
+        }
+
+        [TestMethod]
+        public void Estimate_TECWarranty()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+
+            Assert.AreEqual(0.5, bid.Estimate.TECWarranty);
+        }
+
+        [TestMethod]
+        public void Estimate_ElectricalShipping()
+        {
+            var bid = new TECBid();
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 1;
+
+            var controller = new TECController(manufacturer);
+
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            system.Controllers.Add(controller);
+            bid.Systems.Add(system);
+
+            var ratedCost = new TECCost();
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
+            var conduitType = new TECConduitType();
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            bid.Catalogs.Devices.Add(device);
+
+            subScope.Devices.Add(device);
+
+            var connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            connection.ConduitLength = 5;
+            connection.ConduitType = conduitType;
+
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            Assert.AreEqual(1.5, bid.Estimate.ElectricalShipping);
+        }
+
+        [TestMethod]
+        public void Estimate_ElectricalWarranty()
+        {
+            var bid = new TECBid();
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 1;
+
+            var controller = new TECController(manufacturer);
+
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            system.Controllers.Add(controller);
+            bid.Systems.Add(system);
+
+            var ratedCost = new TECCost();
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
+            var conduitType = new TECConduitType();
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            bid.Catalogs.Devices.Add(device);
+
+            subScope.Devices.Add(device);
+
+            var connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            connection.ConduitLength = 5;
+            connection.ConduitType = conduitType;
+
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            Assert.AreEqual(2.5, bid.Estimate.ElectricalWarranty);
         }
     }
 }
