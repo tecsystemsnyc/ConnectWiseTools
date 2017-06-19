@@ -211,7 +211,86 @@ namespace Tests
         [TestMethod]
         public void AddController()
         {
-            
+            TECController controller = TestHelper.CreateTestController(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addController", controller);
+
+            Total total = calculateTotal(controller, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddPoint()
+        {
+            TECPoint point = TestHelper.CreateTestPoint(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addPoint", point);
+
+            Total total = calculateTotal(point, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddDevice()
+        {
+            TECDevice device = TestHelper.CreateTestDevice(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addDevice", device);
+
+            Total total = calculateTotal(device, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddSubScope()
+        {
+            TECSubScope subscope = TestHelper.CreateTestSubScope(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addSubScope", subscope);
+
+            Total total = calculateTotal(subscope, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddEquipment()
+        {
+            TECEquipment equipment = TestHelper.CreateTestEquipment(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addEquipment", equipment);
+
+            Total total = calculateTotal(equipment, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        public void AddSystem()
+        {
+
         }
         #endregion
 
