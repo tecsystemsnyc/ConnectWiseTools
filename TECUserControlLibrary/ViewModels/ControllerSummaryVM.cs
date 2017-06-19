@@ -121,19 +121,31 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddController(controller);
             }
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
-                foreach(TECSystem sys in system.SystemInstances)
+                foreach(TECSystem instance in typical.SystemInstances)
                 {
-                    foreach(TECController controller in sys.Controllers)
-                    {
-                        AddController(controller);
-                    }
+                    AddInstanceSystem(instance);
                 }
             }
         }
 
         #region Add/Remove
+        public void AddInstanceSystem(TECSystem system)
+        {
+            foreach(TECController controller in system.Controllers)
+            {
+                AddController(controller);
+            }
+        }
+        public void RemoveInstanceSystem(TECSystem system)
+        {
+            foreach(TECController controller in system.Controllers)
+            {
+                RemoveController(controller);
+            }
+        }
+
         public void AddController(TECController controller)
         {
             Controllers.Add(controller);
@@ -143,7 +155,6 @@ namespace TECUserControlLibrary.ViewModels
                 AddCostToController(cost);
             }
         }
-
         public void RemoveController(TECController controller)
         {
             Controllers.Remove(controller);
@@ -160,7 +171,6 @@ namespace TECUserControlLibrary.ViewModels
             ControllerAssCostSubTotalCost += delta.Item1;
             ControllerAssCostSubTotalLabor += delta.Item2;
         }
-
         public void RemoveCostFromController(TECCost cost)
         {
             Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);

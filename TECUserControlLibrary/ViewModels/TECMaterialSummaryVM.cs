@@ -81,12 +81,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public double TotalMiscCost
         {
-            get { return MiscCostsSummaryVM.MiscCostSubTotalCost; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalCost + MiscCostsSummaryVM.AssCostSubTotalCost; }
         }
 
         public double TotalMiscLabor
         {
-            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor; }
+            get { return MiscCostsSummaryVM.MiscCostSubTotalLabor + MiscCostsSummaryVM.AssCostSubTotalLabor; }
         }
 
         public double TotalCost
@@ -148,8 +148,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECSystem)
                     {
-                        DeviceSummaryVM.AddSystem(targetObject as TECSystem);
-                        foreach(TECController control in (targetObject as TECSystem).Controllers)
+                        DeviceSummaryVM.AddInstanceSystem(targetObject as TECSystem);
+                        foreach (TECController control in (targetObject as TECSystem).Controllers)
                         {
                             ControllerSummaryVM.AddController(control);
                         }
@@ -191,8 +191,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        DeviceSummaryVM.RemoveSystem(targetObject as TECSystem);
-                        foreach(TECController control in (targetObject as TECSystem).Controllers)
+                        DeviceSummaryVM.RemoveInstanceSystem(targetObject as TECSystem);
+                        foreach (TECController control in (targetObject as TECSystem).Controllers)
                         {
                             ControllerSummaryVM.RemoveController(control);
                         }
@@ -251,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         else if (referenceObject is TECSystem)
                         {
-                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
                             {
                                 MiscCostsSummaryVM.AddMiscCost(cost);
                             }
@@ -269,7 +269,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         else if (referenceObject is TECSystem)
                         {
-                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
                             {
                                 MiscCostsSummaryVM.RemoveMiscCost(cost);
                             }
@@ -323,12 +323,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void MiscCostsSummaryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "MiscCostSubTotalCost")
+            if (e.PropertyName == "MiscCostSubTotalCost" || e.PropertyName == "AssCostSubTotalCost")
             {
                 RaisePropertyChanged("TotalMiscCost");
                 RaisePropertyChanged("TotalCost");
             }
-            else if (e.PropertyName == "MiscCostSubTotalLabor")
+            else if (e.PropertyName == "MiscCostSubTotalLabor" || e.PropertyName == "AssCostSubTotalLabor")
             {
                 RaisePropertyChanged("TotalMiscLabor");
                 RaisePropertyChanged("TotalLabor");
@@ -360,7 +360,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             return Tuple.Create(costChange, laborChange);
         }
-
         static public Tuple<double, double> RemoveCost(TECCost cost, Dictionary<Guid, CostSummaryItem> dictionary, ObservableCollection<CostSummaryItem> collection)
         {
             double costChange = 0;
@@ -386,6 +385,97 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new InvalidOperationException("Associated Cost not found in dictionary.");
             }
+        }
+
+        private void addTypicalSystem(TECSystem system)
+        {
+            MiscCostsSummaryVM.AddTypicalSystem(system);
+        }
+        private void removeTypicalSystem(TECSystem system)
+        {
+            MiscCostsSummaryVM.RemoveTypicalSystem(system);
+        }
+
+        private void addInstanceSystem(TECSystem system)
+        {
+            DeviceSummaryVM.AddInstanceSystem(system);
+            ControllerSummaryVM.AddInstanceSystem(system);
+            PanelTypeSummaryVM.AddInstanceSystem(system);
+            MiscCostsSummaryVM.AddInstanceSystem(system);
+        }
+        private void removeInstanceSystem(TECSystem system)
+        {
+            DeviceSummaryVM.RemoveInstanceSystem(system);
+            ControllerSummaryVM.RemoveInstanceSystem(system);
+            PanelTypeSummaryVM.RemoveInstanceSystem(system);
+            MiscCostsSummaryVM.RemoveInstanceSystem(system);
+        }
+
+        private void addEquipment(TECEquipment equipment)
+        {
+            DeviceSummaryVM.AddEquipment(equipment);
+            MiscCostsSummaryVM.AddEquipment(equipment);
+        }
+        private void removeEquipment(TECEquipment equipment)
+        {
+            DeviceSummaryVM.RemoveEquipment(equipment);
+            MiscCostsSummaryVM.RemoveEquipment(equipment);
+        }
+
+        private void addSubScope(TECSubScope subscope)
+        {
+            DeviceSummaryVM.AddSubScope(subscope);
+            MiscCostsSummaryVM.AddSubScope(subscope);
+        }
+        private void removeSubScope(TECSubScope subscope)
+        {
+            DeviceSummaryVM.RemoveSubScope(subscope);
+            MiscCostsSummaryVM.RemoveSubScope(subscope);
+        }
+
+        private void addDevice(TECDevice device)
+        {
+            DeviceSummaryVM.AddDevice(device);
+        }
+        private void removeDevice(TECDevice device)
+        {
+            DeviceSummaryVM.RemoveDevice(device);
+        }
+
+        private void addPoint(TECPoint point)
+        {
+            MiscCostsSummaryVM.AddPoint(point);
+        }
+        private void removePoint(TECPoint point)
+        {
+            MiscCostsSummaryVM.RemovePoint(point);
+        }
+
+        private void addController(TECController controller)
+        {
+            ControllerSummaryVM.AddController(controller);
+        }
+        private void removeController(TECController controller)
+        {
+            ControllerSummaryVM.RemoveController(controller);
+        }
+
+        private void addPanel(TECPanel panel)
+        {
+            PanelTypeSummaryVM.AddPanel(panel);
+        }
+        private void removePanel(TECPanel panel)
+        {
+            PanelTypeSummaryVM.RemovePanel(panel);
+        }
+
+        private void addMiscCost(TECMisc misc, TECSystem system = null)
+        {
+            MiscCostsSummaryVM.AddMiscCost(misc, system);
+        }
+        private void removeMiscCost(TECMisc misc)
+        {
+            MiscCostsSummaryVM.RemoveMiscCost(misc);
         }
         #endregion
     }
