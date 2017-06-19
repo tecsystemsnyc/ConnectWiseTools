@@ -63,9 +63,9 @@ namespace Tests
 
 
         #region TECSummaryTests
-
+        #region Add
         [TestMethod]
-        public void AddCost()
+        public void AddTECCost()
         {
             TECCost cost = null;
             while(cost == null)
@@ -82,7 +82,7 @@ namespace Tests
             PrivateObject testVM = new PrivateObject(vm);
             testVM.Invoke("addAssCost", cost);
 
-            Total total = calculateCost(cost);
+            Total total = calculateTotal(cost, CostType.TEC);
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
@@ -90,20 +90,81 @@ namespace Tests
             Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
 
+        [TestMethod]
+        public void AddElectricalCost()
+        {
+            TECCost cost = null;
+            while (cost == null)
+            {
+                TECCost randomCost = catalogs.AssociatedCosts.RandomObject();
+                if (randomCost.Type == CostType.Electrical)
+                {
+                    cost = randomCost;
+                }
+            }
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addAssCost", cost);
+
+            Total total = calculateCost(cost, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddTECMiscToBid()
+        {
+            TECMisc misc = null;
+            while (misc == null)
+            {
+                TECMisc randomMisc = TestHelper.CreateTestMisc();
+                if (randomMisc.Type == CostType.TEC)
+                {
+                    misc = randomMisc;
+                }
+            }
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc);
+
+            Total total = calculateTotal(misc, CostType.TEC);
+        }
         #endregion
 
-        #region MaterialSummaryTests
+        #region Remove
+
+        #endregion
+        #endregion
+
+        #region ElectricalSummaryTests
 
         #endregion
 
         #region Calculation Methods
 
-        private Total calculateCost(TECCost cost)
+        private Total calculateTotal(TECCost cost, CostType type)
         {
-            Total total;
-            total.cost = cost.Cost * cost.Quantity;
-            total.labor = cost.Labor * cost.Quantity;
-            return total;
+            if (cost.Type == type)
+            {
+                Total total;
+                total.cost = cost.Cost * cost.Quantity;
+                total.labor = cost.Labor * cost.Quantity;
+                return total;
+            }
+            else
+            {
+                Total total;
+                total.cost = 0;
+                total.labor = 0;
+                return total;
+            }
         }
 
         

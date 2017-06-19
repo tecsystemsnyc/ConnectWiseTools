@@ -578,12 +578,17 @@ namespace Tests
             TECCost testAssociatedCost = new TECCost();
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
+            testAssociatedCost.Labor = 39;
+            testAssociatedCost.Quantity = 5;
             testAssociatedCost.Type = CostType.Electrical;
 
             outCatalogs.AssociatedCosts.Add(testAssociatedCost);
 
             var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
+            testCost2.Cost = 98;
+            testCost2.Labor = 72;
+            testCost2.Quantity = 3;
             testCost2.Type = CostType.TEC;
             outCatalogs.AssociatedCosts.Add(testCost2);
 
@@ -716,6 +721,15 @@ namespace Tests
             labor.ElectricalIsUnion = true;
             return labor;
         }
+        public static TECMisc CreateTestMisc()
+        {
+            TECMisc misc = new TECMisc();
+            misc.Cost = RandomDouble(0, 1000);
+            misc.Labor = RandomDouble(0, 1000);
+            misc.Quantity = RandomInt(0, 100);
+            misc.Type = (CostType)RandomInt(0, 3);
+            return misc;
+        }
         
 
         public static T RandomObject<T>(this ObservableCollection<T> list)
@@ -723,8 +737,7 @@ namespace Tests
             int index = 0;
             if(list.Count > 0)
             {
-                Random rand = new Random();
-                index = rand.Next(0, list.Count);
+                index = RandomInt(0, list.Count);
                 return list[index];
             }
             else
@@ -738,6 +751,17 @@ namespace Tests
         {
             Random rand = new Random();
             return rand.Next(min, max);
+        }
+        public static double RandomDouble(double min, double max)
+        {
+            Random rand = new Random();
+            double multiplier = rand.NextDouble();
+            return (multiplier * (max - min)) + min;
+        }
+        public static bool RandomBool()
+        {
+            int zeroOne = RandomInt(0, 2);
+            return (zeroOne == 1);
         }
         public static void ConnectEquipmentToController(TECEquipment equipment, TECController controller)
         {
