@@ -178,7 +178,7 @@ namespace EstimatingLibrary
                     assCost.PropertyChanged += AssCost_PropertyChanged;
                     var old = this.Copy() as TECScope;
                     old.AssociatedCosts.Remove(item as TECCost);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                    NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -189,7 +189,7 @@ namespace EstimatingLibrary
                     assCost.PropertyChanged -= AssCost_PropertyChanged;
                     var old = this.Copy() as TECScope;
                     old.AssociatedCosts.Add(item as TECCost);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                    NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
                 }
             }
         }

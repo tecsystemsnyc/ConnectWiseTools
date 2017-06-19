@@ -19,7 +19,7 @@ namespace EstimatingLibrary
 
         const double ZERO = 0;
 
-        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship"});
+        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship", "AddCatalog", "RemoveCatalog"});
 
         #region Cost Base
         private TECCost tecCost;
@@ -260,7 +260,6 @@ namespace EstimatingLibrary
                             addCost(newValue);
                             addPoints(newValue);
                         }
-                        
                     }
                 }
                 else if (e.PropertyName == "Remove")
@@ -458,14 +457,10 @@ namespace EstimatingLibrary
         }
         private void editCost(object newValue, object oldValue)
         {
-            if (newValue is TECConnection || newValue is TECMisc
-                || newValue is TECSubScope)
+            if (newValue.GetType() == oldValue.GetType())
             {
-                if (newValue.GetType() == oldValue.GetType())
-                {
-                    addCost(newValue);
-                    removeCost(oldValue);
-                }
+                addCost(newValue);
+                removeCost(oldValue);
             }
         }
 

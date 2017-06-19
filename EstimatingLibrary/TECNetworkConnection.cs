@@ -61,8 +61,15 @@ namespace EstimatingLibrary
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
+            TECCost thisCost = new TECCost();
+
             if (ConnectionType != null)
             {
+                thisCost = new TECCost();
+                thisCost.Type = ConnectionType.Type;
+                thisCost.Cost = ConnectionType.Cost * Length;
+                thisCost.Labor = ConnectionType.Labor * Length;
+                outCosts.Add(thisCost);
                 foreach (TECCost cost in ConnectionType.AssociatedCosts)
                 {
                     outCosts.Add(cost);
@@ -77,6 +84,11 @@ namespace EstimatingLibrary
             }
             if (ConduitType != null)
             {
+                thisCost = new TECCost();
+                thisCost.Type = ConduitType.Type;
+                thisCost.Cost = ConduitType.Cost * ConduitLength;
+                thisCost.Labor = ConduitType.Labor * ConduitLength;
+                outCosts.Add(thisCost);
                 foreach (TECCost cost in ConduitType.AssociatedCosts)
                 {
                     outCosts.Add(cost);
