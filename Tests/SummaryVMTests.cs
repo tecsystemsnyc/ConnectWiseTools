@@ -335,7 +335,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ElectricalSummary_addConnection()
+        public void ElectricalSummary_AddConnection()
         {
             TECController controller = TestHelper.CreateTestController(catalogs);
             TECSubScope subScope = TestHelper.CreateTestSubScope(catalogs);
@@ -346,7 +346,7 @@ namespace Tests
             ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addConnection", connection, null);
+            testVM.Invoke("addConnection", connection);
 
             Total total = calculateTotal(connection, CostType.Electrical);
 
@@ -417,22 +417,22 @@ namespace Tests
         [TestMethod]
         public void ElectricalSummary_AddAssCost()
         {
-            TECMisc misc = null;
-            while (misc == null)
+            TECCost cost = null;
+            while (cost == null)
             {
-                TECMisc randomMisc = TestHelper.CreateTestMisc();
-                if (randomMisc.Type == CostType.Electrical)
+                TECCost randomCost = catalogs.AssociatedCosts.RandomObject();
+                if (randomCost.Type == CostType.Electrical)
                 {
-                    misc = randomMisc;
+                    cost = randomCost;
                 }
             }
 
             ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addAssCost", misc, null);
+            testVM.Invoke("addAssCost", cost);
 
-            Total total = calculateTotal(misc, CostType.Electrical);
+            Total total = calculateTotal(cost, CostType.Electrical);
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
