@@ -746,7 +746,6 @@ namespace Tests
             return misc;
         }
         
-
         public static T RandomObject<T>(this ObservableCollection<T> list)
         {
             int index = 0;
