@@ -569,7 +569,8 @@ namespace Tests
 
             //Panel Types
             TECPanelType panelType = new TECPanelType();
-            panelType.Cost = RandomInt(10, 100);
+            panelType.Cost = RandomDouble(0, 1000);
+            panelType.Labor = RandomDouble(0, 1000);
             panelType.Name = "Test Panel Type";
 
             outCatalogs.PanelTypes.Add(panelType);
@@ -658,6 +659,13 @@ namespace Tests
             subScope.Devices.Add(device);
             subScope.Points.Add(point);
             return subScope;
+        }
+        public static TECPoint CreateTestPoint(TECCatalogs catalogs)
+        {
+            TECPoint point = new TECPoint();
+            AssignSecondaryProperties(point, catalogs);
+            point.Type = (PointTypes)Enum.GetNames(typeof(PointTypes)).Length;
+            return point;
         }
         public static TECEquipment CreateTestEquipment(TECCatalogs catalogs)
         {
@@ -924,9 +932,17 @@ namespace Tests
         public static void AssignSecondaryProperties(TECScope scope, TECBid bid)
         {
             scope.Location = bid.Locations.RandomObject();
-            if(scope.Tags.Count == 0)
+            AssignSecondaryProperties(scope, bid.Catalogs);
+        }
+        public static void AssignSecondaryProperties(TECScope scope, TECCatalogs catalogs)
+        {
+            if (scope.Tags.Count == 0)
             {
-                scope.Tags.Add(bid.Catalogs.Tags.RandomObject());
+                scope.Tags.Add(catalogs.Tags.RandomObject());
+            }
+            if (scope.AssociatedCosts.Count == 0)
+            {
+                scope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());
             }
         }
     }
