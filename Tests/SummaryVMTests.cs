@@ -191,6 +191,28 @@ namespace Tests
             Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
             Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
+
+        [TestMethod]
+        public void AddPanel()
+        {
+            TECPanel panel = TestHelper.CreateTestPanel(catalogs);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addPanel", panel);
+
+            Total total = calculateTotal(panel, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddController()
+        {
+            
+        }
         #endregion
 
         #region Remove

@@ -569,7 +569,8 @@ namespace Tests
 
             //Panel Types
             TECPanelType panelType = new TECPanelType();
-            panelType.Cost = RandomInt(10, 100);
+            panelType.Cost = RandomDouble(0, 1000);
+            panelType.Labor = RandomDouble(0, 1000);
             panelType.Name = "Test Panel Type";
 
             outCatalogs.PanelTypes.Add(panelType);
