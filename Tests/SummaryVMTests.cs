@@ -277,23 +277,7 @@ namespace Tests
             Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
             Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
-
-        [TestMethod]
-        public void ElectricalSummary_AddTypicalSystem()
-        {
-            TECSystem system = TestHelper.CreateTestSystem(catalogs);
-
-            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
-
-            PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addTypicalSystem", system);
-
-            Total total = calculateTotal(system, CostType.Electrical);
-
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-        }
-
+        
         [TestMethod]
         public void ElectricalSummary_AddInstanceSystem()
         {
@@ -444,7 +428,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
 
-            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(bid);
 
             PrivateObject testVM = new PrivateObject(vm);
             double initialTotalCost = vm.TotalCost;
@@ -455,8 +439,8 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -476,7 +460,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
            
-            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(bid);
 
             PrivateObject testVM = new PrivateObject(vm);
             double initialTotalCost = vm.TotalCost;
@@ -487,8 +471,8 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -508,32 +492,10 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
-
-        [TestMethod]
-        public void ElectricalSummary_RemoveTypicalSystem()
-        {
-            TECBid bid = TestHelper.CreateTestBid();
-            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
-            system.AddInstance(bid);
-
-            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(bid);
-
-            PrivateObject testVM = new PrivateObject(vm);
-            double initialTotalCost = vm.TotalCost;
-            double initialTotalLabor = vm.TotalLabor;
-
-            var removed = system;
-            Total total = calculateTotal(removed, CostType.Electrical);
-
-            testVM.Invoke("removeTypicalSystem", removed);
-
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
-        }
-
+        
         [TestMethod]
         public void ElectricalSummary_RemoveInstanceSystem()
         {
@@ -552,8 +514,8 @@ namespace Tests
 
             testVM.Invoke("removeInstanceSystem", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -571,8 +533,8 @@ namespace Tests
 
             testVM.Invoke("removeController", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -596,8 +558,8 @@ namespace Tests
 
             testVM.Invoke("removeConnection", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -615,8 +577,8 @@ namespace Tests
 
             testVM.Invoke("removeEquipment", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -634,8 +596,8 @@ namespace Tests
 
             testVM.Invoke("removeSubScope", removed);
             
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -653,8 +615,8 @@ namespace Tests
 
             testVM.Invoke("removePoint", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
         }
 
         #endregion
