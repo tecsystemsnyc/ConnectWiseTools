@@ -474,100 +474,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-
-        private void handleSystem(TECSystem sys, Change change, ChangeType changeType)
-        {
-            foreach (TECEquipment equip in sys.Equipment)
-            {
-                if (change == Change.Add)
-                {
-                    if(changeType == ChangeType.Instance)
-                    {
-                        equip.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        equip.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        equip.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        equip.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-                handleEquipmentChildren(equip, change, changeType);
-            }
-            foreach (TECController controller in sys.Controllers)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        controller.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        controller.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        controller.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        controller.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-            }
-            foreach (TECPanel panel in sys.Panels)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        panel.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        panel.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        panel.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        panel.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-            }
-            foreach(TECSystem instance in sys.SystemInstances)
-            {
-                if (change == Change.Add)
-                {
-                    instance.PropertyChanged += Object_PropertyChanged;
-                    instance.PropertyChanged += Instance_PropertyChanged;
-                }
-                else if (change == Change.Remove)
-                {
-                    instance.PropertyChanged -= Object_PropertyChanged;
-                    instance.PropertyChanged -= Instance_PropertyChanged;
-                }
-            }
-        }
-
+        
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(sender, e);
@@ -722,7 +629,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     (newValue as TECSystem).PropertyChanged -= Instance_PropertyChanged;
                 }
-                handleSystem(newValue as TECSystem, change, ChangeType.Instance);
+                handleSystemChildren(newValue as TECSystem, change, ChangeType.Instance);
             }
             else if (oldValue is TECBid && newValue is TECController ||
                 oldValue is TECBid && newValue is TECPanel ||
