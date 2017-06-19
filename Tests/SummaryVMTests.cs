@@ -398,7 +398,7 @@ namespace Tests
             TECPoint point = new TECPoint();
             foreach(TECCost cost in catalogs.AssociatedCosts)
             {
-                point.AssociatedCosts.Add(cost)
+                point.AssociatedCosts.Add(cost);
             }
 
             ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
