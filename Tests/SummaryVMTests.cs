@@ -132,9 +132,52 @@ namespace Tests
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addMiscCost", misc);
+            testVM.Invoke("addMiscCost", misc, null);
 
             Total total = calculateTotal(misc, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddElectricalMiscToBid()
+        {
+            TECMisc misc = null;
+            while (misc == null)
+            {
+                TECMisc randomMisc = TestHelper.CreateTestMisc();
+                if (randomMisc.Type == CostType.Electrical)
+                {
+                    misc = randomMisc;
+                }
+            }
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc, null);
+
+            Total total = calculateTotal(misc, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddTECMiscToSystem()
+        {
+            TECSystem system = TestHelper.CreateTestSystem(catalogs);
+            system.AddInstance(new TECBid());
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke
         }
         #endregion
 
@@ -188,6 +231,14 @@ namespace Tests
                 Total total;
                 total.cost = left.cost - right.cost;
                 total.labor = left.labor - right.labor;
+                return total;
+            }
+
+            public static Total operator *(Total left, double right)
+            {
+                Total total;
+                total.cost = left.cost * right;
+                total.labor = left.labor * right;
                 return total;
             }
         }
