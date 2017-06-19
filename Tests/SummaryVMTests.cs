@@ -119,15 +119,7 @@ namespace Tests
         [TestMethod]
         public void AddTECMiscToBid()
         {
-            TECMisc misc = null;
-            while (misc == null)
-            {
-                TECMisc randomMisc = TestHelper.CreateTestMisc();
-                if (randomMisc.Type == CostType.TEC)
-                {
-                    misc = randomMisc;
-                }
-            }
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
 
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
@@ -138,22 +130,12 @@ namespace Tests
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
         public void AddElectricalMiscToBid()
         {
-            TECMisc misc = null;
-            while (misc == null)
-            {
-                TECMisc randomMisc = TestHelper.CreateTestMisc();
-                if (randomMisc.Type == CostType.Electrical)
-                {
-                    misc = randomMisc;
-                }
-            }
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
 
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
@@ -164,8 +146,6 @@ namespace Tests
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -176,14 +156,40 @@ namespace Tests
             {
                 system.AddInstance(new TECBid());
             }
-            TECMisc misc = TestHelper.CreateTestMisc();
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
 
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
             testVM.Invoke("addMiscCost", misc, system);
 
+            Total total = calculateTotal(misc, CostType.TEC);
+            total *= system.SystemInstances.Count;
 
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddElectricalMiscToSystem()
+        {
+            TECSystem system = TestHelper.CreateTestSystem(catalogs);
+            for (int i = 0; i < TestHelper.RandomInt(0, 10); i++)
+            {
+                system.AddInstance(new TECBid());
+            }
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc, system);
+
+            Total total = calculateTotal(misc, CostType.TEC);
+            total *= system.SystemInstances.Count;
+
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
         #endregion
 

@@ -721,13 +721,20 @@ namespace Tests
             labor.ElectricalIsUnion = true;
             return labor;
         }
-        public static TECMisc CreateTestMisc()
+        public static TECMisc CreateTestMisc(CostType type = 0)
         {
             TECMisc misc = new TECMisc();
             misc.Cost = RandomDouble(0, 1000);
             misc.Labor = RandomDouble(0, 1000);
             misc.Quantity = RandomInt(0, 100);
-            misc.Type = (CostType)RandomInt(0, 3);
+            if (type == 0)
+            {
+                misc.Type = (CostType)RandomInt(0, 3);
+            }
+            else
+            {
+                misc.Type = type;
+            }
             return misc;
         }
         
