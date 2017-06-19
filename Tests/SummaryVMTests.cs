@@ -144,7 +144,315 @@ namespace Tests
         #endregion
 
         #region ElectricalSummaryTests
+        #region Add
+        [TestMethod]
+        public void ElectricalSummary_AddTECCost()
+        {
+            TECCost cost = null;
+            while (cost == null)
+            {
+                TECCost randomCost = catalogs.AssociatedCosts.RandomObject();
+                if (randomCost.Type == CostType.Electrical)
+                {
+                    cost = randomCost;
+                }
+            }
 
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addAssCost", cost);
+
+            Total total = calculateTotal(cost, CostType.Electrical);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void ElectricalSummary_AddElectricalCost()
+        {
+            TECCost cost = null;
+            while (cost == null)
+            {
+                TECCost randomCost = catalogs.AssociatedCosts.RandomObject();
+                if (randomCost.Type == CostType.Electrical)
+                {
+                    cost = randomCost;
+                }
+            }
+
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addAssCost", cost);
+
+            Total total = calculateTotal(cost, CostType.Electrical);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void ElectricalSummary_AddElectricalMiscToBid()
+        {
+            TECMisc misc = null;
+            while (misc == null)
+            {
+                TECMisc randomMisc = TestHelper.CreateTestMisc();
+                if (randomMisc.Type == CostType.Electrical)
+                {
+                    misc = randomMisc;
+                }
+            }
+
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc, null);
+
+            Total total = calculateTotal(misc, CostType.Electrical);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void ElectricalSummary_AddTypicalSystem()
+        {
+            TECSystem system = TestHelper.CreateTestSystem(TestHelper.CreateTestCatalogs());
+
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addTypicalSystem", system);
+
+            Total total = calculateTotal(system, CostType.Electrical);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        }
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+
+        //[TestMethod]
+        //public void ElectricalSummary_AddTypicalSystem()
+        //{
+        //    TECMisc misc = null;
+        //    while (misc == null)
+        //    {
+        //        TECMisc randomMisc = TestHelper.CreateTestMisc();
+        //        if (randomMisc.Type == CostType.Electrical)
+        //        {
+        //            misc = randomMisc;
+        //        }
+        //    }
+
+        //    ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
+
+        //    PrivateObject testVM = new PrivateObject(vm);
+        //    testVM.Invoke("addMiscCost", misc, null);
+
+        //    Total total = calculateTotal(misc, CostType.Electrical);
+
+        //    Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
+        //    Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+        //}
+        #endregion
+
+        #region Remove
+
+        #endregion
         #endregion
 
         #region Calculation Methods
@@ -167,7 +475,89 @@ namespace Tests
             }
         }
 
-        
+        private Total calculateTotal(TECScope scope, CostType type)
+        {
+            Total total = new Total();
+            foreach(TECCost cost in scope.AssociatedCosts)
+            {
+                total += calculateTotal(cost, type);
+            }
+            return total;
+        }
+
+        private Total calculateTotal(TECDevice device, CostType type)
+        {
+            Total total = new Total();
+            total += calculateTotal(device as TECCost, type);
+            total += calculateTotal(device as TECScope, type);
+            return total;
+        }
+
+        private Total calculateTotal(TECSubScope subScope, CostType type)
+        {
+            Total total = new Total();
+            foreach(TECDevice device in subScope.Devices)
+            {
+                total += calculateTotal(device, type);
+            }
+            foreach(TECPoint point in subScope.Points)
+            {
+                total += calculateTotal(point, type);
+            }
+            total += calculateTotal(subScope as TECScope, type);
+            return total;
+        }
+
+        private Total calculateTotal(TECEquipment equipment, CostType type)
+        {
+            Total total = new Total();
+            foreach (TECSubScope subScope in equipment.SubScope)
+            {
+                total += calculateTotal(subScope, type);
+            }
+            total += calculateTotal(equipment as TECScope, type);
+            return total;
+        }
+
+        private Total calculateTotal(TECController controller, CostType type)
+        {
+            Total total = new Total();
+            total += calculateTotal(controller as TECScope, type);
+            total += calculateTotal(controller as TECCost, type);
+            return total;
+        }
+
+        private Total calculateTotal(TECPanel panel, CostType type)
+        {
+            Total total = new Total();
+            total += calculateTotal(panel as TECScope, type);
+            total += calculateTotal(panel.Type as TECCost, type);
+            return total;
+        }
+
+        private Total calculateTotal(TECSystem system, CostType type)
+        {
+            Total total = new Total();
+            foreach (TECEquipment equipment in system.Equipment)
+            {
+                total += calculateTotal(equipment, type);
+            }
+            foreach(TECMisc misc in system.MiscCosts)
+            {
+                total += calculateTotal(misc, type) * system.SystemInstances.Count;
+            }
+            foreach(TECController controller in system.Controllers)
+            {
+                calculateTotal(controller, type);
+            }
+            foreach(TECPanel panel in system.Panels)
+            {
+                calculateTotal(panel, type);
+            }
+            total += calculateTotal(system as TECScope, type);
+            return total;
+        }
+
         #endregion
 
         private struct Total
