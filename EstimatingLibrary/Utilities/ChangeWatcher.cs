@@ -540,7 +540,10 @@ namespace EstimatingLibrary.Utilities
                         {
                             (newValue as TECBid).Labor.PropertyChanged += Object_PropertyChanged;
                         }
-                    } 
+                    } else if (newValue is TECBidParameters || newValue is TECLabor)
+                    {
+                        checkForRaiseInstance(sender, args, Change.Add);
+                    }
                 }
             }
             else
@@ -650,6 +653,10 @@ namespace EstimatingLibrary.Utilities
                     handleControllerChildren(newValue as TECController, change, ChangeType.Instance);
                 }
                 
+            }
+            else if (newValue is TECBidParameters || newValue is TECLabor)
+            {
+                InstanceChanged?.Invoke(sender, args);
             }
         }
     }

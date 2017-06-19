@@ -511,7 +511,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double GetExtendedMaterialCost()
         {
-            return (TECMaterialCost + TECShipping + TECWarranty);
+            return (TECMaterialCost + TECShipping + TECWarranty + Tax);
         }
         /// <summary>
         /// Returns TEC labor costs of associated costs
@@ -531,7 +531,7 @@ namespace EstimatingLibrary
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * GetExtendedMaterialCost();
+                outTax += .0875 * TECMaterialCost;
             }
 
             return outTax;
