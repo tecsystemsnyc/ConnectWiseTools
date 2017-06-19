@@ -146,88 +146,117 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECSystem && referenceObject is TECSystem)
+                    if (targetObject is TECSystem)
                     {
-                        DeviceSummaryVM.AddInstanceSystem(targetObject as TECSystem);
-                        foreach (TECController control in (targetObject as TECSystem).Controllers)
+                        addInstanceSystem(targetObject as TECSystem);
+                    }
+                    else if (targetObject is TECEquipment)
+                    {
+                        addEquipment(targetObject as TECEquipment);
+                    }
+                    else if (targetObject is TECSubScope)
+                    {
+                        addSubScope(targetObject as TECSubScope);
+                    }
+                    else if (targetObject is TECPoint)
+                    {
+                        addPoint(targetObject as TECPoint);
+                    }
+                    else if (targetObject is TECDevice)
+                    {
+                        addDevice(targetObject as TECDevice);
+                    }
+                    else if (targetObject is TECController)
+                    {
+                        addController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECPanel)
+                    {
+                        addPanel(targetObject as TECPanel);
+                    }
+                    else if (targetObject is TECMisc)
+                    {
+                        if (referenceObject is TECBid)
                         {
-                            ControllerSummaryVM.AddController(control);
+                            addMiscCost(targetObject as TECMisc);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            addMiscCost(targetObject as TECMisc, referenceObject as TECSystem);
                         }
                     }
-                    else if (targetObject is TECEquipment && referenceObject is TECSystem)
+                    else if (targetObject is TECCost)
                     {
-                        DeviceSummaryVM.AddEquipment(targetObject as TECEquipment);
-                    }
-                    else if (targetObject is TECSubScope && referenceObject is TECEquipment)
-                    {
-                        DeviceSummaryVM.AddSubScope(targetObject as TECSubScope);
-                    }
-                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
-                    {
-                        DeviceSummaryVM.AddDevice(targetObject as TECDevice);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECDevice)
-                    {
-                        DeviceSummaryVM.AddCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
-                    }
-                    else if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        ControllerSummaryVM.AddController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        PanelTypeSummaryVM.AddPanel(targetObject as TECPanel);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECController)
-                    {
-                        ControllerSummaryVM.AddCostToController(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECPanel)
-                    {
-                        PanelTypeSummaryVM.AddCostToPanel(targetObject as TECCost);
+                        if (referenceObject is TECController)
+                        {
+                            ControllerSummaryVM.AddCostToController(targetObject as TECCost);
+                        }
+                        else if (referenceObject is TECPanel)
+                        {
+                            PanelTypeSummaryVM.AddCostToPanel(targetObject as TECCost);
+                        }
+                        else if (referenceObject is TECDevice)
+                        {
+                            DeviceSummaryVM.AddCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
+                        }
+                        else
+                        {
+                            addAssCost(targetObject as TECCost);
+                        }
                     }
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
+                    if (targetObject is TECSystem)
                     {
-                        DeviceSummaryVM.RemoveInstanceSystem(targetObject as TECSystem);
-                        foreach (TECController control in (targetObject as TECSystem).Controllers)
+                        removeInstanceSystem(targetObject as TECSystem);
+                    }
+                    else if (targetObject is TECEquipment)
+                    {
+                        removeEquipment(targetObject as TECEquipment);
+                    }
+                    else if (targetObject is TECSubScope)
+                    {
+                        removeSubScope(targetObject as TECSubScope);
+                    }
+                    else if (targetObject is TECPoint)
+                    {
+                        removePoint(targetObject as TECPoint);
+                    }
+                    else if (targetObject is TECDevice)
+                    {
+                        removeDevice(targetObject as TECDevice);
+                    }
+                    else if (targetObject is TECController)
+                    {
+                        removeController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECPanel)
+                    {
+                        removePanel(targetObject as TECPanel);
+                    }
+                    else if (targetObject is TECMisc)
+                    {
+                        removeMiscCost(targetObject as TECMisc);
+                    }
+                    else if (targetObject is TECCost)
+                    {
+                        if (referenceObject is TECController)
                         {
-                            ControllerSummaryVM.RemoveController(control);
+                            ControllerSummaryVM.RemoveCostFromController(targetObject as TECCost);
                         }
-                    }
-                    else if (targetObject is TECEquipment && referenceObject is TECSystem)
-                    {
-                        DeviceSummaryVM.RemoveEquipment(targetObject as TECEquipment);
-                    }
-                    else if (targetObject is TECSubScope && referenceObject is TECEquipment)
-                    {
-                        DeviceSummaryVM.RemoveSubScope(targetObject as TECSubScope);
-                    }
-                    else if (targetObject is TECDevice && referenceObject is TECSubScope)
-                    {
-                        DeviceSummaryVM.RemoveDevice(targetObject as TECDevice);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECDevice)
-                    {
-                        DeviceSummaryVM.RemoveCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
-                    }
-                    else if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        ControllerSummaryVM.RemoveController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECPanel && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        PanelTypeSummaryVM.RemovePanel(targetObject as TECPanel);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECController)
-                    {
-                        ControllerSummaryVM.RemoveCostFromController(targetObject as TECCost);
-                    }
-                    else if (targetObject is TECCost && referenceObject is TECPanel)
-                    {
-                        PanelTypeSummaryVM.RemoveCostFromPanel(targetObject as TECCost);
+                        else if (referenceObject is TECPanel)
+                        {
+                            PanelTypeSummaryVM.RemoveCostFromPanel(targetObject as TECCost);
+                        }
+                        else if (referenceObject is TECDevice)
+                        {
+                            DeviceSummaryVM.RemoveCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
+                        }
+                        else
+                        {
+                            removeAssCost(targetObject as TECCost);
+                        }
                     }
                 }
             }
@@ -242,38 +271,16 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {
-                    if (targetObject is TECMisc)
+                    if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        TECMisc cost = targetObject as TECMisc;
-                        if (referenceObject is TECBid)
-                        {
-                            MiscCostsSummaryVM.AddMiscCost(cost);
-                        }
-                        else if (referenceObject is TECSystem)
-                        {
-                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
-                            {
-                                MiscCostsSummaryVM.AddMiscCost(cost);
-                            }
-                        }
+                        addTypicalSystem(targetObject as TECSystem);
                     }
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
-                    if (targetObject is TECMisc)
+                    if (targetObject is TECSystem && referenceObject is TECBid)
                     {
-                        TECMisc cost = targetObject as TECMisc;
-                        if (referenceObject is TECBid)
-                        {
-                            MiscCostsSummaryVM.RemoveMiscCost(cost);
-                        }
-                        else if (referenceObject is TECSystem)
-                        {
-                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
-                            {
-                                MiscCostsSummaryVM.RemoveMiscCost(cost);
-                            }
-                        }
+                        removeTypicalSystem(targetObject as TECSystem);
                     }
                 }
             }
@@ -476,6 +483,15 @@ namespace TECUserControlLibrary.ViewModels
         private void removeMiscCost(TECMisc misc)
         {
             MiscCostsSummaryVM.RemoveMiscCost(misc);
+        }
+
+        private void addAssCost(TECCost cost)
+        {
+            MiscCostsSummaryVM.AddAssCost(cost);
+        }
+        private void removeAssCost(TECCost cost)
+        {
+            MiscCostsSummaryVM.RemoveAssCost(cost);
         }
         #endregion
     }
