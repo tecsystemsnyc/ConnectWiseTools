@@ -84,6 +84,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(cost);
             _cost = cost.Cost;
             _labor = cost.Labor;
+            _type = cost.Type;
         }
 
         public override object Copy()

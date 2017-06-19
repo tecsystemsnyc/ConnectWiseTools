@@ -13,7 +13,6 @@ namespace Tests
     [TestClass]
     public class EstimatorTests
     {
-
         public EstimatorTests()
         {
             //
