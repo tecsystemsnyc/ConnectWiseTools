@@ -578,11 +578,13 @@ namespace Tests
             TECCost testAssociatedCost = new TECCost();
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
+            testAssociatedCost.Type = CostType.Electrical;
 
             outCatalogs.AssociatedCosts.Add(testAssociatedCost);
 
             var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
+            testCost2.Type = CostType.TEC;
             outCatalogs.AssociatedCosts.Add(testCost2);
 
 
@@ -714,15 +716,15 @@ namespace Tests
             labor.ElectricalIsUnion = true;
             return labor;
         }
+        
 
         public static T RandomObject<T>(this ObservableCollection<T> list)
         {
             int index = 0;
             if(list.Count > 0)
             {
-                int maxIndex = list.Count - 1;
                 Random rand = new Random();
-                index = rand.Next(0, maxIndex);
+                index = rand.Next(0, list.Count);
                 return list[index];
             }
             else
