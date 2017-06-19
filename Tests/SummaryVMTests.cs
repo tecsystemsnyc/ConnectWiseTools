@@ -132,9 +132,58 @@ namespace Tests
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addMiscCost", misc);
+            testVM.Invoke("addMiscCost", misc, null);
 
             Total total = calculateTotal(misc, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddElectricalMiscToBid()
+        {
+            TECMisc misc = null;
+            while (misc == null)
+            {
+                TECMisc randomMisc = TestHelper.CreateTestMisc();
+                if (randomMisc.Type == CostType.Electrical)
+                {
+                    misc = randomMisc;
+                }
+            }
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc, null);
+
+            Total total = calculateTotal(misc, CostType.TEC);
+
+            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void AddTECMiscToSystem()
+        {
+            TECSystem system = TestHelper.CreateTestSystem(catalogs);
+            for(int i = 0; i < TestHelper.RandomInt(0, 10); i++)
+            {
+                system.AddInstance(new TECBid());
+            }
+            TECMisc misc = TestHelper.CreateTestMisc();
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("addMiscCost", misc, system);
+
+
         }
         #endregion
 
@@ -461,17 +510,14 @@ namespace Tests
         {
             if (cost.Type == type)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = cost.Cost * cost.Quantity;
                 total.labor = cost.Labor * cost.Quantity;
                 return total;
             }
             else
             {
-                Total total;
-                total.cost = 0;
-                total.labor = 0;
-                return total;
+                return new Total();
             }
         }
 
@@ -560,14 +606,20 @@ namespace Tests
 
         #endregion
 
-        private struct Total
+        private class Total
         {
             public double cost;
             public double labor;
 
+            public Total()
+            {
+                cost = 0;
+                labor = 0;
+            }
+
             public static Total operator +(Total left, Total right)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = left.cost + right.cost;
                 total.labor = left.labor + right.labor;
                 return total;
@@ -575,9 +627,17 @@ namespace Tests
 
             public static Total operator -(Total left, Total right)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = left.cost - right.cost;
                 total.labor = left.labor - right.labor;
+                return total;
+            }
+
+            public static Total operator *(Total left, double right)
+            {
+                Total total = new Total();
+                total.cost = left.cost * right;
+                total.labor = left.labor * right;
                 return total;
             }
         }
