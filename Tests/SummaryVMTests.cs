@@ -338,13 +338,17 @@ namespace Tests
         public void ElectricalSummary_addConnection()
         {
             TECController controller = TestHelper.CreateTestController(catalogs);
-
+            TECSubScope subScope = TestHelper.CreateTestSubScope(catalogs);
+            TECConnection connection = controller.AddSubScope(subScope);
+            connection.Length = 50;
+            connection.ConduitLength = 50;
+            connection.ConduitType = catalogs.ConduitTypes.RandomObject();
             ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke("addMiscCost", misc, null);
+            testVM.Invoke("addConnection", connection, null);
 
-            Total total = calculateTotal(misc, CostType.Electrical);
+            Total total = calculateTotal(connection, CostType.Electrical);
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
