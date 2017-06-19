@@ -108,7 +108,7 @@ namespace Tests
             PrivateObject testVM = new PrivateObject(vm);
             testVM.Invoke("addAssCost", cost);
 
-            Total total = calculateCost(cost, CostType.TEC);
+            Total total = calculateTotal(cost, CostType.TEC);
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
