@@ -172,12 +172,18 @@ namespace Tests
         public void AddTECMiscToSystem()
         {
             TECSystem system = TestHelper.CreateTestSystem(catalogs);
-            system.AddInstance(new TECBid());
+            for(int i = 0; i < TestHelper.RandomInt(0, 10); i++)
+            {
+                system.AddInstance(new TECBid());
+            }
+            TECMisc misc = TestHelper.CreateTestMisc();
 
             TECMaterialSummaryVM vm = new TECMaterialSummaryVM(new TECBid());
 
             PrivateObject testVM = new PrivateObject(vm);
-            testVM.Invoke
+            testVM.Invoke("addMiscCost", misc, system);
+
+
         }
         #endregion
 
@@ -196,31 +202,34 @@ namespace Tests
         {
             if (cost.Type == type)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = cost.Cost * cost.Quantity;
                 total.labor = cost.Labor * cost.Quantity;
                 return total;
             }
             else
             {
-                Total total;
-                total.cost = 0;
-                total.labor = 0;
-                return total;
+                return new Total();
             }
         }
 
         
         #endregion
 
-        private struct Total
+        private class Total
         {
             public double cost;
             public double labor;
 
+            public Total()
+            {
+                cost = 0;
+                labor = 0;
+            }
+
             public static Total operator +(Total left, Total right)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = left.cost + right.cost;
                 total.labor = left.labor + right.labor;
                 return total;
@@ -228,7 +237,7 @@ namespace Tests
 
             public static Total operator -(Total left, Total right)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = left.cost - right.cost;
                 total.labor = left.labor - right.labor;
                 return total;
@@ -236,7 +245,7 @@ namespace Tests
 
             public static Total operator *(Total left, double right)
             {
-                Total total;
+                Total total = new Total();
                 total.cost = left.cost * right;
                 total.labor = left.labor * right;
                 return total;
