@@ -181,6 +181,32 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AddDeviceWithMultiplierToSubScope()
+        {
+            var bid = new TECBid();
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 0.5;
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { new TECConnectionType() }, manufacturer);
+            device.Cost = 100;
+            bid.Catalogs.Devices.Add(device);
+
+            subScope.Devices.Add(device);
+
+            Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added");
+        }
+
+        [TestMethod]
         public void Estimate_AddConnectionToSubScope()
         {
             var bid = new TECBid();

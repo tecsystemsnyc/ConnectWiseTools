@@ -40,6 +40,7 @@ namespace TECUserControlLibrary.ViewModels
         private void refreshSelected(TECSystem selected)
         {
             ComponentVM.SelectedSystem = selected;
+            ComponentChanged?.Invoke(ComponentIndex);
         }
 
         private TECBid _bid;
