@@ -146,10 +146,10 @@ namespace TECUserControlLibrary.ViewModels
             if (containsPanelType)
             {
                 PanelTypeSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
-                PanelTypeLaborSubTotal -= panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal -= panelTypeDictionary[panel.Type.Guid].LaborTotal;
                 panelTypeDictionary[panel.Type.Guid].Quantity++;
                 PanelTypeSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
-                PanelTypeLaborSubTotal += panelTypeDictionary[panel.Type.Guid].Total;
+                PanelTypeLaborSubTotal += panelTypeDictionary[panel.Type.Guid].LaborTotal;
             }
             else
             {

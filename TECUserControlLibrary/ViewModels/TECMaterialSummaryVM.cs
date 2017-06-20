@@ -76,7 +76,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public double TotalPanelLabor
         {
-            get { return PanelTypeSummaryVM.PanelAssCostSubTotalLabor; }
+            get { return (PanelTypeSummaryVM.PanelTypeLaborSubTotal + PanelTypeSummaryVM.PanelAssCostSubTotalLabor); }
         }
 
         public double TotalMiscCost
@@ -321,7 +321,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TotalPanelCost");
                 RaisePropertyChanged("TotalCost");
             }
-            else if (e.PropertyName == "PanelAssCostSubTotalLabor")
+            else if (e.PropertyName == "PanelTypeLaborSubTotal" || e.PropertyName == "PanelAssCostSubTotalLabor")
             {
                 RaisePropertyChanged("TotalPanelLabor");
                 RaisePropertyChanged("TotalLabor");
