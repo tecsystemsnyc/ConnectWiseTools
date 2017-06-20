@@ -1103,11 +1103,11 @@ namespace Tests
             }
             foreach(TECController controller in system.Controllers)
             {
-                calculateTotal(controller, type);
+                total += calculateTotal(controller, type);
             }
             foreach(TECPanel panel in system.Panels)
             {
-                calculateTotal(panel, type);
+                total += calculateTotal(panel, type);
             }
             total += calculateTotal(system as TECScope, type);
             return total;
