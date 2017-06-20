@@ -1141,7 +1141,7 @@ namespace Tests
             }
             if(connection.ConduitType != null)
             {
-                total += calculateTotal(connection.ConduitType, type) * connection.Length;
+                total += calculateTotal(connection.ConduitType, type) * connection.ConduitLength;
                 total += calculateTotal(connection.ConduitType as TECScope, type);
                 foreach (TECCost cost in connection.ConduitType.RatedCosts)
                 {

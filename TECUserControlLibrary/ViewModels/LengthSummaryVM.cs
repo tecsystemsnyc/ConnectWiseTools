@@ -218,6 +218,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void AddConnection(TECConnection connection)
         {
+            connection.PropertyChanged += Connection_PropertyChanged;
             if (Type == LengthType.Conduit)
             {
                 if (connection.ConduitType != null)
@@ -269,8 +270,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+
         public void RemoveConnection(TECConnection connection)
         {
+            connection.PropertyChanged -= Connection_PropertyChanged;
             if (Type == LengthType.Conduit)
             {
                 if (connection.ConduitType != null)
@@ -420,6 +423,22 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 throw new InvalidOperationException("Cost not found in ratedCost dicionary.");
+            }
+        }
+        #endregion
+
+        #region Event Handlers
+        private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e is PropertyChangedExtendedEventArgs<object>)
+            {
+                PropertyChangedExtendedEventArgs<object> args = e as PropertyChangedExtendedEventArgs<object>;
+
+                if (args.PropertyName == "ConduitType")
+                {
+                    RemoveConnection(args.OldValue as TECConnection);
+                    AddConnection(args.NewValue as TECConnection);
+                }
             }
         }
         #endregion
