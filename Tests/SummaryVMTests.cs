@@ -86,8 +86,6 @@ namespace Tests
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
