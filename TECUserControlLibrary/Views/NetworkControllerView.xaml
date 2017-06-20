@@ -22,6 +22,7 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <DataGrid ItemsSource="{Binding NetworkControllers}"
                   AutoGenerateColumns="False"
+                  CanUserDeleteRows="False"
                   dd:DragDrop.DropHandler="{Binding}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30" IsReadOnly="True" 

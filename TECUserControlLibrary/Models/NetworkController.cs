@@ -181,6 +181,10 @@ namespace TECUserControlLibrary.Models
             controller.ChildrenConnections.CollectionChanged += ChildrenConnections_CollectionChanged;
             controller.PropertyChanged += Controller_PropertyChanged;
             this.defaultWireType = defaultWireType;
+            if (controller.ParentConnection != null)
+            {
+                controller.ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
+            }
         }
 
         public void RefreshIsConnected()
@@ -263,10 +267,32 @@ namespace TECUserControlLibrary.Models
         }
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ParentConnection")
+            if (e is PropertyChangedExtendedEventArgs<object>)
             {
-                RaisePropertyChanged("ParentController");
-                RefreshIsConnected();
+                var args = e as PropertyChangedExtendedEventArgs<object>;
+
+                if (args.PropertyName == "ParentConnection")
+                {
+                    if ((args.OldValue as TECController).ParentConnection != null)
+                    {
+                        (args.OldValue as TECController).ParentConnection.PropertyChanged -= ParentConnection_PropertyChanged;
+                    }
+                    RaisePropertyChanged("ParentController");
+                    RefreshIsConnected();
+                    (args.NewValue as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
+                }
+            }
+        }
+
+        private void ParentConnection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Length")
+            {
+                RaisePropertyChanged("WireLength");
+            }
+            else if (e.PropertyName == "ConduitLength")
+            {
+                RaisePropertyChanged("ConduitLength");
             }
         }
         #endregion
