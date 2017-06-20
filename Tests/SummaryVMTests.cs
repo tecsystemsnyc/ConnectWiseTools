@@ -86,8 +86,6 @@ namespace Tests
 
             Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -1040,8 +1038,11 @@ namespace Tests
         private Total calculateTotal(TECDevice device, CostType type)
         {
             Total total = new Total();
-            total.cost = device.ExtendedCost;
-            total.labor = device.Labor;
+            if (type == CostType.TEC)
+            {
+                total.cost += device.ExtendedCost;
+                total.labor += device.Labor;
+            }
             total += calculateTotal(device as TECScope, type);
             return total;
         }
@@ -1105,11 +1106,11 @@ namespace Tests
             }
             foreach(TECController controller in system.Controllers)
             {
-                calculateTotal(controller, type);
+                total += calculateTotal(controller, type);
             }
             foreach(TECPanel panel in system.Panels)
             {
-                calculateTotal(panel, type);
+                total += calculateTotal(panel, type);
             }
             total += calculateTotal(system as TECScope, type);
             return total;
