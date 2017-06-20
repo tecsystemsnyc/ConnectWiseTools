@@ -546,7 +546,7 @@ namespace Tests
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
             manufacturer1.Name = "Test";
-            manufacturer1.Multiplier = RandomInt(0, 1);
+            manufacturer1.Multiplier = RandomDouble(0, 1);
             
             outCatalogs.Manufacturers.Add(manufacturer1);
 

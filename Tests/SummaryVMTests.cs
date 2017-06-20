@@ -1035,7 +1035,8 @@ namespace Tests
         private Total calculateTotal(TECDevice device, CostType type)
         {
             Total total = new Total();
-            total += calculateTotal(device as TECCost, type);
+            total.cost = device.ExtendedCost;
+            total.labor = device.Labor;
             total += calculateTotal(device as TECScope, type);
             return total;
         }

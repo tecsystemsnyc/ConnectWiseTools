@@ -262,9 +262,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach (TECCost cost in device.AssociatedCosts)
             {
-                Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                DeviceAssCostSubTotalCost += delta.Item1;
-                DeviceAssCostSubTotalLabor += delta.Item2;
+                if (cost.Type == CostType.TEC)
+                {
+                    Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                    DeviceAssCostSubTotalCost += delta.Item1;
+                    DeviceAssCostSubTotalLabor += delta.Item2;
+                }
             }
         }
         public void RemoveDevice(TECDevice device)
@@ -284,9 +287,12 @@ namespace TECUserControlLibrary.ViewModels
 
                 foreach (TECCost cost in device.AssociatedCosts)
                 {
-                    Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
-                    DeviceAssCostSubTotalCost += delta.Item1;
-                    DeviceAssCostSubTotalLabor += delta.Item2;
+                    if (cost.Type == CostType.TEC)
+                    {
+                        Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, deviceAssCostDictionary, DeviceAssCostSummaryItems);
+                        DeviceAssCostSubTotalCost += delta.Item1;
+                        DeviceAssCostSubTotalLabor += delta.Item2;
+                    }
                 }
             }
             else
@@ -297,7 +303,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void AddCostToDevices(TECCost cost, TECDevice device)
         {
-            if (deviceDictionary.ContainsKey(device.Guid))
+            if (deviceDictionary.ContainsKey(device.Guid) && cost.Type == CostType.TEC)
             {
                 for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
@@ -309,7 +315,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void RemoveCostFromDevices(TECCost cost, TECDevice device)
         {
-            if (deviceDictionary.ContainsKey(device.Guid))
+            if (deviceDictionary.ContainsKey(device.Guid) && cost.Type == CostType.TEC)
             {
                 for (int i = 0; i < deviceDictionary[device.Guid].Quantity; i++)
                 {
