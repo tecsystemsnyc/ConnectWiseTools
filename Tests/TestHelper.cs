@@ -942,5 +942,18 @@ namespace Tests
                 scope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());
             }
         }
+
+        public static bool areDoublesEqual(double first, double second, double maxDiff = 1.0 / 1000.0)
+        {
+            var absFirst = Math.Abs(first);
+            if(Math.Abs(first - second) > (maxDiff))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

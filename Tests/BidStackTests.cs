@@ -942,7 +942,6 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
             subScope.Devices.Add(edit);
-            Assert.AreEqual((beforeCount + 2), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert

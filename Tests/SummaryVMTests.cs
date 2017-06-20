@@ -366,8 +366,9 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+
+            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, 1.0 / 1000.0, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, 1.0 / 1000.0, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -387,8 +388,8 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, 1.0 / 1000.0, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, 1.0 / 1000.0, "Total labor didn't update properly.");
         }
 
         [TestMethod]
