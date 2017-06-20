@@ -13,6 +13,7 @@ namespace Tests
 {
     public static class TestHelper
     {
+        static private Random rand = new Random();
         static public string StaticTestBidPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestBid.tbdb";
         static public string StaticTestTemplatesPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\StaticTestTemplates.ttdb";
         static public string TestPDF1 = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Resources\Sales Office Update.pdf";
@@ -763,12 +764,10 @@ namespace Tests
         }
         public static int RandomInt(int min, int max)
         {
-            Random rand = new Random();
             return rand.Next(min, max);
         }
         public static double RandomDouble(double min, double max)
         {
-            Random rand = new Random();
             double multiplier = rand.NextDouble();
             return (multiplier * (max - min)) + min;
         }
