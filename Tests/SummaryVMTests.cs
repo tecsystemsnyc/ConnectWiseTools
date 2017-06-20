@@ -22,6 +22,8 @@ namespace Tests
 
         private TestContext testContextInstance;
 
+        private static double delta = 1.0 / 1000.0;
+
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
@@ -84,8 +86,8 @@ namespace Tests
 
             Total total = calculateTotal(cost, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -108,10 +110,10 @@ namespace Tests
 
             Total total = calculateTotal(cost, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -126,8 +128,8 @@ namespace Tests
 
             Total total = calculateTotal(misc, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -142,8 +144,8 @@ namespace Tests
 
             Total total = calculateTotal(misc, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -164,8 +166,8 @@ namespace Tests
             Total total = calculateTotal(misc, CostType.TEC);
             total *= system.SystemInstances.Count;
 
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -186,8 +188,8 @@ namespace Tests
             Total total = calculateTotal(misc, CostType.TEC);
             total *= system.SystemInstances.Count;
 
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -202,8 +204,8 @@ namespace Tests
 
             Total total = calculateTotal(panel, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -218,8 +220,8 @@ namespace Tests
 
             Total total = calculateTotal(controller, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -234,8 +236,8 @@ namespace Tests
 
             Total total = calculateTotal(point, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -250,8 +252,8 @@ namespace Tests
 
             Total total = calculateTotal(device, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -266,8 +268,8 @@ namespace Tests
 
             Total total = calculateTotal(subscope, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -282,8 +284,8 @@ namespace Tests
 
             Total total = calculateTotal(equipment, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -300,8 +302,8 @@ namespace Tests
 
             Total total = calculateTotal(system, CostType.TEC);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
         #endregion
 
@@ -334,8 +336,8 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -367,8 +369,8 @@ namespace Tests
             testVM.Invoke("removeAssCost", removed);
 
 
-            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, 1.0 / 1000.0, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, 1.0 / 1000.0, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -388,8 +390,8 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, 1.0 / 1000.0, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, 1.0 / 1000.0, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -409,8 +411,8 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -430,8 +432,8 @@ namespace Tests
 
             testVM.Invoke("removePanel", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -451,8 +453,8 @@ namespace Tests
 
             testVM.Invoke("removeController", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -470,8 +472,8 @@ namespace Tests
 
             testVM.Invoke("removePoint", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -489,8 +491,8 @@ namespace Tests
 
             testVM.Invoke("removeDevice", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -504,13 +506,13 @@ namespace Tests
             double initialTotalCost = vm.TotalCost;
             double initialTotalLabor = vm.TotalLabor;
 
-            Total delta = calculateTotal(removed, CostType.TEC);
+            Total total = calculateTotal(removed, CostType.TEC);
 
             PrivateObject testVM = new PrivateObject(vm);
             testVM.Invoke("removeSubScope", removed);
 
-            Assert.AreEqual(initialTotalCost - delta.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - delta.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -524,13 +526,13 @@ namespace Tests
             double initialTotalCost = vm.TotalCost;
             double initialTotalLabor = vm.TotalLabor;
 
-            Total delta = calculateTotal(removed, CostType.TEC);
+            Total total = calculateTotal(removed, CostType.TEC);
 
             PrivateObject testVM = new PrivateObject(vm);
             testVM.Invoke("removeEquipment", removed);
 
-            Assert.AreEqual(initialTotalCost - delta.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - delta.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -552,8 +554,8 @@ namespace Tests
 
             testVM.Invoke("removeInstanceSystem", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
         #endregion
         #endregion
@@ -580,10 +582,10 @@ namespace Tests
 
             Total total = calculateTotal(cost, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -606,10 +608,10 @@ namespace Tests
 
             Total total = calculateTotal(cost, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
 
         [TestMethod]
@@ -632,10 +634,10 @@ namespace Tests
 
             Total total = calculateTotal(misc, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscCost, total.cost, "Total misc cost didn't update properly.");
-            Assert.AreEqual(vm.TotalMiscLabor, total.labor, "Total misc labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscCost, total.cost, delta, "Total misc cost didn't update properly.");
+            Assert.AreEqual(vm.TotalMiscLabor, total.labor, delta, "Total misc labor didn't update properly.");
         }
         
         [TestMethod]
@@ -652,8 +654,8 @@ namespace Tests
 
             Total total = calculateTotal(system, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -668,8 +670,8 @@ namespace Tests
 
             Total total = calculateTotal(controller, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -688,8 +690,8 @@ namespace Tests
 
             Total total = calculateTotal(connection, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -704,8 +706,8 @@ namespace Tests
 
             Total total = calculateTotal(equipment, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -720,8 +722,8 @@ namespace Tests
 
             Total total = calculateTotal(subScope, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -740,8 +742,8 @@ namespace Tests
 
             Total total = calculateTotal(point, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -764,8 +766,8 @@ namespace Tests
 
             Total total = calculateTotal(cost, CostType.Electrical);
 
-            Assert.AreEqual(vm.TotalCost, total.cost, "Total cost didn't update properly.");
-            Assert.AreEqual(vm.TotalLabor, total.labor, "Total labor didn't update properly.");
+            Assert.AreEqual(vm.TotalCost, total.cost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, total.labor, delta, "Total labor didn't update properly.");
         }
 
         #endregion
@@ -799,8 +801,8 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -831,8 +833,8 @@ namespace Tests
 
             testVM.Invoke("removeAssCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -852,8 +854,8 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -873,8 +875,8 @@ namespace Tests
 
             testVM.Invoke("removeMiscCost", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
         
         [TestMethod]
@@ -896,8 +898,8 @@ namespace Tests
 
             testVM.Invoke("removeInstanceSystem", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -915,8 +917,8 @@ namespace Tests
 
             testVM.Invoke("removeController", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -940,8 +942,8 @@ namespace Tests
 
             testVM.Invoke("removeConnection", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -959,8 +961,8 @@ namespace Tests
 
             testVM.Invoke("removeEquipment", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -978,8 +980,8 @@ namespace Tests
 
             testVM.Invoke("removeSubScope", removed);
             
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         [TestMethod]
@@ -997,8 +999,8 @@ namespace Tests
 
             testVM.Invoke("removePoint", removed);
 
-            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
-            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, delta, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, delta, "Total labor didn't update properly.");
         }
 
         #endregion
