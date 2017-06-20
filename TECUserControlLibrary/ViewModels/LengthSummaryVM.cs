@@ -183,6 +183,10 @@ namespace TECUserControlLibrary.ViewModels
                     AddInstanceSystem(instance);
                 }
             }
+            foreach(TECController controller in bid.Controllers)
+            {
+                AddController(controller);
+            }
         }
 
         #region Add/Remove
