@@ -581,7 +581,6 @@ namespace Tests
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
             testAssociatedCost.Labor = 39;
-            testAssociatedCost.Quantity = 5;
             testAssociatedCost.Type = CostType.Electrical;
 
             outCatalogs.AssociatedCosts.Add(testAssociatedCost);
@@ -590,7 +589,6 @@ namespace Tests
             testCost2.Name = "Other Cost";
             testCost2.Cost = 98;
             testCost2.Labor = 72;
-            testCost2.Quantity = 3;
             testCost2.Type = CostType.TEC;
             outCatalogs.AssociatedCosts.Add(testCost2);
 
