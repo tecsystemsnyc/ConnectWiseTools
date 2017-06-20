@@ -339,6 +339,223 @@ namespace Tests
             Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
             Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
         }
+
+        [TestMethod]
+        public void RemoveElectricalCost()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECCost cost = null;
+            while (cost == null)
+            {
+                TECCost randomCost = bid.Catalogs.AssociatedCosts.RandomObject();
+                if (randomCost.Type == CostType.Electrical)
+                {
+                    cost = randomCost;
+                }
+            }
+            var system = bid.Systems.RandomObject();
+            system.AddInstance(bid);
+            system.AssociatedCosts.Add(cost);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = cost;
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removeAssCost", removed);
+
+            Assert.AreEqual(vm.TotalCost, initialTotalCost - total.cost, "Total cost didn't update properly.");
+            Assert.AreEqual(vm.TotalLabor, initialTotalLabor - total.labor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveTECMisc()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
+            bid.MiscCosts.Add(misc);
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = misc;
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removeMiscCost", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveElectricalMisc()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
+            bid.MiscCosts.Add(misc);
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = misc;
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removeMiscCost", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemovePanel()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECPanel panel = TestHelper.CreateTestPanel(catalogs);
+            bid.Panels.Add(panel);
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            TECPanel removed = panel;
+            Total total = calculateTotal(panel, CostType.TEC);
+
+            testVM.Invoke("removePanel", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveController()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECController controller = TestHelper.CreateTestController(catalogs);
+            bid.Controllers.Add(controller);
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            TECController removed = controller;
+            Total total = calculateTotal(controller, CostType.TEC);
+
+            testVM.Invoke("removeController", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemovePoint()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = bid.RandomPoint();
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removePoint", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveDevice()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            TECDevice removed = bid.RandomDevice();
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removeDevice", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveSubScope()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            TECSubScope removed = bid.RandomSubScope();
+
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            Total delta = calculateTotal(removed, CostType.TEC);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("removeSubScope", removed);
+
+            Assert.AreEqual(initialTotalCost - delta.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - delta.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveEquipment()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            TECEquipment removed = bid.RandomEquipment();
+
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            Total delta = calculateTotal(removed, CostType.TEC);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            testVM.Invoke("removeEquipment", removed);
+
+            Assert.AreEqual(initialTotalCost - delta.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - delta.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
+        public void RemoveInstanceSystem()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            TECMaterialSummaryVM vm = new TECMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = system.SystemInstances.RandomObject();
+            Total total = calculateTotal(removed, CostType.TEC);
+
+            testVM.Invoke("removeInstanceSystem", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
         #endregion
         #endregion
 
@@ -620,6 +837,27 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ElectricalSummary_RemoveTECMiscFromBid()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
+            bid.MiscCosts.Add(misc);
+            ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(bid);
+
+            PrivateObject testVM = new PrivateObject(vm);
+            double initialTotalCost = vm.TotalCost;
+            double initialTotalLabor = vm.TotalLabor;
+
+            var removed = misc;
+            Total total = calculateTotal(removed, CostType.Electrical);
+
+            testVM.Invoke("removeMiscCost", removed);
+
+            Assert.AreEqual(initialTotalCost - total.cost, vm.TotalCost, "Total cost didn't update properly.");
+            Assert.AreEqual(initialTotalLabor - total.labor, vm.TotalLabor, "Total labor didn't update properly.");
+        }
+
+        [TestMethod]
         public void ElectricalSummary_RemoveElectricalMiscFromBid()
         {
             TECBid bid = TestHelper.CreateTestBid();
@@ -645,6 +883,7 @@ namespace Tests
         {
             TECBid bid = TestHelper.CreateTestBid();
             TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
             system.AddInstance(bid);
 
             ElectricalMaterialSummaryVM vm = new ElectricalMaterialSummaryVM(bid);
