@@ -201,6 +201,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 RemoveAssCost(cost);
             }
+            foreach (TECPoint point in subScope.Points)
+            {
+                RemovePoint(point);
+            }
         }
 
         public void AddPoint(TECPoint point)

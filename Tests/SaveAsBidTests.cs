@@ -422,9 +422,6 @@ namespace Tests
             Assert.AreEqual(expectedSystem1.Location.Guid, actualSystem1.Location.Guid);
             Assert.AreEqual(expectedEquipment.Location.Guid, actualEquipment.Location.Guid);
             Assert.AreEqual(expectedSubScope.Location.Guid, actualSubScope.Location.Guid);
-
-            //In CreateTestBid, the first system has the same location as its equipment.
-            Assert.AreEqual(expectedSystem.Location, expectedEquipment.Location);
         }
 
         [TestMethod]
