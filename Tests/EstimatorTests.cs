@@ -586,7 +586,7 @@ namespace Tests
 
             Assert.AreEqual(2, bid.Estimate.TotalPointNumber, "Total points not updating");
             Assert.AreEqual(3.08, bid.Estimate.PMLaborHours, "PM labor calcualtion");
-            Assert.AreEqual(1.5, bid.Estimate.ENGLaborHours, "PM labor calcualtion");
+            Assert.AreEqual(2.5, bid.Estimate.ENGLaborHours, "ENG labor calcualtion");
             Assert.AreEqual(0.74, bid.Estimate.SoftLaborHours, "Software labor calcualtion");
             Assert.AreEqual(1.06, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
             Assert.AreEqual(2.68, bid.Estimate.CommLaborHours, "Comm labor calcualtion");

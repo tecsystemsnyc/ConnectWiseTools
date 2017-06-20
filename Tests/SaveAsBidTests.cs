@@ -395,10 +395,11 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
-            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
+            Assert.IsTrue(TestHelper.areDoublesEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier),
+                "Expected: " + expectedManufacturer.Multiplier + " Actual: " + actualManufacturer.Multiplier);
 
             Assert.AreEqual(expectedDevice.Manufacturer.Name, expectedDevice.Manufacturer.Name);
-            Assert.AreEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier);
+            Assert.IsTrue(TestHelper.areDoublesEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier));
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, expectedDevice.Manufacturer.Guid);
         }
 
