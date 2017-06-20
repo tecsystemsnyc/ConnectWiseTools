@@ -633,10 +633,10 @@ namespace Tests
             connectionTypes.Add(catalogs.ConnectionTypes.RandomObject());
             var manufacturer = catalogs.Manufacturers.RandomObject();
 
-            double cost = (new Random()).Next(0, 1000) / (new Random()).Next(0, 10);
+            double cost = RandomDouble(0, 100);
 
             var assCosts = new ObservableCollection<TECCost>();
-            int costNum = (new Random()).Next(1, 10);
+            int costNum = RandomInt(0,10);
             for(int x = 0; x < costNum; x++)
             {
                 assCosts.Add(catalogs.AssociatedCosts.RandomObject());
