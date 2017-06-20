@@ -58,7 +58,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECBidParameters";
         public static Type ParameterType = typeof(TECBidParameters);
 
-        public static TableField ParamtersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
+        public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
 
         public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
         public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
@@ -72,7 +72,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            ParamtersID
+            ParametersID
         };
 
         public static new List<Type> Types = new List<Type>()
