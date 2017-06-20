@@ -1009,11 +1009,16 @@ namespace Tests
 
         private Total calculateTotal(TECCost cost, CostType type)
         {
+            int qty = 1;
+            if(cost is TECMisc)
+            {
+                qty = cost.Quantity;
+            }
             if (cost.Type == type)
             {
                 Total total = new Total();
-                total.cost = cost.Cost * cost.Quantity;
-                total.labor = cost.Labor * cost.Quantity;
+                total.cost = cost.Cost * qty;
+                total.labor = cost.Labor * qty;
                 return total;
             }
             else
