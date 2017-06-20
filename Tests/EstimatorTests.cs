@@ -22,6 +22,8 @@ namespace Tests
 
         private TestContext testContextInstance;
 
+        private static TECLabor labor;
+
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
@@ -43,8 +45,16 @@ namespace Tests
         // You can use the following additional attributes as you write your tests:
         //
         // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            labor = new TECLabor();
+            labor.PMCoef = 1.54;
+            labor.ENGCoef = 1.25;
+            labor.SoftCoef = 0.37;
+            labor.GraphCoef = 0.53;
+            labor.CommCoef = 1.34;
+        }
         //
         // Use ClassCleanup to run code after all tests in a class have run
         // [ClassCleanup()]
@@ -527,5 +537,53 @@ namespace Tests
             //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(2.5, bid.Estimate.ElectricalWarranty);
         }
+
+        #region Derived Labor
+        [TestMethod]
+        public void Estimate_TECLaborHoursFromPoints()
+        {
+            var bid = new TECBid();
+            bid.Labor = labor;
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            var point = new TECPoint();
+            point.Type = PointTypes.AI;
+
+            subScope.Points.Add(point);
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+            
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            Assert.AreEqual(2, bid.Estimate.TotalPointNumber, "Total points not updating");
+            Assert.AreEqual(3.08, bid.Estimate.PMLaborHours, "PM labor calcualtion");
+            Assert.AreEqual(1.5, bid.Estimate.ENGLaborHours, "PM labor calcualtion");
+            Assert.AreEqual(0.74, bid.Estimate.SoftLaborHours, "Software labor calcualtion");
+            Assert.AreEqual(1.06, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
+            Assert.AreEqual(2.68, bid.Estimate.CommLaborHours, "Comm labor calcualtion");
+        }
+
+        [TestMethod]
+        public void Estimate_TECLaborHoursFromLump()
+        {
+            var bid = new TECBid();
+            bid.Labor = labor;
+            labor.PMExtraHours = 10;
+            labor.ENGExtraHours = 10;
+            labor.SoftExtraHours = 10;
+            labor.GraphExtraHours = 10;
+            labor.CommExtraHours = 10;
+
+            Assert.AreEqual(10, bid.Estimate.PMLaborHours, "PM labor calcualtion");
+            Assert.AreEqual(10, bid.Estimate.ENGLaborHours, "PM labor calcualtion");
+            Assert.AreEqual(10, bid.Estimate.SoftLaborHours, "Software labor calcualtion");
+            Assert.AreEqual(10, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
+            Assert.AreEqual(10, bid.Estimate.CommLaborHours, "Comm labor calcualtion");
+        }
+
+        #endregion
     }
 }
