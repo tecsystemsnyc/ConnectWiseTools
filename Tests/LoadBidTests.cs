@@ -16,6 +16,10 @@ namespace Tests
     {
         static TECBid actualBid;
 
+        static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+        static Guid TEST_COST_GUID = new Guid("");
+        static Guid TEST_LOCATION_GUID = new Guid("");
+
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -222,7 +226,7 @@ namespace Tests
         }
         
         [TestMethod]
-        public void Load_Bid_System()
+        public void Load_Bid_TypicalSystem()
         {
             //Arrange
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
@@ -233,12 +237,9 @@ namespace Tests
             bool expectedProposeEquipment = true;
             int expectedChildren = 1;
 
-
-            Guid expectedChildGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
-            string expectedChildName = "Instance System";
-            string expectedChildDescription = "Instance System Description";
-            int expectedChildQuantity = 1;
-            double expectedChildBP = 100;
+            Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
 
             TECSystem actualSystem = null;
             foreach(TECSystem system in actualBid.Systems)
@@ -249,12 +250,31 @@ namespace Tests
                     break;
                 }
             }
-            TECSystem actualChild = null;
-            foreach(TECSystem child in actualSystem.SystemInstances)
+
+            bool foundEquip = false;
+            foreach (TECEquipment equip in actualSystem.Equipment)
             {
-                if (child.Guid == expectedChildGuid)
+                if (equip.Guid == childEquipment)
                 {
-                    actualChild = child;
+                    foundEquip = true;
+                    break;
+                }
+            }
+            bool foundControl = false;
+            foreach (TECController control in actualSystem.Controllers)
+            {
+                if (control.Guid == childController)
+                {
+                    foundControl = true;
+                    break;
+                }
+            }
+            bool foundPanel = false;
+            foreach(TECPanel panel in actualSystem.Panels)
+            {
+                if (panel.Guid == childPanel)
+                {
+                    foundPanel = true;
                     break;
                 }
             }
@@ -267,19 +287,49 @@ namespace Tests
             Assert.AreEqual(expectedChildren, actualSystem.SystemInstances.Count);
             Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
 
-            Assert.AreEqual(expectedChildName, actualChild.Name);
-            Assert.AreEqual(expectedChildDescription, actualChild.Description);
-            Assert.AreEqual(expectedChildQuantity, actualChild.Quantity);
-            Assert.AreEqual(expectedChildBP, actualChild.BudgetPriceModifier);
+            foreach(TECSystem instance in actualSystem.SystemInstances)
+            {
+                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
+                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
+            }
 
-            Assert.AreEqual(actualSystem.Equipment.Count, actualChild.Equipment.Count);
-            Assert.AreEqual(actualSystem.Panels.Count, actualChild.Panels.Count);
-            Assert.AreEqual(actualSystem.Controllers.Count, actualChild.Controllers.Count);
-
-            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Equipment[0]).Contains(actualChild.Equipment[0]));
-            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Controllers[0]).Contains(actualChild.Controllers[0]));
-            Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Panels[0]).Contains(actualChild.Panels[0]));
+            Assert.IsTrue(foundEquip, "Typical equipment not loaded properly into typical system.");
+            Assert.IsTrue(foundControl, "Typical controller not loaded properly into typical system.");
+            Assert.IsTrue(foundPanel, "Typical panel not loaded properly into typical system.");
         }
+
+        [TestMethod]
+        public void Load_Bid_InstanceSystem()
+        {
+            Guid expectedGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
+            string expectedName = "Instance System";
+            string expectedDescription = "Instance System Description";
+            int expectedQuantity = 1;
+            double expectedBP = 100;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    if (instance.Guid == expectedGuid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+                if (actualSystem != null) { break; }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSystem.Name);
+            Assert.AreEqual(expectedDescription, actualSystem.Description);
+            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+        }
+
+        //----------------------------------------To break out, link tests-----------------------------------------------------
         
         [TestMethod]
         public void Load_Bid_EditSystemInstances()
