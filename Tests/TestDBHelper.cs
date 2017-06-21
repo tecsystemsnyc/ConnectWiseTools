@@ -794,6 +794,207 @@ namespace Tests
         }
         private static void AddToScopeAssociatedCostTable()
         {
+            string tecCostString = "1c2a7631-9e3b-4006-ada7-12d6cee52f08";
+            string electricalCostString = "63ed1eb7-c05b-440b-9e15-397f64ff05c7";
+            string scopeString = "";
+
+            List<string> values = new List<string>();
+            scopeString = "98e6bc3e-31dc-4394-8b54-9ca53c193f46";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "a8cdd31c-e690-4eaa-81ea-602c72904391";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "ebdbcc85-10f4-46b3-99e7-d896679f874a";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "fbe0a143-e7cd-4580-a1c4-26eff0cd55a6";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "03a16819-9205-4e65-a16b-96616309f171";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "1bb86714-2512-4fdd-a80f-46969753d8a0";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "e7695d68-d79f-44a2-92f5-b303436186af";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "ba2e71d4-a2b9-471a-9229-9fbad7432bf7";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "94726d87-b468-46a8-9421-3ff9725d5239";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "e60437bc-09a1-47eb-9fd5-78711d942a12";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "f22913a6-e348-4a77-821f-80447621c6e0";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "10b07f6c-4374-49fc-ba6f-84db65b61ffa";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "95135fdf-7565-4d22-b9e4-1f177febae15";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "f38867c8-3846-461f-a6fa-c941aeb723c7";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "8d442906-efa2-49a0-ad21-f6b27852c9ef";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            scopeString = "04e3204c-b35f-4e1a-8a01-db07f7eb055e";
+            values.Add(scopeString);
+            values.Add(tecCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeString);
+            values.Add(electricalCostString);
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
             
 
         }
@@ -938,7 +1139,30 @@ namespace Tests
         }
         private static void AddToCharacteristicScopeInstanceScopeTable()
         {
+            List<string> values = new List<string>();
+            values.Add("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            values.Add("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
 
+            values = new List<string>();
+            values.Add("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+            values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("03a16819-9205-4e65-a16b-96616309f171");
+            values.Add("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("e7695d68-d79f-44a2-92f5-b303436186af");
+            values.Add("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
         }
         #endregion
     }
