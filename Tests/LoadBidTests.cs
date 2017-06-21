@@ -220,7 +220,6 @@ namespace Tests
             Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
             Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
         }
-
         
         [TestMethod]
         public void Load_Bid_System()
