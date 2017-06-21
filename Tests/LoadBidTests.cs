@@ -298,6 +298,9 @@ namespace Tests
             Assert.IsTrue(foundEquip, "Typical equipment not loaded properly into typical system.");
             Assert.IsTrue(foundControl, "Typical controller not loaded properly into typical system.");
             Assert.IsTrue(foundPanel, "Typical panel not loaded properly into typical system.");
+
+            testForTag(actualSystem);
+            testForCosts(actualSystem);
         }
 
         [TestMethod]
@@ -328,6 +331,8 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+
+            testForScopeChildren(actualSystem);
         }
 
         [TestMethod]
@@ -1061,5 +1066,58 @@ namespace Tests
         //    Assert.AreEqual(expectedYPos, actualVisScope.Y);
         //    Assert.AreEqual(actualSystem, actualVisScope.Scope);
         //}
+
+        private void testForScopeChildren(TECScope scope)
+        {
+            testForTag(scope);
+            testForCosts(scope);
+            testForLocation(scope);
+        }
+
+        private void testForTag(TECScope scope)
+        {
+            bool foundTag = false;
+
+            foreach (TECTag tag in scope.Tags)
+            {
+                if (tag.Guid == TEST_TAG_GUID)
+                {
+                    foundTag = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTag, "Tag not loaded properly into scope.");
+        }
+        private void testForCosts(TECScope scope)
+        {
+            bool foundTECCost = false;
+            bool foundElectricalCost = false;
+
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_TEC_COST_GUID)
+                {
+                    foundTECCost = true;
+                    break;
+                }
+            }
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
+                {
+                    foundElectricalCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
+            Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
+        }
+        private void testForLocation(TECScope scope)
+        {
+            bool foundLocation = (scope.Location.Guid == TEST_LOCATION_GUID);
+            Assert.IsTrue(foundLocation, "Location not loaded properly into scope.");
+        }
     }
 }
