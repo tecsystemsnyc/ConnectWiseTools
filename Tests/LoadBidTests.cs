@@ -221,52 +221,97 @@ namespace Tests
             Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
         }
 
-
-        //----------------------------------------Tests above have new values, below do not-------------------------------------------
-
-
+        
         [TestMethod]
         public void Load_Bid_System()
         {
             //Arrange
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECSystem actualChild = actualSystem.SystemInstances.RandomObject();
-            string expectedName = "Test System";
-            string expectedDescription = "Test System Description";
-            int expectedQuantity = 123;
-            double expectedBP = 12.3;
+            Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            string expectedName = "Typical System";
+            string expectedDescription = "Typical System Description";
+            int expectedQuantity = 1;
+            double expectedBP = 100;
+            bool expectedProposeEquipment = true;
+            int expectedChildren = 1;
+
+
+            Guid expectedChildGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
+            string expectedChildName = "Instance System";
+            string expectedChildDescription = "Instance System Description";
+            int expectedChildQuantity = 1;
+            double expectedChildBP = 100;
+
+            TECSystem actualSystem = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                if(system.Guid == expectedGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+            TECSystem actualChild = null;
+            foreach(TECSystem child in actualSystem.SystemInstances)
+            {
+                if (child.Guid == expectedChildGuid)
+                {
+                    actualChild = child;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreNotEqual(null, actualChild);
             Assert.AreEqual(expectedName, actualSystem.Name);
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+            Assert.AreEqual(expectedChildren, actualSystem.SystemInstances.Count);
+            Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
+
+            Assert.AreEqual(expectedChildName, actualChild.Name);
+            Assert.AreEqual(expectedChildDescription, actualChild.Description);
+            Assert.AreEqual(expectedChildQuantity, actualChild.Quantity);
+            Assert.AreEqual(expectedChildBP, actualChild.BudgetPriceModifier);
+
             Assert.AreEqual(actualSystem.Equipment.Count, actualChild.Equipment.Count);
             Assert.AreEqual(actualSystem.Panels.Count, actualChild.Panels.Count);
             Assert.AreEqual(actualSystem.Controllers.Count, actualChild.Controllers.Count);
+
             Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Equipment[0]).Contains(actualChild.Equipment[0]));
             Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Controllers[0]).Contains(actualChild.Controllers[0]));
             Assert.IsTrue(actualSystem.CharactersticInstances.GetInstances(actualSystem.Panels[0]).Contains(actualChild.Panels[0]));
         }
-
+        
         [TestMethod]
         public void Load_Bid_EditSystemInstances()
         {
-            TECSystem system = actualBid.Systems[0];
-            
-            system.Equipment.Add(TestHelper.CreateTestEquipment(actualBid.Catalogs));
-            system.Controllers.Add(TestHelper.CreateTestController(actualBid.Catalogs));
-            system.Panels.Add(TestHelper.CreateTestPanel(actualBid.Catalogs));
+            Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
 
-            foreach (TECSystem instance in system.SystemInstances)
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
             {
-                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
-                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
-                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+                if (system.Guid == expectedGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+
+            actualSystem.Equipment.Add(TestHelper.CreateTestEquipment(actualBid.Catalogs));
+            actualSystem.Controllers.Add(TestHelper.CreateTestController(actualBid.Catalogs));
+            actualSystem.Panels.Add(TestHelper.CreateTestPanel(actualBid.Catalogs));
+
+            foreach (TECSystem instance in actualSystem.SystemInstances)
+            {
+                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
             }
 
         }
+
+        //----------------------------------------Tests above have new values, below do not-------------------------------------------
+
 
         [TestMethod]
         public void Load_Bid_Equipment()
@@ -479,49 +524,7 @@ namespace Tests
             Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualController.Tags[0].Text);
         }
-
-        [TestMethod]
-        public void Load_Bid_Drawing()
-        {
-            //Arrange
-            TECDrawing actualDrawing = actualBid.Drawings[0];
-
-            //Assert
-            string expectedName = "Test Drawing";
-            string expectedDescription = "Test Drawing Description";
-
-            Assert.AreEqual(expectedName, actualDrawing.Name);
-            Assert.AreEqual(expectedDescription, actualDrawing.Description);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Page()
-        {
-            //Arrange
-            TECPage actualPage = actualBid.Drawings[0].Pages[0];
-
-            //Assert
-            int expectedPageNum = 1;
-
-            Assert.AreEqual(expectedPageNum, actualPage.PageNum);
-        }
-
-        [TestMethod]
-        public void Load_Bid_VisualScope()
-        {
-            //Arrange
-            TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Assert
-            double expectedXPos = 119;
-            double expectedYPos = 69.08;
-
-            Assert.AreEqual(expectedXPos, actualVisScope.X);
-            Assert.AreEqual(expectedYPos, actualVisScope.Y);
-            Assert.AreEqual(actualSystem, actualVisScope.Scope);
-        }
-
+        
         [TestMethod]
         public void Load_Bid_Controller()
         {
@@ -908,6 +911,46 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
 
+        //[TestMethod]
+        //public void Load_Bid_Drawing()
+        //{
+        //    //Arrange
+        //    TECDrawing actualDrawing = actualBid.Drawings[0];
 
+        //    //Assert
+        //    string expectedName = "Test Drawing";
+        //    string expectedDescription = "Test Drawing Description";
+
+        //    Assert.AreEqual(expectedName, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDescription, actualDrawing.Description);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_Page()
+        //{
+        //    //Arrange
+        //    TECPage actualPage = actualBid.Drawings[0].Pages[0];
+
+        //    //Assert
+        //    int expectedPageNum = 1;
+
+        //    Assert.AreEqual(expectedPageNum, actualPage.PageNum);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_VisualScope()
+        //{
+        //    //Arrange
+        //    TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
+        //    TECSystem actualSystem = actualBid.Systems[0];
+
+        //    //Assert
+        //    double expectedXPos = 119;
+        //    double expectedYPos = 69.08;
+
+        //    Assert.AreEqual(expectedXPos, actualVisScope.X);
+        //    Assert.AreEqual(expectedYPos, actualVisScope.Y);
+        //    Assert.AreEqual(actualSystem, actualVisScope.Scope);
+        //}
     }
 }
