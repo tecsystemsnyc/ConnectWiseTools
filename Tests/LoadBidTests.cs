@@ -748,6 +748,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_Tag()
+        {
+            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+            string expectedString = "Test Tag";
+
+            TECTag actualTag = null;
+            foreach(TECTag tag in actualBid.Catalogs.Tags)
+            {
+                if (tag.Guid == expectedGuid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedString, actualTag.Text, "Tag text didn't load properly.");
+        }
+
+        [TestMethod]
         public void Load_Bid_Controller()
         {
             //Arrange
@@ -1210,44 +1229,7 @@ namespace Tests
 
             Assert.AreEqual(1, actualBid.ScopeTree.Count);
         }
-        
-        [TestMethod]
-        public void Load_Bid_Tag()
-        {
-            //Arrange
-            TECTag actualTag = actualBid.Catalogs.Tags[0];
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECEquipment actualEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSubScope = actualEquipment.SubScope[0];
-            TECDevice actualDevice = actualSubScope.Devices[0];
-            TECPoint actualPoint = actualSubScope.Points[0];
-            TECController actualController = actualBid.Controllers[0];
 
-            //Assert
-            string expectedText = "Test Tag";
-            Assert.AreEqual(expectedText, actualTag.Text);
-
-            Guid expectedGuid = actualTag.Guid;
-
-            Assert.AreEqual(expectedGuid, actualSystem.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSystem.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualEquipment.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualEquipment.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualSubScope.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSubScope.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualDevice.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualDevice.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualController.Tags[0].Text);
-        }
-        
         [TestMethod]
         public void Load_Bid_SubScopeConnection()
         {
