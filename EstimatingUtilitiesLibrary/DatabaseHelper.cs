@@ -189,7 +189,8 @@ namespace EstimatingUtilitiesLibrary
                 getUserAdjustments(bid);
                 //Breaks Visual Scope in a page
                 //populatePageVisualConnections(bid.Drawings, bid.Connections);
-
+                bid.Estimate.Refresh();
+                
                 return bid;
             }
             else
