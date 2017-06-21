@@ -41,20 +41,42 @@ namespace Tests
         public void Load_Bid_Info()
         {
             //Assert
-            string expectedName = "Unit Testimate";
-            Assert.AreEqual(expectedName, actualBid.Name);
+            string expectedName = "Testimate";
+            Assert.AreEqual(expectedName, actualBid.Name, "Bid name didn't load properly.");
 
-            string expectedNumber = "1701-117";
-            Assert.AreEqual(expectedNumber, actualBid.BidNumber);
+            string expectedNumber = "7357";
+            Assert.AreEqual(expectedNumber, actualBid.BidNumber, "Bid number didn't load properly.");
 
             DateTime expectedDueDate = new DateTime(1969, 7, 20);
-            Assert.AreEqual(expectedDueDate, actualBid.DueDate);
+            Assert.AreEqual(expectedDueDate, actualBid.DueDate, "Bid due date didn't load properly.");
 
-            string expectedSales = "Mrs. Test";
-            Assert.AreEqual(expectedSales, actualBid.Salesperson);
+            string expectedSales = "Mrs. Salesperson";
+            Assert.AreEqual(expectedSales, actualBid.Salesperson, "Salesperson didn't load properly.");
 
-            string expectedEstimator = "Mr. Test";
-            Assert.AreEqual(expectedEstimator, actualBid.Estimator);
+            string expectedEstimator = "Mr. Estimator";
+            Assert.AreEqual(expectedEstimator, actualBid.Estimator, "Estimator didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Parameters()
+        {
+            double expectedEscalation = 10;
+            double expectedOverhead = 20;
+            double expectedProfit = 20;
+            double expectedSubcontractorMarkup = 20;
+            double expectedSubcontractorEscalation = 10;
+            bool expectedIsTaxExempt = false;
+            bool expectedRequiresBond = false;
+            bool expectedRequiresWrapUp = false;
+
+            Assert.AreEqual(expectedEscalation, actualBid.Parameters.Escalation, "Escalation didn't load properly.");
+            Assert.AreEqual(expectedOverhead, actualBid.Parameters.Overhead, "Overhead didn't load properly.");
+            Assert.AreEqual(expectedProfit, actualBid.Parameters.Profit, "Profit didn't load properly.");
+            Assert.AreEqual(expectedSubcontractorMarkup, actualBid.Parameters.SubcontractorMarkup, "Subcontractor markup didn't load properly.");
+            Assert.AreEqual(expectedSubcontractorEscalation, actualBid.Parameters.SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
+            Assert.AreEqual(expectedIsTaxExempt, actualBid.Parameters.IsTaxExempt, "Is tax exempt didn't load properly.");
+            Assert.AreEqual(expectedRequiresBond, actualBid.Parameters.RequiresBond, "Requires bond didn't load properly.");
+            Assert.AreEqual(expectedRequiresWrapUp, actualBid.Parameters.RequiresWrapUp, "Requires wrap up didn't load properly.");
         }
 
         [TestMethod]
@@ -62,27 +84,27 @@ namespace Tests
         {
             //Assert
             double expectedPMCoef = 2;
-            double expectedPMRate = 2.1;
+            double expectedPMRate = 30;
             Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef);
             Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate);
 
-            double expectedENGCoef = 3;
-            double expectedENGRate = 3.1;
+            double expectedENGCoef = 2;
+            double expectedENGRate = 40;
             Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef);
             Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate);
 
-            double expectedCommCoef = 4;
-            double expectedCommRate = 4.1;
+            double expectedCommCoef = 2;
+            double expectedCommRate = 50;
             Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef);
             Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate);
 
-            double expectedSoftCoef = 5;
-            double expectedSoftRate = 5.1;
+            double expectedSoftCoef = 2;
+            double expectedSoftRate = 60;
             Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef);
             Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate);
 
-            double expectedGraphCoef = 6;
-            double expectedGraphRate = 6.1;
+            double expectedGraphCoef = 2;
+            double expectedGraphRate = 70;
             Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef);
             Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate);
         }
@@ -91,16 +113,18 @@ namespace Tests
         public void Load_Bid_SubcontractorConsts()
         {
             //Assert
-            double expectedElectricalRate = 7;
-            double expectedElectricalSuperRate = 7.1;
-            double expectedElectricalNonUnionRate = 8;
-            double expectedElectricalSuperNonUnionRate = 8.1;
-            bool expectedOT = true;
+            double expectedElectricalRate = 50;
+            double expectedElectricalSuperRate = 60;
+            double expectedElectricalNonUnionRate = 30;
+            double expectedElectricalSuperNonUnionRate = 40;
+            double expectedElectricalSuperRatio = 0.25;
+            bool expectedOT = false;
             bool expectedUnion = true;
             Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
             Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate);
             Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate);
             Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate);
+            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Labor.ElectricalSuperRatio);
             Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime);
             Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion);
         }
@@ -109,11 +133,11 @@ namespace Tests
         public void Load_Bid_UserAdjustments()
         {
             //Assert
-            double expectedPMExtra = 10;
-            double expectedENGExtra = 10.1;
-            double expectedCommExtra = 10.2;
-            double expectedSoftExtra = 10.3;
-            double expectedGraphExtra = 10.4;
+            double expectedPMExtra = 120;
+            double expectedENGExtra = 110;
+            double expectedCommExtra = 100;
+            double expectedSoftExtra = 90;
+            double expectedGraphExtra = 80;
 
             Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours);
             Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours);
@@ -121,6 +145,56 @@ namespace Tests
             Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours);
             Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours);
         }
+
+        [TestMethod]
+        public void Load_Bid_Note()
+        {
+            //Assert
+            Guid expectedGuid = new Guid("50f3a707-fc1b-4eb3-9413-1dbde57b1d90");
+            string expectedText = "Test Note";
+
+            TECNote actualNote = null;
+            foreach(TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == expectedGuid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedText, actualNote.Text);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Exclusion()
+        {
+            //Assert
+            Guid expectedGuid = new Guid("15692e12-e728-4f1b-b65c-de365e016e7a");
+            string expectedText = "Test Exclusion";
+
+            TECExclusion actualExclusion = null;
+            foreach (TECExclusion note in actualBid.Exclusions)
+            {
+                if (note.Guid == expectedGuid)
+                {
+                    actualExclusion = note;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedText, actualExclusion.Text);
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidScopeBranch()
+        {
+            //Incomplete
+        }
+
+
+        //----------------------------------------Tests above have new values, below do not-------------------------------------------
+
 
         [TestMethod]
         public void Load_Bid_System()
@@ -339,23 +413,7 @@ namespace Tests
 
             Assert.AreEqual(1, actualBid.ScopeTree.Count);
         }
-
-        [TestMethod]
-        public void Load_Bid_Note()
-        {
-            //Assert
-            string expectedText = "Test Note";
-            Assert.AreEqual(expectedText, actualBid.Notes[0].Text);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Exclusion()
-        {
-            //Assert
-            string expectedText = "Test Exclusion";
-            Assert.AreEqual(expectedText, actualBid.Exclusions[0].Text);
-        }
-
+        
         [TestMethod]
         public void Load_Bid_Tag()
         {
