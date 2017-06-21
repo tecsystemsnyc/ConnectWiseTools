@@ -275,7 +275,7 @@ namespace Tests
             AddDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
-            values.Add("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
+            values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
             values.Add("Instance SS");
             values.Add("Instance SS Description");
             values.Add("1");
@@ -592,8 +592,8 @@ namespace Tests
         private static void AddToBidSystemTable()
         {
             List<string> values = new List<string>();
-            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("0");
             AddDataToTable(new BidSystemTable(), values);
         }
