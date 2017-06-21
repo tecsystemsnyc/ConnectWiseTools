@@ -384,6 +384,7 @@ namespace Tests
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
+            testForScopeChildren(actualController);
         }
 
         [TestMethod]
