@@ -437,10 +437,13 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
-            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
             string expectedName = "Typical SS";
             string expectedDescription = "Typical SS Description";
             int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("03a16819-9205-4e65-a16b-96616309f171");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -466,11 +469,34 @@ namespace Tests
                 }
             }
 
+            bool foundPoint = false;
+            foreach(TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach(TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
+
             //Assert
             Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
             Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
             Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+
+            Assert.IsTrue(foundPoint, "Typical point not loaded into typical subscope properly.");
+            Assert.IsTrue(foundDevice, "Typical device not loaded into typical subscope properly.");
+
             testForTag(actualSubScope);
             testForCosts(actualSubScope);
         }
@@ -480,10 +506,13 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
-            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
             string expectedName = "Instance SS";
             string expectedDescription = "Instance SS Description";
             int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem typical in actualBid.Systems)
@@ -516,11 +545,34 @@ namespace Tests
                 }
             }
 
+            bool foundPoint = false;
+            foreach (TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach (TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
+
             //Assert
             Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
             Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
             Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
             Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+
+            Assert.IsTrue(foundPoint, "Instance point not loaded into typical subscope properly.");
+            Assert.IsTrue(foundDevice, "Instance device not loaded into typical subscope properly.");
+
             testForScopeChildren(actualSubScope);
         }
 
