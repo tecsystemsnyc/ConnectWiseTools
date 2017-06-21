@@ -214,6 +214,18 @@ namespace Tests
             values.Add("System Scope Branch");
             values.Add("System Scope Branch Description");
             AddDataToTable(new ScopeBranchTable(), values);
+
+            values = new List<string>();
+            values.Add("81adfc62-20ec-466f-a2a0-430e1223f64f");
+            values.Add("Bid Child Branch");
+            values.Add("Bid Child Branch Description");
+            AddDataToTable(new ScopeBranchTable(), values);
+
+            values = new List<string>();
+            values.Add("542802f6-a7b1-4020-9be4-e58225c433a8");
+            values.Add("System Child Branch");
+            values.Add("System Child Branch Description");
+            AddDataToTable(new ScopeBranchTable(), values);
         }
         private static void AddToSystemTable()
         {
