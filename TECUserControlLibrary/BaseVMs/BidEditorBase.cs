@@ -165,6 +165,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
                 templatesLoaded = false;
+                ResetStatus();
             }
         }
         protected override void setupMenu()

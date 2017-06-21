@@ -1973,7 +1973,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[BidParametersTable.ParamtersID.Name].ToString());
+            Guid guid = new Guid(row[BidParametersTable.ParametersID.Name].ToString());
             TECBidParameters paramters = new TECBidParameters(guid);
 
             paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
