@@ -330,6 +330,56 @@ namespace Tests
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
         }
 
+        [TestMethod]
+        public void Load_Bid_Controller()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            string expectedName = "Bid Controller";
+            string expectedDescription = "Bid Controller Description";
+            double expectedCost = 1812;
+            NetworkType expectedType = NetworkType.Server;
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedGuid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
+            {
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.IsTrue(hasIO);
+            Assert.IsTrue(hasConnection);
+        }
 
         [TestMethod]
         public void Load_Bid_MiscCost()
@@ -858,51 +908,6 @@ namespace Tests
             Assert.AreEqual(expectedText, actualController.Tags[0].Text);
         }
         
-        [TestMethod]
-        public void Load_Bid_Controller()
-        {
-            //Arrange
-            TECController actualController = actualBid.Controllers[0];
-            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
-
-            string expectedName = "Test Controller";
-            string expectedDescription = "Test Controller Description";
-            double expectedCost = 64.94;
-
-            bool hasAI = false;
-            bool hasAO = false;
-
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == IOType.AI)
-                {
-                    hasAI = true;
-                }
-                else if (io.Type == IOType.AO)
-                {
-                    hasAO = true;
-                }
-            }
-
-            bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
-            {
-                if (conn == actualConnection)
-                {
-                    hasConnection = true;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualController.Name);
-            Assert.AreEqual(expectedDescription, actualController.Description);
-            Assert.AreEqual(expectedCost, actualController.Cost);
-            Assert.IsTrue(hasAI);
-            Assert.IsTrue(hasAO);
-
-            Assert.IsTrue(hasConnection);
-        }
-
         [TestMethod]
         public void Load_Bid_SubScopeConnection()
         {
