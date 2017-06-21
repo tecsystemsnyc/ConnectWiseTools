@@ -359,28 +359,66 @@ namespace Tests
 
         }
 
-        //----------------------------------------Tests above have new values, below do not-------------------------------------------
-
-
         [TestMethod]
         public void Load_Bid_Equipment()
         {
             //Arrange
-            TECEquipment actualEquipment = actualBid.Systems[0].Equipment[0];
+            Guid expectedSystemGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystemGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+
+            Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            TECEquipment actualEquipment = null;
+            foreach (TECEquipment equipment in actualSystem.Equipment)
+            {
+                if (equipment.Guid == expectedGuid)
+                {
+                    actualEquipment = equipment;
+                    break;
+                }
+            }
+
+            string expectedName = "Typical Equip";
+            string expectedDescription = "Typical Equip Description";
+            int expectedQuantity = 1;
+            double expectedBP = 50;
+
+            string expectedInstanceName = "Instance Equip";
+            string expectedInstanceDescription = "Instance Equip Description";
+            int expectedInstanceQuantity = 1;
+            double expectedInstanceBP = 50;
+            Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
+
+            TECEquipment actualInstance = null;
+            foreach (TECScope item in actualSystem.CharactersticInstances.GetInstances(actualEquipment))
+            {
+                if (item.Guid == expectedInstanceGuid)
+                {
+                    actualInstance = item as TECEquipment;
+                }
+            }
 
             //Assert
-            string expectedName = "Test Equipment";
             Assert.AreEqual(expectedName, actualEquipment.Name);
-
-            string expectedDescription = "Test Equipment Description";
             Assert.AreEqual(expectedDescription, actualEquipment.Description);
-
-            int expectedQuantity = 456;
             Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
-
-            double expectedBP = 456;
             Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
+
+            Assert.AreEqual(expectedInstanceName, actualInstance.Name);
+            Assert.AreEqual(expectedInstanceDescription, actualInstance.Description);
+            Assert.AreEqual(expectedInstanceQuantity, actualInstance.Quantity);
+            Assert.AreEqual(expectedInstanceBP, actualInstance.BudgetUnitPrice);
         }
+
+        //----------------------------------------Tests above have new values, below do not-------------------------------------------
+
 
         [TestMethod]
         public void Load_Bid_SubScope()
