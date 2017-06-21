@@ -17,8 +17,9 @@ namespace Tests
         static TECBid actualBid;
 
         static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
-        static Guid TEST_COST_GUID = new Guid("");
-        static Guid TEST_LOCATION_GUID = new Guid("");
+        static Guid TEST_TECCOST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+        static Guid TEST_ELECTRICALCOST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+        static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -297,6 +298,9 @@ namespace Tests
             Assert.IsTrue(foundEquip, "Typical equipment not loaded properly into typical system.");
             Assert.IsTrue(foundControl, "Typical controller not loaded properly into typical system.");
             Assert.IsTrue(foundPanel, "Typical panel not loaded properly into typical system.");
+
+            testForTag(actualSystem);
+            testForCosts(actualSystem);
         }
 
         [TestMethod]
@@ -327,6 +331,8 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
             Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+
+            testForScopeChildren(actualSystem);
         }
 
         //----------------------------------------To break out, link tests-----------------------------------------------------
@@ -1039,5 +1045,58 @@ namespace Tests
         //    Assert.AreEqual(expectedYPos, actualVisScope.Y);
         //    Assert.AreEqual(actualSystem, actualVisScope.Scope);
         //}
+
+        private void testForScopeChildren(TECScope scope)
+        {
+            testForTag(scope);
+            testForCosts(scope);
+            testForLocation(scope);
+        }
+
+        private void testForTag(TECScope scope)
+        {
+            bool foundTag = false;
+
+            foreach (TECTag tag in scope.Tags)
+            {
+                if (tag.Guid == TEST_TAG_GUID)
+                {
+                    foundTag = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTag, "Tag not loaded properly into scope.");
+        }
+        private void testForCosts(TECScope scope)
+        {
+            bool foundTECCost = false;
+            bool foundElectricalCost = false;
+
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_TECCOST_GUID)
+                {
+                    foundTECCost = true;
+                    break;
+                }
+            }
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_ELECTRICALCOST_GUID)
+                {
+                    foundElectricalCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
+            Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
+        }
+        private void testForLocation(TECScope scope)
+        {
+            bool foundLocation = (scope.Location.Guid == TEST_LOCATION_GUID);
+            Assert.IsTrue(foundLocation, "Location not loaded properly into scope.");
+        }
     }
 }
