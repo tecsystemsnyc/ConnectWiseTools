@@ -564,7 +564,7 @@ namespace Tests
         {
             List<string> values = new List<string>();
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
             AddDataToTable(new ControllerConnectionTable(), values);
 
             values = new List<string>();
