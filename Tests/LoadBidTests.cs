@@ -495,49 +495,7 @@ namespace Tests
             Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
             Assert.AreEqual(expectedText, actualController.Tags[0].Text);
         }
-
-        [TestMethod]
-        public void Load_Bid_Drawing()
-        {
-            //Arrange
-            TECDrawing actualDrawing = actualBid.Drawings[0];
-
-            //Assert
-            string expectedName = "Test Drawing";
-            string expectedDescription = "Test Drawing Description";
-
-            Assert.AreEqual(expectedName, actualDrawing.Name);
-            Assert.AreEqual(expectedDescription, actualDrawing.Description);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Page()
-        {
-            //Arrange
-            TECPage actualPage = actualBid.Drawings[0].Pages[0];
-
-            //Assert
-            int expectedPageNum = 1;
-
-            Assert.AreEqual(expectedPageNum, actualPage.PageNum);
-        }
-
-        [TestMethod]
-        public void Load_Bid_VisualScope()
-        {
-            //Arrange
-            TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Assert
-            double expectedXPos = 119;
-            double expectedYPos = 69.08;
-
-            Assert.AreEqual(expectedXPos, actualVisScope.X);
-            Assert.AreEqual(expectedYPos, actualVisScope.Y);
-            Assert.AreEqual(actualSystem, actualVisScope.Scope);
-        }
-
+        
         [TestMethod]
         public void Load_Bid_Controller()
         {
@@ -924,6 +882,46 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
 
+        //[TestMethod]
+        //public void Load_Bid_Drawing()
+        //{
+        //    //Arrange
+        //    TECDrawing actualDrawing = actualBid.Drawings[0];
 
+        //    //Assert
+        //    string expectedName = "Test Drawing";
+        //    string expectedDescription = "Test Drawing Description";
+
+        //    Assert.AreEqual(expectedName, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDescription, actualDrawing.Description);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_Page()
+        //{
+        //    //Arrange
+        //    TECPage actualPage = actualBid.Drawings[0].Pages[0];
+
+        //    //Assert
+        //    int expectedPageNum = 1;
+
+        //    Assert.AreEqual(expectedPageNum, actualPage.PageNum);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_VisualScope()
+        //{
+        //    //Arrange
+        //    TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
+        //    TECSystem actualSystem = actualBid.Systems[0];
+
+        //    //Assert
+        //    double expectedXPos = 119;
+        //    double expectedYPos = 69.08;
+
+        //    Assert.AreEqual(expectedXPos, actualVisScope.X);
+        //    Assert.AreEqual(expectedYPos, actualVisScope.Y);
+        //    Assert.AreEqual(actualSystem, actualVisScope.Scope);
+        //}
     }
 }

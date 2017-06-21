@@ -76,6 +76,7 @@ namespace Tests
             AddToSubScopeConnectionChildrenTable();
             AddToPanelPanelTypeTable();
             AddToPanelControllerTable();
+            AddToSystemControllerTable();
             AddToSystemPanelTable();
             AddToSystemScopeBranchTable();
             AddToSystemHierarchyTable();
@@ -404,7 +405,7 @@ namespace Tests
             values.Add("Typical Controller Description");
             values.Add("1776");
             values.Add("0");
-            AddDataToTable(new AssociatedCostTable(), values);
+            AddDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
@@ -412,7 +413,7 @@ namespace Tests
             values.Add("Instance Controller Description");
             values.Add("1776");
             values.Add("DDC");
-            AddDataToTable(new AssociatedCostTable(), values);
+            AddDataToTable(new ControllerTable(), values);
         }
         private static void AddToMiscTable()
         {
@@ -1146,12 +1147,12 @@ namespace Tests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("e7695d68-d79f-44a2-92f5-b303436186af");
-            AddDataToTable(new SystemControllerTable(), values);
+            AddDataToTable(new SystemPanelTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
-            AddDataToTable(new SystemControllerTable(), values);
+            AddDataToTable(new SystemPanelTable(), values);
         }
         private static void AddToSystemScopeBranchTable()
         {
