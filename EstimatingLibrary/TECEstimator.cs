@@ -229,6 +229,13 @@ namespace EstimatingLibrary
             watcher = new ChangeWatcher(bid);
             watcher.InstanceChanged += Object_PropertyChanged;
         }
+        public void Refresh()
+        {
+            getInitialValues();
+            watcher.InstanceChanged -= Object_PropertyChanged;
+            watcher = new ChangeWatcher(bid);
+            watcher.InstanceChanged += Object_PropertyChanged;
+        }
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
         private void handlePropertyChanged(PropertyChangedEventArgs e)
@@ -385,6 +392,8 @@ namespace EstimatingLibrary
                 addCost(miscCost);
             }
         }
+
+        public 
 
         #region Update From Changes
         private void addCost(object item)
