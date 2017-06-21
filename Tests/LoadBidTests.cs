@@ -17,8 +17,8 @@ namespace Tests
         static TECBid actualBid;
 
         static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
-        static Guid TEST_TECCOST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
-        static Guid TEST_ELECTRICALCOST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+        static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+        static Guid TEST_ELECTRICAL_COST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
         static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
 
         private TestContext testContextInstance;
@@ -335,8 +335,36 @@ namespace Tests
             testForScopeChildren(actualSystem);
         }
 
+
+        [TestMethod]
+        public void Load_Bid_MiscCost()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            string expectedName = "Bid Misc";
+            double expectedCost = 1298;
+            double expectedLabor = 8921;
+            double expectedQuantity = 2;
+            CostType expectedType = CostType.Electrical;
+            TECMisc actualMisc = null;
+            foreach (TECMisc misc in actualBid.MiscCosts)
+            {
+                if (misc.Guid == expectedGuid)
+                {
+                    actualMisc = misc;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
+        }
         //----------------------------------------To break out, link tests-----------------------------------------------------
-        
+
         [TestMethod]
         public void Load_Bid_EditSystemInstances()
         {
@@ -751,17 +779,7 @@ namespace Tests
             Assert.AreEqual(expectedName, actualConduitType.Name);
         }
 
-        [TestMethod]
-        public void Load_Bid_MiscCost()
-        {
-            //Arrange
-            TECMisc actualCost = actualBid.MiscCosts[0];
-
-            //Assert
-            Assert.AreEqual("Test Misc Cost", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
-        }
+        
         
         [TestMethod]
         public void Load_Bid_PanelType()
