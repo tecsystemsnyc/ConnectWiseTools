@@ -1091,7 +1091,7 @@ namespace Tests
 
             foreach (TECCost cost in scope.AssociatedCosts)
             {
-                if (cost.Guid == TEST_TECCOST_GUID)
+                if (cost.Guid == TEST_TEC_COST_GUID)
                 {
                     foundTECCost = true;
                     break;
@@ -1099,7 +1099,7 @@ namespace Tests
             }
             foreach (TECCost cost in scope.AssociatedCosts)
             {
-                if (cost.Guid == TEST_ELECTRICALCOST_GUID)
+                if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
                 {
                     foundElectricalCost = true;
                     break;
