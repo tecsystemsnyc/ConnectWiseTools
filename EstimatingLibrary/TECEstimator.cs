@@ -392,9 +392,7 @@ namespace EstimatingLibrary
                 addCost(miscCost);
             }
         }
-
-        public 
-
+        
         #region Update From Changes
         private void addCost(object item)
         {
