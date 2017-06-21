@@ -433,6 +433,98 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_TypicalSubScope()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            string expectedName = "Typical SS";
+            string expectedDescription = "Typical SS Description";
+            int expectedQuantity = 1;
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (subScope.Guid == expectedGuid)
+                        {
+                            actualSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+            testForTag(actualSubScope);
+            testForCosts(actualSubScope);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceSubScope()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            string expectedName = "Instance SS";
+            string expectedDescription = "Instance SS Description";
+            int expectedQuantity = 1;
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equipment in system.Equipment)
+                    {
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            if (subScope.Guid == expectedGuid)
+                            {
+                                actualSubScope = subScope;
+                                break;
+                            }
+                        }
+                        if (actualSubScope != null)
+                        {
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+            testForScopeChildren(actualSubScope);
+        }
+
+        [TestMethod]
         public void Load_Bid_Controller()
         {
             //Arrange
@@ -481,6 +573,7 @@ namespace Tests
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
+            testForScopeChildren(actualController);
         }
 
         [TestMethod]
@@ -758,49 +851,8 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
         //----------------------------------------Tests above have new values, below do not-------------------------------------------
-
-
-        [TestMethod]
-        public void Load_Bid_SubScope()
-        {
-            //Arrange
-            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
-            TECSubScope actualSubScope = null;
-            foreach(TECSystem system in actualBid.Systems)
-            {
-                foreach(TECEquipment equipment in system.Equipment)
-                {
-                    foreach(TECSubScope subScope in equipment.SubScope)
-                    {
-                        if(subScope.Guid == actualConnection.SubScope.Guid)
-                        {
-                            actualSubScope = subScope;
-                            break;
-                        }
-                    }
-                    if(actualSubScope != null)
-                    {
-                        break;
-                    }
-                }
-                if (actualSubScope != null)
-                {
-                    break;
-                }
-            }
-
-            //Assert
-            string expectedName = "Test SubScope";
-            Assert.AreEqual(expectedName, actualSubScope.Name);
-
-            string expectedDescription = "Test SubScope Description";
-            Assert.AreEqual(expectedDescription, actualSubScope.Description);
-
-            int expectedQuantity = 789;
-            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
-            Assert.AreEqual(actualConnection, actualSubScope.Connection);
-            Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
-        }
+        
+        
 
         [TestMethod]
         public void Load_Bid_Device()
