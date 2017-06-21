@@ -497,6 +497,18 @@ namespace Tests
             values.Add("BACnetIP");
             values.Add("2");
             AddDataToTable(new IOTable(), values);
+
+            values = new List<string>();
+            values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
+            values.Add("BACnetIP");
+            values.Add("2");
+            AddDataToTable(new IOTable(), values);
+
+            values = new List<string>();
+            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            values.Add("BACnetIP");
+            values.Add("2");
+            AddDataToTable(new IOTable(), values);
         }
         #endregion
 

@@ -751,7 +751,123 @@ namespace Tests
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
-            testForScopeChildren(actualController);
+            testForTag(actualController);
+            testForCosts(actualController);
+        }
+
+        [TestMethod]
+        public void Load_Bid_SystemTypicalController()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            string expectedName = "Typical Controller";
+            string expectedDescription = "Typical Controller Description";
+            double expectedCost = 1776;
+            NetworkType expectedType = 0;
+
+            TECController actualController = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECController controller in system.Controllers)
+                {
+                    if (controller.Guid == expectedGuid)
+                    {
+                        actualController = controller;
+                        break;
+                    }
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            Guid expectedIOGuid = new Guid("fbae3851-3320-4e94-a674-ddec86bc4964");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
+            {
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.IsTrue(hasIO, "IO not loaded");
+            Assert.IsTrue(hasConnection, "Connection not loaded");
+            testForTag(actualController);
+            testForCosts(actualController);
+        }
+
+        [TestMethod]
+        public void Load_Bid_SystemInstanceController()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            string expectedName = "Instance Controller";
+            string expectedDescription = "Instance Controller Description";
+            double expectedCost = 1776;
+            NetworkType expectedType = NetworkType.DDC;
+
+            TECController actualController = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        if (controller.Guid == expectedGuid)
+                        {
+                            actualController = controller;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            Guid expectedIOGuid = new Guid("434bc312-f933-40c8-b8bd-f4e22f19f606");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
+            {
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.IsTrue(hasIO, "IO not loaded");
+            Assert.IsTrue(hasConnection, "Connection not loaded");
+            testForTag(actualController);
+            testForCosts(actualController);
         }
 
         [TestMethod]
