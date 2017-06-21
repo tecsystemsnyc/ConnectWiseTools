@@ -674,5 +674,19 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void SaveAs_Bid_Estimate()
+        {
+            TECBid saveBid = TestHelper.CreateTestBid();
+            var expectedTotalCost = saveBid.Estimate.TotalCost;
+            
+            //Act
+            path = Path.GetTempFileName();
+            DatabaseHelper.SaveNew(path, saveBid);
+            TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
+
+            Assert.AreEqual(expectedTotalCost, loadedBid.Estimate.TotalCost);
+        }
     }
 }

@@ -143,6 +143,22 @@ namespace EstimatingUtilitiesLibrary
            // watch.Stop();
            // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
+
+        static public void CreateDB(string path, bool isBidDB = true)
+        {
+            SQLiteDB = new SQLiteDatabase(path);
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            if (isBidDB)
+            {
+                createAllBidTables();
+            } else
+            {
+                createAllTemplateTables();
+            }
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
+            SQLiteDB.Connection.Close();
+        }
+
         #endregion Public Functions
 
         #region Loading from DB Methods

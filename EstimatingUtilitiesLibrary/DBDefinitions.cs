@@ -200,27 +200,6 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class BidScopeBranchTable : TableBase
-    {
-        public static new string TableName = "TECBidTECScopeBranch";
-        public static Type ObjectType = typeof(TECScopeBranch);
-        public static Type ReferenceType = typeof(TECBid);
-
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            BidID,
-            ScopeBranchID
-        };
-
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-    }
     public class ScopeBranchTable : TableBase
     {
         public static new string TableName = "TECScopeBranch";
@@ -699,6 +678,27 @@ namespace EstimatingUtilitiesLibrary
             ParameterType
         };
     }
+    public class BidScopeBranchTable : TableBase
+    {
+        public static new string TableName = "TECBidTECScopeBranch";
+        public static Type ObjectType = typeof(TECScopeBranch);
+        public static Type ReferenceType = typeof(TECBid);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            BidID,
+            ScopeBranchID
+        };
+
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
     public class BidMiscTable : TableBase
     {
         public static new string TableName = "TECBidTECMisc";
@@ -732,6 +732,24 @@ namespace EstimatingUtilitiesLibrary
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
             IOID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
+    public class IOModuleManufacturerTable : TableBase
+    {
+        public static new string TableName = "TECIOModuleTECManufacturer";
+        public static Type ObjectType = typeof(TECIOModule);
+        public static Type ReferenceType = typeof(TECManufacturer);
+
+        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            IOModuleID
             };
         public static new List<Type> Types = new List<Type>()
         {
@@ -1324,26 +1342,7 @@ namespace EstimatingUtilitiesLibrary
             ScopeType
         };
     }
-
-    public class IOModuleManufacturerTable : TableBase
-    {
-        public static new string TableName = "TECIOModuleTECManufacturer";
-        public static Type ObjectType = typeof(TECIOModule);
-        public static Type ReferenceType = typeof(TECManufacturer);
-
-        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            IOModuleID
-            };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-    }
-
+    
     public static class AllBidTables
     {
         public static List<object> Tables = new List<object>() {

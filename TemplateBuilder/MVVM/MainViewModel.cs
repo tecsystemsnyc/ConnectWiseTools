@@ -303,6 +303,7 @@ namespace TemplateBuilder.MVVM
             TypicalSystemsTab.DropHandler += Drop;
             TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
             TypicalSystemsTab.ComponentVM.SelectionChanged += EditTab.updateSelection;
+            TypicalSystemsTab.AssignChildDelegates();
         }
         private void setupConstantsVM()
         {

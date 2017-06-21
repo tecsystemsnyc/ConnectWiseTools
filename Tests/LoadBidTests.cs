@@ -813,5 +813,12 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        public void Load_Bid_Estimate()
+        {
+            Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
+        }
+
+
     }
 }

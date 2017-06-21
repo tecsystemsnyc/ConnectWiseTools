@@ -49,8 +49,7 @@ namespace TECUserControlLibrary.ViewModels
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
-
-
+        
         #region Properties
 
         private GridIndex _dGTabIndex;
