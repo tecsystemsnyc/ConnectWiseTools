@@ -17,8 +17,9 @@ namespace Tests
         static TECBid actualBid;
 
         static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
-        static Guid TEST_COST_GUID = new Guid("");
-        static Guid TEST_LOCATION_GUID = new Guid("");
+        static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+        static Guid TEST_ELECTRICAL_COST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+        static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
 
         private TestContext testContextInstance;
         public TestContext TestContext
