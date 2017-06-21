@@ -672,7 +672,7 @@ namespace Tests
             {
                 foreach (TECSystem instance in typical.SystemInstances)
                 {
-                    foreach (TECEquipment equip in typical.Equipment)
+                    foreach (TECEquipment equip in instance.Equipment)
                     {
                         foreach (TECSubScope ss in equip.SubScope)
                         {
