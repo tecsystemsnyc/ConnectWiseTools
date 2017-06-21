@@ -85,28 +85,28 @@ namespace Tests
             //Assert
             double expectedPMCoef = 2;
             double expectedPMRate = 30;
-            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef);
-            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate);
+            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate, "PM Rate didn't load properly.");
 
             double expectedENGCoef = 2;
             double expectedENGRate = 40;
-            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef);
-            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate);
+            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate, "ENG Rate didn't load properly.");
 
             double expectedCommCoef = 2;
             double expectedCommRate = 50;
-            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef);
-            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate);
+            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate, "Comm Rate didn't load properly.");
 
             double expectedSoftCoef = 2;
             double expectedSoftRate = 60;
-            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef);
-            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate);
+            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate, "Software Rate didn't load properly.");
 
             double expectedGraphCoef = 2;
             double expectedGraphRate = 70;
-            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef);
-            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate);
+            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
@@ -120,13 +120,13 @@ namespace Tests
             double expectedElectricalSuperRatio = 0.25;
             bool expectedOT = false;
             bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
-            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate);
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate);
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate);
-            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Labor.ElectricalSuperRatio);
-            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime);
-            Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion);
+            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Labor.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]
@@ -139,11 +139,11 @@ namespace Tests
             double expectedSoftExtra = 90;
             double expectedGraphExtra = 80;
 
-            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours);
-            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours);
-            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours);
-            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours);
-            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours);
+            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours, "PM Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours, "ENG Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours, "Comm Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours, "Soft Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours, "Graph Extra Hours didn't load properly.");
         }
 
         [TestMethod]
@@ -163,7 +163,7 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual(expectedText, actualNote.Text);
+            Assert.AreEqual(expectedText, actualNote.Text, "Note text didn't load properly.");
         }
 
         [TestMethod]
@@ -183,13 +183,42 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual(expectedText, actualExclusion.Text);
+            Assert.AreEqual(expectedText, actualExclusion.Text, "Exclusion text didn't load properly.");
         }
 
         [TestMethod]
-        public void Load_Bid_BidScopeBranch()
+        public void Load_Bid_BidScopeTree()
         {
-            //Incomplete
+            Guid expectedParentGuid = new Guid("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
+            string expectedParentName = "Bid Scope Branch";
+            string expectedParentDescription = "Bid Scope Branch Description";
+            Guid expectedChildGuid = new Guid("81adfc62-20ec-466f-a2a0-430e1223f64f");
+            string expectedChildName = "Bid Child Branch";
+            string expectedChildDescription = "Bid Child Branch Description";
+
+            TECScopeBranch actualParent = null;
+            TECScopeBranch actualChild = null;
+            foreach(TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedParentGuid)
+                {
+                    actualParent = branch;
+                    foreach(TECScopeBranch child in branch.Branches)
+                    {
+                        if (child.Guid == expectedChildGuid)
+                        {
+                            actualChild = child;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedParentName, actualParent.Name, "Parent scope branch name didn't load properly.");
+            Assert.AreEqual(expectedParentDescription, actualParent.Description, "Parent scope branch description didn't load properly.");
+            Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
+            Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
         }
 
 
