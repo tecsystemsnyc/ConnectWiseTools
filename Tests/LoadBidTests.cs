@@ -336,6 +336,103 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_TypicalEquipment()
+        {
+            Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            string expectedName = "Typical Equip";
+            string expectedDescription = "Typical Equip Description";
+            int expectedQuantity = 1;
+            double expectedBP = 50;
+
+            Guid childSubScope = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECEquipment actualEquipment = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECEquipment equip in typical.Equipment)
+                {
+                    if (equip.Guid == expectedGuid)
+                    {
+                        actualEquipment = equip;
+                        break;
+                    }
+                }
+                if (actualEquipment != null) break;
+            }
+
+            bool foundSubScope = false;
+            foreach(TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == childSubScope)
+                {
+                    foundSubScope = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualEquipment.Name);
+            Assert.AreEqual(expectedDescription, actualEquipment.Description);
+            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
+
+            Assert.IsTrue(foundSubScope, "Typical subscope not loaded properly into typical equipment.");
+
+            testForTag(actualEquipment);
+            testForCosts(actualEquipment);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceEquipment()
+        {
+            Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
+            string expectedInstanceName = "Instance Equip";
+            string expectedInstanceDescription = "Instance Equip Description";
+            int expectedInstanceQuantity = 1;
+            double expectedInstanceBP = 50;
+
+            Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+
+            TECEquipment actualEquipment = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach(TECEquipment equip in instance.Equipment)
+                    {
+                        if (equip.Guid == expectedInstanceGuid)
+                        {
+                            actualEquipment = equip;
+                            break;
+                        }
+                    }
+                    if (actualEquipment != null) break;
+                }
+                if (actualEquipment != null) break;
+            }
+
+            bool foundSubScope = false;
+            foreach(TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == childSubScope)
+                {
+                    foundSubScope = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedInstanceName, actualEquipment.Name);
+            Assert.AreEqual(expectedInstanceDescription, actualEquipment.Description);
+            Assert.AreEqual(expectedInstanceQuantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedInstanceBP, actualEquipment.BudgetUnitPrice);
+
+            Assert.IsTrue(foundSubScope, "Instance subscope not loaded properly into instance equipment.");
+
+            testForScopeChildren(actualEquipment);
+        }
+
+        [TestMethod]
         public void Load_Bid_Controller()
         {
             //Arrange
@@ -441,64 +538,6 @@ namespace Tests
                 Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
             }
 
-        }
-
-        [TestMethod]
-        public void Load_Bid_Equipment()
-        {
-            //Arrange
-            Guid expectedSystemGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Guid == expectedSystemGuid)
-                {
-                    actualSystem = system;
-                    break;
-                }
-            }
-
-            Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
-            TECEquipment actualEquipment = null;
-            foreach (TECEquipment equipment in actualSystem.Equipment)
-            {
-                if (equipment.Guid == expectedGuid)
-                {
-                    actualEquipment = equipment;
-                    break;
-                }
-            }
-
-            string expectedName = "Typical Equip";
-            string expectedDescription = "Typical Equip Description";
-            int expectedQuantity = 1;
-            double expectedBP = 50;
-
-            string expectedInstanceName = "Instance Equip";
-            string expectedInstanceDescription = "Instance Equip Description";
-            int expectedInstanceQuantity = 1;
-            double expectedInstanceBP = 50;
-            Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
-
-            TECEquipment actualInstance = null;
-            foreach (TECScope item in actualSystem.CharactersticInstances.GetInstances(actualEquipment))
-            {
-                if (item.Guid == expectedInstanceGuid)
-                {
-                    actualInstance = item as TECEquipment;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualEquipment.Name);
-            Assert.AreEqual(expectedDescription, actualEquipment.Description);
-            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
-
-            Assert.AreEqual(expectedInstanceName, actualInstance.Name);
-            Assert.AreEqual(expectedInstanceDescription, actualInstance.Description);
-            Assert.AreEqual(expectedInstanceQuantity, actualInstance.Quantity);
-            Assert.AreEqual(expectedInstanceBP, actualInstance.BudgetUnitPrice);
         }
         
         [TestMethod]
