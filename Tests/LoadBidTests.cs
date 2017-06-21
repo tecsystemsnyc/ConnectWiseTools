@@ -577,6 +577,49 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_Device()
+        {
+            Guid expectedGuid = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            string expectedName = "Test Device";
+            string expectedDescription = "Test Device Description";
+            double expectedCost = 123.45;
+
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            Guid connectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+
+            TECDevice actualDevice = null;
+            foreach(TECDevice dev in actualBid.Catalogs.Devices)
+            {
+                if (dev.Guid == expectedGuid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach(TECConnectionType connectType in actualDevice.ConnectionTypes)
+            {
+                if (connectType.Guid == connectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
+
+            Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
+
+            testForTag(actualDevice);
+            testForCosts(actualDevice);
+        }
+
+
+        [TestMethod]
         public void Load_Bid_Controller()
         {
             //Arrange
@@ -903,42 +946,6 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
         //----------------------------------------Tests above have new values, below do not-------------------------------------------
-        
-        
-
-        [TestMethod]
-        public void Load_Bid_Device()
-        {
-            //Arrange
-            ObservableCollection<TECDevice> actualDevices = actualBid.Systems[0].Equipment[0].SubScope[0].Devices;
-            TECDevice actualDevice = actualDevices[0];
-            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
-
-            //Assert
-            string expectedName = "Test Device";
-            Assert.AreEqual(expectedName, actualDevice.Name);
-
-            string expectedDescription = "Test Device Description";
-            Assert.AreEqual(expectedDescription, actualDevice.Description);
-
-            int expectedQuantity = 3;
-            int actualQuantity = 0;
-            foreach (TECDevice device in actualDevices)
-            {
-                if (device.Guid == actualDevice.Guid)
-                {
-                    actualQuantity++;
-                }
-            }
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            double expectedCost = 654;
-            Assert.AreEqual(expectedCost, actualDevice.Cost);
-
-            Assert.AreEqual("ThreeC18", actualDevice.ConnectionTypes[0].Name);
-
-            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
-        }
 
         [TestMethod]
         public void Load_Bid_Manufacturer()
