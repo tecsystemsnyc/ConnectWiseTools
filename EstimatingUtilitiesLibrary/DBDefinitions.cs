@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace EstimatingUtilitiesLibrary
 {
     #region Table Definitions
+    #region Object Tables
     public class BidInfoTable : TableBase
     {
         public static new string TableName = "TECBidInfo";
@@ -635,7 +636,9 @@ namespace EstimatingUtilitiesLibrary
             IOObjectType
         };
     }
+    #endregion
 
+    #region Relationship Tables
     public class BidLaborTable : TableBase
     {
         public static new string TableName = "TECBidTECLabor";
@@ -1312,7 +1315,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MIscID", "TEXT", MiscType.GetProperty("Guid"));
-
+        
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID,
             MiscID
@@ -1342,7 +1345,8 @@ namespace EstimatingUtilitiesLibrary
             ScopeType
         };
     }
-    
+    #endregion
+
     public static class AllBidTables
     {
         public static List<object> Tables = new List<object>() {
