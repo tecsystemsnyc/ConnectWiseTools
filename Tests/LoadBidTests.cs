@@ -618,6 +618,89 @@ namespace Tests
             testForCosts(actualDevice);
         }
 
+        [TestMethod]
+        public void Load_Bid_TypicalPoint()
+        {
+            Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
+            string expectedName = "Typical Point";
+            string expectedDescription = "Typical Point Description";
+            int expectedQuantity = 1;
+            PointTypes expectedType = PointTypes.AI;
+
+            TECPoint actualPoint = null;
+            foreach(TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECEquipment equip in typical.Equipment)
+                {
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        foreach(TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedGuid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            Assert.AreEqual(expectedName, actualPoint.Name, "Typical point name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualPoint.Description, "Typical point description didn't load properly.");
+            Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Typical point quantity didn't load properly.");
+            Assert.AreEqual(expectedType, actualPoint.Type, "Typical point type didn't load properly.");
+
+            testForTag(actualPoint);
+            testForCosts(actualPoint);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstancePoint()
+        {
+            Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            string expectedName = "Instance Point";
+            string expectedDescription = "Instance Point Description";
+            int expectedQuantity = 1;
+            PointTypes expectedType = PointTypes.AI;
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equip in typical.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                if (point.Guid == expectedGuid)
+                                {
+                                    actualPoint = point;
+                                    break;
+                                }
+                            }
+                            if (actualPoint != null) break;
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            Assert.AreEqual(expectedName, actualPoint.Name, "Instance point name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualPoint.Description, "Instance point description didn't load properly.");
+            Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Instance point quantity didn't load properly.");
+            Assert.AreEqual(expectedType, actualPoint.Type, "Instance point type didn't load properly.");
+
+            testForTag(actualPoint);
+            testForCosts(actualPoint);
+        }
 
         [TestMethod]
         public void Load_Bid_Controller()
@@ -965,25 +1048,7 @@ namespace Tests
             Assert.AreEqual(expectedMultiplier, actualDevice.Manufacturer.Multiplier);
         }
 
-        [TestMethod]
-        public void Load_Bid_Point()
-        {
-            //Arrange
-            TECPoint actualPoint = actualBid.Systems[0].Equipment[0].SubScope[0].Points[0];
-
-            //Assert
-            string expectedName = "Test Point";
-            Assert.AreEqual(expectedName, actualPoint.Name);
-
-            string expectedDescription = "Test Point Description";
-            Assert.AreEqual(expectedDescription, actualPoint.Description);
-
-            int expectedQuantity = 321;
-            Assert.AreEqual(expectedQuantity, actualPoint.Quantity);
-
-            PointTypes expectedType = PointTypes.Serial;
-            Assert.AreEqual(expectedType, actualPoint.Type);
-        }
+        
 
         [TestMethod]
         public void Load_Bid_Location()
