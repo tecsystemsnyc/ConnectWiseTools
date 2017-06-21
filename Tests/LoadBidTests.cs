@@ -619,6 +619,51 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_Manufacturer()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.5;
+
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
+            {
+                if (man.Guid == expectedGuid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Location()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+            string expectedLocationName = "Test Location";
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation location in actualBid.Locations)
+            {
+                if (location.Guid == expectedGuid)
+                {
+                    actualLocation = location;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLocationName, actualLocation.Name);
+        }
+
+        [TestMethod]
         public void Load_Bid_TypicalPoint()
         {
             Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
@@ -1145,48 +1190,7 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
         //----------------------------------------Tests above have new values, below do not-------------------------------------------
-
-        [TestMethod]
-        public void Load_Bid_Manufacturer()
-        {
-            //Arrange
-            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
-            TECDevice actualDevice = actualBid.Systems[0].Equipment[0].SubScope[0].Devices[0];
-
-            //Assert
-            string expectedName = "Test Manufacturer";
-            double expectedMultiplier = 0.17;
-
-            Assert.AreEqual(expectedName, actualManufacturer.Name);
-            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
-
-            Assert.AreEqual(expectedName, actualDevice.Manufacturer.Name);
-            Assert.AreEqual(expectedMultiplier, actualDevice.Manufacturer.Multiplier);
-        }
-
         
-
-        [TestMethod]
-        public void Load_Bid_Location()
-        {
-            //Arrange
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECEquipment actualEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSubScope = actualEquipment.SubScope[0];
-
-            //Assert
-            string expectedLocationName = "Test Location";
-            Assert.AreEqual(expectedLocationName, actualBid.Locations[0].Name);
-
-            string expectedLocation2Name = "Test Location 2";
-            Assert.AreEqual(expectedLocation2Name, actualBid.Locations[1].Name);
-
-            //System and Equipment have the same location, but subscope does not
-            Assert.AreEqual(actualBid.Locations[0], actualSystem.Location);
-            Assert.AreEqual(actualBid.Locations[0], actualEquipment.Location);
-            Assert.AreEqual(actualBid.Locations[1], actualSubScope.Location);
-        }
-
         [TestMethod]
         public void Load_Bid_ScopeTree()
         {
