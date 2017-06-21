@@ -113,7 +113,7 @@ namespace Tests
             values.Add("Testimate");
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("7357");
-            values.Add("1969-07-20T20:18:04.0000000");
+            values.Add("1969-07-20T00:00:00.0000000");
             values.Add("Mrs. Salesperson");
             values.Add("Mr. Estimator");
             AddDataToTable(new BidInfoTable(), values);
