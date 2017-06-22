@@ -374,10 +374,13 @@ namespace EstimatingLibrary
             tecCost = new TECCost();
             electricalCost = new TECCost();
 
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
-                addCost(system);
-                addPoints(system);
+                foreach(TECSystem system in typical.SystemInstances)
+                {
+                    addCost(system);
+                    addPoints(system);
+                }
             }
             foreach (TECPanel panel in bid.Panels)
             {

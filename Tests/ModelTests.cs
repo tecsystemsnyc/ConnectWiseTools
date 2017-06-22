@@ -114,6 +114,11 @@ namespace Tests
             }
         }
 
+        #endregion
+
+        #region System
+
+
         [TestMethod]
         public void System_AddInstances()
         {
@@ -123,19 +128,19 @@ namespace Tests
             TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
             bid.Systems.Add(system);
 
-            for(int x = 0; x < qty; x++)
+            for (int x = 0; x < qty; x++)
             {
                 system.AddInstance(bid);
             }
 
             Assert.AreEqual(system.SystemInstances.Count, qty);
-            foreach(TECSystem instance in system.SystemInstances)
+            foreach (TECSystem instance in system.SystemInstances)
             {
                 Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
                 Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
                 Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
             }
-            
+
         }
         [TestMethod]
         public void System_EditInstances()
@@ -162,7 +167,7 @@ namespace Tests
             }
 
         }
-
+        
         #endregion
     }
 }
