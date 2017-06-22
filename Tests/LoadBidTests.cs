@@ -225,6 +225,45 @@ namespace Tests
             Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
             Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
         }
+
+        [TestMethod]
+        public void Load_Bid_SystemScopeTree()
+        {
+            Guid expectedParentGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+            string expectedParentName = "System Scope Branch";
+            string expectedParentDescription = "System Scope Branch Description";
+            Guid expectedChildGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
+            string expectedChildName = "System Child Branch";
+            string expectedChildDescription = "System Child Branch Description";
+
+            TECScopeBranch actualParent = null;
+            TECScopeBranch actualChild = null;
+            foreach(TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECScopeBranch branch in typical.ScopeBranches)
+                {
+                    if (branch.Guid == expectedParentGuid)
+                    {
+                        actualParent = branch;
+                        foreach(TECScopeBranch child in branch.Branches)
+                        {
+                            if (child.Guid == expectedChildGuid)
+                            {
+                                actualChild = child;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (actualParent != null) break;
+            }
+
+            Assert.AreEqual(expectedParentName, actualParent.Name, "Parent scope branch name didn't load properly.");
+            Assert.AreEqual(expectedParentDescription, actualParent.Description, "Parent scope branch description didn't load properly.");
+            Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
+            Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
+        }
         
         [TestMethod]
         public void Load_Bid_TypicalSystem()
