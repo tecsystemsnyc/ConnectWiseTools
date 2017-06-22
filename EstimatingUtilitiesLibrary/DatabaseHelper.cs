@@ -244,54 +244,7 @@ namespace EstimatingUtilitiesLibrary
                 return new TECTemplates();
             }
         }
-
-        static private void updateCatalogs(TECBid bid, TECTemplates templates)
-        {
-            //Update catalogs from templates.
-            foreach (TECManufacturer manufacturer in templates.Catalogs.Manufacturers)
-            {
-                editObject(new StackItem(Change.Edit, bid, manufacturer));
-                editScopeChildrenRelations(manufacturer);
-            }
-            foreach (TECTag tag in templates.Catalogs.Tags)
-            { editObject(new StackItem(Change.Edit, bid, tag)); }
-            foreach (TECConnectionType connectionType in templates.Catalogs.ConnectionTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, connectionType));
-                editScopeChildrenRelations(connectionType);
-            }
-            foreach (TECConduitType conduitType in templates.Catalogs.ConduitTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, conduitType));
-                editScopeChildrenRelations(conduitType);
-            }
-            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
-            {
-                editObject(new StackItem(Change.Edit, bid, cost));
-                editScopeChildrenRelations(cost);
-            }
-            foreach (TECIOModule module in templates.Catalogs.IOModules)
-            {
-                editObject(new StackItem(Change.Edit, bid, module));
-                editObject(new StackItem(Change.Edit, module, module.Manufacturer));
-                editScopeChildrenRelations(module);
-            }
-            foreach (TECDevice device in templates.Catalogs.Devices)
-            {
-                editObject(new StackItem(Change.Edit, bid, device));
-                foreach(TECConnectionType type in device.ConnectionTypes)
-                {
-                    editObject(new StackItem(Change.Edit, device, type));
-                }
-                editObject(new StackItem(Change.Edit, device, device.Manufacturer));
-                editScopeChildrenRelations(device);
-            }
-            foreach (TECPanelType panelType in templates.Catalogs.PanelTypes)
-            {
-                editObject(new StackItem(Change.Edit, bid, panelType));
-                editScopeChildrenRelations(panelType);
-            }
-        }
+        
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
@@ -720,20 +673,6 @@ namespace EstimatingUtilitiesLibrary
 
             return childBranches;
         }
-        static private ObservableCollection<TECSystem> getAllSystems()
-        {
-            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            DataTable systemsDT = SQLiteDB.getDataFromTable(SystemTable.TableName);
-            watch.Stop();
-            Console.WriteLine("Get System DT: " + watch.ElapsedMilliseconds);
-            foreach (DataRow row in systemsDT.Rows)
-            {
-                var system = getSystemFromRow(row);
-                systems.Add(system);
-            }
-            return systems;
-        }
         static private ObservableCollection<TECSystem> getAllSystemsInBid()
         {
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
@@ -984,16 +923,6 @@ namespace EstimatingUtilitiesLibrary
 
             return vs;
         }
-        static private ObservableCollection<TECController> getControllers()
-        {
-            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-
-            DataTable controllersDT = SQLiteDB.getDataFromTable(ControllerTable.TableName);
-            foreach (DataRow row in controllersDT.Rows)
-            { controllers.Add(getControllerFromRow(row)); }
-
-            return controllers;
-        }
         static private ObservableCollection<TECController> getOrphanControllers()
         {
             //Returns the controllers that are not in the ControlledScopeController table.
@@ -1027,17 +956,6 @@ namespace EstimatingUtilitiesLibrary
             { outIO.Add(getIOFromRow(row)); }
             return outIO;
         }
-        static private ObservableCollection<TECConnection> getConnections()
-        {
-            ObservableCollection<TECConnection> connections = new ObservableCollection<TECConnection>();
-            DataTable connectionDT = SQLiteDB.getDataFromTable(SubScopeConnectionTable.TableName);
-            foreach (DataRow row in connectionDT.Rows)
-            { connections.Add(getSubScopeConnectionFromRow(row)); }
-            connectionDT = SQLiteDB.getDataFromTable(NetworkConnectionTable.TableName);
-            foreach (DataRow row in connectionDT.Rows)
-            { connections.Add(getNetworkConnectionFromRow(row)); }
-            return connections;
-        }
         static private TECScope getScopeGuidInVisualScope(Guid guid)
         {
             string command = "select " + VisualScopeScopeTable.ScopeID.Name + " from " + VisualScopeScopeTable.TableName;
@@ -1062,27 +980,7 @@ namespace EstimatingUtilitiesLibrary
             { ioModules.Add(getIOModuleFromRow(row)); }
             return ioModules;
         }
-
-        static private TECController getControllerInConnection(Guid connectionID)
-        {
-            var tables = getAllTableNames();
-            if (tables.Contains(SubScopeConnectionTable.TableName) || tables.Contains(NetworkConnectionTable.TableName))
-            {
-                var outController = new TECController(new TECManufacturer());
-                string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
-                command += "(select " + ControllerConnectionTable.ControllerID.Name + " from " + ControllerConnectionTable.TableName + " where ";
-                command += ControllerConnectionTable.ConnectionID.Name + " = '" + connectionID;
-                command += "')";
-                DataTable connectionDT = SQLiteDB.getDataFromCommand(command);
-                if (connectionDT.Rows.Count > 0)
-                {
-                    outController = getControllerPlaceholderFromRow(connectionDT.Rows[0]);
-                }
-                return outController;
-            }
-            else
-            { return null; }
-        }
+        
         static private TECSubScope getSubScopeInSubScopeConnection(Guid connectionID)
         {
             TECSubScope outScope = null;
@@ -1170,18 +1068,6 @@ namespace EstimatingUtilitiesLibrary
             }
 
             return misc;
-        }
-        static private ObservableCollection<TECPanel> getPanels()
-        {
-            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-
-            DataTable panelTypesDT = SQLiteDB.getDataFromTable(PanelTable.TableName);
-            foreach (DataRow row in panelTypesDT.Rows)
-            {
-                panels.Add(getPanelFromRow(row));
-            }
-
-            return panels;
         }
         static private ObservableCollection<TECPanel> getOrphanPanels()
         {
