@@ -619,51 +619,6 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_Manufacturer()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            string expectedName = "Test Manufacturer";
-            double expectedMultiplier = 0.5;
-
-
-            TECManufacturer actualManufacturer = null;
-            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
-            {
-                if (man.Guid == expectedGuid)
-                {
-                    actualManufacturer = man;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualManufacturer.Name);
-            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Location()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
-            string expectedLocationName = "Test Location";
-
-            TECLocation actualLocation = null;
-            foreach (TECLocation location in actualBid.Locations)
-            {
-                if (location.Guid == expectedGuid)
-                {
-                    actualLocation = location;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedLocationName, actualLocation.Name);
-        }
-
-        [TestMethod]
         public void Load_Bid_TypicalPoint()
         {
             Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
@@ -767,7 +722,97 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_Controller()
+        public void Load_Bid_Manufacturer()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.5;
+
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
+            {
+                if (man.Guid == expectedGuid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Location()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+            string expectedLocationName = "Test Location";
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation location in actualBid.Locations)
+            {
+                if (location.Guid == expectedGuid)
+                {
+                    actualLocation = location;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLocationName, actualLocation.Name);
+        }
+
+        [TestMethod]
+        public void Load_Bid_AssociatedCosts()
+        {
+            Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+            string expectedTECName = "Test TEC Associated Cost";
+            double expectedTECCost = 31;
+            double expectedTECLabor = 13;
+            CostType expectedTECType = CostType.TEC;
+
+            Guid expectedElectricalGuid = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+            string expectedElectricalName = "Test Electrical Associated Cost";
+            double expectedElectricalCost = 42;
+            double expectedElectricalLabor = 24;
+            CostType expectedElectricalType = CostType.Electrical;
+
+            TECCost actualTECCost = null;
+            TECCost actualElectricalCost = null;
+            foreach(TECCost cost in actualBid.Catalogs.AssociatedCosts)
+            {
+                if (cost.Guid == expectedTECGuid)
+                {
+                    actualTECCost = cost;
+                }
+                else if (cost.Guid == expectedElectricalGuid)
+                {
+                    actualElectricalCost = cost;
+                }
+                if (actualTECCost != null && actualElectricalCost != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedTECName, actualTECCost.Name, "TEC cost name didn't load properly.");
+            Assert.AreEqual(expectedTECCost, actualTECCost.Cost, "TEC cost cost didn't load properly.");
+            Assert.AreEqual(expectedTECLabor, actualTECCost.Labor, "TEC cost labor didn't load properly.");
+            Assert.AreEqual(expectedTECType, actualTECCost.Type, "TEC cost type didn't load properly.");
+
+            Assert.AreEqual(expectedElectricalName, actualElectricalCost.Name, "Electrical cost name didn't load properly.");
+            Assert.AreEqual(expectedElectricalCost, actualElectricalCost.Cost, "Electrical cost cost didn't load properly.");
+            Assert.AreEqual(expectedElectricalLabor, actualElectricalCost.Labor, "Electrical cost labor didn't load properly.");
+            Assert.AreEqual(expectedElectricalType, actualElectricalCost.Type, "Electrical cost type didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidController()
         {
             //Arrange
             Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
@@ -1283,17 +1328,6 @@ namespace Tests
             Assert.AreEqual(expectedLength, actualConnection.Length);
             Assert.AreEqual(actualController, actualConnection.ParentController);
             Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
-        }
-        
-        [TestMethod]
-        public void Load_Bid_AssociatedCosts()
-        {
-            //Arrange
-            TECCost actualAssociatedCost = actualBid.Catalogs.AssociatedCosts[0];
-
-            //Assert
-            string expectedName = "Test Cost";
-            Assert.AreEqual(expectedName, actualAssociatedCost.Name);
         }
 
         [TestMethod]

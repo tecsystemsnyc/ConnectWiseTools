@@ -364,7 +364,7 @@ namespace Tests
         {
             List<string> values = new List<string>();
             values.Add("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
-            values.Add("Test Associated Cost");
+            values.Add("Test TEC Associated Cost");
             values.Add("31");
             values.Add("13");
             values.Add("TEC");
