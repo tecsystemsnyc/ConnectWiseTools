@@ -866,6 +866,53 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_InstanceSubScopeConnection()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            double expectedLength = 50;
+            double expectedConduitLength = 30;
+            Guid expectedSubScopeGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+            Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+
+            TECSubScopeConnection actualConnection = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            if (connection.Guid == expectedGuid)
+                            {
+                                actualConnection = connection as TECSubScopeConnection;
+                                break;
+                            }
+                        }
+                        if (actualConnection != null)
+                        {
+                            break;
+                        }
+                    }
+                    if (actualConnection != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualConnection.Length);
+            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength);
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid);
+            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid);
+            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid);
+        }
+
+        [TestMethod]
         public void Load_Bid_BidController()
         {
             //Arrange
@@ -1327,53 +1374,6 @@ namespace Tests
             Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
 
             Assert.AreEqual(1, actualBid.ScopeTree.Count);
-        }
-
-        [TestMethod]
-        public void Load_Bid_InstanceSubScopeConnection()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
-            double expectedLength = 50;
-            double expectedConduitLength = 30;
-            Guid expectedSubScopeGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
-            Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
-            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
-
-            TECSubScopeConnection actualConnection = null;
-            foreach (TECSystem typical in actualBid.Systems)
-            {
-                foreach (TECSystem system in typical.SystemInstances)
-                {
-                    foreach (TECController controller in system.Controllers)
-                    {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
-                        {
-                            if (connection.Guid == expectedGuid)
-                            {
-                                actualConnection = connection as TECSubScopeConnection;
-                                break;
-                            }
-                        }
-                        if (actualConnection != null)
-                        {
-                            break;
-                        }
-                    }
-                    if (actualConnection != null)
-                    {
-                        break;
-                    }
-                }
-            }
-            
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength);
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid);
-            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid);
-            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid);
         }
         
         [TestMethod]
