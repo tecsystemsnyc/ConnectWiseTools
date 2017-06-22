@@ -663,6 +663,61 @@ namespace Tests
             Assert.AreEqual(expectedLocationName, actualLocation.Name);
         }
 
+
+        [TestMethod]
+        public void Load_Bid_ConnectionType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            string expectedName = "Test Connection Type";
+            double expectedCost = 12.48;
+            double expectedLabor = 84.21;
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedGuid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualConnectionType.Name);
+            Assert.AreEqual(expectedCost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedLabor, actualConnectionType.Labor);
+
+            testForCosts(actualConnectionType);
+        }
+
+        [TestMethod]
+        public void Load_Bid_ConduitType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            string expectedName = "Test Conduit Type";
+            double expectedCost = 45.67;
+            double expectedLabor = 76.54;
+
+            TECConduitType actualConduitType = null;
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedGuid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualConduitType.Name);
+            Assert.AreEqual(expectedCost, actualConduitType.Cost);
+            Assert.AreEqual(expectedLabor, actualConduitType.Labor);
+
+            testForCosts(actualConduitType);
+        }
+
         [TestMethod]
         public void Load_Bid_TypicalPoint()
         {
@@ -1234,6 +1289,7 @@ namespace Tests
         public void Load_Bid_SubScopeConnection()
         {
             //Arrange
+            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
             TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
 
             TECSubScope actualSubScope = null;
@@ -1294,28 +1350,6 @@ namespace Tests
             //Assert
             string expectedName = "Test Cost";
             Assert.AreEqual(expectedName, actualAssociatedCost.Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ConnectionType()
-        {
-            //Arrange
-            TECConnectionType actualConnectionType = actualBid.Catalogs.ConnectionTypes[0];
-
-            //Assert
-            string expectedName = "ThreeC18";
-            Assert.AreEqual(expectedName, actualConnectionType.Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ConduitType()
-        {
-            //Arrange
-            TECConduitType actualConduitType = actualBid.Catalogs.ConduitTypes[0];
-
-            //Assert
-            string expectedName = "Test ConduitType";
-            Assert.AreEqual(expectedName, actualConduitType.Name);
         }
         
         [TestMethod]
