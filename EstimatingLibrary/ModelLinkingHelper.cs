@@ -326,15 +326,25 @@ namespace EstimatingLibrary
         }
         static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems)
         {
+            ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
+            foreach(TECController controller in controllers)
+            {
+                allControllers.Add(controller);
+            }
+
             foreach (TECSystem system in systems)
             {
                 linkConnections(controllers, system.Equipment);
                 foreach(TECSystem instance in system.SystemInstances)
                 {
                     linkConnections(controllers, instance.Equipment);
+                    foreach(TECController controller in instance.Controllers)
+                    {
+                        allControllers.Add(controller);
+                    }
                 }
             }
-            linkNetworkConnections(controllers);
+            linkNetworkConnections(allControllers);
         }
 
         static private void linkAllDevices(ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECDevice> deviceCatalog)
