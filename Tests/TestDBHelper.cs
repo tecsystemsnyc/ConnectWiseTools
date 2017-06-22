@@ -479,6 +479,14 @@ namespace Tests
             values.Add("0");
             values.Add("0");
             AddDataToTable(new ControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("Child Typical Controller");
+            values.Add("");
+            values.Add("0");
+            values.Add("0");
+            AddDataToTable(new ControllerTable(), values);
         }
         private static void AddToMiscTable()
         {
@@ -566,25 +574,31 @@ namespace Tests
             values = new List<string>();
             values.Add("de2d29b7-c63d-4ddf-8b9c-987915e58cd2");
             values.Add("BACnetIP");
-            values.Add("2");
+            values.Add("3");
             AddDataToTable(new IOTable(), values);
 
             values = new List<string>();
             values.Add("81827dfc-1375-476f-bfd8-290764403545");
             values.Add("BACnetIP");
-            values.Add("2");
+            values.Add("3");
             AddDataToTable(new IOTable(), values);
 
             values = new List<string>();
             values.Add("6afb5c4d-4ee9-4c86-b37a-fa26a7be64b0");
             values.Add("BACnetIP");
-            values.Add("2");
+            values.Add("3");
             AddDataToTable(new IOTable(), values);
 
             values = new List<string>();
             values.Add("7cb05a42-07fe-44f6-8f33-df0eab7416a5");
             values.Add("BACnetIP");
-            values.Add("2");
+            values.Add("3");
+            AddDataToTable(new IOTable(), values);
+
+            values = new List<string>();
+            values.Add("4ce8ee4b-03f3-4460-9387-b14ec5bdc5db");
+            values.Add("BACnetIP");
+            values.Add("3");
             AddDataToTable(new IOTable(), values);
         }
         #endregion
@@ -653,6 +667,11 @@ namespace Tests
             values = new List<string>();
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
             values.Add("7cb05a42-07fe-44f6-8f33-df0eab7416a5");
+            AddDataToTable(new ControllerIOTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("4ce8ee4b-03f3-4460-9387-b14ec5bdc5db");
             AddDataToTable(new ControllerIOTable(), values);
         }
         private static void AddToIOModuleManufacturerTable()
@@ -1208,6 +1227,11 @@ namespace Tests
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
             values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
             AddDataToTable(new ControllerManufacturerTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            AddDataToTable(new ControllerManufacturerTable(), values);
         }
         private static void AddToConnectionConduitTypeTable()
         {
@@ -1332,6 +1356,16 @@ namespace Tests
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
             AddDataToTable(new SystemControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            AddDataToTable(new SystemControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
+            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+            AddDataToTable(new SystemControllerTable(), values);
         }
         private static void AddToSystemPanelTable()
         {
@@ -1391,6 +1425,11 @@ namespace Tests
             values = new List<string>();
             values.Add("e7695d68-d79f-44a2-92f5-b303436186af");
             values.Add("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             AddDataToTable(new CharacteristicScopeInstanceScopeTable(), values);
         }
         #endregion

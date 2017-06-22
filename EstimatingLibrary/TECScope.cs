@@ -126,7 +126,7 @@ namespace EstimatingLibrary
             _tags = new ObservableCollection<TECTag>();
             _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += collectionChanged;
-            AssociatedCosts.CollectionChanged += collectionChanged;
+            AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
         }
 
         abstract public Object DragDropCopy();
