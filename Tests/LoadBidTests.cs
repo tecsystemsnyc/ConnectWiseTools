@@ -982,11 +982,11 @@ namespace Tests
 
 
             //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength);
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid);
-            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid);
-            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid);
+            Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
         }
 
         [TestMethod]
@@ -1230,278 +1230,135 @@ namespace Tests
             Assert.AreEqual(expectedLabor, actualMisc.Labor);
             Assert.AreEqual(expectedType, actualMisc.Type);
         }
-        //----------------------------------------To break out, link tests-----------------------------------------------------
 
-        [TestMethod]
-        public void Load_Bid_EditSystemInstances()
-        {
-            Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
-
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Guid == expectedGuid)
-                {
-                    actualSystem = system;
-                    break;
-                }
-            }
-
-            actualSystem.Equipment.Add(TestHelper.CreateTestEquipment(actualBid.Catalogs));
-            actualSystem.Controllers.Add(TestHelper.CreateTestController(actualBid.Catalogs));
-            actualSystem.Panels.Add(TestHelper.CreateTestPanel(actualBid.Catalogs));
-
-            foreach (TECSystem instance in actualSystem.SystemInstances)
-            {
-                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
-                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
-                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
-            }
-
-        }
-        
-        [TestMethod]
-        public void Load_Bid_Linked_Devices()
-        {
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            if (!actualBid.Catalogs.Devices.Contains(device))
-                            {
-                                Assert.Fail("Devices in systems not linked");
-                            }
-                        }
-                    }
-                }
-            }
-
-            Assert.IsTrue(true, "All Devices Linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_AssociatedCosts()
-        {
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECCost cost in system.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in system not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECCost cost in equipment.AssociatedCosts)
-                    {
-                        if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                        { Assert.Fail("Associated costs in equipment not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECCost cost in subScope.AssociatedCosts)
-                        {
-                            if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                            { Assert.Fail("Associated costs in subscope not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECCost cost in device.AssociatedCosts)
-                            {
-                                if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                                { Assert.Fail("Associated costs in subscope not linked"); }
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                foreach (TECCost cost in device.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
-            {
-                foreach (TECCost cost in conduitType.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
-            {
-                foreach (TECCost cost in connectionType.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in connection type catalog not linked"); }
-                }
-            }
-
-            Assert.IsTrue(true, "All Associated costs Linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_Manufacturers()
-        {
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                if (device.Manufacturer == null)
-                {
-                    Assert.Fail("Device doesn't have manufacturer.");
-                }
-                if (!actualBid.Catalogs.Manufacturers.Contains(device.Manufacturer))
-                {
-                    Assert.Fail("Manufacturers not linked in device catalog");
-                }
-            }
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Manufacturer == null)
-                {
-                    Assert.Fail("Controller doesn't have manufacturer.");
-                }
-                if (!actualBid.Catalogs.Manufacturers.Contains(controller.Manufacturer))
-                {
-                    Assert.Fail("Manufacturers not linked in controllers");
-                }
-            }
-            Assert.IsTrue(true, "All Manufacturers linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_ConduitTypes()
-        {
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType) && connection.ConduitType != null)
-                    { Assert.Fail("Conduit types in connection not linked"); }
-                }
-            }
-            Assert.IsTrue(true, "All conduit types Linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_Tags()
-        {
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECTag tag in system.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in system templates not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECTag tag in equipment.Tags)
-                    {
-                        if (!actualBid.Catalogs.Tags.Contains(tag))
-                        { Assert.Fail("Tags in system templates not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECTag tag in subScope.Tags)
-                        {
-                            if (!actualBid.Catalogs.Tags.Contains(tag))
-                            { Assert.Fail("Tags in system templates not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECTag tag in device.Tags)
-                            {
-                                if (!actualBid.Catalogs.Tags.Contains(tag))
-                                { Assert.Fail("Tags in system templates not linked"); }
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                foreach (TECTag tag in device.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
-            {
-                foreach (TECTag tag in conduitType.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
-            {
-                foreach (TECTag tag in connectionType.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in connection type catalog not linked"); }
-                }
-            }
-
-            Assert.IsTrue(true, "All Tags Linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_ConnectionTypes()
-        {
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                if (device.ConnectionTypes.Count == 0)
-                {
-                    Assert.Fail("Device doesn't have connectionType");
-                }
-                foreach (TECConnectionType type in device.ConnectionTypes)
-                {
-                    if (!actualBid.Catalogs.ConnectionTypes.Contains(type))
-                    {
-                        Assert.Fail("ConnectionTypes not linked in device catalog");
-                    }
-                }
-            }
-        }
-
-        [TestMethod]
-        public void Load_Bid_Estimate()
-        {
-            Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
-        }
-        //----------------------------------------Tests above have new values, below do not-------------------------------------------
         [TestMethod]
         public void Load_Bid_PanelType()
         {
             //Arrange
-            TECPanelType actualCost = actualBid.Catalogs.PanelTypes[0];
+            Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            string expectedName = "Test Panel Type";
+            double expectedCost = 1324;
+            double expectedLabor = 4231;
+
+            TECPanelType actualType = null;
+            foreach (TECPanelType type in actualBid.Catalogs.PanelTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Panel Type", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
         }
 
         [TestMethod]
-        public void Load_Bid_Panel()
+        public void Load_Bid_BidPanel()
         {
             //Arrange
-            TECPanel actualPanel = actualBid.Panels[0];
-            TECPanelType actualPanelType = actualBid.Panels[0].Type;
+            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            string expectedName = "Bid Panel";
+            string expectedDescription = "Bid Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == expectedGuid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Panel", actualPanel.Name);
-            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalPanel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+            string expectedName = "Typical Panel";
+            string expectedDescription = "Typical Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECPanel panel in system.Panels)
+                {
+                    if (panel.Guid == expectedGuid)
+                    {
+                        actualPanel = panel;
+                        break;
+                    }
+                }
+                if (actualPanel != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstancePanel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            string expectedName = "Instance Panel";
+            string expectedDescription = "Instance Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECPanel panel in system.Panels)
+                    {
+                        if (panel.Guid == expectedGuid)
+                        {
+                            actualPanel = panel;
+                            break;
+                        }
+                    }
+                    if (actualPanel != null) break;
+                }
+                if (actualPanel != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
         }
         
+        //----------------------------------------To break out, link tests-----------------------------------------------------
 
+        //----------------------------------------Tests above have new values, below do not-------------------------------------------
+        
+        
         //[TestMethod]
         //public void Load_Bid_Drawing()
         //{

@@ -71,6 +71,17 @@ namespace Tests
         // public void MyTestCleanup() { }
         //
         #endregion
+            
+        [TestMethod]
+        public void Estimate_Refresh()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            double expetcedPrice = bid.Estimate.TotalPrice;
+
+            bid.Estimate.Refresh();
+
+            Assert.AreEqual(expetcedPrice, bid.Estimate.TotalPrice);
+        }
 
         [TestMethod]
         public void Estimate_AddMiscCost()
