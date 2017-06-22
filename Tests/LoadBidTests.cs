@@ -1036,6 +1036,50 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_BidBidChild_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
+            double expectedLength = 80;
+            double expectedConduitLength = 60;
+
+            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            Guid expectedChildControllerGuid = new Guid("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.Guid == expectedGuid)
+                    {
+                        actualNetConnect = (connection as TECNetworkConnection);
+                        break;
+                    }
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool childControllerFound = false;
+            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if (controller.Guid == expectedChildControllerGuid)
+                {
+                    childControllerFound = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
         public void Load_Bid_BidController()
         {
             //Arrange
@@ -1353,8 +1397,6 @@ namespace Tests
             Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
             testForCosts(actualPanel);
         }
-        
-        //----------------------------------------To break out, link tests-----------------------------------------------------
 
         //----------------------------------------Tests above have new values, below do not-------------------------------------------
         

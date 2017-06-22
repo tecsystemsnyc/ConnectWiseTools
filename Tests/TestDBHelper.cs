@@ -403,22 +403,22 @@ namespace Tests
 
             values = new List<string>();
             values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb8");
-            values.Add("0");
-            values.Add("0");
+            values.Add("90");
+            values.Add("70");
             values.Add("BACnetIP");
             AddDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
             values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
-            values.Add("0");
-            values.Add("0");
+            values.Add("80");
+            values.Add("60");
             values.Add("BACnetIP");
             AddDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
             values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
-            values.Add("0");
-            values.Add("0");
+            values.Add("70");
+            values.Add("50");
             values.Add("BACnetIP");
             AddDataToTable(new NetworkConnectionTable(), values);
         }
