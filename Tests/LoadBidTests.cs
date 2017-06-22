@@ -943,11 +943,11 @@ namespace Tests
 
 
             //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength);
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid);
-            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid);
-            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid);
+            Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
         }
 
         [TestMethod]
@@ -1145,6 +1145,128 @@ namespace Tests
             Assert.AreEqual(expectedLabor, actualMisc.Labor);
             Assert.AreEqual(expectedType, actualMisc.Type);
         }
+
+        [TestMethod]
+        public void Load_Bid_PanelType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            string expectedName = "Test Panel Type";
+            double expectedCost = 1324;
+            double expectedLabor = 4231;
+
+            TECPanelType actualType = null;
+            foreach (TECPanelType type in actualBid.Catalogs.PanelTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidPanel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            string expectedName = "Bid Panel";
+            string expectedDescription = "Bid Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == expectedGuid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalPanel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+            string expectedName = "Typical Panel";
+            string expectedDescription = "Typical Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECPanel panel in system.Panels)
+                {
+                    if (panel.Guid == expectedGuid)
+                    {
+                        actualPanel = panel;
+                        break;
+                    }
+                }
+                if (actualPanel != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstancePanel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            string expectedName = "Instance Panel";
+            string expectedDescription = "Instance Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECPanel panel in system.Panels)
+                    {
+                        if (panel.Guid == expectedGuid)
+                        {
+                            actualPanel = panel;
+                            break;
+                        }
+                    }
+                    if (actualPanel != null) break;
+                }
+                if (actualPanel != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+        }
+
+        
         //----------------------------------------To break out, link tests-----------------------------------------------------
 
         [TestMethod]
@@ -1393,30 +1515,8 @@ namespace Tests
             Assert.AreEqual(2308.8142, actualBid.Estimate.TotalCost);
         }
         //----------------------------------------Tests above have new values, below do not-------------------------------------------
-        [TestMethod]
-        public void Load_Bid_PanelType()
-        {
-            //Arrange
-            TECPanelType actualCost = actualBid.Catalogs.PanelTypes[0];
-
-            //Assert
-            Assert.AreEqual("Test Panel Type", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Panel()
-        {
-            //Arrange
-            TECPanel actualPanel = actualBid.Panels[0];
-            TECPanelType actualPanelType = actualBid.Panels[0].Type;
-
-            //Assert
-            Assert.AreEqual("Test Panel", actualPanel.Name);
-            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
-        }
         
-
+        
         //[TestMethod]
         //public void Load_Bid_Drawing()
         //{
