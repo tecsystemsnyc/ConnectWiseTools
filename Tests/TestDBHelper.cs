@@ -402,7 +402,7 @@ namespace Tests
             AddDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
-            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb8");
+            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             values.Add("90");
             values.Add("70");
             values.Add("BACnetIP");

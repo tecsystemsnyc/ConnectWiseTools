@@ -1080,6 +1080,111 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_InstanceInstanceChild_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("e503fdd4-f299-4618-8d54-6751c3b2bc25");
+            double expectedLength = 70;
+            double expectedConduitLength = 50;
+
+            Guid expectedParentControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            if (connection.Guid == expectedGuid)
+                            {
+                                actualNetConnect = (connection as TECNetworkConnection);
+                                break;
+                            }
+                        }
+                        if (actualNetConnect != null) break;
+                    }
+                    if (actualNetConnect != null) break;
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool childControllerFound = false;
+            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if (controller.Guid == expectedChildControllerGuid)
+                {
+                    childControllerFound = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_DaisyChain_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
+            double expectedLength = 90;
+            double expectedConduitLength = 70;
+
+            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+
+            Guid expectedDaisy1Guid = new Guid("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            Guid expectedDaisy2Guid = new Guid("7b6825df-57da-458a-a859-a9459c15907b");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.Guid == expectedGuid)
+                    {
+                        actualNetConnect = (connection as TECNetworkConnection);
+                        break;
+                    }
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool daisy1Found = false;
+            bool daisy2Found = false;
+            foreach(TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if(controller.Guid == expectedDaisy1Guid)
+                {
+                    daisy1Found = true;
+                }
+                else if (controller.Guid == expectedDaisy2Guid)
+                {
+                    daisy2Found = true;
+                }
+                if (daisy1Found && daisy2Found) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+
+            Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
+            Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
         public void Load_Bid_BidController()
         {
             //Arrange
