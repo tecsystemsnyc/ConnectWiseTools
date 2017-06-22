@@ -866,6 +866,44 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_TypicalSubScopeConnection()
+        {
+            Guid expectedGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            double expectedWireLength = 40;
+            double expectedConduitLength = 20;
+
+            Guid expectedParentControllerGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECSubScopeConnection actualSSConnect = null;
+            foreach(TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECController controller in typical.Controllers)
+                {
+                    foreach(TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection.Guid == expectedGuid)
+                        {
+                            actualSSConnect = (connection as TECSubScopeConnection);
+                            break;
+                        }
+                    }
+                    if (actualSSConnect != null) break;
+                }
+                if (actualSSConnect != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedWireLength, actualSSConnect.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualSSConnect.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+        }
+
+        [TestMethod]
         public void Load_Bid_BidController()
         {
             //Arrange
@@ -1327,62 +1365,6 @@ namespace Tests
             Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
 
             Assert.AreEqual(1, actualBid.ScopeTree.Count);
-        }
-
-        [TestMethod]
-        public void Load_Bid_SubScopeConnection()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
-            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
-
-            TECSubScope actualSubScope = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        if (subScope.Guid == actualConnection.SubScope.Guid)
-                        {
-                            actualSubScope = subScope;
-                            break;
-                        }
-                    }
-                    if (actualSubScope != null)
-                    {
-                        break;
-                    }
-                }
-                if (actualSubScope != null)
-                {
-                    break;
-                }
-            }
-            TECController actualController = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Name == "Test Controller")
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-
-
-            double expectedLength = 521;
-
-            bool hasSubScope = false;
-            if (actualConnection.SubScope == actualSubScope)
-            {
-                hasSubScope = true;
-            }
-
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(actualController, actualConnection.ParentController);
-            Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
         }
         
         [TestMethod]
