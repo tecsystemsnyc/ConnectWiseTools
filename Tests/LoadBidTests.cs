@@ -1330,59 +1330,50 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_SubScopeConnection()
+        public void Load_Bid_InstanceSubScopeConnection()
         {
             //Arrange
-            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
-            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            double expectedLength = 50;
+            double expectedConduitLength = 30;
+            Guid expectedSubScopeGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+            Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
-            TECSubScope actualSubScope = null;
-            foreach (TECSystem system in actualBid.Systems)
+            TECSubScopeConnection actualConnection = null;
+            foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECEquipment equipment in system.Equipment)
+                foreach (TECSystem system in typical.SystemInstances)
                 {
-                    foreach (TECSubScope subScope in equipment.SubScope)
+                    foreach (TECController controller in system.Controllers)
                     {
-                        if (subScope.Guid == actualConnection.SubScope.Guid)
+                        foreach (TECConnection connection in controller.ChildrenConnections)
                         {
-                            actualSubScope = subScope;
+                            if (connection.Guid == expectedGuid)
+                            {
+                                actualConnection = connection as TECSubScopeConnection;
+                                break;
+                            }
+                        }
+                        if (actualConnection != null)
+                        {
                             break;
                         }
                     }
-                    if (actualSubScope != null)
+                    if (actualConnection != null)
                     {
                         break;
                     }
                 }
-                if (actualSubScope != null)
-                {
-                    break;
-                }
             }
-            TECController actualController = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Name == "Test Controller")
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-
-
-            double expectedLength = 521;
-
-            bool hasSubScope = false;
-            if (actualConnection.SubScope == actualSubScope)
-            {
-                hasSubScope = true;
-            }
-
+            
 
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(actualController, actualConnection.ParentController);
-            Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
+            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength);
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid);
+            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid);
+            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid);
         }
         
         [TestMethod]
