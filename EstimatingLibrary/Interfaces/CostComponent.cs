@@ -9,5 +9,6 @@ namespace EstimatingLibrary.Interfaces
     interface CostComponent
     {
         List<TECCost> Costs { get; }
+        Guid Guid { get; }
     }
 }
