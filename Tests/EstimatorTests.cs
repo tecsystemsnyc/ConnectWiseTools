@@ -1429,5 +1429,22 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
         }
+
+        private void checkRefresh(TECBid bid)
+        {
+            double tecCost = bid.Estimate.TECMaterialCost;
+            double tecLabor = bid.Estimate.TECLaborHours;
+            double elecCost = bid.Estimate.ElectricalMaterialCost;
+            double elecLabor = bid.Estimate.ElectricalLaborHours;
+            double total = bid.Estimate.TotalPrice;
+
+            bid.Estimate.Refresh();
+
+            Assert.AreEqual(tecCost, bid.Estimate.TECMaterialCost, "TEC material cost refresh failed.");
+            Assert.AreEqual(tecLabor, bid.Estimate.TECLaborHours, "TEC labor hours refresh failed.");
+            Assert.AreEqual(elecCost, bid.Estimate.ElectricalMaterialCost, "Electrtical material cost refresh failed.");
+            Assert.AreEqual(elecLabor, bid.Estimate.ElectricalLaborHours, "Elecrtical labor horus refresh failed.");
+            Assert.AreEqual(total, bid.Estimate.TotalPrice);
+        }
     }
 }
