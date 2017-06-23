@@ -1381,6 +1381,37 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Bid_SystemMiscCost()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("e3ecee54-1f90-415a-b493-90a78f618476");
+            string expectedName = "System Misc";
+            double expectedCost = 1492;
+            double expectedLabor = 2941;
+            double expectedQuantity = 3;
+            CostType expectedType = CostType.TEC;
+            TECMisc actualMisc = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                foreach (TECMisc misc in system.MiscCosts)
+                {
+                    if (misc.Guid == expectedGuid)
+                    {
+                        actualMisc = misc;
+                        break;
+                    }
+                }
+            }
+            
+            //Assert
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
+        }
+
+        [TestMethod]
         public void Load_Bid_PanelType()
         {
             //Arrange
