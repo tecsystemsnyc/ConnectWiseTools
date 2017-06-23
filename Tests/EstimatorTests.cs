@@ -84,6 +84,45 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AddTypicalSystem()
+        {
+            var bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            var system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+
+            Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "Material cost not added");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
+            Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not added");
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+        }
+
+        [TestMethod]
+        public void Estimate_AddInstanceSystem()
+        {
+            var bid = new TECBid();
+            var manufacturer = new TECManufacturer();
+            var connectionType = new TECConnectionType();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Cost = 10;
+            bid.Catalogs.Devices.Add(device);
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+        }
+
+        [TestMethod]
         public void Estimate_AddMiscCost()
         {
             var bid = new TECBid();
@@ -944,21 +983,7 @@ namespace Tests
             Assert.AreEqual(10, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
             Assert.AreEqual(10, bid.Estimate.CommLaborHours, "Comm labor calcualtion");
         }
-
-        [TestMethod]
-        public void Estimate_AddTypicalSystem()
-        {
-            var bid = new TECBid();
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var system = TestHelper.CreateTestSystem(bid.Catalogs);
-            bid.Systems.Add(system);
-            
-            Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "Material cost not added");
-            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
-            Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not added");
-            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
-        }
-
+        
         #endregion
     }
 }
