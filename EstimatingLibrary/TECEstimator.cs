@@ -349,7 +349,6 @@ namespace EstimatingLibrary
 
         private void handleInstanceRemoved(TECSystem instance, TECSystem parent)
         {
-
             removeCost(instance);
             removePoints(instance);
             foreach (TECMisc misc in parent.MiscCosts)
