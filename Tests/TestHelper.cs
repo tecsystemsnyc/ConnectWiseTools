@@ -720,6 +720,7 @@ namespace Tests
 
             labor.ElectricalRate = 0.6;
             labor.ElectricalSuperRate = 0.66;
+            labor.ElectricalSuperRatio = 1.0 / 7.0;
 
             labor.ElectricalNonUnionRate = 0.7;
             labor.ElectricalSuperNonUnionRate = 0.77;

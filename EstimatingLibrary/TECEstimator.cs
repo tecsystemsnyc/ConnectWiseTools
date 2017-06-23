@@ -470,7 +470,9 @@ namespace EstimatingLibrary
         }
         private void editCost(object newValue, object oldValue)
         {
-            if (newValue.GetType() == oldValue.GetType())
+            Type newType = newValue.GetType();
+            Type oldType = oldValue.GetType();
+            if (newType == oldType && newValue is CostComponent)
             {
                 addCost(newValue);
                 removeCost(oldValue);
@@ -779,7 +781,9 @@ namespace EstimatingLibrary
         /// </summary>
         public double getElectricalLaborCost(TECBid bid)
         {
-            double cost = electricalCost.Labor * bid.Labor.ElectricalEffectiveRate;
+            double electricalHours = electricalCost.Labor;
+            double electricalRate = bid.Labor.ElectricalEffectiveRate;
+            double cost = electricalHours * electricalRate;
 
             return cost;
         }
@@ -814,7 +818,9 @@ namespace EstimatingLibrary
         /// </summary>
         public double getTotalElectricalLaborCost(TECBid bid)
         {
-            double laborCost = getElectricalLaborCost(bid) + getElectricalSuperLaborCost(bid);
+            double electricalLaborCost = getElectricalLaborCost(bid);
+            double electricalSuperLaborCost = getElectricalSuperLaborCost(bid);
+            double laborCost = electricalLaborCost + electricalSuperLaborCost;
             return laborCost;
         }
 
@@ -850,10 +856,11 @@ namespace EstimatingLibrary
         /// </summary>
         public double getSubcontractorCost(TECBid bid)
         {
-            double outCost = 0;
-            outCost += getSubcontractorLaborCost(bid);
-            outCost += getExtendedElectricalMaterialCost();
-            outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
+            double subcontractorLaborCost = getSubcontractorLaborCost(bid);
+            double extendedElectricalMaterialCost = getExtendedElectricalMaterialCost();
+            double subcontractorEscalation = bid.Parameters.SubcontractorEscalation;
+
+            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost) * (1 + (subcontractorEscalation) / 100);
 
             return outCost;
         }
@@ -862,9 +869,9 @@ namespace EstimatingLibrary
         /// </summary>
         public double getSubcontractorSubtotal(TECBid bid)
         {
-            double outCost = 0;
-            outCost += getSubcontractorCost(bid);
-            outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
+            double subContractorCost = getSubcontractorCost(bid);
+            double subContractorMarkup = bid.Parameters.SubcontractorMarkup;
+            double outCost = subContractorCost * (1 + (subContractorMarkup / 100));
             return outCost;
         }
         /// <summary>
@@ -879,10 +886,10 @@ namespace EstimatingLibrary
         /// </summary>
         public double getTotalPrice(TECBid bid)
         {
-            double outPrice = 0;
+            double tecSubtotal = getTECSubtotal(bid);
+            double subcontractSubtotal = getSubcontractorSubtotal(bid);
 
-            outPrice += getTECSubtotal(bid);
-            outPrice += getSubcontractorSubtotal(bid);
+            double outPrice = tecSubtotal + subcontractSubtotal;
             if (bid.Parameters.RequiresBond)
             {
                 outPrice *= 1.013;
