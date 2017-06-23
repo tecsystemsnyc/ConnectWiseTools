@@ -1193,6 +1193,7 @@ namespace Tests
             string expectedDescription = "Bid Controller Description";
             double expectedCost = 1812;
             NetworkType expectedType = NetworkType.Server;
+            bool expectedGlobalStatus = true;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -1231,6 +1232,7 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Cost);
             Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
             testForTag(actualController);
@@ -1246,6 +1248,7 @@ namespace Tests
             string expectedDescription = "Typical Controller Description";
             double expectedCost = 1776;
             NetworkType expectedType = 0;
+            bool expectedGlobalStatus = false;
 
             TECController actualController = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -1287,6 +1290,7 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Cost);
             Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO, "IO not loaded");
             Assert.IsTrue(hasConnection, "Connection not loaded");
             testForTag(actualController);
@@ -1302,6 +1306,7 @@ namespace Tests
             string expectedDescription = "Instance Controller Description";
             double expectedCost = 1776;
             NetworkType expectedType = NetworkType.DDC;
+            bool expectedGlobalStatus = false;
 
             TECController actualController = null;
             foreach (TECSystem typical in actualBid.Systems)
@@ -1346,6 +1351,7 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Cost);
             Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO, "IO not loaded");
             Assert.IsTrue(hasConnection, "Connection not loaded");
             testForTag(actualController);
