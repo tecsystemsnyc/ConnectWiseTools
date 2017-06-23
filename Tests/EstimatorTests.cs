@@ -428,6 +428,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
 
             var controller = new TECController(manufacturer);
+            controller.IsGlobal = false;
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
