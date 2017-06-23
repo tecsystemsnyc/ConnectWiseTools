@@ -379,6 +379,10 @@ namespace EstimatingLibrary
                 {
                     addCost(system);
                     addPoints(system);
+                    foreach (TECMisc misc in typical.MiscCosts)
+                    {
+                        addCost(misc);
+                    }
                 }
             }
             foreach (TECPanel panel in bid.Panels)

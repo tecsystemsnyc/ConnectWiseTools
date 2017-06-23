@@ -437,6 +437,10 @@ namespace EstimatingLibrary
                     if (item != null)
                     {
                         NotifyPropertyChanged("Add", this, item);
+                        if(item is TECController)
+                        {
+                            (item as TECController).IsGlobal = false;
+                        }
                     }
                 }
             }
