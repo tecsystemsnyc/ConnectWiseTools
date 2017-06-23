@@ -687,6 +687,16 @@ namespace Tests
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
             AddDataToTable(new IOIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
+            AddDataToTable(new IOIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            AddDataToTable(new IOIOModuleTable(), values);
         }
         private static void AddToControllerConnectionTable()
         {
