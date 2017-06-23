@@ -84,6 +84,254 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AddControllerToBid()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            bid.Controllers.Add(controller);
+
+            Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveControllerFromBid()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            bid.Controllers.Add(controller);
+            bid.Controllers.Remove(controller);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_AddControllerToTypicalWithInstances()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.AddInstance(bid);
+
+            typical.Controllers.Add(controller);
+
+            Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveControllerToTypicalWithInstances()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.AddInstance(bid);
+
+            typical.Controllers.Add(controller);
+            typical.Controllers.Remove(controller);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_AddSystemInstancesWithController()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.Controllers.Add(controller);
+
+            typical.AddInstance(bid);
+
+            Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveSystemInstancesWithController()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+
+            var controller = new TECController(manufacturer);
+            controller.Cost = 100;
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.Controllers.Add(controller);
+
+            typical.AddInstance(bid);
+
+            typical.Controllers.Remove(controller);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_AddPanelToBid()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            bid.Panels.Add(panel);
+
+            Assert.AreEqual(50, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+        }
+
+        [TestMethod]
+        public void Estimate_RemovePanelToBid()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            bid.Panels.Add(panel);
+            bid.Panels.Remove(panel);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_AddPanelToTypicalWithInstances()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.AddInstance(bid);
+
+            typical.Panels.Add(panel);
+
+            Assert.AreEqual(50, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+        }
+
+        [TestMethod]
+        public void Estimate_RemovePanelToTypicalWithInstances()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.AddInstance(bid);
+
+            typical.Panels.Add(panel);
+
+            typical.Panels.Remove(panel);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_AddSystemInstanceWithPanel()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.Panels.Add(panel);
+
+            typical.AddInstance(bid);
+
+            Assert.AreEqual(50, bid.Estimate.TECMaterialCost, "Material cost not added.");
+            Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveSystemInstanceWithPanel()
+        {
+            var bid = new TECBid();
+
+            var panelType = new TECPanelType();
+            panelType.Cost = 50;
+            panelType.Labor = 7;
+
+            var panel = new TECPanel(panelType);
+
+            var typical = new TECSystem();
+            bid.Systems.Add(typical);
+
+            typical.Panels.Add(panel);
+
+            typical.AddInstance(bid);
+
+            typical.Panels.Remove(panel);
+
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
         public void Estimate_AddMiscCost()
         {
             var bid = new TECBid();
@@ -960,5 +1208,13 @@ namespace Tests
         }
 
         #endregion
+
+        private void assertNoCostOrLabor(TECBid bid)
+        {
+            Assert.AreEqual(0, bid.Estimate.TECMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.TECLaborHours);
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+        }
     }
 }
