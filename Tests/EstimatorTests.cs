@@ -401,20 +401,8 @@ namespace Tests
         public void Estimate_AddSystemWithSubScopeConnection()
         {
             var bid = new TECBid();
-
-            var system = new TECSystem();
-            var equipment = new TECEquipment();
-            var subScope = new TECSubScope();
-
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
-
-            var controller = new TECController(manufacturer);
-
-            equipment.SubScope.Add(subScope);
-            system.Equipment.Add(equipment);
-            system.Controllers.Add(controller);
-
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -431,7 +419,22 @@ namespace Tests
 
             var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.ConnectionTypes.Add(connectionType);
+            bid.Catalogs.ConduitTypes.Add(conduitType);
+            bid.Catalogs.AssociatedCosts.Add(ratedCost);
+            bid.Catalogs.Manufacturers.Add(manufacturer);
 
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            
+            var controller = new TECController(manufacturer);
+
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            system.Controllers.Add(controller);
+            
             subScope.Devices.Add(device);
 
             var connection = controller.AddSubScope(subScope);
@@ -454,23 +457,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var system = new TECSystem();
-            var equipment = new TECEquipment();
-            var subScope = new TECSubScope();
-
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
-
-            var controller = new TECController(manufacturer);
-
-            equipment.SubScope.Add(subScope);
-            system.Equipment.Add(equipment);
-            system.Controllers.Add(controller);
-            bid.Systems.Add(system);
-
-            system.AddInstance(bid);
-            system.AddInstance(bid);
-
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -487,13 +475,43 @@ namespace Tests
 
             var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.ConnectionTypes.Add(connectionType);
+            bid.Catalogs.ConduitTypes.Add(conduitType);
+            bid.Catalogs.AssociatedCosts.Add(ratedCost);
+            bid.Catalogs.Manufacturers.Add(manufacturer);
 
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            
+            var controller = new TECController(manufacturer);
+
+            system.Controllers.Add(controller);
+            system.Equipment.Add(equipment);
+            equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
+            bid.Systems.Add(system);
 
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+            
             var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
+
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                foreach(TECController instanceController in instance.Controllers)
+                {
+                    foreach(TECConnection instanceConnection in instanceController.ChildrenConnections)
+                    {
+                        instanceConnection.Length = 10;
+                        instanceConnection.ConduitLength = 5;
+                        instanceConnection.ConduitType = conduitType;
+                    }
+                }
+            }
 
 
             //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
