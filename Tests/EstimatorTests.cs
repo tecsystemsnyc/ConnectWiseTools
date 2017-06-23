@@ -428,6 +428,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
 
             var controller = new TECController(manufacturer);
+            controller.IsGlobal = false;
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -482,8 +483,8 @@ namespace Tests
             connectionType.Labor = 1;
 
             var conduitType = new TECConduitType();
-            connectionType.Cost = 1;
-            connectionType.Labor = 1;
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
 
             var controller1 = new TECController(manufacturer);
             controller1.IO.Add(io);
