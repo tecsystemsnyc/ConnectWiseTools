@@ -913,10 +913,11 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECScope && referenceObject is TECCost && !(referenceObject is TECMisc))
+            else if (targetObject is TECCost && referenceObject is TECScope && !(targetObject is TECMisc)
+                && !(targetObject is TECController) && !(targetObject is TECDevice))
             {
-                var characteristicScope = targetObject as TECScope;
-                var cost = referenceObject as TECCost;
+                var characteristicScope = referenceObject as TECScope;
+                var cost = targetObject as TECCost;
                 if (CharactersticInstances.ContainsKey(characteristicScope))
                 {
                     foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
