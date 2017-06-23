@@ -470,8 +470,8 @@ namespace EstimatingLibrary
             Type oldType = oldValue.GetType();
             if (newType == oldType && newType is CostComponent)
             {
-                addCost(newValue, false);
-                removeCost(oldValue, false);
+                addCost(newValue);
+                removeCost(oldValue);
             }
         }
 
