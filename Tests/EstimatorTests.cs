@@ -98,6 +98,8 @@ namespace Tests
             Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -114,6 +116,8 @@ namespace Tests
             bid.Controllers.Remove(controller);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -135,6 +139,8 @@ namespace Tests
 
             Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -156,6 +162,8 @@ namespace Tests
             typical.Controllers.Remove(controller);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -177,6 +185,8 @@ namespace Tests
 
             Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -199,6 +209,8 @@ namespace Tests
             typical.Controllers.Remove(controller);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -218,6 +230,8 @@ namespace Tests
             Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -235,6 +249,8 @@ namespace Tests
             bid.Panels.Remove(panel);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -259,6 +275,8 @@ namespace Tests
             Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -282,6 +300,8 @@ namespace Tests
             typical.Panels.Remove(panel);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -306,6 +326,8 @@ namespace Tests
             Assert.AreEqual(7, bid.Estimate.TECLaborHours, "Labor hours not added.");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -329,6 +351,8 @@ namespace Tests
             typical.Panels.Remove(panel);
 
             assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -343,6 +367,8 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -368,6 +394,8 @@ namespace Tests
             system.AddInstance(bid);
 
             Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -395,6 +423,8 @@ namespace Tests
             Assert.AreEqual(13, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(12, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(14, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -450,6 +480,8 @@ namespace Tests
             //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -517,6 +549,8 @@ namespace Tests
             //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -541,6 +575,8 @@ namespace Tests
             Assert.AreEqual(5678, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(4321, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(8765, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -568,6 +604,8 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not removed");
             Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not removed");
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not removed");
+
+            checkRefresh(bid);
         }
         
         [TestMethod]
@@ -596,6 +634,8 @@ namespace Tests
             Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -627,6 +667,8 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -657,6 +699,8 @@ namespace Tests
             Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -690,6 +734,8 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not removed");
             Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not removed");
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not removed");
+
+            checkRefresh(bid);
         }
         
         [TestMethod]
@@ -716,6 +762,8 @@ namespace Tests
             subScope.Devices.Add(device);
             
             Assert.AreEqual(200, bid.Estimate.TECMaterialCost, "Material cost not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -744,6 +792,8 @@ namespace Tests
             subScope.Devices.Remove(device);
 
             Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "Material cost not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -770,6 +820,8 @@ namespace Tests
             subScope.Devices.Add(device);
 
             Assert.AreEqual(100, bid.Estimate.TECMaterialCost, "Material cost not added");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -798,6 +850,8 @@ namespace Tests
             subScope.Devices.Remove(device);
 
             Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "Material cost not added");
+
+            checkRefresh(bid);
         }
 
         
@@ -854,6 +908,8 @@ namespace Tests
             //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -888,6 +944,8 @@ namespace Tests
 
             Assert.AreEqual(100, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(100, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
         
         [TestMethod]
@@ -918,6 +976,8 @@ namespace Tests
 
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -950,6 +1010,8 @@ namespace Tests
 
             Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -984,6 +1046,8 @@ namespace Tests
 
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1009,6 +1073,8 @@ namespace Tests
             equipment.SubScope.Add(subScope);
 
             Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1036,6 +1102,8 @@ namespace Tests
             equipment.SubScope.Remove(subScope);
 
             Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1060,6 +1128,8 @@ namespace Tests
             system.Equipment.Add(equipment);
 
             Assert.AreEqual(10, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1086,6 +1156,8 @@ namespace Tests
             system.Equipment.Remove(equipment);
 
             Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "TECMaterialCost Not Updating");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1110,6 +1182,8 @@ namespace Tests
             system.Equipment.Add(equipment);
 
             Assert.AreEqual(0.875, bid.Estimate.Tax);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1136,6 +1210,8 @@ namespace Tests
             bid.Parameters.IsTaxExempt = true;
 
             Assert.AreEqual(0, bid.Estimate.Tax);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1160,6 +1236,8 @@ namespace Tests
             system.Equipment.Add(equipment);
             
             Assert.AreEqual(0.3, bid.Estimate.TECShipping);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1184,6 +1262,8 @@ namespace Tests
             system.Equipment.Add(equipment);
 
             Assert.AreEqual(0.5, bid.Estimate.TECWarranty);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1234,6 +1314,8 @@ namespace Tests
 
             //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(1.5, bid.Estimate.ElectricalShipping);
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1284,6 +1366,8 @@ namespace Tests
 
             //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(2.5, bid.Estimate.ElectricalWarranty);
+
+            checkRefresh(bid);
         }
 
         #region Derived Labor
@@ -1312,6 +1396,8 @@ namespace Tests
             Assert.AreEqual(0.74, bid.Estimate.SoftLaborHours, "Software labor calcualtion");
             Assert.AreEqual(1.06, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
             Assert.AreEqual(2.68, bid.Estimate.CommLaborHours, "Comm labor calcualtion");
+
+            checkRefresh(bid);
         }
 
         [TestMethod]
@@ -1330,6 +1416,8 @@ namespace Tests
             Assert.AreEqual(10, bid.Estimate.SoftLaborHours, "Software labor calcualtion");
             Assert.AreEqual(10, bid.Estimate.GraphLaborHours, "Graphics labor calcualtion");
             Assert.AreEqual(10, bid.Estimate.CommLaborHours, "Comm labor calcualtion");
+
+            checkRefresh(bid);
         }
         
         #endregion
