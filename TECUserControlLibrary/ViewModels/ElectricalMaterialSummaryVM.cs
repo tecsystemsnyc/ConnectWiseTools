@@ -372,11 +372,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             WireSummaryVM.AddController(controller);
             ConduitSummaryVM.AddController(controller);
+            MiscCostsSummaryVM.AddController(controller);
         }
         private void removeController(TECController controller)
         {
             WireSummaryVM.RemoveController(controller);
             ConduitSummaryVM.RemoveController(controller);
+            MiscCostsSummaryVM.RemoveController(controller);
         }
 
         private void addPanel(TECPanel panel)

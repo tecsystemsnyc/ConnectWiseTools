@@ -169,6 +169,21 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public void AddController(TECController controller)
+        {
+            foreach(TECCost cost in controller.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) AddAssCost(cost);
+            }
+        }
+        public void RemoveController(TECController controller)
+        {
+            foreach(TECCost cost in controller.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
+            }
+        }
+
         public void AddEquipment(TECEquipment equip)
         {
             foreach (TECCost cost in equip.AssociatedCosts)
