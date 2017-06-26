@@ -120,6 +120,14 @@ namespace TECUserControlLibrary.ViewModels
                     AddInstanceSystem(instance);
                 }
             }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                AddPanel(panel);
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                AddController(controller);
+            }
         }
 
         #region Add/Remove

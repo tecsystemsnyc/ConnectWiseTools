@@ -188,9 +188,12 @@ namespace TECUserControlLibrary.ViewModels
 
                 foreach (TECCost cost in panel.AssociatedCosts)
                 {
-                    Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
-                    PanelAssCostSubTotalCost += delta.Item1;
-                    PanelAssCostSubTotalLabor += delta.Item2;
+                    if (cost.Type == CostType.TEC)
+                    {
+                        Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, panelAssCostDictionary, PanelAssCostSummaryItems);
+                        PanelAssCostSubTotalCost += delta.Item1;
+                        PanelAssCostSubTotalLabor += delta.Item2;
+                    }
                 }
             }
             else
