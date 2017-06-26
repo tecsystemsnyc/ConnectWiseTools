@@ -117,8 +117,7 @@ namespace Tests
         #endregion
 
         #region System
-
-
+        
         [TestMethod]
         public void System_AddInstances()
         {
@@ -142,6 +141,7 @@ namespace Tests
             }
 
         }
+
         [TestMethod]
         public void System_EditInstances()
         {
@@ -167,7 +167,30 @@ namespace Tests
             }
 
         }
-        
+
+        [TestMethod]
+        public void System_RemoveSystemInsatnceWithBidConnection()
+        {
+            var bid = new TECBid();
+            var bidController = new TECController(new TECManufacturer());
+            bid.Controllers.Add(bidController);
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            system.Equipment.Add(equipment);
+            equipment.SubScope.Add(subScope);
+            bidController.AddSubScope(subScope);
+            var instance = system.AddInstance(bid);
+            
+            Assert.IsTrue(bidController.ChildrenConnections.Count == 2, "Connection not added");
+
+            system.SystemInstances.Remove(instance);
+
+            Assert.IsTrue(bidController.ChildrenConnections.Count == 1, "Connection not removed");
+            
+        }
+
         #endregion
     }
 }

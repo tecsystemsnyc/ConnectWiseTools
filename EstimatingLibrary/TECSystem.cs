@@ -451,6 +451,10 @@ namespace EstimatingLibrary
                     if (item != null)
                     {
                          NotifyPropertyChanged("Remove", this, item);
+                        if(item is TECSystem)
+                        {
+                            handleInstanceRemoved(item as TECSystem);
+                        }
                     }
                 }
             }
@@ -459,6 +463,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Edit", this, sender, typeof(TECSystem), typeof(TECEquipment));
             }
         }
+
+        private void handleInstanceRemoved(TECSystem instance)
+        {
+            foreach(TECSubScope subScope in instance.SubScope)
+            {
+                if(subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
+                {
+                    subScope.Connection.ParentController.RemoveSubScope(subScope);
+                }
+            }
+        }
+
         private void TECSystem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ObjectPropertyChanged")
