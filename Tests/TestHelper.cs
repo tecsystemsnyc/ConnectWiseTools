@@ -120,14 +120,6 @@ namespace Tests
 
             bid.Panels.Add(panel);
             
-            //IO Modules
-            TECIOModule testIOModule = new TECIOModule();
-            testIOModule.Name = "Test IO Module";
-            testIOModule.Cost = 42;
-            testIOModule.Manufacturer = bid.Catalogs.Manufacturers.RandomObject();
-            bid.Catalogs.IOModules.Add(testIOModule);
-            ioToAdd.IOModule = testIOModule;
-
             //Systems
             var system1 = CreateTestSystem(bid.Catalogs);
             AssignSecondaryProperties(system1, bid);
@@ -156,6 +148,7 @@ namespace Tests
             system1.AddInstance(bid);
             system2.AddInstance(bid);
             system3.AddInstance(bid);
+
             system1.AddInstance(bid);
             system2.AddInstance(bid);
             system3.AddInstance(bid);
@@ -192,19 +185,19 @@ namespace Tests
             subScope2.Name = "Empty SubScope";
             subScope2.Description = "Description 2";
             subScope2.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
-            
+
             //Points
             var point1 = new TECPoint();
-            AssignSecondaryProperties(point1, bid);
             point1.Name = "Point 1";
             point1.Description = "Description 1";
             point1.Type = PointTypes.Serial;
             point1.Quantity = 321;
 
             subScope1.Points.Add(point1);
-            
+
             //Connections
             TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();

@@ -631,14 +631,21 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
+            var assCost = new TECCost();
+            assCost.Cost = 1;
+            assCost.Labor = 1;
+            assCost.Type = CostType.Electrical;
+
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
+            connectionType.AssociatedCosts.Add(assCost);
             var conduitType = new TECConduitType();
             conduitType.Cost = 1;
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
+            conduitType.AssociatedCosts.Add(assCost);
 
             var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
@@ -681,9 +688,9 @@ namespace Tests
             }
 
 
-            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
-            Assert.AreEqual(50, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
-            Assert.AreEqual(50, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2*(10 * 1 +10 * 1 + 2) + 2 * (5 * 1 + 5 * 1 + 2) = 40 + 10 = 54
+            Assert.AreEqual(54, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(54, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
             checkRefresh(bid);
         }
@@ -700,10 +707,16 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
+            var assCost = new TECCost();
+            assCost.Cost = 1;
+            assCost.Labor = 1;
+            assCost.Type = CostType.Electrical;
+
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
+            connectionType.AssociatedCosts.Add(assCost);
             var conduitType = new TECConduitType();
             conduitType.Cost = 1;
             conduitType.Labor = 1;
@@ -715,6 +728,7 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
+            conduitType.AssociatedCosts.Add(assCost);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
