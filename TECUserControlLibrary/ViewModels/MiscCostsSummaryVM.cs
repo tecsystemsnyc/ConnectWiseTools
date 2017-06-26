@@ -148,6 +148,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddEquipment(equip);
             }
+            foreach (TECPanel panel in system.Panels)
+            {
+                AddPanel(panel);
+            }
         }
         public void RemoveInstanceSystem(TECSystem system)
         {
@@ -158,6 +162,10 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECEquipment equip in system.Equipment)
             {
                 RemoveEquipment(equip);
+            }
+            foreach (TECPanel panel in system.Panels)
+            {
+                RemovePanel(panel);
             }
         }
 
@@ -305,6 +313,21 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     throw new InvalidOperationException("Misc not found in summary items.");
                 }
+            }
+        }
+
+        public void AddPanel(TECPanel panel)
+        {
+            foreach(TECCost cost in panel.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) AddAssCost(cost);
+            }
+        }
+        public void RemovePanel(TECPanel panel)
+        {
+            foreach(TECCost cost in panel.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
             }
         }
         #endregion

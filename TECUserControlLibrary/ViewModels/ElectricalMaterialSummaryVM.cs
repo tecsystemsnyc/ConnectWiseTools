@@ -158,6 +158,10 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         addController(targetObject as TECController);
                     }
+                    else if (targetObject is TECPanel)
+                    {
+                        addPanel(targetObject as TECPanel);
+                    }
                     else if (targetObject is TECConnection)
                     {
                         addConnection(targetObject as TECConnection);
@@ -203,6 +207,10 @@ namespace TECUserControlLibrary.ViewModels
                     else if (targetObject is TECController)
                     {
                         removeController(targetObject as TECController);
+                    }
+                    else if (targetObject is TECPanel)
+                    {
+                        removePanel(targetObject as TECPanel);
                     }
                     else if (targetObject is TECConnection)
                     {
@@ -369,6 +377,15 @@ namespace TECUserControlLibrary.ViewModels
         {
             WireSummaryVM.RemoveController(controller);
             ConduitSummaryVM.RemoveController(controller);
+        }
+
+        private void addPanel(TECPanel panel)
+        {
+            MiscCostsSummaryVM.AddPanel(panel);
+        }
+        private void removePanel(TECPanel panel)
+        {
+            MiscCostsSummaryVM.RemovePanel(panel);
         }
 
         private void addConnection(TECConnection connection)
