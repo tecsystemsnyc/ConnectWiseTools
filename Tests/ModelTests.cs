@@ -169,7 +169,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void System_RemoveSystemInsatnceWithBidConnection()
+        public void System_RemoveSystemInstanceWithBidConnection()
         {
             var bid = new TECBid();
             var bidController = new TECController(new TECManufacturer());
