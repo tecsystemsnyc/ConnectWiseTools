@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1097,6 +1098,29 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
+    public class ElectricalMaterialRatedCostTable : IndexedRelationTableBase
+    {
+        public static new string TableName = "ElectricalMaterialRatedCost";
+        public static Type ObjectType = typeof(ElectricalMaterialComponent);
+        public static Type ReferenceType = typeof(TECCost);
+
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField ComponentID = new TableField("ComponentID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField CostID = new TableField("CostID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ComponentID,
+            CostID
+        };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
     public class ControllerManufacturerTable : TableBase
     {
         public static new string TableName = "TECControllerTECManufacturer";
@@ -1394,6 +1418,7 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ControllerTable(),
             new AssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerIOTable(),
             new IOIOModuleTable(),
@@ -1456,6 +1481,7 @@ namespace EstimatingUtilitiesLibrary
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
@@ -1526,6 +1552,7 @@ namespace EstimatingUtilitiesLibrary
             new VisualScopeScopeTable(),
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
             new BidBidParametersTable(),

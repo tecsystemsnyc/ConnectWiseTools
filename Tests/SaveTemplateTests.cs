@@ -1482,6 +1482,18 @@ namespace Tests
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
+            TECCost expectedRated = null;
+            foreach(TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if(cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConnectionType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
+
             DatabaseHelper.Update(path, testStack);
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
@@ -1503,6 +1515,7 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.Catalogs.ConnectionTypes.Count);
             Assert.AreEqual(expectedCostCount, actualConnectionType.AssociatedCosts.Count);
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
 
@@ -1522,6 +1535,18 @@ namespace Tests
 
             templates.Catalogs.ConduitTypes.Add(expectedConduitType);
 
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConduitType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConduitType.RatedCosts.Count;
+
             DatabaseHelper.Update(path, testStack);
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
@@ -1539,6 +1564,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
             Assert.AreEqual((oldNumConduitTypes + 1), actualTemplates.Catalogs.ConduitTypes.Count);
 
         }
@@ -1563,6 +1589,44 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.Catalogs.ConduitTypes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Templates_Add_ConduitTypeRatedCost()
+        {
+            //Act
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
+            TECConduitType expectedConduitType = templates.Catalogs.ConduitTypes.RandomObject();
+            
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConduitType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConduitType.RatedCosts.Count;
+
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+
+            TECConduitType actualConnectionType = null;
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedConduitType.Guid)
+                {
+                    actualConnectionType = conduitType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
+
         }
         #endregion
 
