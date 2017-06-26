@@ -174,6 +174,10 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         addPanel(targetObject as TECPanel);
                     }
+                    else if (targetObject is TECConnection)
+                    {
+                        addConnection(targetObject as TECConnection);
+                    }
                     else if (targetObject is TECMisc)
                     {
                         if (referenceObject is TECBid)
@@ -234,6 +238,10 @@ namespace TECUserControlLibrary.ViewModels
                     else if (targetObject is TECPanel)
                     {
                         removePanel(targetObject as TECPanel);
+                    }
+                    else if (targetObject is TECConnection)
+                    {
+                        removeConnection(targetObject as TECConnection);
                     }
                     else if (targetObject is TECMisc)
                     {
@@ -465,6 +473,15 @@ namespace TECUserControlLibrary.ViewModels
         private void removeController(TECController controller)
         {
             ControllerSummaryVM.RemoveController(controller);
+        }
+
+        private void addConnection(TECConnection connection)
+        {
+            MiscCostsSummaryVM.AddConnection(connection);
+        }
+        private void removeConnection(TECConnection connection)
+        {
+            MiscCostsSummaryVM.RemoveConnection(connection);
         }
 
         private void addPanel(TECPanel panel)

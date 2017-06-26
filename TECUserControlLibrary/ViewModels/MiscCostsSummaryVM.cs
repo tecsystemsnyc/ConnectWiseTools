@@ -120,6 +120,14 @@ namespace TECUserControlLibrary.ViewModels
                     AddInstanceSystem(instance);
                 }
             }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                AddPanel(panel);
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                AddController(controller);
+            }
         }
 
         #region Add/Remove
@@ -148,6 +156,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddEquipment(equip);
             }
+            foreach (TECPanel panel in system.Panels)
+            {
+                AddPanel(panel);
+            }
         }
         public void RemoveInstanceSystem(TECSystem system)
         {
@@ -158,6 +170,100 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECEquipment equip in system.Equipment)
             {
                 RemoveEquipment(equip);
+            }
+            foreach (TECPanel panel in system.Panels)
+            {
+                RemovePanel(panel);
+            }
+        }
+
+        public void AddController(TECController controller)
+        {
+            foreach(TECCost cost in controller.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) AddAssCost(cost);
+            }
+        }
+        public void RemoveController(TECController controller)
+        {
+            foreach(TECCost cost in controller.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
+            }
+        }
+
+        public void AddConnection(TECConnection connection)
+        {
+            if (connection is TECNetworkConnection)
+            {
+                foreach(TECCost cost in (connection as TECNetworkConnection).ConnectionType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AddAssCost(cost);
+                    }
+                }
+            }
+            else if (connection is TECSubScopeConnection)
+            {
+                foreach(TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                {
+                    foreach(TECCost cost in type.AssociatedCosts)
+                    {
+                        if (cost.Type == CostType.TEC)
+                        {
+                            AddAssCost(cost);
+                        }
+                    }
+                }
+            }
+
+            if (connection.ConduitType != null)
+            {
+                foreach(TECCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AddAssCost(cost);
+                    }
+                }
+            }
+        }
+        public void RemoveConnection(TECConnection connection)
+        {
+            if (connection is TECNetworkConnection)
+            {
+                foreach (TECCost cost in (connection as TECNetworkConnection).ConnectionType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                }
+            }
+            else if (connection is TECSubScopeConnection)
+            {
+                foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                {
+                    foreach (TECCost cost in type.AssociatedCosts)
+                    {
+                        if (cost.Type == CostType.TEC)
+                        {
+                            RemoveAssCost(cost);
+                        }
+                    }
+                }
+            }
+
+            if (connection.ConduitType != null)
+            {
+                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                }
             }
         }
 
@@ -305,6 +411,21 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     throw new InvalidOperationException("Misc not found in summary items.");
                 }
+            }
+        }
+
+        public void AddPanel(TECPanel panel)
+        {
+            foreach(TECCost cost in panel.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) AddAssCost(cost);
+            }
+        }
+        public void RemovePanel(TECPanel panel)
+        {
+            foreach(TECCost cost in panel.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
             }
         }
         #endregion

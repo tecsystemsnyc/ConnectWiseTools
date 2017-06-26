@@ -933,9 +933,27 @@ namespace Tests
             {
                 scope.Tags.Add(catalogs.Tags.RandomObject());
             }
-            if (scope.AssociatedCosts.Count == 0)
+            bool tecAdded = false;
+            bool elecAdded = false;
+            foreach(TECCost cost in catalogs.AssociatedCosts)
             {
-                scope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());
+                if (cost.Type == CostType.TEC)
+                {
+                    if (!tecAdded)
+                    {
+                        scope.AssociatedCosts.Add(cost);
+                        tecAdded = true;
+                    }
+                }
+                else if (cost.Type == CostType.Electrical)
+                {
+                    if (!elecAdded)
+                    {
+                        scope.AssociatedCosts.Add(cost);
+                        elecAdded = true;
+                    }
+                }
+                if (tecAdded && elecAdded) break;
             }
         }
 
