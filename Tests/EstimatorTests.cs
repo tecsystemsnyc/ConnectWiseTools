@@ -610,7 +610,6 @@ namespace Tests
             bid.Systems.Add(system);
 
             var instance = system.AddInstance(bid);
-            system.AddInstance(bid);
 
             system.SystemInstances.Remove(instance);
 
