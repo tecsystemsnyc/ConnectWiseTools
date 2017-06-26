@@ -1015,7 +1015,16 @@ namespace EstimatingLibrary
             foreach(TECSubScope subScope in SubScope)
             {
                 var instances = CharactersticInstances.GetInstances(subScope);
-                //foreach(tecsubs)
+                foreach(TECSubScope subInstance in instances)
+                {
+                    if (newSubScope.Contains(subInstance))
+                    {
+                        if(subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
+                        {
+                            subScope.Connection.ParentController.AddSubScope(subInstance);
+                        }
+                    }
+                }
             }
             SystemInstances.Add(newSystem);
             return (newSystem);
