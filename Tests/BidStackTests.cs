@@ -1150,7 +1150,7 @@ namespace Tests
 
             //assert
             TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
-            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
+            Assert.AreEqual(expected, actual, "Not Undone");
         }
 
         #endregion
