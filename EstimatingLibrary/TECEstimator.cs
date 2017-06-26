@@ -283,6 +283,10 @@ namespace EstimatingLibrary
                         {
                             handleRemoveMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
                         }
+                        else if (newValue is TECSystem && oldValue is TECBid)
+                        {
+                            handleTypicalRemoved(newValue as TECSystem);
+                        }
                         else
                         {
                             removeCost(newValue);
@@ -354,6 +358,14 @@ namespace EstimatingLibrary
             foreach (TECMisc misc in parent.MiscCosts)
             {
                 removeCost(misc);
+            }
+        }
+
+        private void handleTypicalRemoved(TECSystem typical)
+        {
+            foreach(TECSystem instance in typical.SystemInstances)
+            {
+                handleInstanceRemoved(instance, typical);
             }
         }
 
