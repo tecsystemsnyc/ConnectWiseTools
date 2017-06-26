@@ -758,6 +758,110 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AddSubScopeConnectionInTypical()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 1;
+            var ratedCost = new TECCost();
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
+            var conduitType = new TECConduitType();
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.ConnectionTypes.Add(connectionType);
+            bid.Catalogs.ConduitTypes.Add(conduitType);
+            bid.Catalogs.AssociatedCosts.Add(ratedCost);
+            bid.Catalogs.Manufacturers.Add(manufacturer);
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+
+            var controller = new TECController(manufacturer);
+            bid.Controllers.Add(controller);
+
+            system.Equipment.Add(equipment);
+            equipment.SubScope.Add(subScope);
+            subScope.Devices.Add(device);
+            bid.Systems.Add(system);
+
+            var connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            connection.ConduitLength = 5;
+            connection.ConduitType = conduitType;
+
+            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+
+            checkRefresh(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveSubScopeConnectionInTypical()
+        {
+            var bid = new TECBid();
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 1;
+            var ratedCost = new TECCost();
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
+
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
+            var conduitType = new TECConduitType();
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
+
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.ConnectionTypes.Add(connectionType);
+            bid.Catalogs.ConduitTypes.Add(conduitType);
+            bid.Catalogs.AssociatedCosts.Add(ratedCost);
+            bid.Catalogs.Manufacturers.Add(manufacturer);
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+
+            var controller = new TECController(manufacturer);
+            bid.Controllers.Add(controller);
+
+            system.Equipment.Add(equipment);
+            equipment.SubScope.Add(subScope);
+            subScope.Devices.Add(device);
+            bid.Systems.Add(system);
+            var connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            connection.ConduitLength = 5;
+            connection.ConduitType = conduitType;
+            
+            controller.RemoveSubScope(subScope);
+
+            //Assert
+            assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
+        }
+
+        [TestMethod]
         public void Estimate_AddMiscCost()
         {
             var bid = new TECBid();
