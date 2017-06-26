@@ -184,6 +184,81 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public void AddConnection(TECConnection connection)
+        {
+            if (connection is TECNetworkConnection)
+            {
+                foreach(TECCost cost in (connection as TECNetworkConnection).ConnectionType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AddAssCost(cost);
+                    }
+                }
+            }
+            else if (connection is TECSubScopeConnection)
+            {
+                foreach(TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                {
+                    foreach(TECCost cost in type.AssociatedCosts)
+                    {
+                        if (cost.Type == CostType.TEC)
+                        {
+                            AddAssCost(cost);
+                        }
+                    }
+                }
+            }
+
+            if (connection.ConduitType != null)
+            {
+                foreach(TECCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AddAssCost(cost);
+                    }
+                }
+            }
+        }
+        public void RemoveConnection(TECConnection connection)
+        {
+            if (connection is TECNetworkConnection)
+            {
+                foreach (TECCost cost in (connection as TECNetworkConnection).ConnectionType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                }
+            }
+            else if (connection is TECSubScopeConnection)
+            {
+                foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                {
+                    foreach (TECCost cost in type.AssociatedCosts)
+                    {
+                        if (cost.Type == CostType.TEC)
+                        {
+                            RemoveAssCost(cost);
+                        }
+                    }
+                }
+            }
+
+            if (connection.ConduitType != null)
+            {
+                foreach (TECCost cost in connection.ConduitType.AssociatedCosts)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        RemoveAssCost(cost);
+                    }
+                }
+            }
+        }
+
         public void AddEquipment(TECEquipment equip)
         {
             foreach (TECCost cost in equip.AssociatedCosts)
