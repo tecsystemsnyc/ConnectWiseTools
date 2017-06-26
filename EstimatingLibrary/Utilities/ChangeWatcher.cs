@@ -511,7 +511,6 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged -= Object_PropertyChanged;
                     handleChildren(newValue, Change.Remove, ChangeType.Object);
                     checkForRaiseInstance(sender, args, Change.Remove);
-
                 }
                 else if (e.PropertyName == "MetaAdd")
                 {
@@ -655,6 +654,10 @@ namespace EstimatingLibrary.Utilities
                 
             }
             else if (newValue is TECBidParameters || newValue is TECLabor)
+            {
+                InstanceChanged?.Invoke(sender, args);
+            }
+            else if (change == Change.Remove && oldValue is TECBid && newValue is TECSystem)
             {
                 InstanceChanged?.Invoke(sender, args);
             }
