@@ -1595,10 +1595,10 @@ namespace Tests
 
         private void assertNoCostOrLabor(TECBid bid)
         {
-            Assert.AreEqual(0, bid.Estimate.TECMaterialCost);
-            Assert.AreEqual(0, bid.Estimate.TECLaborHours);
-            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost);
-            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours);
+            Assert.AreEqual(0, bid.Estimate.TECMaterialCost, 0.0001);
+            Assert.AreEqual(0, bid.Estimate.TECLaborHours, 0.0001);
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, 0.0001);
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, 0.0001);
         }
 
         private void checkRefresh(TECBid bid)
@@ -1611,11 +1611,11 @@ namespace Tests
 
             bid.Estimate.Refresh();
 
-            Assert.AreEqual(tecCost, bid.Estimate.TECMaterialCost, "TEC material cost refresh failed.");
-            Assert.AreEqual(tecLabor, bid.Estimate.TECLaborHours, "TEC labor hours refresh failed.");
-            Assert.AreEqual(elecCost, bid.Estimate.ElectricalMaterialCost, "Electrtical material cost refresh failed.");
-            Assert.AreEqual(elecLabor, bid.Estimate.ElectricalLaborHours, "Elecrtical labor horus refresh failed.");
-            Assert.AreEqual(total, bid.Estimate.TotalPrice);
+            Assert.AreEqual(tecCost, bid.Estimate.TECMaterialCost, 0.0001, "TEC material cost refresh failed.");
+            Assert.AreEqual(tecLabor, bid.Estimate.TECLaborHours, 0.0001, "TEC labor hours refresh failed.");
+            Assert.AreEqual(elecCost, bid.Estimate.ElectricalMaterialCost, 0.0001, "Electrtical material cost refresh failed.");
+            Assert.AreEqual(elecLabor, bid.Estimate.ElectricalLaborHours, 0.0001, "Elecrtical labor hours refresh failed.");
+            Assert.AreEqual(total, bid.Estimate.TotalPrice, 0.0001, "Total price refresh failed.");
         }
     }
 }
