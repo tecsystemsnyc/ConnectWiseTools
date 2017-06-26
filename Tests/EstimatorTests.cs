@@ -1527,13 +1527,13 @@ namespace Tests
 
             TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            //TECSystem instance = typical.AddInstance(bid);
 
             TECSubScope subScope = typical.Equipment[0].SubScope[0];
             TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
             ssConnect.Length = 50;
 
-            typical.SystemInstances.Remove(instance);
+            //typical.SystemInstances.Remove(instance);
 
             //Assert
             assertNoCostOrLabor(bid);

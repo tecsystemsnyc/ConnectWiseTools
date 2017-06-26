@@ -315,31 +315,43 @@ namespace EstimatingLibrary
                 {
                     message = "Edit change: " + oldValue;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    editCost(newValue, oldValue);
-                    editPoints(newValue, oldValue);
 
-                    if(bid.GetType().GetProperty(e.PropertyName) != null)
+                    if (oldValue is TECSubScopeConnection && newValue is TECSubScopeConnection)
                     {
-                        var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
-                        if (list != null)
+                        if(!isTypical(newValue as TECSubScopeConnection))
                         {
-                            foreach (object item in list)
-                            {
-                                addCost(item);
-                                addPoints(item);
-                            }
+                            editCost(newValue, oldValue);
+                            editPoints(newValue, oldValue);
                         }
                     }
-                    if(newValue is TECBidParameters)
+                    else
                     {
-                        raiseMaterial();
-                        raiseTECTotals();
-                        raiseSubcontractorTotals();
-                    }
-                    else if (newValue is TECLabor)
-                    {
-                        raiseTECLabor();
-                        raiseElectricalLabor();
+                        editCost(newValue, oldValue);
+                        editPoints(newValue, oldValue);
+
+                        if (bid.GetType().GetProperty(e.PropertyName) != null)
+                        {
+                            var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
+                            if (list != null)
+                            {
+                                foreach (object item in list)
+                                {
+                                    addCost(item);
+                                    addPoints(item);
+                                }
+                            }
+                        }
+                        if (newValue is TECBidParameters)
+                        {
+                            raiseMaterial();
+                            raiseTECTotals();
+                            raiseSubcontractorTotals();
+                        }
+                        else if (newValue is TECLabor)
+                        {
+                            raiseTECLabor();
+                            raiseElectricalLabor();
+                        }
                     }
                 }
             }
