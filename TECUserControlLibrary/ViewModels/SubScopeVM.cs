@@ -163,11 +163,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            DragHandler(dropInfo);
+            DragHandler?.Invoke(dropInfo);
         }
         public void Drop(IDropInfo dropInfo)
         {
-            DropHandler(dropInfo);
+            DropHandler?.Invoke(dropInfo);
         }
         
 
