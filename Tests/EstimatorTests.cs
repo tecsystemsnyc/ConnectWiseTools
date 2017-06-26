@@ -1517,6 +1517,30 @@ namespace Tests
             checkRefresh(bid);
         }
 
+        [TestMethod]
+        public void Estimate_RemoveInstanceSystemWithBidControllerSubscopeConnection()
+        {
+            TECBid bid = TestHelper.CreateTestBid();
+            TECManufacturer manufacturer = bid.Catalogs.Manufacturers[0];
+            TECController controller = new TECController(manufacturer);
+            bid.Controllers.Add(controller);
+
+            TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+
+            TECSubScope subScope = typical.Equipment[0].SubScope[0];
+            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
+            ssConnect.Length = 50;
+
+            typical.SystemInstances.Remove(instance);
+
+            //Assert
+            assertNoCostOrLabor(bid);
+
+            checkRefresh(bid);
+        }
+
         #region Derived Labor
         [TestMethod]
         public void Estimate_TECLaborHoursFromPoints()
