@@ -207,6 +207,21 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public void AddDevice(TECDevice dev)
+        {
+            foreach(TECCost cost in dev.AssociatedCosts)
+            {
+                AddAssCost(cost);
+            }
+        }
+        public void RemoveDevice(TECDevice dev)
+        {
+            foreach(TECCost cost in dev.AssociatedCosts)
+            {
+                RemoveAssCost(cost);
+            }
+        }
+
         public void AddPoint(TECPoint point)
         {
             foreach(TECCost cost in point.AssociatedCosts)
