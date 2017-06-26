@@ -73,6 +73,9 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <StackPanel>
+                        <i:Interaction.Behaviors>
+                            <utilities:BubbleScrollEvent/>
+                        </i:Interaction.Behaviors>
                         <Label Content="Points" FontSize="10"/>
                         <local:SubScopeGridView SubScopeSource="{Binding SubScope}"
                                                    ViewModel="{Binding ElementName=parent, Path=ViewModel.ChildVM}"
