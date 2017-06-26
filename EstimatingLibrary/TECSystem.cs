@@ -970,7 +970,7 @@ namespace EstimatingLibrary
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
-        public void AddInstance(TECScopeManager scopeManager)
+        public TECSystem AddInstance(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
@@ -996,6 +996,7 @@ namespace EstimatingLibrary
             }
             ModelLinkingHelper.LinkSystem(newSystem, scopeManager, guidDictionary);
             SystemInstances.Add(newSystem);
+            return (newSystem);
         }
         #endregion
     }
