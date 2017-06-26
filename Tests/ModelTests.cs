@@ -183,11 +183,11 @@ namespace Tests
             bidController.AddSubScope(subScope);
             var instance = system.AddInstance(bid);
             
-            Assert.IsTrue(bidController.ChildrenConnections.Count == 2, "Connection not added");
+            Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 
             system.SystemInstances.Remove(instance);
 
-            Assert.IsTrue(bidController.ChildrenConnections.Count == 1, "Connection not removed");
+            Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not removed");
             
         }
 

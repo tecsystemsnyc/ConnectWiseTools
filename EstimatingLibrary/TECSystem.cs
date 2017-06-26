@@ -1011,6 +1011,12 @@ namespace EstimatingLibrary
                 newSystem.Panels.Add(toAdd);
             }
             ModelLinkingHelper.LinkSystem(newSystem, scopeManager, guidDictionary);
+            var newSubScope = newSystem.SubScope;
+            foreach(TECSubScope subScope in SubScope)
+            {
+                var instances = CharactersticInstances.GetInstances(subScope);
+                //foreach(tecsubs)
+            }
             SystemInstances.Add(newSystem);
             return (newSystem);
         }
