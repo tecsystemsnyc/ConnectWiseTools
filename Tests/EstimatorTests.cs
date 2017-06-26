@@ -1519,7 +1519,8 @@ namespace Tests
         [TestMethod]
         public void Estimate_RemoveInstanceSystemWithBidControllerSubscopeConnection()
         {
-            TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECManufacturer manufacturer = bid.Catalogs.Manufacturers[0];
             TECController controller = new TECController(manufacturer);
             bid.Controllers.Add(controller);
