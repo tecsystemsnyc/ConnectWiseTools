@@ -197,7 +197,6 @@ namespace Tests
             
             //Points
             var point1 = new TECPoint();
-            AssignSecondaryProperties(point1, bid);
             point1.Name = "Point 1";
             point1.Description = "Description 1";
             point1.Type = PointTypes.Serial;

@@ -78,9 +78,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateTestBid();
             double expetcedPrice = bid.Estimate.TotalPrice;
 
-            bid.Estimate.Refresh();
-
-            Assert.AreEqual(expetcedPrice, bid.Estimate.TotalPrice);
+            checkRefresh(bid);
         }
 
         [TestMethod]
