@@ -432,6 +432,16 @@ namespace EstimatingLibrary
             foreach (TECController controller in bid.Controllers)
             {
                 addCost(controller);
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if(connection is TECSubScopeConnection)
+                    {
+                        if (isTypical(connection as TECSubScopeConnection))
+                        {
+                            removeCost(connection);
+                        }
+                    }
+                }
             }
             foreach (TECMisc miscCost in bid.MiscCosts)
             {
