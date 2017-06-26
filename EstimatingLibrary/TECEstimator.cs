@@ -262,6 +262,14 @@ namespace EstimatingLibrary
                         {
                             handleAddMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
                         }
+                        else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                        {
+                            if (!isTypical(newValue as TECSubScopeConnection))
+                            {
+                                addCost(newValue);
+                                addPoints(newValue);
+                            }
+                        }
                         else
                         {
                             addCost(newValue);
@@ -286,6 +294,14 @@ namespace EstimatingLibrary
                         else if (newValue is TECSystem && oldValue is TECBid)
                         {
                             handleTypicalRemoved(newValue as TECSystem);
+                        }
+                        else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                        {
+                            if (!isTypical(newValue as TECSubScopeConnection))
+                            {
+                                removeCost(newValue);
+                                removePoints(newValue);
+                            }
                         }
                         else
                         {
@@ -1079,6 +1095,19 @@ namespace EstimatingLibrary
             RaisePropertyChanged("Margin");
         }
         #endregion
+
+        private bool isTypical(TECSubScopeConnection ssConnect)
+        {
+            TECSubScope ss = ssConnect.SubScope;
+            foreach (TECSystem typical in bid.Systems)
+            {
+                if (typical.SubScope.Contains(ss))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public override object Copy()
         {
