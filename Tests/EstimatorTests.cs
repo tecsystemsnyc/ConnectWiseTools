@@ -346,6 +346,23 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_RemoveTypicalSystem()
+        {
+            var bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            var system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            bid.Systems.Remove(system);
+
+            //Assert
+            assertNoCostOrLabor(bid);
+        }
+
+        [TestMethod]
         public void Estimate_AddInstanceSystemWithEquipment()
         {
             var bid = new TECBid();
