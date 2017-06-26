@@ -194,6 +194,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddPoint(point);
             }
+            foreach (TECDevice dev in subScope.Devices)
+            {
+                AddDevice(dev);
+            }
         }
         public void RemoveSubScope(TECSubScope subScope)
         {
@@ -205,20 +209,24 @@ namespace TECUserControlLibrary.ViewModels
             {
                 RemovePoint(point);
             }
+            foreach (TECDevice dev in subScope.Devices)
+            {
+                RemoveDevice(dev);
+            }
         }
 
         public void AddDevice(TECDevice dev)
         {
             foreach(TECCost cost in dev.AssociatedCosts)
             {
-                AddAssCost(cost);
+                if (cost.Type == CostType.Electrical) AddAssCost(cost);
             }
         }
         public void RemoveDevice(TECDevice dev)
         {
             foreach(TECCost cost in dev.AssociatedCosts)
             {
-                RemoveAssCost(cost);
+                if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
             }
         }
 
