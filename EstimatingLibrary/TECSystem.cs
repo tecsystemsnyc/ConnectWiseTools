@@ -1030,6 +1030,10 @@ namespace EstimatingLibrary
                 CharactersticInstances.AddItem(panel, toAdd);
                 newSystem.Panels.Add(toAdd);
             }
+            foreach(TECCost cost in AssociatedCosts)
+            {
+                newSystem.AssociatedCosts.Add(cost);
+            }
             ModelLinkingHelper.LinkSystem(newSystem, scopeManager, guidDictionary);
             var newSubScope = newSystem.SubScope;
             foreach(TECSubScope subScope in SubScope)
