@@ -1028,7 +1028,7 @@ namespace Tests
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
-                total += calculateTotal(misc, type) * system.SystemInstances.Count;
+                total += (calculateTotal(misc, type) * system.SystemInstances.Count);
             }
             foreach(TECController controller in system.Controllers)
             {

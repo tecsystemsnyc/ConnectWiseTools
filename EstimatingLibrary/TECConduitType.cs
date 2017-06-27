@@ -44,7 +44,9 @@ namespace EstimatingLibrary
             var ratedCosts = new ObservableCollection<TECCost>();
             foreach (TECCost cost in conduitSource.RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
+            RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
             _ratedCosts = ratedCosts;
+            RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
 
         public override object Copy()
@@ -56,9 +58,11 @@ namespace EstimatingLibrary
             foreach (TECCost cost in RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
             outType._ratedCosts = ratedCosts;
+            outType.RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
 
             return outType;
         }
+
         public override object DragDropCopy()
         {
             throw new NotImplementedException();
