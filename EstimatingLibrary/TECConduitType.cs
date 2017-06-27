@@ -37,25 +37,28 @@ namespace EstimatingLibrary
             _type = CostType.Electrical;
             RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
-
         public TECConduitType() : this(Guid.NewGuid()) { }
         public TECConduitType(TECConduitType conduitSource) : this()
         {
             copyPropertiesFromCost(conduitSource);
-            _labor = conduitSource.Labor;
-            _ratedCosts = conduitSource._ratedCosts;
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in conduitSource.RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            _ratedCosts = ratedCosts;
         }
+
         public override object Copy()
         {
             var outType = new TECConduitType();
-            outType.copyPropertiesFromCost(this);
             outType._guid = this._guid;
-            outType._labor = this._labor;
-            outType._ratedCosts = this._ratedCosts;
+            outType.copyPropertiesFromCost(this);
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            outType._ratedCosts = ratedCosts;
 
             return outType;
         }
-
         public override object DragDropCopy()
         {
             throw new NotImplementedException();
@@ -67,14 +70,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("AddCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Remove", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("RemoveCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
         }
