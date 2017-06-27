@@ -108,6 +108,7 @@ namespace TECUserControlLibrary.ViewModels
             PanelAssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
             PanelTypeSubTotal = 0;
+            PanelTypeLaborSubTotal = 0;
             PanelAssCostSubTotalCost = 0;
             PanelAssCostSubTotalLabor = 0;
 
