@@ -69,6 +69,7 @@ namespace Tests
             AddToVisualScopeScopeTable();
             AddToLocationScopeTable();
             AddToScopeAssociatedCostTable();
+            AddElectricalComponentRatedCostTable();
             AddToControllerManufacturerTable();
             AddToConnectionConduitTypeTable();
             AddToNetworkConnectionConnectionTypeTable();
@@ -375,6 +376,14 @@ namespace Tests
             values.Add("Test Electrical Associated Cost");
             values.Add("42");
             values.Add("24");
+            values.Add("Electrical");
+            AddDataToTable(new AssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add("b7c01526-c195-442f-a1f1-28d07db61144");
+            values.Add("Rated Cost");
+            values.Add("10");
+            values.Add("5");
             values.Add("Electrical");
             AddDataToTable(new AssociatedCostTable(), values);
         }
@@ -1200,6 +1209,21 @@ namespace Tests
             AddDataToTable(new ScopeAssociatedCostTable(), values);
             
 
+        }
+        private static void AddElectricalComponentRatedCostTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            values.Add("b7c01526-c195-442f-a1f1-28d07db61144");
+            values.Add("1");
+            AddDataToTable(new ElectricalMaterialRatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            values.Add("b7c01526-c195-442f-a1f1-28d07db61144");
+            values.Add("1");
+            AddDataToTable(new ElectricalMaterialRatedCostTable(), values);
+            
         }
         private static void AddToControllerManufacturerTable()
         {

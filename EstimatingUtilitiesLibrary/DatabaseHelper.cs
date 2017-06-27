@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Collections;
 using DebugLibrary;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -421,7 +422,22 @@ namespace EstimatingUtilitiesLibrary
             { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             return connectionTypes;
         }
-
+        static private ObservableCollection<TECCost> getRatedCostsInComponent(Guid componentID)
+        {
+            
+            string command = "select " + ElectricalMaterialRatedCostTable.CostID.Name + ", " + ElectricalMaterialRatedCostTable.Quantity.Name + " from " + ElectricalMaterialRatedCostTable.TableName + " where ";
+            command += ElectricalMaterialRatedCostTable.ComponentID.Name + " = '" + componentID;
+            command += "'";
+            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            var costs = new ObservableCollection<TECCost>();
+            foreach (DataRow row in DT.Rows)
+            {
+                TECCost costToAdd = getPlaceholderRatedCostFromRow(row);
+                int quantity = row[ElectricalMaterialRatedCostTable.Quantity.Name].ToString().ToInt();
+                for (int x = 0; x < quantity; x++) { costs.Add(costToAdd); }
+            }
+            return costs;
+        }
         #endregion
         #region System Components
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
@@ -1019,11 +1035,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
-            //string command = "select * from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
-            //command += "(select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
-            //command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
-            //command += controllerID;
-            //command += "')";
+            
             string command = "select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
             command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
             command += controllerID;
@@ -1635,8 +1647,24 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.Cost = cost;
             outConnectionType.Labor = labor;
             getScopeChildren(outConnectionType);
+            outConnectionType.RatedCosts = getRatedCostsInComponent(outConnectionType.Guid);
             return outConnectionType;
         }
+        private static TECConduitType getConduitTypeFromRow(DataRow row)
+        {
+            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
+            string name = row[ConduitTypeTable.Name.Name].ToString();
+            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
+            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
+            var conduitType = new TECConduitType(conduitGuid);
+            conduitType.Name = name;
+            conduitType.Cost = cost;
+            conduitType.Labor = labor;
+            getScopeChildren(conduitType);
+            conduitType.RatedCosts = getRatedCostsInComponent(conduitType.Guid);
+            return conduitType;
+        }
+
         private static TECCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
@@ -1680,19 +1708,6 @@ namespace EstimatingUtilitiesLibrary
             var location = new TECLocation(locationID);
             location.Name = row[LocationTable.Name.Name].ToString();
             return location;
-        }
-        private static TECConduitType getConduitTypeFromRow(DataRow row)
-        {
-            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
-            string name = row[ConduitTypeTable.Name.Name].ToString();
-            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
-            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
-            var conduitType = new TECConduitType(conduitGuid);
-            conduitType.Name = name;
-            conduitType.Cost = cost;
-            conduitType.Labor = labor;
-            getScopeChildren(conduitType);
-            return conduitType;
         }
         private static TECTag getTagFromRow(DataRow row)
         {
@@ -1885,7 +1900,6 @@ namespace EstimatingUtilitiesLibrary
             scope.AssociatedCosts = getAssociatedCostsInScope(scope.Guid);
         }
 
-
         #region Placeholder
         private static TECSubScope getSubScopeConnectionChildPlaceholderFromRow(DataRow row)
         {
@@ -1912,6 +1926,12 @@ namespace EstimatingUtilitiesLibrary
         private static TECCost getPlaceholderAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ScopeAssociatedCostTable.AssociatedCostID.Name].ToString());
+            TECCost associatedCost = new TECCost(guid);
+            return associatedCost;
+        }
+        private static TECCost getPlaceholderRatedCostFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ElectricalMaterialRatedCostTable.CostID.Name].ToString());
             TECCost associatedCost = new TECCost(guid);
             return associatedCost;
         }
@@ -2151,11 +2171,13 @@ namespace EstimatingUtilitiesLibrary
             {
                 addObject(new StackItem(Change.Add, catalogs, conduitType));
                 saveScopeChildProperties(conduitType);
+                saveRatedCosts(conduitType);
             }
             foreach (TECConnectionType connectionType in catalogs.ConnectionTypes)
             {
                 addObject(new StackItem(Change.Add, catalogs, connectionType));
                 saveScopeChildProperties(connectionType);
+                saveRatedCosts(connectionType);
             }
             foreach (TECTag tag in catalogs.Tags)
             { addObject(new StackItem(Change.Add, catalogs, tag)); }
@@ -2293,6 +2315,13 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECCost cost in scope.AssociatedCosts)
             {
                 addObject(new StackItem(Change.Add, scope, cost, typeof(TECScope), typeof(TECCost)));
+            }
+        }
+        private static void saveRatedCosts(ElectricalMaterialComponent component)
+        {
+            foreach (TECCost cost in component.RatedCosts)
+            {
+                addObject(new StackItem(Change.Add, component, cost, typeof(ElectricalMaterialComponent), typeof(TECCost)));
             }
         }
         private static void saveControllerChildProperties(TECController controller)

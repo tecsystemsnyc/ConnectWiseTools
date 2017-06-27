@@ -282,11 +282,13 @@ namespace Tests
             TECCost testAssociatedCost = new TECCost();
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
+            testAssociatedCost.Type = CostType.Electrical;
 
             templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
             var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
+            testCost2.Type = CostType.TEC;
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
             //IO Modules

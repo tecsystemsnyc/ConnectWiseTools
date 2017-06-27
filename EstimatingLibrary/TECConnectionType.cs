@@ -67,14 +67,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("Add", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("Remove", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
         }

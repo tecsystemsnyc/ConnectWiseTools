@@ -426,6 +426,7 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
+            Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
         [TestMethod]
@@ -435,6 +436,7 @@ namespace Tests
             Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
             Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
+            Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
         [TestMethod]

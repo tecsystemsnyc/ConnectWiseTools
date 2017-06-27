@@ -1,5 +1,6 @@
 ﻿using DebugLibrary;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections;
@@ -436,6 +437,7 @@ namespace EstimatingUtilitiesLibrary
             else if (newItem is TECConduitType || newItem is TECConnectionType)
             {
                 handleScopeChildren(newItem as TECScope, item.Change);
+                handleElectricalMaterialChildren(newItem as ElectricalMaterialComponent, item.Change);
             }
             else if (newItem is TECConnection || newItem is TECSubScopeConnection || newItem is TECNetworkConnection)
             {
@@ -607,6 +609,15 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECTag tag in scope.Tags)
             {
                 item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECTag));
+                SaveStack.Add(item);
+            }
+        }
+        private void handleElectricalMaterialChildren(ElectricalMaterialComponent component, Change change)
+        {
+            StackItem item;
+            foreach (TECCost cost in component.RatedCosts)
+            {
+                item = new StackItem(change, (object)component, (object)cost, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 SaveStack.Add(item);
             }
         }

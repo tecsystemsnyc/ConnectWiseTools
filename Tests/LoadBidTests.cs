@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -20,6 +21,7 @@ namespace Tests
         static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
         static Guid TEST_ELECTRICAL_COST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
         static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+        static Guid TEST_RATED_COST_GUID = new Guid("b7c01526-c195-442f-a1f1-28d07db61144");
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -830,6 +832,7 @@ namespace Tests
             Assert.AreEqual(expectedLabor, actualConnectionType.Labor);
 
             testForCosts(actualConnectionType);
+            testForRatedCosts(actualConnectionType);
         }
 
         [TestMethod]
@@ -857,6 +860,7 @@ namespace Tests
             Assert.AreEqual(expectedLabor, actualConduitType.Labor);
 
             testForCosts(actualConduitType);
+            testForRatedCosts(actualConduitType);
         }
 
         [TestMethod]
@@ -1752,6 +1756,22 @@ namespace Tests
         {
             bool foundLocation = (scope.Location.Guid == TEST_LOCATION_GUID);
             Assert.IsTrue(foundLocation, "Location not loaded properly into scope.");
+        }
+
+        private void testForRatedCosts(ElectricalMaterialComponent component)
+        {
+            bool foundCost = false;
+            
+            foreach (TECCost cost in component.RatedCosts)
+            {
+                if (cost.Guid == TEST_RATED_COST_GUID)
+                {
+                    foundCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundCost, "Rated Cost not loaded properly into scope.");
         }
     }
 }
