@@ -992,6 +992,69 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Estimate_AddAssCostToSystem()
+        {
+            var bid = new TECBid();
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            var tecCost = new TECCost();
+            tecCost.Cost = 1234;
+            tecCost.Labor = 4321;
+            tecCost.Type = CostType.TEC;
+
+            var eCost = new TECCost();
+            eCost.Cost = 5678;
+            eCost.Labor = 8765;
+            eCost.Type = CostType.Electrical;
+
+            system.AssociatedCosts.Add(tecCost);
+            system.AssociatedCosts.Add(eCost);
+
+            Assert.AreEqual(2468, bid.Estimate.TECMaterialCost, "Material cost not added");
+            Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
+            Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
+            Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
+        }
+
+        [TestMethod]
+        public void Estimate_RemoveAssCostRemoveSystem()
+        {
+            var bid = new TECBid();
+            var system = new TECSystem();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            var tecCost = new TECCost();
+            tecCost.Cost = 1234;
+            tecCost.Labor = 4321;
+            tecCost.Type = CostType.TEC;
+
+            var eCost = new TECCost();
+            eCost.Cost = 5678;
+            eCost.Labor = 8765;
+            eCost.Type = CostType.Electrical;
+
+            system.AssociatedCosts.Add(tecCost);
+            system.AssociatedCosts.Add(eCost);
+
+            system.AssociatedCosts.Remove(tecCost);
+            system.AssociatedCosts.Remove(eCost);
+
+            Assert.AreEqual(2468, bid.Estimate.TECMaterialCost, "Material cost not added");
+            Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
+            Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
+            Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+
+            checkRefresh(bid);
+        }
+
+        [TestMethod]
         public void Estimate_AddAssCostFromEquipemnt()
         {
             var bid = new TECBid();

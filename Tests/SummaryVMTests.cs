@@ -287,26 +287,34 @@ namespace Tests
         [TestMethod]
         public void AddDevice()
         {
+            //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             TECDevice device = TestHelper.CreateTestDevice(bid.Catalogs);
             TestHelper.AssignSecondaryProperties(device, bid.Catalogs);
 
-            TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
-            ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
-
-            PrivateObject privateTecVM = new PrivateObject(tecVM);
-            PrivateObject privateElecVM = new PrivateObject(elecVM);
-
-            privateTecVM.Invoke("addDevice", device);
-            privateElecVM.Invoke("addDevice", device);
-
             Total totalTEC = calculateTotal(device, CostType.TEC);
             Total totalElec = calculateTotal(device, CostType.Electrical);
 
+            TECSystem typical = new TECSystem();
+            TECEquipment typEquip = new TECEquipment();
+            TECSubScope typSS = new TECSubScope();
+            typical.Equipment.Add(typEquip);
+            typEquip.SubScope.Add(typSS);
+            typical.AddInstance(bid);
+
+            TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
+            ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
+
+            //Act
+            typSS.Devices.Add(device);
+
+            //Assert
             Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
             Assert.AreEqual(tecVM.TotalLabor, totalTEC.labor, delta, "Total tec labor didn't update properly.");
             Assert.AreEqual(elecVM.TotalCost, totalElec.cost, delta, "Total elec cost didn't update proplery.");
             Assert.AreEqual(elecVM.TotalLabor, totalElec.labor, delta, "Total elec labor didn't update properly.");
+
+            checkRefresh(tecVM, elecVM, bid);
         }
 
         [TestMethod]
