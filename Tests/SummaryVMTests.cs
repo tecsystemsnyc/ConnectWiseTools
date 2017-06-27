@@ -406,7 +406,7 @@ namespace Tests
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
 
             //Act
-            typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance(bid);
 
             //Assert
             Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
