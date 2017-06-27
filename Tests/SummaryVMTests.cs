@@ -473,7 +473,8 @@ namespace Tests
                     cost = randomCost;
                 }
             }
-            var system = bid.Systems.RandomObject();
+            var system = new TECSystem();
+            bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
 
