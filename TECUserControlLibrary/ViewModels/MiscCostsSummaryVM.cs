@@ -160,6 +160,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddPanel(panel);
             }
+            foreach (TECController controller in system.Controllers)
+            {
+                AddController(controller);
+            }
         }
         public void RemoveInstanceSystem(TECSystem system)
         {
@@ -174,6 +178,10 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECPanel panel in system.Panels)
             {
                 RemovePanel(panel);
+            }
+            foreach (TECController controller in system.Controllers)
+            {
+                RemoveController(controller);
             }
         }
 

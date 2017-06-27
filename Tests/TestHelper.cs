@@ -604,13 +604,13 @@ namespace Tests
             TECSystem outScope = new TECSystem();
             outScope.Tags.Add(catalogs.Tags.RandomObject());
             outScope.ProposeEquipment = true;
-            var panel = new TECPanel(catalogs.PanelTypes[0]);
+            var panel = CreateTestPanel(catalogs);
 
             outScope.Panels.Add(panel);
             var equipment = CreateTestEquipment(catalogs);
             outScope.Equipment.Add(equipment);
 
-            var controller = new TECController(catalogs.Manufacturers[0]);
+            var controller = CreateTestController(catalogs);
             outScope.Controllers.Add(controller);
 
             ConnectEquipmentToController(equipment, controller);
@@ -619,7 +619,7 @@ namespace Tests
             var scopeBranch = new TECScopeBranch();
             outScope.ScopeBranches.Add(scopeBranch);
 
-            var misc = new TECMisc();
+            var misc = CreateTestMisc();
             outScope.MiscCosts.Add(misc);
 
             outScope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());

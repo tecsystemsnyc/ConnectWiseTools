@@ -406,7 +406,7 @@ namespace Tests
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
 
             //Act
-            typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance(bid);
 
             //Assert
             Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
@@ -1024,21 +1024,26 @@ namespace Tests
             Total total = new Total();
             foreach (TECEquipment equipment in system.Equipment)
             {
-                total += calculateTotal(equipment, type);
+                Total equipSubTotal = calculateTotal(equipment, type);
+                total += equipSubTotal;
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
-                total += (calculateTotal(misc, type) * system.SystemInstances.Count);
+                Total miscSubTotal = calculateTotal(misc, type);
+                total += (miscSubTotal * system.SystemInstances.Count);
             }
             foreach(TECController controller in system.Controllers)
             {
-                total += calculateTotal(controller, type);
+                Total controllerSubTotal = calculateTotal(controller, type);
+                total += controllerSubTotal;
             }
             foreach(TECPanel panel in system.Panels)
             {
-                total += calculateTotal(panel, type);
+                Total panelSubTotal = calculateTotal(panel, type);
+                total += panelSubTotal;
             }
-            total += calculateTotal(system as TECScope, type);
+            Total systemScopeSubTotal = calculateTotal(system as TECScope, type);
+            total += systemScopeSubTotal;
             return total;
         }
 
