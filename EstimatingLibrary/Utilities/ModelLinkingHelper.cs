@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingLibrary
+namespace EstimatingLibrary.Utilities
 {
     public static class ModelLinkingHelper
     {
@@ -130,13 +130,99 @@ namespace EstimatingLibrary
         #endregion
 
         #region Link Methods
+
+        #region Catalogs
         static private void linkCatalogs(TECCatalogs catalogs)
         {
             linkConnectionTypeWithDevices(catalogs.ConnectionTypes, catalogs.Devices);
             linkManufacturersWithDevices(catalogs.Manufacturers, catalogs.Devices);
             linkManufacturersWithIOModules(catalogs.Manufacturers, catalogs.IOModules);
+            foreach (TECDevice device in catalogs.Devices)
+            { linkAssociatedCostsInDevice(catalogs.AssociatedCosts, device); }
+            foreach (TECConnectionType scope in catalogs.ConnectionTypes)
+            {
+                linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
+                linkRatedCostsInElectricalMaterial(catalogs.AssociatedCosts, scope);
+            }
+            foreach (TECConduitType scope in catalogs.ConduitTypes)
+            {
+                linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
+                linkRatedCostsInElectricalMaterial(catalogs.AssociatedCosts, scope);
+            }
 
         }
+        static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
+        {
+            foreach (TECDevice device in devices)
+            {
+                foreach (TECManufacturer man in mans)
+                {
+                    if (device.Manufacturer.Guid == man.Guid)
+                    {
+                        device.Manufacturer = man;
+                    }
+                }
+            }
+        }
+        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
+        {
+            foreach (TECDevice device in devices)
+            {
+                ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+                foreach (TECConnectionType deviceType in device.ConnectionTypes)
+                {
+                    foreach (TECConnectionType connectionType in connectionTypes)
+                    {
+                        if (deviceType.Guid == connectionType.Guid)
+                        {
+                            linkedTypes.Add(connectionType);
+                        }
+                    }
+                }
+                device.ConnectionTypes = linkedTypes;
+            }
+        }
+        static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
+        {
+            foreach (TECIOModule module in ioModules)
+            {
+                foreach (TECManufacturer manufacturer in manufacturers)
+                {
+                    if (module.Manufacturer.Guid == manufacturer.Guid)
+                    {
+                        module.Manufacturer = manufacturer;
+                    }
+                }
+            }
+        }
+        static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
+        {
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost devCost in device.AssociatedCosts)
+                {
+                    if (devCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            device.AssociatedCosts = costsToAssign;
+        }
+        static private void linkRatedCostsInElectricalMaterial(ObservableCollection<TECCost> costs, ElectricalMaterialComponent component)
+        {
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost scopeCost in component.RatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            component.RatedCosts = costsToAssign;
+        }
+        #endregion
+
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
             ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
             ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
@@ -395,19 +481,6 @@ namespace EstimatingLibrary
                 sub.Devices = linkedDevices;
             }
         }
-        static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
-        {
-            foreach (TECDevice device in devices)
-            {
-                foreach (TECManufacturer man in mans)
-                {
-                    if (device.Manufacturer.Guid == man.Guid)
-                    {
-                        device.Manufacturer = man;
-                    }
-                }
-            }
-        }
         static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
         {
             foreach (TECController controller in controllers)
@@ -525,24 +598,6 @@ namespace EstimatingLibrary
             }
             scope.Tags = linkedTags;
         }
-        static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
-        {
-            foreach (TECDevice device in devices)
-            {
-                ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-                foreach(TECConnectionType deviceType in device.ConnectionTypes)
-                {
-                    foreach (TECConnectionType connectionType in connectionTypes)
-                    {
-                        if (deviceType.Guid == connectionType.Guid)
-                        {
-                            linkedTypes.Add(connectionType);
-                        }
-                    }
-                }
-                device.ConnectionTypes = linkedTypes;
-            }
-        }
 
         static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
         {
@@ -551,10 +606,6 @@ namespace EstimatingLibrary
                 TECBid bid = scopeManager as TECBid;
                 foreach (TECSystem system in bid.Systems)
                 { linkAssociatedCostsInSystem(bid.Catalogs.AssociatedCosts, system); }
-                foreach (TECConnectionType scope in bid.Catalogs.ConnectionTypes)
-                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
-                foreach (TECConduitType scope in bid.Catalogs.ConduitTypes)
-                { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
                 foreach (TECController scope in bid.Controllers)
                 { linkAssociatedCostsInScope(bid.Catalogs.AssociatedCosts, scope); }
                 foreach (TECPanel scope in bid.Panels)
@@ -570,30 +621,11 @@ namespace EstimatingLibrary
                 { linkAssociatedCostsInEquipment(templates.Catalogs.AssociatedCosts, equipment); }
                 foreach (TECSubScope subScope in templates.SubScopeTemplates)
                 { linkAssociatedCostsInSubScope(templates.Catalogs.AssociatedCosts, subScope); }
-                foreach (TECDevice device in templates.Catalogs.Devices)
-                { linkAssociatedCostsInDevice(templates.Catalogs.AssociatedCosts, device); }
-                foreach (TECConnectionType scope in templates.Catalogs.ConnectionTypes)
-                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
-                foreach (TECConduitType scope in templates.Catalogs.ConduitTypes)
-                { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
                 foreach (TECController scope in templates.ControllerTemplates)
                 { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
                 foreach (TECPanel scope in templates.PanelTemplates)
                 { linkAssociatedCostsInScope(templates.Catalogs.AssociatedCosts, scope); }
             }
-        }
-        static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
-        {
-            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in costs)
-            {
-                foreach (TECCost devCost in device.AssociatedCosts)
-                {
-                    if (devCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
-                }
-            }
-            device.AssociatedCosts = costsToAssign;
         }
         static private void linkAssociatedCostsInSubScope(ObservableCollection<TECCost> costs, TECSubScope subScope)
         {
@@ -732,19 +764,6 @@ namespace EstimatingLibrary
                         }
                     }
 
-                }
-            }
-        }
-        static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
-        {
-            foreach (TECIOModule module in ioModules)
-            {
-                foreach (TECManufacturer manufacturer in manufacturers)
-                {
-                    if (module.Manufacturer.Guid == manufacturer.Guid)
-                    {
-                        module.Manufacturer = manufacturer;
-                    }
                 }
             }
         }
