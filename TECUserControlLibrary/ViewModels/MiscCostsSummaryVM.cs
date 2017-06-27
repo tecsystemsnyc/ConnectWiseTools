@@ -133,9 +133,12 @@ namespace TECUserControlLibrary.ViewModels
         #region Add/Remove
         public void AddTypicalSystem(TECSystem system)
         {
-            foreach(TECMisc misc in system.MiscCosts)
+            foreach(TECSystem instance in system.SystemInstances)
             {
-                AddMiscCost(misc, system);
+                foreach (TECMisc misc in system.MiscCosts)
+                {
+                    AddMiscCost(misc, system);
+                }
             }
         }
         public void RemoveTypicalSystem(TECSystem system)
