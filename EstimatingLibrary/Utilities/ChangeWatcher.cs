@@ -162,6 +162,10 @@ namespace EstimatingLibrary.Utilities
         private void registerSystem(TECSystem scope, ChangeType changeType = ChangeType.Object)
         {
             scope.PropertyChanged += Object_PropertyChanged;
+            if (changeType == ChangeType.Instance)
+            {
+                scope.PropertyChanged += Instance_PropertyChanged;
+            }
             foreach (TECPanel panel in scope.Panels)
             {
                 panel.PropertyChanged += Object_PropertyChanged;
