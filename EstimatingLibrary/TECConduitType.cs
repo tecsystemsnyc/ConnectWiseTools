@@ -58,7 +58,7 @@ namespace EstimatingLibrary
             foreach (TECCost cost in RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
             outType._ratedCosts = ratedCosts;
-            outType.RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
+            outType.RatedCosts.CollectionChanged += outType.RatedCosts_CollectionChanged;
 
             return outType;
         }
