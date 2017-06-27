@@ -16,7 +16,6 @@ namespace EstimatingLibrary.Interfaces
         string Name { get; set; }
         double Cost { get; set; }
         double Labor { get; set; }
-        ObservableCollection<TECCost> AssociatedCosts { get; set; }
         ObservableCollection<TECCost> RatedCosts { get; set; }
     }
 }

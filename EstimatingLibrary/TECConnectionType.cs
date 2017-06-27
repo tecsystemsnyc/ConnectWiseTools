@@ -10,13 +10,11 @@ namespace EstimatingLibrary
 {
     public class TECConnectionType : TECCost, ElectricalMaterialComponent
     {
+        #region Properties
         private ObservableCollection<TECCost> _ratedCosts;
         public ObservableCollection<TECCost> RatedCosts
         {
-            get
-            {
-                return _ratedCosts;
-            }
+            get { return _ratedCosts; }
             set
             {
                 var temp = this.Copy();
@@ -26,6 +24,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("RatedCosts", temp, this);
             }
         }
+        #endregion
 
         public TECConnectionType(Guid guid) : base(guid)
         {
@@ -38,24 +37,25 @@ namespace EstimatingLibrary
         public TECConnectionType() : this(Guid.NewGuid()) { }
         public TECConnectionType(TECConnectionType connectionTypeSource) : this()
         {
-            copyPropertiesFromScope(connectionTypeSource);
-            _cost = connectionTypeSource.Cost;
-            _labor = connectionTypeSource.Labor;
-            _ratedCosts = connectionTypeSource._ratedCosts;
+            copyPropertiesFromCost(connectionTypeSource);
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in connectionTypeSource.RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            _ratedCosts = ratedCosts;
         }
 
         public override object Copy()
         {
             var outType = new TECConnectionType();
             outType._guid = this._guid;
-            outType.copyPropertiesFromScope(this);
-            outType._cost = this._cost;
-            outType._labor = this._labor;
-            outType._ratedCosts = this._ratedCosts;
+            outType.copyPropertiesFromCost(this);
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            outType._ratedCosts = ratedCosts;
 
             return outType;
         }
-
         public override object DragDropCopy()
         {
             throw new NotImplementedException();
@@ -67,14 +67,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("AddCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Remove", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged("RemoveCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }
             }
         }

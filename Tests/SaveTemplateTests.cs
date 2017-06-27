@@ -1520,7 +1520,43 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
 
         }
+        [TestMethod]
+        public void Save_Templates_Add_ConnectionTypeRatedCost()
+        {
+            //Act
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
+            TECConnectionType expectedConnectionType = templates.Catalogs.ConnectionTypes.RandomObject();
 
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConnectionType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
+
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedConnectionType.Guid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
+
+        }
         #endregion
 
         #region Save Conduit Type
