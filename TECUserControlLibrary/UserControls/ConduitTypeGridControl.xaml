@@ -36,10 +36,18 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                         <Label Content="Associated Costs"/>
                         <controls:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
                                                           ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                           Grid.Row="1"/>
+                        <Label Content="Rated Costs" Grid.Column="1"/>
+                        <controls:AssociatedCostsGridControl CostsSource="{Binding RatedCosts}"
+                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                          Grid.Row="1" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
