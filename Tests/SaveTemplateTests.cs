@@ -1553,8 +1553,18 @@ namespace Tests
                 }
             }
 
+            bool hasRated = false;
+            foreach (TECCost cost in actualConnectionType.RatedCosts)
+            {
+                if (cost.Guid == expectedRated.Guid)
+                {
+                    hasRated = true;
+                    break;
+                }
+            }
+
             //Assert
-            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
+            Assert.IsTrue(hasRated);
 
         }
         #endregion
@@ -1650,18 +1660,28 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECConduitType actualConnectionType = null;
+            TECConduitType actualConduitType = null;
             foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {
-                    actualConnectionType = conduitType;
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
+
+            bool hasRated = false;
+            foreach(TECCost cost in actualConduitType.RatedCosts)
+            {
+                if(cost.Guid == expectedRated.Guid)
+                {
+                    hasRated = true;
                     break;
                 }
             }
 
             //Assert
-            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
+            Assert.IsTrue(hasRated);
 
         }
         #endregion
