@@ -92,12 +92,12 @@ namespace TECUserControlLibrary.ViewModels
             refreshVMs(bid);
         }
 
-        public void reinitialize(TECBid bid)
+        private void reinitialize(TECBid bid)
         {
             changeWatcher = new ChangeWatcher(bid);
         }
 
-        public void initializeVMs(TECBid bid)
+        private void initializeVMs(TECBid bid)
         {
             WireSummaryVM = new LengthSummaryVM(bid, LengthType.Wire);
             ConduitSummaryVM = new LengthSummaryVM(bid, LengthType.Conduit);
@@ -108,7 +108,7 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostsSummaryVM.PropertyChanged += MiscCostsSummaryVM_PropertyChanged;
         }
 
-        public void refreshVMs(TECBid bid)
+        private void refreshVMs(TECBid bid)
         {
             WireSummaryVM.Refresh(bid);
             ConduitSummaryVM.Refresh(bid);

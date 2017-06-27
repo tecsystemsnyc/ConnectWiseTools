@@ -206,6 +206,13 @@ namespace Tests
             return bid;
         }
 
+        public static TECBid CreateEmptyCatalogBid()
+        {
+            TECBid bid = new TECBid();
+            bid.Catalogs = CreateTestCatalogs();
+            return bid;
+        }
+
         public static TECTemplates CreateTestTemplates()
         {
             TECTemplates templates = new TECTemplates();
