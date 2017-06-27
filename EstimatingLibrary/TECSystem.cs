@@ -722,15 +722,25 @@ namespace EstimatingLibrary
             else if (targetObject is TECCost && referenceObject is TECScope && !(targetObject is TECMisc)
                 && !(targetObject is TECController) && !(targetObject is TECDevice))
             {
-                var characteristicScope = referenceObject as TECScope;
-                var cost = targetObject as TECCost;
-                if (CharactersticInstances.ContainsKey(characteristicScope))
+                if(referenceObject is TECSystem)
                 {
-                    foreach(TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                    foreach(TECSystem system in SystemInstances)
                     {
-                        scope.AssociatedCosts.Add(cost);
+                        system.AssociatedCosts.Add(targetObject as TECCost);
+                    }
+                }else
+                {
+                    var characteristicScope = referenceObject as TECScope;
+                    var cost = targetObject as TECCost;
+                    if (CharactersticInstances.ContainsKey(characteristicScope))
+                    {
+                        foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                        {
+                            scope.AssociatedCosts.Add(cost);
+                        }
                     }
                 }
+                
             }
         }
         private void handleRemove(object targetObject, object referenceObject)
@@ -936,13 +946,23 @@ namespace EstimatingLibrary
             else if (targetObject is TECCost && referenceObject is TECScope && !(targetObject is TECMisc)
                 && !(targetObject is TECController) && !(targetObject is TECDevice))
             {
-                var characteristicScope = referenceObject as TECScope;
-                var cost = targetObject as TECCost;
-                if (CharactersticInstances.ContainsKey(characteristicScope))
+                if (referenceObject is TECSystem)
                 {
-                    foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                    foreach (TECSystem system in SystemInstances)
                     {
-                        scope.AssociatedCosts.Remove(cost);
+                        system.AssociatedCosts.Remove(targetObject as TECCost);
+                    }
+                }
+                else
+                {
+                    var characteristicScope = referenceObject as TECScope;
+                    var cost = targetObject as TECCost;
+                    if (CharactersticInstances.ContainsKey(characteristicScope))
+                    {
+                        foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                        {
+                            scope.AssociatedCosts.Remove(cost);
+                        }
                     }
                 }
             }

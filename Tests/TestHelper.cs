@@ -281,7 +281,7 @@ namespace Tests
 
             var testCost2 = new TECCost();
             testCost2.Name = "Other Cost";
-            testAssociatedCost.Type = CostType.TEC;
+            testCost2.Type = CostType.TEC;
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
             //IO Modules

@@ -1650,6 +1650,21 @@ namespace EstimatingUtilitiesLibrary
             outConnectionType.RatedCosts = getRatedCostsInComponent(outConnectionType.Guid);
             return outConnectionType;
         }
+        private static TECConduitType getConduitTypeFromRow(DataRow row)
+        {
+            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
+            string name = row[ConduitTypeTable.Name.Name].ToString();
+            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
+            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
+            var conduitType = new TECConduitType(conduitGuid);
+            conduitType.Name = name;
+            conduitType.Cost = cost;
+            conduitType.Labor = labor;
+            getScopeChildren(conduitType);
+            conduitType.RatedCosts = getRatedCostsInComponent(conduitType.Guid);
+            return conduitType;
+        }
+
         private static TECCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
@@ -1693,20 +1708,6 @@ namespace EstimatingUtilitiesLibrary
             var location = new TECLocation(locationID);
             location.Name = row[LocationTable.Name.Name].ToString();
             return location;
-        }
-        private static TECConduitType getConduitTypeFromRow(DataRow row)
-        {
-            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
-            string name = row[ConduitTypeTable.Name.Name].ToString();
-            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
-            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
-            var conduitType = new TECConduitType(conduitGuid);
-            conduitType.Name = name;
-            conduitType.Cost = cost;
-            conduitType.Labor = labor;
-            getScopeChildren(conduitType);
-            conduitType.RatedCosts = getRatedCostsInComponent(conduitType.Guid);
-            return conduitType;
         }
         private static TECTag getTagFromRow(DataRow row)
         {
