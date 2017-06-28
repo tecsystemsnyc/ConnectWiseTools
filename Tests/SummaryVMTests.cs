@@ -1095,10 +1095,10 @@ namespace Tests
             tecVM.Refresh(bid);
             elecVM.Refresh(bid);
 
-            Assert.AreEqual(tecCost, tecVM.TotalCost, "Total tec cost didn't refresh properly.");
-            Assert.AreEqual(tecLabor, tecVM.TotalLabor, "Total tec labor didn't refresh properly.");
-            Assert.AreEqual(elecCost, elecVM.TotalCost, "Total elec cost didn't refresh properly.");
-            Assert.AreEqual(elecLabor, elecVM.TotalLabor, "Total elec labor didn't refresh properly.");
+            Assert.AreEqual(tecCost, tecVM.TotalCost, delta, "Total tec cost didn't refresh properly.");
+            Assert.AreEqual(tecLabor, tecVM.TotalLabor, delta, "Total tec labor didn't refresh properly.");
+            Assert.AreEqual(elecCost, elecVM.TotalCost, delta, "Total elec cost didn't refresh properly.");
+            Assert.AreEqual(elecLabor, elecVM.TotalLabor, delta, "Total elec labor didn't refresh properly.");
         }
 
         private class Total
