@@ -112,7 +112,19 @@ namespace EstimatingLibrary.Utilities
 
         public static void LinkInstance(TECSystem instance, TECBid bid, Dictionary<Guid, Guid> guidDictionary)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
+            foreach(TECEquipment equip in instance.Equipment)
+            {
+                foreach(TECSubScope ss in equip.SubScope)
+                {
+                    allSubScope.Add(ss);
+                }
+            }
+
+            linkSystemToCatalogs(instance, bid.Catalogs);
+            linkLocation(instance, bid.Locations);
+            linkSubScopeConnections(instance.Controllers, allSubScope, guidDictionary);
+            linkPanelsToControllers(instance.Panels, instance.Controllers, guidDictionary);
         }
 
         public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECScope> oldDictionary, TECSystem newTypical)
@@ -174,7 +186,7 @@ namespace EstimatingLibrary.Utilities
             throw new NotImplementedException();
         }
 
-        public static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers)
+        public static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
             throw new NotImplementedException();
         }
@@ -184,7 +196,7 @@ namespace EstimatingLibrary.Utilities
             throw new NotImplementedException();
         }
 
-        public static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope)
+        public static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
         {
             throw new NotImplementedException();
         }
