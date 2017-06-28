@@ -222,7 +222,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public void AddConnection(TECConnection connection)
         {
-            connection.PropertyChanged += Connection_PropertyChanged;
             if (Type == LengthType.Conduit)
             {
                 if (connection.ConduitType != null)
@@ -277,7 +276,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public void RemoveConnection(TECConnection connection)
         {
-            connection.PropertyChanged -= Connection_PropertyChanged;
             if (Type == LengthType.Conduit)
             {
                 if (connection.ConduitType != null)
@@ -332,116 +330,118 @@ namespace TECUserControlLibrary.ViewModels
 
         public void AddLength(ElectricalMaterialComponent component, double length)
         {
-            bool containsLength = lengthDictionary.ContainsKey(component.Guid);
-            if (containsLength)
+            if ((component is TECConnectionType && Type == LengthType.Wire) || (component is TECConduitType && Type == LengthType.Conduit))
             {
-                LengthSubTotalCost -= lengthDictionary[component.Guid].TotalCost;
-                LengthSubTotalLabor -= lengthDictionary[component.Guid].TotalLabor;
-                lengthDictionary[component.Guid].Length += length;
-                LengthSubTotalCost += lengthDictionary[component.Guid].TotalCost;
-                LengthSubTotalLabor += lengthDictionary[component.Guid].TotalLabor;
-            }
-            else
-            {
-                LengthSummaryItem lengthItem = new LengthSummaryItem(component);
-                lengthItem.Length = length;
-                lengthDictionary.Add(component.Guid, lengthItem);
-                LengthSummaryItems.Add(lengthItem);
-                LengthSubTotalCost += lengthItem.TotalCost;
-                LengthSubTotalLabor += lengthItem.TotalLabor;
+                bool containsLength = lengthDictionary.ContainsKey(component.Guid);
+                if (containsLength)
+                {
+                    LengthSubTotalCost -= lengthDictionary[component.Guid].TotalCost;
+                    LengthSubTotalLabor -= lengthDictionary[component.Guid].TotalLabor;
+                    lengthDictionary[component.Guid].Length += length;
+                    LengthSubTotalCost += lengthDictionary[component.Guid].TotalCost;
+                    LengthSubTotalLabor += lengthDictionary[component.Guid].TotalLabor;
+                }
+                else
+                {
+                    LengthSummaryItem lengthItem = new LengthSummaryItem(component);
+                    lengthItem.Length = length;
+                    lengthDictionary.Add(component.Guid, lengthItem);
+                    LengthSummaryItems.Add(lengthItem);
+                    LengthSubTotalCost += lengthItem.TotalCost;
+                    LengthSubTotalLabor += lengthItem.TotalLabor;
+                }
             }
         }
         public void RemoveLength(ElectricalMaterialComponent component, double length)
         {
-            bool containsLength = lengthDictionary.ContainsKey(component.Guid);
-            if (containsLength)
+            if ((component is TECConnectionType && Type == LengthType.Wire) || (component is TECConduitType && Type == LengthType.Conduit))
             {
-                LengthSubTotalCost -= lengthDictionary[component.Guid].TotalCost;
-                LengthSubTotalLabor -= lengthDictionary[component.Guid].TotalLabor;
-                lengthDictionary[component.Guid].Length -= length;
-                LengthSubTotalCost += lengthDictionary[component.Guid].TotalCost;
-                LengthSubTotalLabor += lengthDictionary[component.Guid].TotalLabor;
-
-                if (lengthDictionary[component.Guid].Length < 0)
+                bool containsLength = lengthDictionary.ContainsKey(component.Guid);
+                if (containsLength)
                 {
-                    LengthSummaryItems.Remove(lengthDictionary[component.Guid]);
-                    lengthDictionary.Remove(component.Guid);
+                    LengthSubTotalCost -= lengthDictionary[component.Guid].TotalCost;
+                    LengthSubTotalLabor -= lengthDictionary[component.Guid].TotalLabor;
+                    lengthDictionary[component.Guid].Length -= length;
+                    LengthSubTotalCost += lengthDictionary[component.Guid].TotalCost;
+                    LengthSubTotalLabor += lengthDictionary[component.Guid].TotalLabor;
+
+                    if (lengthDictionary[component.Guid].Length < 0)
+                    {
+                        LengthSummaryItems.Remove(lengthDictionary[component.Guid]);
+                        lengthDictionary.Remove(component.Guid);
+                    }
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("Component not found in length dictionary.");
+                else
+                {
+                    throw new InvalidOperationException("Component not found in length dictionary.");
+                }
             }
         }
 
         public void AddAssCost(TECCost cost)
         {
-            Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, assCostDictionary, AssCostSummaryItems);
-            AssCostSubTotalCost += delta.Item1;
-            AssCostSubTotalLabor += delta.Item2;
+            if (cost.Type == CostType.Electrical)
+            {
+                Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, assCostDictionary, AssCostSummaryItems);
+                AssCostSubTotalCost += delta.Item1;
+                AssCostSubTotalLabor += delta.Item2;
+            }
         }
         public void RemoveAssCost(TECCost cost)
         {
-            Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, assCostDictionary, AssCostSummaryItems);
-            AssCostSubTotalCost += delta.Item1;
-            AssCostSubTotalLabor += delta.Item2;
+            if (cost.Type == CostType.Electrical)
+            {
+                Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, assCostDictionary, AssCostSummaryItems);
+                AssCostSubTotalCost += delta.Item1;
+                AssCostSubTotalLabor += delta.Item2;
+            }
         }
 
         public void AddRatedCost(TECCost cost, double length)
         {
-            bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
-            if (containsCost)
+            if (cost.Type == CostType.Electrical)
             {
-                RatedCostSubTotalCost -= ratedCostDictionary[cost.Guid].TotalCost;
-                RatedCostSubTotalLabor -= ratedCostDictionary[cost.Guid].TotalLabor;
-                ratedCostDictionary[cost.Guid].Length += length;
-                RatedCostSubTotalCost += ratedCostDictionary[cost.Guid].TotalCost;
-                RatedCostSubTotalLabor += ratedCostDictionary[cost.Guid].TotalLabor;
-            }
-            else
-            {
-                RatedCostSummaryItem ratedItem = new RatedCostSummaryItem(cost, length);
-                ratedCostDictionary.Add(cost.Guid, ratedItem);
-                RatedCostSummaryItems.Add(ratedItem);
-                RatedCostSubTotalCost += ratedItem.TotalCost;
-                RatedCostSubTotalLabor += ratedItem.TotalLabor;
+                bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
+                if (containsCost)
+                {
+                    RatedCostSubTotalCost -= ratedCostDictionary[cost.Guid].TotalCost;
+                    RatedCostSubTotalLabor -= ratedCostDictionary[cost.Guid].TotalLabor;
+                    ratedCostDictionary[cost.Guid].Length += length;
+                    RatedCostSubTotalCost += ratedCostDictionary[cost.Guid].TotalCost;
+                    RatedCostSubTotalLabor += ratedCostDictionary[cost.Guid].TotalLabor;
+                }
+                else
+                {
+                    RatedCostSummaryItem ratedItem = new RatedCostSummaryItem(cost, length);
+                    ratedCostDictionary.Add(cost.Guid, ratedItem);
+                    RatedCostSummaryItems.Add(ratedItem);
+                    RatedCostSubTotalCost += ratedItem.TotalCost;
+                    RatedCostSubTotalLabor += ratedItem.TotalLabor;
+                }
             }
         }
         public void RemoveRatedCost(TECCost cost, double length)
         {
-            bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
-            if (containsCost)
+            if (cost.Type == CostType.Electrical)
             {
-                RatedCostSubTotalCost -= lengthDictionary[cost.Guid].TotalCost;
-                RatedCostSubTotalLabor -= lengthDictionary[cost.Guid].TotalLabor;
-                ratedCostDictionary[cost.Guid].Length -= length;
-                RatedCostSubTotalCost += ratedCostDictionary[cost.Guid].TotalCost;
-                RatedCostSubTotalLabor += ratedCostDictionary[cost.Guid].TotalLabor;
-
-                if (ratedCostDictionary[cost.Guid].Length < 0)
+                bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
+                if (containsCost)
                 {
-                    RatedCostSummaryItems.Remove(ratedCostDictionary[cost.Guid]);
-                    ratedCostDictionary.Remove(cost.Guid);
+                    RatedCostSubTotalCost -= lengthDictionary[cost.Guid].TotalCost;
+                    RatedCostSubTotalLabor -= lengthDictionary[cost.Guid].TotalLabor;
+                    ratedCostDictionary[cost.Guid].Length -= length;
+                    RatedCostSubTotalCost += ratedCostDictionary[cost.Guid].TotalCost;
+                    RatedCostSubTotalLabor += ratedCostDictionary[cost.Guid].TotalLabor;
+
+                    if (ratedCostDictionary[cost.Guid].Length < 0)
+                    {
+                        RatedCostSummaryItems.Remove(ratedCostDictionary[cost.Guid]);
+                        ratedCostDictionary.Remove(cost.Guid);
+                    }
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("Cost not found in ratedCost dicionary.");
-            }
-        }
-        #endregion
-
-        #region Event Handlers
-        private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<object>)
-            {
-                PropertyChangedExtendedEventArgs<object> args = e as PropertyChangedExtendedEventArgs<object>;
-
-                if (args.PropertyName == "ConduitType")
+                else
                 {
-                    RemoveConnection(args.OldValue as TECConnection);
-                    AddConnection(args.NewValue as TECConnection);
+                    throw new InvalidOperationException("Cost not found in ratedCost dicionary.");
                 }
             }
         }

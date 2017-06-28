@@ -451,7 +451,7 @@ namespace Tests
 
             Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
             Assert.AreEqual(tecVM.TotalLabor, totalTEC.labor, delta, "Total tec labor didn't update properly.");
-            Assert.AreEqual(elecVM.TotalCost, totalElec.cost, delta, "Total elec cost didn't update proplery.");
+            Assert.AreEqual(elecVM.TotalCost, totalElec.cost, delta, "Total elec cost didn't update properly.");
             Assert.AreEqual(elecVM.TotalLabor, totalElec.labor, delta, "Total elec labor didn't update properly.");
 
             checkRefresh(tecVM, elecVM, bid);
@@ -1076,7 +1076,7 @@ namespace Tests
                 total += calculateTotal(connection.ConduitType as TECScope, type);
                 foreach (TECCost cost in connection.ConduitType.RatedCosts)
                 {
-                    total += calculateTotal(cost, type) * connection.Length;
+                    total += calculateTotal(cost, type) * connection.ConduitLength;
                 }
             }
             return total;

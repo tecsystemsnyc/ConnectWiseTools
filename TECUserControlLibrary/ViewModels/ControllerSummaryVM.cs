@@ -179,7 +179,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void RemoveCostFromController(TECCost cost)
         {
-            Tuple<double, double> delta = TECMaterialSummaryVM.AddCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
+            Tuple<double, double> delta = TECMaterialSummaryVM.RemoveCost(cost, controllerAssCostDictionary, ControllerAssCostSummaryItems);
             ControllerAssCostSubTotalCost += delta.Item1;
             ControllerAssCostSubTotalLabor += delta.Item2;
         }
