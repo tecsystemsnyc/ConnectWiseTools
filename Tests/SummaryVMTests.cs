@@ -506,7 +506,7 @@ namespace Tests
         public void RemoveElectricalCost()
         {
             //Arrange
-            TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
             TECCost cost = null;
             while (cost == null)
             {
@@ -516,7 +516,8 @@ namespace Tests
                     cost = randomCost;
                 }
             }
-            var system = bid.Systems.RandomObject();
+            var system = new TECSystem();
+            bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
 
