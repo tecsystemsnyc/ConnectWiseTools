@@ -130,7 +130,28 @@ namespace EstimatingLibrary.Utilities
         //Was LinkCharacteristicInstances()
         public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECScope> oldDictionary, TECSystem newTypical)
         {
-            throw new NotImplementedException();
+            ObservableItemToInstanceList<TECScope> newCharacteristicInstances = new ObservableItemToInstanceList<TECScope>();
+            foreach (TECSystem instance in newTypical.SystemInstances)
+            {
+                linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
+                foreach (TECEquipment equipment in newTypical.Equipment)
+                {
+                    foreach (TECEquipment instanceEquipment in instance.Equipment)
+                    {
+                        linkCharacteristicCollections(equipment.SubScope, instanceEquipment.SubScope, oldDictionary, newCharacteristicInstances);
+                        foreach (TECSubScope subscope in equipment.SubScope)
+                        {
+                            foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                            {
+                                linkCharacteristicCollections(subscope.Points, instanceSubScope.Points, oldDictionary, newCharacteristicInstances);
+                            }
+                        }
+                    }
+                }
+                linkCharacteristicCollections(newTypical.Controllers, instance.Controllers, oldDictionary, newCharacteristicInstances);
+                linkCharacteristicCollections(newTypical.Panels, instance.Panels, oldDictionary, newCharacteristicInstances);
+            }
+            newTypical.CharactersticInstances = newCharacteristicInstances;
         }
 
         #region public static void LinkScopeItem(TECScope scope, TECBid Bid)
@@ -234,74 +255,39 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
+        static private void linkCharacteristicCollections(IList characteristic, IList instances,
+            ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
+            ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
+        {
+            foreach (var item in oldCharacteristicInstances.GetFullDictionary())
+            {
+                foreach (TECScope charItem in characteristic)
+                {
+                    if (item.Key.Guid == charItem.Guid)
+                    {
+                        foreach (var sub in item.Value)
+                        {
+                            foreach (TECScope subInstance in instances)
+                            {
+                                if (subInstance.Guid == sub.Guid)
+                                {
+                                    newCharacteristicInstances.AddItem(charItem, subInstance);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
         public static void createScopeDictionary(TECSystem typical, Dictionary<Guid, Guid> guidDictionary)
         {
             throw new NotImplementedException();
         }
         #endregion
-
-        //#region Public Methods
-        //public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict = null)
-        //{
-        //    if(placeholderDict != null)
-        //    {
-        //        linkControlledScopeWithInstances(bid, placeholderDict);
-        //    }
-        //    linkCatalogs(bid.Catalogs);
-        //    linkAllVisualScope(bid.Drawings, bid.Systems, bid.Controllers);
-        //    linkAllLocations(bid.Locations, bid.Systems);
-        //    linkAllDevices(bid.Systems, bid.Catalogs.Devices);
-        //    linkTagsInBid(bid.Catalogs.Tags, bid);
-        //    linkManufacturersWithControllers(bid.Catalogs.Manufacturers, bid.Controllers);
-        //    linkAssociatedCostsWithScope(bid);
-        //    linkConduitTypeWithConnections(bid.Catalogs.ConduitTypes, bid.Controllers);
-        //    linkPanelTypesInPanel(bid.Catalogs.PanelTypes, bid.Panels);
-        //    linkControllersInPanels(bid.Controllers, bid.Panels);
-        //    linkIOModules(bid.Controllers, bid.Catalogs.IOModules);
-        //    linkAllConnectionTypes(bid.Controllers, bid.Catalogs.ConnectionTypes);
-        //    linkSystems(bid.Systems, bid);
-        //    linkAllConnections(bid.Controllers, bid.Systems);
-        //}
-
-        //public static void LinkTemplates(TECTemplates templates)
-        //{
-        //    linkCatalogs(templates.Catalogs);
-        //    linkAllDevicesFromSystems(templates.SystemTemplates, templates.Catalogs.Devices);
-        //    linkAllDevicesFromEquipment(templates.EquipmentTemplates, templates.Catalogs.Devices);
-        //    linkAllDevicesFromSubScope(templates.SubScopeTemplates, templates.Catalogs.Devices);
-        //    linkTagsInTemplates(templates.Catalogs.Tags, templates);
-        //    linkManufacturersWithControllers(templates.Catalogs.Manufacturers, templates.ControllerTemplates);
-        //    linkAssociatedCostsWithScope(templates);
-        //    linkPanelTypesInPanel(templates.Catalogs.PanelTypes, templates.PanelTemplates);
-        //    linkControllersInPanels(templates.ControllerTemplates, templates.PanelTemplates);
-        //    linkSystems(templates.SystemTemplates, templates);
-        //    linkIOModules(templates.ControllerTemplates, templates.Catalogs.IOModules);
-        //}
-        //public static void LinkSystem(TECSystem system,
-        //    TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    linkAllDevicesFromEquipment(system.Equipment, scopeManager.Catalogs.Devices);
-        //    linkPanelTypesInPanel(scopeManager.Catalogs.PanelTypes, system.Panels);
-        //    linkConduitTypeWithConnections(scopeManager.Catalogs.ConduitTypes, system.Controllers);
-        //    linkManufacturersWithControllers(scopeManager.Catalogs.Manufacturers, system.Controllers);
-        //    linkIOModules(system.Controllers, scopeManager.Catalogs.IOModules);
-        //    foreach (TECEquipment equip in system.Equipment)
-        //    {
-        //        linkScopeChildrenInEquipment(equip, scopeManager);
-        //    }
-        //    linkControllersInPanels(system.Controllers, system.Panels, guidDictionary);
-        //    foreach (TECController control in system.Controllers)
-        //    {
-        //        linkScopeChildren(control, scopeManager);
-        //    }
-        //    foreach (TECPanel panel in system.Panels)
-        //    {
-        //        linkScopeChildren(panel, scopeManager);
-        //    }
-        //    linkConnections(system.Controllers, system.Equipment, guidDictionary);
-        //    linkNetworkConnections(system.Controllers, guidDictionary);
-        //    linkSystems(system.SystemInstances, scopeManager);
-        //}
+        
+        
 
         //public static void LinkCharacteristicInstances(ObservableItemToInstanceList<TECScope> oldCharacteristicInstances, TECSystem system)
         //{
@@ -451,31 +437,7 @@ namespace EstimatingLibrary.Utilities
         //}
         //#endregion
 
-        //static private void linkCharacteristicCollections(IList characteristic, IList instances,
-        //    ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
-        //    ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
-        //{
-        //    foreach (var item in oldCharacteristicInstances.GetFullDictionary())
-        //    {
-        //        foreach (TECScope charItem in characteristic)
-        //        {
-        //            if (item.Key.Guid == charItem.Guid)
-        //            {
-        //                foreach (var sub in item.Value)
-        //                {
-        //                    foreach (TECScope subInstance in instances)
-        //                    {
-        //                        if (subInstance.Guid == sub.Guid)
-        //                        {
-        //                            newCharacteristicInstances.AddItem(charItem, subInstance);
-        //                        }
-        //                    }
-        //                }
-
-        //            }
-        //        }
-        //    }
-        //}
+        
 
         //static private void linkSystems(ObservableCollection<TECSystem> systems, TECScopeManager scopeManager)
         //{
