@@ -399,14 +399,14 @@ namespace Tests
             TestHelper.AssignSecondaryProperties(typical, bid.Catalogs);
             bid.Systems.Add(typical);
             
-            Total totalTEC = calculateTotal(typical, CostType.TEC);
-            Total totalElec = calculateTotal(typical, CostType.Electrical);
-            
             TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
 
             //Act
             TECSystem instance = typical.AddInstance(bid);
+
+            Total totalTEC = calculateTotalInstanceSystem(instance, typical, CostType.TEC);
+            Total totalElec = calculateTotalInstanceSystem(instance, typical, CostType.Electrical);
 
             //Assert
             Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
@@ -866,8 +866,8 @@ namespace Tests
             double initialElecCost = elecVM.TotalCost;
             double initialElecLabor = elecVM.TotalLabor;
 
-            Total totalTEC = calculateTotal(instance, CostType.TEC);
-            Total totalElec = calculateTotal(instance, CostType.Electrical);
+            Total totalTEC = calculateTotalInstanceSystem(instance, typical, CostType.TEC);
+            Total totalElec = calculateTotalInstanceSystem(instance, typical, CostType.Electrical);
 
             //Act
             typical.SystemInstances.Remove(instance);
@@ -1021,30 +1021,30 @@ namespace Tests
             return total;
         }
 
-        private Total calculateTotal(TECSystem system, CostType type)
+        private Total calculateTotalInstanceSystem(TECSystem instance, TECSystem typical, CostType type)
         {
             Total total = new Total();
-            foreach (TECEquipment equipment in system.Equipment)
+            foreach (TECEquipment equipment in instance.Equipment)
             {
                 Total equipSubTotal = calculateTotal(equipment, type);
                 total += equipSubTotal;
             }
-            foreach(TECMisc misc in system.MiscCosts)
+            foreach(TECMisc misc in typical.MiscCosts)
             {
                 Total miscSubTotal = calculateTotal(misc, type);
                 total += miscSubTotal;
             }
-            foreach(TECController controller in system.Controllers)
+            foreach(TECController controller in instance.Controllers)
             {
                 Total controllerSubTotal = calculateTotal(controller, type);
                 total += controllerSubTotal;
             }
-            foreach(TECPanel panel in system.Panels)
+            foreach(TECPanel panel in instance.Panels)
             {
                 Total panelSubTotal = calculateTotal(panel, type);
                 total += panelSubTotal;
             }
-            Total systemScopeSubTotal = calculateTotal(system as TECScope, type);
+            Total systemScopeSubTotal = calculateTotal(instance as TECScope, type);
             total += systemScopeSubTotal;
             return total;
         }
