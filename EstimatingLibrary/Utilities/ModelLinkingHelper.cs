@@ -13,25 +13,34 @@ namespace EstimatingLibrary.Utilities
     public static class ModelLinkingHelper
     {
         #region Public Methods
-        public static void LinkBid(TECBid bid)
+        public static void LinkBid(TECBid bid, Dictionary<Guid, Guid> guidDictionary)
         {
             ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
+            ObservableCollection<TECPanel> allPanels = new ObservableCollection<TECPanel>();
 
             linkCatalogs(bid.Catalogs);
 
             foreach(TECSystem sys in bid.Systems)
             {
-                #region Get all controllers and subscope
+                #region Get all controllers, subscope and panels
                 foreach (TECController controller in sys.Controllers)
                 {
                     allControllers.Add(controller);
+                }
+                foreach (TECPanel panel in sys.Panels)
+                {
+                    allPanels.Add(panel);
                 }
                 foreach(TECSystem instance in sys.SystemInstances)
                 {
                     foreach(TECController controller in instance.Controllers)
                     {
                         allControllers.Add(controller);
+                    }
+                    foreach(TECPanel panel in instance.Panels)
+                    {
+                        allPanels.Add(panel);
                     }
                     foreach(TECEquipment equip in instance.Equipment)
                     {
@@ -52,6 +61,8 @@ namespace EstimatingLibrary.Utilities
 
                 linkSystemToCatalogs(sys, bid.Catalogs);
                 linkLocation(sys, bid.Locations);
+
+                createScopeDictionary(sys, guidDictionary);
             }
 
             foreach(TECController controller in bid.Controllers)
@@ -63,11 +74,14 @@ namespace EstimatingLibrary.Utilities
 
             foreach(TECPanel panel in bid.Panels)
             {
+                allPanels.Add(panel);
+
                 linkPanelToCatalogs(panel, bid.Catalogs);
             }
 
             linkNetworkConnections(allControllers);
             linkSubScopeConnections(allControllers, allSubScope);
+            linkPanelsToControllers(allPanels, allControllers);
         }
 
         public static void LinkTemplates(TECTemplates templates)
