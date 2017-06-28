@@ -127,6 +127,7 @@ namespace EstimatingLibrary.Utilities
             linkPanelsToControllers(instance.Panels, instance.Controllers, guidDictionary);
         }
 
+        //Was LinkCharacteristicInstances()
         public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECScope> oldDictionary, TECSystem newTypical)
         {
             throw new NotImplementedException();
@@ -135,22 +136,42 @@ namespace EstimatingLibrary.Utilities
         #region public static void LinkScopeItem(TECScope scope, TECBid Bid)
         public static void LinkScopeItem(TECSystem scope, TECBid bid)
         {
-            throw new NotImplementedException();
+            linkScopeChildren(scope, bid);
+            foreach(TECSystem instance in scope.SystemInstances)
+            {
+                LinkScopeItem(instance, bid);
+            }
+            foreach(TECEquipment equip in scope.Equipment)
+            {
+                LinkScopeItem(equip, bid);
+            }
         }
 
         public static void LinkScopeItem(TECEquipment scope, TECBid bid)
         {
-            throw new NotImplementedException();
+            linkScopeChildren(scope, bid);
+            foreach(TECSubScope ss in scope.SubScope)
+            {
+                LinkScopeItem(ss, bid);
+            }
         }
 
         public static void LinkScopeItem(TECSubScope scope, TECBid bid)
         {
-            throw new NotImplementedException();
+            linkScopeChildren(scope, bid);
+            foreach(TECPoint point in scope.Points)
+            {
+                LinkScopeItem(point, bid);
+            }
+            foreach(TECDevice dev in scope.Devices)
+            {
+                LinkScopeItem(dev, bid);
+            }
         }
 
         public static void LinkScopeItem(TECScope scope, TECBid bid)
         {
-            throw new NotImplementedException();
+            linkScopeChildren(scope, bid);
         }
         #endregion
         #endregion
