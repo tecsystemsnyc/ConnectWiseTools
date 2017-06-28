@@ -17,30 +17,20 @@ namespace EstimatingLibrary.Utilities
         {
             ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
-            ObservableCollection<TECPanel> allPanels = new ObservableCollection<TECPanel>();
 
             linkCatalogs(bid.Catalogs);
 
             foreach(TECSystem sys in bid.Systems)
             {
-                #region Get all controllers, subscope and panels
                 foreach (TECController controller in sys.Controllers)
                 {
                     allControllers.Add(controller);
-                }
-                foreach (TECPanel panel in sys.Panels)
-                {
-                    allPanels.Add(panel);
                 }
                 foreach(TECSystem instance in sys.SystemInstances)
                 {
                     foreach(TECController controller in instance.Controllers)
                     {
                         allControllers.Add(controller);
-                    }
-                    foreach(TECPanel panel in instance.Panels)
-                    {
-                        allPanels.Add(panel);
                     }
                     foreach(TECEquipment equip in instance.Equipment)
                     {
@@ -49,6 +39,7 @@ namespace EstimatingLibrary.Utilities
                             allSubScope.Add(ss);
                         }
                     }
+                    linkPanelsToControllers(instance.Panels, instance.Controllers);
                 }
                 foreach(TECEquipment equip in sys.Equipment)
                 {
@@ -57,10 +48,10 @@ namespace EstimatingLibrary.Utilities
                         allSubScope.Add(ss);
                     }
                 }
-                #endregion
 
                 linkSystemToCatalogs(sys, bid.Catalogs);
                 linkLocation(sys, bid.Locations);
+                linkPanelsToControllers(sys.Panels, sys.Controllers);
 
                 createScopeDictionary(sys, guidDictionary);
             }
@@ -74,19 +65,49 @@ namespace EstimatingLibrary.Utilities
 
             foreach(TECPanel panel in bid.Panels)
             {
-                allPanels.Add(panel);
-
                 linkPanelToCatalogs(panel, bid.Catalogs);
             }
 
             linkNetworkConnections(allControllers);
             linkSubScopeConnections(allControllers, allSubScope);
-            linkPanelsToControllers(allPanels, allControllers);
+            linkPanelsToControllers(bid.Panels, bid.Controllers);
         }
 
         public static void LinkTemplates(TECTemplates templates)
         {
-            throw new NotImplementedException();
+            linkCatalogs(templates.Catalogs);
+            
+            foreach(TECSystem sys in templates.SystemTemplates)
+            {
+                linkSystemToCatalogs(sys, templates.Catalogs);
+
+                ObservableCollection<TECSubScope> allSysSubScope = new ObservableCollection<TECSubScope>();
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        allSysSubScope.Add(ss);
+                    }
+                }
+                linkSubScopeConnections(sys.Controllers, allSysSubScope);
+                linkPanelsToControllers(sys.Panels, sys.Controllers);
+            }
+            foreach(TECEquipment equip in templates.EquipmentTemplates)
+            {
+                linkEquipmentToCatalogs(equip, templates.Catalogs);
+            }
+            foreach(TECSubScope ss in templates.SubScopeTemplates)
+            {
+                linkSubScopeToCatalogs(ss, templates.Catalogs);
+            }
+            foreach(TECController controller in templates.ControllerTemplates)
+            {
+                linkControllerToCatalogs(controller, templates.Catalogs);
+            }
+            foreach(TECPanel panel in templates.PanelTemplates)
+            {
+                linkPanelToCatalogs(panel, templates.Catalogs);
+            }
         }
 
         public static void LinkInstance(TECSystem instance, TECBid bid, Dictionary<Guid, Guid> guidDictionary)
@@ -129,6 +150,16 @@ namespace EstimatingLibrary.Utilities
         }
 
         public static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkEquipmentToCatalogs(TECEquipment equip, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
