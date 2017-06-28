@@ -152,7 +152,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        addInstanceSystem(targetObject as TECSystem);
+                        addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
                     }
                     else if (targetObject is TECController)
                     {
@@ -190,7 +190,10 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         else if (referenceObject is TECSystem)
                         {
-                            addMiscCost(targetObject as TECMisc, referenceObject as TECSystem);
+                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            {
+                                addMiscCost(targetObject as TECMisc);
+                            }
                         }
                     }
                     else if (targetObject is TECCost)
@@ -202,7 +205,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        removeInstanceSystem(targetObject as TECSystem);
+                        removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
                     }
                     else if (targetObject is TECController)
                     {
@@ -234,7 +237,17 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (targetObject is TECMisc)
                     {
-                        removeMiscCost(targetObject as TECMisc);
+                        if (referenceObject is TECBid)
+                        {
+                            removeMiscCost(targetObject as TECMisc);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            {
+                                removeMiscCost(targetObject as TECMisc);
+                            }
+                        }
                     }
                     else if (targetObject is TECCost)
                     {
@@ -355,17 +368,17 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostsSummaryVM.RemoveTypicalSystem(system);
         }
 
-        private void addInstanceSystem(TECSystem system)
+        private void addInstanceSystem(TECSystem instance, TECSystem typical)
         {
-            WireSummaryVM.AddInstanceSystem(system);
-            ConduitSummaryVM.AddInstanceSystem(system);
-            MiscCostsSummaryVM.AddInstanceSystem(system);
+            WireSummaryVM.AddInstanceSystem(instance);
+            ConduitSummaryVM.AddInstanceSystem(instance);
+            MiscCostsSummaryVM.AddInstanceSystem(instance, typical);
         }
-        private void removeInstanceSystem(TECSystem system)
+        private void removeInstanceSystem(TECSystem instance, TECSystem typical)
         {
-            WireSummaryVM.RemoveInstanceSystem(system);
-            ConduitSummaryVM.RemoveInstanceSystem(system);
-            MiscCostsSummaryVM.RemoveInstanceSystem(system);
+            WireSummaryVM.RemoveInstanceSystem(instance);
+            ConduitSummaryVM.RemoveInstanceSystem(instance);
+            MiscCostsSummaryVM.RemoveInstanceSystem(instance, typical);
         }
 
         private void addController(TECController controller)
@@ -437,9 +450,9 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostsSummaryVM.RemovePoint(point);
         }
 
-        private void addMiscCost(TECMisc misc, TECSystem system = null)
+        private void addMiscCost(TECMisc misc)
         {
-            MiscCostsSummaryVM.AddMiscCost(misc, system);
+            MiscCostsSummaryVM.AddMiscCost(misc);
         }
         private void removeMiscCost(TECMisc misc)
         {

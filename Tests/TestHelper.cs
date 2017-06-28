@@ -619,8 +619,10 @@ namespace Tests
             var scopeBranch = new TECScopeBranch();
             outScope.ScopeBranches.Add(scopeBranch);
 
-            var misc = CreateTestMisc();
-            outScope.MiscCosts.Add(misc);
+            var tecMisc = CreateTestMisc(CostType.TEC);
+            var elecMisc = CreateTestMisc(CostType.Electrical);
+            outScope.MiscCosts.Add(tecMisc);
+            outScope.MiscCosts.Add(elecMisc);
 
             outScope.AssociatedCosts.Add(catalogs.AssociatedCosts.RandomObject());
 

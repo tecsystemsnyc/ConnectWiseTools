@@ -57,25 +57,12 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        private TECSystem system;
-
         public CostSummaryItem(TECCost cost)
         {
             _cost = cost;
             _quantity = cost.Quantity;
             Cost.PropertyChanged += Cost_PropertyChanged;
             updateTotals();
-            system = null;
-        }
-
-        public CostSummaryItem(TECMisc cost, TECSystem typicalSystem)
-        {
-            _cost = cost;
-            _quantity = cost.Quantity * typicalSystem.SystemInstances.Count;
-            Cost.PropertyChanged += Cost_PropertyChanged;
-            typicalSystem.SystemInstances.CollectionChanged += SystemInstances_CollectionChanged;
-            updateTotals();
-            system = typicalSystem;
         }
 
         private void updateTotals()
@@ -88,48 +75,19 @@ namespace TECUserControlLibrary.Models
         {
             if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
             {
+                var old = this.Copy();
                 updateTotals();
-            }
-            else if (e.PropertyName == "Quantity")
-            {
-                if (e is PropertyChangedExtendedEventArgs<object>)
-                {
-                    PropertyChangedExtendedEventArgs<object> args = e as PropertyChangedExtendedEventArgs<object>;
-                    if (system == null)
-                    {
-                        Quantity -= (args.OldValue as TECCost).Quantity;
-                        Quantity += (args.NewValue as TECCost).Quantity;
-                    }
-                    else
-                    {
-                        Quantity -= (args.OldValue as TECCost).Quantity * system.SystemInstances.Count;
-                        Quantity += (args.NewValue as TECCost).Quantity * system.SystemInstances.Count;
-                    }
-                }
-            }
-        }
-
-        private void SystemInstances_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach(object item in e.NewItems)
-                {
-                    Quantity += Cost.Quantity;
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach(object item in e.OldItems)
-                {
-                    Quantity -= Cost.Quantity;
-                }
+                NotifyPropertyChanged("Total", old, this);
             }
         }
 
         public override object Copy()
         {
-            throw new NotImplementedException();
+            CostSummaryItem item = new CostSummaryItem(Cost);
+            item._quantity = Quantity;
+            item._totalCost = TotalCost;
+            item._totalLabor = TotalLabor;
+            return item;
         }
     }
 }
