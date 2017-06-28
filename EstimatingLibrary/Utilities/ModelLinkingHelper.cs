@@ -15,7 +15,59 @@ namespace EstimatingLibrary.Utilities
         #region Public Methods
         public static void LinkBid(TECBid bid)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
+            ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
+
+            linkCatalogs(bid.Catalogs);
+
+            foreach(TECSystem sys in bid.Systems)
+            {
+                #region Get all controllers and subscope
+                foreach (TECController controller in sys.Controllers)
+                {
+                    allControllers.Add(controller);
+                }
+                foreach(TECSystem instance in sys.SystemInstances)
+                {
+                    foreach(TECController controller in instance.Controllers)
+                    {
+                        allControllers.Add(controller);
+                    }
+                    foreach(TECEquipment equip in instance.Equipment)
+                    {
+                        foreach(TECSubScope ss in equip.SubScope)
+                        {
+                            allSubScope.Add(ss);
+                        }
+                    }
+                }
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        allSubScope.Add(ss);
+                    }
+                }
+                #endregion
+
+                linkSystemToCatalogs(sys, bid.Catalogs);
+                linkLocation(sys, bid.Locations);
+            }
+
+            foreach(TECController controller in bid.Controllers)
+            {
+                allControllers.Add(controller);
+
+                linkControllerToCatalogs(controller, bid.Catalogs);
+            }
+
+            foreach(TECPanel panel in bid.Panels)
+            {
+                linkPanelToCatalogs(panel, bid.Catalogs);
+            }
+
+            linkNetworkConnections(allControllers);
+            linkSubScopeConnections(allControllers, allSubScope);
         }
 
         public static void LinkTemplates(TECTemplates templates)
@@ -57,7 +109,54 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Private Methods
-        public static void LinkScopeChildren(TECScope scope, TECBid bid)
+        public static void linkCatalogs(TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkNetworkConnections(ObservableCollection<TECController> controllers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void linkScopeChildren(TECScope scope, TECBid bid)
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Location Linking
+        public static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        public static void createScopeDictionary(TECSystem typical, Dictionary<Guid, Guid> guidDictionary)
         {
             throw new NotImplementedException();
         }
