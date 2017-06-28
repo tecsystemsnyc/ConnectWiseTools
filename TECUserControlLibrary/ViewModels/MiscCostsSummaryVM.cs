@@ -420,9 +420,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-
-
         public void RemoveMiscCost(TECMisc misc)
         {
             if (misc.Type == this.CostType)

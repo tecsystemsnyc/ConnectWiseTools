@@ -1032,7 +1032,7 @@ namespace Tests
             foreach(TECMisc misc in system.MiscCosts)
             {
                 Total miscSubTotal = calculateTotal(misc, type);
-                total += (miscSubTotal * system.SystemInstances.Count);
+                total += miscSubTotal;
             }
             foreach(TECController controller in system.Controllers)
             {
