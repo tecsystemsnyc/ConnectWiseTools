@@ -143,9 +143,12 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void RemoveTypicalSystem(TECSystem system)
         {
-            foreach(TECMisc misc in system.MiscCosts)
+            foreach (TECSystem instance in system.SystemInstances)
             {
-                RemoveMiscCost(misc);
+                foreach (TECMisc misc in system.MiscCosts)
+                {
+                    RemoveMiscCost(misc);
+                }
             }
         }
 
