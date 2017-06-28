@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 
 namespace Tests
 {

@@ -75,7 +75,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECCost item in e.NewItems)
+                foreach (TECCost item in e.OldItems)
                 {
                     NotifyPropertyChanged("RemoveCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
                 }

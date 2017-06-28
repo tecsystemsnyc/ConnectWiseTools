@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;

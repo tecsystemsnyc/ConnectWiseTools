@@ -1046,10 +1046,10 @@ namespace Tests
             system.AssociatedCosts.Remove(tecCost);
             system.AssociatedCosts.Remove(eCost);
 
-            Assert.AreEqual(2468, bid.Estimate.TECMaterialCost, "Material cost not added");
-            Assert.AreEqual(11356, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not added");
-            Assert.AreEqual(8642, bid.Estimate.TECLaborHours, "Labor hours not added");
-            Assert.AreEqual(17530, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not added");
+            Assert.AreEqual(0, bid.Estimate.TECMaterialCost, "Material cost not removed");
+            Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material cost not removed");
+            Assert.AreEqual(0, bid.Estimate.TECLaborHours, "Labor hours not removed");
+            Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical labor hours not removed");
 
             checkRefresh(bid);
         }

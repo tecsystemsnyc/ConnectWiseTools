@@ -109,7 +109,7 @@
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />
     <Compile Include="TECIOModule.cs" />
-    <Compile Include="ModelLinkingHelper.cs" />
+    <Compile Include="Utilities\ModelLinkingHelper.cs" />
     <Compile Include="PropertyChangedExtendedEventArgs.cs" />
     <Compile Include="TECBid.cs" />
     <Compile Include="TECBidParameters.cs" />

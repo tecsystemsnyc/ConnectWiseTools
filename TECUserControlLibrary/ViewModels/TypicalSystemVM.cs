@@ -12,6 +12,7 @@ using TECUserControlLibrary.Models;
 using System.ComponentModel;
 using System.Collections.Generic;
 using TECUserControlLibrary.Utilities;
+using EstimatingLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {

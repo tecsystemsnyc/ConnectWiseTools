@@ -1,5 +1,6 @@
 ﻿using DebugLibrary;
 using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
