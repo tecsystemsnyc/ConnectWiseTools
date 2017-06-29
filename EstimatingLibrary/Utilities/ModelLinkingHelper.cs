@@ -263,7 +263,7 @@ namespace EstimatingLibrary.Utilities
             linkScopeChildrenToCatalogs(system, catalogs);
             foreach(TECSystem instance in system.SystemInstances)
             {
-                linkSystemToCatalogs(system, catalogs);
+                linkSystemToCatalogs(instance, catalogs);
             }
             foreach(TECController controller in system.Controllers)
             {
@@ -307,7 +307,7 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkPanelToPanelType(panel, catalogs.PanelTypes);
         }
 
         private static void linkElectricalMaterialComponentToCatalogs(ElectricalMaterialComponent component, TECCatalogs catalogs)
@@ -491,12 +491,34 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECConduitType> conduitTypes)
         {
-            throw new NotImplementedException();
+            if (connection.ConduitType != null)
+            {
+                foreach (TECConduitType type in conduitTypes)
+                {
+                    if (connection.ConduitType.Guid == type.Guid)
+                    {
+                        connection.ConduitType = type;
+                        return;
+                    }
+                }
+            }
         }
 
         private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
         {
             throw new NotImplementedException();
+        }
+
+        private static void linkPanelToPanelType(TECPanel panel, ObservableCollection<TECPanelType> panelTypes)
+        {
+            foreach(TECPanelType type in panelTypes)
+            {
+                if (panel.Type.Guid == type.Guid)
+                {
+                    panel.Type = type;
+                    return;
+                }
+            }
         }
 
         #region Location Linking
@@ -593,25 +615,6 @@ namespace EstimatingLibrary.Utilities
         #endregion
         #endregion
 
-        //#region Link Methods
-
-        //static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
-        //{
-        //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-        //    foreach (TECCost cost in costs)
-        //    {
-        //        foreach (TECCost devCost in device.AssociatedCosts)
-        //        {
-        //            if (devCost.Guid == cost.Guid)
-        //            { costsToAssign.Add(cost); }
-        //        }
-        //    }
-        //    device.AssociatedCosts = costsToAssign;
-        //}
-        //#endregion
-
-
-
         //static private void linkSystems(ObservableCollection<TECSystem> systems, TECScopeManager scopeManager)
         //{
         //    foreach(TECSystem system in systems)
@@ -619,75 +622,8 @@ namespace EstimatingLibrary.Utilities
         //        LinkSystem(system, scopeManager);
         //    }
         //}
-        //static private void linkScopeChildren(TECScope scope, TECScopeManager scopeManager)
-        //{
-        //    linkTags(scopeManager.Catalogs.Tags, scope);
-        //    linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
-        //    if (scopeManager is TECBid)
-        //    {
-        //        linkLocationsInScope((scopeManager as TECBid).Locations, scope);
-        //    }
-        //}
-        //static private void linkScopeChildrenInEquipment(TECEquipment equipment, TECScopeManager scopeManager)
-        //{
-        //    linkScopeChildren(equipment, scopeManager);
-        //    foreach (TECSubScope ss in equipment.SubScope)
-        //    {
-        //        linkScopeChildren(ss, scopeManager);
-        //    }
-        //}
 
-        //static private void linkAllVisualScope(ObservableCollection<TECDrawing> bidDrawings, ObservableCollection<TECSystem> bidSystems, ObservableCollection<TECController> bidControllers)
-        //{
-        //    //This function links visual scope with scope in Systems, Equipment, SubScope and Devices if they have the same GUID.
-        //    foreach (TECDrawing drawing in bidDrawings)
-        //    {
-        //        foreach (TECPage page in drawing.Pages)
-        //        {
-        //            foreach (TECVisualScope vs in page.PageScope)
-        //            {
-        //                foreach (TECSystem system in bidSystems)
-        //                {
-        //                    if (vs.Scope.Guid == system.Guid)
-        //                    {
-        //                        vs.Scope = system;
-        //                        break;
-        //                    }
-        //                    else
-        //                    {
-        //                        foreach (TECEquipment equipment in system.Equipment)
-        //                        {
-        //                            if (vs.Scope.Guid == equipment.Guid)
-        //                            {
-        //                                vs.Scope = equipment;
-        //                                break;
-        //                            }
-        //                            else
-        //                            {
-        //                                foreach (TECSubScope subScope in equipment.SubScope)
-        //                                {
-        //                                    if (vs.Scope.Guid == subScope.Guid)
-        //                                    {
-        //                                        vs.Scope = subScope;
-        //                                        break;
-        //                                    }
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-
-        //                }
-        //                foreach (TECController controller in bidControllers)
-        //                {
-        //                    if (vs.Scope.Guid == controller.Guid)
-        //                    {
-        //                        vs.Scope = controller;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        
         //static private void linkAllLocations(ObservableCollection<TECLocation> locations, ObservableCollection<TECSystem> bidSystems)
         //{
         //    foreach (TECLocation location in locations)

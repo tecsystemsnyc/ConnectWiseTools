@@ -135,7 +135,7 @@ namespace EstimatingLibrary
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
             foreach (TECDevice device in sourceSubScope.Devices)
-            { Devices.Add(new TECDevice(device)); }
+            { _devices.Add(new TECDevice(device)); }
             var subWatch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECPoint point in sourceSubScope.Points)
             {
