@@ -602,6 +602,10 @@ namespace EstimatingLibrary.Utilities
         /// <param name="guidDictionary">The dictionary of typical to instances guids loaded</param>
         private static void createScopeDictionary(TECSystem typical, Dictionary<Guid, List<Guid>> guidDictionary)
         {
+            if(guidDictionary.Count == 0)
+            {
+                return;
+            }
             foreach (TECSystem instance in typical.SystemInstances)
             {
                 foreach (TECEquipment equipment in instance.Equipment)
