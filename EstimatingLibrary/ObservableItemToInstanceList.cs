@@ -56,6 +56,23 @@ namespace EstimatingLibrary
             return charactersticInstances;
         }
 
+        public int Count
+        {
+            get { return charactersticInstances.Count; }
+        }
+
+        public bool ContainsValue(T value)
+        {
+            foreach(KeyValuePair<T, List<T>> item in charactersticInstances)
+            {
+                if (value.GetType() == item.Key.GetType())
+                {
+                    if (item.Value.Contains(value)) return true;
+                }
+            }
+            return false;
+        }
+
         public override object Copy()
         {
             throw new NotImplementedException();

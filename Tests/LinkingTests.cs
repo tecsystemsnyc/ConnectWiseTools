@@ -124,7 +124,110 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        public void TypicalDictionaryLinking()
+        {
+            foreach(TECSystem typical in bid.Systems)
+            {
+                ObservableItemToInstanceList<TECScope> list = typical.CharactersticInstances;
+                int scopeFound = 0;
+                foreach(TECEquipment equip in typical.Equipment)
+                {
+                    if (!list.ContainsKey(equip))
+                    {
+                        Assert.Fail("Equipment in typical not in characteristic instances.");
+                    }
+                    else { scopeFound++; }
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        if (!list.ContainsKey(ss))
+                        {
+                            Assert.Fail("Subscope in typical not in characteristic instances.");
+                        }
+                        else { scopeFound++; }
+                        foreach(TECPoint point in ss.Points)
+                        {
+                            if (!list.ContainsKey(point))
+                            {
+                                Assert.Fail("Point in typical not in characteristic instances.");
+                            }
+                            else { scopeFound++; }
+                        }
+                    }
+                }
+                foreach(TECController controller in typical.Controllers)
+                {
+                    if (!list.ContainsKey(controller))
+                    {
+                        Assert.Fail("Controller in typical not in characteristic instances.");
+                    }
+                    else { scopeFound++; }
+                }
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    if (!list.ContainsKey(panel))
+                    {
+                        Assert.Fail("Panel in typical not in characteristic instances.");
+                    }
+                    else { scopeFound++; }
+                }
+                Assert.AreEqual(list.Count, scopeFound, "Number of scope found doesn't match the number of scope in characteristic instances.");
+            }
+        }
 
+        [TestMethod]
+        public void InstanceDictionaryLinking()
+        {
+            foreach(TECSystem typical in bid.Systems)
+            {
+                ObservableItemToInstanceList<TECScope> list = typical.CharactersticInstances;
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    int scopeFound = 0;
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        if (!list.ContainsValue(equip))
+                        {
+                            Assert.Fail("Equipment in instance not in characteristic instances.");
+                        }
+                        else { scopeFound++; }
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            if (!list.ContainsValue(ss))
+                            {
+                                Assert.Fail("Subscope in instance not in characteristic instances.");
+                            }
+                            else { scopeFound++; }
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                if (!list.ContainsValue(point))
+                                {
+                                    Assert.Fail("Point in instance not in characteristic instances.");
+                                }
+                                else { scopeFound++; }
+                            }
+                        }
+                    }
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        if (!list.ContainsValue(controller))
+                        {
+                            Assert.Fail("Controller in instance not in characteristic instances.");
+                        }
+                        else { scopeFound++; }
+                    }
+                    foreach (TECPanel panel in instance.Panels)
+                    {
+                        if (!list.ContainsValue(panel))
+                        {
+                            Assert.Fail("Panel in instance not in characteristic instances.");
+                        }
+                        else { scopeFound++; }
+                    }
+                    Assert.AreEqual(list.Count, scopeFound, "Number of scope found doesn't match the number of scope in characteristic instances.");
+                }
+            }
+        }
         #endregion
 
         #region Old Linking Tests
