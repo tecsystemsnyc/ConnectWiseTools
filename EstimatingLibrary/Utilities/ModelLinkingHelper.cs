@@ -318,7 +318,11 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkConnectionToConduitType(connection, catalogs.ConduitTypes);
+            TECNetworkConnection netConnect = connection as TECNetworkConnection;if (netConnect != null)
+            {
+                linkNetworkConnectionToConnectionType(netConnect, catalogs.ConnectionTypes);
+            }
         }
         #endregion
 
@@ -368,6 +372,16 @@ namespace EstimatingLibrary.Utilities
         }
 
         private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECConduitType> conduitTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
         {
             throw new NotImplementedException();
         }
