@@ -112,35 +112,8 @@ namespace EstimatingLibrary.Utilities
 
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
-            ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
-            foreach (TECEquipment equip in system.Equipment)
-            {
-                foreach (TECSubScope ss in equip.SubScope)
-                {
-                    allSubScope.Add(ss);
-                }
-            }
-
-            ObservableCollection<TECController> controllers = null;
-            if (scopeManager is TECBid)
-            {
-                controllers = new ObservableCollection<TECController>();
-                foreach(TECController controller in system.Controllers)
-                {
-                    controllers.Add(controller);
-                }
-                foreach(TECController controller in (scopeManager as TECBid).Controllers)
-                {
-                    controllers.Add(controller);
-                }
-            }
-            else if (scopeManager is TECTemplates)
-            {
-                controllers = system.Controllers;
-            }
-
             linkSystemToCatalogs(system, scopeManager.Catalogs);
-            linkSubScopeConnections(controllers, allSubScope, guidDictionary);
+            linkSubScopeConnections(system.Controllers, system.SubScope, guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
         }
 

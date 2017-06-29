@@ -94,7 +94,17 @@ namespace Tests
         [TestMethod]
         public void ConduitTypeLinking()
         {
-
+            foreach(TECConduitType conduitType in bid.Catalogs.ConduitTypes)
+            {
+                foreach (TECCost cost in conduitType.RatedCosts)
+                {
+                    if (!bid.Catalogs.AssociatedCosts.Contains(cost))
+                    {
+                        Assert.Fail("Rated cost in conduit type not linked.");
+                    }
+                }
+                checkScopeChildrenCatalogLinks(conduitType, bid.Catalogs);
+            }
         }
         #endregion
 
