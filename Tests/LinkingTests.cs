@@ -45,6 +45,55 @@ namespace Tests
         [TestMethod]
         public void DeviceLinking()
         {
+            foreach(TECDevice device in bid.Catalogs.Devices)
+            {
+                foreach(TECConnectionType connectionType in device.ConnectionTypes)
+                {
+                    if (!bid.Catalogs.ConnectionTypes.Contains(connectionType))
+                    {
+                        Assert.Fail("Connection type in device not linked.");
+                    }
+                }
+                if (!bid.Catalogs.Manufacturers.Contains(device.Manufacturer))
+                {
+                    Assert.Fail("Manufacturer in device not linked.");
+                }
+                checkScopeChildrenCatalogLinks(device, bid.Catalogs);
+            }
+        }
+
+        [TestMethod]
+        public void IOModuleLinking()
+        {
+            foreach(TECIOModule module in bid.Catalogs.IOModules)
+            {
+                if (!bid.Catalogs.Manufacturers.Contains(module.Manufacturer))
+                {
+                    Assert.Fail("Manufacturer in IO module not linked.");
+                }
+                checkScopeChildrenCatalogLinks(module, bid.Catalogs);
+            }
+        }
+
+        [TestMethod]
+        public void ConnectionTypeLinking()
+        {
+            foreach(TECConnectionType connectionType in bid.Catalogs.ConnectionTypes)
+            {
+                foreach(TECCost cost in connectionType.RatedCosts)
+                {
+                    if (!bid.Catalogs.AssociatedCosts.Contains(cost))
+                    {
+                        Assert.Fail("Rated cost in connection type not linked.");
+                    }
+                }
+                checkScopeChildrenCatalogLinks(connectionType, bid.Catalogs);
+            }
+        }
+
+        [TestMethod]
+        public void ConduitTypeLinking()
+        {
 
         }
         #endregion
@@ -287,6 +336,24 @@ namespace Tests
                     {
                         Assert.Fail("ConnectionTypes not linked in device catalog");
                     }
+                }
+            }
+        }
+
+        private void checkScopeChildrenCatalogLinks(TECScope scope, TECCatalogs catalogs)
+        {
+            foreach(TECCost cost in scope.AssociatedCosts)
+            {
+                if (!catalogs.AssociatedCosts.Contains(cost))
+                {
+                    Assert.Fail("Associated cost in scope not linked.");
+                }
+            }
+            foreach(TECTag tag in scope.Tags)
+            {
+                if (!catalogs.Tags.Contains(tag))
+                {
+                    Assert.Fail("Tag in scope not linked.");
                 }
             }
         }
