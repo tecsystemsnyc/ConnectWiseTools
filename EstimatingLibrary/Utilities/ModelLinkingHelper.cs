@@ -339,7 +339,8 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkScopeChildrenToCatalogs(TECScope scope, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
+            linkTagsInScope(catalogs.Tags, scope);
         }
 
         private static void linkModuleToManufacturer(TECIOModule module, ObservableCollection<TECManufacturer> manufacturers)
@@ -426,8 +427,8 @@ namespace EstimatingLibrary.Utilities
         #region Location Linking
         private static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
-            foreach(TECEquipment equip in system.Equipment)
+            linkLocation(system as TECScope, locations);
+            foreach (TECEquipment equip in system.Equipment)
             {
                 linkLocation(equip, locations);
             }
@@ -435,17 +436,25 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
-            foreach(TECSubScope ss in equipment.SubScope)
+            linkLocation(equipment as TECScope, locations);
+            foreach (TECSubScope ss in equipment.SubScope)
             {
                 linkLocation(ss, locations);
             }
         }
 
-        private static void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
+        static private void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
+            foreach (TECLocation location in locations)
+            {
+                if (scope.Location != null && scope.Location.Guid == location.Guid)
+                {
+                    scope.Location = location;
+                    break;
+                }
+            }
         }
+
         #endregion
 
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
@@ -478,10 +487,39 @@ namespace EstimatingLibrary.Utilities
         {
             throw new NotImplementedException();
         }
+
+        #region Scope Children
+        static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
+        {
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost scopeCost in scope.AssociatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            scope.AssociatedCosts = costsToAssign;
+        }
+        static private void linkTagsInScope(ObservableCollection<TECTag> tags, TECScope scope)
+        {
+            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
+            foreach (TECTag tag in scope.Tags)
+            {
+                foreach (TECTag referenceTag in tags)
+                {
+                    if (tag.Guid == referenceTag.Guid)
+                    { linkedTags.Add(referenceTag); }
+                }
+            }
+            scope.Tags = linkedTags;
+        }
         #endregion
-        
+        #endregion
+
         //#region Link Methods
-        
+
         //static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
         //{
         //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
@@ -497,7 +535,7 @@ namespace EstimatingLibrary.Utilities
         //}
         //#endregion
 
-        
+
 
         //static private void linkSystems(ObservableCollection<TECSystem> systems, TECScopeManager scopeManager)
         //{
@@ -820,19 +858,7 @@ namespace EstimatingLibrary.Utilities
         //    foreach (TECDevice device in templates.Catalogs.Devices)
         //    { linkTags(tags, device); }
         //}
-        //static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
-        //{
-        //    ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
-        //    foreach (TECTag tag in scope.Tags)
-        //    {
-        //        foreach (TECTag referenceTag in tags)
-        //        {
-        //            if (tag.Guid == referenceTag.Guid)
-        //            { linkedTags.Add(referenceTag); }
-        //        }
-        //    }
-        //    scope.Tags = linkedTags;
-        //}
+
 
         //static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
         //{
