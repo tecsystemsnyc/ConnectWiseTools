@@ -303,11 +303,13 @@ namespace EstimatingLibrary.Utilities
             {
                 linkConnectionToCatalogs(connection, catalogs);
             }
+            linkScopeChildrenToCatalogs(controller, catalogs);
         }
 
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
         {
             linkPanelToPanelType(panel, catalogs.PanelTypes);
+            linkScopeChildrenToCatalogs(panel, catalogs);
         }
 
         private static void linkElectricalMaterialComponentToCatalogs(ElectricalMaterialComponent component, TECCatalogs catalogs)
