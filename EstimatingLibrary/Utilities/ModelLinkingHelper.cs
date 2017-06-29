@@ -328,52 +328,165 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECPanel panel in panels)
+            {
+                ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
+                foreach (TECController panelController in panel.Controllers)
+                {
+                    foreach (TECController controller in controllers)
+                    {
+                        if (panelController.Guid == controller.Guid)
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
+                        else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
+                    }
+                }
+                panel.Controllers = controllersToLink;
+            }
         }
 
-        private static void linkNetworkConnections(ObservableCollection<TECController> controllers)
+        private static void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECController controller in controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection is TECNetworkConnection)
+                    {
+                        TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                        ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
+                        foreach (TECController child in netConnect.ChildrenControllers)
+                        {
+                            foreach (TECController bidController in controllers)
+                            {
+                                bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
+                                if (child.Guid == bidController.Guid || isCopy)
+                                {
+                                    controllersToAdd.Add(bidController);
+                                    bidController.ParentConnection = netConnect;
+                                }
+                            }
+                        }
+                        netConnect.ChildrenControllers = controllersToAdd;
+                    }
+                }
+            }
         }
 
         private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECSubScope subScope in subscope)
+            {
+                foreach (TECController controller in controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection is TECSubScopeConnection)
+                        {
+                            TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
+                            if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                            {
+                                ssConnect.SubScope = subScope;
+                                subScope.LinkConnection(ssConnect);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private static void linkScopeChildrenToCatalogs(TECScope scope, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
+            linkTagsInScope(catalogs.Tags, scope);
         }
 
         private static void linkModuleToManufacturer(TECIOModule module, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer manufacturer in manufacturers)
+            {
+                if (module.Manufacturer.Guid == manufacturer.Guid)
+                {
+                    module.Manufacturer = manufacturer;
+                }
+            }
         }
 
         private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECConnectionType> connectionTypes)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType deviceType in device.ConnectionTypes)
+            {
+                foreach (TECConnectionType connectionType in connectionTypes)
+                {
+                    if (deviceType.Guid == connectionType.Guid)
+                    {
+                        linkedTypes.Add(connectionType);
+                    }
+                }
+            }
+            device.ConnectionTypes = linkedTypes;
         }
 
         private static void linkDeviceToManufacturer(TECDevice device, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer man in manufacturers)
+            {
+                if (device.Manufacturer.Guid == man.Guid)
+                {
+                    device.Manufacturer = man;
+                }
+            }
         }
 
-        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> cost)
+        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> costs)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost scopeCost in component.RatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            component.RatedCosts = costsToAssign;
         }
 
         private static void linkControllerToManufacturer(TECController controller, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer manufacturer in manufacturers)
+            {
+                if (controller.Manufacturer != null)
+                {
+                    if (controller.Manufacturer.Guid == manufacturer.Guid)
+                    {
+                        controller.Manufacturer = manufacturer;
+                    }
+                }
+            }
         }
 
         private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
         {
-            throw new NotImplementedException();
+            if (io.IOModule != null)
+            {
+                foreach (TECIOModule module in modules)
+                {
+                    if (io.IOModule.Guid == module.Guid)
+                    {
+                        io.IOModule = module;
+                        break;
+                    }
+                }
+            }
         }
 
         private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECConduitType> conduitTypes)
@@ -389,8 +502,8 @@ namespace EstimatingLibrary.Utilities
         #region Location Linking
         private static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
-            foreach(TECEquipment equip in system.Equipment)
+            linkLocation(system as TECScope, locations);
+            foreach (TECEquipment equip in system.Equipment)
             {
                 linkLocation(equip, locations);
             }
@@ -398,17 +511,25 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
-            foreach(TECSubScope ss in equipment.SubScope)
+            linkLocation(equipment as TECScope, locations);
+            foreach (TECSubScope ss in equipment.SubScope)
             {
                 linkLocation(ss, locations);
             }
         }
 
-        private static void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
+        static private void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
         {
-            throw new NotImplementedException();
+            foreach (TECLocation location in locations)
+            {
+                if (scope.Location != null && scope.Location.Guid == location.Guid)
+                {
+                    scope.Location = location;
+                    break;
+                }
+            }
         }
+
         #endregion
 
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
@@ -441,54 +562,39 @@ namespace EstimatingLibrary.Utilities
         {
             throw new NotImplementedException();
         }
+
+        #region Scope Children
+        static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
+        {
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost scopeCost in scope.AssociatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            scope.AssociatedCosts = costsToAssign;
+        }
+        static private void linkTagsInScope(ObservableCollection<TECTag> tags, TECScope scope)
+        {
+            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
+            foreach (TECTag tag in scope.Tags)
+            {
+                foreach (TECTag referenceTag in tags)
+                {
+                    if (tag.Guid == referenceTag.Guid)
+                    { linkedTags.Add(referenceTag); }
+                }
+            }
+            scope.Tags = linkedTags;
+        }
         #endregion
-        
+        #endregion
+
         //#region Link Methods
-        
-        //static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
-        //{
-        //    foreach (TECDevice device in devices)
-        //    {
-        //        foreach (TECManufacturer man in mans)
-        //        {
-        //            if (device.Manufacturer.Guid == man.Guid)
-        //            {
-        //                device.Manufacturer = man;
-        //            }
-        //        }
-        //    }
-        //}
-        //static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
-        //{
-        //    foreach (TECDevice device in devices)
-        //    {
-        //        ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-        //        foreach (TECConnectionType deviceType in device.ConnectionTypes)
-        //        {
-        //            foreach (TECConnectionType connectionType in connectionTypes)
-        //            {
-        //                if (deviceType.Guid == connectionType.Guid)
-        //                {
-        //                    linkedTypes.Add(connectionType);
-        //                }
-        //            }
-        //        }
-        //        device.ConnectionTypes = linkedTypes;
-        //    }
-        //}
-        //static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
-        //{
-        //    foreach (TECIOModule module in ioModules)
-        //    {
-        //        foreach (TECManufacturer manufacturer in manufacturers)
-        //        {
-        //            if (module.Manufacturer.Guid == manufacturer.Guid)
-        //            {
-        //                module.Manufacturer = manufacturer;
-        //            }
-        //        }
-        //    }
-        //}
+
         //static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
         //{
         //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
@@ -502,22 +608,9 @@ namespace EstimatingLibrary.Utilities
         //    }
         //    device.AssociatedCosts = costsToAssign;
         //}
-        //static private void linkRatedCostsInElectricalMaterial(ObservableCollection<TECCost> costs, ElectricalMaterialComponent component)
-        //{
-        //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-        //    foreach (TECCost cost in costs)
-        //    {
-        //        foreach (TECCost scopeCost in component.RatedCosts)
-        //        {
-        //            if (scopeCost.Guid == cost.Guid)
-        //            { costsToAssign.Add(cost); }
-        //        }
-        //    }
-        //    component.RatedCosts = costsToAssign;
-        //}
         //#endregion
 
-        
+
 
         //static private void linkSystems(ObservableCollection<TECSystem> systems, TECScopeManager scopeManager)
         //{
@@ -616,70 +709,8 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //}
-        //static private void linkLocationsInScope(ObservableCollection<TECLocation> locations, TECScope scope)
-        //{
-        //    foreach (TECLocation location in locations)
-        //    {
-        //        if (scope.Location != null && scope.Location.Guid == location.Guid)
-        //        {
-        //            scope.Location = location;
-        //            break;
-        //        }
-        //    }
-        //}
+        
 
-        //static private void linkConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECEquipment equip in equipment)
-        //    {
-        //        foreach (TECSubScope subScope in equip.SubScope)
-        //        {
-        //            foreach (TECController controller in controllers)
-        //            {
-        //                foreach (TECConnection connection in controller.ChildrenConnections)
-        //                {
-        //                    if (connection is TECSubScopeConnection)
-        //                    {
-        //                        TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-        //                        bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
-        //                        if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
-        //                        {
-        //                            ssConnect.SubScope = subScope;
-        //                            subScope.LinkConnection(ssConnect);
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //static private void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECConnection connection in controller.ChildrenConnections)
-        //        {
-        //            if (connection is TECNetworkConnection)
-        //            {
-        //                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-        //                ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
-        //                foreach (TECController child in netConnect.ChildrenControllers)
-        //                {
-        //                    foreach (TECController bidController in controllers)
-        //                    {
-        //                        bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
-        //                        if (child.Guid == bidController.Guid || isCopy)
-        //                        {
-        //                            controllersToAdd.Add(bidController);
-        //                            bidController.ParentConnection = netConnect;
-        //                        }
-        //                    }
-        //                }
-        //                netConnect.ChildrenControllers = controllersToAdd;
-        //            }
-        //        }
-        //    }
-        //}
         //static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems)
         //{
         //    ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
@@ -751,22 +782,7 @@ namespace EstimatingLibrary.Utilities
         //        sub.Devices = linkedDevices;
         //    }
         //}
-        //static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECManufacturer manufacturer in mans)
-        //        {
-        //            if (controller.Manufacturer != null)
-        //            {
-        //                if (controller.Manufacturer.Guid == manufacturer.Guid)
-        //                {
-        //                    controller.Manufacturer = manufacturer;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+
         //static private void linkAllConnectionTypes(ObservableCollection<TECController> controllers, ObservableCollection<TECConnectionType> connectionTypes)
         //{
         //    foreach (TECController controller in controllers)
@@ -855,19 +871,7 @@ namespace EstimatingLibrary.Utilities
         //    foreach (TECDevice device in templates.Catalogs.Devices)
         //    { linkTags(tags, device); }
         //}
-        //static private void linkTags(ObservableCollection<TECTag> tags, TECScope scope)
-        //{
-        //    ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
-        //    foreach (TECTag tag in scope.Tags)
-        //    {
-        //        foreach (TECTag referenceTag in tags)
-        //        {
-        //            if (tag.Guid == referenceTag.Guid)
-        //            { linkedTags.Add(referenceTag); }
-        //        }
-        //    }
-        //    scope.Tags = linkedTags;
-        //}
+
 
         //static private void linkAssociatedCostsWithScope(TECScopeManager scopeManager)
         //{
@@ -992,51 +996,8 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //}
-        //static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECPanel panel in panels)
-        //    {
-        //        ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
-        //        foreach (TECController panelController in panel.Controllers)
-        //        {
-        //            foreach (TECController controller in controllers)
-        //            {
-        //                if (panelController.Guid == controller.Guid)
-        //                {
-        //                    controllersToLink.Add(controller);
-        //                    break;
-        //                }
-        //                else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
-        //                {
-        //                    controllersToLink.Add(controller);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        panel.Controllers = controllersToLink;
-        //    }
-        //}
-        //static private void linkIOModules(ObservableCollection<TECController> controllers, ObservableCollection<TECIOModule> ioModules)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECIO io in controller.IO)
-        //        {
-        //            if (io.IOModule != null)
-        //            {
-        //                foreach (TECIOModule module in ioModules)
-        //                {
-        //                    if (io.IOModule.Guid == module.Guid)
-        //                    {
-        //                        io.IOModule = module;
-        //                        break;
-        //                    }
-        //                }
-        //            }
 
-        //        }
-        //    }
-        //}
+
 
         //private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
         //{
