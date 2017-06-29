@@ -324,7 +324,27 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECPanel panel in panels)
+            {
+                ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
+                foreach (TECController panelController in panel.Controllers)
+                {
+                    foreach (TECController controller in controllers)
+                    {
+                        if (panelController.Guid == controller.Guid)
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
+                        else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
+                        {
+                            controllersToLink.Add(controller);
+                            break;
+                        }
+                    }
+                }
+                panel.Controllers = controllersToLink;
+            }
         }
 
         private static void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
@@ -962,30 +982,7 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //}
-        //static private void linkControllersInPanels(ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECPanel panel in panels)
-        //    {
-        //        ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
-        //        foreach (TECController panelController in panel.Controllers)
-        //        {
-        //            foreach (TECController controller in controllers)
-        //            {
-        //                if (panelController.Guid == controller.Guid)
-        //                {
-        //                    controllersToLink.Add(controller);
-        //                    break;
-        //                }
-        //                else if (guidDictionary != null && guidDictionary[panelController.Guid] == guidDictionary[controller.Guid])
-        //                {
-        //                    controllersToLink.Add(controller);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        panel.Controllers = controllersToLink;
-        //    }
-        //}
+
 
 
         //private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
