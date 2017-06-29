@@ -646,7 +646,7 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECSystem instance in typical.SystemInstances)
             {
-                foreach (TECEquipment equipment in instance.Equipment)
+                foreach (TECEquipment equipment in typical.Equipment)
                 {
                     linkCharacteristicWithInstances(equipment, instance.Equipment, guidDictionary, typical.CharactersticInstances);
                     foreach (TECSubScope subscope in equipment.SubScope)
@@ -664,11 +664,11 @@ namespace EstimatingLibrary.Utilities
                         }
                     }
                 }
-                foreach (TECController controller in instance.Controllers)
+                foreach (TECController controller in typical.Controllers)
                 {
                     linkCharacteristicWithInstances(controller, instance.Controllers, guidDictionary, typical.CharactersticInstances);
                 }
-                foreach (TECPanel panel in instance.Panels)
+                foreach (TECPanel panel in typical.Panels)
                 {
                     linkCharacteristicWithInstances(panel, instance.Panels, guidDictionary, typical.CharactersticInstances);
                 }
