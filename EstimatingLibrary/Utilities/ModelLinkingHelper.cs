@@ -380,9 +380,18 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> cost)
+        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> costs)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in costs)
+            {
+                foreach (TECCost scopeCost in component.RatedCosts)
+                {
+                    if (scopeCost.Guid == cost.Guid)
+                    { costsToAssign.Add(cost); }
+                }
+            }
+            component.RatedCosts = costsToAssign;
         }
 
         private static void linkControllerToManufacturer(TECController controller, ObservableCollection<TECManufacturer> manufacturers)
@@ -485,19 +494,6 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //    device.AssociatedCosts = costsToAssign;
-        //}
-        //static private void linkRatedCostsInElectricalMaterial(ObservableCollection<TECCost> costs, ElectricalMaterialComponent component)
-        //{
-        //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-        //    foreach (TECCost cost in costs)
-        //    {
-        //        foreach (TECCost scopeCost in component.RatedCosts)
-        //        {
-        //            if (scopeCost.Guid == cost.Guid)
-        //            { costsToAssign.Add(cost); }
-        //        }
-        //    }
-        //    component.RatedCosts = costsToAssign;
         //}
         //#endregion
 
