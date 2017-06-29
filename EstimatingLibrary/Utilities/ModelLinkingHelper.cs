@@ -344,17 +344,40 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkModuleToManufacturer(TECIOModule module, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer manufacturer in manufacturers)
+            {
+                if (module.Manufacturer.Guid == manufacturer.Guid)
+                {
+                    module.Manufacturer = manufacturer;
+                }
+            }
         }
 
         private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECConnectionType> connectionTypes)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType deviceType in device.ConnectionTypes)
+            {
+                foreach (TECConnectionType connectionType in connectionTypes)
+                {
+                    if (deviceType.Guid == connectionType.Guid)
+                    {
+                        linkedTypes.Add(connectionType);
+                    }
+                }
+            }
+            device.ConnectionTypes = linkedTypes;
         }
 
         private static void linkDeviceToManufacturer(TECDevice device, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer man in manufacturers)
+            {
+                if (device.Manufacturer.Guid == man.Guid)
+                {
+                    device.Manufacturer = man;
+                }
+            }
         }
 
         private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> cost)
@@ -364,12 +387,31 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkControllerToManufacturer(TECController controller, ObservableCollection<TECManufacturer> manufacturers)
         {
-            throw new NotImplementedException();
+            foreach (TECManufacturer manufacturer in manufacturers)
+            {
+                if (controller.Manufacturer != null)
+                {
+                    if (controller.Manufacturer.Guid == manufacturer.Guid)
+                    {
+                        controller.Manufacturer = manufacturer;
+                    }
+                }
+            }
         }
 
         private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
         {
-            throw new NotImplementedException();
+            if (io.IOModule != null)
+            {
+                foreach (TECIOModule module in modules)
+                {
+                    if (io.IOModule.Guid == module.Guid)
+                    {
+                        io.IOModule = module;
+                        break;
+                    }
+                }
+            }
         }
 
         #region Location Linking
@@ -431,50 +473,6 @@ namespace EstimatingLibrary.Utilities
         
         //#region Link Methods
         
-        //static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
-        //{
-        //    foreach (TECDevice device in devices)
-        //    {
-        //        foreach (TECManufacturer man in mans)
-        //        {
-        //            if (device.Manufacturer.Guid == man.Guid)
-        //            {
-        //                device.Manufacturer = man;
-        //            }
-        //        }
-        //    }
-        //}
-        //static private void linkConnectionTypeWithDevices(ObservableCollection<TECConnectionType> connectionTypes, ObservableCollection<TECDevice> devices)
-        //{
-        //    foreach (TECDevice device in devices)
-        //    {
-        //        ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-        //        foreach (TECConnectionType deviceType in device.ConnectionTypes)
-        //        {
-        //            foreach (TECConnectionType connectionType in connectionTypes)
-        //            {
-        //                if (deviceType.Guid == connectionType.Guid)
-        //                {
-        //                    linkedTypes.Add(connectionType);
-        //                }
-        //            }
-        //        }
-        //        device.ConnectionTypes = linkedTypes;
-        //    }
-        //}
-        //static private void linkManufacturersWithIOModules(ObservableCollection<TECManufacturer> manufacturers, ObservableCollection<TECIOModule> ioModules)
-        //{
-        //    foreach (TECIOModule module in ioModules)
-        //    {
-        //        foreach (TECManufacturer manufacturer in manufacturers)
-        //        {
-        //            if (module.Manufacturer.Guid == manufacturer.Guid)
-        //            {
-        //                module.Manufacturer = manufacturer;
-        //            }
-        //        }
-        //    }
-        //}
         //static private void linkAssociatedCostsInDevice(ObservableCollection<TECCost> costs, TECDevice device)
         //{
         //    ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
@@ -737,22 +735,7 @@ namespace EstimatingLibrary.Utilities
         //        sub.Devices = linkedDevices;
         //    }
         //}
-        //static private void linkManufacturersWithControllers(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECController> controllers)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECManufacturer manufacturer in mans)
-        //        {
-        //            if (controller.Manufacturer != null)
-        //            {
-        //                if (controller.Manufacturer.Guid == manufacturer.Guid)
-        //                {
-        //                    controller.Manufacturer = manufacturer;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+
         //static private void linkAllConnectionTypes(ObservableCollection<TECController> controllers, ObservableCollection<TECConnectionType> connectionTypes)
         //{
         //    foreach (TECController controller in controllers)
@@ -1002,27 +985,7 @@ namespace EstimatingLibrary.Utilities
         //        panel.Controllers = controllersToLink;
         //    }
         //}
-        //static private void linkIOModules(ObservableCollection<TECController> controllers, ObservableCollection<TECIOModule> ioModules)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECIO io in controller.IO)
-        //        {
-        //            if (io.IOModule != null)
-        //            {
-        //                foreach (TECIOModule module in ioModules)
-        //                {
-        //                    if (io.IOModule.Guid == module.Guid)
-        //                    {
-        //                        io.IOModule = module;
-        //                        break;
-        //                    }
-        //                }
-        //            }
 
-        //        }
-        //    }
-        //}
 
         //private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
         //{
