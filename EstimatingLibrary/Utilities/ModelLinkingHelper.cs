@@ -327,14 +327,55 @@ namespace EstimatingLibrary.Utilities
             throw new NotImplementedException();
         }
 
-        private static void linkNetworkConnections(ObservableCollection<TECController> controllers)
+        private static void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECController controller in controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection is TECNetworkConnection)
+                    {
+                        TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                        ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
+                        foreach (TECController child in netConnect.ChildrenControllers)
+                        {
+                            foreach (TECController bidController in controllers)
+                            {
+                                bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
+                                if (child.Guid == bidController.Guid || isCopy)
+                                {
+                                    controllersToAdd.Add(bidController);
+                                    bidController.ParentConnection = netConnect;
+                                }
+                            }
+                        }
+                        netConnect.ChildrenControllers = controllersToAdd;
+                    }
+                }
+            }
         }
 
         private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
         {
-            throw new NotImplementedException();
+            foreach (TECSubScope subScope in subscope)
+            {
+                foreach (TECController controller in controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection is TECSubScopeConnection)
+                        {
+                            TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
+                            if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                            {
+                                ssConnect.SubScope = subScope;
+                                subScope.LinkConnection(ssConnect);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private static void linkScopeChildrenToCatalogs(TECScope scope, TECCatalogs catalogs)
@@ -634,70 +675,8 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //}
-        //static private void linkLocationsInScope(ObservableCollection<TECLocation> locations, TECScope scope)
-        //{
-        //    foreach (TECLocation location in locations)
-        //    {
-        //        if (scope.Location != null && scope.Location.Guid == location.Guid)
-        //        {
-        //            scope.Location = location;
-        //            break;
-        //        }
-        //    }
-        //}
+        
 
-        //static private void linkConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECEquipment equip in equipment)
-        //    {
-        //        foreach (TECSubScope subScope in equip.SubScope)
-        //        {
-        //            foreach (TECController controller in controllers)
-        //            {
-        //                foreach (TECConnection connection in controller.ChildrenConnections)
-        //                {
-        //                    if (connection is TECSubScopeConnection)
-        //                    {
-        //                        TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-        //                        bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
-        //                        if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
-        //                        {
-        //                            ssConnect.SubScope = subScope;
-        //                            subScope.LinkConnection(ssConnect);
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //static private void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECConnection connection in controller.ChildrenConnections)
-        //        {
-        //            if (connection is TECNetworkConnection)
-        //            {
-        //                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-        //                ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
-        //                foreach (TECController child in netConnect.ChildrenControllers)
-        //                {
-        //                    foreach (TECController bidController in controllers)
-        //                    {
-        //                        bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
-        //                        if (child.Guid == bidController.Guid || isCopy)
-        //                        {
-        //                            controllersToAdd.Add(bidController);
-        //                            bidController.ParentConnection = netConnect;
-        //                        }
-        //                    }
-        //                }
-        //                netConnect.ChildrenControllers = controllersToAdd;
-        //            }
-        //        }
-        //    }
-        //}
         //static private void linkAllConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSystem> systems)
         //{
         //    ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
