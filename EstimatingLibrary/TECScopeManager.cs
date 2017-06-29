@@ -29,7 +29,7 @@ namespace EstimatingLibrary
         }
 
         protected TECCatalogs _catalogs;
-        public TECCatalogs Catalogs
+        virtual public TECCatalogs Catalogs
         {
             get { return _catalogs; }
             set

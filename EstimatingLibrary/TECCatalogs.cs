@@ -97,8 +97,10 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 AssociatedCosts.CollectionChanged -= CollectionChanged;
+                AssociatedCosts.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _associatedCosts = value;
                 AssociatedCosts.CollectionChanged += CollectionChanged;
+                AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
             }
         }
@@ -109,11 +111,15 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 Tags.CollectionChanged -= CollectionChanged;
+                Tags.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _tags = value;
                 Tags.CollectionChanged += CollectionChanged;
+                Tags.CollectionChanged += ScopeChildren_CollectionChanged;
                 NotifyPropertyChanged("Tags", temp, this);
             }
         }
+
+        public Action<TECObject> ScopeChildRemoved;
 
         public TECCatalogs()
         {
@@ -143,6 +149,9 @@ namespace EstimatingLibrary
             Devices.CollectionChanged += CollectionChanged;
             Manufacturers.CollectionChanged += CollectionChanged;
             Tags.CollectionChanged += CollectionChanged;
+
+            AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
+            Tags.CollectionChanged += ScopeChildren_CollectionChanged;
         }
 
         public override object Copy()
@@ -186,6 +195,17 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 //Change order
+            }
+        }
+
+        private void ScopeChildren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECObject item in e.OldItems)
+                {
+                    ScopeChildRemoved?.Invoke(item);
+                }
             }
         }
 

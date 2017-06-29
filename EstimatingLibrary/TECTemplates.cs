@@ -92,6 +92,22 @@ namespace EstimatingLibrary
         }
         #endregion //Properties
 
+        //For listening to a catalog changing
+        public override TECCatalogs Catalogs
+        {
+            get
+            {
+                return base.Catalogs;
+            }
+
+            set
+            {
+                base.Catalogs.ScopeChildRemoved -= scopeChildRemoved;
+                base.Catalogs = value;
+                base.Catalogs.ScopeChildRemoved += scopeChildRemoved;
+            }
+        }
+
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
@@ -111,6 +127,8 @@ namespace EstimatingLibrary
             ControllerTemplates.CollectionChanged += CollectionChanged;
             MiscCostTemplates.CollectionChanged += CollectionChanged;
             PanelTemplates.CollectionChanged += CollectionChanged;
+
+            Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
@@ -136,6 +154,122 @@ namespace EstimatingLibrary
             }
         }
         #endregion //Constructors
+
+        private void scopeChildRemoved(TECObject child)
+        {
+            foreach (TECConnectionType type in Catalogs.ConnectionTypes)
+            {
+                removeChildFromScope(type, child);
+                TECCost cost = child as TECCost;
+                if (cost != null)
+                {
+                    type.RatedCosts.Remove(cost);
+                }
+            }
+            foreach (TECConduitType type in Catalogs.ConduitTypes)
+            {
+                removeChildFromScope(type, child);
+                TECCost cost = child as TECCost;
+                if (cost != null)
+                {
+                    type.RatedCosts.Remove(cost);
+                }
+            }
+            foreach (TECPanelType type in Catalogs.PanelTypes)
+            {
+                removeChildFromScope(type, child);
+            }
+            foreach (TECIOModule module in Catalogs.IOModules)
+            {
+                removeChildFromScope(module, child);
+            }
+            foreach (TECDevice dev in Catalogs.Devices)
+            {
+                removeChildFromScope(dev, child);
+            }
+            foreach (TECManufacturer man in Catalogs.Manufacturers)
+            {
+                removeChildFromScope(man, child);
+            }
+            foreach (TECSystem sys in SystemTemplates)
+            {
+                removeChildFromScope(sys, child);
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    removeChildFromScope(equip, child);
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        removeChildFromScope(ss, child);
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            removeChildFromScope(point, child);
+                        }
+                    }
+                }
+                foreach(TECSystem instance in sys.SystemInstances)
+                {
+                    removeChildFromScope(sys, child);
+                    foreach (TECEquipment equip in sys.Equipment)
+                    {
+                        removeChildFromScope(equip, child);
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            removeChildFromScope(ss, child);
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                removeChildFromScope(point, child);
+                            }
+                        }
+                    }
+                }
+            }
+            foreach(TECEquipment equip in EquipmentTemplates)
+            {
+                removeChildFromScope(equip, child);
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    removeChildFromScope(ss, child);
+                    foreach (TECPoint point in ss.Points)
+                    {
+                        removeChildFromScope(point, child);
+                    }
+                }
+            }
+            foreach(TECSubScope ss in SubScopeTemplates)
+            {
+                removeChildFromScope(ss, child);
+                foreach (TECPoint point in ss.Points)
+                {
+                    removeChildFromScope(point, child);
+                }
+            }
+            foreach(TECController controller in ControllerTemplates)
+            {
+                removeChildFromScope(controller, child);
+            }
+            foreach(TECPanel panel in PanelTemplates)
+            {
+                removeChildFromScope(panel, child);
+            }
+        }
+
+        private void removeChildFromScope(TECScope scope, TECObject child)
+        {
+            TECCost cost = child as TECCost;
+            TECTag tag = child as TECTag;
+            if (cost != null)
+            {
+                scope.AssociatedCosts.Remove(cost);
+            }
+            else if (tag != null)
+            {
+                scope.Tags.Remove(tag);
+            }
+            else
+            {
+                throw new NotImplementedException("Scope child isn't cost or tag.");
+            }
+        }
 
         #region Collection Changed
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -181,8 +315,8 @@ namespace EstimatingLibrary
             { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
             foreach (TECPanel panel in this.PanelTemplates)
             { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
+            outTemplate.Catalogs.ScopeChildRemoved += outTemplate.scopeChildRemoved;
             return outTemplate;
         }
-
     }
 }
