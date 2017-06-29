@@ -265,6 +265,10 @@ namespace EstimatingLibrary.Utilities
         {
             linkScopeChildrenToCatalogs(ss, catalogs);
             linkSubScopeToDevices(ss, catalogs.Devices);
+            foreach(TECPoint point in ss.Points)
+            {
+                linkScopeChildrenToCatalogs(point, catalogs);
+            }
         }
 
         private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
