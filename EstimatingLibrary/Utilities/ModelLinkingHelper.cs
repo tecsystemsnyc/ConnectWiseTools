@@ -506,7 +506,14 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
         {
-            throw new NotImplementedException();
+            foreach (TECConnectionType type in connectionTypes)
+            {
+                if (netConnect.ConnectionType.Guid == type.Guid)
+                {
+                    netConnect.ConnectionType = type;
+                    break;
+                }
+            }
         }
 
         private static void linkPanelToPanelType(TECPanel panel, ObservableCollection<TECPanelType> panelTypes)
@@ -779,27 +786,7 @@ namespace EstimatingLibrary.Utilities
         //    }
         //}
 
-        //static private void linkAllConnectionTypes(ObservableCollection<TECController> controllers, ObservableCollection<TECConnectionType> connectionTypes)
-        //{
-        //    foreach (TECController controller in controllers)
-        //    {
-        //        foreach (TECConnection connection in controller.ChildrenConnections)
-        //        {
-        //            if (connection is TECNetworkConnection)
-        //            {
-        //                TECNetworkConnection netConnect = connection as TECNetworkConnection;
-        //                foreach (TECConnectionType type in connectionTypes)
-        //                {
-        //                    if (netConnect.ConnectionType.Guid == type.Guid)
-        //                    {
-        //                        netConnect.ConnectionType = type;
-        //                        break;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+
 
         //static private void linkTagsInBid(ObservableCollection<TECTag> tags, TECBid bid)
         //{
