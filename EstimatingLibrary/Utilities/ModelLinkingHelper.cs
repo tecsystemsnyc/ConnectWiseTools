@@ -235,6 +235,7 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Private Methods
+        #region Catalog Linking
         private static void linkCatalogs(TECCatalogs catalogs)
         {
             foreach (TECDevice device in catalogs.Devices)
@@ -258,7 +259,20 @@ namespace EstimatingLibrary.Utilities
         private static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
         {
             //Should assume linking a typical system with potential instances, controllers and panels.
-            throw new NotImplementedException();
+
+            linkScopeChildrenToCatalogs(system, catalogs);
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                linkSystemToCatalogs(system, catalogs);
+            }
+            foreach(TECController controller in system.Controllers)
+            {
+                linkControllerToCatalogs(controller, catalogs);
+            }
+            foreach(TECPanel panel in system.Panels)
+            {
+                linkPanelToCatalogs(panel, catalogs);
+            }
         }
 
         private static void linkEquipmentToCatalogs(TECEquipment equip, TECCatalogs catalogs)
@@ -280,7 +294,15 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkControllerToManufacturer(controller, catalogs.Manufacturers);
+            foreach(TECIO io in controller.IO)
+            {
+                linkIOToModule(io, catalogs.IOModules);
+            }
+            foreach(TECConnection connection in controller.ChildrenConnections)
+            {
+                linkConnectionToCatalogs(connection, catalogs);
+            }
         }
 
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
@@ -293,6 +315,12 @@ namespace EstimatingLibrary.Utilities
             linkScopeChildrenToCatalogs((component as TECScope), catalogs);
             linkElectricalMaterialComponentToRatedCosts(component, catalogs.AssociatedCosts);
         }
+
+        private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
@@ -330,6 +358,16 @@ namespace EstimatingLibrary.Utilities
         }
 
         private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> cost)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkControllerToManufacturer(TECController controller, ObservableCollection<TECManufacturer> manufacturers)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
         {
             throw new NotImplementedException();
         }
