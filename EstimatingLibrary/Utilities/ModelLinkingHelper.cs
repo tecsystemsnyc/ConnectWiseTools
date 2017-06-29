@@ -13,37 +13,37 @@ namespace EstimatingLibrary.Utilities
     public static class ModelLinkingHelper
     {
         #region Public Methods
-        public static void LinkBid(TECBid bid, Dictionary<Guid, Guid> guidDictionary)
+        public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
         {
             ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
 
             linkCatalogs(bid.Catalogs);
 
-            foreach(TECSystem sys in bid.Systems)
+            foreach (TECSystem sys in bid.Systems)
             {
                 foreach (TECController controller in sys.Controllers)
                 {
                     allControllers.Add(controller);
                 }
-                foreach(TECSystem instance in sys.SystemInstances)
+                foreach (TECSystem instance in sys.SystemInstances)
                 {
-                    foreach(TECController controller in instance.Controllers)
+                    foreach (TECController controller in instance.Controllers)
                     {
                         allControllers.Add(controller);
                     }
-                    foreach(TECEquipment equip in instance.Equipment)
+                    foreach (TECEquipment equip in instance.Equipment)
                     {
-                        foreach(TECSubScope ss in equip.SubScope)
+                        foreach (TECSubScope ss in equip.SubScope)
                         {
                             allSubScope.Add(ss);
                         }
                     }
                     linkPanelsToControllers(instance.Panels, instance.Controllers);
                 }
-                foreach(TECEquipment equip in sys.Equipment)
+                foreach (TECEquipment equip in sys.Equipment)
                 {
-                    foreach(TECSubScope ss in equip.SubScope)
+                    foreach (TECSubScope ss in equip.SubScope)
                     {
                         allSubScope.Add(ss);
                     }
@@ -56,14 +56,14 @@ namespace EstimatingLibrary.Utilities
                 createScopeDictionary(sys, guidDictionary);
             }
 
-            foreach(TECController controller in bid.Controllers)
+            foreach (TECController controller in bid.Controllers)
             {
                 allControllers.Add(controller);
 
                 linkControllerToCatalogs(controller, bid.Catalogs);
             }
 
-            foreach(TECPanel panel in bid.Panels)
+            foreach (TECPanel panel in bid.Panels)
             {
                 linkPanelToCatalogs(panel, bid.Catalogs);
             }
@@ -76,15 +76,15 @@ namespace EstimatingLibrary.Utilities
         public static void LinkTemplates(TECTemplates templates)
         {
             linkCatalogs(templates.Catalogs);
-            
-            foreach(TECSystem sys in templates.SystemTemplates)
+
+            foreach (TECSystem sys in templates.SystemTemplates)
             {
                 linkSystemToCatalogs(sys, templates.Catalogs);
 
                 ObservableCollection<TECSubScope> allSysSubScope = new ObservableCollection<TECSubScope>();
-                foreach(TECEquipment equip in sys.Equipment)
+                foreach (TECEquipment equip in sys.Equipment)
                 {
-                    foreach(TECSubScope ss in equip.SubScope)
+                    foreach (TECSubScope ss in equip.SubScope)
                     {
                         allSysSubScope.Add(ss);
                     }
@@ -92,39 +92,56 @@ namespace EstimatingLibrary.Utilities
                 linkSubScopeConnections(sys.Controllers, allSysSubScope);
                 linkPanelsToControllers(sys.Panels, sys.Controllers);
             }
-            foreach(TECEquipment equip in templates.EquipmentTemplates)
+            foreach (TECEquipment equip in templates.EquipmentTemplates)
             {
                 linkEquipmentToCatalogs(equip, templates.Catalogs);
             }
-            foreach(TECSubScope ss in templates.SubScopeTemplates)
+            foreach (TECSubScope ss in templates.SubScopeTemplates)
             {
                 linkSubScopeToCatalogs(ss, templates.Catalogs);
             }
-            foreach(TECController controller in templates.ControllerTemplates)
+            foreach (TECController controller in templates.ControllerTemplates)
             {
                 linkControllerToCatalogs(controller, templates.Catalogs);
             }
-            foreach(TECPanel panel in templates.PanelTemplates)
+            foreach (TECPanel panel in templates.PanelTemplates)
             {
                 linkPanelToCatalogs(panel, templates.Catalogs);
             }
         }
 
-        public static void LinkInstance(TECSystem instance, TECBid bid, Dictionary<Guid, Guid> guidDictionary)
+        public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
-            foreach(TECEquipment equip in instance.Equipment)
+            foreach (TECEquipment equip in system.Equipment)
             {
-                foreach(TECSubScope ss in equip.SubScope)
+                foreach (TECSubScope ss in equip.SubScope)
                 {
                     allSubScope.Add(ss);
                 }
             }
 
-            linkSystemToCatalogs(instance, bid.Catalogs);
-            linkLocation(instance, bid.Locations);
-            linkSubScopeConnections(instance.Controllers, allSubScope, guidDictionary);
-            linkPanelsToControllers(instance.Panels, instance.Controllers, guidDictionary);
+            ObservableCollection<TECController> controllers = null;
+            if (scopeManager is TECBid)
+            {
+                controllers = new ObservableCollection<TECController>();
+                foreach(TECController controller in system.Controllers)
+                {
+                    controllers.Add(controller);
+                }
+                foreach(TECController controller in (scopeManager as TECBid).Controllers)
+                {
+                    controllers.Add(controller);
+                }
+            }
+            else if (scopeManager is TECTemplates)
+            {
+                controllers = system.Controllers;
+            }
+
+            linkSystemToCatalogs(system, scopeManager.Catalogs);
+            linkSubScopeConnections(controllers, allSubScope, guidDictionary);
+            linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
         }
 
         //Was LinkCharacteristicInstances()
@@ -157,12 +174,13 @@ namespace EstimatingLibrary.Utilities
         #region public static void LinkScopeItem(TECScope scope, TECBid Bid)
         public static void LinkScopeItem(TECSystem scope, TECBid bid)
         {
-            linkScopeChildren(scope, bid);
-            foreach(TECSystem instance in scope.SystemInstances)
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            foreach (TECSystem instance in scope.SystemInstances)
             {
                 LinkScopeItem(instance, bid);
             }
-            foreach(TECEquipment equip in scope.Equipment)
+            foreach (TECEquipment equip in scope.Equipment)
             {
                 LinkScopeItem(equip, bid);
             }
@@ -170,8 +188,9 @@ namespace EstimatingLibrary.Utilities
 
         public static void LinkScopeItem(TECEquipment scope, TECBid bid)
         {
-            linkScopeChildren(scope, bid);
-            foreach(TECSubScope ss in scope.SubScope)
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            foreach (TECSubScope ss in scope.SubScope)
             {
                 LinkScopeItem(ss, bid);
             }
@@ -179,77 +198,162 @@ namespace EstimatingLibrary.Utilities
 
         public static void LinkScopeItem(TECSubScope scope, TECBid bid)
         {
-            linkScopeChildren(scope, bid);
-            foreach(TECPoint point in scope.Points)
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            foreach (TECPoint point in scope.Points)
             {
                 LinkScopeItem(point, bid);
             }
-            foreach(TECDevice dev in scope.Devices)
+            foreach (TECDevice dev in scope.Devices)
             {
                 LinkScopeItem(dev, bid);
             }
         }
 
-        public static void LinkScopeItem(TECScope scope, TECBid bid)
+        public static void LinkScopeItem(TECScope scope, TECScopeManager manager)
         {
-            linkScopeChildren(scope, bid);
+            linkScopeChildrenToCatalogs(scope, manager.Catalogs);
         }
         #endregion
+
+        public static void LinkBidToCatalogs(TECBid bid)
+        {
+            linkCatalogs(bid.Catalogs);
+            foreach(TECSystem typical in bid.Systems)
+            {
+                linkSystemToCatalogs(typical, bid.Catalogs);
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                linkControllerToCatalogs(controller, bid.Catalogs);
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                linkPanelToCatalogs(panel, bid.Catalogs);
+            }
+        }
         #endregion
 
         #region Private Methods
-        public static void linkCatalogs(TECCatalogs catalogs)
+        private static void linkCatalogs(TECCatalogs catalogs)
+        {
+            foreach (TECDevice device in catalogs.Devices)
+            {
+                linkDeviceToCatalogs(device, catalogs);
+            }
+            foreach (TECIOModule module in catalogs.IOModules)
+            {
+                linkModuleToManufacturer(module, catalogs.Manufacturers);
+            }
+            foreach (TECConnectionType connectionType in catalogs.ConnectionTypes)
+            {
+                linkElectricalMaterialComponentToCatalogs(connectionType, catalogs);
+            }
+            foreach (TECConduitType conduitType in catalogs.ConduitTypes)
+            {
+                linkElectricalMaterialComponentToCatalogs(conduitType, catalogs);
+            }
+        }
+
+        private static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
+        {
+            //Should assume linking a typical system with potential instances, controllers and panels.
+            throw new NotImplementedException();
+        }
+
+        private static void linkEquipmentToCatalogs(TECEquipment equip, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
+        private static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkEquipmentToCatalogs(TECEquipment equip, TECCatalogs catalogs)
+        private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
+        {
+            linkDeviceToConnectionTypes(dev, catalogs.ConnectionTypes);
+            linkDeviceToManufacturer(dev, catalogs.Manufacturers);
+            linkScopeChildrenToCatalogs(dev, catalogs);
+        }
+
+        private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
+        private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
+        private static void linkElectricalMaterialComponentToCatalogs(ElectricalMaterialComponent component, TECCatalogs catalogs)
+        {
+            linkScopeChildrenToCatalogs((component as TECScope), catalogs);
+            linkElectricalMaterialComponentToRatedCosts(component, catalogs.AssociatedCosts);
+        }
+
+        private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
+        private static void linkNetworkConnections(ObservableCollection<TECController> controllers)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkNetworkConnections(ObservableCollection<TECController> controllers)
+        private static void linkScopeChildrenToCatalogs(TECScope scope, TECCatalogs catalogs)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkModuleToManufacturer(TECIOModule module, ObservableCollection<TECManufacturer> manufacturers)
         {
             throw new NotImplementedException();
         }
 
-        public static void linkScopeChildren(TECScope scope, TECBid bid)
+        private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECConnectionType> connectionTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkDeviceToManufacturer(TECDevice device, ObservableCollection<TECManufacturer> manufacturers)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> cost)
         {
             throw new NotImplementedException();
         }
 
         #region Location Linking
-        public static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
+        private static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
+        {
+            throw new NotImplementedException();
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                linkLocation(equip, locations);
+            }
+        }
+
+        private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLocation> locations)
+        {
+            throw new NotImplementedException();
+            foreach(TECSubScope ss in equipment.SubScope)
+            {
+                linkLocation(ss, locations);
+            }
+        }
+
+        private static void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
         {
             throw new NotImplementedException();
         }
@@ -281,90 +385,14 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void createScopeDictionary(TECSystem typical, Dictionary<Guid, Guid> guidDictionary)
+        private static void createScopeDictionary(TECSystem typical, Dictionary<Guid, List<Guid>> guidDictionary)
         {
             throw new NotImplementedException();
         }
         #endregion
         
-        
-
-        //public static void LinkCharacteristicInstances(ObservableItemToInstanceList<TECScope> oldCharacteristicInstances, TECSystem system)
-        //{
-        //    ObservableItemToInstanceList<TECScope> newCharacteristicInstances = new ObservableItemToInstanceList<TECScope>();
-        //    foreach(TECSystem instance in system.SystemInstances)
-        //    {
-        //        linkCharacteristicCollections(system.Equipment, instance.Equipment, oldCharacteristicInstances, newCharacteristicInstances);
-        //        foreach(TECEquipment equipment in system.Equipment)
-        //        {
-        //            foreach (TECEquipment instanceEquipment in instance.Equipment)
-        //            {
-        //                linkCharacteristicCollections(equipment.SubScope, instanceEquipment.SubScope, oldCharacteristicInstances, newCharacteristicInstances);
-        //                foreach(TECSubScope subscope in equipment.SubScope)
-        //                {
-        //                    foreach(TECSubScope instanceSubScope in instanceEquipment.SubScope)
-        //                    {
-        //                        linkCharacteristicCollections(subscope.Points, instanceSubScope.Points, oldCharacteristicInstances, newCharacteristicInstances);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        linkCharacteristicCollections(system.Controllers, instance.Controllers, oldCharacteristicInstances, newCharacteristicInstances);
-        //        linkCharacteristicCollections(system.Panels, instance.Panels, oldCharacteristicInstances, newCharacteristicInstances);
-        //    }
-        //    system.CharactersticInstances = newCharacteristicInstances;
-        //}
-        //public static void LinkScopeCopy(TECScope scope, TECScopeManager scopeManager)
-        //{
-        //    if(scope is TECSystem)
-        //    {
-        //        linkAssociatedCostsInSystem(scopeManager.Catalogs.AssociatedCosts, scope as TECSystem);
-        //        linkAllDevicesFromEquipment((scope as TECSystem).Equipment, scopeManager.Catalogs.Devices);
-        //    } else if (scope is TECEquipment)
-        //    {
-        //        linkAssociatedCostsInEquipment(scopeManager.Catalogs.AssociatedCosts, scope as TECEquipment);
-        //        linkAllDevicesFromSubScope((scope as TECEquipment).SubScope, scopeManager.Catalogs.Devices);
-        //    }
-        //    else if (scope is TECSubScope)
-        //    {
-        //        linkAssociatedCostsInSubScope(scopeManager.Catalogs.AssociatedCosts, scope as TECSubScope);
-        //    }
-        //    else if (scope is TECController)
-        //    {
-        //        linkManufacturersWithControllers(scopeManager.Catalogs.Manufacturers, new ObservableCollection<TECController> { scope as TECController });
-        //        linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
-        //        linkIOModules(new ObservableCollection<TECController> { scope as TECController }, scopeManager.Catalogs.IOModules);
-        //    }
-        //    else if (scope is TECPanel)
-        //    {
-        //        linkPanelTypesInPanel(scopeManager.Catalogs.PanelTypes, new ObservableCollection<TECPanel> { scope as TECPanel });
-        //        linkAssociatedCostsInScope(scopeManager.Catalogs.AssociatedCosts, scope);
-        //    }
-        //}
-        //#endregion
-
         //#region Link Methods
-
-        //#region Catalogs
-        //static private void linkCatalogs(TECCatalogs catalogs)
-        //{
-        //    linkConnectionTypeWithDevices(catalogs.ConnectionTypes, catalogs.Devices);
-        //    linkManufacturersWithDevices(catalogs.Manufacturers, catalogs.Devices);
-        //    linkManufacturersWithIOModules(catalogs.Manufacturers, catalogs.IOModules);
-        //    foreach (TECDevice device in catalogs.Devices)
-        //    { linkAssociatedCostsInDevice(catalogs.AssociatedCosts, device); }
-        //    foreach (TECConnectionType scope in catalogs.ConnectionTypes)
-        //    {
-        //        linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
-        //        linkRatedCostsInElectricalMaterial(catalogs.AssociatedCosts, scope);
-        //    }
-        //    foreach (TECConduitType scope in catalogs.ConduitTypes)
-        //    {
-        //        linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
-        //        linkRatedCostsInElectricalMaterial(catalogs.AssociatedCosts, scope);
-        //    }
-
-        //}
+        
         //static private void linkManufacturersWithDevices(ObservableCollection<TECManufacturer> mans, ObservableCollection<TECDevice> devices)
         //{
         //    foreach (TECDevice device in devices)

@@ -51,7 +51,7 @@ namespace TECUserControlLibrary.Utilities
                     foreach (object item in ((IList)sourceItem))
                     {
                         var toAdd = ((TECScope)item).DragDropCopy() as TECScope;
-                        ModelLinkingHelper.LinkScopeCopy(toAdd, scopeManager);
+                        ModelLinkingHelper.LinkScopeItem(toAdd, scopeManager);
                         outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
@@ -65,7 +65,7 @@ namespace TECUserControlLibrary.Utilities
                     else
                     {
                         sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-                        ModelLinkingHelper.LinkScopeCopy(sourceItem as TECScope, scopeManager);
+                        ModelLinkingHelper.LinkScopeItem(sourceItem as TECScope, scopeManager);
 
                     }
                 }

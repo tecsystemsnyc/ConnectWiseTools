@@ -66,7 +66,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECSystem system in actualBid.Systems)
             {
@@ -94,7 +94,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECSystem system in actualBid.Systems)
             {
@@ -163,7 +163,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {
@@ -196,7 +196,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECController controller in actualBid.Controllers)
             {
@@ -215,7 +215,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECSystem system in actualBid.Systems)
             {
@@ -284,7 +284,7 @@ namespace Tests
             TECBid actualBid = TestHelper.CreateTestBid();
             TECCatalogs copiedCatalogs = actualBid.Catalogs.Copy() as TECCatalogs;
             actualBid.Catalogs = copiedCatalogs;
-            ModelLinkingHelper.LinkBid(actualBid);
+            ModelLinkingHelper.LinkBid(actualBid, new Dictionary<Guid, List<Guid>>());
 
             foreach (TECDevice device in actualBid.Catalogs.Devices)
             {

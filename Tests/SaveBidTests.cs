@@ -66,7 +66,7 @@ namespace Tests
             //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
 
             bid = OGBid.Copy() as TECBid;
-            ModelLinkingHelper.LinkBid(bid);
+            ModelLinkingHelper.LinkBid(bid, new Dictionary<Guid, List<Guid>>());
             testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
             File.Copy(OGPath, path, true);

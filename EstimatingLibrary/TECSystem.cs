@@ -419,7 +419,7 @@ namespace EstimatingLibrary
             outSystem._budgetPriceModifier = this.BudgetPriceModifier;
             outSystem.copyPropertiesFromScope(this);
             outSystem._proposeEquipment = this.ProposeEquipment;
-            ModelLinkingHelper.LinkCharacteristicInstances(CharactersticInstances, outSystem);
+            ModelLinkingHelper.LinkTypicalInstanceDictionary(CharactersticInstances, outSystem);
             return outSystem;
         }
         public override object DragDropCopy()
@@ -1006,7 +1006,7 @@ namespace EstimatingLibrary
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }
-        public TECSystem AddInstance(TECScopeManager scopeManager)
+        public TECSystem AddInstance(TECBid bid)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
@@ -1034,7 +1034,7 @@ namespace EstimatingLibrary
             {
                 newSystem.AssociatedCosts.Add(cost);
             }
-            ModelLinkingHelper.LinkSystem(newSystem, scopeManager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
             var newSubScope = newSystem.SubScope;
             foreach(TECSubScope subScope in SubScope)
             {
