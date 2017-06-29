@@ -284,10 +284,20 @@ namespace Tests
         [TestMethod]
         public void Load_Templates_ConnectionType()
         {
+            bool found = false;
+            foreach (TECCost cost in actualConnectionType.AssociatedCosts)
+            {
+                if (cost.Name == "Test Cost")
+                {
+                    found = true;
+                    break;
+                }
+            }
+
             Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
             Assert.AreEqual(10, actualConnectionType.Cost);
             Assert.AreEqual(12, actualConnectionType.Labor);
-            Assert.AreEqual("Test Cost", actualConnectionType.AssociatedCosts[0].Name);
+            Assert.IsTrue(found);
             Assert.AreEqual(2, actualConnectionType.AssociatedCosts.Count);
         }
 
