@@ -571,14 +571,17 @@ namespace EstimatingLibrary.Utilities
 
         static private void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
         {
-            foreach (TECLocation location in locations)
+            if (scope.Location != null)
             {
                 bool found = false;
-                if (scope.Location != null && scope.Location.Guid == location.Guid)
+                foreach (TECLocation location in locations)
                 {
-                    scope.Location = location;
-                    found = true;
-                    break;
+                    if (scope.Location.Guid == location.Guid)
+                    {
+                        scope.Location = location;
+                        found = true;
+                        break;
+                    }
                 }
                 if (!found)
                 {
@@ -689,14 +692,14 @@ namespace EstimatingLibrary.Utilities
         static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
         {
             ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in costs)
+            foreach (TECCost scopeCost in scope.AssociatedCosts)
             {
                 bool found = false;
-                foreach (TECCost scopeCost in scope.AssociatedCosts)
+                foreach (TECCost catalogCost in costs)
                 {
-                    if (scopeCost.Guid == cost.Guid)
+                    if (scopeCost.Guid == catalogCost.Guid)
                     {
-                        costsToAssign.Add(cost);
+                        costsToAssign.Add(catalogCost);
                         found = true;
                         break;
                     }
