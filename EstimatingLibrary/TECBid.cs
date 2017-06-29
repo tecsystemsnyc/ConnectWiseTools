@@ -170,11 +170,16 @@ namespace EstimatingLibrary
             {
                 var temp = this.Copy();
                 Locations.CollectionChanged -= CollectionChanged;
+                Locations.CollectionChanged -= Locations_CollectionChanged;
                 _locations = value;
                 Locations.CollectionChanged += CollectionChanged;
+                Locations.CollectionChanged += Locations_CollectionChanged;
                 NotifyPropertyChanged("Locations", temp, this);
             }
         }
+
+        
+
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
@@ -260,6 +265,7 @@ namespace EstimatingLibrary
             Exclusions.CollectionChanged += CollectionChanged;
             Drawings.CollectionChanged += CollectionChanged;
             Locations.CollectionChanged += CollectionChanged;
+            Locations.CollectionChanged += Locations_CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;
             MiscCosts.CollectionChanged += CollectionChanged;
             Panels.CollectionChanged += CollectionChanged;
@@ -379,6 +385,16 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 NotifyPropertyChanged("Edit", this, sender, typeof(TECBid), typeof(TECSystem));
+            }
+        }
+        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECLocation location in e.OldItems)
+                {
+                    removeLocationFromScope(location);
+                }
             }
         }
         private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -552,6 +568,34 @@ namespace EstimatingLibrary
         public void RefreshEstimate()
         {
             Estimate = new TECEstimator(this);
+        }
+
+        private void removeLocationFromScope(TECLocation location)
+        {
+            foreach(TECSystem typical in this.Systems)
+            {
+                if (typical.Location == location) typical.Location = null;
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    if (instance.Location == location) instance.Location = null;
+                    foreach(TECEquipment equip in instance.Equipment)
+                    {
+                        if (equip.Location == location) equip.Location = null;
+                        foreach(TECSubScope ss in equip.SubScope)
+                        {
+                            if (ss.Location == location) ss.Location = null;
+                        }
+                    }
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    if (equip.Location == location) equip.Location = null;
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Location == location) ss.Location = null;
+                    }
+                }
+            }
         }
 
         #endregion
