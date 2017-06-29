@@ -108,6 +108,7 @@ namespace Tests
         }
         #endregion
 
+        #region Old Linking Tests
         [TestMethod]
         public void Load_Bid_Linked_Devices()
         {
@@ -349,6 +350,7 @@ namespace Tests
                 }
             }
         }
+        #endregion
 
         private void checkScopeChildrenCatalogLinks(TECScope scope, TECCatalogs catalogs)
         {
