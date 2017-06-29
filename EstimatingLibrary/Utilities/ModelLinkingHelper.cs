@@ -554,6 +554,14 @@ namespace EstimatingLibrary.Utilities
 
         #endregion
 
+        #region System Instance Reference Methods
+        /// <summary>
+        /// Rereferences the objects in a typical, instances scope dictionary after copying a typical system.
+        /// </summary>
+        /// <param name="characteristic">The typical items (equipment, panels, controllers) in the typical system</param>
+        /// <param name="instances">The instances of those items in child system instance</param>
+        /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
+        /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
             ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
             ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
@@ -580,11 +588,63 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        /// <summary>
+        /// Creates the typical, instances scope dictionary of a system after loading.
+        /// </summary>
+        /// <param name="typical">The typical system</param>
+        /// <param name="guidDictionary">The dictionary of typical to instances guids loaded</param>
         private static void createScopeDictionary(TECSystem typical, Dictionary<Guid, List<Guid>> guidDictionary)
         {
-            throw new NotImplementedException();
+            foreach (TECSystem instance in typical.SystemInstances)
+            {
+                foreach (TECEquipment equipment in instance.Equipment)
+                {
+                    linkCharacteristicWithInstances(equipment, instance.Equipment, guidDictionary, typical.CharactersticInstances);
+                    foreach (TECSubScope subscope in equipment.SubScope)
+                    {
+                        foreach (TECEquipment instanceEquipment in instance.Equipment)
+                        {
+                            linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, guidDictionary, typical.CharactersticInstances);
+                            foreach (TECPoint point in subscope.Points)
+                            {
+                                foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                                {
+                                    linkCharacteristicWithInstances(point, instanceSubScope.Points, guidDictionary, typical.CharactersticInstances);
+                                }
+                            }
+                        }
+                    }
+                }
+                foreach (TECController controller in instance.Controllers)
+                {
+                    linkCharacteristicWithInstances(controller, instance.Controllers, guidDictionary, typical.CharactersticInstances);
+                }
+                foreach (TECPanel panel in instance.Panels)
+                {
+                    linkCharacteristicWithInstances(panel, instance.Panels, guidDictionary, typical.CharactersticInstances);
+                }
+            }
         }
-
+        /// <summary>
+        /// Generically references scope to instances of scope into a dictionary from a guid, guids dictionary
+        /// </summary>
+        /// <param name="characteristic"></param>
+        /// <param name="instances"></param>
+        /// <param name="referenceDict"></param>
+        /// <param name="characteristicList"></param>
+        private static void linkCharacteristicWithInstances(TECScope characteristic, IList instances,
+            Dictionary<Guid, List<Guid>> referenceDict,
+            ObservableItemToInstanceList<TECScope> characteristicList)
+        {
+            foreach (TECScope item in instances)
+            {
+                if (referenceDict[characteristic.Guid].Contains(item.Guid))
+                {
+                    characteristicList.AddItem(characteristic, item);
+                }
+            }
+        }
+        #endregion
         #region Scope Children
         static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
         {
@@ -932,54 +992,8 @@ namespace EstimatingLibrary.Utilities
         //        }
         //    }
         //}
-
-
-
-        //private static void linkControlledScopeWithInstances(TECBid bid, Dictionary<Guid, List<Guid>> placeholderDict)
-        //{
-        //    foreach (TECSystem system in bid.Systems)
-        //    {
-        //        foreach(TECSystem instance in system.SystemInstances)
-        //        {
-        //            foreach(TECEquipment equipment in system.Equipment)
-        //            {
-        //                linkCharacteristicWithInstances(equipment, instance.Equipment, placeholderDict, system.CharactersticInstances);
-        //                foreach(TECSubScope subscope in equipment.SubScope)
-        //                {
-        //                    foreach(TECEquipment instanceEquipment in instance.Equipment)
-        //                    {
-        //                        linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, placeholderDict, system.CharactersticInstances);
-        //                        foreach(TECPoint point in subscope.Points)
-        //                        {
-        //                            foreach(TECSubScope instanceSubScope in instanceEquipment.SubScope)
-        //                            {
-        //                                linkCharacteristicWithInstances(point, instanceSubScope.Points, placeholderDict, system.CharactersticInstances);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            foreach(TECController controller in system.Controllers)
-        //            {
-        //                linkCharacteristicWithInstances(controller, instance.Controllers, placeholderDict, system.CharactersticInstances);
-        //            }
-        //            foreach(TECPanel panel in system.Panels)
-        //            {
-        //                linkCharacteristicWithInstances(panel, instance.Panels, placeholderDict, system.CharactersticInstances);
-        //            }
-        //        }
-        //    }
-        //}
-        //private static void linkCharacteristicWithInstances(TECScope characteristic, IList instances, Dictionary<Guid, List<Guid>> referenceDict, ObservableItemToInstanceList<TECScope> characteristicList)
-        //{
-        //    foreach(TECScope item in instances)
-        //    {
-        //        if (referenceDict[characteristic.Guid].Contains(item.Guid))
-        //        {
-        //            characteristicList.AddItem(characteristic, item);
-        //        }
-        //    }
-        //}
+        
+        
         //#endregion Link Methods
 
     }
