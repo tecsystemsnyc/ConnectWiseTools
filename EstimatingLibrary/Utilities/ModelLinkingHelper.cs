@@ -273,16 +273,28 @@ namespace EstimatingLibrary.Utilities
             {
                 linkPanelToCatalogs(panel, catalogs);
             }
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                linkEquipmentToCatalogs(equip, catalogs);
+            }
         }
 
         private static void linkEquipmentToCatalogs(TECEquipment equip, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkScopeChildrenToCatalogs(equip, catalogs);
+            foreach (TECSubScope subScope in equip.SubScope)
+            {
+                linkSubScopeToCatalogs(subScope, catalogs);
+            }
         }
 
         private static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
         {
-            throw new NotImplementedException();
+            linkScopeChildrenToCatalogs(ss, catalogs);
+            foreach(TECDevice dev in ss.Devices)
+            {
+                linkDeviceToCatalogs(dev, catalogs);
+            }
         }
 
         private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
