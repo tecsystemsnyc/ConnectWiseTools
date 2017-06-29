@@ -291,10 +291,7 @@ namespace EstimatingLibrary.Utilities
         private static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
         {
             linkScopeChildrenToCatalogs(ss, catalogs);
-            foreach(TECDevice dev in ss.Devices)
-            {
-                linkDeviceToCatalogs(dev, catalogs);
-            }
+            linkSubScopeToDevices(ss, catalogs.Devices);
         }
 
         private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
@@ -539,6 +536,33 @@ namespace EstimatingLibrary.Utilities
                     panel.Type = type;
                     return;
                 }
+            }
+        }
+
+        private static void linkSubScopeToDevices(TECSubScope subScope, ObservableCollection<TECDevice> devices)
+        {
+            List<Tuple<TECDevice, TECDevice>> replacements = new List<Tuple<TECDevice, TECDevice>>();
+            foreach(TECDevice device in subScope.Devices)
+            {
+                foreach(TECDevice catalogDevice in devices)
+                {
+                    if (device.Guid == catalogDevice.Guid)
+                    {
+                        replacements.Add(new Tuple<TECDevice, TECDevice>(device, catalogDevice));
+                        break;
+                    }
+                }
+            }
+
+            if (replacements.Count != subScope.Devices.Count)
+            {
+                throw new Exception("Not all subscope devices found.");
+            }
+
+            foreach(Tuple<TECDevice, TECDevice> replacement in replacements)
+            {
+                subScope.Devices.Remove(replacement.Item1);
+                subScope.Devices.Add(replacement.Item2);
             }
         }
 
