@@ -390,7 +390,7 @@ namespace Tests
         }
         private void checkScopeLocationLinks(TECScope scope, TECBid bid)
         {
-            if (!bid.Locations.Contains(scope.Location))
+            if (scope.Location != null && !bid.Locations.Contains(scope.Location))
             {
                 Assert.Fail("Location in scope not linked.");
             }
