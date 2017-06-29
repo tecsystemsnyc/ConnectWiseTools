@@ -408,12 +408,19 @@ namespace EstimatingLibrary.Utilities
             ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
             foreach (TECConnectionType deviceType in device.ConnectionTypes)
             {
+                bool found = false;
                 foreach (TECConnectionType connectionType in connectionTypes)
                 {
                     if (deviceType.Guid == connectionType.Guid)
                     {
                         linkedTypes.Add(connectionType);
+                        found = true;
+                        break;
                     }
+                }
+                if (!found)
+                {
+                    throw new Exception("Device connection type not found.");
                 }
             }
             device.ConnectionTypes = linkedTypes;
@@ -514,35 +521,35 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkSubScopeToDevices(TECSubScope subScope, ObservableCollection<TECDevice> devices)
         {
-            List<Tuple<TECDevice, TECDevice>> replacements = new List<Tuple<TECDevice, TECDevice>>();
+            ObservableCollection<TECDevice> replacements = new ObservableCollection<TECDevice>();
             foreach(TECDevice device in subScope.Devices)
             {
+                bool found = false;
                 foreach(TECDevice catalogDevice in devices)
                 {
                     if (device.Guid == catalogDevice.Guid)
                     {
-                        replacements.Add(new Tuple<TECDevice, TECDevice>(device, catalogDevice));
+                        replacements.Add(catalogDevice);
+                        found = true;
                         break;
                     }
                 }
+                if (!found)
+                {
+                    throw new Exception("Subscope device not found.");
+                }
             }
-
-            if (replacements.Count != subScope.Devices.Count)
-            {
-                throw new Exception("Not all subscope devices found.");
-            }
-
-            foreach(Tuple<TECDevice, TECDevice> replacement in replacements)
-            {
-                subScope.Devices.Remove(replacement.Item1);
-                subScope.Devices.Add(replacement.Item2);
-            }
+            subScope.Devices = replacements;
         }
 
         #region Location Linking
         private static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
         {
             linkLocation(system as TECScope, locations);
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                linkLocation(instance, locations);
+            }
             foreach (TECEquipment equip in system.Equipment)
             {
                 linkLocation(equip, locations);
@@ -562,10 +569,16 @@ namespace EstimatingLibrary.Utilities
         {
             foreach (TECLocation location in locations)
             {
+                bool found = false;
                 if (scope.Location != null && scope.Location.Guid == location.Guid)
                 {
                     scope.Location = location;
+                    found = true;
                     break;
+                }
+                if (!found)
+                {
+                    throw new Exception("Location in scope not found.");
                 }
             }
         }
@@ -667,16 +680,26 @@ namespace EstimatingLibrary.Utilities
             }
         }
         #endregion
+
         #region Scope Children
         static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
         {
             ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
             foreach (TECCost cost in costs)
             {
+                bool found = false;
                 foreach (TECCost scopeCost in scope.AssociatedCosts)
                 {
                     if (scopeCost.Guid == cost.Guid)
-                    { costsToAssign.Add(cost); }
+                    {
+                        costsToAssign.Add(cost);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    throw new Exception("Associated cost not found.");
                 }
             }
             scope.AssociatedCosts = costsToAssign;
@@ -686,10 +709,19 @@ namespace EstimatingLibrary.Utilities
             ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)
             {
+                bool found = false;
                 foreach (TECTag referenceTag in tags)
                 {
                     if (tag.Guid == referenceTag.Guid)
-                    { linkedTags.Add(referenceTag); }
+                    {
+                        linkedTags.Add(referenceTag);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    throw new Exception("Tag not found.");
                 }
             }
             scope.Tags = linkedTags;

@@ -108,6 +108,25 @@ namespace Tests
         }
         #endregion
 
+        #region System Linking
+        [TestMethod]
+        public void SystemLinking()
+        {
+            foreach(TECSystem typical in bid.Systems)
+            {
+                checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
+                checkScopeLocationLinks(typical, bid);
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
+                    checkScopeLocationLinks(typical, bid);
+                }
+            }
+        }
+
+
+        #endregion
+
         #region Old Linking Tests
         [TestMethod]
         public void Load_Bid_Linked_Devices()
@@ -367,6 +386,13 @@ namespace Tests
                 {
                     Assert.Fail("Tag in scope not linked.");
                 }
+            }
+        }
+        private void checkScopeLocationLinks(TECScope scope, TECBid bid)
+        {
+            if (!bid.Locations.Contains(scope.Location))
+            {
+                Assert.Fail("Location in scope not linked.");
             }
         }
     }
