@@ -230,6 +230,53 @@ namespace Tests
         }
         #endregion
 
+        #region Connection Linking
+        [TestMethod]
+        public void SubScopeConnectionLinking()
+        {
+            foreach(TECController controller in bid.Controllers)
+            {
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    var subScopeConnection = connection as TECSubScopeConnection;
+                    if(subScopeConnection != null)
+                    {
+                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                    }
+                }
+            }
+            foreach(TECSystem typical in bid.Systems)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        var subScopeConnection = connection as TECSubScopeConnection;
+                        if (subScopeConnection != null)
+                        {
+                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                        }
+                    }
+                }
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            var subScopeConnection = connection as TECSubScopeConnection;
+                            if (subScopeConnection != null)
+                            {
+                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        #endregion
+
         #region Old Linking Tests
         [TestMethod]
         public void Load_Bid_Linked_Devices()
