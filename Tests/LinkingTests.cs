@@ -108,22 +108,73 @@ namespace Tests
         }
         #endregion
 
-        #region System Linking
         [TestMethod]
-        public void SystemLinking()
+        public void ScopeChildrenLinking()
         {
-            foreach(TECSystem typical in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
                 checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
                 checkScopeLocationLinks(typical, bid);
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.SystemInstances)
                 {
-                    checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
-                    checkScopeLocationLinks(typical, bid);
+                    checkScopeChildrenCatalogLinks(instance, bid.Catalogs);
+                    checkScopeLocationLinks(instance, bid);
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        checkScopeChildrenCatalogLinks(equip, bid.Catalogs);
+                        checkScopeLocationLinks(equip, bid);
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
+                            checkScopeLocationLinks(ss, bid);
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                checkScopeChildrenCatalogLinks(point, bid.Catalogs);
+                                checkScopeLocationLinks(point, bid);
+                            }
+                        }
+                    }
                 }
+                foreach (TECController control in typical.Controllers)
+                {
+                    checkScopeChildrenCatalogLinks(control, bid.Catalogs);
+                    checkScopeLocationLinks(control, bid);
+                }
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    checkScopeChildrenCatalogLinks(panel, bid.Catalogs);
+                    checkScopeLocationLinks(panel, bid);
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    checkScopeChildrenCatalogLinks(equip, bid.Catalogs);
+                    checkScopeLocationLinks(equip, bid);
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
+                        checkScopeLocationLinks(ss, bid);
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            checkScopeChildrenCatalogLinks(point, bid.Catalogs);
+                            checkScopeLocationLinks(point, bid);
+                        }
+                    }
+                }
+
+            }
+            foreach(TECController control in bid.Controllers)
+            {
+                checkScopeChildrenCatalogLinks(control, bid.Catalogs);
+                checkScopeLocationLinks(control, bid);
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                checkScopeChildrenCatalogLinks(panel, bid.Catalogs);
+                checkScopeLocationLinks(panel, bid);
             }
         }
 
+        #region System Linking
         [TestMethod]
         public void TypicalDictionaryLinking()
         {
