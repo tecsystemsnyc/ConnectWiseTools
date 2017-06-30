@@ -32,6 +32,9 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -191,56 +194,63 @@
         <TextBlock Text="{Binding Bid.Estimate.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="7"
                  />
-
         
+        <!--TEC Field Labor Values-->
+        <TextBlock Text="Field Labor:"
+                   Grid.Row="6"/>
+        <TextBlock Text="{Binding Bid.Estimate.TECFieldHours, Mode=OneWay, StringFormat={}{0:F2}}"
+                   Grid.Row="6" Grid.Column="5"/>
+        <TextBlock Text="{Binding Bid.Labor.CommRate, StringFormat= {} {0:C}}"
+                 Grid.Row="6" Grid.Column="6"/>
+
         <!--Subcontractor Labor Headers-->
         <TextBlock Text="Subcontractor Labor"
                FontWeight="Bold"
-               Grid.Row="7"/>
+               Grid.Row="9"/>
         <TextBlock Text="Hours"
-               Grid.Row="7" Grid.Column="5"/>
+               Grid.Row="9" Grid.Column="5"/>
         <TextBlock Text="$/Hour"
-               Grid.Row="7" Grid.Column="6"/>
+               Grid.Row="9" Grid.Column="6"/>
         <TextBlock Text="SubTotal"
-               Grid.Row="7" Grid.Column="7"/>
+               Grid.Row="9" Grid.Column="7"/>
         
 
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
-               Grid.Row="8"/>
+               Grid.Row="10"/>
         <TextBlock Text="{Binding Bid.Estimate.ElectricalLaborHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="8" Grid.Column="5"
+                 Grid.Row="10" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalEffectiveRate, StringFormat= {} {0:C}}"
-                 Grid.Row="8" Grid.Column="6"
+                 Grid.Row="10" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Bid.Estimate.ElectricalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
-                 Grid.Row="8" Grid.Column="7"
+                 Grid.Row="10" Grid.Column="7"
                  />
 
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
-               Grid.Row="9"/>
+               Grid.Row="11"/>
         <TextBlock Text="{Binding Bid.Estimate.ElectricalSuperLaborHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="9" Grid.Column="5"
+                 Grid.Row="11" Grid.Column="5"
                  />
         <TextBlock Text="{Binding Bid.Labor.ElectricalSuperEffectiveRate, StringFormat= {} {0:C}}"
-                 Grid.Row="9" Grid.Column="6"
+                 Grid.Row="11" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Bid.Estimate.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
-                 Grid.Row="9" Grid.Column="7"
+                 Grid.Row="11" Grid.Column="7"
                  />
 
 
         <!--Total Values-->
         <TextBlock Text="Total"
-               Grid.Row="10" Grid.Column="7"/>
+               Grid.Row="12" Grid.Column="7"/>
         <TextBlock Text="{Binding Bid.Estimate.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
-                 Grid.Row="11" Grid.Column="7"
+                 Grid.Row="13" Grid.Column="7"
                  />
         
         <!--Boolean Modifiers-->
-        <Grid Grid.Column="8" Grid.Row="7">
+        <Grid Grid.Column="8" Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
@@ -251,7 +261,7 @@
             <Border Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="Black"/>
         </Grid>
 
-        <Grid Grid.Column="9" Grid.Row="7">
+        <Grid Grid.Column="9" Grid.Row="9">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
@@ -264,7 +274,7 @@
         
         
         <!--Reload Button-->
-        <Button Grid.Row="10" Grid.Column="0"
+        <Button Grid.Row="12" Grid.Column="0"
                 Grid.RowSpan="2"
                 Margin="5"
                 Command="{Binding ReloadCommand}">
@@ -298,12 +308,12 @@
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
         <Border Grid.Column="1" 
-                  Grid.Row="8"
+                  Grid.Row="10"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
         <Border Grid.Column="1" 
-                  Grid.Row="9"
+                  Grid.Row="11"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
