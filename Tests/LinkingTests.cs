@@ -372,6 +372,77 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        //Checks every conduit type in connection is in catalogs.
+        public void ConnectionLinking()
+        {
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
+                        }
+                    }
+                }
+                foreach (TECController controller in typical.Controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
+                    }
+                }
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
+                }
+            }
+        }
+
+        [TestMethod]
+        //Checks every controller in network connections for a two-way connection.
+        public void NetworkConnectionLinking()
+        {
+            List<TECController> allControllers = new List<TECController>();
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        allControllers.Add(controller);
+                    }
+                }
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                allControllers.Add(controller);
+            }
+
+            foreach(TECController controller in allControllers)
+            {
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                    if (netConnect != null)
+                    {
+                        Assert.IsTrue(netConnect.ParentController == controller);
+                        foreach(TECController childControl in netConnect.ChildrenControllers)
+                        {
+                            Assert.IsTrue(childControl.ParentConnection == netConnect);
+                            Assert.IsTrue(allControllers.Contains(childControl));
+                        }
+                    }
+                }
+            }
+        }
+
         #region Old Linking Tests
         [TestMethod]
         public void Load_Bid_Linked_Devices()
