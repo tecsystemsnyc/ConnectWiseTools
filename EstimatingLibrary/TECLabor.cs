@@ -326,7 +326,7 @@ namespace EstimatingLibrary
 
                 if (ElectricalIsOnOvertime)
                 {
-                    return (rate * ElectricalSuperRatio);
+                    return (rate * 1.5);
                 }
                 else
                 {
@@ -468,6 +468,8 @@ namespace EstimatingLibrary
             ElectricalNonUnionRate = labor.ElectricalNonUnionRate;
             ElectricalSuperRate = labor.ElectricalSuperRate;
             ElectricalSuperNonUnionRate = labor.ElectricalSuperNonUnionRate;
+
+            ElectricalSuperRatio = labor.ElectricalSuperRatio;
         }
 
         private void raiseEffectiveRateChanged()

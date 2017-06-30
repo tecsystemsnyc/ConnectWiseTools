@@ -842,9 +842,7 @@ namespace EstimatingLibrary
         /// </summary>
         public double getElectricalSuperLaborHours()
         {
-            double laborHours = electricalCost.Labor;
-
-            return laborHours / 7;
+            return electricalCost.Labor * bid.Labor.ElectricalSuperRatio;
         }
         /// <summary>
         /// Returns the electrical super labor cost
