@@ -58,6 +58,7 @@
                     <controls:ControlledScopeGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                    SystemSource="{Binding SelectedSystem.SystemInstances}"
                                                    SelectedItem="{Binding SelectedChild}"
+                                                         ShowInstanceCount="Collapsed"
                                                          UserCanAddRows="False"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>

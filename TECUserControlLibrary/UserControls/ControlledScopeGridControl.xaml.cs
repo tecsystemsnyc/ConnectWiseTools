@@ -21,8 +21,6 @@ namespace TECUserControlLibrary.UserControls
     public partial class ControlledScopeGridControl : UserControl
     {
         #region DPs
-
-        
         public ObservableCollection<TECSystem> SystemSource
         {
             get { return (ObservableCollection<TECSystem>)GetValue(SystemSourceProperty); }
@@ -61,6 +59,17 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty AllowAddingNewProperty =
             DependencyProperty.Register("UserCanAddRows", typeof(bool),
               typeof(ControlledScopeGridControl), new PropertyMetadata(true));
+
+
+        public Visibility ShowInstanceCount
+        {
+            get { return (Visibility)GetValue(ShowInstanceCountProperty); }
+            set { SetValue(ShowInstanceCountProperty, value); }
+        }
+        
+        public static readonly DependencyProperty ShowInstanceCountProperty =
+            DependencyProperty.Register("ShowInstanceCount", typeof(Visibility),
+              typeof(ControlledScopeGridControl), new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used
