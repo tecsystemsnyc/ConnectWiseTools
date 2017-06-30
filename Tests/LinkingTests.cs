@@ -372,6 +372,7 @@ namespace Tests
             }
         }
 
+        #region Connection Linking
         [TestMethod]
         //Checks every conduit type in connection is in catalogs.
         public void ConnectionLinking()
@@ -405,45 +406,6 @@ namespace Tests
             }
         }
 
-        [TestMethod]
-        //Checks every controller in network connections for a two-way connection.
-        public void NetworkConnectionLinking()
-        {
-            List<TECController> allControllers = new List<TECController>();
-            foreach (TECSystem typical in bid.Systems)
-            {
-                foreach (TECSystem instance in typical.SystemInstances)
-                {
-                    foreach (TECController controller in instance.Controllers)
-                    {
-                        allControllers.Add(controller);
-                    }
-                }
-            }
-            foreach (TECController controller in bid.Controllers)
-            {
-                allControllers.Add(controller);
-            }
-
-            foreach(TECController controller in allControllers)
-            {
-                foreach(TECConnection connection in controller.ChildrenConnections)
-                {
-                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                    if (netConnect != null)
-                    {
-                        Assert.IsTrue(netConnect.ParentController == controller);
-                        foreach(TECController childControl in netConnect.ChildrenControllers)
-                        {
-                            Assert.IsTrue(childControl.ParentConnection == netConnect);
-                            Assert.IsTrue(allControllers.Contains(childControl));
-                        }
-                    }
-                }
-            }
-        }
-
-        #region Connection Linking
         [TestMethod]
         public void SubScopeConnectionLinking()
         {
@@ -487,6 +449,44 @@ namespace Tests
                 }
             }
             
+        }
+
+        [TestMethod]
+        //Checks every controller in network connections for a two-way connection.
+        public void NetworkConnectionLinking()
+        {
+            List<TECController> allControllers = new List<TECController>();
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        allControllers.Add(controller);
+                    }
+                }
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                allControllers.Add(controller);
+            }
+
+            foreach (TECController controller in allControllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    TECNetworkConnection netConnect = connection as TECNetworkConnection;
+                    if (netConnect != null)
+                    {
+                        Assert.IsTrue(netConnect.ParentController == controller);
+                        foreach (TECController childControl in netConnect.ChildrenControllers)
+                        {
+                            Assert.IsTrue(childControl.ParentConnection == netConnect);
+                            Assert.IsTrue(allControllers.Contains(childControl));
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
