@@ -110,7 +110,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _confirmCommand = value;
-                RaisePropertyChanged("Confirm");
+                RaisePropertyChanged("ConfirmCommand");
             }
         }
         public ICommand CancelCommand { get; private set; }
