@@ -281,7 +281,32 @@ namespace Tests
         #endregion
 
         [TestMethod]
-        public void PanelControllerLinking()
+        //Checks controller manufacturer is in catalogs.
+        public void ControllerLinking()
+        {
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                    }
+                }
+                foreach (TECController controller in typical.Controllers)
+                {
+                    Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                }
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+            }
+        }
+
+        [TestMethod]
+        //Checks panel connected to a controller in a bid and panel type in panel is in catalogs.
+        public void PanelLinking()
         {
             foreach(TECPanel panel in bid.Panels)
             {
@@ -289,6 +314,7 @@ namespace Tests
                 {
                     Assert.IsTrue(bid.Controllers.Contains(panelControl), "Controller in panel not found in bid.");
                 }
+                Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
             }
             foreach(TECSystem typical in bid.Systems)
             {
@@ -298,6 +324,7 @@ namespace Tests
                     {
                         Assert.IsTrue(typical.Controllers.Contains(panelControl), "Controller in panel not found in typical.");
                     }
+                    Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
                 }
                 foreach(TECSystem instance in typical.SystemInstances)
                 {
@@ -306,6 +333,39 @@ namespace Tests
                         foreach (TECController panelControl in panel.Controllers)
                         {
                             Assert.IsTrue(instance.Controllers.Contains(panelControl), "Controller in panel not found in instance.");
+                        }
+                        Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        //Checks every device in subscope is in catalogs.
+        public void SubScopeLinking()
+        {
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (TECDevice dev in ss.Devices)
+                            {
+                                Assert.IsTrue(bid.Catalogs.Devices.Contains(dev));
+                            }
+                        }
+                    }
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECDevice dev in ss.Devices)
+                        {
+                            Assert.IsTrue(bid.Catalogs.Devices.Contains(dev));
                         }
                     }
                 }
