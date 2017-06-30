@@ -160,7 +160,6 @@ namespace Tests
                         }
                     }
                 }
-
             }
             foreach(TECController control in bid.Controllers)
             {
@@ -280,6 +279,38 @@ namespace Tests
             }
         }
         #endregion
+
+        [TestMethod]
+        public void PanelControllerLinking()
+        {
+            foreach(TECPanel panel in bid.Panels)
+            {
+                foreach(TECController panelControl in panel.Controllers)
+                {
+                    Assert.IsTrue(bid.Controllers.Contains(panelControl), "Controller in panel not found in bid.");
+                }
+            }
+            foreach(TECSystem typical in bid.Systems)
+            {
+                foreach(TECPanel panel in typical.Panels)
+                {
+                    foreach (TECController panelControl in panel.Controllers)
+                    {
+                        Assert.IsTrue(typical.Controllers.Contains(panelControl), "Controller in panel not found in typical.");
+                    }
+                }
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECPanel panel in instance.Panels)
+                    {
+                        foreach (TECController panelControl in panel.Controllers)
+                        {
+                            Assert.IsTrue(instance.Controllers.Contains(panelControl), "Controller in panel not found in instance.");
+                        }
+                    }
+                }
+            }
+        }
 
         #region Old Linking Tests
         [TestMethod]
